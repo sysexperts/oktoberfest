@@ -1,9 +1,14 @@
 extends Node
-## Net — multiplayer bootstrap singleton (Faz 3'te doldurulacak).
-## Host-as-server modeli: ENetMultiplayerPeer + high-level multiplayer API.
+## Net — multiplayer bootstrap singleton (host-as-server, ENet).
+## Menü buradan host/join başlatır, sonra oyun sahnesine geçer.
 
 const DEFAULT_PORT := 8642
 const MAX_PLAYERS := 4
+const GAME_SCENE := "res://scenes/main.tscn"
+
+signal connection_failed()
+
+var player_name: String = "Oyuncu"
 
 func host_game(port: int = DEFAULT_PORT) -> Error:
 	var peer := ENetMultiplayerPeer.new()
@@ -11,6 +16,7 @@ func host_game(port: int = DEFAULT_PORT) -> Error:
 	if err != OK:
 		return err
 	multiplayer.multiplayer_peer = peer
+	get_tree().change_scene_to_file(GAME_SCENE)
 	return OK
 
 func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
@@ -19,7 +25,22 @@ func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	if err != OK:
 		return err
 	multiplayer.multiplayer_peer = peer
+	# Bağlantı kurulunca oyun sahnesine geç
+	if not multiplayer.connected_to_server.is_connected(_on_connected):
+		multiplayer.connected_to_server.connect(_on_connected)
+	if not multiplayer.connection_failed.is_connected(_on_connection_failed):
+		multiplayer.connection_failed.connect(_on_connection_failed)
 	return OK
+
+func _on_connected() -> void:
+	get_tree().change_scene_to_file(GAME_SCENE)
+
+func _on_connection_failed() -> void:
+	multiplayer.multiplayer_peer = null
+	connection_failed.emit()
 
 func disconnect_game() -> void:
 	multiplayer.multiplayer_peer = null
+
+func is_host() -> bool:
+	return multiplayer.multiplayer_peer == null or multiplayer.is_server()

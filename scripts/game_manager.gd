@@ -1,15 +1,29 @@
 extends Node3D
-## GameManager — dünyayı prosedürel kurar, vardiyayı yönetir:
-## müşteri spawn, sipariş sonuçları, süre, vardiya sonu özeti, yeniden başlatma.
+## GameManager (ağ-farkında). Dünyayı tüm peer'larda prosedürel kurar.
+## Host: vardiya/müşteri/skor otoriter yürütür ve istemcilere senkronlar.
+## Oyuncular spawner-benzeri el sıkışma ile eklenir; hareket Player içinde senkronlanır.
 
 const SHIFT_TIME := 120.0
-const SPAWN_START := 6.0   # ilk spawn aralığı
-const SPAWN_MIN := 2.5     # zamanla düşen minimum aralık
+const SPAWN_START := 6.0
+const SPAWN_MIN := 2.5
+const SYNC_INTERVAL := 0.15
+const MISS_PENALTY := 5
+
+const SPAWN_POINTS := [
+	Vector3(-1.5, 0.1, 0), Vector3(1.5, 0.1, 0),
+	Vector3(-1.5, 0.1, 2), Vector3(1.5, 0.1, 2),
+]
 
 var _tables: Array[CustomerTable] = []
 var _hud: HUD
+var _players_container: Node3D
+var _players_nodes := {}          # peer_id -> Player
+var _spawn_index_by_peer := {}    # peer_id -> spawn index
+var _next_spawn := 0
+
 var _time_left := SHIFT_TIME
 var _spawn_timer := 3.0
+var _sync_timer := 0.0
 var _served := 0
 var _missed := 0
 var _shift_over := false
@@ -18,14 +32,28 @@ func _ready() -> void:
 	Game.reset()
 	_build_environment()
 	_build_arena()
+
+	_players_container = Node3D.new()
+	_players_container.name = "Players"
+	add_child(_players_container)
+
 	_hud = HUD.new()
 	add_child(_hud)
 	Game.money_changed.connect(_hud.set_money)
 	Game.score_changed.connect(_hud.set_score)
 	_hud.set_money(Game.money)
 	_hud.set_score(Game.score)
+	_hud.set_time(_time_left)
 
-# ---------------------------------------------------------------- ortam
+	if multiplayer.is_server():
+		_spawn_index_by_peer[1] = 0
+		_next_spawn = 1
+		_add_player(1, 0)
+		multiplayer.peer_disconnected.connect(_on_peer_left)
+	else:
+		_client_ready.rpc_id(1)
+
+# ================================================= dünya
 func _build_environment() -> void:
 	var sun := DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-55, -35, 0)
@@ -43,9 +71,7 @@ func _build_environment() -> void:
 	env.environment = e
 	add_child(env)
 
-# ---------------------------------------------------------------- arena
 func _build_arena() -> void:
-	# Zemin
 	var floor_body := StaticBody3D.new()
 	add_child(floor_body)
 	var floor_mesh := MeshInstance3D.new()
@@ -57,46 +83,36 @@ func _build_arena() -> void:
 	floor_mesh.material_override = fmat
 	floor_body.add_child(floor_mesh)
 	var floor_col := CollisionShape3D.new()
-	var floor_shape := WorldBoundaryShape3D.new()
-	floor_col.shape = floor_shape
+	floor_col.shape = WorldBoundaryShape3D.new()
 	floor_body.add_child(floor_col)
 
-	# Çadır duvarları (blockout — oyuncuyu içeride tutar)
 	_build_wall(Vector3(0, 1.5, -12), Vector3(24, 3, 0.5))
 	_build_wall(Vector3(0, 1.5, 12), Vector3(24, 3, 0.5))
 	_build_wall(Vector3(-12, 1.5, 0), Vector3(0.5, 3, 24))
 	_build_wall(Vector3(12, 1.5, 0), Vector3(0.5, 3, 24))
 
-	# İstasyonlar
 	var dispenser := MugDispenser.new()
 	dispenser.position = Vector3(-6, 0, -8)
 	add_child(dispenser)
-
 	var keg := KegStation.new()
 	keg.position = Vector3(-2, 0, -8)
 	add_child(keg)
-
 	var keg2 := KegStation.new()
 	keg2.position = Vector3(2, 0, -8)
 	add_child(keg2)
 
-	# Masalar
 	var positions := [
 		Vector3(-6, 0, 4), Vector3(-2, 0, 6), Vector3(2, 0, 6),
 		Vector3(6, 0, 4), Vector3(-6, 0, 0), Vector3(6, 0, 0),
 	]
+	var idx := 0
 	for p in positions:
 		var t := CustomerTable.new()
 		t.position = p
+		t.table_index = idx
 		add_child(t)
-		t.order_served.connect(_on_order_served)
-		t.order_missed.connect(_on_order_missed)
 		_tables.append(t)
-
-	# Oyuncu
-	var player := Player.new()
-	player.position = Vector3(0, 0.1, 0)
-	add_child(player)
+		idx += 1
 
 func _build_wall(pos: Vector3, size: Vector3) -> void:
 	var body := StaticBody3D.new()
@@ -116,12 +132,66 @@ func _build_wall(pos: Vector3, size: Vector3) -> void:
 	col.shape = box_shape
 	body.add_child(col)
 
-# ---------------------------------------------------------------- döngü
+# ================================================= oyuncular
+@rpc("any_peer", "reliable")
+func _client_ready() -> void:
+	if not multiplayer.is_server():
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	# Mevcut oyuncuları yeni gelene gönder
+	for pid in _spawn_index_by_peer.keys():
+		_add_player.rpc_id(sender, pid, _spawn_index_by_peer[pid])
+	# Yeni geleni herkese ekle
+	var sidx := _next_spawn
+	_next_spawn += 1
+	_spawn_index_by_peer[sender] = sidx
+	_add_player.rpc(sender, sidx)
+
+@rpc("authority", "reliable", "call_local")
+func _add_player(peer_id: int, spawn_index: int) -> void:
+	if _players_nodes.has(peer_id):
+		return
+	var p := Player.new()
+	p.name = str(peer_id)
+	p.set_multiplayer_authority(peer_id)
+	p.position = SPAWN_POINTS[spawn_index % SPAWN_POINTS.size()]
+	_players_container.add_child(p)
+	_players_nodes[peer_id] = p
+
+@rpc("authority", "reliable", "call_local")
+func _remove_player(peer_id: int) -> void:
+	if _players_nodes.has(peer_id):
+		var p: Node = _players_nodes[peer_id]
+		if is_instance_valid(p):
+			p.queue_free()
+		_players_nodes.erase(peer_id)
+
+func _on_peer_left(peer_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	_spawn_index_by_peer.erase(peer_id)
+	_remove_player.rpc(peer_id)
+
+# ================================================= host servis
+func host_try_serve(index: int) -> bool:
+	if not multiplayer.is_server():
+		return false
+	if index < 0 or index >= _tables.size():
+		return false
+	if _tables[index].host_serve():
+		_served += 1
+		Game.add_score(CustomerTable.REWARD)
+		Game.add_money(CustomerTable.REWARD)
+		return true
+	return false
+
+# ================================================= döngü
 func _process(delta: float) -> void:
 	if _shift_over:
-		if _hud.restart_requested():
-			_shift_over = false
-			get_tree().reload_current_scene()
+		if multiplayer.is_server() and _hud.restart_requested():
+			_net_reload.rpc()
+		return
+	if not multiplayer.is_server():
 		return
 
 	_time_left -= delta
@@ -133,9 +203,18 @@ func _process(delta: float) -> void:
 	_spawn_timer -= delta
 	if _spawn_timer <= 0.0:
 		_try_spawn_customer()
-		# Zaman geçtikçe daha sık müşteri
 		var progress := 1.0 - (_time_left / SHIFT_TIME)
 		_spawn_timer = lerpf(SPAWN_START, SPAWN_MIN, progress)
+
+	for t in _tables:
+		if t.host_tick(delta) == 1:
+			_missed += 1
+			Game.add_score(-MISS_PENALTY)
+
+	_sync_timer -= delta
+	if _sync_timer <= 0.0:
+		_sync_timer = SYNC_INTERVAL
+		_broadcast_sync()
 
 func _try_spawn_customer() -> void:
 	var free: Array[CustomerTable] = []
@@ -144,18 +223,36 @@ func _try_spawn_customer() -> void:
 			free.append(t)
 	if free.is_empty():
 		return
-	free.pick_random().seat_customer()
+	free.pick_random().host_seat()
 
-func _on_order_served(reward: int) -> void:
-	_served += 1
-	Game.add_score(reward)
-	Game.add_money(reward)
+func _broadcast_sync() -> void:
+	var st := PackedInt32Array()
+	var ra := PackedFloat32Array()
+	for t in _tables:
+		st.append(t.state)
+		ra.append(t.ratio())
+	_net_sync.rpc(Game.money, Game.score, _time_left, st, ra)
 
-func _on_order_missed() -> void:
-	_missed += 1
-	Game.add_score(-5)
+@rpc("authority", "unreliable")
+func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array) -> void:
+	# Sadece istemcilerde çalışır (host'ta call_local yok)
+	_hud.set_money(money)
+	_hud.set_score(score)
+	_hud.set_time(time_left)
+	for i in range(_tables.size()):
+		if i < st.size():
+			_tables[i].apply_sync(st[i], ra[i])
 
 func _end_shift() -> void:
 	_shift_over = true
+	_net_end_shift.rpc(_served, _missed, Game.money, Game.score)
+
+@rpc("authority", "reliable", "call_local")
+func _net_end_shift(served: int, missed: int, money: int, score: int) -> void:
+	_shift_over = true
 	_hud.set_time(0.0)
-	_hud.show_summary(_served, _missed, Game.money, Game.score)
+	_hud.show_summary(served, missed, money, score)
+
+@rpc("authority", "reliable", "call_local")
+func _net_reload() -> void:
+	get_tree().reload_current_scene()

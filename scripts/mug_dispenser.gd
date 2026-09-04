@@ -1,6 +1,7 @@
 class_name MugDispenser
 extends Node3D
-## Boş bardak dağıtıcısı. E: eli boşsa yeni boş bardak verir.
+## Boş bardak dağıtıcısı. Oyuncu yaklaşıp E'ye basınca boş bardak alır
+## (mantık Player içinde; burası görsel + hedef işaretidir).
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -24,10 +25,3 @@ func _build_visual() -> void:
 	label.position = Vector3(0, 1.2, 0)
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	add_child(label)
-
-func interact(player: Player) -> void:
-	if player.held != null:
-		return
-	var mug := Mug.new()
-	get_tree().current_scene.add_child(mug)
-	player.pick_up(mug)
