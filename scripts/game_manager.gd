@@ -75,25 +75,26 @@ func _build_environment() -> void:
 	env.environment = e
 	add_child(env)
 
+const TENT_X0 := -9.5
+const TENT_X1 := 9.5
+const TENT_Z0 := -11.5
+const TENT_Z1 := 9.5
+
 func _build_arena() -> void:
+	# Zemin çarpışması (görünmez, her yerde)
 	var floor_body := StaticBody3D.new()
 	add_child(floor_body)
-	var floor_mesh := MeshInstance3D.new()
-	var plane := PlaneMesh.new()
-	plane.size = Vector2(24, 24)
-	floor_mesh.mesh = plane
-	var fmat := StandardMaterial3D.new()
-	fmat.albedo_color = Color(0.35, 0.28, 0.2)
-	floor_mesh.material_override = fmat
-	floor_body.add_child(floor_mesh)
 	var floor_col := CollisionShape3D.new()
 	floor_col.shape = WorldBoundaryShape3D.new()
 	floor_body.add_child(floor_col)
 
-	_build_wall(Vector3(0, 1.5, -12), Vector3(24, 3, 0.5))
-	_build_wall(Vector3(0, 1.5, 12), Vector3(24, 3, 0.5))
-	_build_wall(Vector3(-12, 1.5, 0), Vector3(0.5, 3, 24))
-	_build_wall(Vector3(12, 1.5, 0), Vector3(0.5, 3, 24))
+	# Görsel çadır + çevre çarpışması yalnız istemcilerde (dedicated server hafif kalsın)
+	if not Net.dedicated:
+		_build_tent()
+		_collision_box(Vector3(0, 2, TENT_Z0 - 0.3), Vector3(22, 4, 0.6))
+		_collision_box(Vector3(0, 2, TENT_Z1 + 0.3), Vector3(22, 4, 0.6))
+		_collision_box(Vector3(TENT_X0 - 0.3, 2, -1), Vector3(0.6, 4, 24))
+		_collision_box(Vector3(TENT_X1 + 0.3, 2, -1), Vector3(0.6, 4, 24))
 
 	var dispenser := MugDispenser.new()
 	dispenser.position = Vector3(-6, 0, -8)
@@ -118,23 +119,67 @@ func _build_arena() -> void:
 		_tables.append(t)
 		idx += 1
 
-func _build_wall(pos: Vector3, size: Vector3) -> void:
+## Görünmez çarpışma kutusu (oyuncular çadırdan çıkamasın)
+func _collision_box(pos: Vector3, size: Vector3) -> void:
 	var body := StaticBody3D.new()
 	body.position = pos
 	add_child(body)
-	var mesh := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = size
-	mesh.mesh = box
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.6, 0.5, 0.35)
-	mesh.material_override = mat
-	body.add_child(mesh)
 	var col := CollisionShape3D.new()
 	var box_shape := BoxShape3D.new()
 	box_shape.size = size
 	col.shape = box_shape
 	body.add_child(col)
+
+## Oktoberfest çadırını modüler modellerle döşer (floor/wall/roof).
+func _build_tent() -> void:
+	const S := 1.6
+	var floor_ps := load("res://assets/models/floor.glb")
+	var wall_ps := load("res://assets/models/wall.glb")
+	var roof_ps := load("res://assets/models/roof.glb")
+
+	# Zemin karoları
+	var fs := 1.903 * S
+	var y_floor := -0.096 * S
+	var x := TENT_X0
+	while x <= TENT_X1 + 0.01:
+		var z := TENT_Z0
+		while z <= TENT_Z1 + 0.01:
+			_spawn_model(floor_ps, Vector3(x, y_floor, z), S, 0.0)
+			z += fs
+		x += fs
+
+	# Duvarlar (kenarlar boyunca)
+	var ws := 1.489 * S
+	var y_wall := 0.951 * S
+	x = TENT_X0
+	while x <= TENT_X1 + 0.01:
+		_spawn_model(wall_ps, Vector3(x, y_wall, TENT_Z0), S, 0.0)
+		_spawn_model(wall_ps, Vector3(x, y_wall, TENT_Z1), S, 180.0)
+		x += ws
+	var z2 := TENT_Z0
+	while z2 <= TENT_Z1 + 0.01:
+		_spawn_model(wall_ps, Vector3(TENT_X0, y_wall, z2), S, 90.0)
+		_spawn_model(wall_ps, Vector3(TENT_X1, y_wall, z2), S, -90.0)
+		z2 += ws
+
+	# Çatı
+	var rsx := 1.445 * S
+	var rsz := 1.917 * S
+	var y_roof := 1.9 * S + 0.383 * S
+	x = TENT_X0
+	while x <= TENT_X1 + 0.01:
+		var z3 := TENT_Z0
+		while z3 <= TENT_Z1 + 0.01:
+			_spawn_model(roof_ps, Vector3(x, y_roof, z3), S, 0.0)
+			z3 += rsz
+		x += rsx
+
+func _spawn_model(ps: PackedScene, pos: Vector3, s: float, rot_y: float) -> void:
+	var m: Node3D = ps.instantiate()
+	m.position = pos
+	m.scale = Vector3(s, s, s)
+	m.rotation_degrees.y = rot_y
+	add_child(m)
 
 # ================================================= oyuncular
 @rpc("any_peer", "reliable")
