@@ -38,7 +38,10 @@ var _net_yaw: float
 func _ready() -> void:
 	add_to_group("player")
 	_world = get_tree().current_scene
-	_is_local = is_multiplayer_authority()
+	# Authority'yi düğüm adından türet (ad = peer_id). Zamanlamadan bağımsız, garantili.
+	var auth := name.to_int()
+	set_multiplayer_authority(auth)
+	_is_local = (auth == multiplayer.get_unique_id())
 	_net_pos = global_position
 	_net_yaw = rotation.y
 	_build_body()
@@ -252,22 +255,23 @@ func _update_carry_visual() -> void:
 		_carry_beer.scale.y = maxf(carry_fill, 0.001)
 		_carry_beer.position.y = -0.08 + (0.16 * carry_fill) * 0.5
 
+## Modeli gerçek görünen boyutuna göre ölçekler (dünya-uzayı AABB, çarpımsal).
+## Ölçek modelin kökünde/iç düğümünde gömülü olsa da doğru çalışır.
 func _fit_model(root: Node3D, target_height: float) -> void:
-	var aabb := _combined_aabb(root)
-	if aabb.size.y <= 0.0001:
-		return
-	var s := target_height / aabb.size.y
-	root.scale = Vector3(s, s, s)
-	root.position.y = -aabb.position.y * s
+	var a := _world_aabb(root)
+	if a.size.y > 0.0001:
+		root.scale *= (target_height / a.size.y)
+	# Ayakları oyuncunun taban hizasına çek
+	var a2 := _world_aabb(root)
+	root.global_position.y += (global_position.y - a2.position.y)
 
-func _combined_aabb(root: Node3D) -> AABB:
+## Tüm görsel alt-düğümlerin DÜNYA uzayındaki birleşik AABB'si (mevcut ölçek dahil).
+func _world_aabb(root: Node3D) -> AABB:
 	var result := AABB()
 	var has := false
-	var inv := root.global_transform.affine_inverse()
 	for child in root.find_children("*", "VisualInstance3D", true, false):
 		var vi := child as VisualInstance3D
-		var local := inv * vi.global_transform
-		var a := local * vi.get_aabb()
+		var a := vi.global_transform * vi.get_aabb()
 		if not has:
 			result = a
 			has = true
