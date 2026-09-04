@@ -1,8 +1,7 @@
 class_name Player
 extends CharacterBody3D
-## Ağ-farkında oyuncu (FPS). Yerel oyuncu (authority) girdi işler ve durumunu yayınlar;
-## uzak oyuncular senkron konum + bean modeli + eldeki bardakla görünür.
-## Elde taşıma ayrı ağ nesnesi DEĞİL: carry_state/carry_fill senkronlanır, görsel yerelde çizilir.
+## Ağ-farkında oyuncu (FPS). Görsel yapı player.tscn'de gerçek düğümlerdir.
+## Yerel oyuncu (authority) girdi işler + durum yayınlar; uzaklar senkron görünür.
 
 const SPEED := 4.0
 const SPRINT_SPEED := 7.0
@@ -11,64 +10,48 @@ const INTERACT_RANGE := 2.2
 const FACING_DOT := 0.35
 const MOUSE_SENS := 0.0025
 const PITCH_LIMIT := deg_to_rad(85.0)
-const EYE_HEIGHT := 1.35 ## Modelin gerçek göz hizası (iskeletten ölçüldü) — arkadaşlarla göz seviyesi aynı olsun
-const FILL_RATE := 0.6 # saniyede doluluk
-const CHAR_SCENE: PackedScene = preload("res://assets/character/character/bavarian_bean.glb")
-const MODEL_HEIGHT := 1.7
-const MODEL_YAW := 180.0
+const EYE_HEIGHT := 1.35
+const FILL_RATE := 0.6
 
 # Ağ ile senkronlanan durum
 var carry_state := 0     # 0 = boş el, 1 = bardak
 var carry_fill := 0.0    # 0..1
 
 var _is_local := false
-var _model: Node3D
-var _head: Node3D
-var _cam: Camera3D
-var _hold_point: Node3D
 var _world: Node
 var _current_target: Node3D = null
 var _highlight_ring: MeshInstance3D
 var _pitch := 0.0
-var _carry_glass: MeshInstance3D
-var _carry_beer: MeshInstance3D
-var _net_pos: Vector3
-var _net_yaw: float
 var _anim: AnimationPlayer
 var _cur_anim := ""
 var _last_anim_pos: Vector3
+var _net_pos: Vector3
+var _net_yaw: float
+
+@onready var _model: Node3D = $Model
+@onready var _head: Node3D = $Head
+@onready var _cam: Camera3D = $Head/Camera3D
+@onready var _hold_point: Node3D = $Head/HoldPoint
+@onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
+@onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
 
 func _ready() -> void:
 	add_to_group("player")
 	_world = get_tree().current_scene
-	# Authority'yi düğüm adından türet (ad = peer_id). Zamanlamadan bağımsız, garantili.
+	# Authority'yi düğüm adından türet (ad = peer_id). Zamanlamadan bağımsız.
 	var auth := name.to_int()
 	set_multiplayer_authority(auth)
 	_is_local = (auth == multiplayer.get_unique_id())
 	_net_pos = global_position
 	_net_yaw = rotation.y
-	_build_body()
-	if _is_local:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-func _build_body() -> void:
-	var shape := CollisionShape3D.new()
-	var capsule := CapsuleShape3D.new()
-	capsule.radius = 0.35
-	capsule.height = 1.6
-	shape.shape = capsule
-	shape.position.y = 0.8
-	add_child(shape)
-
-	# Karakter modeli — sadece UZAK oyuncularda görünür (kendi FPS görüşünü kapatmasın)
-	_model = CHAR_SCENE.instantiate()
-	add_child(_model)
-	_model.rotation_degrees.y = MODEL_YAW
-	# NOT: Model doğal ölçeğinde (scale 1) zaten ~1.7m — otomatik fit ×100 yapıp
-	# dev ediyordu (skinned mesh AABB yanlış ölçülüyor). Bu yüzden fit KALDIRILDI.
+	# Kendi modelini gizle (FPS), kameranı aç; uzak oyuncularda tersi
 	_model.visible = not _is_local
+	_cam.current = _is_local
+	if not _is_local:
+		_hold_point.position = Vector3(0.3, 1.15, -0.45) # uzakta bardak elde görünür
 
-	# Animasyon: Idle/Walk/Run döngüsü (model GLB'sinde hazır)
+	# Animasyon (GLB'de Idle/Walk/Run)
 	var aps := _model.find_children("*", "AnimationPlayer", true, false)
 	if aps.size() > 0:
 		_anim = aps[0]
@@ -80,58 +63,23 @@ func _build_body() -> void:
 			_cur_anim = "Idle"
 	_last_anim_pos = global_position
 
-	# Baş + kamera (kamera yalnız yerelde aktif)
-	_head = Node3D.new()
-	_head.position = Vector3(0, EYE_HEIGHT, 0)
-	add_child(_head)
-	_cam = Camera3D.new()
-	_cam.current = _is_local
-	_head.add_child(_cam)
-
-	# Tutma noktası + bardak görseli (herkeste; senkron duruma göre çizilir)
-	_hold_point = Node3D.new()
-	_hold_point.position = Vector3(0.35, -0.28, -0.6) if _is_local else Vector3(0.3, 1.15, -0.45)
-	_head.add_child(_hold_point)
-	_build_carry_visual()
-
-	# Vurgu halkası yalnız yerel oyuncuya lazım
 	if _is_local:
-		_highlight_ring = MeshInstance3D.new()
-		var ring := TorusMesh.new()
-		ring.inner_radius = 0.35
-		ring.outer_radius = 0.5
-		_highlight_ring.mesh = ring
-		var ring_mat := StandardMaterial3D.new()
-		ring_mat.albedo_color = Color(1, 0.9, 0.2)
-		ring_mat.emission_enabled = true
-		ring_mat.emission = Color(1, 0.8, 0.1)
-		_highlight_ring.material_override = ring_mat
-		_highlight_ring.visible = false
-		_world.add_child.call_deferred(_highlight_ring)
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		_make_highlight_ring()
 
-func _build_carry_visual() -> void:
-	_carry_glass = MeshInstance3D.new()
-	var glass := CylinderMesh.new()
-	glass.top_radius = 0.06
-	glass.bottom_radius = 0.05
-	glass.height = 0.18
-	_carry_glass.mesh = glass
-	var gmat := StandardMaterial3D.new()
-	gmat.albedo_color = Color(0.85, 0.9, 0.95, 0.35)
-	gmat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_carry_glass.material_override = gmat
-	_hold_point.add_child(_carry_glass)
-
-	_carry_beer = MeshInstance3D.new()
-	var beer := CylinderMesh.new()
-	beer.top_radius = 0.055
-	beer.bottom_radius = 0.048
-	beer.height = 0.16
-	_carry_beer.mesh = beer
-	var bmat := StandardMaterial3D.new()
-	bmat.albedo_color = Color(0.95, 0.65, 0.05)
-	_carry_beer.material_override = bmat
-	_carry_glass.add_child(_carry_beer)
+func _make_highlight_ring() -> void:
+	_highlight_ring = MeshInstance3D.new()
+	var ring := TorusMesh.new()
+	ring.inner_radius = 0.35
+	ring.outer_radius = 0.5
+	_highlight_ring.mesh = ring
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(1, 0.9, 0.2)
+	mat.emission_enabled = true
+	mat.emission = Color(1, 0.8, 0.1)
+	_highlight_ring.material_override = mat
+	_highlight_ring.visible = false
+	_world.add_child.call_deferred(_highlight_ring)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_local:
@@ -161,7 +109,6 @@ func _physics_process(delta: float) -> void:
 	_update_carry_visual()
 	_update_animation(delta)
 
-## Hareket hızına göre Idle/Walk/Run seçer (hem yerel hem uzak oyuncularda).
 func _update_animation(delta: float) -> void:
 	if _anim == null:
 		return
@@ -240,7 +187,6 @@ func _update_highlight() -> void:
 
 func _handle_interaction(delta: float) -> void:
 	if _current_target == null:
-		# Boşa E: elindeki bardağı boşalt/at
 		if Input.is_action_just_pressed("interact") and carry_state != 0:
 			carry_state = 0
 			carry_fill = 0.0
@@ -269,7 +215,6 @@ func _serve_request(index: int) -> void:
 	if multiplayer.is_server():
 		_apply_serve(index)
 
-# Yalnız host'ta çalışır
 func _apply_serve(index: int) -> void:
 	if _world.has_method("host_try_serve") and _world.host_try_serve(index):
 		if is_multiplayer_authority():

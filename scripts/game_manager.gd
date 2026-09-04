@@ -1,20 +1,17 @@
 extends Node3D
-## GameManager (ağ-farkında). Dünyayı tüm peer'larda prosedürel kurar.
+## GameManager (ağ-farkında). Dünyayı KURMAZ — main.tscn'deki düğümleri okur.
 ## Host: vardiya/müşteri/skor otoriter yürütür ve istemcilere senkronlar.
-## Oyuncular spawner-benzeri el sıkışma ile eklenir; hareket Player içinde senkronlanır.
+## Düzenlenebilir her şey (masa/istasyon/ışık/spawn/çadır) sahnede düğüm olarak durur.
 
 const SHIFT_TIME := 800.0
 const SPAWN_START := 6.0
 const SPAWN_MIN := 2.5
 const SYNC_INTERVAL := 0.15
 const MISS_PENALTY := 5
-
-const SPAWN_POINTS := [
-	Vector3(-1.5, 0.1, 0), Vector3(1.5, 0.1, 0),
-	Vector3(-1.5, 0.1, 2), Vector3(1.5, 0.1, 2),
-]
+const PLAYER_SCENE := preload("res://scenes/player.tscn")
 
 var _tables: Array[CustomerTable] = []
+var _spawn_points: Array[Vector3] = []
 var _hud: HUD
 var _players_container: Node3D
 var _players_nodes := {}          # peer_id -> Player
@@ -30,15 +27,22 @@ var _shift_over := false
 
 func _ready() -> void:
 	Game.reset()
-	_build_environment()
-	_build_arena()
+	_hud = $HUD
+	_players_container = $Players
 
-	_players_container = Node3D.new()
-	_players_container.name = "Players"
-	add_child(_players_container)
+	# Masaları sahneden topla (table_index'e göre sırala)
+	for c in $Tables.get_children():
+		if c is CustomerTable:
+			_tables.append(c)
+	_tables.sort_custom(func(a, b): return a.table_index < b.table_index)
 
-	_hud = HUD.new()
-	add_child(_hud)
+	# Spawn noktalarını sahneden oku
+	for c in $SpawnPoints.get_children():
+		if c is Node3D:
+			_spawn_points.append((c as Node3D).position)
+	if _spawn_points.is_empty():
+		_spawn_points.append(Vector3(0, 0.1, 0))
+
 	Game.money_changed.connect(_hud.set_money)
 	Game.score_changed.connect(_hud.set_score)
 	_hud.set_money(Game.money)
@@ -48,7 +52,6 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		multiplayer.peer_disconnected.connect(_on_peer_left)
 		if Net.dedicated:
-			# Dedicated server: kendisi oyuncu değil, sadece simülasyonu yürütür
 			_next_spawn = 0
 		else:
 			_spawn_index_by_peer[1] = 0
@@ -57,195 +60,14 @@ func _ready() -> void:
 	else:
 		_client_ready.rpc_id(1)
 
-# ================================================= dünya
-func _build_environment() -> void:
-	var sun := DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-55, -35, 0)
-	sun.shadow_enabled = true
-	add_child(sun)
-
-	var env := WorldEnvironment.new()
-	var e := Environment.new()
-	e.background_mode = Environment.BG_SKY
-	var sky := Sky.new()
-	sky.sky_material = ProceduralSkyMaterial.new()
-	e.sky = sky
-	e.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-	e.ambient_light_energy = 0.6
-	env.environment = e
-	add_child(env)
-
-const TENT_X0 := -9.5
-const TENT_X1 := 9.5
-const TENT_Z0 := -11.5
-const TENT_Z1 := 9.5
-
-func _build_arena() -> void:
-	# Zemin çarpışması (görünmez, her yerde)
-	var floor_body := StaticBody3D.new()
-	add_child(floor_body)
-	var floor_col := CollisionShape3D.new()
-	floor_col.shape = WorldBoundaryShape3D.new()
-	floor_body.add_child(floor_col)
-
-	# Görsel çadır + çevre çarpışması yalnız istemcilerde (dedicated server hafif kalsın)
-	if not Net.dedicated:
-		_build_tent()
-		_collision_box(Vector3(0, 2, TENT_Z0 - 0.3), Vector3(22, 4, 0.6))
-		_collision_box(Vector3(0, 2, TENT_Z1 + 0.3), Vector3(22, 4, 0.6))
-		_collision_box(Vector3(TENT_X0 - 0.3, 2, -1), Vector3(0.6, 4, 24))
-		_collision_box(Vector3(TENT_X1 + 0.3, 2, -1), Vector3(0.6, 4, 24))
-
-	var dispenser := MugDispenser.new()
-	dispenser.position = Vector3(-6, 0, -8)
-	add_child(dispenser)
-	var keg := KegStation.new()
-	keg.position = Vector3(-2, 0, -8)
-	add_child(keg)
-	var keg2 := KegStation.new()
-	keg2.position = Vector3(2, 0, -8)
-	add_child(keg2)
-
-	var positions := [
-		Vector3(-6, 0, 4), Vector3(-2, 0, 6), Vector3(2, 0, 6),
-		Vector3(6, 0, 4), Vector3(-6, 0, 0), Vector3(6, 0, 0),
-	]
-	var idx := 0
-	for p in positions:
-		var t := CustomerTable.new()
-		t.position = p
-		t.table_index = idx
-		add_child(t)
-		_tables.append(t)
-		idx += 1
-
-## Görünmez çarpışma kutusu (oyuncular çadırdan çıkamasın)
-func _collision_box(pos: Vector3, size: Vector3) -> void:
-	var body := StaticBody3D.new()
-	body.position = pos
-	add_child(body)
-	var col := CollisionShape3D.new()
-	var box_shape := BoxShape3D.new()
-	box_shape.size = size
-	col.shape = box_shape
-	body.add_child(col)
-
-## Oktoberfest çadırını modüler modellerle döşer (kapalı oda: overlap ile boşluksuz).
-func _build_tent() -> void:
-	const S := 1.8            # biraz daha büyük
-	const WALL_OVL := 0.82    # duvar bindirme (boşluksuz)
-	const ROOF_OVL := 0.86    # çatı bindirme (boşluksuz)
-	var floor_ps := load("res://assets/models/floor.glb")
-	var wall_ps := load("res://assets/models/wall.glb")
-	var roof_ps := load("res://assets/models/roof.glb")
-
-	# Zemin karoları
-	var fs := 1.903 * S * 0.98
-	var y_floor := -0.096 * S
-	var x := TENT_X0
-	while x <= TENT_X1 + 0.01:
-		var z := TENT_Z0
-		while z <= TENT_Z1 + 0.01:
-			_spawn_model(floor_ps, Vector3(x, y_floor, z), S, 0.0)
-			z += fs
-		x += fs
-
-	# Duvarlar (kenarlar boyunca, bitişik/overlap) + fener ışıkları
-	var ws := 1.489 * S * WALL_OVL
-	var y_wall := 0.951 * S
-	var lamp_y := y_wall + 0.55 * S
-	var inw := 0.5
-	var li := 0
-	x = TENT_X0
-	while x <= TENT_X1 + 0.01:
-		_spawn_model(wall_ps, Vector3(x, y_wall, TENT_Z0), S, 0.0)
-		_spawn_model(wall_ps, Vector3(x, y_wall, TENT_Z1), S, 180.0)
-		if li % 2 == 0:
-			_add_lantern_light(Vector3(x, lamp_y, TENT_Z0 + inw))
-			_add_lantern_light(Vector3(x, lamp_y, TENT_Z1 - inw))
-		li += 1
-		x += ws
-	var z2 := TENT_Z0
-	while z2 <= TENT_Z1 + 0.01:
-		_spawn_model(wall_ps, Vector3(TENT_X0, y_wall, z2), S, 90.0)
-		_spawn_model(wall_ps, Vector3(TENT_X1, y_wall, z2), S, -90.0)
-		if li % 2 == 0:
-			_add_lantern_light(Vector3(TENT_X0 + inw, lamp_y, z2))
-			_add_lantern_light(Vector3(TENT_X1 - inw, lamp_y, z2))
-		li += 1
-		z2 += ws
-
-	# Çatı (overlap + kenarlarda saçak taşması → boşluksuz, kapalı)
-	var rsx := 1.445 * S * ROOF_OVL
-	var rsz := 1.917 * S * ROOF_OVL
-	var y_roof := 1.9 * S + 0.30 * S
-	x = TENT_X0 - 1.0
-	while x <= TENT_X1 + 1.0:
-		var z3 := TENT_Z0 - 1.0
-		while z3 <= TENT_Z1 + 1.0:
-			_spawn_model(roof_ps, Vector3(x, y_roof, z3), S, 0.0)
-			z3 += rsz
-		x += rsx
-
-	# İç mekan: tavandan sarkan fenerler (parlayan ampul + sıcak ışık)
-	var ceil_y := 1.9 * S - 0.4
-	for hx in [-6.0, 0.0, 6.0]:
-		for hz in [-8.0, -3.0, 2.0, 7.0]:
-			_add_hanging_lantern(Vector3(hx, ceil_y, hz))
-
-## Tavandan sarkan fener: küçük parlayan küre + gölgesiz sıcak OmniLight
-func _add_hanging_lantern(pos: Vector3) -> void:
-	var bulb := MeshInstance3D.new()
-	var sph := SphereMesh.new()
-	sph.radius = 0.12
-	sph.height = 0.24
-	bulb.mesh = sph
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(1.0, 0.85, 0.55)
-	mat.emission_enabled = true
-	mat.emission = Color(1.0, 0.78, 0.45)
-	mat.emission_energy_multiplier = 4.0
-	bulb.material_override = mat
-	bulb.position = pos
-	add_child(bulb)
-
-	var l := OmniLight3D.new()
-	l.position = pos
-	l.light_color = Color(1.0, 0.82, 0.5)
-	l.light_energy = 2.6
-	l.omni_range = 9.0
-	l.omni_attenuation = 1.2
-	l.shadow_enabled = false
-	add_child(l)
-
-## Sıcak fener ışığı (gölgesiz, performans için)
-func _add_lantern_light(pos: Vector3) -> void:
-	var l := OmniLight3D.new()
-	l.position = pos
-	l.light_color = Color(1.0, 0.80, 0.48)
-	l.light_energy = 2.2
-	l.omni_range = 6.5
-	l.omni_attenuation = 1.5
-	l.shadow_enabled = false
-	add_child(l)
-
-func _spawn_model(ps: PackedScene, pos: Vector3, s: float, rot_y: float) -> void:
-	var m: Node3D = ps.instantiate()
-	m.position = pos
-	m.scale = Vector3(s, s, s)
-	m.rotation_degrees.y = rot_y
-	add_child(m)
-
 # ================================================= oyuncular
 @rpc("any_peer", "reliable")
 func _client_ready() -> void:
 	if not multiplayer.is_server():
 		return
 	var sender := multiplayer.get_remote_sender_id()
-	# Mevcut oyuncuları yeni gelene gönder
 	for pid in _spawn_index_by_peer.keys():
 		_add_player.rpc_id(sender, pid, _spawn_index_by_peer[pid])
-	# Yeni geleni herkese ekle
 	var sidx := _next_spawn
 	_next_spawn += 1
 	_spawn_index_by_peer[sender] = sidx
@@ -255,10 +77,10 @@ func _client_ready() -> void:
 func _add_player(peer_id: int, spawn_index: int) -> void:
 	if _players_nodes.has(peer_id):
 		return
-	var p := Player.new()
+	var p := PLAYER_SCENE.instantiate()
 	p.name = str(peer_id)
 	p.set_multiplayer_authority(peer_id)
-	p.position = SPAWN_POINTS[spawn_index % SPAWN_POINTS.size()]
+	p.position = _spawn_points[spawn_index % _spawn_points.size()]
 	_players_container.add_child(p)
 	_players_nodes[peer_id] = p
 
@@ -297,8 +119,6 @@ func _process(delta: float) -> void:
 		return
 	if not multiplayer.is_server():
 		return
-
-	# Dedicated server: kimse yokken vardiyayı başlatma/çalıştırma
 	if Net.dedicated and _players_nodes.is_empty():
 		return
 
@@ -343,7 +163,6 @@ func _broadcast_sync() -> void:
 
 @rpc("authority", "unreliable")
 func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array) -> void:
-	# Sadece istemcilerde çalışır (host'ta call_local yok)
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(time_left)

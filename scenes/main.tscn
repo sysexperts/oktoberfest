@@ -1,6 +1,126 @@
-[gd_scene format=3 uid="uid://b7dl2t154d5cj"]
+[gd_scene load_steps=13 format=3 uid="uid://b7dl2t154d5cj"]
 
-[ext_resource type="Script" uid="uid://2xj70othwtox" path="res://scripts/game_manager.gd" id="1_gm"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_gm"]
+[ext_resource type="PackedScene" path="res://scenes/tent.tscn" id="2_tent"]
+[ext_resource type="PackedScene" path="res://scenes/mug_dispenser.tscn" id="3_disp"]
+[ext_resource type="PackedScene" path="res://scenes/keg_station.tscn" id="4_keg"]
+[ext_resource type="PackedScene" path="res://scenes/customer_table.tscn" id="5_table"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud"]
 
-[node name="Main" type="Node3D" unique_id=131253687]
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMat")
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 2
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_energy = 0.6
+
+[sub_resource type="WorldBoundaryShape3D" id="Ground"]
+
+[sub_resource type="BoxShape3D" id="WallX"]
+size = Vector3(22, 4, 0.6)
+
+[sub_resource type="BoxShape3D" id="WallZ"]
+size = Vector3(0.6, 4, 24)
+
+[node name="Main" type="Node3D"]
 script = ExtResource("1_gm")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819152, -0.401695, 0.409576, 0, 0.713251, 0.700909, -0.573576, -0.574227, 0.585489, 0, 10, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("Ground")
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="WallSouth" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -11.8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallSouth"]
+shape = SubResource("WallX")
+
+[node name="WallNorth" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 9.8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallNorth"]
+shape = SubResource("WallX")
+
+[node name="WallWest" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.8, 2, -1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallWest"]
+shape = SubResource("WallZ")
+
+[node name="WallEast" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.8, 2, -1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallEast"]
+shape = SubResource("WallZ")
+
+[node name="Tent" parent="." instance=ExtResource("2_tent")]
+
+[node name="Stations" type="Node3D" parent="."]
+
+[node name="MugDispenser" parent="Stations" instance=ExtResource("3_disp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -8)
+
+[node name="Keg1" parent="Stations" instance=ExtResource("4_keg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -8)
+
+[node name="Keg2" parent="Stations" instance=ExtResource("4_keg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -8)
+
+[node name="Tables" type="Node3D" parent="."]
+
+[node name="Table0" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 4)
+table_index = 0
+
+[node name="Table1" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 6)
+table_index = 1
+
+[node name="Table2" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
+table_index = 2
+
+[node name="Table3" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
+table_index = 3
+
+[node name="Table4" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
+table_index = 4
+
+[node name="Table5" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+table_index = 5
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="Spawn0" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+
+[node name="Spawn1" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
+
+[node name="Spawn2" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 2)
+
+[node name="Spawn3" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 2)
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("6_hud")
