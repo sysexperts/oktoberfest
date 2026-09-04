@@ -117,9 +117,10 @@ func _update_target() -> void:
 	for node in get_tree().get_nodes_in_group("interactable"):
 		if node == held:
 			continue
-		if not (node is Node3D):
+		var n3 := node as Node3D
+		if n3 == null:
 			continue
-		var to := (node.global_position - global_position)
+		var to: Vector3 = n3.global_position - global_position
 		to.y = 0
 		var dist := to.length()
 		if dist > INTERACT_RANGE:
@@ -130,7 +131,7 @@ func _update_target() -> void:
 		var s := facing / maxf(dist, 0.1)
 		if s > best_score:
 			best_score = s
-			best = node
+			best = n3
 	_current_target = best
 	_update_highlight()
 
