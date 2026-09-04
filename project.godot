@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Oktoberfest Simulator"
 config/description="2-4 arkadaş, kaotik bir Oktoberfest çadırında bira/yemek servis ederken didişiyor."
-run/main_scene="res://scenes/menu.tscn"
+run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
