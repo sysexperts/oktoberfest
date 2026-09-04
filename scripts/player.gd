@@ -61,9 +61,8 @@ func _build_body() -> void:
 	_model = CHAR_SCENE.instantiate()
 	add_child(_model)
 	_model.rotation_degrees.y = MODEL_YAW
-	_fit_model(_model, MODEL_HEIGHT)
-	# Erken-zamanlama (global_transform henüz oturmamışsa) hatalarına karşı bir kare sonra tekrar ölç
-	call_deferred("_fit_model", _model, MODEL_HEIGHT)
+	# NOT: Model doğal ölçeğinde (scale 1) zaten ~1.7m — otomatik fit ×100 yapıp
+	# dev ediyordu (skinned mesh AABB yanlış ölçülüyor). Bu yüzden fit KALDIRILDI.
 	_model.visible = not _is_local
 
 	# Baş + kamera (kamera yalnız yerelde aktif)
@@ -256,27 +255,3 @@ func _update_carry_visual() -> void:
 	if has_mug:
 		_carry_beer.scale.y = maxf(carry_fill, 0.001)
 		_carry_beer.position.y = -0.08 + (0.16 * carry_fill) * 0.5
-
-## Modeli gerçek görünen boyutuna göre ölçekler (dünya-uzayı AABB, çarpımsal).
-## Ölçek modelin kökünde/iç düğümünde gömülü olsa da doğru çalışır.
-func _fit_model(root: Node3D, target_height: float) -> void:
-	var a := _world_aabb(root)
-	if a.size.y > 0.0001:
-		root.scale *= (target_height / a.size.y)
-	# Ayakları oyuncunun taban hizasına çek
-	var a2 := _world_aabb(root)
-	root.global_position.y += (global_position.y - a2.position.y)
-
-## Tüm görsel alt-düğümlerin DÜNYA uzayındaki birleşik AABB'si (mevcut ölçek dahil).
-func _world_aabb(root: Node3D) -> AABB:
-	var result := AABB()
-	var has := false
-	for child in root.find_children("*", "VisualInstance3D", true, false):
-		var vi := child as VisualInstance3D
-		var a := vi.global_transform * vi.get_aabb()
-		if not has:
-			result = a
-			has = true
-		else:
-			result = result.merge(a)
-	return result
