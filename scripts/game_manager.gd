@@ -46,10 +46,14 @@ func _ready() -> void:
 	_hud.set_time(_time_left)
 
 	if multiplayer.is_server():
-		_spawn_index_by_peer[1] = 0
-		_next_spawn = 1
-		_add_player(1, 0)
 		multiplayer.peer_disconnected.connect(_on_peer_left)
+		if Net.dedicated:
+			# Dedicated server: kendisi oyuncu değil, sadece simülasyonu yürütür
+			_next_spawn = 0
+		else:
+			_spawn_index_by_peer[1] = 0
+			_next_spawn = 1
+			_add_player(1, 0)
 	else:
 		_client_ready.rpc_id(1)
 
@@ -192,6 +196,10 @@ func _process(delta: float) -> void:
 			_net_reload.rpc()
 		return
 	if not multiplayer.is_server():
+		return
+
+	# Dedicated server: kimse yokken vardiyayı başlatma/çalıştırma
+	if Net.dedicated and _players_nodes.is_empty():
 		return
 
 	_time_left -= delta

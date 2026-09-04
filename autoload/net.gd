@@ -9,6 +9,21 @@ const GAME_SCENE := "res://scenes/main.tscn"
 signal connection_failed()
 
 var player_name: String = "Oyuncu"
+var dedicated := false ## true ise oyuncu spawn edilmez (headless dedicated server)
+
+func _ready() -> void:
+	# Dedicated server modu: "-- --server" ile başlatılınca otomatik host
+	if OS.get_cmdline_user_args().has("--server"):
+		dedicated = true
+		call_deferred("_start_dedicated")
+
+func _start_dedicated() -> void:
+	var err := host_game()
+	if err == OK:
+		print("[DEDICATED] Server açık, port %d" % DEFAULT_PORT)
+	else:
+		push_error("[DEDICATED] Server açılamadı: %d" % err)
+		get_tree().quit(1)
 
 func host_game(port: int = DEFAULT_PORT) -> Error:
 	var peer := ENetMultiplayerPeer.new()
