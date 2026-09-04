@@ -39,7 +39,7 @@ func _ready() -> void:
 	crosshair.offset_top = -18
 	add_child(crosshair)
 
-	_hint_label = _make_label("WASD: hareket · Fare: bak · Shift: koş · E: al/bırak/servis · Fıçıda E basılı tut · Esc: fare")
+	_hint_label = _make_label("WASD · Fare: bak · Shift: koş · E: al/servis · Fıçıda E basılı tut (doğru bira!) · Q: Prost · Esc: fare")
 	_hint_label.anchor_top = 1.0
 	_hint_label.anchor_left = 0.0
 	_hint_label.offset_left = 16
