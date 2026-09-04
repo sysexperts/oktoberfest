@@ -130,15 +130,17 @@ func _collision_box(pos: Vector3, size: Vector3) -> void:
 	col.shape = box_shape
 	body.add_child(col)
 
-## Oktoberfest çadırını modüler modellerle döşer (floor/wall/roof).
+## Oktoberfest çadırını modüler modellerle döşer (kapalı oda: overlap ile boşluksuz).
 func _build_tent() -> void:
-	const S := 1.6
+	const S := 1.8            # biraz daha büyük
+	const WALL_OVL := 0.82    # duvar bindirme (boşluksuz)
+	const ROOF_OVL := 0.86    # çatı bindirme (boşluksuz)
 	var floor_ps := load("res://assets/models/floor.glb")
 	var wall_ps := load("res://assets/models/wall.glb")
 	var roof_ps := load("res://assets/models/roof.glb")
 
 	# Zemin karoları
-	var fs := 1.903 * S
+	var fs := 1.903 * S * 0.98
 	var y_floor := -0.096 * S
 	var x := TENT_X0
 	while x <= TENT_X1 + 0.01:
@@ -148,31 +150,53 @@ func _build_tent() -> void:
 			z += fs
 		x += fs
 
-	# Duvarlar (kenarlar boyunca)
-	var ws := 1.489 * S
+	# Duvarlar (kenarlar boyunca, bitişik/overlap) + fener ışıkları
+	var ws := 1.489 * S * WALL_OVL
 	var y_wall := 0.951 * S
+	var lamp_y := y_wall + 0.55 * S
+	var inw := 0.5
+	var li := 0
 	x = TENT_X0
 	while x <= TENT_X1 + 0.01:
 		_spawn_model(wall_ps, Vector3(x, y_wall, TENT_Z0), S, 0.0)
 		_spawn_model(wall_ps, Vector3(x, y_wall, TENT_Z1), S, 180.0)
+		if li % 2 == 0:
+			_add_lantern_light(Vector3(x, lamp_y, TENT_Z0 + inw))
+			_add_lantern_light(Vector3(x, lamp_y, TENT_Z1 - inw))
+		li += 1
 		x += ws
 	var z2 := TENT_Z0
 	while z2 <= TENT_Z1 + 0.01:
 		_spawn_model(wall_ps, Vector3(TENT_X0, y_wall, z2), S, 90.0)
 		_spawn_model(wall_ps, Vector3(TENT_X1, y_wall, z2), S, -90.0)
+		if li % 2 == 0:
+			_add_lantern_light(Vector3(TENT_X0 + inw, lamp_y, z2))
+			_add_lantern_light(Vector3(TENT_X1 - inw, lamp_y, z2))
+		li += 1
 		z2 += ws
 
-	# Çatı
-	var rsx := 1.445 * S
-	var rsz := 1.917 * S
-	var y_roof := 1.9 * S + 0.383 * S
-	x = TENT_X0
-	while x <= TENT_X1 + 0.01:
-		var z3 := TENT_Z0
-		while z3 <= TENT_Z1 + 0.01:
+	# Çatı (overlap + kenarlarda saçak taşması → boşluksuz, kapalı)
+	var rsx := 1.445 * S * ROOF_OVL
+	var rsz := 1.917 * S * ROOF_OVL
+	var y_roof := 1.9 * S + 0.30 * S
+	x = TENT_X0 - 1.0
+	while x <= TENT_X1 + 1.0:
+		var z3 := TENT_Z0 - 1.0
+		while z3 <= TENT_Z1 + 1.0:
 			_spawn_model(roof_ps, Vector3(x, y_roof, z3), S, 0.0)
 			z3 += rsz
 		x += rsx
+
+## Sıcak fener ışığı (gölgesiz, performans için)
+func _add_lantern_light(pos: Vector3) -> void:
+	var l := OmniLight3D.new()
+	l.position = pos
+	l.light_color = Color(1.0, 0.80, 0.48)
+	l.light_energy = 2.2
+	l.omni_range = 6.5
+	l.omni_attenuation = 1.5
+	l.shadow_enabled = false
+	add_child(l)
 
 func _spawn_model(ps: PackedScene, pos: Vector3, s: float, rot_y: float) -> void:
 	var m: Node3D = ps.instantiate()
