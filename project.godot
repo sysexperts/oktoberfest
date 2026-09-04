@@ -1,6 +1,10 @@
 ; Engine configuration file.
-; Oktoberfest Simulator — 2-4 player chaotic Bavarian beer-tent co-op.
-; Godot 4.7.x — GDScript, Forward+ renderer, Jolt physics.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
@@ -9,18 +13,14 @@ config_version=5
 config/name="Oktoberfest Simulator"
 config/description="2-4 arkadaş, kaotik bir Oktoberfest çadırında bira/yemek servis ederken didişiyor."
 run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.7", "GDScript", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-Net="res://autoload/net.gd"
-Game="res://autoload/game.gd"
+Net="*res://autoload/net.gd"
+Game="*res://autoload/game.gd"
 
 [physics]
 
 3d/physics_engine="Jolt Physics"
-
-[rendering]
-
-renderer/rendering_method="forward_plus"
