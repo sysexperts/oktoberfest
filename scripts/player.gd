@@ -62,6 +62,8 @@ func _build_body() -> void:
 	add_child(_model)
 	_model.rotation_degrees.y = MODEL_YAW
 	_fit_model(_model, MODEL_HEIGHT)
+	# Erken-zamanlama (global_transform henüz oturmamışsa) hatalarına karşı bir kare sonra tekrar ölç
+	call_deferred("_fit_model", _model, MODEL_HEIGHT)
 	_model.visible = not _is_local
 
 	# Baş + kamera (kamera yalnız yerelde aktif)

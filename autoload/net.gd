@@ -5,6 +5,7 @@ extends Node
 const DEFAULT_PORT := 8642
 const MAX_PLAYERS := 4
 const GAME_SCENE := "res://scenes/main.tscn"
+const BUILD := "v3" ## Menüde gösterilir — hangi sürümü çalıştırdığını doğrulamak için
 
 signal connection_failed()
 

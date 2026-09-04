@@ -23,6 +23,13 @@ func _ready() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
+	var ver := Label.new()
+	ver.text = "Build %s" % Net.BUILD
+	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ver.add_theme_color_override("font_color", Color(0.6, 0.7, 0.85))
+	ver.add_theme_font_size_override("font_size", 14)
+	vbox.add_child(ver)
+
 	var host_btn := Button.new()
 	host_btn.text = "Host Aç (Oyun Kur)"
 	host_btn.custom_minimum_size = Vector2(0, 44)
