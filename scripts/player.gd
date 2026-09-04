@@ -41,6 +41,7 @@ var _net_yaw: float
 @onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
 @onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
 @onready var _emote_label: Label3D = $Emote
+@onready var _ring: MeshInstance3D = $Ring
 
 func _ready() -> void:
 	add_to_group("player")
@@ -69,6 +70,14 @@ func _ready() -> void:
 			_anim.play("Idle")
 			_cur_anim = "Idle"
 	_last_anim_pos = global_position
+
+	# Oyuncuyu kimliğe göre renklendir (kim kim belli olsun)
+	var hue := fmod(absf(float(auth)) * 0.61803399, 1.0)
+	var col := Color.from_hsv(hue, 0.75, 1.0)
+	var rm := _ring.material_override as StandardMaterial3D
+	if rm:
+		rm.albedo_color = col
+		rm.emission = col
 
 	if _is_local:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
