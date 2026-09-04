@@ -11,7 +11,7 @@ const INTERACT_RANGE := 2.2
 const FACING_DOT := 0.35
 const MOUSE_SENS := 0.0025
 const PITCH_LIMIT := deg_to_rad(85.0)
-const EYE_HEIGHT := 1.55
+const EYE_HEIGHT := 1.35 ## Modelin gerçek göz hizası (iskeletten ölçüldü) — arkadaşlarla göz seviyesi aynı olsun
 const FILL_RATE := 0.6 # saniyede doluluk
 const CHAR_SCENE: PackedScene = preload("res://assets/character/character/bavarian_bean.glb")
 const MODEL_HEIGHT := 1.7
@@ -34,6 +34,9 @@ var _carry_glass: MeshInstance3D
 var _carry_beer: MeshInstance3D
 var _net_pos: Vector3
 var _net_yaw: float
+var _anim: AnimationPlayer
+var _cur_anim := ""
+var _last_anim_pos: Vector3
 
 func _ready() -> void:
 	add_to_group("player")
@@ -64,6 +67,18 @@ func _build_body() -> void:
 	# NOT: Model doğal ölçeğinde (scale 1) zaten ~1.7m — otomatik fit ×100 yapıp
 	# dev ediyordu (skinned mesh AABB yanlış ölçülüyor). Bu yüzden fit KALDIRILDI.
 	_model.visible = not _is_local
+
+	# Animasyon: Idle/Walk/Run döngüsü (model GLB'sinde hazır)
+	var aps := _model.find_children("*", "AnimationPlayer", true, false)
+	if aps.size() > 0:
+		_anim = aps[0]
+		for n in ["Idle", "Walk", "Run"]:
+			if _anim.has_animation(n):
+				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
+		if _anim.has_animation("Idle"):
+			_anim.play("Idle")
+			_cur_anim = "Idle"
+	_last_anim_pos = global_position
 
 	# Baş + kamera (kamera yalnız yerelde aktif)
 	_head = Node3D.new()
@@ -144,6 +159,26 @@ func _physics_process(delta: float) -> void:
 		global_position = global_position.lerp(_net_pos, t)
 		rotation.y = lerp_angle(rotation.y, _net_yaw, t)
 	_update_carry_visual()
+	_update_animation(delta)
+
+## Hareket hızına göre Idle/Walk/Run seçer (hem yerel hem uzak oyuncularda).
+func _update_animation(delta: float) -> void:
+	if _anim == null:
+		return
+	var spd: float
+	if _is_local:
+		spd = Vector2(velocity.x, velocity.z).length()
+	else:
+		spd = (global_position - _last_anim_pos).length() / maxf(delta, 0.0001)
+	_last_anim_pos = global_position
+	var want := "Idle"
+	if spd > 5.5:
+		want = "Run"
+	elif spd > 0.4:
+		want = "Walk"
+	if want != _cur_anim and _anim.has_animation(want):
+		_anim.play(want)
+		_cur_anim = want
 
 @rpc("authority", "unreliable_ordered")
 func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float) -> void:
