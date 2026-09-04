@@ -1,0 +1,20 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Godot-created exports
+export.cfg
+export_presets.cfg
+/build/
+/exports/
+# NOTE: *.import files ARE committed in Godot 4 (they hold import settings + UIDs).
+
+# Mono/C# (unused, GDScript project) — kept for safety
+.mono/
+data_*/
+mono_crash.*.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.tmp

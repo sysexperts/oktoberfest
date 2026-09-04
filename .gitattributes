@@ -1,0 +1,34 @@
+# Normalize line endings for text-based Godot/source files
+* text=auto eol=lf
+*.gd    text eol=lf
+*.tscn  text eol=lf
+*.tres  text eol=lf
+*.cfg   text eol=lf
+*.godot text eol=lf
+*.import text eol=lf
+*.md    text eol=lf
+
+# --- Git LFS: binary art/audio assets ---
+# 3D models
+*.glb   filter=lfs diff=lfs merge=lfs -text
+*.gltf  filter=lfs diff=lfs merge=lfs -text
+*.fbx   filter=lfs diff=lfs merge=lfs -text
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.obj   filter=lfs diff=lfs merge=lfs -text
+
+# Textures / images
+*.png   filter=lfs diff=lfs merge=lfs -text
+*.jpg   filter=lfs diff=lfs merge=lfs -text
+*.jpeg  filter=lfs diff=lfs merge=lfs -text
+*.tga   filter=lfs diff=lfs merge=lfs -text
+*.exr   filter=lfs diff=lfs merge=lfs -text
+*.hdr   filter=lfs diff=lfs merge=lfs -text
+*.webp  filter=lfs diff=lfs merge=lfs -text
+
+# Audio
+*.wav   filter=lfs diff=lfs merge=lfs -text
+*.ogg   filter=lfs diff=lfs merge=lfs -text
+*.mp3   filter=lfs diff=lfs merge=lfs -text
+
+# NOTE: icon.svg is text (kept out of LFS via the rule below).
+*.svg   text eol=lf
