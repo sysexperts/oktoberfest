@@ -13,9 +13,13 @@ const PITCH_LIMIT := deg_to_rad(85.0)
 const EYE_HEIGHT := 1.35
 const FILL_RATE := 0.6
 
+# 1 Helles, 2 Weizen, 3 Radler
+const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
+
 # Ağ ile senkronlanan durum
 var carry_state := 0     # 0 = boş el, 1 = bardak
 var carry_fill := 0.0    # 0..1
+var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler
 
 var _is_local := false
 var _world: Node
@@ -101,7 +105,7 @@ func _physics_process(delta: float) -> void:
 		_handle_movement(delta)
 		_update_target()
 		_handle_interaction(delta)
-		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill)
+		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type)
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
@@ -128,11 +132,12 @@ func _update_animation(delta: float) -> void:
 		_cur_anim = want
 
 @rpc("authority", "unreliable_ordered")
-func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float) -> void:
+func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
 	carry_state = cstate
 	carry_fill = cfill
+	carry_type = ctype
 
 func _handle_movement(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -190,36 +195,40 @@ func _handle_interaction(delta: float) -> void:
 		if Input.is_action_just_pressed("interact") and carry_state != 0:
 			carry_state = 0
 			carry_fill = 0.0
+			carry_type = 0
 		return
 	if Input.is_action_just_pressed("interact"):
 		if _current_target is CustomerTable and _has_full_mug():
-			_serve((_current_target as CustomerTable).table_index)
+			_serve((_current_target as CustomerTable).table_index, carry_type)
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
 			carry_fill = 0.0
+			carry_type = 0
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
+			carry_type = (_current_target as KegStation).beer_type
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
 
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
 
-func _serve(index: int) -> void:
+func _serve(index: int, bt: int) -> void:
 	if multiplayer.is_server():
-		_apply_serve(index)
+		_apply_serve(index, bt)
 	else:
-		_serve_request.rpc_id(1, index)
+		_serve_request.rpc_id(1, index, bt)
 
 @rpc("any_peer", "reliable")
-func _serve_request(index: int) -> void:
+func _serve_request(index: int, bt: int) -> void:
 	if multiplayer.is_server():
-		_apply_serve(index)
+		_apply_serve(index, bt)
 
-func _apply_serve(index: int) -> void:
-	if _world.has_method("host_try_serve") and _world.host_try_serve(index):
+func _apply_serve(index: int, bt: int) -> void:
+	if _world.has_method("host_try_serve") and _world.host_try_serve(index, bt):
 		if is_multiplayer_authority():
 			carry_state = 0
 			carry_fill = 0.0
+			carry_type = 0
 		else:
 			_clear_carry.rpc_id(get_multiplayer_authority())
 
@@ -227,6 +236,7 @@ func _apply_serve(index: int) -> void:
 func _clear_carry() -> void:
 	carry_state = 0
 	carry_fill = 0.0
+	carry_type = 0
 
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1
@@ -235,3 +245,6 @@ func _update_carry_visual() -> void:
 	if has_mug:
 		_carry_beer.scale.y = maxf(carry_fill, 0.001)
 		_carry_beer.position.y = -0.08 + (0.16 * carry_fill) * 0.5
+		var m := _carry_beer.material_override as StandardMaterial3D
+		if m:
+			m.albedo_color = BEER_COLORS.get(carry_type, BEER_COLORS[0])

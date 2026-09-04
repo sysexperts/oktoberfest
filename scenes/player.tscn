@@ -22,6 +22,7 @@ bottom_radius = 0.048
 height = 0.16
 
 [sub_resource type="StandardMaterial3D" id="MatBeer"]
+resource_local_to_scene = true
 albedo_color = Color(0.95, 0.65, 0.05, 1)
 
 [node name="Player" type="CharacterBody3D"]

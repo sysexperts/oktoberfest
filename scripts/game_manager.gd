@@ -99,15 +99,16 @@ func _on_peer_left(peer_id: int) -> void:
 	_remove_player.rpc(peer_id)
 
 # ================================================= host servis
-func host_try_serve(index: int) -> bool:
+func host_try_serve(index: int, beer_type: int) -> bool:
 	if not multiplayer.is_server():
 		return false
 	if index < 0 or index >= _tables.size():
 		return false
-	if _tables[index].host_serve():
+	if _tables[index].host_serve(beer_type):
 		_served += 1
+		var tip := randi_range(0, 5)
 		Game.add_score(CustomerTable.REWARD)
-		Game.add_money(CustomerTable.REWARD)
+		Game.add_money(CustomerTable.REWARD + tip)
 		return true
 	return false
 
@@ -156,19 +157,21 @@ func _try_spawn_customer() -> void:
 func _broadcast_sync() -> void:
 	var st := PackedInt32Array()
 	var ra := PackedFloat32Array()
+	var rq := PackedInt32Array()
 	for t in _tables:
 		st.append(t.state)
 		ra.append(t.ratio())
-	_net_sync.rpc(Game.money, Game.score, _time_left, st, ra)
+		rq.append(t.required_type)
+	_net_sync.rpc(Game.money, Game.score, _time_left, st, ra, rq)
 
 @rpc("authority", "unreliable")
-func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array) -> void:
+func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(time_left)
 	for i in range(_tables.size()):
 		if i < st.size():
-			_tables[i].apply_sync(st[i], ra[i])
+			_tables[i].apply_sync(st[i], ra[i], rq[i])
 
 func _end_shift() -> void:
 	_shift_over = true

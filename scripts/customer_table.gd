@@ -8,10 +8,13 @@ enum State { EMPTY = 0, WAITING = 1, SERVED = 2, MISSED = 3 }
 const PATIENCE := 20.0
 const REWARD := 10
 const CLEAR_DELAY := 1.5
+const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler"}
+const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
 
 @export var table_index := 0
 
 var state: int = State.EMPTY
+var required_type := 1
 var _patience_left := 0.0
 var _clear_left := 0.0
 
@@ -33,6 +36,7 @@ func ratio() -> float:
 # ---- HOST mantığı ----
 func host_seat() -> void:
 	state = State.WAITING
+	required_type = randi_range(1, 3)
 	_patience_left = PATIENCE
 	_apply_visual()
 
@@ -52,8 +56,11 @@ func host_tick(delta: float) -> int:
 	_apply_visual()
 	return missed
 
-func host_serve() -> bool:
+## Doğru bira tipiyse servis eder. Yanlış tip -> false (servis olmaz).
+func host_serve(beer_type: int) -> bool:
 	if state != State.WAITING:
+		return false
+	if beer_type != required_type:
 		return false
 	state = State.SERVED
 	_clear_left = CLEAR_DELAY
@@ -61,8 +68,9 @@ func host_serve() -> bool:
 	return true
 
 # ---- İSTEMCİ senkronu ----
-func apply_sync(new_state: int, new_ratio: float) -> void:
+func apply_sync(new_state: int, new_ratio: float, req: int) -> void:
 	state = new_state
+	required_type = req
 	_patience_left = new_ratio * PATIENCE
 	_apply_visual()
 
@@ -74,7 +82,8 @@ func _apply_visual() -> void:
 		State.WAITING:
 			_customer.visible = true
 			_bubble.visible = true
-			_bubble.text = "🍺"
+			_bubble.text = "🍺 " + BEER_NAMES.get(required_type, "Bira")
+			_bubble.modulate = BEER_COLORS.get(required_type, Color.WHITE)
 			_bar_fill.visible = true
 			var t := ratio()
 			_bar_fill.scale.x = maxf(t, 0.001)
@@ -87,11 +96,13 @@ func _apply_visual() -> void:
 			_customer.visible = true
 			_bubble.visible = true
 			_bubble.text = "😄"
+			_bubble.modulate = Color.WHITE
 			_bar_fill.visible = false
 		State.MISSED:
 			_customer.visible = true
 			_bubble.visible = true
 			_bubble.text = "😡"
+			_bubble.modulate = Color.WHITE
 			_bar_fill.visible = false
 		_:
 			_customer.visible = false
