@@ -26,7 +26,20 @@ func _ready() -> void:
 	top.add_child(_score_label)
 	top.add_child(_time_label)
 
-	_hint_label = _make_label("WASD: hareket · Shift: koş · E: al/bırak/servis · Fıçıda E'yi basılı tut")
+	# Nişangah (ekran merkezi)
+	var crosshair := Label.new()
+	crosshair.text = "+"
+	crosshair.add_theme_font_size_override("font_size", 28)
+	crosshair.add_theme_color_override("font_color", Color(1, 1, 1, 0.8))
+	crosshair.add_theme_color_override("font_outline_color", Color.BLACK)
+	crosshair.add_theme_constant_override("outline_size", 4)
+	crosshair.anchor_left = 0.5
+	crosshair.anchor_top = 0.5
+	crosshair.offset_left = -9
+	crosshair.offset_top = -18
+	add_child(crosshair)
+
+	_hint_label = _make_label("WASD: hareket · Fare: bak · Shift: koş · E: al/bırak/servis · Fıçıda E basılı tut · Esc: fare")
 	_hint_label.anchor_top = 1.0
 	_hint_label.anchor_left = 0.0
 	_hint_label.offset_left = 16
@@ -90,6 +103,7 @@ func show_summary(served: int, missed: int, money: int, score: int) -> void:
 	_summary_label.text = "Servis edilen: %d\nKaçırılan: %d\nKazanç: %d€\nSkor: %d" % [served, missed, money, score]
 	_summary_panel.visible = true
 	_hint_label.visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func restart_requested() -> bool:
 	return _restart_pressed
