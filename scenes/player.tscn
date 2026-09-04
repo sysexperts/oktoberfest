@@ -35,6 +35,14 @@ shape = SubResource("Cap")
 [node name="Model" parent="." instance=ExtResource("2")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 
+[node name="Emote" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+visible = false
+billboard = 1
+pixel_size = 0.01
+font_size = 64
+text = "Prost! 🍻"
+
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
 

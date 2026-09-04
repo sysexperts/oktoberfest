@@ -20,6 +20,8 @@ const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: 
 var carry_state := 0     # 0 = boş el, 1 = bardak
 var carry_fill := 0.0    # 0..1
 var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler
+var emote := 0           # 0 yok, 1 Prost/dans (senkron)
+var _emote_until := 0.0
 
 var _is_local := false
 var _world: Node
@@ -38,6 +40,7 @@ var _net_yaw: float
 @onready var _hold_point: Node3D = $Head/HoldPoint
 @onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
 @onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
+@onready var _emote_label: Label3D = $Emote
 
 func _ready() -> void:
 	add_to_group("player")
@@ -59,7 +62,7 @@ func _ready() -> void:
 	var aps := _model.find_children("*", "AnimationPlayer", true, false)
 	if aps.size() > 0:
 		_anim = aps[0]
-		for n in ["Idle", "Walk", "Run"]:
+		for n in ["Idle", "Walk", "Run", "Dance"]:
 			if _anim.has_animation(n):
 				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
 		if _anim.has_animation("Idle"):
@@ -95,6 +98,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		_head.rotation.x = _pitch
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Q: Prost/dans emote (InputMap yerine doğrudan tuş — autoload'a bağlı değil)
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_Q:
+		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
@@ -105,7 +111,8 @@ func _physics_process(delta: float) -> void:
 		_handle_movement(delta)
 		_update_target()
 		_handle_interaction(delta)
-		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type)
+		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
+		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote)
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
@@ -115,6 +122,12 @@ func _physics_process(delta: float) -> void:
 
 func _update_animation(delta: float) -> void:
 	if _anim == null:
+		return
+	_emote_label.visible = emote == 1
+	if emote == 1:
+		if _cur_anim != "Dance" and _anim.has_animation("Dance"):
+			_anim.play("Dance")
+			_cur_anim = "Dance"
 		return
 	var spd: float
 	if _is_local:
@@ -132,12 +145,13 @@ func _update_animation(delta: float) -> void:
 		_cur_anim = want
 
 @rpc("authority", "unreliable_ordered")
-func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int) -> void:
+func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int, em: int) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
 	carry_state = cstate
 	carry_fill = cfill
 	carry_type = ctype
+	emote = em
 
 func _handle_movement(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
