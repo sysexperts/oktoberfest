@@ -3,7 +3,7 @@ extends Node3D
 ## Host: vardiya/müşteri/skor otoriter yürütür ve istemcilere senkronlar.
 ## Oyuncular spawner-benzeri el sıkışma ile eklenir; hareket Player içinde senkronlanır.
 
-const SHIFT_TIME := 120.0
+const SHIFT_TIME := 800.0
 const SPAWN_START := 6.0
 const SPAWN_MIN := 2.5
 const SYNC_INTERVAL := 0.15
@@ -186,6 +186,37 @@ func _build_tent() -> void:
 			_spawn_model(roof_ps, Vector3(x, y_roof, z3), S, 0.0)
 			z3 += rsz
 		x += rsx
+
+	# İç mekan: tavandan sarkan fenerler (parlayan ampul + sıcak ışık)
+	var ceil_y := 1.9 * S - 0.4
+	for hx in [-6.0, 0.0, 6.0]:
+		for hz in [-8.0, -3.0, 2.0, 7.0]:
+			_add_hanging_lantern(Vector3(hx, ceil_y, hz))
+
+## Tavandan sarkan fener: küçük parlayan küre + gölgesiz sıcak OmniLight
+func _add_hanging_lantern(pos: Vector3) -> void:
+	var bulb := MeshInstance3D.new()
+	var sph := SphereMesh.new()
+	sph.radius = 0.12
+	sph.height = 0.24
+	bulb.mesh = sph
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(1.0, 0.85, 0.55)
+	mat.emission_enabled = true
+	mat.emission = Color(1.0, 0.78, 0.45)
+	mat.emission_energy_multiplier = 4.0
+	bulb.material_override = mat
+	bulb.position = pos
+	add_child(bulb)
+
+	var l := OmniLight3D.new()
+	l.position = pos
+	l.light_color = Color(1.0, 0.82, 0.5)
+	l.light_energy = 2.6
+	l.omni_range = 9.0
+	l.omni_attenuation = 1.2
+	l.shadow_enabled = false
+	add_child(l)
 
 ## Sıcak fener ışığı (gölgesiz, performans için)
 func _add_lantern_light(pos: Vector3) -> void:
