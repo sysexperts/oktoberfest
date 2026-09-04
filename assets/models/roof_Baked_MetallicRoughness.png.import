@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dglpo2o8nnpxc"
-path.s3tc="res://.godot/imported/bavarian_bean_texture_0.png-9d783bb1f0cf7434c067c10ba4f6aeb3.s3tc.ctex"
+uid="uid://bygugse44fact"
+path.s3tc="res://.godot/imported/roof_Baked_MetallicRoughness.png-15e9dd638bd8d75b4a72f03f184759bd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "d2d4e377bb7417550d1181e1e23f36f5"
+"md5": "b3d704b5dc04f614b06aa02aa4239e7a"
 }
 
 [deps]
 
-source_file="res://assets/character/character/bavarian_bean_texture_0.png"
-dest_files=["res://.godot/imported/bavarian_bean_texture_0.png-9d783bb1f0cf7434c067c10ba4f6aeb3.s3tc.ctex"]
+source_file="res://assets/models/roof_Baked_MetallicRoughness.png"
+dest_files=["res://.godot/imported/roof_Baked_MetallicRoughness.png-15e9dd638bd8d75b4a72f03f184759bd.s3tc.ctex"]
 
 [params]
 

@@ -47,6 +47,9 @@ func _build_body() -> void:
 	add_child(_model)
 	_model.rotation_degrees.y = MODEL_YAW
 	_fit_model(_model, MODEL_HEIGHT)
+	# FPS'te kendi modelini görme (görüşü/kolları kapatmasın).
+	# Multiplayer'da diğer oyuncular bu modeli görecek.
+	_model.visible = false
 
 	# Baş (yaw oyuncuda, pitch başta) + kamera
 	_head = Node3D.new()

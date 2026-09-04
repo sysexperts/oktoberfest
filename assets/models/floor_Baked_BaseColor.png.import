@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dglpo2o8nnpxc"
-path.s3tc="res://.godot/imported/bavarian_bean_texture_0.png-9d783bb1f0cf7434c067c10ba4f6aeb3.s3tc.ctex"
+uid="uid://mhtjrg8urfol"
+path.s3tc="res://.godot/imported/floor_Baked_BaseColor.png-9315754f4c8766fa0684a8fcdeab1a48.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "d2d4e377bb7417550d1181e1e23f36f5"
+"md5": "0cdba55a6ced2f621388cc4b82809cde"
 }
 
 [deps]
 
-source_file="res://assets/character/character/bavarian_bean_texture_0.png"
-dest_files=["res://.godot/imported/bavarian_bean_texture_0.png-9d783bb1f0cf7434c067c10ba4f6aeb3.s3tc.ctex"]
+source_file="res://assets/models/floor_Baked_BaseColor.png"
+dest_files=["res://.godot/imported/floor_Baked_BaseColor.png-9315754f4c8766fa0684a8fcdeab1a48.s3tc.ctex"]
 
 [params]
 
