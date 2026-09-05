@@ -46,21 +46,28 @@ func host_seat() -> void:
 	_patience_left = PATIENCE
 	_apply_visual()
 
+## Dönüş kodu: 0 normal, 1 az önce kaçırıldı, 2 içen müşteri az önce ayrıldı (kir olabilir).
 func host_tick(delta: float) -> int:
-	var missed := 0
+	var code := 0
 	if state == State.WAITING:
 		_patience_left -= delta
 		if _patience_left <= 0.0:
 			_patience_left = 0.0
 			state = State.MISSED
 			_clear_left = CLEAR_DELAY
-			missed = 1
+			code = 1
 	elif state == State.SERVED or state == State.MISSED:
+		var was := state
 		_clear_left -= delta
 		if _clear_left <= 0.0:
 			state = State.EMPTY
+			if was == State.SERVED:
+				code = 2
 	_apply_visual()
-	return missed
+	return code
+
+func global_pos() -> Vector3:
+	return global_position
 
 ## Doğru bira tipiyse servis eder. Yanlış tip -> false (servis olmaz).
 func host_serve(beer_type: int) -> bool:

@@ -13,6 +13,14 @@ const SPAWN_MIN := 2.5
 const SYNC_INTERVAL := 0.15
 const MISS_PENALTY := 5
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
+const MESS_SCENE := preload("res://scenes/mess.tscn")
+
+# Temizlik / hijyen
+const MESS_CHANCE := 0.4        # içen müşteri ayrılınca kir bırakma olasılığı
+const CLEAN_PER_CALL := 0.05    # E basılı her karede temizlik ilerlemesi
+const HYGIENE_DRAIN := 1.5      # her kir başına saniyede hijyen kaybı
+const HYGIENE_REGEN := 1.0      # kir yokken saniyede toparlanma
+const NPC_CLEAN_RATE := 0.06    # Tasarom temizlikçi saniyede (yavaş)
 
 # Roller
 const ROLE_NONE := 0
@@ -41,10 +49,17 @@ var _served := 0
 var _missed := 0
 var _last_earn := 0
 
+var _messes_container: Node3D
+var _messes := {}        # id -> Mess node
+var _mess_clean := {}    # id -> temizlik ilerlemesi 0..1 (host)
+var _mess_next := 0
+var _hygiene := 100.0
+
 func _ready() -> void:
 	Game.reset()
 	_hud = $HUD
 	_players_container = $Players
+	_messes_container = $Messes
 	for c in $Tables.get_children():
 		if c is CustomerTable:
 			_tables.append(c)
@@ -89,6 +104,10 @@ func _client_ready() -> void:
 	_next_spawn += 1
 	_spawn_index_by_peer[sender] = sidx
 	_add_player.rpc(sender, sidx)
+	# Mevcut kirleri yeni gelene gönder
+	for mid in _messes.keys():
+		var mp: Vector3 = (_messes[mid] as Node3D).position
+		_add_mess.rpc_id(sender, mid, mp)
 	_broadcast_meta()  # yeni gelene faz/rol bilgisi
 
 @rpc("authority", "reliable", "call_local")
@@ -144,7 +163,8 @@ func host_try_serve(index: int, beer_type: int) -> bool:
 	if _tables[index].host_serve(beer_type):
 		_served += 1
 		var waiter_npc := _npc_roles.has(ROLE_WAITER)
-		var reward := CustomerTable.REWARD
+		var hyg_factor := 0.4 + 0.6 * (_hygiene / 100.0)  # düşük hijyen -> az gelir
+		var reward := int(CustomerTable.REWARD * hyg_factor)
 		var tip := 0 if waiter_npc else randi_range(0, 5)
 		if waiter_npc:
 			reward = int(reward * 0.5)   # NPC garson -> az gelir
@@ -183,9 +203,73 @@ func _shift_process(delta: float) -> void:
 		var progress := 1.0 - (_phase_time / SHIFT_TIME)
 		_spawn_timer = lerpf(SPAWN_START, SPAWN_MIN, progress)
 	for t in _tables:
-		if t.host_tick(delta) == 1:
+		var code := t.host_tick(delta)
+		if code == 1:
 			_missed += 1
 			Game.add_score(-MISS_PENALTY)
+		elif code == 2 and randf() < MESS_CHANCE:
+			_spawn_mess_near(t.global_pos())
+	_update_hygiene(delta)
+
+func _update_hygiene(delta: float) -> void:
+	var n := _messes.size()
+	if n > 0:
+		_hygiene = maxf(0.0, _hygiene - HYGIENE_DRAIN * n * delta)
+		if _npc_roles.has(ROLE_CLEAN):
+			_npc_clean(delta)
+	else:
+		_hygiene = minf(100.0, _hygiene + HYGIENE_REGEN * delta)
+
+func _npc_clean(delta: float) -> void:
+	for mid in _messes.keys():
+		_mess_clean[mid] = float(_mess_clean.get(mid, 0.0)) + NPC_CLEAN_RATE * delta
+		if _mess_clean[mid] >= 1.0:
+			_remove_mess.rpc(mid)
+		return  # sadece bir kir/kare (yavaş)
+
+func _spawn_mess_near(pos: Vector3) -> void:
+	var off := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-0.5, 1.5))
+	_spawn_mess(pos + off)
+
+func _spawn_mess(pos: Vector3) -> void:
+	var id := _mess_next
+	_mess_next += 1
+	_mess_clean[id] = 0.0
+	_add_mess.rpc(id, Vector3(pos.x, 0.02, pos.z))
+
+@rpc("authority", "reliable", "call_local")
+func _add_mess(id: int, pos: Vector3) -> void:
+	if _messes.has(id):
+		return
+	var m := MESS_SCENE.instantiate()
+	m.mess_id = id
+	m.position = pos
+	_messes_container.add_child(m)
+	_messes[id] = m
+
+@rpc("authority", "reliable", "call_local")
+func _remove_mess(id: int) -> void:
+	if _messes.has(id):
+		var m: Node = _messes[id]
+		if is_instance_valid(m):
+			m.queue_free()
+		_messes.erase(id)
+	_mess_clean.erase(id)
+
+func _clear_messes() -> void:
+	for mid in _messes.keys().duplicate():
+		_remove_mess.rpc(mid)
+
+## Oyuncu kir üstünde E basılı tutunca çağrılır (host otoriter).
+@rpc("any_peer", "reliable")
+func net_clean(id: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.SHIFT:
+		return
+	if not _messes.has(id):
+		return
+	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL
+	if _mess_clean[id] >= 1.0:
+		_remove_mess.rpc(id)
 
 func _start_shift() -> void:
 	_phase = Phase.SHIFT
@@ -194,6 +278,8 @@ func _start_shift() -> void:
 	_missed = 0
 	_last_earn = 0
 	_spawn_timer = 3.0
+	_hygiene = 100.0
+	_clear_messes()
 	# İnsan olmayan rolleri NPC (Tasarom) doldurur
 	_npc_roles = {}
 	var covered := {}
@@ -210,6 +296,7 @@ func _end_shift() -> void:
 	_phase_time = INTERMISSION_TIME
 	for t in _tables:
 		t.host_reset()
+	_clear_messes()
 	_broadcast_meta()
 
 func _try_spawn_customer() -> void:
@@ -231,6 +318,13 @@ func _broadcast_sync() -> void:
 		ra.append(t.ratio())
 		rq.append(t.required_type)
 	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq)
+	# Çevre: hijyen + kir ilerlemesi
+	var ids := PackedInt32Array()
+	var pr := PackedFloat32Array()
+	for mid in _messes.keys():
+		ids.append(mid)
+		pr.append(float(_mess_clean.get(mid, 0.0)))
+	_net_env.rpc(_hygiene, ids, pr)
 
 @rpc("authority", "unreliable")
 func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array) -> void:
@@ -240,6 +334,15 @@ func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, r
 	for i in range(_tables.size()):
 		if i < st.size():
 			_tables[i].apply_sync(st[i], ra[i], rq[i])
+
+@rpc("authority", "unreliable")
+func _net_env(hygiene: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:
+	_hygiene = hygiene
+	_hud.set_hygiene(hygiene)
+	for i in range(ids.size()):
+		var m = _messes.get(ids[i])
+		if m:
+			m.apply_progress(pr[i])
 
 func _roster_string() -> String:
 	var lines := []

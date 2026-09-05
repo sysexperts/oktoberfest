@@ -5,6 +5,7 @@ extends CanvasLayer
 var _money_label: Label
 var _score_label: Label
 var _time_label: Label
+var _hygiene_label: Label
 var _phase_label: Label
 var _roster_label: Label
 var _hint_label: Label
@@ -29,10 +30,12 @@ func _ready() -> void:
 	_money_label = _make_label("💶 0€")
 	_score_label = _make_label("⭐ 0")
 	_time_label = _make_label("⏱ 0")
+	_hygiene_label = _make_label("🧼 100%")
 	top.add_child(_phase_label)
 	top.add_child(_money_label)
 	top.add_child(_score_label)
 	top.add_child(_time_label)
+	top.add_child(_hygiene_label)
 
 	# Rol listesi (sağ üst)
 	_roster_label = _make_label("")
@@ -85,6 +88,10 @@ func set_score(v: int) -> void:
 
 func set_time(seconds: float) -> void:
 	_time_label.text = "⏱ %d" % int(ceil(seconds))
+
+func set_hygiene(v: float) -> void:
+	_hygiene_label.text = "🧼 %d%%" % int(round(v))
+	_hygiene_label.add_theme_color_override("font_color", Color.WHITE if v > 40 else Color(1, 0.4, 0.3))
 
 func set_phase(name: String) -> void:
 	_phase_label.text = name

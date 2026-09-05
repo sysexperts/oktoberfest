@@ -239,6 +239,10 @@ func _handle_interaction(delta: float) -> void:
 		if carry_state == 1 and carry_fill < 1.0:
 			carry_type = (_current_target as KegStation).beer_type
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+	# Kir temizle (E basılı tut)
+	if Input.is_action_pressed("interact") and _current_target is Mess:
+		if _world.has_method("net_clean"):
+			_world.net_clean.rpc_id(1, (_current_target as Mess).mess_id)
 
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
