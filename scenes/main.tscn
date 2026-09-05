@@ -16,7 +16,7 @@ sky_material = SubResource("SkyMat")
 background_mode = 2
 sky = SubResource("Sky")
 ambient_light_source = 3
-ambient_light_energy = 0.6
+ambient_light_energy = 0.35
 
 [sub_resource type="WorldBoundaryShape3D" id="Ground"]
 

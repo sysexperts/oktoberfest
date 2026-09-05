@@ -5,862 +5,1002 @@
 [ext_resource type="PackedScene" path="res://assets/models/roof.glb" id="3_0wtp6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_auivy"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_hf87r"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hdw41"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_4626l"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6cgqp"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_2262p"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wobrp"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_3mwne"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3pq62"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_un0bi"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7w378"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_ym5l2"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_djo4e"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_187du"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3na3"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_qngs5"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yolh3"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_13e6d"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d5gvj"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_n47ql"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7y5d"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_tjt02"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5dsw2"]
-albedo_color = Color(1, 0.85, 0.55, 1)
+albedo_color = Color(1, 0.82, 0.5, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.45, 1)
-emission_energy_multiplier = 4.0
+emission = Color(1, 0.72, 0.42, 1)
+emission_energy_multiplier = 1.4
 
 [sub_resource type="SphereMesh" id="SphereMesh_ictml"]
-radius = 0.12
-height = 0.24
+radius = 0.1
+height = 0.2
 
-[node name="Tent" type="Node3D" unique_id=1473996412]
+[node name="Tent" type="Node3D" unique_id=1011522519]
 
 [node name="floor" type="Node3D" parent="." unique_id=19937502 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -14)
 
-[node name="@Node3D@2" type="Node3D" parent="." unique_id=1650776898 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@2" type="Node3D" parent="." unique_id=1129267287 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -10.27012)
 
-[node name="@Node3D@3" type="Node3D" parent="." unique_id=675009281 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@3" type="Node3D" parent="." unique_id=1263646707 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -6.54024)
 
-[node name="@Node3D@4" type="Node3D" parent="." unique_id=1909889695 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@4" type="Node3D" parent="." unique_id=997395183 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -2.81036)
 
-[node name="@Node3D@5" type="Node3D" parent="." unique_id=747185327 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@5" type="Node3D" parent="." unique_id=1457862026 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, 0.91952)
 
-[node name="@Node3D@6" type="Node3D" parent="." unique_id=673959055 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@6" type="Node3D" parent="." unique_id=2019273741 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, 4.6494)
 
-[node name="@Node3D@7" type="Node3D" parent="." unique_id=1174919691 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@7" type="Node3D" parent="." unique_id=1283042591 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, 8.37928)
 
-[node name="@Node3D@8" type="Node3D" parent="." unique_id=88703853 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@8" type="Node3D" parent="." unique_id=718226439 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -14)
 
-[node name="@Node3D@9" type="Node3D" parent="." unique_id=389704796 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@9" type="Node3D" parent="." unique_id=1652450951 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -10.27012)
 
-[node name="@Node3D@10" type="Node3D" parent="." unique_id=1281229233 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@10" type="Node3D" parent="." unique_id=397907636 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -6.54024)
 
-[node name="@Node3D@11" type="Node3D" parent="." unique_id=1567084965 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@11" type="Node3D" parent="." unique_id=34608546 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -2.81036)
 
-[node name="@Node3D@12" type="Node3D" parent="." unique_id=1793516401 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@12" type="Node3D" parent="." unique_id=1481261063 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, 0.91952)
 
-[node name="@Node3D@13" type="Node3D" parent="." unique_id=692177971 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@13" type="Node3D" parent="." unique_id=1361339615 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, 4.6494)
 
-[node name="@Node3D@14" type="Node3D" parent="." unique_id=1198786730 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@14" type="Node3D" parent="." unique_id=801171907 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, 8.37928)
 
-[node name="@Node3D@15" type="Node3D" parent="." unique_id=1150315944 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@15" type="Node3D" parent="." unique_id=1609319353 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -14)
 
-[node name="@Node3D@16" type="Node3D" parent="." unique_id=784207839 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@16" type="Node3D" parent="." unique_id=566607651 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -10.27012)
 
-[node name="@Node3D@17" type="Node3D" parent="." unique_id=1396304254 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@17" type="Node3D" parent="." unique_id=803240767 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -6.54024)
 
-[node name="@Node3D@18" type="Node3D" parent="." unique_id=2115768427 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@18" type="Node3D" parent="." unique_id=455588642 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -2.81036)
 
-[node name="@Node3D@19" type="Node3D" parent="." unique_id=29808467 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@19" type="Node3D" parent="." unique_id=16082305 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, 0.91952)
 
-[node name="@Node3D@20" type="Node3D" parent="." unique_id=1405038095 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@20" type="Node3D" parent="." unique_id=833193663 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, 4.6494)
 
-[node name="@Node3D@21" type="Node3D" parent="." unique_id=1894241901 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@21" type="Node3D" parent="." unique_id=2005516792 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, 8.37928)
 
-[node name="@Node3D@22" type="Node3D" parent="." unique_id=994015236 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@22" type="Node3D" parent="." unique_id=872993925 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -14)
 
-[node name="@Node3D@23" type="Node3D" parent="." unique_id=316676671 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@23" type="Node3D" parent="." unique_id=240663410 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -10.27012)
 
-[node name="@Node3D@24" type="Node3D" parent="." unique_id=59165421 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@24" type="Node3D" parent="." unique_id=813776304 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -6.54024)
 
-[node name="@Node3D@25" type="Node3D" parent="." unique_id=2058672969 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@25" type="Node3D" parent="." unique_id=1390136301 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -2.81036)
 
-[node name="@Node3D@26" type="Node3D" parent="." unique_id=1326636848 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@26" type="Node3D" parent="." unique_id=1153471643 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, 0.91952)
 
-[node name="@Node3D@27" type="Node3D" parent="." unique_id=1635566756 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@27" type="Node3D" parent="." unique_id=1411108001 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, 4.6494)
 
-[node name="@Node3D@28" type="Node3D" parent="." unique_id=2032830498 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@28" type="Node3D" parent="." unique_id=2005863843 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, 8.37928)
 
-[node name="@Node3D@29" type="Node3D" parent="." unique_id=1797831005 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@29" type="Node3D" parent="." unique_id=375496341 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -14)
 
-[node name="@Node3D@30" type="Node3D" parent="." unique_id=1043938979 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@30" type="Node3D" parent="." unique_id=1069712671 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -10.27012)
 
-[node name="@Node3D@31" type="Node3D" parent="." unique_id=518443948 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@31" type="Node3D" parent="." unique_id=2059190566 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -6.54024)
 
-[node name="@Node3D@32" type="Node3D" parent="." unique_id=341199803 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@32" type="Node3D" parent="." unique_id=995805618 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -2.81036)
 
-[node name="@Node3D@33" type="Node3D" parent="." unique_id=1566437171 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@33" type="Node3D" parent="." unique_id=123002328 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, 0.91952)
 
-[node name="@Node3D@34" type="Node3D" parent="." unique_id=1693628747 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@34" type="Node3D" parent="." unique_id=38554532 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, 4.6494)
 
-[node name="@Node3D@35" type="Node3D" parent="." unique_id=762145043 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@35" type="Node3D" parent="." unique_id=1093597516 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, 8.37928)
 
-[node name="@Node3D@36" type="Node3D" parent="." unique_id=1730765306 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@36" type="Node3D" parent="." unique_id=1202103918 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -14)
 
-[node name="@Node3D@37" type="Node3D" parent="." unique_id=8877960 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@37" type="Node3D" parent="." unique_id=1970289826 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -10.27012)
 
-[node name="@Node3D@38" type="Node3D" parent="." unique_id=321853929 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@38" type="Node3D" parent="." unique_id=1234540418 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -6.54024)
 
-[node name="@Node3D@39" type="Node3D" parent="." unique_id=1228406380 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@39" type="Node3D" parent="." unique_id=1913610218 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -2.81036)
 
-[node name="@Node3D@40" type="Node3D" parent="." unique_id=160130372 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@40" type="Node3D" parent="." unique_id=7457817 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, 0.91952)
 
-[node name="@Node3D@41" type="Node3D" parent="." unique_id=1471187378 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@41" type="Node3D" parent="." unique_id=1796189296 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, 4.6494)
 
-[node name="@Node3D@42" type="Node3D" parent="." unique_id=1970983810 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@42" type="Node3D" parent="." unique_id=37929930 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, 8.37928)
 
-[node name="@Node3D@43" type="Node3D" parent="." unique_id=58526515 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@43" type="Node3D" parent="." unique_id=246992808 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -14)
 
-[node name="@Node3D@44" type="Node3D" parent="." unique_id=1623673602 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@44" type="Node3D" parent="." unique_id=214665896 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -10.27012)
 
-[node name="@Node3D@45" type="Node3D" parent="." unique_id=1649869922 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@45" type="Node3D" parent="." unique_id=1075502058 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -6.54024)
 
-[node name="@Node3D@46" type="Node3D" parent="." unique_id=768073236 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@46" type="Node3D" parent="." unique_id=323211397 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -2.81036)
 
-[node name="@Node3D@47" type="Node3D" parent="." unique_id=1372441539 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@47" type="Node3D" parent="." unique_id=1238772748 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, 0.91952)
 
-[node name="@Node3D@48" type="Node3D" parent="." unique_id=915926548 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@48" type="Node3D" parent="." unique_id=1063529641 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, 4.6494)
 
-[node name="@Node3D@49" type="Node3D" parent="." unique_id=161493102 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@49" type="Node3D" parent="." unique_id=1100408852 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, 8.37928)
 
 [node name="wall" type="Node3D" parent="." unique_id=1355866637 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, 1.902, -14)
 
-[node name="@Node3D@50" type="Node3D" parent="." unique_id=626868902 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@50" type="Node3D" parent="." unique_id=503456745 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -12, 1.902, 11)
 
-[node name="@OmniLight3D@51" type="OmniLight3D" parent="." unique_id=706377635]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3.002, -13.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@51" type="OmniLight3D" parent="." unique_id=901555168]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@52" type="OmniLight3D" parent="." unique_id=589883934]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3.002, 10.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@52" type="OmniLight3D" parent="." unique_id=181455757]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@53" type="Node3D" parent="." unique_id=1978973978 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@53" type="Node3D" parent="." unique_id=557963686 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -9.55804, 1.902, -14)
 
-[node name="@Node3D@54" type="Node3D" parent="." unique_id=683099792 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@54" type="Node3D" parent="." unique_id=724225875 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -9.55804, 1.902, 11)
 
-[node name="@Node3D@55" type="Node3D" parent="." unique_id=206480369 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@55" type="OmniLight3D" parent="." unique_id=815868609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55804, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@56" type="OmniLight3D" parent="." unique_id=1750314871]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55804, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@57" type="Node3D" parent="." unique_id=498298949 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.11608, 1.902, -14)
 
-[node name="@Node3D@56" type="Node3D" parent="." unique_id=1867517019 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@58" type="Node3D" parent="." unique_id=1596958875 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -7.11608, 1.902, 11)
 
-[node name="@OmniLight3D@57" type="OmniLight3D" parent="." unique_id=1174197932]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 3.002, -13.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@59" type="OmniLight3D" parent="." unique_id=1495333715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@58" type="OmniLight3D" parent="." unique_id=123429757]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 3.002, 10.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@60" type="OmniLight3D" parent="." unique_id=1114764368]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@59" type="Node3D" parent="." unique_id=622713109 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@61" type="Node3D" parent="." unique_id=1972380587 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.67412, 1.902, -14)
 
-[node name="@Node3D@60" type="Node3D" parent="." unique_id=85912724 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@62" type="Node3D" parent="." unique_id=592402512 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -4.67412, 1.902, 11)
 
-[node name="@Node3D@61" type="Node3D" parent="." unique_id=1737268166 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@63" type="OmniLight3D" parent="." unique_id=311012412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.67412, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@64" type="OmniLight3D" parent="." unique_id=1659396707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.67412, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@65" type="Node3D" parent="." unique_id=1416549807 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.23216, 1.902, -14)
 
-[node name="@Node3D@62" type="Node3D" parent="." unique_id=541178293 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@66" type="Node3D" parent="." unique_id=21991314 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -2.23216, 1.902, 11)
 
-[node name="@OmniLight3D@63" type="OmniLight3D" parent="." unique_id=595904400]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 3.002, -13.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@67" type="OmniLight3D" parent="." unique_id=531234750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@64" type="OmniLight3D" parent="." unique_id=408843288]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 3.002, 10.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@68" type="OmniLight3D" parent="." unique_id=117401578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@65" type="Node3D" parent="." unique_id=1410530917 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@69" type="Node3D" parent="." unique_id=1590106185 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.2098, 1.902, -14)
 
-[node name="@Node3D@66" type="Node3D" parent="." unique_id=1550824544 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@70" type="Node3D" parent="." unique_id=2126075893 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0.2098, 1.902, 11)
 
-[node name="@Node3D@67" type="Node3D" parent="." unique_id=142999695 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@71" type="OmniLight3D" parent="." unique_id=2077621051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2098, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@72" type="OmniLight3D" parent="." unique_id=804024023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2098, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@73" type="Node3D" parent="." unique_id=27073633 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.65176, 1.902, -14)
 
-[node name="@Node3D@68" type="Node3D" parent="." unique_id=1833844094 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@74" type="Node3D" parent="." unique_id=1144894358 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 2.65176, 1.902, 11)
 
-[node name="@OmniLight3D@69" type="OmniLight3D" parent="." unique_id=868697155]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 3.002, -13.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@75" type="OmniLight3D" parent="." unique_id=1670928086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@70" type="OmniLight3D" parent="." unique_id=303624159]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 3.002, 10.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@76" type="OmniLight3D" parent="." unique_id=550700418]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@71" type="Node3D" parent="." unique_id=275110755 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@77" type="Node3D" parent="." unique_id=1673183560 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.09372, 1.902, -14)
 
-[node name="@Node3D@72" type="Node3D" parent="." unique_id=57018321 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@78" type="Node3D" parent="." unique_id=31792860 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 5.09372, 1.902, 11)
 
-[node name="@Node3D@73" type="Node3D" parent="." unique_id=1794413796 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@79" type="OmniLight3D" parent="." unique_id=1369062551]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09372, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@80" type="OmniLight3D" parent="." unique_id=728288165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09372, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@81" type="Node3D" parent="." unique_id=1846458374 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.53568, 1.902, -14)
 
-[node name="@Node3D@74" type="Node3D" parent="." unique_id=787744290 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@82" type="Node3D" parent="." unique_id=445795749 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 7.53568, 1.902, 11)
 
-[node name="@OmniLight3D@75" type="OmniLight3D" parent="." unique_id=185434431]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 3.002, -13.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@83" type="OmniLight3D" parent="." unique_id=1040267340]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@76" type="OmniLight3D" parent="." unique_id=1165363554]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 3.002, 10.5)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@84" type="OmniLight3D" parent="." unique_id=132398889]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@77" type="Node3D" parent="." unique_id=1409508278 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@85" type="Node3D" parent="." unique_id=1409957521 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.97764, 1.902, -14)
 
-[node name="@Node3D@78" type="Node3D" parent="." unique_id=1764648253 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@86" type="Node3D" parent="." unique_id=137761083 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 9.97764, 1.902, 11)
 
-[node name="@Node3D@79" type="Node3D" parent="." unique_id=709234019 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@87" type="OmniLight3D" parent="." unique_id=887083403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.97764, 2.602, -13.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@88" type="OmniLight3D" parent="." unique_id=1142345714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.97764, 2.602, 10.75)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@89" type="Node3D" parent="." unique_id=1313687122 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -14)
 
-[node name="@Node3D@80" type="Node3D" parent="." unique_id=973203127 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@90" type="Node3D" parent="." unique_id=145441561 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -14)
 
-[node name="@OmniLight3D@81" type="OmniLight3D" parent="." unique_id=1247346349]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 3.002, -14)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@91" type="OmniLight3D" parent="." unique_id=1791528476]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -14)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@82" type="OmniLight3D" parent="." unique_id=1739954567]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 3.002, -14)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@92" type="OmniLight3D" parent="." unique_id=91312896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -14)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@83" type="Node3D" parent="." unique_id=1776924514 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@93" type="Node3D" parent="." unique_id=183394077 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -11.55804)
 
-[node name="@Node3D@84" type="Node3D" parent="." unique_id=790626371 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@94" type="Node3D" parent="." unique_id=770253323 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -11.55804)
 
-[node name="@Node3D@85" type="Node3D" parent="." unique_id=111151493 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@95" type="OmniLight3D" parent="." unique_id=950028477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -11.55804)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@96" type="OmniLight3D" parent="." unique_id=1716576059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -11.55804)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@97" type="Node3D" parent="." unique_id=1324862872 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -9.11608)
 
-[node name="@Node3D@86" type="Node3D" parent="." unique_id=739227200 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@98" type="Node3D" parent="." unique_id=196321410 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -9.11608)
 
-[node name="@OmniLight3D@87" type="OmniLight3D" parent="." unique_id=1605970947]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 3.002, -9.11608)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@99" type="OmniLight3D" parent="." unique_id=3893145]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -9.11608)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@88" type="OmniLight3D" parent="." unique_id=1312368336]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 3.002, -9.11608)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@100" type="OmniLight3D" parent="." unique_id=950450896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -9.11608)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@89" type="Node3D" parent="." unique_id=1016057397 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@101" type="Node3D" parent="." unique_id=1739092596 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -6.67412)
 
-[node name="@Node3D@90" type="Node3D" parent="." unique_id=1297670061 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@102" type="Node3D" parent="." unique_id=462351873 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -6.67412)
 
-[node name="@Node3D@91" type="Node3D" parent="." unique_id=1166972473 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@103" type="OmniLight3D" parent="." unique_id=12608504]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -6.67412)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@104" type="OmniLight3D" parent="." unique_id=831791047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -6.67412)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@105" type="Node3D" parent="." unique_id=1470511335 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -4.23216)
 
-[node name="@Node3D@92" type="Node3D" parent="." unique_id=1210999024 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@106" type="Node3D" parent="." unique_id=5112012 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -4.23216)
 
-[node name="@OmniLight3D@93" type="OmniLight3D" parent="." unique_id=1857565393]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 3.002, -4.23216)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@107" type="OmniLight3D" parent="." unique_id=2039313644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -4.23216)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@94" type="OmniLight3D" parent="." unique_id=2101558514]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 3.002, -4.23216)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@108" type="OmniLight3D" parent="." unique_id=1252358430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -4.23216)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@95" type="Node3D" parent="." unique_id=1611197723 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@109" type="Node3D" parent="." unique_id=330046367 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -1.7902)
 
-[node name="@Node3D@96" type="Node3D" parent="." unique_id=724214338 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@110" type="Node3D" parent="." unique_id=1604097737 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -1.7902)
 
-[node name="@Node3D@97" type="Node3D" parent="." unique_id=1553610901 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@111" type="OmniLight3D" parent="." unique_id=1900104521]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -1.7902)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@112" type="OmniLight3D" parent="." unique_id=119072223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -1.7902)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@113" type="Node3D" parent="." unique_id=701511659 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 0.65176)
 
-[node name="@Node3D@98" type="Node3D" parent="." unique_id=1210060983 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@114" type="Node3D" parent="." unique_id=1654466004 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 0.65176)
 
-[node name="@OmniLight3D@99" type="OmniLight3D" parent="." unique_id=1864640042]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 3.002, 0.65176)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@115" type="OmniLight3D" parent="." unique_id=1125239431]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 0.65176)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@100" type="OmniLight3D" parent="." unique_id=1589261091]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 3.002, 0.65176)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@116" type="OmniLight3D" parent="." unique_id=800596614]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 0.65176)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@101" type="Node3D" parent="." unique_id=395783429 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@117" type="Node3D" parent="." unique_id=1173297586 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 3.09372)
 
-[node name="@Node3D@102" type="Node3D" parent="." unique_id=75471245 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@118" type="Node3D" parent="." unique_id=1877499991 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 3.09372)
 
-[node name="@Node3D@103" type="Node3D" parent="." unique_id=856485443 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@119" type="OmniLight3D" parent="." unique_id=1944292686]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 3.09372)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@120" type="OmniLight3D" parent="." unique_id=1600089717]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 3.09372)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@121" type="Node3D" parent="." unique_id=2111910112 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 5.53568)
 
-[node name="@Node3D@104" type="Node3D" parent="." unique_id=1846233605 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@122" type="Node3D" parent="." unique_id=1157565250 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 5.53568)
 
-[node name="@OmniLight3D@105" type="OmniLight3D" parent="." unique_id=1546763251]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 3.002, 5.53568)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@123" type="OmniLight3D" parent="." unique_id=640104054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 5.53568)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@106" type="OmniLight3D" parent="." unique_id=372796564]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 3.002, 5.53568)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@124" type="OmniLight3D" parent="." unique_id=463910805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 5.53568)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@Node3D@107" type="Node3D" parent="." unique_id=503119739 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@125" type="Node3D" parent="." unique_id=26328723 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 7.97764)
 
-[node name="@Node3D@108" type="Node3D" parent="." unique_id=1384715048 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@126" type="Node3D" parent="." unique_id=1620305081 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 7.97764)
 
-[node name="@Node3D@109" type="Node3D" parent="." unique_id=2140143824 instance=ExtResource("2_p0mqa")]
+[node name="@OmniLight3D@127" type="OmniLight3D" parent="." unique_id=1731487199]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 7.97764)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@OmniLight3D@128" type="OmniLight3D" parent="." unique_id=1909616315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 7.97764)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
+
+[node name="@Node3D@129" type="Node3D" parent="." unique_id=1481004281 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 10.4196)
 
-[node name="@Node3D@110" type="Node3D" parent="." unique_id=1212217107 instance=ExtResource("2_p0mqa")]
+[node name="@Node3D@130" type="Node3D" parent="." unique_id=352059399 instance=ExtResource("2_p0mqa")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 10.4196)
 
-[node name="@OmniLight3D@111" type="OmniLight3D" parent="." unique_id=486391127]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 3.002, 10.4196)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@131" type="OmniLight3D" parent="." unique_id=456437860]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 10.4196)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
-[node name="@OmniLight3D@112" type="OmniLight3D" parent="." unique_id=1924284351]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 3.002, 10.4196)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.2
-omni_range = 6.5
-omni_attenuation = 1.5
+[node name="@OmniLight3D@132" type="OmniLight3D" parent="." unique_id=284360230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 10.4196)
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.7
+omni_range = 4.0
+omni_attenuation = 1.8
 
 [node name="roof" type="Node3D" parent="." unique_id=147204350 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -15.5)
 
-[node name="@Node3D@113" type="Node3D" parent="." unique_id=2132019148 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@133" type="Node3D" parent="." unique_id=1432227956 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -10.84169)
 
-[node name="@Node3D@114" type="Node3D" parent="." unique_id=1004549722 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@134" type="Node3D" parent="." unique_id=1925505080 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -6.18338)
 
-[node name="@Node3D@115" type="Node3D" parent="." unique_id=1773553321 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@135" type="Node3D" parent="." unique_id=1688601302 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -1.52507)
 
-[node name="@Node3D@116" type="Node3D" parent="." unique_id=420342146 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@136" type="Node3D" parent="." unique_id=1253716214 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, 3.13324)
 
-[node name="@Node3D@117" type="Node3D" parent="." unique_id=1491464994 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@137" type="Node3D" parent="." unique_id=1092486058 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, 7.79155)
 
-[node name="@Node3D@118" type="Node3D" parent="." unique_id=257668444 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@138" type="Node3D" parent="." unique_id=171704080 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, 12.44986)
 
-[node name="@Node3D@119" type="Node3D" parent="." unique_id=563104199 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@139" type="Node3D" parent="." unique_id=131850918 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -15.5)
 
-[node name="@Node3D@120" type="Node3D" parent="." unique_id=403594718 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@140" type="Node3D" parent="." unique_id=588794701 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -10.84169)
 
-[node name="@Node3D@121" type="Node3D" parent="." unique_id=2104749842 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@141" type="Node3D" parent="." unique_id=2060686331 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -6.18338)
 
-[node name="@Node3D@122" type="Node3D" parent="." unique_id=1369430446 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@142" type="Node3D" parent="." unique_id=177116838 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -1.52507)
 
-[node name="@Node3D@123" type="Node3D" parent="." unique_id=1018322432 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@143" type="Node3D" parent="." unique_id=146695056 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, 3.13324)
 
-[node name="@Node3D@124" type="Node3D" parent="." unique_id=765070887 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@144" type="Node3D" parent="." unique_id=156619916 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, 7.79155)
 
-[node name="@Node3D@125" type="Node3D" parent="." unique_id=1608227839 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@145" type="Node3D" parent="." unique_id=879163218 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, 12.44986)
 
-[node name="@Node3D@126" type="Node3D" parent="." unique_id=1900848529 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@146" type="Node3D" parent="." unique_id=1803103418 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -15.5)
 
-[node name="@Node3D@127" type="Node3D" parent="." unique_id=1737454753 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@147" type="Node3D" parent="." unique_id=1264844990 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -10.84169)
 
-[node name="@Node3D@128" type="Node3D" parent="." unique_id=528159473 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@148" type="Node3D" parent="." unique_id=541132651 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -6.18338)
 
-[node name="@Node3D@129" type="Node3D" parent="." unique_id=990785111 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@149" type="Node3D" parent="." unique_id=1014434075 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -1.52507)
 
-[node name="@Node3D@130" type="Node3D" parent="." unique_id=636430380 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@150" type="Node3D" parent="." unique_id=1450353173 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, 3.13324)
 
-[node name="@Node3D@131" type="Node3D" parent="." unique_id=1891240787 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@151" type="Node3D" parent="." unique_id=1960872777 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, 7.79155)
 
-[node name="@Node3D@132" type="Node3D" parent="." unique_id=1115455061 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@152" type="Node3D" parent="." unique_id=1163025420 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, 12.44986)
 
-[node name="@Node3D@133" type="Node3D" parent="." unique_id=851440249 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@153" type="Node3D" parent="." unique_id=1537171602 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -15.5)
 
-[node name="@Node3D@134" type="Node3D" parent="." unique_id=575571113 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@154" type="Node3D" parent="." unique_id=1995196812 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -10.84169)
 
-[node name="@Node3D@135" type="Node3D" parent="." unique_id=448155687 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@155" type="Node3D" parent="." unique_id=1103303397 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -6.18338)
 
-[node name="@Node3D@136" type="Node3D" parent="." unique_id=61708242 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@156" type="Node3D" parent="." unique_id=754430416 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -1.52507)
 
-[node name="@Node3D@137" type="Node3D" parent="." unique_id=451932304 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@157" type="Node3D" parent="." unique_id=2063762109 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, 3.13324)
 
-[node name="@Node3D@138" type="Node3D" parent="." unique_id=1940476129 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@158" type="Node3D" parent="." unique_id=1750804286 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, 7.79155)
 
-[node name="@Node3D@139" type="Node3D" parent="." unique_id=1516345165 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@159" type="Node3D" parent="." unique_id=166689527 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, 12.44986)
 
-[node name="@Node3D@140" type="Node3D" parent="." unique_id=506342986 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@160" type="Node3D" parent="." unique_id=1363357055 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -15.5)
 
-[node name="@Node3D@141" type="Node3D" parent="." unique_id=487054618 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@161" type="Node3D" parent="." unique_id=1787640271 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -10.84169)
 
-[node name="@Node3D@142" type="Node3D" parent="." unique_id=355535531 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@162" type="Node3D" parent="." unique_id=1311625068 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -6.18338)
 
-[node name="@Node3D@143" type="Node3D" parent="." unique_id=2079965042 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@163" type="Node3D" parent="." unique_id=1519641651 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -1.52507)
 
-[node name="@Node3D@144" type="Node3D" parent="." unique_id=546760290 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@164" type="Node3D" parent="." unique_id=2077264798 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, 3.13324)
 
-[node name="@Node3D@145" type="Node3D" parent="." unique_id=1091076183 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@165" type="Node3D" parent="." unique_id=1755552747 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, 7.79155)
 
-[node name="@Node3D@146" type="Node3D" parent="." unique_id=678302854 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@166" type="Node3D" parent="." unique_id=1455819673 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, 12.44986)
 
-[node name="@Node3D@147" type="Node3D" parent="." unique_id=1017964773 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@167" type="Node3D" parent="." unique_id=688397933 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -15.5)
 
-[node name="@Node3D@148" type="Node3D" parent="." unique_id=733999878 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@168" type="Node3D" parent="." unique_id=61758913 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -10.84169)
 
-[node name="@Node3D@149" type="Node3D" parent="." unique_id=775058210 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@169" type="Node3D" parent="." unique_id=1640393464 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -6.18338)
 
-[node name="@Node3D@150" type="Node3D" parent="." unique_id=793915233 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@170" type="Node3D" parent="." unique_id=1461227615 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -1.52507)
 
-[node name="@Node3D@151" type="Node3D" parent="." unique_id=449453768 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@171" type="Node3D" parent="." unique_id=1658007791 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, 3.13324)
 
-[node name="@Node3D@152" type="Node3D" parent="." unique_id=1754432517 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@172" type="Node3D" parent="." unique_id=1954818137 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, 7.79155)
 
-[node name="@Node3D@153" type="Node3D" parent="." unique_id=2058606963 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@173" type="Node3D" parent="." unique_id=1571616700 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, 12.44986)
 
-[node name="@Node3D@154" type="Node3D" parent="." unique_id=1614488668 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@174" type="Node3D" parent="." unique_id=584492760 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -15.5)
 
-[node name="@Node3D@155" type="Node3D" parent="." unique_id=482436777 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@175" type="Node3D" parent="." unique_id=651989412 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -10.84169)
 
-[node name="@Node3D@156" type="Node3D" parent="." unique_id=331851575 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@176" type="Node3D" parent="." unique_id=1130422451 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -6.18338)
 
-[node name="@Node3D@157" type="Node3D" parent="." unique_id=252359755 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@177" type="Node3D" parent="." unique_id=827316053 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -1.52507)
 
-[node name="@Node3D@158" type="Node3D" parent="." unique_id=411293111 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@178" type="Node3D" parent="." unique_id=1427195696 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, 3.13324)
 
-[node name="@Node3D@159" type="Node3D" parent="." unique_id=1264806441 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@179" type="Node3D" parent="." unique_id=16265059 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, 7.79155)
 
-[node name="@Node3D@160" type="Node3D" parent="." unique_id=491618048 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@180" type="Node3D" parent="." unique_id=1429010599 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, 12.44986)
 
-[node name="@Node3D@161" type="Node3D" parent="." unique_id=400445015 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@181" type="Node3D" parent="." unique_id=2089494015 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -15.5)
 
-[node name="@Node3D@162" type="Node3D" parent="." unique_id=2103855218 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@182" type="Node3D" parent="." unique_id=1039758761 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -10.84169)
 
-[node name="@Node3D@163" type="Node3D" parent="." unique_id=219052401 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@183" type="Node3D" parent="." unique_id=585522132 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -6.18338)
 
-[node name="@Node3D@164" type="Node3D" parent="." unique_id=1805720771 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@184" type="Node3D" parent="." unique_id=154435888 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -1.52507)
 
-[node name="@Node3D@165" type="Node3D" parent="." unique_id=1771046899 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@185" type="Node3D" parent="." unique_id=2044775454 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, 3.13324)
 
-[node name="@Node3D@166" type="Node3D" parent="." unique_id=1484729914 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@186" type="Node3D" parent="." unique_id=1780944604 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, 7.79155)
 
-[node name="@Node3D@167" type="Node3D" parent="." unique_id=281595671 instance=ExtResource("3_0wtp6")]
+[node name="@Node3D@187" type="Node3D" parent="." unique_id=1698416314 instance=ExtResource("3_0wtp6")]
 transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, 12.44986)
 
-[node name="@MeshInstance3D@168" type="MeshInstance3D" parent="." unique_id=421086742]
+[node name="@MeshInstance3D@188" type="MeshInstance3D" parent="." unique_id=1496755611]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -8)
 material_override = SubResource("StandardMaterial3D_auivy")
 mesh = SubResource("SphereMesh_hf87r")
 
-[node name="@OmniLight3D@169" type="OmniLight3D" parent="." unique_id=97490314]
+[node name="@OmniLight3D@189" type="OmniLight3D" parent="." unique_id=609467089]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -8)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@170" type="MeshInstance3D" parent="." unique_id=2091797723]
+[node name="@MeshInstance3D@190" type="MeshInstance3D" parent="." unique_id=762005514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -3)
 material_override = SubResource("StandardMaterial3D_hdw41")
 mesh = SubResource("SphereMesh_4626l")
 
-[node name="@OmniLight3D@171" type="OmniLight3D" parent="." unique_id=1113936554]
+[node name="@OmniLight3D@191" type="OmniLight3D" parent="." unique_id=528445513]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -3)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@172" type="MeshInstance3D" parent="." unique_id=115874874]
+[node name="@MeshInstance3D@192" type="MeshInstance3D" parent="." unique_id=1757051617]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, 2)
 material_override = SubResource("StandardMaterial3D_6cgqp")
 mesh = SubResource("SphereMesh_2262p")
 
-[node name="@OmniLight3D@173" type="OmniLight3D" parent="." unique_id=413553572]
+[node name="@OmniLight3D@193" type="OmniLight3D" parent="." unique_id=1329781259]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, 2)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@174" type="MeshInstance3D" parent="." unique_id=149778775]
+[node name="@MeshInstance3D@194" type="MeshInstance3D" parent="." unique_id=504350825]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, 7)
 material_override = SubResource("StandardMaterial3D_wobrp")
 mesh = SubResource("SphereMesh_3mwne")
 
-[node name="@OmniLight3D@175" type="OmniLight3D" parent="." unique_id=1530378362]
+[node name="@OmniLight3D@195" type="OmniLight3D" parent="." unique_id=238767689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, 7)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@176" type="MeshInstance3D" parent="." unique_id=1050570553]
+[node name="@MeshInstance3D@196" type="MeshInstance3D" parent="." unique_id=2130126443]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -8)
 material_override = SubResource("StandardMaterial3D_3pq62")
 mesh = SubResource("SphereMesh_un0bi")
 
-[node name="@OmniLight3D@177" type="OmniLight3D" parent="." unique_id=35363296]
+[node name="@OmniLight3D@197" type="OmniLight3D" parent="." unique_id=859958253]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -8)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@178" type="MeshInstance3D" parent="." unique_id=1018169020]
+[node name="@MeshInstance3D@198" type="MeshInstance3D" parent="." unique_id=930873957]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -3)
 material_override = SubResource("StandardMaterial3D_7w378")
 mesh = SubResource("SphereMesh_ym5l2")
 
-[node name="@OmniLight3D@179" type="OmniLight3D" parent="." unique_id=901666640]
+[node name="@OmniLight3D@199" type="OmniLight3D" parent="." unique_id=922404726]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -3)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@180" type="MeshInstance3D" parent="." unique_id=1817208172]
+[node name="@MeshInstance3D@200" type="MeshInstance3D" parent="." unique_id=1457131269]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 2)
 material_override = SubResource("StandardMaterial3D_djo4e")
 mesh = SubResource("SphereMesh_187du")
 
-[node name="@OmniLight3D@181" type="OmniLight3D" parent="." unique_id=1804035631]
+[node name="@OmniLight3D@201" type="OmniLight3D" parent="." unique_id=431748100]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 2)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@182" type="MeshInstance3D" parent="." unique_id=642625773]
+[node name="@MeshInstance3D@202" type="MeshInstance3D" parent="." unique_id=1097229290]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 7)
 material_override = SubResource("StandardMaterial3D_t3na3")
 mesh = SubResource("SphereMesh_qngs5")
 
-[node name="@OmniLight3D@183" type="OmniLight3D" parent="." unique_id=1025053281]
+[node name="@OmniLight3D@203" type="OmniLight3D" parent="." unique_id=203802221]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 7)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@184" type="MeshInstance3D" parent="." unique_id=419305408]
+[node name="@MeshInstance3D@204" type="MeshInstance3D" parent="." unique_id=583118531]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, -8)
 material_override = SubResource("StandardMaterial3D_yolh3")
 mesh = SubResource("SphereMesh_13e6d")
 
-[node name="@OmniLight3D@185" type="OmniLight3D" parent="." unique_id=259460133]
+[node name="@OmniLight3D@205" type="OmniLight3D" parent="." unique_id=1124217175]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, -8)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@186" type="MeshInstance3D" parent="." unique_id=898146319]
+[node name="@MeshInstance3D@206" type="MeshInstance3D" parent="." unique_id=1409404473]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, -3)
 material_override = SubResource("StandardMaterial3D_d5gvj")
 mesh = SubResource("SphereMesh_n47ql")
 
-[node name="@OmniLight3D@187" type="OmniLight3D" parent="." unique_id=1961447333]
+[node name="@OmniLight3D@207" type="OmniLight3D" parent="." unique_id=174916759]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, -3)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@188" type="MeshInstance3D" parent="." unique_id=2043523372]
+[node name="@MeshInstance3D@208" type="MeshInstance3D" parent="." unique_id=1485996037]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, 2)
 material_override = SubResource("StandardMaterial3D_y7y5d")
 mesh = SubResource("SphereMesh_tjt02")
 
-[node name="@OmniLight3D@189" type="OmniLight3D" parent="." unique_id=544295549]
+[node name="@OmniLight3D@209" type="OmniLight3D" parent="." unique_id=714617771]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, 2)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
 
-[node name="@MeshInstance3D@190" type="MeshInstance3D" parent="." unique_id=1536718126]
+[node name="@MeshInstance3D@210" type="MeshInstance3D" parent="." unique_id=76935789]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, 7)
 material_override = SubResource("StandardMaterial3D_5dsw2")
 mesh = SubResource("SphereMesh_ictml")
 
-[node name="@OmniLight3D@191" type="OmniLight3D" parent="." unique_id=538942956]
+[node name="@OmniLight3D@211" type="OmniLight3D" parent="." unique_id=1136365925]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, 7)
-light_color = Color(1, 0.8, 0.48, 1)
-light_energy = 2.6
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1, 0.72, 0.4, 1)
+light_energy = 0.9
+omni_range = 6.0
+omni_attenuation = 1.8
