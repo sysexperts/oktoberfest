@@ -91,9 +91,9 @@ func apply_sync(new_state: int, new_ratio: float, req: int) -> void:
 func _apply_visual() -> void:
 	if _customer == null:
 		return
+	_customer.visible = false  # görsel müşteri artık yürüyen NPC modeli
 	match state:
 		State.WAITING:
-			_customer.visible = true
 			_bubble.visible = true
 			_bubble.text = "🍺 " + BEER_NAMES.get(required_type, "Bira")
 			_bubble.modulate = BEER_COLORS.get(required_type, Color.WHITE)
@@ -106,13 +106,11 @@ func _apply_visual() -> void:
 				m.albedo_color = col
 				m.emission = col
 		State.SERVED:
-			_customer.visible = true
 			_bubble.visible = true
 			_bubble.text = "😄"
 			_bubble.modulate = Color.WHITE
 			_bar_fill.visible = false
 		State.MISSED:
-			_customer.visible = true
 			_bubble.visible = true
 			_bubble.text = "😡"
 			_bubble.modulate = Color.WHITE

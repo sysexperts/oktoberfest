@@ -14,6 +14,12 @@ const SYNC_INTERVAL := 0.15
 const MISS_PENALTY := 5
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const MESS_SCENE := preload("res://scenes/mess.tscn")
+const CUSTOMER_SCENE := preload("res://scenes/customer.tscn")
+
+# Müşteri NPC
+const CUST_SPEED := 3.0
+const ENTRANCE := Vector3(0, 0.1, 10.0)   # çadır girişi (ön)
+const EXIT := Vector3(0, 0.1, 10.0)
 
 # Temizlik / hijyen
 const MESS_CHANCE := 0.4        # içen müşteri ayrılınca kir bırakma olasılığı
@@ -55,11 +61,18 @@ var _mess_clean := {}    # id -> temizlik ilerlemesi 0..1 (host)
 var _mess_next := 0
 var _hygiene := 100.0
 
+var _customers_container: Node3D
+var _customers := {}     # id -> Customer node
+var _cust_sim := {}      # id -> {pos, tgt, mode, table, yaw}  (host)
+var _cust_next := 0
+var _table_cust := {}    # table_index -> cust_id
+
 func _ready() -> void:
 	Game.reset()
 	_hud = $HUD
 	_players_container = $Players
 	_messes_container = $Messes
+	_customers_container = $Customers
 	for c in $Tables.get_children():
 		if c is CustomerTable:
 			_tables.append(c)
@@ -108,6 +121,9 @@ func _client_ready() -> void:
 	for mid in _messes.keys():
 		var mp: Vector3 = (_messes[mid] as Node3D).position
 		_add_mess.rpc_id(sender, mid, mp)
+	# Mevcut müşterileri yeni gelene gönder
+	for cid in _cust_sim.keys():
+		_add_customer.rpc_id(sender, cid, _cust_sim[cid].pos)
 	_broadcast_meta()  # yeni gelene faz/rol bilgisi
 
 @rpc("authority", "reliable", "call_local")
@@ -209,6 +225,8 @@ func _shift_process(delta: float) -> void:
 			Game.add_score(-MISS_PENALTY)
 		elif code == 2 and randf() < MESS_CHANCE:
 			_spawn_mess_near(t.global_pos())
+	_leave_customers_of_free_tables()
+	_update_customers(delta)
 	_update_hygiene(delta)
 
 func _update_hygiene(delta: float) -> void:
@@ -280,6 +298,7 @@ func _start_shift() -> void:
 	_spawn_timer = 3.0
 	_hygiene = 100.0
 	_clear_messes()
+	_clear_customers()
 	# İnsan olmayan rolleri NPC (Tasarom) doldurur
 	_npc_roles = {}
 	var covered := {}
@@ -297,16 +316,87 @@ func _end_shift() -> void:
 	for t in _tables:
 		t.host_reset()
 	_clear_messes()
+	_clear_customers()
 	_broadcast_meta()
 
 func _try_spawn_customer() -> void:
 	var free: Array[CustomerTable] = []
 	for t in _tables:
-		if t.is_free():
+		if t.is_free() and not _table_cust.has(t.table_index):
 			free.append(t)
 	if free.is_empty():
 		return
-	free.pick_random().host_seat()
+	var t: CustomerTable = free.pick_random()
+	t.host_seat()
+	_spawn_customer(t)
+
+# ---- Müşteri NPC (host) ----
+func _spawn_customer(t: CustomerTable) -> void:
+	var id := _cust_next
+	_cust_next += 1
+	var seat := t.global_position + Vector3(0, 0.1, 0.9)
+	_cust_sim[id] = {"pos": ENTRANCE, "tgt": seat, "mode": 0, "table": t.table_index, "yaw": 0.0}
+	_table_cust[t.table_index] = id
+	_add_customer.rpc(id, ENTRANCE)
+
+func _update_customers(delta: float) -> void:
+	for id in _cust_sim.keys().duplicate():
+		var s: Dictionary = _cust_sim[id]
+		var pos: Vector3 = s.pos
+		var to: Vector3 = s.tgt - pos
+		to.y = 0
+		var d := to.length()
+		if d > 0.15:
+			pos += to.normalized() * minf(CUST_SPEED * delta, d)
+			s.yaw = atan2(to.x, to.z)
+		else:
+			if s.mode == 0:
+				s.mode = 1
+			elif s.mode == 2:
+				_despawn_customer(id)
+				continue
+		s.pos = pos
+		_cust_sim[id] = s
+		var node = _customers.get(id)
+		if node:
+			node.set_net(pos, s.yaw)
+
+func _leave_customers_of_free_tables() -> void:
+	for t in _tables:
+		if t.is_free() and _table_cust.has(t.table_index):
+			var cid: int = _table_cust[t.table_index]
+			_table_cust.erase(t.table_index)
+			if _cust_sim.has(cid):
+				_cust_sim[cid].mode = 2
+				_cust_sim[cid].tgt = EXIT
+
+func _despawn_customer(id: int) -> void:
+	_remove_customer.rpc(id)
+	_cust_sim.erase(id)
+
+func _clear_customers() -> void:
+	for id in _customers.keys().duplicate():
+		_remove_customer.rpc(id)
+	_cust_sim.clear()
+	_table_cust.clear()
+
+@rpc("authority", "reliable", "call_local")
+func _add_customer(id: int, pos: Vector3) -> void:
+	if _customers.has(id):
+		return
+	var c := CUSTOMER_SCENE.instantiate()
+	c.cust_id = id
+	c.position = pos
+	_customers_container.add_child(c)
+	_customers[id] = c
+
+@rpc("authority", "reliable", "call_local")
+func _remove_customer(id: int) -> void:
+	if _customers.has(id):
+		var c: Node = _customers[id]
+		if is_instance_valid(c):
+			c.queue_free()
+		_customers.erase(id)
 
 # ================================================= senkron
 func _broadcast_sync() -> void:
@@ -325,6 +415,25 @@ func _broadcast_sync() -> void:
 		ids.append(mid)
 		pr.append(float(_mess_clean.get(mid, 0.0)))
 	_net_env.rpc(_hygiene, ids, pr)
+	# Müşteri konumları
+	var cids := PackedInt32Array()
+	var cx := PackedFloat32Array()
+	var cz := PackedFloat32Array()
+	var cyaw := PackedFloat32Array()
+	for id in _cust_sim.keys():
+		var s: Dictionary = _cust_sim[id]
+		cids.append(id)
+		cx.append(s.pos.x)
+		cz.append(s.pos.z)
+		cyaw.append(s.yaw)
+	_net_cust.rpc(cids, cx, cz, cyaw)
+
+@rpc("authority", "unreliable")
+func _net_cust(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array) -> void:
+	for i in range(cids.size()):
+		var c = _customers.get(cids[i])
+		if c:
+			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 
 @rpc("authority", "unreliable")
 func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array) -> void:

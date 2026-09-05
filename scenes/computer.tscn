@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://boktoberfest0comp"]
+[gd_scene format=3 uid="uid://b7dl2t1533kgl"]
 
 [ext_resource type="Script" path="res://scripts/computer.gd" id="1"]
 

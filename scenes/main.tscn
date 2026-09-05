@@ -164,5 +164,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
 
 [node name="Messes" type="Node3D" parent="."]
 
+[node name="Customers" type="Node3D" parent="."]
+
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("6_hud")
