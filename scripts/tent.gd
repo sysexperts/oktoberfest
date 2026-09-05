@@ -4,13 +4,14 @@ extends Node3D
 ## @export parametreleri inspector'dan ayarlanabilir; "Rebuild" ile yeniden kurulur.
 ## Üretilen karolar owner=null olduğu için sahneye KAYDEDİLMEZ (dosya şişmez).
 
-@export var tent_scale := 1.8 : set = _set_scale
+@export var tent_scale := 2.0 : set = _set_scale
+@export var roof_scale := 2.7      # çatı parçaları daha büyük -> daha az sayıda
 @export var wall_overlap := 0.82
-@export var roof_overlap := 0.86
-@export var x0 := -9.5
-@export var x1 := 9.5
-@export var z0 := -11.5
-@export var z1 := 9.5
+@export var roof_overlap := 0.9
+@export var x0 := -12.0
+@export var x1 := 12.0
+@export var z0 := -14.0
+@export var z1 := 11.0
 @export var wall_lanterns := true
 @export var ceiling_lanterns := true
 ## Editörde bunu işaretle -> yeniden kurar (parametre değişikliklerini görmek için).
@@ -79,15 +80,16 @@ func _build() -> void:
 		li += 1
 		z2 += ws
 
-	# Çatı
-	var rsx := 1.445 * S * roof_overlap
-	var rsz := 1.917 * S * roof_overlap
-	var y_roof := 1.9 * S + 0.30 * S
-	x = x0 - 1.0
-	while x <= x1 + 1.0:
-		var z3 := z0 - 1.0
-		while z3 <= z1 + 1.0:
-			_spawn(roof_ps, Vector3(x, y_roof, z3), S, 0.0)
+	# Çatı — daha büyük parçalar, daha az sayı (roof_scale)
+	var rss := roof_scale
+	var rsx := 1.445 * rss * roof_overlap
+	var rsz := 1.917 * rss * roof_overlap
+	var y_roof := 1.9 * S + 0.35 * rss
+	x = x0 - 1.5
+	while x <= x1 + 1.5:
+		var z3 := z0 - 1.5
+		while z3 <= z1 + 1.5:
+			_spawn(roof_ps, Vector3(x, y_roof, z3), rss, 0.0)
 			z3 += rsz
 		x += rsx
 
