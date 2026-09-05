@@ -5,6 +5,8 @@ extends CanvasLayer
 var _money_label: Label
 var _score_label: Label
 var _time_label: Label
+var _phase_label: Label
+var _roster_label: Label
 var _hint_label: Label
 var _summary_panel: PanelContainer
 var _summary_label: Label
@@ -19,12 +21,25 @@ func _ready() -> void:
 	top.add_theme_constant_override("separation", 32)
 	add_child(top)
 
+	_phase_label = _make_label("MOLA")
 	_money_label = _make_label("💶 0€")
 	_score_label = _make_label("⭐ 0")
 	_time_label = _make_label("⏱ 0")
+	top.add_child(_phase_label)
 	top.add_child(_money_label)
 	top.add_child(_score_label)
 	top.add_child(_time_label)
+
+	# Rol listesi (sağ üst)
+	_roster_label = _make_label("")
+	_roster_label.anchor_left = 1.0
+	_roster_label.anchor_right = 1.0
+	_roster_label.offset_left = -320
+	_roster_label.offset_right = -16
+	_roster_label.offset_top = 12
+	_roster_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_roster_label.add_theme_font_size_override("font_size", 18)
+	add_child(_roster_label)
 
 	# Nişangah (ekran merkezi)
 	var crosshair := Label.new()
@@ -39,7 +54,7 @@ func _ready() -> void:
 	crosshair.offset_top = -18
 	add_child(crosshair)
 
-	_hint_label = _make_label("WASD · Fare: bak · Shift: koş · E: al/servis · Fıçıda E basılı tut (doğru bira!) · Q: Prost · Esc: fare")
+	_hint_label = _make_label("WASD · Fare: bak · E: al/servis · Fıçıda E basılı tut · Molada bilgisayarda E: rol seç · Q: Prost · Esc: fare")
 	_hint_label.anchor_top = 1.0
 	_hint_label.anchor_left = 0.0
 	_hint_label.offset_left = 16
@@ -65,6 +80,13 @@ func set_score(v: int) -> void:
 
 func set_time(seconds: float) -> void:
 	_time_label.text = "⏱ %d" % int(ceil(seconds))
+
+func set_phase(name: String) -> void:
+	_phase_label.text = name
+	_phase_label.add_theme_color_override("font_color", Color(1, 0.85, 0.3) if name == "VARDİYA" else Color(0.5, 0.85, 1))
+
+func set_roster(text: String) -> void:
+	_roster_label.text = text
 
 func _build_summary() -> void:
 	_summary_panel = PanelContainer.new()

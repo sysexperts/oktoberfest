@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b7dl2t154d5cj"]
+[gd_scene load_steps=15 format=3 uid="uid://b7dl2t154d5cj"]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_gm"]
 [ext_resource type="PackedScene" path="res://scenes/tent.tscn" id="2_tent"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/customer_table.tscn" id="5_table"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud"]
 [ext_resource type="PackedScene" path="res://assets/models/theke.glb" id="7_theke"]
+[ext_resource type="PackedScene" path="res://scenes/computer.tscn" id="8_comp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 
@@ -155,6 +156,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 2)
 
 [node name="Spawn3" type="Marker3D" parent="SpawnPoints"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 2)
+
+[node name="Computer" parent="." instance=ExtResource("8_comp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
 
 [node name="Players" type="Node3D" parent="."]
 

@@ -227,6 +227,10 @@ func _handle_interaction(delta: float) -> void:
 			carry_state = 1
 			carry_fill = 0.0
 			carry_type = 0
+		elif _current_target is Computer:
+			# Molada rol seç (host'ta doğrulanır)
+			if _world.has_method("net_cycle_role"):
+				_world.net_cycle_role.rpc_id(1)
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			carry_type = (_current_target as KegStation).beer_type

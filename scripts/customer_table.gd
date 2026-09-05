@@ -30,6 +30,12 @@ func _ready() -> void:
 func is_free() -> bool:
 	return state == State.EMPTY
 
+## Vardiya sonu: masayı boşalt (host).
+func host_reset() -> void:
+	state = State.EMPTY
+	_patience_left = 0.0
+	_apply_visual()
+
 func ratio() -> float:
 	return clampf(_patience_left / PATIENCE, 0.0, 1.0)
 
