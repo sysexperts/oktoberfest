@@ -73,41 +73,47 @@ shape = SubResource("WallZ")
 [node name="Bar" type="Node3D" parent="."]
 
 [node name="Theke0" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 0, -9.3)
 
 [node name="Theke1" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -6, 0, -9.3)
 
 [node name="Theke2" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -4, 0, -9.3)
 
 [node name="Theke3" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -2, 0, -9.3)
 
 [node name="Theke4" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, -9.3)
 
 [node name="Theke5" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2, 0, -9.3)
 
 [node name="Theke6" parent="Bar" instance=ExtResource("7_theke")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -9)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 4, 0, -9.3)
+
+[node name="Theke7" parent="Bar" instance=ExtResource("7_theke")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 6, 0, -9.3)
+
+[node name="Theke8" parent="Bar" instance=ExtResource("7_theke")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8, 0, -9.3)
 
 [node name="Stations" type="Node3D" parent="."]
 
 [node name="MugDispenser" parent="Stations" instance=ExtResource("3_disp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.86, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.42, -9)
 
 [node name="Keg1" parent="Stations" instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.72, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.33, -9)
 beer_type = 1
 
 [node name="Keg2" parent="Stations" instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.33, -9)
 beer_type = 2
 
 [node name="Keg3" parent="Stations" instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.72, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.33, -9)
 beer_type = 3
 
 [node name="Tables" type="Node3D" parent="."]
