@@ -106,7 +106,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		_pitch = clampf(_pitch - mm.relative.y * MOUSE_SENS, -PITCH_LIMIT, PITCH_LIMIT)
 		_head.rotation.x = _pitch
 	if event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		var hud := _world.get_node_or_null("HUD")
+		if hud and hud.has_method("is_computer_open") and hud.is_computer_open():
+			hud.close_computer()
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	# Q: Prost/dans emote (InputMap yerine doğrudan tuş — autoload'a bağlı değil)
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_Q:
 		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
@@ -228,9 +232,9 @@ func _handle_interaction(delta: float) -> void:
 			carry_fill = 0.0
 			carry_type = 0
 		elif _current_target is Computer:
-			# Molada rol seç (host'ta doğrulanır)
-			if _world.has_method("net_cycle_role"):
-				_world.net_cycle_role.rpc_id(1)
+			# Bilgisayar arayüzünü aç (rol seçimi)
+			if _world.has_method("open_computer_ui"):
+				_world.open_computer_ui()
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			carry_type = (_current_target as KegStation).beer_type

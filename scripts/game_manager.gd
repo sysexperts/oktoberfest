@@ -120,7 +120,7 @@ func _on_peer_left(peer_id: int) -> void:
 
 # ================================================= rol seçimi (bilgisayar)
 @rpc("any_peer", "reliable")
-func net_cycle_role() -> void:
+func net_set_role(role: int) -> void:
 	if not multiplayer.is_server():
 		return
 	if _phase != Phase.INTERMISSION:
@@ -128,8 +128,12 @@ func net_cycle_role() -> void:
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
 		s = 1
-	_roles[s] = (int(_roles.get(s, 0)) + 1) % 4
+	_roles[s] = clampi(role, 0, 3)
 	_broadcast_meta()
+
+## Yerel oyuncu bilgisayara bastığında UI açar.
+func open_computer_ui() -> void:
+	_hud.open_computer()
 
 # ================================================= host servis
 func host_try_serve(index: int, beer_type: int) -> bool:

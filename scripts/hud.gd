@@ -11,6 +11,10 @@ var _hint_label: Label
 var _summary_panel: PanelContainer
 var _summary_label: Label
 var _restart_pressed := false
+var _comp_panel: PanelContainer
+var _comp_roster: Label
+var _comp_open := false
+var _last_roster := ""
 
 func _ready() -> void:
 	var top := HBoxContainer.new()
@@ -62,6 +66,7 @@ func _ready() -> void:
 	add_child(_hint_label)
 
 	_build_summary()
+	_build_computer()
 
 func _make_label(text: String) -> Label:
 	var l := Label.new()
@@ -86,7 +91,78 @@ func set_phase(name: String) -> void:
 	_phase_label.add_theme_color_override("font_color", Color(1, 0.85, 0.3) if name == "VARDİYA" else Color(0.5, 0.85, 1))
 
 func set_roster(text: String) -> void:
+	_last_roster = text
 	_roster_label.text = text
+	if _comp_roster:
+		_comp_roster.text = text
+
+func _build_computer() -> void:
+	_comp_panel = PanelContainer.new()
+	_comp_panel.anchor_left = 0.5
+	_comp_panel.anchor_top = 0.5
+	_comp_panel.anchor_right = 0.5
+	_comp_panel.anchor_bottom = 0.5
+	_comp_panel.offset_left = -260
+	_comp_panel.offset_top = -180
+	_comp_panel.offset_right = 260
+	_comp_panel.offset_bottom = 180
+	_comp_panel.visible = false
+	add_child(_comp_panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 14)
+	_comp_panel.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "💻 Vardiya Bilgisayarı — Sıradaki vardiya için rol seç"
+	title.add_theme_font_size_override("font_size", 22)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	_comp_roster = Label.new()
+	_comp_roster.add_theme_font_size_override("font_size", 20)
+	_comp_roster.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_comp_roster)
+
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 10)
+	vbox.add_child(row)
+	_add_role_button(row, "👨‍🍳 Mutfak", 1)
+	_add_role_button(row, "🧹 Temizlik", 2)
+	_add_role_button(row, "🍺 Garson", 3)
+	_add_role_button(row, "Vazgeç", 0)
+
+	var close_btn := Button.new()
+	close_btn.text = "Kapat (Esc)"
+	close_btn.pressed.connect(close_computer)
+	vbox.add_child(close_btn)
+
+func _add_role_button(parent: Node, text: String, role: int) -> void:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 44)
+	b.pressed.connect(func(): _pick_role(role))
+	parent.add_child(b)
+
+func _pick_role(role: int) -> void:
+	var gm := get_parent()
+	if gm and gm.has_method("net_set_role"):
+		gm.net_set_role.rpc_id(1, role)
+
+func open_computer() -> void:
+	_comp_roster.text = _last_roster
+	_comp_panel.visible = true
+	_comp_open = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func close_computer() -> void:
+	_comp_panel.visible = false
+	_comp_open = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func is_computer_open() -> bool:
+	return _comp_open
 
 func _build_summary() -> void:
 	_summary_panel = PanelContainer.new()
