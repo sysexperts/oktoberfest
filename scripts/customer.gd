@@ -41,3 +41,9 @@ func _process(delta: float) -> void:
 	if want != _cur and _anim and _anim.has_animation(want):
 		_anim.play(want)
 		_cur = want
+	# Otururken (Idle) hafif sarhoş sallanma
+	if _model:
+		if want == "Idle":
+			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * 0.08
+		else:
+			_model.rotation.z = 0.0

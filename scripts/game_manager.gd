@@ -386,6 +386,13 @@ func _update_customers(delta: float) -> void:
 		else:
 			if s.mode == 0:
 				s.mode = 1
+				# Otururken masaya dön
+				var ti: int = s.table
+				if ti >= 0 and ti < _tables.size():
+					var dir: Vector3 = _tables[ti].global_position - pos
+					dir.y = 0
+					if dir.length() > 0.01:
+						s.yaw = atan2(dir.x, dir.z)
 			elif s.mode == 2:
 				_despawn_customer(id)
 				continue
