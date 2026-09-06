@@ -62,7 +62,7 @@
 - [x] C4. Tagesabschluss-**Bilanz** im Wohnwagen (Kazanç/Kira/Net/Servis/Kaçırılan) beim Schlafen (v43).
 
 ### Faz D — Progression & Expand
-- [ ] D1. **Zelt-Upgrade** (Stufe 2/3): neue größere `zelt_L2.tscn`/`zelt_L3.tscn`, höheres Tischlimit, mehr Sitze.
+- [x] D1. **Zelt-Ausbau real:** 12 Tische (3×4) in main.tscn, Tischlimit 4/8/12 je Stufe, natürliche Tischsortierung (v45). (Eigene größere Zelt-Meshes für L2/L3 = Optik, Faz E.)
 - [ ] D2. Freischalt-Kurve: neue Bier-/Essenssorten, Deko, Personal-Slots je Fortschritt.
 - [ ] D3. Ökonomie-Balance: Miete/Kosten pro Tag vs. Einnahmen (soll fordernd bleiben).
 
