@@ -28,6 +28,8 @@ var emote := 0           # 0 yok, 1 Prost/dans (senkron)
 var costume := 0         # kostüm rengi indeksi (senkron)
 var _applied_costume := -1
 var _emote_until := 0.0
+var _sfx_node: Node
+var _sfx_cd := 0.0
 
 var _is_local := false
 var _world: Node
@@ -93,6 +95,17 @@ func _ready() -> void:
 	if _is_local:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		_make_highlight_ring()
+		_sfx_node = _world.get_node_or_null("Sfx")
+
+func _sfx(name: String) -> void:
+	if _sfx_node:
+		_sfx_node.play(name)
+
+func _sfx_loop(name: String) -> void:
+	# sürekli aksiyonlarda kısılmış çalma
+	if _sfx_cd <= 0.0:
+		_sfx_cd = 0.22
+		_sfx(name)
 
 func _make_highlight_ring() -> void:
 	_highlight_ring = MeshInstance3D.new()
@@ -125,6 +138,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Q: Prost/dans emote (InputMap yerine doğrudan tuş — autoload'a bağlı değil)
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_Q:
 		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
+		_sfx("cheer")
 	# C: kostüm rengini değiştir
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_C:
 		costume = (costume + 1) % COSTUME_COLORS.size()
@@ -136,6 +150,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _is_local:
+		_sfx_cd -= delta
 		_handle_movement(delta)
 		_update_target()
 		_handle_interaction(delta)
@@ -252,10 +267,12 @@ func _handle_interaction(delta: float) -> void:
 	if Input.is_action_just_pressed("interact"):
 		if _current_target is CustomerTable and _has_ready():
 			_serve((_current_target as CustomerTable).table_index, _carry_kind(), carry_type)
+			_sfx("ding")
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
 			carry_fill = 0.0
 			carry_type = 0
+			_sfx("pop")
 		elif _current_target is Computer:
 			# Bilgisayar arayüzünü aç (rol seçimi)
 			if _world.has_method("open_computer_ui"):
@@ -264,6 +281,7 @@ func _handle_interaction(delta: float) -> void:
 		if carry_state == 1 and carry_fill < 1.0:
 			carry_type = (_current_target as KegStation).beer_type
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+			_sfx_loop("glug")
 	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
 	if Input.is_action_pressed("interact") and _current_target is FoodStation:
 		var ft := (_current_target as FoodStation).food_type
@@ -273,10 +291,12 @@ func _handle_interaction(delta: float) -> void:
 			carry_fill = 0.0
 		if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+			_sfx_loop("sizzle")
 	# Kir temizle (E basılı tut)
 	if Input.is_action_pressed("interact") and _current_target is Mess:
 		if _world.has_method("net_clean"):
 			_world.net_clean.rpc_id(1, (_current_target as Mess).mess_id)
+			_sfx_loop("scrub")
 
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
