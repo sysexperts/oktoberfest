@@ -26,13 +26,13 @@ const TASAROM := "Tasarom Firma Çalışanı"
 const ENTRANCE := Vector3(0, 0.1, 12.0)
 const CUST_SPEED := 3.0
 const GUEST_SPAWN_INTERVAL := 2.0
-const ORDER_PATIENCE := 25.0
-const ORDER_COOLDOWN_MIN := 6.0
-const ORDER_COOLDOWN_MAX := 14.0
-const SERVED_SHOW := 2.0
-const POP_START := 35.0
-const POP_SERVE := 2.0
-const POP_MISS := 4.0
+const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
+const ORDER_COOLDOWN_MIN := 22.0    # siparişler arası bekleme — uzatıldı
+const ORDER_COOLDOWN_MAX := 45.0
+const SERVED_SHOW := 3.0
+const POP_START := 20.0             # az misafirle başla
+const POP_SERVE := 1.5
+const POP_MISS := 3.0
 const MESS_CHANCE_PER_SEC := 0.02   # oturan sarhoş misafir kir yapma olasılığı/sn
 
 # Temizlik
@@ -332,7 +332,7 @@ func _spawn_guest() -> void:
 	_guest_sim[id] = {
 		"seat": si, "mode": 0, "pos": ENTRANCE, "tgt": _seats[si].pos, "yaw": 0.0,
 		"ostate": 0, "okind": 1, "otype": 1, "patience": ORDER_PATIENCE,
-		"cooldown": randf_range(2.0, 6.0), "served_t": 0.0
+		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0
 	}
 	_add_guest.rpc(id, ENTRANCE)
 
