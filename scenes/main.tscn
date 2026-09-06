@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b7dl2t154d5cj"]
+[gd_scene load_steps=32 format=3 uid="uid://b7dl2t154d5cj"]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_gm"]
 [ext_resource type="PackedScene" path="res://scenes/tent.tscn" id="2_tent"]
@@ -32,6 +32,49 @@ size = Vector3(26, 4, 0.6)
 [sub_resource type="BoxShape3D" id="WallZ"]
 size = Vector3(0.6, 4, 27)
 
+[sub_resource type="BoxShape3D" id="WallNGap"]
+size = Vector3(9, 4, 0.6)
+
+[sub_resource type="BoxShape3D" id="OuterX"]
+size = Vector3(34, 4, 0.6)
+
+[sub_resource type="BoxShape3D" id="OuterZ"]
+size = Vector3(0.6, 4, 20)
+
+[sub_resource type="BoxMesh" id="GrassMesh"]
+size = Vector3(36, 0.1, 22)
+
+[sub_resource type="StandardMaterial3D" id="MatGrass"]
+albedo_color = Color(0.28, 0.45, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="PathMesh"]
+size = Vector3(6, 0.12, 22)
+
+[sub_resource type="StandardMaterial3D" id="MatPath"]
+albedo_color = Color(0.62, 0.55, 0.42, 1)
+
+[sub_resource type="BoxMesh" id="TrunkMesh"]
+size = Vector3(0.4, 1.6, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="MatTrunk"]
+albedo_color = Color(0.35, 0.22, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="LeafMesh"]
+radius = 1.1
+height = 2.2
+
+[sub_resource type="StandardMaterial3D" id="MatLeaf"]
+albedo_color = Color(0.2, 0.5, 0.22, 1)
+
+[sub_resource type="BoxMesh" id="SignMesh"]
+size = Vector3(6, 1.4, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="MatSign"]
+albedo_color = Color(0.55, 0.12, 0.12, 1)
+emission_enabled = true
+emission = Color(0.7, 0.15, 0.15, 1)
+emission_energy_multiplier = 0.8
+
 [node name="Main" type="Node3D"]
 script = ExtResource("1_gm")
 
@@ -55,11 +98,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -14.3)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallSouth"]
 shape = SubResource("WallX")
 
-[node name="WallNorth" type="StaticBody3D" parent="Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 11.3)
+[node name="WallNorthW" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 2, 11.3)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallNorth"]
-shape = SubResource("WallX")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallNorthW"]
+shape = SubResource("WallNGap")
+
+[node name="WallNorthE" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2, 11.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallNorthE"]
+shape = SubResource("WallNGap")
 
 [node name="WallWest" type="StaticBody3D" parent="Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3, 2, -1.5)
@@ -149,28 +198,96 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 [node name="BeerTable5" parent="Tables" instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 7)
 
+[node name="Wasen" type="Node3D" parent="."]
+
+[node name="Grass" type="MeshInstance3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 20)
+mesh = SubResource("GrassMesh")
+material_override = SubResource("MatGrass")
+
+[node name="Path" type="MeshInstance3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
+mesh = SubResource("PathMesh")
+material_override = SubResource("MatPath")
+
+[node name="Sign" type="MeshInstance3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 12)
+mesh = SubResource("SignMesh")
+material_override = SubResource("MatSign")
+
+[node name="SignLabel" type="Label3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 12.2)
+pixel_size = 0.01
+font_size = 60
+outline_size = 20
+text = "🍺 WASENPLATZ 🍺"
+
+[node name="Tree1" type="Node3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 16)
+
+[node name="Trunk" type="MeshInstance3D" parent="Wasen/Tree1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("TrunkMesh")
+material_override = SubResource("MatTrunk")
+
+[node name="Leaves" type="MeshInstance3D" parent="Wasen/Tree1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("LeafMesh")
+material_override = SubResource("MatLeaf")
+
+[node name="Tree2" type="Node3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 24)
+
+[node name="Trunk" type="MeshInstance3D" parent="Wasen/Tree2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("TrunkMesh")
+material_override = SubResource("MatTrunk")
+
+[node name="Leaves" type="MeshInstance3D" parent="Wasen/Tree2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+mesh = SubResource("LeafMesh")
+material_override = SubResource("MatLeaf")
+
+[node name="OuterNorth" type="StaticBody3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 30)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wasen/OuterNorth"]
+shape = SubResource("OuterX")
+
+[node name="OuterWest" type="StaticBody3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 2, 20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wasen/OuterWest"]
+shape = SubResource("OuterZ")
+
+[node name="OuterEast" type="StaticBody3D" parent="Wasen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 2, 20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wasen/OuterEast"]
+shape = SubResource("OuterZ")
+
 [node name="SpawnPoints" type="Node3D" parent="."]
 
 [node name="Spawn0" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 17)
 
 [node name="Spawn1" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 17)
 
 [node name="Spawn2" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 19)
 
 [node name="Spawn3" type="Marker3D" parent="SpawnPoints"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 19)
 
 [node name="Computer" parent="." instance=ExtResource("8_comp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
 
 [node name="BookingKiosk" parent="." instance=ExtResource("11_kiosk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 16)
 
 [node name="Caravan" parent="." instance=ExtResource("12_carav")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 8)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, 22)
 
 [node name="Players" type="Node3D" parent="."]
 
