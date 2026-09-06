@@ -420,7 +420,7 @@ func _update_customers(delta: float) -> void:
 		var d := to.length()
 		if d > 0.15:
 			pos += to.normalized() * minf(CUST_SPEED * delta, d)
-			s.yaw = atan2(to.x, to.z)
+			s.yaw = atan2(-to.x, -to.z)  # model root'un -z'sine bakar
 		else:
 			if s.mode == 0:
 				s.mode = 1
@@ -430,7 +430,7 @@ func _update_customers(delta: float) -> void:
 					var dir: Vector3 = _tables[ti].global_position - pos
 					dir.y = 0
 					if dir.length() > 0.01:
-						s.yaw = atan2(dir.x, dir.z)
+						s.yaw = atan2(-dir.x, -dir.z)
 			elif s.mode == 2:
 				_despawn_customer(id)
 				continue

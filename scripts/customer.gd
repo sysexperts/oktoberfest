@@ -41,9 +41,11 @@ func _process(delta: float) -> void:
 	if want != _cur and _anim and _anim.has_animation(want):
 		_anim.play(want)
 		_cur = want
-	# Otururken (Idle) hafif sarhoş sallanma
+	# Otururken (Idle): banka otur (alçal) + hafif sarhoş sallanma
 	if _model:
+		var target_y := -0.25 if want == "Idle" else 0.0  # banka otur (alçal)
+		_model.position.y = lerpf(_model.position.y, target_y, clampf(delta * 6.0, 0.0, 1.0))
 		if want == "Idle":
-			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * 0.08
+			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * 0.06
 		else:
 			_model.rotation.z = 0.0

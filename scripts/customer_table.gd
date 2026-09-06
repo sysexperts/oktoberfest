@@ -43,6 +43,10 @@ func set_active(a: bool) -> void:
 func is_free() -> bool:
 	return active and state == State.EMPTY
 
+## İstemci tarafı ön kontrol (senkron duruma göre): bu sipariş verilebilir mi?
+func can_serve(kind: int, type: int) -> bool:
+	return active and state == State.WAITING and kind == order_kind and type == required_type
+
 ## Vardiya sonu: masayı boşalt (host).
 func host_reset() -> void:
 	state = State.EMPTY

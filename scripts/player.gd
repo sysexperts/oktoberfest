@@ -266,8 +266,10 @@ func _handle_interaction(delta: float) -> void:
 		return
 	if Input.is_action_just_pressed("interact"):
 		if _current_target is CustomerTable and _has_ready():
-			_serve((_current_target as CustomerTable).table_index, _carry_kind(), carry_type)
-			_sfx("ding")
+			var tbl := _current_target as CustomerTable
+			if tbl.can_serve(_carry_kind(), carry_type):
+				_serve(tbl.table_index, _carry_kind(), carry_type)
+				_sfx("ding")
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
 			carry_fill = 0.0
