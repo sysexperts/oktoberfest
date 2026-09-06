@@ -42,6 +42,15 @@ const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
 const START_MONEY := 10000   # TEST (yayında 0)
 
+# Zelt / makro-döngü (Wasenplatz mantığı)
+const TENT_STAGE_NAMES := {0: "Zelt yok", 1: "Küçük Zelt", 2: "Orta Zelt", 3: "Büyük Zelt"}
+const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 6, 3: 6}   # sahnedeki masa sayısıyla sınırlı (6)
+const TENT_BOOK_COST := 500
+const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
+const TABLE_COST := 200
+const DAILY_RENT := 150
+const WIESN_DAYS := 16
+
 var _hud: HUD
 var _sfx_node: Node
 var _players_container: Node3D
@@ -62,9 +71,15 @@ var _last_earn := 0
 var _shift_num := 0
 var _popularity := POP_START
 
+# Zelt / makro-döngü durumu
+var _tent_stage := 0     # 0 = kiralanmadı, 1..3 zelt büyüklüğü
+var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
+var _day := 1            # Wiesn günü
+
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
-var _beertables: Array = []
+var _all_tables: Array = []   # sahnedeki tüm bira masaları (kararlı sıra)
+var _beertables: Array = []   # sadece aktif masalar (servis/oturma)
 var _held := {}   # peer_id -> beertable idx (molada taşıma)
 # Misafir sim: id -> {seat:int, mode:int(0 gir,1 otur,2 çık), pos, tgt, yaw,
 #                     ostate, okind, otype, patience, cooldown, served_t}
@@ -86,12 +101,10 @@ func _ready() -> void:
 	_customers_container = $Customers
 	_messes_container = $Messes
 
-	# Bira masalarını topla (kararlı sıra) + koltukları kur
-	_beertables = get_tree().get_nodes_in_group("beertable")
-	_beertables.sort_custom(func(a, b): return a.name < b.name)
-	for i in _beertables.size():
-		_beertables[i].idx = i
-	_rebuild_seats()
+	# Bira masalarını topla (kararlı sıra). Başta zelt kiralanmadı → 0 aktif.
+	_all_tables = get_tree().get_nodes_in_group("beertable")
+	_all_tables.sort_custom(func(a, b): return a.name < b.name)
+	_apply_tent()
 
 	Game.money_changed.connect(_hud.set_money)
 	Game.score_changed.connect(_hud.set_score)
@@ -99,6 +112,7 @@ func _ready() -> void:
 	_hud.set_score(Game.score)
 	_hud.set_time(_phase_time)
 	_hud.set_phase(_phase_name())
+	_hud.set_day(_day, WIESN_DAYS)
 
 	if multiplayer.is_server():
 		Game.add_money(START_MONEY)
@@ -118,6 +132,9 @@ func _phase_name() -> String:
 
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
+
+func _tent_ready() -> bool:
+	return _tent_stage > 0 and _active_count > 0
 
 # ================================================= oyuncular
 @rpc("any_peer", "reliable")
@@ -182,6 +199,9 @@ func net_set_role(role: int) -> void:
 func open_computer_ui() -> void:
 	_hud.open_computer()
 
+func open_booking_ui() -> void:
+	_hud.open_booking()
+
 func _rebuild_seats() -> void:
 	_seats.clear()
 	for bt in _beertables:
@@ -191,6 +211,101 @@ func _rebuild_seats() -> void:
 			d.y = 0
 			var yaw := atan2(-d.x, -d.z) if d.length() > 0.01 else 0.0
 			_seats.append({"pos": sp, "yaw": yaw, "guest": -1})
+
+## Zelt kiralamaya göre masaları aktif/pasif yap + koltukları kur.
+func _apply_tent() -> void:
+	for i in _all_tables.size():
+		var bt := _all_tables[i] as Node3D
+		var on: bool = i < _active_count
+		bt.idx = i
+		bt.visible = on
+		if on:
+			if not bt.is_in_group("beertable"):
+				bt.add_to_group("beertable")
+			if not bt.is_in_group("interactable"):
+				bt.add_to_group("interactable")
+		else:
+			if bt.is_in_group("beertable"):
+				bt.remove_from_group("beertable")
+			if bt.is_in_group("interactable"):
+				bt.remove_from_group("interactable")
+	_beertables = []
+	for i in _active_count:
+		_beertables.append(_all_tables[i])
+	_rebuild_seats()
+
+## Kiosk: Zelt buchen (Stufe 1).
+@rpc("any_peer", "reliable")
+func net_book_tent() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION or _tent_stage != 0:
+		return
+	if Game.money < TENT_BOOK_COST:
+		_net_banner.rpc("💶 Yetersiz para! (Zelt: %d€)" % TENT_BOOK_COST)
+		return
+	Game.add_money(-TENT_BOOK_COST)
+	_tent_stage = 1
+	_active_count = 0
+	_apply_tent()
+	_net_banner.rpc("🎪 %s kiralandı! Şimdi masa yerleştir." % TENT_STAGE_NAMES[1])
+	_broadcast_meta()
+
+## Kiosk: Tisch kaufen/platzieren (limit je Zeltstufe).
+@rpc("any_peer", "reliable")
+func net_buy_table() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _tent_stage == 0:
+		_net_banner.rpc("Önce Zelt buchen! (Kiosk)")
+		return
+	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
+	if _active_count >= limit:
+		_net_banner.rpc("🪑 Tisch-Limit dolu (%d). Zelt upgrade et." % limit)
+		return
+	if Game.money < TABLE_COST:
+		_net_banner.rpc("💶 Yetersiz para! (Tisch: %d€)" % TABLE_COST)
+		return
+	Game.add_money(-TABLE_COST)
+	_active_count += 1
+	_apply_tent()
+	_net_banner.rpc("🪑 Masa +1 (%d/%d)" % [_active_count, limit])
+	_broadcast_meta()
+
+## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
+@rpc("any_peer", "reliable")
+func net_upgrade_tent() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var nxt := _tent_stage + 1
+	if not TENT_UPGRADE_COST.has(nxt):
+		_net_banner.rpc("🎪 En büyük Zelt zaten!")
+		return
+	var cost: int = TENT_UPGRADE_COST[nxt]
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (Upgrade: %d€)" % cost)
+		return
+	Game.add_money(-cost)
+	_tent_stage = nxt
+	_apply_tent()
+	_net_banner.rpc("🎪 %s! Tisch-Limit: %d" % [TENT_STAGE_NAMES[nxt], TENT_TABLE_LIMIT[nxt]])
+	_broadcast_meta()
+
+## Wohnwagen: schlafen → nächster Tag (Miete abziehen).
+@rpc("any_peer", "reliable")
+func net_sleep() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _tent_stage == 0:
+		_net_banner.rpc("Önce Zelt buchen, sonra uyu 😴")
+		return
+	_day += 1
+	Game.add_money(-DAILY_RENT)
+	_phase_time = INTERMISSION_TIME
+	if _day > WIESN_DAYS:
+		_net_banner.rpc("🎉 Wiesn bitti! %d gün tamamlandı 🍺" % WIESN_DAYS)
+		_day = 1
+	else:
+		_net_banner.rpc("😴 Wiesn-Tag %d/%d · Kira -%d€" % [_day, WIESN_DAYS, DAILY_RENT])
+	_broadcast_meta()
 
 ## Molada bira masasını tut/bırak (yerleştir).
 @rpc("any_peer", "reliable")
@@ -256,7 +371,10 @@ func _process(delta: float) -> void:
 			_end_shift()
 	else:
 		if _phase_time <= 0.0:
-			_start_shift()
+			if _tent_ready():
+				_start_shift()
+			else:
+				_phase_time = INTERMISSION_TIME
 	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
@@ -553,17 +671,28 @@ func _roster_string() -> String:
 	return "\n".join(lines)
 
 func _mgmt_string() -> String:
-	return "Popülerlik: %d%% · Koltuk: %d" % [int(round(_popularity)), _seats.size()]
+	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
+	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d" % [
+		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
+		int(round(_popularity)), DAILY_RENT, _day, WIESN_DAYS]
 
 func _broadcast_meta() -> void:
-	net_meta.rpc(_phase, _roster_string(), _mgmt_string())
+	net_meta.rpc(_phase, _roster_string(), _mgmt_string(), _day, _tent_stage, _active_count)
 
 @rpc("authority", "reliable", "call_local")
-func net_meta(phase: int, roster: String, mgmt: String) -> void:
+func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int) -> void:
 	_phase = phase
+	_day = day
+	_tent_stage = tent_stage
+	# Clientlerde masaların görünürlüğünü senkronla
+	if not multiplayer.is_server() and _active_count != active_count:
+		_active_count = active_count
+		_apply_tent()
+	_active_count = active_count
 	_hud.set_phase(_phase_name())
 	_hud.set_roster(roster)
 	_hud.set_mgmt(mgmt)
+	_hud.set_day(day, WIESN_DAYS)
 	if _sfx_node:
 		if phase == Phase.SHIFT:
 			_sfx_node.play_music()

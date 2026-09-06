@@ -8,8 +8,12 @@ var _time_label: Label
 var _hygiene_label: Label
 var _pop_label: Label
 var _phase_label: Label
+var _day_label: Label
 var _roster_label: Label
 var _hint_label: Label
+var _book_panel: PanelContainer
+var _book_mgmt: Label
+var _book_open := false
 var _summary_panel: PanelContainer
 var _summary_label: Label
 var _restart_pressed := false
@@ -31,12 +35,14 @@ func _ready() -> void:
 	add_child(top)
 
 	_phase_label = _make_label("MOLA")
+	_day_label = _make_label("📅 1/16")
 	_money_label = _make_label("💶 0€")
 	_score_label = _make_label("⭐ 0")
 	_time_label = _make_label("⏱ 0")
 	_hygiene_label = _make_label("🧼 100%")
 	_pop_label = _make_label("🎉 35%")
 	top.add_child(_phase_label)
+	top.add_child(_day_label)
 	top.add_child(_money_label)
 	top.add_child(_score_label)
 	top.add_child(_time_label)
@@ -67,7 +73,7 @@ func _ready() -> void:
 	crosshair.offset_top = -18
 	add_child(crosshair)
 
-	_hint_label = _make_label("WASD · E: al/servis/temizle · Molada masaya E: tut/bırak (taşı) · Bilgisayar E: rol/masa al · Q: Prost · C: kostüm")
+	_hint_label = _make_label("WASD · E: al/servis/temizle · Kiosk E: Zelt/Tisch · Wohnwagen E: uyu · Bilgisayar E: rol · Masaya E (mola): taşı · Q: Prost · C: kostüm")
 	_hint_label.anchor_top = 1.0
 	_hint_label.anchor_left = 0.0
 	_hint_label.offset_left = 16
@@ -76,6 +82,7 @@ func _ready() -> void:
 
 	_build_summary()
 	_build_computer()
+	_build_booking()
 
 func _make_label(text: String) -> Label:
 	var l := Label.new()
@@ -120,6 +127,10 @@ func set_hygiene(v: float) -> void:
 
 func set_popularity(v: float) -> void:
 	_pop_label.text = "🎉 %d%%" % int(round(v))
+
+func set_day(day: int, total: int) -> void:
+	if _day_label:
+		_day_label.text = "📅 %d/%d" % [day, total]
 
 func set_phase(name: String) -> void:
 	_phase_label.text = name
@@ -195,6 +206,75 @@ func _buy_table() -> void:
 func set_mgmt(text: String) -> void:
 	if _comp_mgmt:
 		_comp_mgmt.text = text
+	if _book_mgmt:
+		_book_mgmt.text = text
+
+func _build_booking() -> void:
+	_book_panel = PanelContainer.new()
+	_book_panel.anchor_left = 0.5
+	_book_panel.anchor_top = 0.5
+	_book_panel.anchor_right = 0.5
+	_book_panel.anchor_bottom = 0.5
+	_book_panel.offset_left = -280
+	_book_panel.offset_top = -200
+	_book_panel.offset_right = 280
+	_book_panel.offset_bottom = 200
+	_book_panel.visible = false
+	add_child(_book_panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 12)
+	_book_panel.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "🎪 Zelt Buchung & Aufbau"
+	title.add_theme_font_size_override("font_size", 24)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	_book_mgmt = Label.new()
+	_book_mgmt.add_theme_font_size_override("font_size", 18)
+	_book_mgmt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_book_mgmt)
+
+	vbox.add_child(HSeparator.new())
+
+	_add_book_button(vbox, "🎪 Zelt buchen (500€)", "net_book_tent")
+	_add_book_button(vbox, "🪑 Tisch stellen (200€)", "net_buy_table")
+	_add_book_button(vbox, "⬆️ Zelt upgraden", "net_upgrade_tent")
+
+	var close_btn := Button.new()
+	close_btn.text = "Kapat (Esc)"
+	close_btn.custom_minimum_size = Vector2(0, 40)
+	close_btn.pressed.connect(close_booking)
+	vbox.add_child(close_btn)
+
+func _add_book_button(parent: Node, text: String, method: String) -> void:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 44)
+	b.pressed.connect(func(): _call_gm(method))
+	parent.add_child(b)
+
+func _call_gm(method: String) -> void:
+	var gm := get_parent()
+	if gm and gm.has_method(method):
+		gm.callv("rpc_id", [1, method])
+
+func open_booking() -> void:
+	if _book_mgmt:
+		_book_mgmt.text = _comp_mgmt.text if _comp_mgmt else ""
+	_book_panel.visible = true
+	_book_open = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func close_booking() -> void:
+	_book_panel.visible = false
+	_book_open = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func is_booking_open() -> bool:
+	return _book_open
 
 func _add_role_button(parent: Node, text: String, role: int) -> void:
 	var b := Button.new()

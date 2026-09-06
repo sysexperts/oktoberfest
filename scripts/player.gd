@@ -133,6 +133,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var hud := _world.get_node_or_null("HUD")
 		if hud and hud.has_method("is_computer_open") and hud.is_computer_open():
 			hud.close_computer()
+		elif hud and hud.has_method("is_booking_open") and hud.is_booking_open():
+			hud.close_booking()
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	# Q: Prost/dans emote (InputMap yerine doğrudan tuş — autoload'a bağlı değil)
@@ -287,6 +289,16 @@ func _handle_interaction(delta: float) -> void:
 			# Bilgisayar arayüzünü aç (rol seçimi)
 			if _world.has_method("open_computer_ui"):
 				_world.open_computer_ui()
+		elif _current_target is BookingKiosk:
+			# Zelt buchen / Tisch stellen / upgrade (sadece molada)
+			if _world.has_method("in_intermission") and _world.in_intermission():
+				if _world.has_method("open_booking_ui"):
+					_world.open_booking_ui()
+		elif _current_target is Caravan:
+			# Uyu → sonraki gün (sadece molada)
+			if _world.has_method("in_intermission") and _world.in_intermission():
+				_world.net_sleep.rpc_id(1)
+				_sfx("pop")
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			carry_type = (_current_target as KegStation).beer_type
