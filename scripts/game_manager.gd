@@ -50,7 +50,8 @@ const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
 const TABLE_COST := 200
-const DAILY_RENT := 150
+const DAILY_RENT := 150       # temel kira; her gün artar (_daily_rent)
+const RENT_PER_DAY := 40      # gün başına ek kira (ekonomi baskısı)
 const WIESN_DAYS := 16
 # Upgrades (kiosk)
 const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
@@ -148,6 +149,26 @@ func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
 
 ## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
+## D3: kira her gün artar (ekonomi baskısı).
+func _daily_rent() -> int:
+	return DAILY_RENT + (_day - 1) * RENT_PER_DAY
+
+## D2: güne göre açılan içecek tipleri (1 Helles, 2 Weizen, 3 Radler).
+func _drinks_avail() -> Array:
+	var a := [1]
+	if _day >= 3:
+		a.append(2)
+	if _day >= 5:
+		a.append(3)
+	return a
+
+## D2: güne göre açılan yemek tipleri (1 Pretzel, 2 Sosis).
+func _foods_avail() -> Array:
+	var a := [1]
+	if _day >= 2:
+		a.append(2)
+	return a
+
 func _tbl_num(n: String) -> int:
 	var digits := ""
 	for i in n.length():
@@ -346,26 +367,32 @@ func net_sleep() -> void:
 	if _tent_stage == 0:
 		_net_banner.rpc("Önce Zelt buchen, sonra uyu 😴")
 		return
-	Game.add_money(-DAILY_RENT)
+	var rent := _daily_rent()
+	Game.add_money(-rent)
 	# Tagesbilanz (Wohnwagen)
-	var net_profit := _last_earn - DAILY_RENT
+	var net_profit := _last_earn - rent
 	var bilanz := ""
 	if _did_shift:
 		bilanz = "📊 Tag %d bilanço: Kazanç %d€ · Kira -%d€ · Net %s%d€\nServis %d · Kaçırılan %d" % [
-			_day, _last_earn, DAILY_RENT, "+" if net_profit >= 0 else "", net_profit, _served, _missed]
+			_day, _last_earn, rent, "+" if net_profit >= 0 else "", net_profit, _served, _missed]
 	else:
-		bilanz = "📊 Tag %d: vardiya yok · Kira -%d€" % [_day, DAILY_RENT]
+		bilanz = "📊 Tag %d: vardiya yok · Kira -%d€" % [_day, rent]
 	_day += 1
 	_phase_time = INTERMISSION_TIME
 	_did_shift = false
 	_last_earn = 0
 	_served = 0
 	_missed = 0
+	var unlock := ""
+	match _day:
+		2: unlock = " · 🌭 Sosis açıldı!"
+		3: unlock = " · 🍺 Weizen açıldı!"
+		5: unlock = " · 🍋 Radler açıldı!"
 	if _day > WIESN_DAYS:
 		_net_banner.rpc("🎉 Wiesn bitti! %d gün tamamlandı 🍺\n%s" % [WIESN_DAYS, bilanz])
 		_day = 1
 	else:
-		_net_banner.rpc("%s\n😴 → Wiesn-Tag %d/%d" % [bilanz, _day, WIESN_DAYS])
+		_net_banner.rpc("%s\n😴 → Wiesn-Tag %d/%d%s" % [bilanz, _day, WIESN_DAYS, unlock])
 	_broadcast_meta()
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
@@ -569,10 +596,10 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			g.ostate = 1
 			if randf() < 0.6:
 				g.okind = 1
-				g.otype = randi_range(1, 3)
+				g.otype = _drinks_avail().pick_random()
 			else:
 				g.okind = 2
-				g.otype = randi_range(1, 2)
+				g.otype = _foods_avail().pick_random()
 			g.patience = ORDER_PATIENCE
 	elif g.ostate == 1:
 		g.patience -= delta * (PATIENCE_NIGHT_MULT if _night else 1.0)
@@ -755,7 +782,7 @@ func _mgmt_string() -> String:
 	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
 	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d" % [
 		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
-		int(round(_popularity)), DAILY_RENT, _day, WIESN_DAYS, _upg_marketing, _upg_deko]
+		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko]
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _roster_string(), _mgmt_string(), _day, _tent_stage, _active_count)
