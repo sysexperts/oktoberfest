@@ -43,11 +43,11 @@
 ## 3. Checkliste (Reihenfolge = Umsetzungsplan)
 
 ### Faz A — Makro-Loop Gerüst (Priorität)
-- [~] A1. **Wasenplatz-Außenszene** — TEILWEISE: Kiosk + Wohnwagen als Nodes im aktuellen Raum (v41). Separate Außenszene `scenes/wasen.tscn` noch offen.
+- [x] A1. **Wasenplatz-Außenszene** — als `Wasen`-Node in main.tscn (v42): Gras/Weg/Bäume/Willkommensschild, Außengrenzen. Kiosk + Wohnwagen stehen draußen davor.
 - [x] A2. **GameState erweitert:** Tag-Zähler (Wiesn-Tag 1..16) + Zeltstufe + aktive Tischzahl, alles über `net_meta` synced (v41).
 - [x] A3. **Zelt buchen (Kiosk):** `net_book_tent` (500€) → Stufe 1; `net_upgrade_tent` (Stufe 2/3). Ohne Buchung startet keine Schicht (v41).
 - [x] A4. **Wohnwagen/Schlafen:** `net_sleep` → Tag++ + Miete −150€/Tag, Wiesn-Tag-HUD (v41).
-- [ ] A5. **Übergänge/Teleport** zwischen Wasen ↔ Zeltinnenraum (Türtrigger oder Fade). ← nächster Schritt (mit A1).
+- [x] A5. **Übergang Wasen ↔ Zelt** — räumlich gelöst (v42): Eingangslücke in Nordwand, man läuft physisch rein/raus (kein Teleport, MP-sicher in einer Welt). Offen/Optik: Tent-Mesh hat an der Lücke noch sichtbare Zeltwand (Faz E).
 
 ### Faz B — Aufbau/Prep sauber
 - [x] B1. **Tischlimit je Zeltstufe** (Stufe1=4, Stufe2/3=6) + Kauf-UI im Kiosk-Panel (v41).
