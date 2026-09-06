@@ -43,15 +43,15 @@
 ## 3. Checkliste (Reihenfolge = Umsetzungsplan)
 
 ### Faz A — Makro-Loop Gerüst (Priorität)
-- [ ] A1. **Wasenplatz-Außenszene** (`scenes/wasen.tscn`): Boden/Himmel, Platz mit leerem Bauslot fürs Zelt, Wohnwagen-Objekt, Buchungs-Schild/Kiosk. Echte Nodes.
-- [ ] A2. **GameState-Phasen erweitern:** `HUB` (Wasenplatz, frei laufen) ↔ `PREP` (im Zelt aufbauen) ↔ `SHIFT` ↔ `SLEEP`. Aktuell nur INTERMISSION/SHIFT.
-- [ ] A3. **Zelt buchen:** am Kiosk interagieren → Stufe-1-Zelt für X€ mieten; erst danach betretbar. Zeltstufe in GameState + synced.
-- [ ] A4. **Wohnwagen/Schlafen:** nach Schicht Interaktion "Schlafen" → Tag++ → zurück in HUB/PREP. Tageszähler + Datum (Wiesn-Tag 1..16).
-- [ ] A5. **Übergänge/Teleport** zwischen Wasen ↔ Zeltinnenraum (Türtrigger oder Fade).
+- [~] A1. **Wasenplatz-Außenszene** — TEILWEISE: Kiosk + Wohnwagen als Nodes im aktuellen Raum (v41). Separate Außenszene `scenes/wasen.tscn` noch offen.
+- [x] A2. **GameState erweitert:** Tag-Zähler (Wiesn-Tag 1..16) + Zeltstufe + aktive Tischzahl, alles über `net_meta` synced (v41).
+- [x] A3. **Zelt buchen (Kiosk):** `net_book_tent` (500€) → Stufe 1; `net_upgrade_tent` (Stufe 2/3). Ohne Buchung startet keine Schicht (v41).
+- [x] A4. **Wohnwagen/Schlafen:** `net_sleep` → Tag++ + Miete −150€/Tag, Wiesn-Tag-HUD (v41).
+- [ ] A5. **Übergänge/Teleport** zwischen Wasen ↔ Zeltinnenraum (Türtrigger oder Fade). ← nächster Schritt (mit A1).
 
 ### Faz B — Aufbau/Prep sauber
-- [ ] B1. **Tischlimit je Zeltstufe** durchsetzen (Stufe1=4). Kauf-UI im Zelt (nicht nur Computer).
-- [ ] B2. **Tische kaufen + frei platzieren** (Grid/Snap), verschieben, verkaufen. (Move existiert schon → Kauf/Limit ergänzen.)
+- [x] B1. **Tischlimit je Zeltstufe** (Stufe1=4, Stufe2/3=6) + Kauf-UI im Kiosk-Panel (v41).
+- [~] B2. **Tische kaufen + platzieren:** kaufen (`net_buy_table` 200€, aktiviert Tisch) + verschieben (mola) da. Frei platzieren mit Grid/Snap + verkaufen noch offen.
 - [ ] B3. **Rollenwahl** am Computer beibehalten; leere Rolle = Tasarom-NPC.
 - [ ] B4. **Vorräte/Upgrades-Shop:** z.B. schnellerer Zapfhahn, zweite Kochstation, Deko (+Beliebtheit).
 
