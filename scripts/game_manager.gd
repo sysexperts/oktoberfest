@@ -12,6 +12,7 @@ const SPAWN_START := 6.0
 const SPAWN_MIN := 2.5
 const SYNC_INTERVAL := 0.15
 const MISS_PENALTY := 5
+const MISS_LIMIT := 12   # bu kadar kaçırılırsa çadır kapanır (komik final)
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const MESS_SCENE := preload("res://scenes/mess.tscn")
 const CUSTOMER_SCENE := preload("res://scenes/customer.tscn")
@@ -258,6 +259,9 @@ func _shift_process(delta: float) -> void:
 		if code == 1:
 			_missed += 1
 			Game.add_score(-MISS_PENALTY)
+			if _missed >= MISS_LIMIT:
+				_end_shift(true)
+				return
 		elif code == 2 and randf() < MESS_CHANCE:
 			_spawn_mess_near(t.global_pos())
 	_leave_customers_of_free_tables()
@@ -368,14 +372,17 @@ func _start_shift() -> void:
 			_npc_roles[role] = true
 	_broadcast_meta()
 
-func _end_shift() -> void:
+func _end_shift(closed_early := false) -> void:
 	_phase = Phase.INTERMISSION
 	_phase_time = INTERMISSION_TIME
 	for t in _tables:
 		t.host_reset()
 	_clear_messes()
 	_clear_customers()
-	_net_banner.rpc("Vardiya bitti! Kazanç: %d€ · Servis: %d · Kaçırılan: %d" % [_last_earn, _served, _missed])
+	if closed_early:
+		_net_banner.rpc("🚫 Çok şikayet! Çadır kapandı 😅 · Kazanç: %d€ · Kaçırılan: %d" % [_last_earn, _missed])
+	else:
+		_net_banner.rpc("Vardiya bitti! Kazanç: %d€ · Servis: %d · Kaçırılan: %d" % [_last_earn, _served, _missed])
 	_broadcast_meta()
 
 func _try_spawn_customer() -> void:
