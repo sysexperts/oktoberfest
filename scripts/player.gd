@@ -17,12 +17,16 @@ const FILL_RATE := 0.6
 const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
 # Yemek: 1 Pretzel, 2 Sosis
 const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
+# Kostüm renkleri (C ile değiştir)
+const COSTUME_COLORS := [Color(0.85,0.2,0.2), Color(0.2,0.45,0.85), Color(0.2,0.7,0.3), Color(0.7,0.3,0.8), Color(0.95,0.85,0.2), Color(0.95,0.95,0.95)]
 
 # Ağ ile senkronlanan durum
 var carry_state := 0     # 0 = boş el, 1 = bardak
 var carry_fill := 0.0    # 0..1
 var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler
 var emote := 0           # 0 yok, 1 Prost/dans (senkron)
+var costume := 0         # kostüm rengi indeksi (senkron)
+var _applied_costume := -1
 var _emote_until := 0.0
 
 var _is_local := false
@@ -43,6 +47,7 @@ var _net_yaw: float
 @onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
 @onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
+@onready var _scarf: MeshInstance3D = $Scarf
 @onready var _emote_label: Label3D = $Emote
 @onready var _ring: MeshInstance3D = $Ring
 
@@ -58,7 +63,10 @@ func _ready() -> void:
 
 	# Kendi modelini gizle (FPS), kameranı aç; uzak oyuncularda tersi
 	_model.visible = not _is_local
+	_scarf.visible = not _is_local
 	_cam.current = _is_local
+	costume = int(abs(auth)) % COSTUME_COLORS.size()  # kimliğe göre başlangıç rengi
+	_apply_costume()
 	if not _is_local:
 		_hold_point.position = Vector3(0.3, 1.15, -0.45) # uzakta bardak elde görünür
 
@@ -117,6 +125,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Q: Prost/dans emote (InputMap yerine doğrudan tuş — autoload'a bağlı değil)
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_Q:
 		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
+	# C: kostüm rengini değiştir
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_C:
+		costume = (costume + 1) % COSTUME_COLORS.size()
+		_apply_costume()
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
@@ -128,7 +140,7 @@ func _physics_process(delta: float) -> void:
 		_update_target()
 		_handle_interaction(delta)
 		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
-		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote)
+		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume)
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
@@ -161,13 +173,23 @@ func _update_animation(delta: float) -> void:
 		_cur_anim = want
 
 @rpc("authority", "unreliable_ordered")
-func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int, em: int) -> void:
+func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int, em: int, cost: int) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
 	carry_state = cstate
 	carry_fill = cfill
 	carry_type = ctype
 	emote = em
+	costume = cost
+	_apply_costume()
+
+func _apply_costume() -> void:
+	if costume == _applied_costume or _scarf == null:
+		return
+	_applied_costume = costume
+	var m := _scarf.material_override as StandardMaterial3D
+	if m:
+		m.albedo_color = COSTUME_COLORS[costume % COSTUME_COLORS.size()]
 
 func _handle_movement(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
