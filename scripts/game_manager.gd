@@ -57,6 +57,7 @@ var _happy_until := 0.0
 var _served := 0
 var _missed := 0
 var _last_earn := 0
+var _shift_num := 0
 
 var _sfx_node: Node
 var _messes_container: Node3D
@@ -255,7 +256,9 @@ func _shift_process(delta: float) -> void:
 	if _spawn_timer <= 0.0:
 		_try_spawn_customer()
 		var progress := 1.0 - (_phase_time / SHIFT_TIME)
-		_spawn_timer = lerpf(SPAWN_START, SPAWN_MIN, progress)
+		# Her vardiya biraz daha hızlı müşteri
+		var diff := 1.0 + 0.12 * float(_shift_num - 1)
+		_spawn_timer = maxf(1.2, lerpf(SPAWN_START, SPAWN_MIN, progress) / diff)
 	for t in _tables:
 		var code := t.host_tick(delta)
 		if code == 1:
@@ -362,7 +365,8 @@ func _start_shift() -> void:
 	_hygiene = 100.0
 	_clear_messes()
 	_clear_customers()
-	_net_banner.rpc("🍺 VARDİYA BAŞLADI!")
+	_shift_num += 1
+	_net_banner.rpc("🍺 VARDİYA %d BAŞLADI!" % _shift_num)
 	# İnsan olmayan rolleri NPC (Tasarom) doldurur
 	_npc_roles = {}
 	var covered := {}
