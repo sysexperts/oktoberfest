@@ -13,6 +13,7 @@ const SPAWN_MIN := 2.5
 const SYNC_INTERVAL := 0.15
 const MISS_PENALTY := 5
 const MISS_LIMIT := 12   # bu kadar kaçırılırsa çadır kapanır (komik final)
+const START_MONEY := 10000   # TEST parası (yayında 0 yapılmalı)
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const MESS_SCENE := preload("res://scenes/mess.tscn")
 const CUSTOMER_SCENE := preload("res://scenes/customer.tscn")
@@ -58,6 +59,7 @@ var _served := 0
 var _missed := 0
 var _last_earn := 0
 var _shift_num := 0
+var _held := {}   # peer_id -> table_index (molada taşınan masa)
 
 var _sfx_node: Node
 var _messes_container: Node3D
@@ -97,6 +99,7 @@ func _ready() -> void:
 	_hud.set_phase(_phase_name())
 
 	if multiplayer.is_server():
+		Game.add_money(START_MONEY)   # TEST
 		multiplayer.peer_disconnected.connect(_on_peer_left)
 		if Net.dedicated:
 			_next_spawn = 0
@@ -201,6 +204,32 @@ func net_buy_table() -> void:
 			_broadcast_meta()
 			return
 
+func in_intermission() -> bool:
+	return _phase == Phase.INTERMISSION
+
+## Molada masayı tut/bırak (yerleştirme).
+@rpc("any_peer", "reliable")
+func net_toggle_table(index: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _held.has(s):
+		_held.erase(s)  # bırak
+	elif index >= 0 and index < _tables.size() and _tables[index].active and not _held.values().has(index):
+		_held[s] = index  # tut
+
+func _update_held_tables() -> void:
+	for peer in _held.keys():
+		var idx: int = _held[peer]
+		var pl = _players_nodes.get(peer)
+		if pl == null or idx < 0 or idx >= _tables.size():
+			continue
+		var fwd: Vector3 = -pl.global_transform.basis.z
+		var p: Vector3 = pl.global_position + fwd * 1.8
+		_tables[idx].position = Vector3(p.x, 0.0, p.z)
+
 func _mgmt_string() -> String:
 	var total := _tables.size()
 	var act := _active_table_count()
@@ -246,6 +275,7 @@ func _process(delta: float) -> void:
 		if _phase_time <= 0.0:
 			_start_shift()
 
+	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
 		_sync_timer = SYNC_INTERVAL
@@ -365,6 +395,7 @@ func _start_shift() -> void:
 	_hygiene = 100.0
 	_clear_messes()
 	_clear_customers()
+	_held.clear()
 	_shift_num += 1
 	_net_banner.rpc("🍺 VARDİYA %d BAŞLADI!" % _shift_num)
 	# İnsan olmayan rolleri NPC (Tasarom) doldurur
@@ -484,13 +515,17 @@ func _broadcast_sync() -> void:
 	var rq := PackedInt32Array()
 	var rk := PackedInt32Array()
 	var ta := PackedInt32Array()
+	var tx := PackedFloat32Array()
+	var tz := PackedFloat32Array()
 	for t in _tables:
 		st.append(t.state)
 		ra.append(t.ratio())
 		rq.append(t.required_type)
 		rk.append(t.order_kind)
 		ta.append(1 if t.active else 0)
-	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq, rk, ta)
+		tx.append(t.position.x)
+		tz.append(t.position.z)
+	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq, rk, ta, tx, tz)
 	# Çevre: hijyen + kir ilerlemesi
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()
@@ -519,13 +554,15 @@ func _net_cust(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 
 @rpc("authority", "unreliable")
-func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array, rk: PackedInt32Array, ta: PackedInt32Array) -> void:
+func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array, rk: PackedInt32Array, ta: PackedInt32Array, tx: PackedFloat32Array, tz: PackedFloat32Array) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(time_left)
 	for i in range(_tables.size()):
 		if i < st.size():
 			_tables[i].apply_sync(st[i], ra[i], rq[i], rk[i], ta[i] == 1)
+			if i < tx.size():
+				_tables[i].position = Vector3(tx[i], 0.0, tz[i])
 
 @rpc("authority", "unreliable")
 func _net_env(hygiene: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:

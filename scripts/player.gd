@@ -265,9 +265,13 @@ func _handle_interaction(delta: float) -> void:
 			carry_type = 0
 		return
 	if Input.is_action_just_pressed("interact"):
-		if _current_target is CustomerTable and _has_ready():
+		if _current_target is CustomerTable:
 			var tbl := _current_target as CustomerTable
-			if tbl.can_serve(_carry_kind(), carry_type):
+			if _world.has_method("in_intermission") and _world.in_intermission():
+				# Molada masayı tut/bırak (yerleştir)
+				_world.net_toggle_table.rpc_id(1, tbl.table_index)
+				_sfx("pop")
+			elif _has_ready() and tbl.can_serve(_carry_kind(), carry_type):
 				_serve(tbl.table_index, _carry_kind(), carry_type)
 				_sfx("ding")
 		elif _current_target is MugDispenser and carry_state == 0:
