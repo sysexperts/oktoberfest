@@ -58,6 +58,7 @@ var _served := 0
 var _missed := 0
 var _last_earn := 0
 
+var _sfx_node: Node
 var _messes_container: Node3D
 var _messes := {}        # id -> Mess node
 var _mess_clean := {}    # id -> temizlik ilerlemesi 0..1 (host)
@@ -76,6 +77,7 @@ func _ready() -> void:
 	_players_container = $Players
 	_messes_container = $Messes
 	_customers_container = $Customers
+	_sfx_node = $Sfx
 	for c in $Tables.get_children():
 		if c is CustomerTable:
 			_tables.append(c)
@@ -558,3 +560,8 @@ func net_meta(phase: int, roster: String, mgmt: String) -> void:
 	_hud.set_phase(_phase_name())
 	_hud.set_roster(roster)
 	_hud.set_mgmt(mgmt)
+	if _sfx_node:
+		if phase == Phase.SHIFT:
+			_sfx_node.play_music()
+		else:
+			_sfx_node.stop_music()
