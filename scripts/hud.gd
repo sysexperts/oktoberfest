@@ -15,6 +15,8 @@ var _restart_pressed := false
 var _comp_panel: PanelContainer
 var _comp_roster: Label
 var _comp_mgmt: Label
+var _banner_label: Label
+var _banner_token := 0
 var _comp_open := false
 var _last_roster := ""
 
@@ -89,6 +91,25 @@ func set_score(v: int) -> void:
 
 func set_time(seconds: float) -> void:
 	_time_label.text = "⏱ %d" % int(ceil(seconds))
+
+func show_banner(text: String) -> void:
+	if _banner_label == null:
+		_banner_label = _make_label("")
+		_banner_label.anchor_left = 0.5
+		_banner_label.anchor_top = 0.28
+		_banner_label.anchor_right = 0.5
+		_banner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_banner_label.add_theme_font_size_override("font_size", 34)
+		_banner_label.offset_left = -400
+		_banner_label.offset_right = 400
+		add_child(_banner_label)
+	_banner_label.text = text
+	_banner_label.visible = true
+	_banner_token += 1
+	var my := _banner_token
+	await get_tree().create_timer(4.0).timeout
+	if my == _banner_token and _banner_label:
+		_banner_label.visible = false
 
 func set_hygiene(v: float) -> void:
 	_hygiene_label.text = "🧼 %d%%" % int(round(v))

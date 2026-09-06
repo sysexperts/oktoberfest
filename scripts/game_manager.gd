@@ -331,6 +331,7 @@ func _start_shift() -> void:
 	_hygiene = 100.0
 	_clear_messes()
 	_clear_customers()
+	_net_banner.rpc("🍺 VARDİYA BAŞLADI!")
 	# İnsan olmayan rolleri NPC (Tasarom) doldurur
 	_npc_roles = {}
 	var covered := {}
@@ -349,6 +350,7 @@ func _end_shift() -> void:
 		t.host_reset()
 	_clear_messes()
 	_clear_customers()
+	_net_banner.rpc("Vardiya bitti! Kazanç: %d€ · Servis: %d · Kaçırılan: %d" % [_last_earn, _served, _missed])
 	_broadcast_meta()
 
 func _try_spawn_customer() -> void:
@@ -506,6 +508,10 @@ func _roster_string() -> String:
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _roster_string(), _mgmt_string())
+
+@rpc("authority", "reliable", "call_local")
+func _net_banner(text: String) -> void:
+	_hud.show_banner(text)
 
 @rpc("authority", "reliable", "call_local")
 func net_meta(phase: int, roster: String, mgmt: String) -> void:
