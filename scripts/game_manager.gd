@@ -51,6 +51,8 @@ var _roles := {}            # peer_id -> role
 var _npc_roles := {}        # vardiyada insan olmayan roller (set gibi kullanılır)
 var _spawn_timer := 3.0
 var _sync_timer := 0.0
+var _event_timer := 25.0
+var _happy_until := 0.0
 var _served := 0
 var _missed := 0
 var _last_earn := 0
@@ -212,7 +214,8 @@ func host_try_serve(index: int, kind: int, type: int) -> bool:
 		_served += 1
 		var waiter_npc := _npc_roles.has(ROLE_WAITER)
 		var hyg_factor := 0.4 + 0.6 * (_hygiene / 100.0)  # düşük hijyen -> az gelir
-		var reward := int(CustomerTable.REWARD * hyg_factor)
+		var happy := 2.0 if (Time.get_ticks_msec() / 1000.0) < _happy_until else 1.0
+		var reward := int(CustomerTable.REWARD * hyg_factor * happy)
 		var tip := 0 if waiter_npc else randi_range(0, 5)
 		if waiter_npc:
 			reward = int(reward * 0.5)   # NPC garson -> az gelir
@@ -260,6 +263,26 @@ func _shift_process(delta: float) -> void:
 	_leave_customers_of_free_tables()
 	_update_customers(delta)
 	_update_hygiene(delta)
+	# Rastgele olaylar
+	_event_timer -= delta
+	if _event_timer <= 0.0:
+		_event_timer = randf_range(25.0, 40.0)
+		_fire_random_event()
+
+func _fire_random_event() -> void:
+	match randi_range(0, 2):
+		0:  # Ansturm: tüm boş masalara müşteri
+			for t in _tables:
+				if t.is_free() and not _table_cust.has(t.table_index):
+					t.host_seat()
+					_spawn_customer(t)
+			_net_banner.rpc("🏃 ANSTURM! Herkes çadıra doluştu!")
+		1:  # Happy Hour: çift gelir
+			_happy_until = Time.get_ticks_msec() / 1000.0 + 20.0
+			_net_banner.rpc("🎉 HAPPY HOUR! 20 sn çift kazanç!")
+		2:  # Şikayet: hijyen düşer
+			_hygiene = maxf(0.0, _hygiene - 30.0)
+			_net_banner.rpc("😷 Şikayet! Hijyen düştü, temizlik lazım!")
 
 func _update_hygiene(delta: float) -> void:
 	var n := _messes.size()
@@ -328,6 +351,8 @@ func _start_shift() -> void:
 	_missed = 0
 	_last_earn = 0
 	_spawn_timer = 3.0
+	_event_timer = randf_range(20.0, 35.0)
+	_happy_until = 0.0
 	_hygiene = 100.0
 	_clear_messes()
 	_clear_customers()
