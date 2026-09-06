@@ -170,6 +170,38 @@ func net_set_role(role: int) -> void:
 func open_computer_ui() -> void:
 	_hud.open_computer()
 
+func _active_table_count() -> int:
+	var n := 0
+	for t in _tables:
+		if t.active:
+			n += 1
+	return n
+
+func _table_cost() -> int:
+	return 40 + _active_table_count() * 25
+
+## Molada para ile yeni masa aç.
+@rpc("any_peer", "reliable")
+func net_buy_table() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var cost := _table_cost()
+	if Game.money < cost:
+		return
+	for t in _tables:
+		if not t.active:
+			t.set_active(true)
+			Game.add_money(-cost)
+			_broadcast_meta()
+			return
+
+func _mgmt_string() -> String:
+	var total := _tables.size()
+	var act := _active_table_count()
+	if act >= total:
+		return "Masalar: %d/%d (hepsi açık)" % [act, total]
+	return "Masalar: %d/%d · Yeni masa: %d€" % [act, total, _table_cost()]
+
 # ================================================= host servis
 func host_try_serve(index: int, kind: int, type: int) -> bool:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
@@ -404,12 +436,14 @@ func _broadcast_sync() -> void:
 	var ra := PackedFloat32Array()
 	var rq := PackedInt32Array()
 	var rk := PackedInt32Array()
+	var ta := PackedInt32Array()
 	for t in _tables:
 		st.append(t.state)
 		ra.append(t.ratio())
 		rq.append(t.required_type)
 		rk.append(t.order_kind)
-	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq, rk)
+		ta.append(1 if t.active else 0)
+	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq, rk, ta)
 	# Çevre: hijyen + kir ilerlemesi
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()
@@ -438,13 +472,13 @@ func _net_cust(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 
 @rpc("authority", "unreliable")
-func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array, rk: PackedInt32Array) -> void:
+func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array, rk: PackedInt32Array, ta: PackedInt32Array) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(time_left)
 	for i in range(_tables.size()):
 		if i < st.size():
-			_tables[i].apply_sync(st[i], ra[i], rq[i], rk[i])
+			_tables[i].apply_sync(st[i], ra[i], rq[i], rk[i], ta[i] == 1)
 
 @rpc("authority", "unreliable")
 func _net_env(hygiene: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:
@@ -471,10 +505,11 @@ func _roster_string() -> String:
 	return "\n".join(lines)
 
 func _broadcast_meta() -> void:
-	net_meta.rpc(_phase, _roster_string())
+	net_meta.rpc(_phase, _roster_string(), _mgmt_string())
 
 @rpc("authority", "reliable", "call_local")
-func net_meta(phase: int, roster: String) -> void:
+func net_meta(phase: int, roster: String, mgmt: String) -> void:
 	_phase = phase
 	_hud.set_phase(_phase_name())
 	_hud.set_roster(roster)
+	_hud.set_mgmt(mgmt)

@@ -14,6 +14,7 @@ const FOOD_NAMES := {1: "Pretzel", 2: "Sosis"}
 const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
 
 @export var table_index := 0
+@export var active := true   # false = henüz satın alınmamış (gizli)
 
 var state: int = State.EMPTY
 var order_kind := 1        # 1 içecek, 2 yemek
@@ -21,6 +22,7 @@ var required_type := 1
 var _patience_left := 0.0
 var _clear_left := 0.0
 
+@onready var _table_mesh: MeshInstance3D = $Table
 @onready var _customer: MeshInstance3D = $Customer
 @onready var _bubble: Label3D = $Bubble
 @onready var _bar_fill: MeshInstance3D = $Bar
@@ -28,10 +30,18 @@ var _clear_left := 0.0
 func _ready() -> void:
 	add_to_group("interactable")
 	add_to_group("tables")
+	set_active(active)
+
+func set_active(a: bool) -> void:
+	active = a
+	if _table_mesh:
+		_table_mesh.visible = a
+	if not a:
+		state = State.EMPTY
 	_apply_visual()
 
 func is_free() -> bool:
-	return state == State.EMPTY
+	return active and state == State.EMPTY
 
 ## Vardiya sonu: masayı boşalt (host).
 func host_reset() -> void:
@@ -89,7 +99,9 @@ func host_serve(kind: int, type: int) -> bool:
 	return true
 
 # ---- İSTEMCİ senkronu ----
-func apply_sync(new_state: int, new_ratio: float, kind: int, type: int) -> void:
+func apply_sync(new_state: int, new_ratio: float, kind: int, type: int, act: bool) -> void:
+	if act != active:
+		set_active(act)
 	state = new_state
 	order_kind = kind
 	required_type = type
@@ -101,6 +113,10 @@ func _apply_visual() -> void:
 	if _customer == null:
 		return
 	_customer.visible = false  # görsel müşteri artık yürüyen NPC modeli
+	if not active:
+		_bubble.visible = false
+		_bar_fill.visible = false
+		return
 	match state:
 		State.WAITING:
 			_bubble.visible = true

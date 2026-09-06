@@ -143,14 +143,17 @@ table_index = 2
 [node name="Table3" parent="Tables" instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
 table_index = 3
+active = false
 
 [node name="Table4" parent="Tables" instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 table_index = 4
+active = false
 
 [node name="Table5" parent="Tables" instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 table_index = 5
+active = false
 
 [node name="SpawnPoints" type="Node3D" parent="."]
 

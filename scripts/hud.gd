@@ -14,6 +14,7 @@ var _summary_label: Label
 var _restart_pressed := false
 var _comp_panel: PanelContainer
 var _comp_roster: Label
+var _comp_mgmt: Label
 var _comp_open := false
 var _last_roster := ""
 
@@ -140,10 +141,33 @@ func _build_computer() -> void:
 	_add_role_button(row, "🍺 Garson", 3)
 	_add_role_button(row, "Vazgeç", 0)
 
+	var sep := HSeparator.new()
+	vbox.add_child(sep)
+
+	_comp_mgmt = Label.new()
+	_comp_mgmt.add_theme_font_size_override("font_size", 18)
+	_comp_mgmt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_comp_mgmt)
+
+	var buy_btn := Button.new()
+	buy_btn.text = "🪑 Yeni Masa Al"
+	buy_btn.custom_minimum_size = Vector2(0, 40)
+	buy_btn.pressed.connect(_buy_table)
+	vbox.add_child(buy_btn)
+
 	var close_btn := Button.new()
 	close_btn.text = "Kapat (Esc)"
 	close_btn.pressed.connect(close_computer)
 	vbox.add_child(close_btn)
+
+func _buy_table() -> void:
+	var gm := get_parent()
+	if gm and gm.has_method("net_buy_table"):
+		gm.net_buy_table.rpc_id(1)
+
+func set_mgmt(text: String) -> void:
+	if _comp_mgmt:
+		_comp_mgmt.text = text
 
 func _add_role_button(parent: Node, text: String, role: int) -> void:
 	var b := Button.new()
