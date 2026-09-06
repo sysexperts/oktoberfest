@@ -64,6 +64,8 @@ var _popularity := POP_START
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
+var _beertables: Array = []
+var _held := {}   # peer_id -> beertable idx (molada taşıma)
 # Misafir sim: id -> {seat:int, mode:int(0 gir,1 otur,2 çık), pos, tgt, yaw,
 #                     ostate, okind, otype, patience, cooldown, served_t}
 var _guests := {}         # id -> Customer node
@@ -84,14 +86,12 @@ func _ready() -> void:
 	_customers_container = $Customers
 	_messes_container = $Messes
 
-	# Koltukları bira masalarından topla
-	for bt in get_tree().get_nodes_in_group("beertable"):
-		var origin: Vector3 = (bt as Node3D).global_position
-		for sp in bt.seat_points():
-			var d: Vector3 = origin - sp
-			d.y = 0
-			var yaw := atan2(-d.x, -d.z) if d.length() > 0.01 else 0.0
-			_seats.append({"pos": sp, "yaw": yaw, "guest": -1})
+	# Bira masalarını topla (kararlı sıra) + koltukları kur
+	_beertables = get_tree().get_nodes_in_group("beertable")
+	_beertables.sort_custom(func(a, b): return a.name < b.name)
+	for i in _beertables.size():
+		_beertables[i].idx = i
+	_rebuild_seats()
 
 	Game.money_changed.connect(_hud.set_money)
 	Game.score_changed.connect(_hud.set_score)
@@ -182,6 +182,39 @@ func net_set_role(role: int) -> void:
 func open_computer_ui() -> void:
 	_hud.open_computer()
 
+func _rebuild_seats() -> void:
+	_seats.clear()
+	for bt in _beertables:
+		var origin: Vector3 = (bt as Node3D).global_position
+		for sp in bt.seat_points():
+			var d: Vector3 = origin - sp
+			d.y = 0
+			var yaw := atan2(-d.x, -d.z) if d.length() > 0.01 else 0.0
+			_seats.append({"pos": sp, "yaw": yaw, "guest": -1})
+
+## Molada bira masasını tut/bırak (yerleştir).
+@rpc("any_peer", "reliable")
+func net_move_table(index: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _held.has(s):
+		_held.erase(s)
+	elif index >= 0 and index < _beertables.size() and not _held.values().has(index):
+		_held[s] = index
+
+func _update_held_tables() -> void:
+	for peer in _held.keys():
+		var idx: int = _held[peer]
+		var pl = _players_nodes.get(peer)
+		if pl == null or idx < 0 or idx >= _beertables.size():
+			continue
+		var fwd: Vector3 = -pl.global_transform.basis.z
+		var p: Vector3 = pl.global_position + fwd * 2.5
+		_beertables[idx].position = Vector3(p.x, 0.0, p.z)
+
 # ================================================= servis (misafire)
 @rpc("any_peer", "reliable")
 func net_serve_guest(id: int, kind: int, type: int) -> void:
@@ -224,6 +257,7 @@ func _process(delta: float) -> void:
 	else:
 		if _phase_time <= 0.0:
 			_start_shift()
+	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
 		_sync_timer = SYNC_INTERVAL
@@ -248,6 +282,8 @@ func _start_shift() -> void:
 	_last_earn = 0
 	_guest_spawn_timer = 1.0
 	_hygiene = 100.0
+	_held.clear()
+	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
 	_clear_messes()
 	_shift_num += 1
 	_npc_roles = {}
@@ -467,6 +503,19 @@ func _broadcast_sync() -> void:
 		ids.append(mid)
 		pr.append(float(_mess_clean.get(mid, 0.0)))
 	_net_env.rpc(Game.money, Game.score, _phase_time, _hygiene, _popularity, ids, pr)
+	# Bira masası konumları (taşıma senkronu)
+	var bx := PackedFloat32Array()
+	var bz := PackedFloat32Array()
+	for bt in _beertables:
+		bx.append((bt as Node3D).position.x)
+		bz.append((bt as Node3D).position.z)
+	_net_tables.rpc(bx, bz)
+
+@rpc("authority", "unreliable")
+func _net_tables(bx: PackedFloat32Array, bz: PackedFloat32Array) -> void:
+	for i in range(_beertables.size()):
+		if i < bx.size():
+			(_beertables[i] as Node3D).position = Vector3(bx[i], 0.0, bz[i])
 
 @rpc("authority", "unreliable")
 func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array) -> void:

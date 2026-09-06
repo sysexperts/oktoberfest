@@ -3,8 +3,11 @@ extends Node3D
 ## Bira masası (tisch + 2 bank) — 6 koltuk. Sadece mobilya + koltuk noktaları.
 ## Misafir/sipariş mantığı GameManager + Customer(guest) içinde.
 
+var idx := -1
+
 func _ready() -> void:
 	add_to_group("beertable")
+	add_to_group("interactable")
 
 ## Koltukların dünya konumları.
 func seat_points() -> Array:

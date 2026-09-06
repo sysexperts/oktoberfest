@@ -273,6 +273,11 @@ func _handle_interaction(delta: float) -> void:
 				carry_fill = 0.0
 				carry_type = 0
 				_sfx("ding")
+		elif _current_target is BeerTable:
+			# Molada masayı tut/bırak (yerleştir)
+			if _world.has_method("in_intermission") and _world.in_intermission():
+				_world.net_move_table.rpc_id(1, (_current_target as BeerTable).idx)
+				_sfx("pop")
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
 			carry_fill = 0.0
