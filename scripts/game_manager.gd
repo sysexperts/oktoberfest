@@ -46,7 +46,7 @@ const START_MONEY := 10000   # TEST (yayında 0)
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_STAGE_NAMES := {0: "Zelt yok", 1: "Küçük Zelt", 2: "Orta Zelt", 3: "Büyük Zelt"}
-const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 6, 3: 6}   # sahnedeki masa sayısıyla sınırlı (6)
+const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
 const TABLE_COST := 200
@@ -114,7 +114,7 @@ func _ready() -> void:
 
 	# Bira masalarını topla (kararlı sıra). Başta zelt kiralanmadı → 0 aktif.
 	_all_tables = get_tree().get_nodes_in_group("beertable")
-	_all_tables.sort_custom(func(a, b): return a.name < b.name)
+	_all_tables.sort_custom(func(a, b): return _tbl_num(a.name) < _tbl_num(b.name))
 	_apply_tent()
 
 	Game.money_changed.connect(_hud.set_money)
@@ -146,6 +146,15 @@ func in_intermission() -> bool:
 
 func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
+
+## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
+func _tbl_num(n: String) -> int:
+	var digits := ""
+	for i in n.length():
+		var ch := n[i]
+		if ch >= "0" and ch <= "9":
+			digits += ch
+	return int(digits) if digits != "" else 0
 
 # ================================================= oyuncular
 @rpc("any_peer", "reliable")

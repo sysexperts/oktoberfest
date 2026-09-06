@@ -198,6 +198,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 [node name="BeerTable5" parent="Tables" instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 7)
 
+[node name="BeerTable6" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
+
+[node name="BeerTable7" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="BeerTable8" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+
+[node name="BeerTable9" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -4)
+
+[node name="BeerTable10" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="BeerTable11" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
+
 [node name="Wasen" type="Node3D" parent="."]
 
 [node name="Grass" type="MeshInstance3D" parent="Wasen"]
