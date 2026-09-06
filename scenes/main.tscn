@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b7dl2t154d5cj"]
+[gd_scene load_steps=16 format=3 uid="uid://b7dl2t154d5cj"]
 
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_gm"]
 [ext_resource type="PackedScene" path="res://scenes/tent.tscn" id="2_tent"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud"]
 [ext_resource type="PackedScene" path="res://assets/models/theke.glb" id="7_theke"]
 [ext_resource type="PackedScene" path="res://scenes/computer.tscn" id="8_comp"]
+[ext_resource type="PackedScene" path="res://scenes/food_station.tscn" id="9_food"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 
@@ -116,6 +117,14 @@ beer_type = 2
 [node name="Keg3" parent="Stations" instance=ExtResource("4_keg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.33, -9)
 beer_type = 3
+
+[node name="FoodPretzel" parent="Stations" instance=ExtResource("9_food")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1.42, -9)
+food_type = 1
+
+[node name="FoodSosis" parent="Stations" instance=ExtResource("9_food")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.42, -9)
+food_type = 2
 
 [node name="Tables" type="Node3D" parent="."]
 

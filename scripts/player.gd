@@ -15,6 +15,8 @@ const FILL_RATE := 0.6
 
 # 1 Helles, 2 Weizen, 3 Radler
 const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
+# Yemek: 1 Pretzel, 2 Sosis
+const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
 
 # Ağ ile senkronlanan durum
 var carry_state := 0     # 0 = boş el, 1 = bardak
@@ -40,6 +42,7 @@ var _net_yaw: float
 @onready var _hold_point: Node3D = $Head/HoldPoint
 @onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
 @onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
+@onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
 @onready var _emote_label: Label3D = $Emote
 @onready var _ring: MeshInstance3D = $Ring
 
@@ -225,8 +228,8 @@ func _handle_interaction(delta: float) -> void:
 			carry_type = 0
 		return
 	if Input.is_action_just_pressed("interact"):
-		if _current_target is CustomerTable and _has_full_mug():
-			_serve((_current_target as CustomerTable).table_index, carry_type)
+		if _current_target is CustomerTable and _has_ready():
+			_serve((_current_target as CustomerTable).table_index, _carry_kind(), carry_type)
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
 			carry_fill = 0.0
@@ -239,6 +242,15 @@ func _handle_interaction(delta: float) -> void:
 		if carry_state == 1 and carry_fill < 1.0:
 			carry_type = (_current_target as KegStation).beer_type
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
+	if Input.is_action_pressed("interact") and _current_target is FoodStation:
+		var ft := (_current_target as FoodStation).food_type
+		if carry_state == 0:
+			carry_state = 2
+			carry_type = ft
+			carry_fill = 0.0
+		if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
+			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
 	# Kir temizle (E basılı tut)
 	if Input.is_action_pressed("interact") and _current_target is Mess:
 		if _world.has_method("net_clean"):
@@ -247,19 +259,26 @@ func _handle_interaction(delta: float) -> void:
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
 
-func _serve(index: int, bt: int) -> void:
+func _carry_kind() -> int:
+	# 1 = içecek (bardak), 2 = yemek
+	return carry_state
+
+func _has_ready() -> bool:
+	return carry_state != 0 and carry_fill >= 0.999
+
+func _serve(index: int, kind: int, type: int) -> void:
 	if multiplayer.is_server():
-		_apply_serve(index, bt)
+		_apply_serve(index, kind, type)
 	else:
-		_serve_request.rpc_id(1, index, bt)
+		_serve_request.rpc_id(1, index, kind, type)
 
 @rpc("any_peer", "reliable")
-func _serve_request(index: int, bt: int) -> void:
+func _serve_request(index: int, kind: int, type: int) -> void:
 	if multiplayer.is_server():
-		_apply_serve(index, bt)
+		_apply_serve(index, kind, type)
 
-func _apply_serve(index: int, bt: int) -> void:
-	if _world.has_method("host_try_serve") and _world.host_try_serve(index, bt):
+func _apply_serve(index: int, kind: int, type: int) -> void:
+	if _world.has_method("host_try_serve") and _world.host_try_serve(index, kind, type):
 		if is_multiplayer_authority():
 			carry_state = 0
 			carry_fill = 0.0
@@ -275,6 +294,7 @@ func _clear_carry() -> void:
 
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1
+	var has_food := carry_state == 2
 	_carry_glass.visible = has_mug
 	_carry_beer.visible = has_mug and carry_fill > 0.01
 	if has_mug:
@@ -283,3 +303,11 @@ func _update_carry_visual() -> void:
 		var m := _carry_beer.material_override as StandardMaterial3D
 		if m:
 			m.albedo_color = BEER_COLORS.get(carry_type, BEER_COLORS[0])
+	_carry_food.visible = has_food
+	if has_food:
+		# pişerken büyür (görsel geri bildirim)
+		var s := lerpf(0.5, 1.0, clampf(carry_fill, 0.0, 1.0))
+		_carry_food.scale = Vector3(s, s, s)
+		var fm := _carry_food.material_override as StandardMaterial3D
+		if fm:
+			fm.albedo_color = FOOD_COLORS.get(carry_type, FOOD_COLORS[1])

@@ -171,12 +171,12 @@ func open_computer_ui() -> void:
 	_hud.open_computer()
 
 # ================================================= host servis
-func host_try_serve(index: int, beer_type: int) -> bool:
+func host_try_serve(index: int, kind: int, type: int) -> bool:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
 		return false
 	if index < 0 or index >= _tables.size():
 		return false
-	if _tables[index].host_serve(beer_type):
+	if _tables[index].host_serve(kind, type):
 		_served += 1
 		var waiter_npc := _npc_roles.has(ROLE_WAITER)
 		var hyg_factor := 0.4 + 0.6 * (_hygiene / 100.0)  # düşük hijyen -> az gelir
@@ -403,11 +403,13 @@ func _broadcast_sync() -> void:
 	var st := PackedInt32Array()
 	var ra := PackedFloat32Array()
 	var rq := PackedInt32Array()
+	var rk := PackedInt32Array()
 	for t in _tables:
 		st.append(t.state)
 		ra.append(t.ratio())
 		rq.append(t.required_type)
-	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq)
+		rk.append(t.order_kind)
+	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq, rk)
 	# Çevre: hijyen + kir ilerlemesi
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()
@@ -436,13 +438,13 @@ func _net_cust(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 
 @rpc("authority", "unreliable")
-func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array) -> void:
+func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array, rk: PackedInt32Array) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(time_left)
 	for i in range(_tables.size()):
 		if i < st.size():
-			_tables[i].apply_sync(st[i], ra[i], rq[i])
+			_tables[i].apply_sync(st[i], ra[i], rq[i], rk[i])
 
 @rpc("authority", "unreliable")
 func _net_env(hygiene: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:

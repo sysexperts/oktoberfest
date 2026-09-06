@@ -25,6 +25,13 @@ height = 0.16
 resource_local_to_scene = true
 albedo_color = Color(0.95, 0.65, 0.05, 1)
 
+[sub_resource type="BoxMesh" id="Food"]
+size = Vector3(0.16, 0.1, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="MatFood"]
+resource_local_to_scene = true
+albedo_color = Color(0.72, 0.45, 0.15, 1)
+
 [sub_resource type="CylinderMesh" id="Disc"]
 top_radius = 0.45
 bottom_radius = 0.45
@@ -77,3 +84,8 @@ material_override = SubResource("MatGlass")
 visible = false
 mesh = SubResource("Beer")
 material_override = SubResource("MatBeer")
+
+[node name="CarryFood" type="MeshInstance3D" parent="Head/HoldPoint"]
+visible = false
+mesh = SubResource("Food")
+material_override = SubResource("MatFood")

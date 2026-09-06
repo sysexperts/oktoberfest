@@ -10,10 +10,13 @@ const REWARD := 10
 const CLEAR_DELAY := 1.5
 const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler"}
 const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
+const FOOD_NAMES := {1: "Pretzel", 2: "Sosis"}
+const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
 
 @export var table_index := 0
 
 var state: int = State.EMPTY
+var order_kind := 1        # 1 içecek, 2 yemek
 var required_type := 1
 var _patience_left := 0.0
 var _clear_left := 0.0
@@ -42,7 +45,12 @@ func ratio() -> float:
 # ---- HOST mantığı ----
 func host_seat() -> void:
 	state = State.WAITING
-	required_type = randi_range(1, 3)
+	if randf() < 0.6:
+		order_kind = 1
+		required_type = randi_range(1, 3)  # bira tipi
+	else:
+		order_kind = 2
+		required_type = randi_range(1, 2)  # yemek tipi
 	_patience_left = PATIENCE
 	_apply_visual()
 
@@ -70,10 +78,10 @@ func global_pos() -> Vector3:
 	return global_position
 
 ## Doğru bira tipiyse servis eder. Yanlış tip -> false (servis olmaz).
-func host_serve(beer_type: int) -> bool:
+func host_serve(kind: int, type: int) -> bool:
 	if state != State.WAITING:
 		return false
-	if beer_type != required_type:
+	if kind != order_kind or type != required_type:
 		return false
 	state = State.SERVED
 	_clear_left = CLEAR_DELAY
@@ -81,9 +89,10 @@ func host_serve(beer_type: int) -> bool:
 	return true
 
 # ---- İSTEMCİ senkronu ----
-func apply_sync(new_state: int, new_ratio: float, req: int) -> void:
+func apply_sync(new_state: int, new_ratio: float, kind: int, type: int) -> void:
 	state = new_state
-	required_type = req
+	order_kind = kind
+	required_type = type
 	_patience_left = new_ratio * PATIENCE
 	_apply_visual()
 
@@ -95,8 +104,12 @@ func _apply_visual() -> void:
 	match state:
 		State.WAITING:
 			_bubble.visible = true
-			_bubble.text = "🍺 " + BEER_NAMES.get(required_type, "Bira")
-			_bubble.modulate = BEER_COLORS.get(required_type, Color.WHITE)
+			if order_kind == 2:
+				_bubble.text = "🥨 " + FOOD_NAMES.get(required_type, "Yemek")
+				_bubble.modulate = FOOD_COLORS.get(required_type, Color.WHITE)
+			else:
+				_bubble.text = "🍺 " + BEER_NAMES.get(required_type, "Bira")
+				_bubble.modulate = BEER_COLORS.get(required_type, Color.WHITE)
 			_bar_fill.visible = true
 			var t := ratio()
 			_bar_fill.scale.x = maxf(t, 0.001)
