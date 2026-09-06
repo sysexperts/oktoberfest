@@ -83,14 +83,14 @@ func _enter_sit() -> void:
 		_anim.active = false
 	if _skel == null:
 		return
-	# Bacakları büküp oturt (kalça öne, diz aşağı)
-	_pose(_skel.find_bone("LeftUpLeg"), Vector3.RIGHT, 1.5)
-	_pose(_skel.find_bone("RightUpLeg"), Vector3.RIGHT, 1.5)
-	_pose(_skel.find_bone("LeftLeg"), Vector3.RIGHT, -1.6)
-	_pose(_skel.find_bone("RightLeg"), Vector3.RIGHT, -1.6)
+	# Bacakları büküp oturt (kalça öne, diz aşağı) — model 180 baked, işaretler buna göre
+	_pose(_skel.find_bone("LeftUpLeg"), Vector3.RIGHT, -1.5)
+	_pose(_skel.find_bone("RightUpLeg"), Vector3.RIGHT, -1.5)
+	_pose(_skel.find_bone("LeftLeg"), Vector3.RIGHT, 1.6)
+	_pose(_skel.find_bone("RightLeg"), Vector3.RIGHT, 1.6)
 	# Sağ kolu kaldır (bira içme pozu) + bardağı göster
-	_pose(_skel.find_bone("RightArm"), Vector3.RIGHT, -0.8)
-	_pose(_skel.find_bone("RightForeArm"), Vector3.RIGHT, -1.4)
+	_pose(_skel.find_bone("RightArm"), Vector3.RIGHT, 0.8)
+	_pose(_skel.find_bone("RightForeArm"), Vector3.RIGHT, 1.4)
 	if _mug:
 		_mug.visible = true
 
