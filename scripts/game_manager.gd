@@ -52,6 +52,11 @@ const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
 const TABLE_COST := 200
 const DAILY_RENT := 150
 const WIESN_DAYS := 16
+# Upgrades (kiosk)
+const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
+const MARKETING_BOOST := 15.0
+const DEKO_COST := 600        # her seviye +%15 gelir
+const DEKO_BONUS := 0.15
 
 var _hud: HUD
 var _sfx_node: Node
@@ -79,6 +84,8 @@ var _popularity := POP_START
 var _tent_stage := 0     # 0 = kiralanmadı, 1..3 zelt büyüklüğü
 var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
 var _day := 1            # Wiesn günü
+var _upg_marketing := 0  # Werbung seviyesi (popülerlik enjeksiyonu)
+var _upg_deko := 0       # Deko seviyesi (gelir çarpanı)
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -274,6 +281,35 @@ func net_buy_table() -> void:
 	_net_banner.rpc("🪑 Masa +1 (%d/%d)" % [_active_count, limit])
 	_broadcast_meta()
 
+## Kiosk: Werbung — anında popülerlik enjeksiyonu (her seviye daha pahalı).
+@rpc("any_peer", "reliable")
+func net_buy_marketing() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var cost := MARKETING_COST * (_upg_marketing + 1)
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (Werbung: %d€)" % cost)
+		return
+	Game.add_money(-cost)
+	_upg_marketing += 1
+	_popularity = minf(100.0, _popularity + MARKETING_BOOST)
+	_net_banner.rpc("📣 Werbung Lv%d! Popülerlik +%d%%" % [_upg_marketing, int(MARKETING_BOOST)])
+	_broadcast_meta()
+
+## Kiosk: Deko — kalıcı gelir çarpanı.
+@rpc("any_peer", "reliable")
+func net_buy_deko() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var cost := DEKO_COST * (_upg_deko + 1)
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (Deko: %d€)" % cost)
+		return
+	Game.add_money(-cost)
+	_upg_deko += 1
+	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
+	_broadcast_meta()
+
 ## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
 @rpc("any_peer", "reliable")
 func net_upgrade_tent() -> void:
@@ -377,7 +413,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_popularity = minf(100.0, _popularity + POP_SERVE)
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
 	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
-	var reward := int(CustomerReward() * hyg)
+	var reward := int(CustomerReward() * hyg * (1.0 + DEKO_BONUS * _upg_deko))
 	var tip := 0 if waiter_npc else randi_range(0, 5)
 	if waiter_npc:
 		reward = int(reward * 0.5)
@@ -708,9 +744,9 @@ func _roster_string() -> String:
 
 func _mgmt_string() -> String:
 	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
-	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d" % [
+	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d" % [
 		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
-		int(round(_popularity)), DAILY_RENT, _day, WIESN_DAYS]
+		int(round(_popularity)), DAILY_RENT, _day, WIESN_DAYS, _upg_marketing, _upg_deko]
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _roster_string(), _mgmt_string(), _day, _tent_stage, _active_count)

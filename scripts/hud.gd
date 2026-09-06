@@ -244,6 +244,8 @@ func _build_booking() -> void:
 	_add_book_button(vbox, "🪑 Tisch stellen (200€)", "net_buy_table")
 	_add_book_button(vbox, "🗑️ Tisch verkaufen (+100€)", "net_sell_table")
 	_add_book_button(vbox, "⬆️ Zelt upgraden", "net_upgrade_tent")
+	_add_book_button(vbox, "📣 Werbung (Popülerlik+)", "net_buy_marketing")
+	_add_book_button(vbox, "🎨 Deko (Gelir+)", "net_buy_deko")
 
 	var close_btn := Button.new()
 	close_btn.text = "Kapat (Esc)"

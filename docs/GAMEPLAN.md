@@ -51,15 +51,15 @@
 
 ### Faz B — Aufbau/Prep sauber
 - [x] B1. **Tischlimit je Zeltstufe** (Stufe1=4, Stufe2/3=6) + Kauf-UI im Kiosk-Panel (v41).
-- [~] B2. **Tische kaufen + platzieren:** kaufen (`net_buy_table` 200€, aktiviert Tisch) + verschieben (mola) da. Frei platzieren mit Grid/Snap + verkaufen noch offen.
+- [x] B2. **Tische kaufen/verkaufen + verschieben:** `net_buy_table` (200€), `net_sell_table` (+100€), verschieben (mola) — v43. Grid/Snap-Feinschliff später.
 - [ ] B3. **Rollenwahl** am Computer beibehalten; leere Rolle = Tasarom-NPC.
-- [ ] B4. **Vorräte/Upgrades-Shop:** z.B. schnellerer Zapfhahn, zweite Kochstation, Deko (+Beliebtheit).
+- [x] B4. **Upgrades-Shop (Kiosk):** Werbung (+Beliebtheit-Schub) & Deko (+Einnahmen) mit Leveln — v44.
 
 ### Faz C — Schicht/Service (Feinschliff bestehend)
 - [ ] C1. Gäste kommen nach Beliebtheit, sitzen ganze Schicht, bestellen wiederholt (steht, balancing v40).
-- [ ] C2. **Nacht-Endspurt** wie PlateUp: ab 75% Schichtzeit Geduld schneller sinkend.
-- [ ] C3. Sarhoşluk → Kusma/Kir → Temizlik/Hijyen (teils da).
-- [ ] C4. Tagesabschluss-**Bilanz** (Umsatz, Bahşiş, Beliebtheit ±, Kosten) im Wohnwagen vor dem Schlafen.
+- [x] C2. **Nacht-Endspurt** — son %25 sabır 1.8x hızlı azalır + HUD 🌙 + banner (v43).
+- [~] C3. Sarhoşluk → Kusma/Kir → Temizlik/Hijyen (mess/hijyen var; kusma animasyonu yok).
+- [x] C4. Tagesabschluss-**Bilanz** im Wohnwagen (Kazanç/Kira/Net/Servis/Kaçırılan) beim Schlafen (v43).
 
 ### Faz D — Progression & Expand
 - [ ] D1. **Zelt-Upgrade** (Stufe 2/3): neue größere `zelt_L2.tscn`/`zelt_L3.tscn`, höheres Tischlimit, mehr Sitze.
