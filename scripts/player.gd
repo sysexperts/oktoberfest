@@ -265,14 +265,13 @@ func _handle_interaction(delta: float) -> void:
 			carry_type = 0
 		return
 	if Input.is_action_just_pressed("interact"):
-		if _current_target is CustomerTable:
-			var tbl := _current_target as CustomerTable
-			if _world.has_method("in_intermission") and _world.in_intermission():
-				# Molada masayı tut/bırak (yerleştir)
-				_world.net_toggle_table.rpc_id(1, tbl.table_index)
-				_sfx("pop")
-			elif _has_ready() and tbl.can_serve(_carry_kind(), carry_type):
-				_serve(tbl.table_index, _carry_kind(), carry_type)
+		if _current_target is Customer and _has_ready():
+			var g := _current_target as Customer
+			if g.can_serve(_carry_kind(), carry_type):
+				_world.net_serve_guest.rpc_id(1, g.cust_id, _carry_kind(), carry_type)
+				carry_state = 0
+				carry_fill = 0.0
+				carry_type = 0
 				_sfx("ding")
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
@@ -313,32 +312,6 @@ func _carry_kind() -> int:
 
 func _has_ready() -> bool:
 	return carry_state != 0 and carry_fill >= 0.999
-
-func _serve(index: int, kind: int, type: int) -> void:
-	if multiplayer.is_server():
-		_apply_serve(index, kind, type)
-	else:
-		_serve_request.rpc_id(1, index, kind, type)
-
-@rpc("any_peer", "reliable")
-func _serve_request(index: int, kind: int, type: int) -> void:
-	if multiplayer.is_server():
-		_apply_serve(index, kind, type)
-
-func _apply_serve(index: int, kind: int, type: int) -> void:
-	if _world.has_method("host_try_serve") and _world.host_try_serve(index, kind, type):
-		if is_multiplayer_authority():
-			carry_state = 0
-			carry_fill = 0.0
-			carry_type = 0
-		else:
-			_clear_carry.rpc_id(get_multiplayer_authority())
-
-@rpc("any_peer", "reliable")
-func _clear_carry() -> void:
-	carry_state = 0
-	carry_fill = 0.0
-	carry_type = 0
 
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1

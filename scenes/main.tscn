@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/tent.tscn" id="2_tent"]
 [ext_resource type="PackedScene" path="res://scenes/mug_dispenser.tscn" id="3_disp"]
 [ext_resource type="PackedScene" path="res://scenes/keg_station.tscn" id="4_keg"]
-[ext_resource type="PackedScene" path="res://scenes/customer_table.tscn" id="5_table"]
+[ext_resource type="PackedScene" path="res://scenes/beer_table.tscn" id="5_table"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="6_hud"]
 [ext_resource type="PackedScene" path="res://assets/models/theke.glb" id="7_theke"]
 [ext_resource type="PackedScene" path="res://scenes/computer.tscn" id="8_comp"]
@@ -129,32 +129,23 @@ food_type = 2
 
 [node name="Tables" type="Node3D" parent="."]
 
-[node name="Table0" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 4)
-table_index = 0
+[node name="BeerTable0" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 3)
 
-[node name="Table1" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 6)
-table_index = 1
+[node name="BeerTable1" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 
-[node name="Table2" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
-table_index = 2
+[node name="BeerTable2" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 3)
 
-[node name="Table3" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
-table_index = 3
-active = false
+[node name="BeerTable3" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 7)
 
-[node name="Table4" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
-table_index = 4
-active = false
+[node name="BeerTable4" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
 
-[node name="Table5" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
-table_index = 5
-active = false
+[node name="BeerTable5" parent="Tables" instance=ExtResource("5_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 7)
 
 [node name="SpawnPoints" type="Node3D" parent="."]
 

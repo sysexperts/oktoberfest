@@ -1,34 +1,17 @@
 extends Node3D
-## GameManager (ağ-farkında). Faz makinesi: MOLA <-> VARDİYA.
-## Mola: role kayıt (bilgisayar), müşteri yok. Vardiya: müşteri/servis.
-## Rol için insan yoksa NPC ("Tasarom Firma Çalışanı") doldurur -> az gelir.
-## Dünyayı KURMAZ; main.tscn'deki düğümleri okur.
+## GameManager. Faz: MOLA <-> VARDİYA. Misafirler popülerliğe göre gelir,
+## bira masalarındaki koltuklara oturur, TÜM vardiya boyunca kalır ve
+## tekrar tekrar sipariş verir; otururken kutlar. Rol için insan yoksa NPC (Tasarom).
 
 enum Phase { INTERMISSION = 0, SHIFT = 1 }
 
-const INTERMISSION_TIME := 45.0
-const SHIFT_TIME := 180.0
-const SPAWN_START := 6.0
-const SPAWN_MIN := 2.5
-const SYNC_INTERVAL := 0.15
+const INTERMISSION_TIME := 40.0
+const SHIFT_TIME := 200.0
+const SYNC_INTERVAL := 0.12
 const MISS_PENALTY := 5
-const MISS_LIMIT := 12   # bu kadar kaçırılırsa çadır kapanır (komik final)
-const START_MONEY := 10000   # TEST parası (yayında 0 yapılmalı)
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
-const MESS_SCENE := preload("res://scenes/mess.tscn")
 const CUSTOMER_SCENE := preload("res://scenes/customer.tscn")
-
-# Müşteri NPC
-const CUST_SPEED := 3.0
-const ENTRANCE := Vector3(0, 0.1, 10.0)   # çadır girişi (ön)
-const EXIT := Vector3(0, 0.1, 10.0)
-
-# Temizlik / hijyen
-const MESS_CHANCE := 0.4        # içen müşteri ayrılınca kir bırakma olasılığı
-const CLEAN_PER_CALL := 0.05    # E basılı her karede temizlik ilerlemesi
-const HYGIENE_DRAIN := 1.5      # her kir başına saniyede hijyen kaybı
-const HYGIENE_REGEN := 1.0      # kir yokken saniyede toparlanma
-const NPC_CLEAN_RATE := 0.06    # Tasarom temizlikçi saniyede (yavaş)
+const MESS_SCENE := preload("res://scenes/mess.tscn")
 
 # Roller
 const ROLE_NONE := 0
@@ -39,57 +22,76 @@ const ROLE_NAMES := {0: "—", 1: "Mutfak", 2: "Temizlik", 3: "Garson"}
 const ROLE_ICONS := {1: "👨‍🍳", 2: "🧹", 3: "🍺"}
 const TASAROM := "Tasarom Firma Çalışanı"
 
-var _tables: Array[CustomerTable] = []
-var _spawn_points: Array[Vector3] = []
+# Misafir / sipariş / popülerlik
+const ENTRANCE := Vector3(0, 0.1, 12.0)
+const CUST_SPEED := 3.0
+const GUEST_SPAWN_INTERVAL := 2.0
+const ORDER_PATIENCE := 25.0
+const ORDER_COOLDOWN_MIN := 6.0
+const ORDER_COOLDOWN_MAX := 14.0
+const SERVED_SHOW := 2.0
+const POP_START := 35.0
+const POP_SERVE := 2.0
+const POP_MISS := 4.0
+const MESS_CHANCE_PER_SEC := 0.02   # oturan sarhoş misafir kir yapma olasılığı/sn
+
+# Temizlik
+const CLEAN_PER_CALL := 0.05
+const HYGIENE_DRAIN := 1.2
+const HYGIENE_REGEN := 1.0
+const NPC_CLEAN_RATE := 0.06
+const START_MONEY := 10000   # TEST (yayında 0)
+
 var _hud: HUD
+var _sfx_node: Node
 var _players_container: Node3D
+var _customers_container: Node3D
+var _messes_container: Node3D
 var _players_nodes := {}
 var _spawn_index_by_peer := {}
 var _next_spawn := 0
 
 var _phase: int = Phase.INTERMISSION
 var _phase_time := INTERMISSION_TIME
-var _roles := {}            # peer_id -> role
-var _npc_roles := {}        # vardiyada insan olmayan roller (set gibi kullanılır)
-var _spawn_timer := 3.0
+var _roles := {}
+var _npc_roles := {}
 var _sync_timer := 0.0
-var _event_timer := 25.0
-var _happy_until := 0.0
 var _served := 0
 var _missed := 0
 var _last_earn := 0
 var _shift_num := 0
-var _held := {}   # peer_id -> table_index (molada taşınan masa)
+var _popularity := POP_START
 
-var _sfx_node: Node
-var _messes_container: Node3D
-var _messes := {}        # id -> Mess node
-var _mess_clean := {}    # id -> temizlik ilerlemesi 0..1 (host)
-var _mess_next := 0
+# Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
+var _seats: Array = []
+# Misafir sim: id -> {seat:int, mode:int(0 gir,1 otur,2 çık), pos, tgt, yaw,
+#                     ostate, okind, otype, patience, cooldown, served_t}
+var _guests := {}         # id -> Customer node
+var _guest_sim := {}
+var _guest_next := 0
+var _guest_spawn_timer := 1.0
+
 var _hygiene := 100.0
-
-var _customers_container: Node3D
-var _customers := {}     # id -> Customer node
-var _cust_sim := {}      # id -> {pos, tgt, mode, table, yaw}  (host)
-var _cust_next := 0
-var _table_cust := {}    # table_index -> cust_id
+var _messes := {}
+var _mess_clean := {}
+var _mess_next := 0
 
 func _ready() -> void:
 	Game.reset()
 	_hud = $HUD
-	_players_container = $Players
-	_messes_container = $Messes
-	_customers_container = $Customers
 	_sfx_node = $Sfx
-	for c in $Tables.get_children():
-		if c is CustomerTable:
-			_tables.append(c)
-	_tables.sort_custom(func(a, b): return a.table_index < b.table_index)
-	for c in $SpawnPoints.get_children():
-		if c is Node3D:
-			_spawn_points.append((c as Node3D).position)
-	if _spawn_points.is_empty():
-		_spawn_points.append(Vector3(0, 0.1, 0))
+	_players_container = $Players
+	_customers_container = $Customers
+	_messes_container = $Messes
+
+	# Koltukları bira masalarından topla
+	for bt in get_tree().get_nodes_in_group("beertable"):
+		var origin: Vector3 = (bt as Node3D).global_position
+		for sp in bt.seat_points():
+			var d: Vector3 = origin - sp
+			d.y = 0
+			var yaw := atan2(-d.x, -d.z) if d.length() > 0.01 else 0.0
+			_seats.append({"pos": sp, "yaw": yaw, "guest": -1})
 
 	Game.money_changed.connect(_hud.set_money)
 	Game.score_changed.connect(_hud.set_score)
@@ -99,7 +101,7 @@ func _ready() -> void:
 	_hud.set_phase(_phase_name())
 
 	if multiplayer.is_server():
-		Game.add_money(START_MONEY)   # TEST
+		Game.add_money(START_MONEY)
 		multiplayer.peer_disconnected.connect(_on_peer_left)
 		if Net.dedicated:
 			_next_spawn = 0
@@ -114,6 +116,9 @@ func _ready() -> void:
 func _phase_name() -> String:
 	return "VARDİYA" if _phase == Phase.SHIFT else "MOLA"
 
+func in_intermission() -> bool:
+	return _phase == Phase.INTERMISSION
+
 # ================================================= oyuncular
 @rpc("any_peer", "reliable")
 func _client_ready() -> void:
@@ -126,14 +131,11 @@ func _client_ready() -> void:
 	_next_spawn += 1
 	_spawn_index_by_peer[sender] = sidx
 	_add_player.rpc(sender, sidx)
-	# Mevcut kirleri yeni gelene gönder
 	for mid in _messes.keys():
-		var mp: Vector3 = (_messes[mid] as Node3D).position
-		_add_mess.rpc_id(sender, mid, mp)
-	# Mevcut müşterileri yeni gelene gönder
-	for cid in _cust_sim.keys():
-		_add_customer.rpc_id(sender, cid, _cust_sim[cid].pos)
-	_broadcast_meta()  # yeni gelene faz/rol bilgisi
+		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position)
+	for gid in _guest_sim.keys():
+		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos)
+	_broadcast_meta()
 
 @rpc("authority", "reliable", "call_local")
 func _add_player(peer_id: int, spawn_index: int) -> void:
@@ -142,7 +144,11 @@ func _add_player(peer_id: int, spawn_index: int) -> void:
 	var p := PLAYER_SCENE.instantiate()
 	p.name = str(peer_id)
 	p.set_multiplayer_authority(peer_id)
-	p.position = _spawn_points[spawn_index % _spawn_points.size()]
+	var pts := $SpawnPoints.get_children()
+	if pts.size() > 0:
+		p.position = (pts[spawn_index % pts.size()] as Node3D).position
+	else:
+		p.position = Vector3(0, 0.1, 0)
 	_players_container.add_child(p)
 	_players_nodes[peer_id] = p
 
@@ -162,12 +168,10 @@ func _on_peer_left(peer_id: int) -> void:
 	_remove_player.rpc(peer_id)
 	_broadcast_meta()
 
-# ================================================= rol seçimi (bilgisayar)
+# ================================================= rol
 @rpc("any_peer", "reliable")
 func net_set_role(role: int) -> void:
-	if not multiplayer.is_server():
-		return
-	if _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
@@ -175,97 +179,43 @@ func net_set_role(role: int) -> void:
 	_roles[s] = clampi(role, 0, 3)
 	_broadcast_meta()
 
-## Yerel oyuncu bilgisayara bastığında UI açar.
 func open_computer_ui() -> void:
 	_hud.open_computer()
 
-func _active_table_count() -> int:
-	var n := 0
-	for t in _tables:
-		if t.active:
-			n += 1
-	return n
-
-func _table_cost() -> int:
-	return 40 + _active_table_count() * 25
-
-## Molada para ile yeni masa aç.
+# ================================================= servis (misafire)
 @rpc("any_peer", "reliable")
-func net_buy_table() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
-		return
-	var cost := _table_cost()
-	if Game.money < cost:
-		return
-	for t in _tables:
-		if not t.active:
-			t.set_active(true)
-			Game.add_money(-cost)
-			_broadcast_meta()
-			return
-
-func in_intermission() -> bool:
-	return _phase == Phase.INTERMISSION
-
-## Molada masayı tut/bırak (yerleştirme).
-@rpc("any_peer", "reliable")
-func net_toggle_table(index: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
-		return
-	var s := multiplayer.get_remote_sender_id()
-	if s == 0:
-		s = 1
-	if _held.has(s):
-		_held.erase(s)  # bırak
-	elif index >= 0 and index < _tables.size() and _tables[index].active and not _held.values().has(index):
-		_held[s] = index  # tut
-
-func _update_held_tables() -> void:
-	for peer in _held.keys():
-		var idx: int = _held[peer]
-		var pl = _players_nodes.get(peer)
-		if pl == null or idx < 0 or idx >= _tables.size():
-			continue
-		var fwd: Vector3 = -pl.global_transform.basis.z
-		var p: Vector3 = pl.global_position + fwd * 1.8
-		_tables[idx].position = Vector3(p.x, 0.0, p.z)
-
-func _mgmt_string() -> String:
-	var total := _tables.size()
-	var act := _active_table_count()
-	if act >= total:
-		return "Masalar: %d/%d (hepsi açık)" % [act, total]
-	return "Masalar: %d/%d · Yeni masa: %d€" % [act, total, _table_cost()]
-
-# ================================================= host servis
-func host_try_serve(index: int, kind: int, type: int) -> bool:
+func net_serve_guest(id: int, kind: int, type: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
-		return false
-	if index < 0 or index >= _tables.size():
-		return false
-	if _tables[index].host_serve(kind, type):
-		_served += 1
-		var waiter_npc := _npc_roles.has(ROLE_WAITER)
-		var hyg_factor := 0.4 + 0.6 * (_hygiene / 100.0)  # düşük hijyen -> az gelir
-		var happy := 2.0 if (Time.get_ticks_msec() / 1000.0) < _happy_until else 1.0
-		var reward := int(CustomerTable.REWARD * hyg_factor * happy)
-		var tip := 0 if waiter_npc else randi_range(0, 5)
-		if waiter_npc:
-			reward = int(reward * 0.5)   # NPC garson -> az gelir
-		_last_earn += reward + tip
-		Game.add_score(reward)
-		Game.add_money(reward + tip)
-		return true
-	return false
+		return
+	if not _guest_sim.has(id):
+		return
+	var g: Dictionary = _guest_sim[id]
+	if g.ostate != 1 or g.okind != kind or g.otype != type:
+		return
+	g.ostate = 2
+	g.served_t = SERVED_SHOW
+	_guest_sim[id] = g
+	_served += 1
+	_popularity = minf(100.0, _popularity + POP_SERVE)
+	var waiter_npc := _npc_roles.has(ROLE_WAITER)
+	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
+	var reward := int(CustomerReward() * hyg)
+	var tip := 0 if waiter_npc else randi_range(0, 5)
+	if waiter_npc:
+		reward = int(reward * 0.5)
+	_last_earn += reward + tip
+	Game.add_score(reward)
+	Game.add_money(reward + tip)
+
+func CustomerReward() -> int:
+	return 10
 
 # ================================================= döngü
 func _process(delta: float) -> void:
 	if not multiplayer.is_server():
 		return
-	# Dedicated + kimse yoksa molada bekle
 	if Net.dedicated and _players_nodes.is_empty():
 		return
-
 	_phase_time -= delta
 	if _phase == Phase.SHIFT:
 		_shift_process(delta)
@@ -274,80 +224,186 @@ func _process(delta: float) -> void:
 	else:
 		if _phase_time <= 0.0:
 			_start_shift()
-
-	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
 		_sync_timer = SYNC_INTERVAL
 		_broadcast_sync()
 
 func _shift_process(delta: float) -> void:
-	_spawn_timer -= delta
-	if _spawn_timer <= 0.0:
-		_try_spawn_customer()
-		var progress := 1.0 - (_phase_time / SHIFT_TIME)
-		# Her vardiya biraz daha hızlı müşteri
-		var diff := 1.0 + 0.12 * float(_shift_num - 1)
-		_spawn_timer = maxf(1.2, lerpf(SPAWN_START, SPAWN_MIN, progress) / diff)
-	for t in _tables:
-		var code := t.host_tick(delta)
-		if code == 1:
+	# Popülerliğe göre misafir çağır
+	_guest_spawn_timer -= delta
+	if _guest_spawn_timer <= 0.0:
+		_guest_spawn_timer = GUEST_SPAWN_INTERVAL
+		var target := int(round(_popularity / 100.0 * float(_seats.size())))
+		if _guest_sim.size() < target:
+			_spawn_guest()
+	_update_guests(delta)
+	_update_hygiene(delta)
+
+func _start_shift() -> void:
+	_phase = Phase.SHIFT
+	_phase_time = SHIFT_TIME
+	_served = 0
+	_missed = 0
+	_last_earn = 0
+	_guest_spawn_timer = 1.0
+	_hygiene = 100.0
+	_clear_messes()
+	_shift_num += 1
+	_npc_roles = {}
+	var covered := {}
+	for r in _roles.values():
+		if r != ROLE_NONE:
+			covered[r] = true
+	for role in [ROLE_KITCHEN, ROLE_CLEAN, ROLE_WAITER]:
+		if not covered.has(role):
+			_npc_roles[role] = true
+	_net_banner.rpc("🍺 VARDİYA %d BAŞLADI!" % _shift_num)
+	_broadcast_meta()
+
+func _end_shift(closed_early := false) -> void:
+	_phase = Phase.INTERMISSION
+	_phase_time = INTERMISSION_TIME
+	# Tüm misafirleri çıkışa yolla
+	for gid in _guest_sim.keys():
+		_guest_sim[gid].mode = 2
+		_guest_sim[gid].tgt = ENTRANCE
+		_guest_sim[gid].ostate = 0
+	_clear_messes()
+	if closed_early:
+		_net_banner.rpc("🚫 Çok şikayet! Çadır kapandı 😅 · Kazanç: %d€" % _last_earn)
+	else:
+		_net_banner.rpc("Vardiya bitti! Kazanç: %d€ · Servis: %d · Kaçırılan: %d" % [_last_earn, _served, _missed])
+	_broadcast_meta()
+
+# ---- Misafirler ----
+func _free_seat() -> int:
+	var free := []
+	for i in _seats.size():
+		if _seats[i].guest == -1:
+			free.append(i)
+	if free.is_empty():
+		return -1
+	return free.pick_random()
+
+func _spawn_guest() -> void:
+	var si := _free_seat()
+	if si < 0:
+		return
+	var id := _guest_next
+	_guest_next += 1
+	_seats[si].guest = id
+	_guest_sim[id] = {
+		"seat": si, "mode": 0, "pos": ENTRANCE, "tgt": _seats[si].pos, "yaw": 0.0,
+		"ostate": 0, "okind": 1, "otype": 1, "patience": ORDER_PATIENCE,
+		"cooldown": randf_range(2.0, 6.0), "served_t": 0.0
+	}
+	_add_guest.rpc(id, ENTRANCE)
+
+func _update_guests(delta: float) -> void:
+	for id in _guest_sim.keys().duplicate():
+		var g: Dictionary = _guest_sim[id]
+		var pos: Vector3 = g.pos
+		var to: Vector3 = g.tgt - pos
+		to.y = 0
+		var d := to.length()
+		if d > 0.15:
+			pos += to.normalized() * minf(CUST_SPEED * delta, d)
+			g.yaw = atan2(-to.x, -to.z)
+		else:
+			if g.mode == 0:
+				g.mode = 1
+				g.yaw = _seats[g.seat].yaw
+			elif g.mode == 2:
+				_despawn_guest(id)
+				continue
+		# Oturan misafir: sipariş döngüsü
+		if g.mode == 1:
+			_guest_order(g, id, delta)
+		g.pos = pos
+		_guest_sim[id] = g
+		var node = _guests.get(id)
+		if node:
+			node.set_net(pos, g.yaw)
+			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / ORDER_PATIENCE, 0.0, 1.0))
+
+func _guest_order(g: Dictionary, id: int, delta: float) -> void:
+	if g.ostate == 0:
+		g.cooldown -= delta
+		if g.cooldown <= 0.0:
+			g.ostate = 1
+			if randf() < 0.6:
+				g.okind = 1
+				g.otype = randi_range(1, 3)
+			else:
+				g.okind = 2
+				g.otype = randi_range(1, 2)
+			g.patience = ORDER_PATIENCE
+	elif g.ostate == 1:
+		g.patience -= delta
+		if g.patience <= 0.0:
+			g.ostate = 0
+			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 			_missed += 1
 			Game.add_score(-MISS_PENALTY)
-			if _missed >= MISS_LIMIT:
+			_popularity = maxf(5.0, _popularity - POP_MISS)
+			if _missed >= 20:
 				_end_shift(true)
-				return
-		elif code == 2 and randf() < MESS_CHANCE:
-			_spawn_mess_near(t.global_pos())
-	_leave_customers_of_free_tables()
-	_update_customers(delta)
-	_update_hygiene(delta)
-	# Rastgele olaylar
-	_event_timer -= delta
-	if _event_timer <= 0.0:
-		_event_timer = randf_range(25.0, 40.0)
-		_fire_random_event()
+	elif g.ostate == 2:
+		g.served_t -= delta
+		if g.served_t <= 0.0:
+			g.ostate = 0
+			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
+	# Sarhoş: ara sıra kir
+	if randf() < MESS_CHANCE_PER_SEC * delta:
+		_spawn_mess_near(_seats[g.seat].pos)
 
-func _fire_random_event() -> void:
-	match randi_range(0, 2):
-		0:  # Ansturm: tüm boş masalara müşteri
-			for t in _tables:
-				if t.is_free() and not _table_cust.has(t.table_index):
-					t.host_seat()
-					_spawn_customer(t)
-			_net_banner.rpc("🏃 ANSTURM! Herkes çadıra doluştu!")
-		1:  # Happy Hour: çift gelir
-			_happy_until = Time.get_ticks_msec() / 1000.0 + 20.0
-			_net_banner.rpc("🎉 HAPPY HOUR! 20 sn çift kazanç!")
-		2:  # Şikayet: hijyen düşer
-			_hygiene = maxf(0.0, _hygiene - 30.0)
-			_net_banner.rpc("😷 Şikayet! Hijyen düştü, temizlik lazım!")
+func _despawn_guest(id: int) -> void:
+	if _guest_sim.has(id):
+		var si: int = _guest_sim[id].seat
+		if si >= 0 and si < _seats.size():
+			_seats[si].guest = -1
+		_guest_sim.erase(id)
+	_remove_guest.rpc(id)
 
+@rpc("authority", "reliable", "call_local")
+func _add_guest(id: int, pos: Vector3) -> void:
+	if _guests.has(id):
+		return
+	var c := CUSTOMER_SCENE.instantiate()
+	c.cust_id = id
+	c.position = pos
+	_customers_container.add_child(c)
+	_guests[id] = c
+
+@rpc("authority", "reliable", "call_local")
+func _remove_guest(id: int) -> void:
+	if _guests.has(id):
+		var c: Node = _guests[id]
+		if is_instance_valid(c):
+			c.queue_free()
+		_guests.erase(id)
+
+# ---- Temizlik / hijyen ----
 func _update_hygiene(delta: float) -> void:
 	var n := _messes.size()
 	if n > 0:
 		_hygiene = maxf(0.0, _hygiene - HYGIENE_DRAIN * n * delta)
 		if _npc_roles.has(ROLE_CLEAN):
-			_npc_clean(delta)
+			for mid in _messes.keys():
+				_mess_clean[mid] = float(_mess_clean.get(mid, 0.0)) + NPC_CLEAN_RATE * delta
+				if _mess_clean[mid] >= 1.0:
+					_remove_mess.rpc(mid)
+				break
 	else:
 		_hygiene = minf(100.0, _hygiene + HYGIENE_REGEN * delta)
 
-func _npc_clean(delta: float) -> void:
-	for mid in _messes.keys():
-		_mess_clean[mid] = float(_mess_clean.get(mid, 0.0)) + NPC_CLEAN_RATE * delta
-		if _mess_clean[mid] >= 1.0:
-			_remove_mess.rpc(mid)
-		return  # sadece bir kir/kare (yavaş)
-
-func _spawn_mess_near(pos: Vector3) -> void:
-	var off := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-0.5, 1.5))
-	_spawn_mess(pos + off)
-
-func _spawn_mess(pos: Vector3) -> void:
+func _spawn_mess_near(p: Vector3) -> void:
+	var off := Vector3(randf_range(-0.8, 0.8), 0.0, randf_range(-0.8, 0.8))
 	var id := _mess_next
 	_mess_next += 1
 	_mess_clean[id] = 0.0
-	_add_mess.rpc(id, Vector3(pos.x, 0.02, pos.z))
+	_add_mess.rpc(id, Vector3(p.x + off.x, 0.02, p.z + off.z))
 
 @rpc("authority", "reliable", "call_local")
 func _add_mess(id: int, pos: Vector3) -> void:
@@ -372,7 +428,6 @@ func _clear_messes() -> void:
 	for mid in _messes.keys().duplicate():
 		_remove_mess.rpc(mid)
 
-## Oyuncu kir üstünde E basılı tutunca çağrılır (host otoriter).
 @rpc("any_peer", "reliable")
 func net_clean(id: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
@@ -383,191 +438,51 @@ func net_clean(id: int) -> void:
 	if _mess_clean[id] >= 1.0:
 		_remove_mess.rpc(id)
 
-func _start_shift() -> void:
-	_phase = Phase.SHIFT
-	_phase_time = SHIFT_TIME
-	_served = 0
-	_missed = 0
-	_last_earn = 0
-	_spawn_timer = 3.0
-	_event_timer = randf_range(20.0, 35.0)
-	_happy_until = 0.0
-	_hygiene = 100.0
-	_clear_messes()
-	_clear_customers()
-	_held.clear()
-	_shift_num += 1
-	_net_banner.rpc("🍺 VARDİYA %d BAŞLADI!" % _shift_num)
-	# İnsan olmayan rolleri NPC (Tasarom) doldurur
-	_npc_roles = {}
-	var covered := {}
-	for r in _roles.values():
-		if r != ROLE_NONE:
-			covered[r] = true
-	for role in [ROLE_KITCHEN, ROLE_CLEAN, ROLE_WAITER]:
-		if not covered.has(role):
-			_npc_roles[role] = true
-	_broadcast_meta()
-
-func _end_shift(closed_early := false) -> void:
-	_phase = Phase.INTERMISSION
-	_phase_time = INTERMISSION_TIME
-	for t in _tables:
-		t.host_reset()
-	_clear_messes()
-	_clear_customers()
-	if closed_early:
-		_net_banner.rpc("🚫 Çok şikayet! Çadır kapandı 😅 · Kazanç: %d€ · Kaçırılan: %d" % [_last_earn, _missed])
-	else:
-		_net_banner.rpc("Vardiya bitti! Kazanç: %d€ · Servis: %d · Kaçırılan: %d" % [_last_earn, _served, _missed])
-	_broadcast_meta()
-
-func _try_spawn_customer() -> void:
-	var free: Array[CustomerTable] = []
-	for t in _tables:
-		if t.is_free() and not _table_cust.has(t.table_index):
-			free.append(t)
-	if free.is_empty():
-		return
-	var t: CustomerTable = free.pick_random()
-	t.host_seat()
-	_spawn_customer(t)
-
-# ---- Müşteri NPC (host) ----
-func _spawn_customer(t: CustomerTable) -> void:
-	var id := _cust_next
-	_cust_next += 1
-	var seat := t.global_position + Vector3(0, 0.1, 0.9)
-	_cust_sim[id] = {"pos": ENTRANCE, "tgt": seat, "mode": 0, "table": t.table_index, "yaw": 0.0}
-	_table_cust[t.table_index] = id
-	_add_customer.rpc(id, ENTRANCE)
-
-func _update_customers(delta: float) -> void:
-	for id in _cust_sim.keys().duplicate():
-		var s: Dictionary = _cust_sim[id]
-		var pos: Vector3 = s.pos
-		var to: Vector3 = s.tgt - pos
-		to.y = 0
-		var d := to.length()
-		if d > 0.15:
-			pos += to.normalized() * minf(CUST_SPEED * delta, d)
-			s.yaw = atan2(-to.x, -to.z)  # model root'un -z'sine bakar
-		else:
-			if s.mode == 0:
-				s.mode = 1
-				# Otururken masaya dön
-				var ti: int = s.table
-				if ti >= 0 and ti < _tables.size():
-					var dir: Vector3 = _tables[ti].global_position - pos
-					dir.y = 0
-					if dir.length() > 0.01:
-						s.yaw = atan2(-dir.x, -dir.z)
-			elif s.mode == 2:
-				_despawn_customer(id)
-				continue
-		s.pos = pos
-		_cust_sim[id] = s
-		var node = _customers.get(id)
-		if node:
-			node.set_net(pos, s.yaw)
-
-func _leave_customers_of_free_tables() -> void:
-	for t in _tables:
-		if t.is_free() and _table_cust.has(t.table_index):
-			var cid: int = _table_cust[t.table_index]
-			_table_cust.erase(t.table_index)
-			if _cust_sim.has(cid):
-				_cust_sim[cid].mode = 2
-				_cust_sim[cid].tgt = EXIT
-
-func _despawn_customer(id: int) -> void:
-	_remove_customer.rpc(id)
-	_cust_sim.erase(id)
-
-func _clear_customers() -> void:
-	for id in _customers.keys().duplicate():
-		_remove_customer.rpc(id)
-	_cust_sim.clear()
-	_table_cust.clear()
-
-@rpc("authority", "reliable", "call_local")
-func _add_customer(id: int, pos: Vector3) -> void:
-	if _customers.has(id):
-		return
-	var c := CUSTOMER_SCENE.instantiate()
-	c.cust_id = id
-	c.position = pos
-	_customers_container.add_child(c)
-	_customers[id] = c
-
-@rpc("authority", "reliable", "call_local")
-func _remove_customer(id: int) -> void:
-	if _customers.has(id):
-		var c: Node = _customers[id]
-		if is_instance_valid(c):
-			c.queue_free()
-		_customers.erase(id)
-
 # ================================================= senkron
 func _broadcast_sync() -> void:
-	var st := PackedInt32Array()
-	var ra := PackedFloat32Array()
-	var rq := PackedInt32Array()
-	var rk := PackedInt32Array()
-	var ta := PackedInt32Array()
-	var tx := PackedFloat32Array()
-	var tz := PackedFloat32Array()
-	for t in _tables:
-		st.append(t.state)
-		ra.append(t.ratio())
-		rq.append(t.required_type)
-		rk.append(t.order_kind)
-		ta.append(1 if t.active else 0)
-		tx.append(t.position.x)
-		tz.append(t.position.z)
-	_net_sync.rpc(Game.money, Game.score, _phase_time, st, ra, rq, rk, ta, tx, tz)
-	# Çevre: hijyen + kir ilerlemesi
+	# Misafirler
+	var cids := PackedInt32Array()
+	var cx := PackedFloat32Array()
+	var cz := PackedFloat32Array()
+	var cyaw := PackedFloat32Array()
+	var cstate := PackedInt32Array()
+	var ckind := PackedInt32Array()
+	var ctype := PackedInt32Array()
+	var cratio := PackedFloat32Array()
+	for id in _guest_sim.keys():
+		var g: Dictionary = _guest_sim[id]
+		cids.append(id)
+		cx.append(g.pos.x)
+		cz.append(g.pos.z)
+		cyaw.append(g.yaw)
+		cstate.append(g.ostate)
+		ckind.append(g.okind)
+		ctype.append(g.otype)
+		cratio.append(clampf(g.patience / ORDER_PATIENCE, 0.0, 1.0))
+	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio)
+	# Çevre
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()
 	for mid in _messes.keys():
 		ids.append(mid)
 		pr.append(float(_mess_clean.get(mid, 0.0)))
-	_net_env.rpc(_hygiene, ids, pr)
-	# Müşteri konumları
-	var cids := PackedInt32Array()
-	var cx := PackedFloat32Array()
-	var cz := PackedFloat32Array()
-	var cyaw := PackedFloat32Array()
-	for id in _cust_sim.keys():
-		var s: Dictionary = _cust_sim[id]
-		cids.append(id)
-		cx.append(s.pos.x)
-		cz.append(s.pos.z)
-		cyaw.append(s.yaw)
-	_net_cust.rpc(cids, cx, cz, cyaw)
+	_net_env.rpc(Game.money, Game.score, _phase_time, _hygiene, _popularity, ids, pr)
 
 @rpc("authority", "unreliable")
-func _net_cust(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array) -> void:
+func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array) -> void:
 	for i in range(cids.size()):
-		var c = _customers.get(cids[i])
+		var c = _guests.get(cids[i])
 		if c:
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
+			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
 
 @rpc("authority", "unreliable")
-func _net_sync(money: int, score: int, time_left: float, st: PackedInt32Array, ra: PackedFloat32Array, rq: PackedInt32Array, rk: PackedInt32Array, ta: PackedInt32Array, tx: PackedFloat32Array, tz: PackedFloat32Array) -> void:
+func _net_env(money: int, score: int, time_left: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(time_left)
-	for i in range(_tables.size()):
-		if i < st.size():
-			_tables[i].apply_sync(st[i], ra[i], rq[i], rk[i], ta[i] == 1)
-			if i < tx.size():
-				_tables[i].position = Vector3(tx[i], 0.0, tz[i])
-
-@rpc("authority", "unreliable")
-func _net_env(hygiene: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:
-	_hygiene = hygiene
 	_hud.set_hygiene(hygiene)
+	_hud.set_popularity(pop)
 	for i in range(ids.size()):
 		var m = _messes.get(ids[i])
 		if m:
@@ -588,12 +503,11 @@ func _roster_string() -> String:
 		lines.append("%s %s: %s" % [ROLE_ICONS[role], ROLE_NAMES[role], val])
 	return "\n".join(lines)
 
+func _mgmt_string() -> String:
+	return "Popülerlik: %d%% · Koltuk: %d" % [int(round(_popularity)), _seats.size()]
+
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _roster_string(), _mgmt_string())
-
-@rpc("authority", "reliable", "call_local")
-func _net_banner(text: String) -> void:
-	_hud.show_banner(text)
 
 @rpc("authority", "reliable", "call_local")
 func net_meta(phase: int, roster: String, mgmt: String) -> void:
@@ -606,3 +520,7 @@ func net_meta(phase: int, roster: String, mgmt: String) -> void:
 			_sfx_node.play_music()
 		else:
 			_sfx_node.stop_music()
+
+@rpc("authority", "reliable", "call_local")
+func _net_banner(text: String) -> void:
+	_hud.show_banner(text)
