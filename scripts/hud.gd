@@ -99,8 +99,9 @@ func set_money(v: int) -> void:
 func set_score(v: int) -> void:
 	_score_label.text = "⭐ %d" % v
 
-func set_time(seconds: float) -> void:
-	_time_label.text = "⏱ %d" % int(ceil(seconds))
+func set_time(seconds: float, night: bool = false) -> void:
+	_time_label.text = "%s %d" % ["🌙" if night else "⏱", int(ceil(seconds))]
+	_time_label.add_theme_color_override("font_color", Color(0.7, 0.75, 1) if night else Color.WHITE)
 
 func show_banner(text: String) -> void:
 	if _banner_label == null:
@@ -241,6 +242,7 @@ func _build_booking() -> void:
 
 	_add_book_button(vbox, "🎪 Zelt buchen (500€)", "net_book_tent")
 	_add_book_button(vbox, "🪑 Tisch stellen (200€)", "net_buy_table")
+	_add_book_button(vbox, "🗑️ Tisch verkaufen (+100€)", "net_sell_table")
 	_add_book_button(vbox, "⬆️ Zelt upgraden", "net_upgrade_tent")
 
 	var close_btn := Button.new()

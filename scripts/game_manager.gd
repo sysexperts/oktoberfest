@@ -30,6 +30,8 @@ const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıld
 const ORDER_COOLDOWN_MIN := 22.0    # siparişler arası bekleme — uzatıldı
 const ORDER_COOLDOWN_MAX := 45.0
 const SERVED_SHOW := 3.0
+const NIGHT_FRACTION := 0.25        # son %25 = "gece" (PlateUp tarzı endspurt)
+const PATIENCE_NIGHT_MULT := 1.8    # gece sabır daha hızlı azalır
 const POP_START := 20.0             # az misafirle başla
 const POP_SERVE := 1.5
 const POP_MISS := 3.0
@@ -69,6 +71,8 @@ var _served := 0
 var _missed := 0
 var _last_earn := 0
 var _shift_num := 0
+var _night := false
+var _did_shift := false   # bu gün en az bir vardiya yapıldı mı (bilanço için)
 var _popularity := POP_START
 
 # Zelt / makro-döngü durumu
@@ -297,14 +301,40 @@ func net_sleep() -> void:
 	if _tent_stage == 0:
 		_net_banner.rpc("Önce Zelt buchen, sonra uyu 😴")
 		return
-	_day += 1
 	Game.add_money(-DAILY_RENT)
+	# Tagesbilanz (Wohnwagen)
+	var net_profit := _last_earn - DAILY_RENT
+	var bilanz := ""
+	if _did_shift:
+		bilanz = "📊 Tag %d bilanço: Kazanç %d€ · Kira -%d€ · Net %s%d€\nServis %d · Kaçırılan %d" % [
+			_day, _last_earn, DAILY_RENT, "+" if net_profit >= 0 else "", net_profit, _served, _missed]
+	else:
+		bilanz = "📊 Tag %d: vardiya yok · Kira -%d€" % [_day, DAILY_RENT]
+	_day += 1
 	_phase_time = INTERMISSION_TIME
+	_did_shift = false
+	_last_earn = 0
+	_served = 0
+	_missed = 0
 	if _day > WIESN_DAYS:
-		_net_banner.rpc("🎉 Wiesn bitti! %d gün tamamlandı 🍺" % WIESN_DAYS)
+		_net_banner.rpc("🎉 Wiesn bitti! %d gün tamamlandı 🍺\n%s" % [WIESN_DAYS, bilanz])
 		_day = 1
 	else:
-		_net_banner.rpc("😴 Wiesn-Tag %d/%d · Kira -%d€" % [_day, WIESN_DAYS, DAILY_RENT])
+		_net_banner.rpc("%s\n😴 → Wiesn-Tag %d/%d" % [bilanz, _day, WIESN_DAYS])
+	_broadcast_meta()
+
+## Kiosk: Tisch verkaufen (yarı fiyat iade).
+@rpc("any_peer", "reliable")
+func net_sell_table() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _active_count <= 0:
+		_net_banner.rpc("🪑 Satılacak masa yok")
+		return
+	_active_count -= 1
+	Game.add_money(int(TABLE_COST / 2))
+	_apply_tent()
+	_net_banner.rpc("🪑 Masa satıldı (+%d€) · %d masa kaldı" % [int(TABLE_COST / 2), _active_count])
 	_broadcast_meta()
 
 ## Molada bira masasını tut/bırak (yerleştir).
@@ -389,6 +419,10 @@ func _shift_process(delta: float) -> void:
 		var target := int(round(_popularity / 100.0 * float(_seats.size())))
 		if _guest_sim.size() < target:
 			_spawn_guest()
+	# Gece endspurt: son %25'te sabır daha hızlı azalır
+	if not _night and _phase_time <= SHIFT_TIME * NIGHT_FRACTION:
+		_night = true
+		_net_banner.rpc("🌙 Gece bastı! Misafirler daha sabırsız 🍻")
 	_update_guests(delta)
 	_update_hygiene(delta)
 
@@ -400,6 +434,8 @@ func _start_shift() -> void:
 	_last_earn = 0
 	_guest_spawn_timer = 1.0
 	_hygiene = 100.0
+	_night = false
+	_did_shift = true
 	_held.clear()
 	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
 	_clear_messes()
@@ -494,7 +530,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 				g.otype = randi_range(1, 2)
 			g.patience = ORDER_PATIENCE
 	elif g.ostate == 1:
-		g.patience -= delta
+		g.patience -= delta * (PATIENCE_NIGHT_MULT if _night else 1.0)
 		if g.patience <= 0.0:
 			g.ostate = 0
 			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
@@ -620,7 +656,7 @@ func _broadcast_sync() -> void:
 	for mid in _messes.keys():
 		ids.append(mid)
 		pr.append(float(_mess_clean.get(mid, 0.0)))
-	_net_env.rpc(Game.money, Game.score, _phase_time, _hygiene, _popularity, ids, pr)
+	_net_env.rpc(Game.money, Game.score, _phase_time, _hygiene, _popularity, ids, pr, _night)
 	# Bira masası konumları (taşıma senkronu)
 	var bx := PackedFloat32Array()
 	var bz := PackedFloat32Array()
@@ -644,10 +680,10 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
 
 @rpc("authority", "unreliable")
-func _net_env(money: int, score: int, time_left: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array) -> void:
+func _net_env(money: int, score: int, time_left: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array, night: bool) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
-	_hud.set_time(time_left)
+	_hud.set_time(time_left, night)
 	_hud.set_hygiene(hygiene)
 	_hud.set_popularity(pop)
 	for i in range(ids.size()):
