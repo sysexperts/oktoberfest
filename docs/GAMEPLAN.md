@@ -78,3 +78,47 @@
 - Multiplayer host-as-server (ENet); neue State-Felder via bestehende `_net_*` sync + `net_meta`.
 - Deploy: pck-Export → web root + version.json++ ; class_name-Änderungen → Server-Editor-Rescan vor restart.
 - Autoloads (net.gd/game.gd/project.godot) kommen NICHT per pck — brauchen exe-Rebuild + BASE_VERSION++.
+- **Texturen: `process/size_limit=2048`** in jeder `.import` — sonst wächst die pck explosionsartig (4K-Backtexturen: 216 MB → 96 MB).
+
+## 4a. Die Map selbst bearbeiten (für Serdar)
+
+**Alles liegt in `scenes/main.tscn`.** Dort öffnen und im Szenenbaum umstellen — nichts davon wird von Code überschrieben:
+
+| Node | Was drin ist |
+|---|---|
+| `Tent` | Das Zelt (Wände/Dach/Laternen) — `scenes/tent.tscn` |
+| `Walls` | Kollision des Zeltes. **Nordwand ist geteilt** (`WallNorthW`/`WallNorthE`) → dazwischen der Eingang |
+| `Bar` | Die 9 Theken-Teile |
+| `Stations` | Zapfhähne (`beer_type` 1-3), Küche (`food_type` 1-2), Krugausgabe |
+| `Tables` | **12 Biertische.** Verschieben = neue Sitzplätze. Reihenfolge zählt: `BeerTable0` wird als erster freigeschaltet |
+| `Wasen` | Außenwelt: `Grass`, `Path`, `Sign`, Bäume, `Attraktionen`, Außenmauern |
+| `Wasen/Attraktionen` | Die Jahrmarkt-Buden (Drehscheibe, Enten, Schießstand, Süßigkeiten) |
+| `BookingKiosk` / `Caravan` | Buchungskiosk und Wohnwagen |
+| `SpawnPoints` | Wo Spieler starten (4 Marker) |
+
+**Wichtige Regeln beim Umbauen:**
+- **Tische:** immer als Instanz von `scenes/beer_table.tscn`. Der Name muss auf eine Zahl enden (`BeerTable12`) — danach wird sortiert. Sitzplätze kommen automatisch aus dem `Seats`-Node im Prefab.
+- **Zelt vergrößern?** Dann `Walls`-Kollision mitziehen, sonst laufen Spieler durch.
+- **Eingang verschieben?** `WallNorthW`/`WallNorthE` anpassen **und** in `game_manager.gd` die Konstante `ENTRANCE` — dort erscheinen die Gäste.
+
+## 4b. Neue Assets einbauen (Rezept)
+
+1. **`.glb` nach `assets/models/` legen.** Keine Umlaute im Dateinamen (`süssigkeiten` → `suessigkeiten`).
+2. **Godot einmal öffnen** → importiert automatisch.
+3. **Texturlimit setzen** (sonst bläht sich die pck auf): in Godot die neuen Texturen anwählen → Reiter *Import* → `Process → Size Limit = 2048` → *Reimport*.
+4. **Prefab bauen** — neue Szene in `scenes/props/`, Aufbau wie bei den vorhandenen:
+   ```
+   Node3D  (Wurzel, benannt wie das Objekt)
+   ├── Model            → das .glb instanziert, y = halbe Höhe (Modelle sind mittig zentriert!)
+   └── Body (StaticBody3D)
+       └── CollisionShape3D → BoxShape3D in Modellgröße, gleiche y-Verschiebung
+   ```
+5. **In `main.tscn` ziehen** — Attraktionen unter `Wasen/Attraktionen`, Zeltmöbel unter `Tables`.
+
+**Modellgröße herausfinden** (statt raten) — Pfade in `tools/measure_aabb.gd` eintragen, dann:
+```bash
+godot --headless --path . --script res://tools/measure_aabb.gd
+```
+Gibt Breite/Höhe/Tiefe und Mittelpunkt aus → daraus Box-Größe und y-Verschiebung ablesen.
+
+**Soll das Objekt benutzbar sein** (wie Kiosk/Computer)? Dann zusätzlich ein Skript mit `class_name` anlegen, im `_ready()` `add_to_group("interactable")`, und in `player.gd::_handle_interaction` einen `elif _current_target is DeinTyp:`-Zweig ergänzen. **Achtung:** neuer `class_name` ⇒ beim Deploy muss der Server seinen Klassencache neu scannen (siehe oben).

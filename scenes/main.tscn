@@ -12,6 +12,10 @@
 [ext_resource type="Script" path="res://scripts/sfx.gd" id="10_sfx"]
 [ext_resource type="PackedScene" path="res://scenes/booking_kiosk.tscn" id="11_kiosk"]
 [ext_resource type="PackedScene" path="res://scenes/caravan.tscn" id="12_carav"]
+[ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="13_dreh"]
+[ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="14_ente"]
+[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="15_schi"]
+[ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="16_sues"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 
@@ -265,6 +269,20 @@ material_override = SubResource("MatTrunk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 mesh = SubResource("LeafMesh")
 material_override = SubResource("MatLeaf")
+
+[node name="Attraktionen" type="Node3D" parent="Wasen"]
+
+[node name="Drehscheibe" parent="Wasen/Attraktionen" instance=ExtResource("13_dreh")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -12, 0, 22)
+
+[node name="Enten" parent="Wasen/Attraktionen" instance=ExtResource("14_ente")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -12, 0, 27)
+
+[node name="Schiessstand" parent="Wasen/Attraktionen" instance=ExtResource("15_schi")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, 17)
+
+[node name="Suessigkeiten" parent="Wasen/Attraktionen" instance=ExtResource("16_sues")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, 27)
 
 [node name="OuterNorth" type="StaticBody3D" parent="Wasen"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 30)
