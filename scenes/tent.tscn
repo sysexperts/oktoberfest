@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b7dl2t154lahp"]
 
-[ext_resource type="PackedScene" path="res://assets/models/floor.glb" id="1_7ns01"]
-[ext_resource type="PackedScene" path="res://assets/models/wall.glb" id="2_p0mqa"]
-[ext_resource type="PackedScene" path="res://assets/models/roof.glb" id="3_0wtp6"]
+[ext_resource type="PackedScene" uid="uid://bpnfvbwbqr2ej" path="res://assets/models/floor.glb" id="1_7ns01"]
+[ext_resource type="PackedScene" uid="uid://djxfevmhcj8jy" path="res://assets/models/wall.glb" id="2_p0mqa"]
+[ext_resource type="PackedScene" uid="uid://bw31ewc5mbw1u" path="res://assets/models/roof.glb" id="3_0wtp6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_auivy"]
 albedo_color = Color(1, 0.82, 0.5, 1)
@@ -126,158 +126,158 @@ height = 0.2
 
 [node name="Tent" type="Node3D" unique_id=1011522519]
 
-[node name="floor" type="Node3D" parent="." unique_id=19937502 instance=ExtResource("1_7ns01")]
+[node name="floor" parent="." unique_id=19937502 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -14)
 
-[node name="@Node3D@2" type="Node3D" parent="." unique_id=1129267287 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@2" parent="." unique_id=1129267287 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -10.27012)
 
-[node name="@Node3D@3" type="Node3D" parent="." unique_id=1263646707 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@3" parent="." unique_id=1263646707 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -6.54024)
 
-[node name="@Node3D@4" type="Node3D" parent="." unique_id=997395183 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@4" parent="." unique_id=997395183 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, -2.81036)
 
-[node name="@Node3D@5" type="Node3D" parent="." unique_id=1457862026 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@5" parent="." unique_id=1457862026 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, 0.91952)
 
-[node name="@Node3D@6" type="Node3D" parent="." unique_id=2019273741 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@6" parent="." unique_id=2019273741 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, 4.6494)
 
-[node name="@Node3D@7" type="Node3D" parent="." unique_id=1283042591 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@7" parent="." unique_id=1283042591 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, -0.192, 8.37928)
 
-[node name="@Node3D@8" type="Node3D" parent="." unique_id=718226439 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@8" parent="." unique_id=718226439 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -14)
 
-[node name="@Node3D@9" type="Node3D" parent="." unique_id=1652450951 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@9" parent="." unique_id=1652450951 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -10.27012)
 
-[node name="@Node3D@10" type="Node3D" parent="." unique_id=397907636 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@10" parent="." unique_id=397907636 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -6.54024)
 
-[node name="@Node3D@11" type="Node3D" parent="." unique_id=34608546 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@11" parent="." unique_id=34608546 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, -2.81036)
 
-[node name="@Node3D@12" type="Node3D" parent="." unique_id=1481261063 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@12" parent="." unique_id=1481261063 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, 0.91952)
 
-[node name="@Node3D@13" type="Node3D" parent="." unique_id=1361339615 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@13" parent="." unique_id=1361339615 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, 4.6494)
 
-[node name="@Node3D@14" type="Node3D" parent="." unique_id=801171907 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@14" parent="." unique_id=801171907 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -8.27012, -0.192, 8.37928)
 
-[node name="@Node3D@15" type="Node3D" parent="." unique_id=1609319353 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@15" parent="." unique_id=1609319353 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -14)
 
-[node name="@Node3D@16" type="Node3D" parent="." unique_id=566607651 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@16" parent="." unique_id=566607651 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -10.27012)
 
-[node name="@Node3D@17" type="Node3D" parent="." unique_id=803240767 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@17" parent="." unique_id=803240767 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -6.54024)
 
-[node name="@Node3D@18" type="Node3D" parent="." unique_id=455588642 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@18" parent="." unique_id=455588642 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, -2.81036)
 
-[node name="@Node3D@19" type="Node3D" parent="." unique_id=16082305 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@19" parent="." unique_id=16082305 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, 0.91952)
 
-[node name="@Node3D@20" type="Node3D" parent="." unique_id=833193663 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@20" parent="." unique_id=833193663 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, 4.6494)
 
-[node name="@Node3D@21" type="Node3D" parent="." unique_id=2005516792 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@21" parent="." unique_id=2005516792 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.54024, -0.192, 8.37928)
 
-[node name="@Node3D@22" type="Node3D" parent="." unique_id=872993925 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@22" parent="." unique_id=872993925 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -14)
 
-[node name="@Node3D@23" type="Node3D" parent="." unique_id=240663410 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@23" parent="." unique_id=240663410 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -10.27012)
 
-[node name="@Node3D@24" type="Node3D" parent="." unique_id=813776304 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@24" parent="." unique_id=813776304 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -6.54024)
 
-[node name="@Node3D@25" type="Node3D" parent="." unique_id=1390136301 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@25" parent="." unique_id=1390136301 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, -2.81036)
 
-[node name="@Node3D@26" type="Node3D" parent="." unique_id=1153471643 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@26" parent="." unique_id=1153471643 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, 0.91952)
 
-[node name="@Node3D@27" type="Node3D" parent="." unique_id=1411108001 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@27" parent="." unique_id=1411108001 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, 4.6494)
 
-[node name="@Node3D@28" type="Node3D" parent="." unique_id=2005863843 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@28" parent="." unique_id=2005863843 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -0.81036, -0.192, 8.37928)
 
-[node name="@Node3D@29" type="Node3D" parent="." unique_id=375496341 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@29" parent="." unique_id=375496341 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -14)
 
-[node name="@Node3D@30" type="Node3D" parent="." unique_id=1069712671 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@30" parent="." unique_id=1069712671 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -10.27012)
 
-[node name="@Node3D@31" type="Node3D" parent="." unique_id=2059190566 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@31" parent="." unique_id=2059190566 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -6.54024)
 
-[node name="@Node3D@32" type="Node3D" parent="." unique_id=995805618 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@32" parent="." unique_id=995805618 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, -2.81036)
 
-[node name="@Node3D@33" type="Node3D" parent="." unique_id=123002328 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@33" parent="." unique_id=123002328 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, 0.91952)
 
-[node name="@Node3D@34" type="Node3D" parent="." unique_id=38554532 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@34" parent="." unique_id=38554532 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, 4.6494)
 
-[node name="@Node3D@35" type="Node3D" parent="." unique_id=1093597516 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@35" parent="." unique_id=1093597516 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.91952, -0.192, 8.37928)
 
-[node name="@Node3D@36" type="Node3D" parent="." unique_id=1202103918 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@36" parent="." unique_id=1202103918 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -14)
 
-[node name="@Node3D@37" type="Node3D" parent="." unique_id=1970289826 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@37" parent="." unique_id=1970289826 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -10.27012)
 
-[node name="@Node3D@38" type="Node3D" parent="." unique_id=1234540418 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@38" parent="." unique_id=1234540418 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -6.54024)
 
-[node name="@Node3D@39" type="Node3D" parent="." unique_id=1913610218 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@39" parent="." unique_id=1913610218 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, -2.81036)
 
-[node name="@Node3D@40" type="Node3D" parent="." unique_id=7457817 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@40" parent="." unique_id=7457817 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, 0.91952)
 
-[node name="@Node3D@41" type="Node3D" parent="." unique_id=1796189296 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@41" parent="." unique_id=1796189296 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, 4.6494)
 
-[node name="@Node3D@42" type="Node3D" parent="." unique_id=37929930 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@42" parent="." unique_id=37929930 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.6494, -0.192, 8.37928)
 
-[node name="@Node3D@43" type="Node3D" parent="." unique_id=246992808 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@43" parent="." unique_id=246992808 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -14)
 
-[node name="@Node3D@44" type="Node3D" parent="." unique_id=214665896 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@44" parent="." unique_id=214665896 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -10.27012)
 
-[node name="@Node3D@45" type="Node3D" parent="." unique_id=1075502058 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@45" parent="." unique_id=1075502058 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -6.54024)
 
-[node name="@Node3D@46" type="Node3D" parent="." unique_id=323211397 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@46" parent="." unique_id=323211397 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, -2.81036)
 
-[node name="@Node3D@47" type="Node3D" parent="." unique_id=1238772748 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@47" parent="." unique_id=1238772748 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, 0.91952)
 
-[node name="@Node3D@48" type="Node3D" parent="." unique_id=1063529641 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@48" parent="." unique_id=1063529641 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, 4.6494)
 
-[node name="@Node3D@49" type="Node3D" parent="." unique_id=1100408852 instance=ExtResource("1_7ns01")]
+[node name="@Node3D@49" parent="." unique_id=1100408852 instance=ExtResource("1_7ns01")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.37928, -0.192, 8.37928)
 
-[node name="wall" type="Node3D" parent="." unique_id=1355866637 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, 1.902, -14)
+[node name="wall" parent="." unique_id=1355866637 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -12, 1.5, -14)
 
-[node name="@Node3D@50" type="Node3D" parent="." unique_id=503456745 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -12, 1.902, 11)
+[node name="@Node3D@50" parent="." unique_id=503456745 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -12, 1.5, 11)
 
 [node name="@OmniLight3D@51" type="OmniLight3D" parent="." unique_id=901555168]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.602, -13.75)
@@ -293,11 +293,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@53" type="Node3D" parent="." unique_id=557963686 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -9.55804, 1.902, -14)
+[node name="@Node3D@53" parent="." unique_id=557963686 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -9.55804, 1.5, -14)
 
-[node name="@Node3D@54" type="Node3D" parent="." unique_id=724225875 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -9.55804, 1.902, 11)
+[node name="@Node3D@54" parent="." unique_id=724225875 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -9.55804, 1.5, 11)
 
 [node name="@OmniLight3D@55" type="OmniLight3D" parent="." unique_id=815868609]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55804, 2.602, -13.75)
@@ -313,11 +313,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@57" type="Node3D" parent="." unique_id=498298949 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.11608, 1.902, -14)
+[node name="@Node3D@57" parent="." unique_id=498298949 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.11608, 1.5, -14)
 
-[node name="@Node3D@58" type="Node3D" parent="." unique_id=1596958875 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -7.11608, 1.902, 11)
+[node name="@Node3D@58" parent="." unique_id=1596958875 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -7.11608, 1.5, 11)
 
 [node name="@OmniLight3D@59" type="OmniLight3D" parent="." unique_id=1495333715]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 2.602, -13.75)
@@ -333,11 +333,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@61" type="Node3D" parent="." unique_id=1972380587 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.67412, 1.902, -14)
+[node name="@Node3D@61" parent="." unique_id=1972380587 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.67412, 1.5, -14)
 
-[node name="@Node3D@62" type="Node3D" parent="." unique_id=592402512 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -4.67412, 1.902, 11)
+[node name="@Node3D@62" parent="." unique_id=592402512 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -4.67412, 1.5, 11)
 
 [node name="@OmniLight3D@63" type="OmniLight3D" parent="." unique_id=311012412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.67412, 2.602, -13.75)
@@ -353,8 +353,8 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@65" type="Node3D" parent="." unique_id=1416549807 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.23216, 1.902, -14)
+[node name="@Node3D@65" parent="." unique_id=1416549807 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.23216, 1.5, -14)
 
 [node name="@OmniLight3D@67" type="OmniLight3D" parent="." unique_id=531234750]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 2.602, -13.75)
@@ -370,8 +370,8 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@69" type="Node3D" parent="." unique_id=1590106185 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.2098, 1.902, -14)
+[node name="@Node3D@69" parent="." unique_id=1590106185 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.2098, 1.5, -14)
 
 [node name="@OmniLight3D@71" type="OmniLight3D" parent="." unique_id=2077621051]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2098, 2.602, -13.75)
@@ -387,8 +387,8 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@73" type="Node3D" parent="." unique_id=27073633 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.65176, 1.902, -14)
+[node name="@Node3D@73" parent="." unique_id=27073633 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.65176, 1.5, -14)
 
 [node name="@OmniLight3D@75" type="OmniLight3D" parent="." unique_id=1670928086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 2.602, -13.75)
@@ -404,11 +404,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@77" type="Node3D" parent="." unique_id=1673183560 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.09372, 1.902, -14)
+[node name="@Node3D@77" parent="." unique_id=1673183560 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.09372, 1.5, -14)
 
-[node name="@Node3D@78" type="Node3D" parent="." unique_id=31792860 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 5.09372, 1.902, 11)
+[node name="@Node3D@78" parent="." unique_id=31792860 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 5.09372, 1.5, 11)
 
 [node name="@OmniLight3D@79" type="OmniLight3D" parent="." unique_id=1369062551]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09372, 2.602, -13.75)
@@ -424,11 +424,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@81" type="Node3D" parent="." unique_id=1846458374 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.53568, 1.902, -14)
+[node name="@Node3D@81" parent="." unique_id=1846458374 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.53568, 1.5, -14)
 
-[node name="@Node3D@82" type="Node3D" parent="." unique_id=445795749 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 7.53568, 1.902, 11)
+[node name="@Node3D@82" parent="." unique_id=445795749 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 7.53568, 1.5, 11)
 
 [node name="@OmniLight3D@83" type="OmniLight3D" parent="." unique_id=1040267340]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 2.602, -13.75)
@@ -444,11 +444,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@85" type="Node3D" parent="." unique_id=1409957521 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.97764, 1.902, -14)
+[node name="@Node3D@85" parent="." unique_id=1409957521 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.97764, 1.5, -14)
 
-[node name="@Node3D@86" type="Node3D" parent="." unique_id=137761083 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 9.97764, 1.902, 11)
+[node name="@Node3D@86" parent="." unique_id=137761083 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 9.97764, 1.5, 11)
 
 [node name="@OmniLight3D@87" type="OmniLight3D" parent="." unique_id=887083403]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.97764, 2.602, -13.75)
@@ -464,11 +464,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@89" type="Node3D" parent="." unique_id=1313687122 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -14)
+[node name="@Node3D@89" parent="." unique_id=1313687122 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, -14)
 
-[node name="@Node3D@90" type="Node3D" parent="." unique_id=145441561 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -14)
+[node name="@Node3D@90" parent="." unique_id=145441561 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, -14)
 
 [node name="@OmniLight3D@91" type="OmniLight3D" parent="." unique_id=1791528476]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -14)
@@ -484,11 +484,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@93" type="Node3D" parent="." unique_id=183394077 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -11.55804)
+[node name="@Node3D@93" parent="." unique_id=183394077 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, -11.55804)
 
-[node name="@Node3D@94" type="Node3D" parent="." unique_id=770253323 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -11.55804)
+[node name="@Node3D@94" parent="." unique_id=770253323 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, -11.55804)
 
 [node name="@OmniLight3D@95" type="OmniLight3D" parent="." unique_id=950028477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -11.55804)
@@ -504,11 +504,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@97" type="Node3D" parent="." unique_id=1324862872 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -9.11608)
+[node name="@Node3D@97" parent="." unique_id=1324862872 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, -9.11608)
 
-[node name="@Node3D@98" type="Node3D" parent="." unique_id=196321410 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -9.11608)
+[node name="@Node3D@98" parent="." unique_id=196321410 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, -9.11608)
 
 [node name="@OmniLight3D@99" type="OmniLight3D" parent="." unique_id=3893145]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -9.11608)
@@ -524,11 +524,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@101" type="Node3D" parent="." unique_id=1739092596 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -6.67412)
+[node name="@Node3D@101" parent="." unique_id=1739092596 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, -6.67412)
 
-[node name="@Node3D@102" type="Node3D" parent="." unique_id=462351873 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -6.67412)
+[node name="@Node3D@102" parent="." unique_id=462351873 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, -6.67412)
 
 [node name="@OmniLight3D@103" type="OmniLight3D" parent="." unique_id=12608504]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -6.67412)
@@ -544,11 +544,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@105" type="Node3D" parent="." unique_id=1470511335 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -4.23216)
+[node name="@Node3D@105" parent="." unique_id=1470511335 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, -4.23216)
 
-[node name="@Node3D@106" type="Node3D" parent="." unique_id=5112012 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -4.23216)
+[node name="@Node3D@106" parent="." unique_id=5112012 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, -4.23216)
 
 [node name="@OmniLight3D@107" type="OmniLight3D" parent="." unique_id=2039313644]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -4.23216)
@@ -564,11 +564,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@109" type="Node3D" parent="." unique_id=330046367 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, -1.7902)
+[node name="@Node3D@109" parent="." unique_id=330046367 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, -1.7902)
 
-[node name="@Node3D@110" type="Node3D" parent="." unique_id=1604097737 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, -1.7902)
+[node name="@Node3D@110" parent="." unique_id=1604097737 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, -1.7902)
 
 [node name="@OmniLight3D@111" type="OmniLight3D" parent="." unique_id=1900104521]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -1.7902)
@@ -584,11 +584,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@113" type="Node3D" parent="." unique_id=701511659 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 0.65176)
+[node name="@Node3D@113" parent="." unique_id=701511659 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, 0.65176)
 
-[node name="@Node3D@114" type="Node3D" parent="." unique_id=1654466004 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 0.65176)
+[node name="@Node3D@114" parent="." unique_id=1654466004 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, 0.65176)
 
 [node name="@OmniLight3D@115" type="OmniLight3D" parent="." unique_id=1125239431]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 0.65176)
@@ -604,11 +604,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@117" type="Node3D" parent="." unique_id=1173297586 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 3.09372)
+[node name="@Node3D@117" parent="." unique_id=1173297586 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, 3.09372)
 
-[node name="@Node3D@118" type="Node3D" parent="." unique_id=1877499991 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 3.09372)
+[node name="@Node3D@118" parent="." unique_id=1877499991 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, 3.09372)
 
 [node name="@OmniLight3D@119" type="OmniLight3D" parent="." unique_id=1944292686]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 3.09372)
@@ -624,11 +624,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@121" type="Node3D" parent="." unique_id=2111910112 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 5.53568)
+[node name="@Node3D@121" parent="." unique_id=2111910112 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, 5.53568)
 
-[node name="@Node3D@122" type="Node3D" parent="." unique_id=1157565250 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 5.53568)
+[node name="@Node3D@122" parent="." unique_id=1157565250 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, 5.53568)
 
 [node name="@OmniLight3D@123" type="OmniLight3D" parent="." unique_id=640104054]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 5.53568)
@@ -644,11 +644,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@125" type="Node3D" parent="." unique_id=26328723 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 7.97764)
+[node name="@Node3D@125" parent="." unique_id=26328723 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, 7.97764)
 
-[node name="@Node3D@126" type="Node3D" parent="." unique_id=1620305081 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 7.97764)
+[node name="@Node3D@126" parent="." unique_id=1620305081 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, 7.97764)
 
 [node name="@OmniLight3D@127" type="OmniLight3D" parent="." unique_id=1731487199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 7.97764)
@@ -664,11 +664,11 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="@Node3D@129" type="Node3D" parent="." unique_id=1481004281 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.902, 10.4196)
+[node name="@Node3D@129" parent="." unique_id=1481004281 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -12, 1.5, 10.4196)
 
-[node name="@Node3D@130" type="Node3D" parent="." unique_id=352059399 instance=ExtResource("2_p0mqa")]
-transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.902, 10.4196)
+[node name="@Node3D@130" parent="." unique_id=352059399 instance=ExtResource("2_p0mqa")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 1.5, 10.4196)
 
 [node name="@OmniLight3D@131" type="OmniLight3D" parent="." unique_id=456437860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 10.4196)
@@ -684,173 +684,8 @@ light_energy = 0.7
 omni_range = 4.0
 omni_attenuation = 1.8
 
-[node name="roof" type="Node3D" parent="." unique_id=147204350 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -15.5)
-
-[node name="@Node3D@133" type="Node3D" parent="." unique_id=1432227956 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -10.84169)
-
-[node name="@Node3D@134" type="Node3D" parent="." unique_id=1925505080 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -6.18338)
-
-[node name="@Node3D@135" type="Node3D" parent="." unique_id=1688601302 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, -1.52507)
-
-[node name="@Node3D@136" type="Node3D" parent="." unique_id=1253716214 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, 3.13324)
-
-[node name="@Node3D@137" type="Node3D" parent="." unique_id=1092486058 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, 7.79155)
-
-[node name="@Node3D@138" type="Node3D" parent="." unique_id=171704080 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -13.5, 4.745, 12.44986)
-
-[node name="@Node3D@139" type="Node3D" parent="." unique_id=131850918 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -15.5)
-
-[node name="@Node3D@140" type="Node3D" parent="." unique_id=588794701 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -10.84169)
-
-[node name="@Node3D@141" type="Node3D" parent="." unique_id=2060686331 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -6.18338)
-
-[node name="@Node3D@142" type="Node3D" parent="." unique_id=177116838 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, -1.52507)
-
-[node name="@Node3D@143" type="Node3D" parent="." unique_id=146695056 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, 3.13324)
-
-[node name="@Node3D@144" type="Node3D" parent="." unique_id=156619916 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, 7.79155)
-
-[node name="@Node3D@145" type="Node3D" parent="." unique_id=879163218 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -9.98865, 4.745, 12.44986)
-
-[node name="@Node3D@146" type="Node3D" parent="." unique_id=1803103418 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -15.5)
-
-[node name="@Node3D@147" type="Node3D" parent="." unique_id=1264844990 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -10.84169)
-
-[node name="@Node3D@148" type="Node3D" parent="." unique_id=541132651 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -6.18338)
-
-[node name="@Node3D@149" type="Node3D" parent="." unique_id=1014434075 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, -1.52507)
-
-[node name="@Node3D@150" type="Node3D" parent="." unique_id=1450353173 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, 3.13324)
-
-[node name="@Node3D@151" type="Node3D" parent="." unique_id=1960872777 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, 7.79155)
-
-[node name="@Node3D@152" type="Node3D" parent="." unique_id=1163025420 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -6.4773, 4.745, 12.44986)
-
-[node name="@Node3D@153" type="Node3D" parent="." unique_id=1537171602 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -15.5)
-
-[node name="@Node3D@154" type="Node3D" parent="." unique_id=1995196812 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -10.84169)
-
-[node name="@Node3D@155" type="Node3D" parent="." unique_id=1103303397 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -6.18338)
-
-[node name="@Node3D@156" type="Node3D" parent="." unique_id=754430416 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, -1.52507)
-
-[node name="@Node3D@157" type="Node3D" parent="." unique_id=2063762109 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, 3.13324)
-
-[node name="@Node3D@158" type="Node3D" parent="." unique_id=1750804286 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, 7.79155)
-
-[node name="@Node3D@159" type="Node3D" parent="." unique_id=166689527 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, -2.96595, 4.745, 12.44986)
-
-[node name="@Node3D@160" type="Node3D" parent="." unique_id=1363357055 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -15.5)
-
-[node name="@Node3D@161" type="Node3D" parent="." unique_id=1787640271 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -10.84169)
-
-[node name="@Node3D@162" type="Node3D" parent="." unique_id=1311625068 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -6.18338)
-
-[node name="@Node3D@163" type="Node3D" parent="." unique_id=1519641651 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, -1.52507)
-
-[node name="@Node3D@164" type="Node3D" parent="." unique_id=2077264798 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, 3.13324)
-
-[node name="@Node3D@165" type="Node3D" parent="." unique_id=1755552747 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, 7.79155)
-
-[node name="@Node3D@166" type="Node3D" parent="." unique_id=1455819673 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 0.5454, 4.745, 12.44986)
-
-[node name="@Node3D@167" type="Node3D" parent="." unique_id=688397933 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -15.5)
-
-[node name="@Node3D@168" type="Node3D" parent="." unique_id=61758913 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -10.84169)
-
-[node name="@Node3D@169" type="Node3D" parent="." unique_id=1640393464 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -6.18338)
-
-[node name="@Node3D@170" type="Node3D" parent="." unique_id=1461227615 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, -1.52507)
-
-[node name="@Node3D@171" type="Node3D" parent="." unique_id=1658007791 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, 3.13324)
-
-[node name="@Node3D@172" type="Node3D" parent="." unique_id=1954818137 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, 7.79155)
-
-[node name="@Node3D@173" type="Node3D" parent="." unique_id=1571616700 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 4.05675, 4.745, 12.44986)
-
-[node name="@Node3D@174" type="Node3D" parent="." unique_id=584492760 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -15.5)
-
-[node name="@Node3D@175" type="Node3D" parent="." unique_id=651989412 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -10.84169)
-
-[node name="@Node3D@176" type="Node3D" parent="." unique_id=1130422451 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -6.18338)
-
-[node name="@Node3D@177" type="Node3D" parent="." unique_id=827316053 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, -1.52507)
-
-[node name="@Node3D@178" type="Node3D" parent="." unique_id=1427195696 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, 3.13324)
-
-[node name="@Node3D@179" type="Node3D" parent="." unique_id=16265059 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, 7.79155)
-
-[node name="@Node3D@180" type="Node3D" parent="." unique_id=1429010599 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 7.5681, 4.745, 12.44986)
-
-[node name="@Node3D@181" type="Node3D" parent="." unique_id=2089494015 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -15.5)
-
-[node name="@Node3D@182" type="Node3D" parent="." unique_id=1039758761 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -10.84169)
-
-[node name="@Node3D@183" type="Node3D" parent="." unique_id=585522132 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -6.18338)
-
-[node name="@Node3D@184" type="Node3D" parent="." unique_id=154435888 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, -1.52507)
-
-[node name="@Node3D@185" type="Node3D" parent="." unique_id=2044775454 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, 3.13324)
-
-[node name="@Node3D@186" type="Node3D" parent="." unique_id=1780944604 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, 7.79155)
-
-[node name="@Node3D@187" type="Node3D" parent="." unique_id=1698416314 instance=ExtResource("3_0wtp6")]
-transform = Transform3D(2.7, 0, 0, 0, 2.7, 0, 0, 0, 2.7, 11.07945, 4.745, 12.44986)
+[node name="@Node3D@174" parent="." unique_id=584492760 instance=ExtResource("3_0wtp6")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -8.703563, 4.2578063, 4.3436365)
 
 [node name="@MeshInstance3D@188" type="MeshInstance3D" parent="." unique_id=1496755611]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -8)
@@ -925,7 +760,7 @@ omni_range = 6.0
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@200" type="MeshInstance3D" parent="." unique_id=1457131269]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3844071, 1.8160745, -1.6811199)
 material_override = SubResource("StandardMaterial3D_djo4e")
 mesh = SubResource("SphereMesh_187du")
 
@@ -995,3 +830,18 @@ light_color = Color(1, 0.72, 0.4, 1)
 light_energy = 0.9
 omni_range = 6.0
 omni_attenuation = 1.8
+
+[node name="_Node3D_174" parent="." unique_id=147204350 instance=ExtResource("3_0wtp6")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 9.529319, 4.257809, 4.3601875)
+
+[node name="_Node3D_175" parent="." unique_id=1960965002 instance=ExtResource("3_0wtp6")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 9.529319, 4.257809, -7.8144608)
+
+[node name="_Node3D_176" parent="." unique_id=336327570 instance=ExtResource("3_0wtp6")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -8.703563, 4.2578063, -7.7143354)
+
+[node name="_Node3D_177" parent="." unique_id=662026299 instance=ExtResource("3_0wtp6")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0.4186895, 4.2578063, 4.3436365)
+
+[node name="_Node3D_178" parent="." unique_id=1184681961 instance=ExtResource("3_0wtp6")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0.4186895, 4.2578063, -7.7143354)
