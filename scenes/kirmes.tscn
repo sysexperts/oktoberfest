@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="1_dreh"]
 [ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="2_ente"]
@@ -22,6 +22,9 @@ size = Vector3(70, 0.12, 8)
 
 [sub_resource type="BoxMesh" id="PathWE"]
 size = Vector3(8, 0.12, 49)
+
+[sub_resource type="BoxMesh" id="PathLane"]
+size = Vector3(4, 0.12, 12)
 
 [sub_resource type="BoxShape3D" id="BoundX"]
 size = Vector3(90, 5, 1)
@@ -82,61 +85,159 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -1.5)
 mesh = SubResource("PathWE")
 material_override = SubResource("MatPath")
 
-[node name="Staende" type="Node3D" parent="."]
+[node name="PathWohnwagen" type="MeshInstance3D" parent="Wege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, -34)
+mesh = SubResource("PathLane")
+material_override = SubResource("MatPath")
 
-[node name="Drehscheibe" parent="Staende" instance=ExtResource("1_dreh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 27)
+[node name="StaendeNord" type="Node3D" parent="."]
 
-[node name="Enten" parent="Staende" instance=ExtResource("2_ente")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 27)
+[node name="StandN01" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -31.5, 0, 27)
 
-[node name="Schiessstand" parent="Staende" instance=ExtResource("3_schi")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -20, 0, -30)
+[node name="StandN02" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -27, 0, 27)
 
-[node name="Suessigkeiten" parent="Staende" instance=ExtResource("4_sues")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 20, 0, -30)
+[node name="StandN03" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -22.5, 0, 27)
 
-[node name="StandN1" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 27)
+[node name="StandN04" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -18, 0, 27)
 
-[node name="StandN2" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 27)
+[node name="Drehscheibe1" parent="StaendeNord" instance=ExtResource("1_dreh")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -13.5, 0, 27)
 
-[node name="StandN3" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 27)
+[node name="StandN05" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -9, 0, 27)
 
-[node name="StandS1" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -10, 0, -30)
+[node name="StandN06" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4.5, 0, 27)
 
-[node name="StandS2" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4, 0, -30)
+[node name="StandN07" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 27)
 
-[node name="StandS3" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4, 0, -30)
+[node name="StandN08" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.5, 0, 27)
 
-[node name="StandS4" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 10, 0, -30)
+[node name="StandN09" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 9, 0, 27)
 
-[node name="StandE1" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, 12)
+[node name="Enten1" parent="StaendeNord" instance=ExtResource("2_ente")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 13.5, 0, 27)
 
-[node name="StandE2" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, 4)
+[node name="StandN10" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 18, 0, 27)
 
-[node name="StandE3" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, -4)
+[node name="StandN11" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 22.5, 0, 27)
 
-[node name="StandE4" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, -12)
+[node name="StandN12" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 27, 0, 27)
 
-[node name="StandW1" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -30, 0, 12)
+[node name="StandN13" parent="StaendeNord" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 31.5, 0, 27)
 
-[node name="StandW2" parent="Staende" instance=ExtResource("5_stand")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -30, 0, 4)
+[node name="StaendeSued" type="Node3D" parent="."]
+
+[node name="StandS01" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5, 0, -30)
+
+[node name="StandS02" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, -30)
+
+[node name="StandS03" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0, -30)
+
+[node name="StandS04" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, -30)
+
+[node name="Schiessstand1" parent="StaendeSued" instance=ExtResource("3_schi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0, -30)
+
+[node name="StandS05" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -30)
+
+[node name="StandS06" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -30)
+
+[node name="StandS07" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, -30)
+
+[node name="Suessigkeiten1" parent="StaendeSued" instance=ExtResource("4_sues")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, -30)
+
+[node name="StandS08" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -30)
+
+[node name="StandS09" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 0, -30)
+
+[node name="StandS10" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27, 0, -30)
+
+[node name="StandS11" parent="StaendeSued" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5, 0, -30)
+
+[node name="StaendeOst" type="Node3D" parent="."]
+
+[node name="StandO01" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, -18)
+
+[node name="StandO02" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, -13.5)
+
+[node name="Drehscheibe2" parent="StaendeOst" instance=ExtResource("1_dreh")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, -9)
+
+[node name="StandO03" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, -4.5)
+
+[node name="StandO04" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, 0)
+
+[node name="StandO05" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, 4.5)
+
+[node name="Enten2" parent="StaendeOst" instance=ExtResource("2_ente")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, 9)
+
+[node name="StandO06" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, 13.5)
+
+[node name="StandO07" parent="StaendeOst" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, 18)
+
+[node name="StaendeWest" type="Node3D" parent="."]
+
+[node name="StandW01" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, -18)
+
+[node name="StandW02" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, -13.5)
+
+[node name="Schiessstand2" parent="StaendeWest" instance=ExtResource("3_schi")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, -9)
+
+[node name="StandW03" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, -4.5)
+
+[node name="StandW04" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, 0)
+
+[node name="StandW05" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, 4.5)
+
+[node name="Suessigkeiten2" parent="StaendeWest" instance=ExtResource("4_sues")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, 9)
+
+[node name="StandW06" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, 13.5)
+
+[node name="StandW07" parent="StaendeWest" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -30, 0, 18)
 
 [node name="Wiesenbuero" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 0, 36)
 
 [node name="WallNorth" type="MeshInstance3D" parent="Wiesenbuero"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
@@ -169,7 +270,7 @@ mesh = SubResource("BueroRoof")
 material_override = SubResource("MatBuero")
 
 [node name="Schild" type="Label3D" parent="Wiesenbuero"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, -4.3)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 4.9, -4.3)
 pixel_size = 0.012
 font_size = 64
 outline_size = 20
@@ -204,18 +305,26 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 2.5)
 [node name="Wohnwagenplatz" type="Node3D" parent="."]
 
 [node name="MeinWohnwagen" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -39)
 
 [node name="Nachbar1" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, -7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -39)
 is_mine = false
 
 [node name="Nachbar2" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -39)
 is_mine = false
 
 [node name="Nachbar3" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, 14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -43)
+is_mine = false
+
+[node name="Nachbar4" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -43)
+is_mine = false
+
+[node name="Nachbar5" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -43)
 is_mine = false
 
 [node name="Grenze" type="Node3D" parent="."]

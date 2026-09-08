@@ -20,17 +20,17 @@ albedo_color = Color(0.95, 0.95, 0.9, 1)
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.245, 0)
 
 [node name="Awning" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 1)
 mesh = SubResource("AwningMesh")
 material_override = SubResource("MatAwning")
 
 [node name="AwningStripe" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.72, -1.02)
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.72, 1.02)
 mesh = SubResource("AwningMesh")
 material_override = SubResource("MatAwning2")
 
 [node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 1)
 pixel_size = 0.008
 font_size = 48
 outline_size = 16
