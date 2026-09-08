@@ -7,6 +7,7 @@ var _score_label: Label
 var _time_label: Label
 var _hygiene_label: Label
 var _pop_label: Label
+var _stock_label: Label
 var _phase_label: Label
 var _day_label: Label
 var _roster_label: Label
@@ -41,6 +42,7 @@ func _ready() -> void:
 	_time_label = _make_label("⏱ 0")
 	_hygiene_label = _make_label("🧼 100%")
 	_pop_label = _make_label("🎉 35%")
+	_stock_label = _make_label("📦 0/0")
 	top.add_child(_phase_label)
 	top.add_child(_day_label)
 	top.add_child(_money_label)
@@ -48,6 +50,7 @@ func _ready() -> void:
 	top.add_child(_time_label)
 	top.add_child(_hygiene_label)
 	top.add_child(_pop_label)
+	top.add_child(_stock_label)
 
 	# Rol listesi (sağ üst)
 	_roster_label = _make_label("")
@@ -291,7 +294,17 @@ func _build_booking() -> void:
 	_add_staff_row(t_staff, "🍺 Kellner", 2, 500)
 	_add_staff_row(t_staff, "🧹 Reinigung", 3, 400)
 	_add_soon_tab(tabs, "🎤 Künstler", "Künstler für die Bühne buchen.\nTeuer, bringt aber viele Gäste.\n\n(später)")
-	_add_soon_tab(tabs, "📦 Ware", "Bierfässer und Zutaten einkaufen,\ndann in die Küche verräumen.\n\n(später)")
+	# --- Reiter: Ware ---
+	var t_ware := VBoxContainer.new()
+	t_ware.name = "📦 Ware"
+	t_ware.add_theme_constant_override("separation", 6)
+	tabs.add_child(t_ware)
+	var w_info := Label.new()
+	w_info.text = "1 Paket = 10 Einheiten. Lieferung nach ~1 Minute\nper Wagen — dann Pakete ins Lager tragen!"
+	w_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t_ware.add_child(w_info)
+	_add_order_row(t_ware, "🍺 Bier", 1, 60)
+	_add_order_row(t_ware, "🥨 Zutaten", 2, 80)
 
 	var close_btn := Button.new()
 	close_btn.text = "Kapat (Esc)"
@@ -348,6 +361,33 @@ func _gm_call_int(method: String, v: int) -> void:
 	var gm := get_parent()
 	if gm and gm.has_method(method):
 		gm.rpc_id(1, method, v)
+
+## Eine Zeile im Ware-Reiter: 1 / 5 / 10 Pakete bestellen.
+func _add_order_row(parent: Node, label: String, kind: int, cost: int) -> void:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	parent.add_child(row)
+	var l := Label.new()
+	l.text = "%s (%d€/Paket)" % [label, cost]
+	l.custom_minimum_size = Vector2(220, 38)
+	row.add_child(l)
+	for packs in [1, 5, 10]:
+		var b := Button.new()
+		b.text = "×%d" % packs
+		b.custom_minimum_size = Vector2(70, 38)
+		b.pressed.connect(func(): _order_goods(kind, packs))
+		row.add_child(b)
+
+func _order_goods(kind: int, packs: int) -> void:
+	var gm := get_parent()
+	if gm and gm.has_method("net_order_goods"):
+		gm.rpc_id(1, "net_order_goods", kind, packs)
+
+func set_stock(bier: int, essen: int) -> void:
+	if _stock_label:
+		_stock_label.text = "📦 %d/%d" % [bier, essen]
+		_stock_label.add_theme_color_override("font_color",
+			Color.WHITE if (bier > 0 or essen > 0) else Color(1, 0.4, 0.3))
 
 func _call_gm(method: String) -> void:
 	var gm := get_parent()

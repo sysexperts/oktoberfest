@@ -85,12 +85,28 @@ const KITCHEN_POINT := Vector3(7.0, 0.1, -7.0) # Koch steht hier
 const DRINK_PREP := 1.2                        # Sekunden pro Getränk
 const FOOD_PREP := 3.0                         # Sekunden pro Speise (mit Koch)
 
+# ---- E4: Ware & Lieferung ----
+const PACKAGE_SCENE := preload("res://scenes/package.tscn")
+const VAN_SCENE := preload("res://scenes/delivery_van.tscn")
+const WARE_BIER := 1
+const WARE_ESSEN := 2
+const WARE_NAMES := {1: "🍺 Bier", 2: "🥨 Zutaten"}
+const PACK_UNITS := 10                    # Einheiten pro Paket
+const PACK_COST := {1: 60, 2: 80}         # Preis pro Paket
+const DELIVERY_DELAY := 60.0              # Lieferzeit nach Bestellung (Sekunden)
+const VAN_START := Vector3(-42.0, 0.0, 19.0)
+const VAN_DROP := Vector3(2.0, 0.0, 19.0)
+const VAN_END := Vector3(42.0, 0.0, 19.0)
+const VAN_SPEED := 9.0
+const DROP_POINT := Vector3(0.0, 0.0, 15.5)   # wo die Pakete landen
+
 var _hud: HUD
 var _sfx_node: Node
 var _players_container: Node3D
 var _customers_container: Node3D
 var _messes_container: Node3D
 var _staff_container: Node3D
+var _packages_container: Node3D
 var _players_nodes := {}
 var _spawn_index_by_peer := {}
 var _next_spawn := 0
@@ -122,6 +138,17 @@ var _staff_sim := {}
 var _staff_next := 0
 var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
 var _wages_last := 0
+# E4: Bestand + Lieferungen
+var _stock := {1: 0, 2: 0}      # WARE_BIER / WARE_ESSEN
+var _goods_cost := 0            # Wareneinsatz des Tages (für die Bilanz)
+var _pending := []              # [{kind, packs, t}] — offene Lieferungen
+var _packages := {}             # id -> Package node
+var _pkg_next := 0
+var _van_node: Node3D = null
+var _van_state := 0             # 0 aus, 1 anfahrt, 2 abladen, 3 abfahrt
+var _van_pos := Vector3.ZERO
+var _van_timer := 0.0
+var _van_cargo := []            # [{kind, packs}] die abgeladen werden
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -158,6 +185,11 @@ func _ready() -> void:
 		_staff_container = Node3D.new()
 		_staff_container.name = "StaffNodes"
 		add_child(_staff_container)
+	_packages_container = get_node_or_null("Packages")
+	if _packages_container == null:
+		_packages_container = Node3D.new()
+		_packages_container.name = "Packages"
+		add_child(_packages_container)
 	_sun = $Sun
 	_world_env = $WorldEnvironment
 	_day_sun_energy = _sun.light_energy
@@ -237,6 +269,8 @@ func _save_game() -> void:
 		"tables": tables,
 		"lic": _lic,
 		"staff": _staff_save_list(),
+		"stock_bier": int(_stock[WARE_BIER]),
+		"stock_essen": int(_stock[WARE_ESSEN]),
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -269,6 +303,8 @@ func _load_game() -> bool:
 	if lic is Dictionary:
 		for k in LIC_COST.keys():
 			_lic[k] = bool((lic as Dictionary).get(k, false))
+	_stock[WARE_BIER] = int(d.get("stock_bier", 0))
+	_stock[WARE_ESSEN] = int(d.get("stock_essen", 0))
 	var st: Variant = d.get("staff", [])
 	if st is Array:
 		for e in (st as Array):
@@ -347,6 +383,10 @@ func _client_ready() -> void:
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
 		_add_staff.rpc_id(sender, sid, st.pos, int(st.role), int(st.level))
+	for pid in _packages.keys():
+		var pk = _packages[pid]
+		_add_package.rpc_id(sender, pid, (pk as Node3D).position, int(pk.kind), int(pk.amount))
+	_push_stock.rpc_id(sender, int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	_broadcast_meta()
 
 @rpc("authority", "reliable", "call_local")
@@ -493,6 +533,172 @@ func net_buy_deko() -> void:
 	_upg_deko += 1
 	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
 	_broadcast_meta()
+
+# ================================================= E4: Ware & Lieferung
+## Wiesenbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
+@rpc("any_peer", "reliable")
+func net_order_goods(kind: int, packs: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if not PACK_COST.has(kind) or packs <= 0:
+		return
+	var cost: int = PACK_COST[kind] * packs
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (%d× %s: %d€)" % [packs, WARE_NAMES[kind], cost])
+		return
+	Game.add_money(-cost)
+	_goods_cost += cost
+	_pending.append({"kind": kind, "packs": packs, "t": DELIVERY_DELAY})
+	_net_banner.rpc("🚚 %d× %s bestellt (%d€)\nLieferung in ~1 Minute" % [packs, WARE_NAMES[kind], cost])
+	_broadcast_meta()
+
+func _update_delivery(delta: float) -> void:
+	# Offene Bestellungen herunterzählen
+	for i in range(_pending.size() - 1, -1, -1):
+		var o: Dictionary = _pending[i]
+		o.t = float(o.t) - delta
+		_pending[i] = o
+		if float(o.t) <= 0.0 and _van_state == 0:
+			_van_cargo = [{"kind": int(o.kind), "packs": int(o.packs)}]
+			_pending.remove_at(i)
+			# gleiche fällige Bestellungen mitnehmen
+			for j in range(_pending.size() - 1, -1, -1):
+				if float(_pending[j].t) <= 0.0:
+					_van_cargo.append({"kind": int(_pending[j].kind), "packs": int(_pending[j].packs)})
+					_pending.remove_at(j)
+			_van_pos = VAN_START
+			_van_state = 1
+			_van_show.rpc(true, VAN_START)
+			break
+	if _van_state == 0:
+		return
+	match _van_state:
+		1:
+			var to: Vector3 = VAN_DROP - _van_pos
+			var d := to.length()
+			if d <= 0.4:
+				_van_state = 2
+				_van_timer = 1.2
+				_drop_cargo()
+				_van_honk.rpc()
+			else:
+				_van_pos += to.normalized() * minf(VAN_SPEED * delta, d)
+		2:
+			_van_timer -= delta
+			if _van_timer <= 0.0:
+				_van_state = 3
+		3:
+			var to2: Vector3 = VAN_END - _van_pos
+			var d2 := to2.length()
+			if d2 <= 0.5:
+				_van_state = 0
+				_van_show.rpc(false, VAN_END)
+			else:
+				_van_pos += to2.normalized() * minf(VAN_SPEED * delta, d2)
+	if _van_state != 0:
+		_van_move.rpc(_van_pos)
+
+func _drop_cargo() -> void:
+	var n := 0
+	for c in _van_cargo:
+		for p in int(c.packs):
+			var id := _pkg_next
+			_pkg_next += 1
+			var off := Vector3(randf_range(-2.5, 2.5), 0.0, randf_range(-1.5, 1.5))
+			_add_package.rpc(id, DROP_POINT + off, int(c.kind), PACK_UNITS)
+			n += 1
+	_van_cargo = []
+	_net_banner.rpc("📦 %d Paket(e) geliefert! Bring sie ins Lager." % n)
+
+@rpc("authority", "reliable", "call_local")
+func _van_show(on: bool, pos: Vector3) -> void:
+	if on:
+		if _van_node == null:
+			_van_node = VAN_SCENE.instantiate()
+			add_child(_van_node)
+		_van_node.position = pos
+	else:
+		if _van_node and is_instance_valid(_van_node):
+			_van_node.queue_free()
+		_van_node = null
+
+@rpc("authority", "unreliable")
+func _van_move(pos: Vector3) -> void:
+	if _van_node and is_instance_valid(_van_node):
+		_van_node.position = pos
+
+@rpc("authority", "reliable", "call_local")
+func _van_honk() -> void:
+	if _sfx_node:
+		_sfx_node.play("honk", 0.0)
+
+@rpc("authority", "reliable", "call_local")
+func _add_package(id: int, pos: Vector3, kind: int, amount: int) -> void:
+	if _packages.has(id):
+		return
+	var p := PACKAGE_SCENE.instantiate()
+	p.pkg_id = id
+	p.position = pos
+	_packages_container.add_child(p)
+	p.set_info(kind, amount)
+	_packages[id] = p
+
+@rpc("authority", "reliable", "call_local")
+func _remove_package(id: int) -> void:
+	if _packages.has(id):
+		var p: Node = _packages[id]
+		if is_instance_valid(p):
+			p.queue_free()
+		_packages.erase(id)
+
+## Spieler hebt ein Paket auf.
+@rpc("any_peer", "reliable")
+func net_pickup_package(id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if not _packages.has(id):
+		return
+	_remove_package.rpc(id)
+
+## Spieler lädt getragenes Paket im Lager ab.
+@rpc("any_peer", "reliable")
+func net_store_package(kind: int, amount: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if not _stock.has(kind):
+		return
+	_stock[kind] = int(_stock[kind]) + amount
+	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _push_stock(bier: int, essen: int) -> void:
+	_stock[WARE_BIER] = bier
+	_stock[WARE_ESSEN] = essen
+	for l in get_tree().get_nodes_in_group("lager"):
+		if l.has_method("set_stock"):
+			l.set_stock(bier, essen)
+	if _hud:
+		_hud.set_stock(bier, essen)
+
+## Reicht der Bestand für diese Bestellung? (kind: 1 Getränk, 2 Essen)
+func _has_stock(okind: int) -> bool:
+	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
+	return int(_stock.get(w, 0)) > 0
+
+func _consume_stock(okind: int) -> void:
+	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
+	_stock[w] = maxi(0, int(_stock.get(w, 0)) - 1)
+	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+
+func _stock_string() -> String:
+	var pend := ""
+	if not _pending.is_empty():
+		var soon := 999.0
+		for o in _pending:
+			soon = minf(soon, float(o.t))
+		pend = " · 🚚 unterwegs (%ds)" % int(ceil(soon))
+	return "Lager: 🍺 %d · 🥨 %d%s" % [int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]), pend]
 
 # ================================================= E3: Personal
 ## Wiesenbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
@@ -645,7 +851,8 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 				if picked.size() >= cap:
 					break
 				var g: Dictionary = _guest_sim[gid]
-				if int(g.ostate) == 1 and not _assigned.has(gid):
+				# Ohne Bestand nicht annehmen — sonst läuft der Kellner umsonst
+				if int(g.ostate) == 1 and not _assigned.has(gid) and _has_stock(int(g.okind)):
 					picked.append(gid)
 					_assigned[gid] = sid
 			if picked.is_empty():
@@ -726,6 +933,9 @@ func _serve_by_staff(gid: int) -> void:
 	var g: Dictionary = _guest_sim[gid]
 	if int(g.ostate) != 1:
 		return
+	if not _has_stock(int(g.okind)):
+		return
+	_consume_stock(int(g.okind))
 	g.ostate = 2
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
@@ -871,6 +1081,10 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	var g: Dictionary = _guest_sim[id]
 	if g.ostate != 1 or g.okind != kind or g.otype != type:
 		return
+	if not _has_stock(int(g.okind)):
+		_net_banner.rpc("📦 Lager leer! %s nachbestellen (Wiesenbüro → Ware)" % WARE_NAMES[WARE_ESSEN if int(g.okind) == 2 else WARE_BIER])
+		return
+	_consume_stock(int(g.okind))
 	g.ostate = 2
 	g.served_t = SERVED_SHOW
 	_guest_sim[id] = g
@@ -901,6 +1115,7 @@ func _process(delta: float) -> void:
 		if _phase_time <= 0.0:
 			_end_shift(0)   # 22:00 — normal kapanış
 	# MOLA: otomatik başlangıç YOK. Oyuncu Wohnwagen'de uyuyunca gün başlar.
+	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
@@ -976,14 +1191,17 @@ func _end_shift(reason := 0) -> void:
 	var wages := _total_wages()
 	_wages_last = wages
 	Game.add_money(-rent - wages)
-	var net_profit := _last_earn - rent - wages
+	var goods := _goods_cost      # schon beim Bestellen bezahlt, hier nur ausgewiesen
+	var net_profit := _last_earn - rent - wages - goods
 	var head := ""
 	match reason:
 		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
 		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
 		_: head = "🌙 22:00 — Feierabend!"
-	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Netto %s%d€\nServiert %d · Verpasst %d\n😴 Wohnwagen: schlafen → neuer Tag" % [
-		head, _day, _last_earn, rent, wages, "+" if net_profit >= 0 else "", net_profit, _served, _missed])
+	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\nServiert %d · Verpasst %d · %s\n😴 Wohnwagen: schlafen → neuer Tag" % [
+		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit,
+		_served, _missed, _stock_string()])
+	_goods_cost = 0
 	_day += 1
 	if _day > WIESN_DAYS:
 		_day = 1
@@ -1265,7 +1483,7 @@ func _mgmt_string() -> String:
 	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d\n%s" % [
 		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
 		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko,
-		_lic_string()]
+		_lic_string() + "\n" + _stock_string()]
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count)

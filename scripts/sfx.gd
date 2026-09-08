@@ -22,6 +22,7 @@ func _ready() -> void:
 	_streams["scrub"] = _tone(0.0, 0.16, "noise", 0.0)
 	_streams["splash"] = _tone(0.0, 0.3, "noise", 0.0)
 	_streams["cheer"] = _chord([520.0, 660.0, 790.0], 0.5)
+	_streams["honk"] = _honk()
 	for i in 6:
 		var p := AudioStreamPlayer.new()
 		add_child(p)
@@ -133,6 +134,30 @@ func _chord(freqs: Array, dur: float) -> AudioStreamWAV:
 			s += sin(t * float(f) * TAU)
 		s /= float(freqs.size())
 		data.encode_s16(i * 2, int(clampf(s * env, -1.0, 1.0) * 30000.0))
+	return _wav(data, rate)
+
+## Lieferwagen-Hupe: zwei kurze Töne — "düt düt".
+func _honk() -> AudioStreamWAV:
+	var rate := 22050
+	var beep := 0.16      # Länge eines Tons
+	var gap := 0.10       # Pause dazwischen
+	var total := beep * 2.0 + gap
+	var n := int(total * rate)
+	var data := PackedByteArray()
+	data.resize(n * 2)
+	for i in n:
+		var t := float(i) / rate
+		var local := -1.0
+		if t < beep:
+			local = t
+		elif t >= beep + gap:
+			local = t - beep - gap
+		var s := 0.0
+		if local >= 0.0:
+			# leicht rauer Klang: Grundton + Quinte, weiche Hüllkurve
+			var env: float = clampf(local / 0.02, 0.0, 1.0) * clampf((beep - local) / 0.04, 0.0, 1.0)
+			s = (sin(local * 420.0 * TAU) * 0.6 + sin(local * 630.0 * TAU) * 0.4) * env
+		data.encode_s16(i * 2, int(clampf(s, -1.0, 1.0) * 26000.0))
 	return _wav(data, rate)
 
 func _wav(data: PackedByteArray, rate: int) -> AudioStreamWAV:

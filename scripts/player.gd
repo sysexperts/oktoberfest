@@ -21,7 +21,9 @@ const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
 const COSTUME_COLORS := [Color(0.85,0.2,0.2), Color(0.2,0.45,0.85), Color(0.2,0.7,0.3), Color(0.7,0.3,0.8), Color(0.95,0.85,0.2), Color(0.95,0.95,0.95)]
 
 # Ağ ile senkronlanan durum
-var carry_state := 0     # 0 = boş el, 1 = bardak
+var carry_pkg_kind := 0  # taşınan paketin türü (1 Bier, 2 Zutaten); 0 = yok
+var carry_pkg_amount := 0
+var carry_state := 0     # 0 = boş el, 1 = bardak, 2 = yemek, 3 = paket
 var carry_fill := 0.0    # 0..1
 var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler
 var emote := 0           # 0 yok, 1 Prost/dans (senkron)
@@ -265,6 +267,8 @@ func _handle_interaction(delta: float) -> void:
 			carry_state = 0
 			carry_fill = 0.0
 			carry_type = 0
+			carry_pkg_kind = 0
+			carry_pkg_amount = 0
 		return
 	if Input.is_action_just_pressed("interact"):
 		if _current_target is Customer and _has_ready():
@@ -289,6 +293,24 @@ func _handle_interaction(delta: float) -> void:
 			# Bilgisayar arayüzünü aç (rol seçimi)
 			if _world.has_method("open_computer_ui"):
 				_world.open_computer_ui()
+		elif _current_target is Package and carry_state == 0:
+			# Warenpaket aufnehmen
+			var pk := _current_target as Package
+			carry_state = 3
+			carry_pkg_kind = pk.kind
+			carry_pkg_amount = pk.amount
+			carry_fill = 1.0
+			_world.net_pickup_package.rpc_id(1, pk.pkg_id)
+			_sfx("pop")
+		elif _current_target is Lager:
+			# Getragenes Paket abladen
+			if carry_state == 3:
+				_world.net_store_package.rpc_id(1, carry_pkg_kind, carry_pkg_amount)
+				carry_state = 0
+				carry_pkg_kind = 0
+				carry_pkg_amount = 0
+				carry_fill = 0.0
+				_sfx("ding")
 		elif _current_target is OfficeDesk:
 			# Wiesenbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
 			if _world.has_method("in_intermission") and _world.in_intermission():
@@ -348,6 +370,14 @@ func _update_carry_visual() -> void:
 		var m := _carry_beer.material_override as StandardMaterial3D
 		if m:
 			m.albedo_color = BEER_COLORS.get(carry_type, BEER_COLORS[0])
+	# Paket wird als große Kiste in der Hand gezeigt
+	if carry_state == 3:
+		_carry_food.visible = true
+		_carry_food.scale = Vector3(2.2, 2.2, 2.2)
+		var pm := _carry_food.material_override as StandardMaterial3D
+		if pm:
+			pm.albedo_color = Color(0.75, 0.55, 0.35) if carry_pkg_kind == 1 else Color(0.6, 0.45, 0.3)
+		return
 	_carry_food.visible = has_food
 	if has_food:
 		# pişerken büyür (görsel geri bildirim)
