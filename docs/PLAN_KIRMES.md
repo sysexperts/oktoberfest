@@ -63,26 +63,27 @@ Ersetzt Buchungskiosk **und** Computer. Ein NPC am Schreibtisch, ein Menü mit R
 - [x] E3.5 Aufstufen kostet 400€ × aktuelles Level
 - **Offen:** Kündigen, Koch als eigene Station (kommt mit E4/Ware), Erfahrung statt Bezahl-Upgrade
 
-### E4 — Wirtschaft & Report
-- [ ] E4.1 **Ware einkaufen** im Büro (Bierfässer, Zutaten) → landet im Lager
-- [ ] E4.2 **Ware verräumen**: aus dem Lager in Küche/Theke bringen (Spieler + Mitarbeiter)
-- [ ] E4.3 Leere Fässer/Zutaten = kein Verkauf → Druck, rechtzeitig nachzufüllen
-- [ ] E4.4 **Schichtreport**: Umsatz · Zeltmiete · Löhne · Wareneinsatz · Beliebtheit ± · Gewinn
+### E4 — Wirtschaft & Report — v60
+- [x] E4.1 **Ware bestellen** im Büro (🍺 Bier 60€ / 🥨 Zutaten 80€ pro Paket à 10 Einheiten)
+- [x] E4.2 **Lieferung nach ~60 s**: Lieferwagen fährt vor, lädt Pakete ab, hupt zweimal „düt düt", fährt weiter. Pakete mit E aufnehmen → **Lagerregal** im Zelt
+- [x] E4.3 Leeres Lager = kein Verkauf. Kellner nehmen Bestellungen ohne Bestand gar nicht erst an
+- [x] E4.4 **Schichtreport**: Umsatz · Miete · Löhne · Wareneinsatz · Netto · serviert/verpasst
 
-### E5 — Bühne, Künstler & Stimmung
-- [ ] E5.1 **Bühne** im Zelt + **Discolicht** (farbige, animierte Lichter — dauerhaft an)
-- [ ] E5.2 Künstler treten auf (Bean-Modelle mit Dance-Animation, die existiert)
-- [ ] E5.3 **Künstler buchen** im Büro: teuer, bringt viele Gäste (Beliebtheit + Gästezahl)
+### E5 — Bühne, Künstler & Stimmung — v61
+- [x] E5.1 **Bühne** im Zelt (Podest, Rückwand, Traverse) + **Discolicht**, läuft immer
+- [x] E5.2 Künstler tanzen während der Schicht auf der Bühne
+- [x] E5.3 **Künstler buchen** im Büro: 🎸 500€ (+15%) · 🎺 2000€ (+35%) · ⭐ 6000€ (+60% Andrang), gilt für die nächste Schicht
 
-### E6 — Details, die es lebendig machen
-- [ ] E6.1 **Kein Klo im kleinen Zelt** → Gäste pinkeln in die Ecke
-- [ ] E6.2 Urin/Dreck → andere Gäste beschweren sich, stehen auf, gehen → Beliebtheit sinkt
-- [ ] E6.3 **Klo kaufbar/Teil größerer Zelte** → Problem verschwindet
-- [ ] E6.4 Alles davon sichtbar im Report
+### E6 — Details, die es lebendig machen — v62
+- [x] E6.1 Gäste haben eine Blase. **Ohne Klo pinkeln sie in die Ecke** (gelber Fleck)
+- [x] E6.2 Gäste im Umkreis beschweren sich → Beliebtheit sinkt, 25% davon stehen auf und gehen
+- [x] E6.3 **Toilette 1800€** im Büro → Problem verschwindet
+- [x] E6.4 Urin-, Beschwerde- und Weggeher-Zähler im Tagesreport
 
-### E7 — Kirmes-Besucher (Kulisse)
-- [ ] E7.1 NPCs laufen draußen zwischen den Ständen herum (Wegpunkte, kein Zeltbezug)
-- [ ] E7.2 Dichte je nach Tageszeit — abends voll
+### E7 — Kirmes-Besucher (Kulisse) — v63
+- [x] E7.1 NPCs laufen draußen auf dem Ringweg zwischen den Ständen, bleiben ab und zu stehen
+- [x] E7.2 Dichte aus der Uhrzeit: morgens leer, abends voll · geschlossen = niemand da
+- Läuft **rein lokal** auf jedem Client (kein Netz-Traffic). Anzahl über `Crowd → max_visitors` einstellbar
 
 ## 4. Was bleibt, was fliegt
 
