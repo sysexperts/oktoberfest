@@ -263,6 +263,7 @@ func _build_booking() -> void:
 	_add_book_button(t_zelt, "🪑 Tisch stellen (200€)", "net_buy_table")
 	_add_book_button(t_zelt, "🗑️ Tisch verkaufen (+100€)", "net_sell_table")
 	_add_book_button(t_zelt, "⬆️ Zelt vergrößern", "net_upgrade_tent")
+	_add_book_button(t_zelt, "🚻 Toilette einbauen (1800€)", "net_buy_toilet")
 	_add_book_button(t_zelt, "📣 Werbung (mehr Gäste)", "net_buy_marketing")
 	_add_book_button(t_zelt, "🎨 Deko (mehr Einnahmen)", "net_buy_deko")
 

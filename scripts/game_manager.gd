@@ -108,6 +108,18 @@ const ARTIST_COUNT := {1: 1, 2: 3, 3: 5}      # wie viele auf der Bühne stehen
 const ARTIST_POP := {1: 5.0, 2: 12.0, 3: 25.0}  # Beliebtheitsschub beim Buchen
 const ARTIST_DRAW := {1: 0.15, 2: 0.35, 3: 0.6} # zusätzliche Auslastung während der Schicht
 
+# ---- E6: Klo, Urin, Beschwerden ----
+const TOILET_COST := 1800
+const BLADDER_MIN := 70.0        # Sekunden bis ein Gast muss
+const BLADDER_MAX := 150.0
+const PEE_CORNER := Vector3(-10.5, 0.1, 8.0)   # Ecke, in die ohne Klo gepinkelt wird
+const TOILET_POINT := Vector3(10.5, 0.1, 8.0)  # Klo-Ecke (wenn gekauft)
+const PEE_DURATION := 4.0
+const COMPLAIN_INTERVAL := 6.0   # wie oft geprüft wird
+const COMPLAIN_RADIUS := 5.0     # Umkreis eines Urinflecks
+const COMPLAIN_POP := 2.5        # Beliebtheitsverlust pro Beschwerde
+const LEAVE_CHANCE := 0.25       # Wahrscheinlichkeit, dass ein Gast deshalb geht
+
 var _hud: HUD
 var _sfx_node: Node
 var _players_container: Node3D
@@ -160,6 +172,13 @@ var _van_cargo := []            # [{kind, packs}] die abgeladen werden
 # E5: gebuchter Künstler (gilt für die nächste Schicht, danach verbraucht)
 var _artist_tier := 0
 var _artist_nodes := []
+# E6: Klo / Urin / Beschwerden
+var _has_toilet := false
+var _mess_kind := {}          # mess_id -> 0 Erbrochenes, 1 Urin
+var _complain_timer := 0.0
+var _urin_count := 0          # Tageszähler für den Report
+var _complaints := 0
+var _left_guests := 0
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -282,6 +301,7 @@ func _save_game() -> void:
 		"staff": _staff_save_list(),
 		"stock_bier": int(_stock[WARE_BIER]),
 		"stock_essen": int(_stock[WARE_ESSEN]),
+		"toilet": _has_toilet,
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -314,6 +334,7 @@ func _load_game() -> bool:
 	if lic is Dictionary:
 		for k in LIC_COST.keys():
 			_lic[k] = bool((lic as Dictionary).get(k, false))
+	_has_toilet = bool(d.get("toilet", false))
 	_stock[WARE_BIER] = int(d.get("stock_bier", 0))
 	_stock[WARE_ESSEN] = int(d.get("stock_essen", 0))
 	var st: Variant = d.get("staff", [])
@@ -544,6 +565,93 @@ func net_buy_deko() -> void:
 	_upg_deko += 1
 	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
 	_broadcast_meta()
+
+# ================================================= E6: Klo & Beschwerden
+## Wiesenbüro: Toilette einbauen — danach pinkelt niemand mehr in die Ecke.
+@rpc("any_peer", "reliable")
+func net_buy_toilet() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _has_toilet:
+		_net_banner.rpc("🚻 Toilette ist schon eingebaut")
+		return
+	if _tent_stage == 0:
+		_net_banner.rpc("Erst ein Zelt mieten!")
+		return
+	if Game.money < TOILET_COST:
+		_net_banner.rpc("💶 Yetersiz para! (Toilette: %d€)" % TOILET_COST)
+		return
+	Game.add_money(-TOILET_COST)
+	_has_toilet = true
+	_net_banner.rpc("🚻 Toilette eingebaut! Schluss mit Pinkeln in der Ecke.")
+	_broadcast_meta()
+
+## Blase der sitzenden Gäste. Ohne Klo → Urinfleck in der Ecke.
+func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
+	if int(g.mode) == 3:
+		# unterwegs / gerade dabei
+		g.pee_t = float(g.pee_t) - delta
+		if float(g.pee_t) <= 0.0:
+			g.mode = 1
+			g.tgt = _seats[int(g.seat)].pos
+			g.bladder = randf_range(BLADDER_MIN, BLADDER_MAX)
+		return
+	g.bladder = float(g.bladder) - delta
+	if float(g.bladder) > 0.0:
+		return
+	# Muss mal
+	if _has_toilet:
+		# geht kurz aufs Klo, kein Dreck
+		g.mode = 3
+		g.pee_t = PEE_DURATION
+		g.tgt = TOILET_POINT
+		g.ostate = 0
+	else:
+		g.mode = 3
+		g.pee_t = PEE_DURATION
+		g.tgt = PEE_CORNER
+		g.ostate = 0
+		_spawn_mess_at(PEE_CORNER + Vector3(randf_range(-1.2, 1.2), 0.0, randf_range(-1.2, 1.2)), 1)
+		_urin_count += 1
+
+## Beschwerden: Gäste in der Nähe von Urin meckern, manche gehen.
+func _update_complaints(delta: float) -> void:
+	_complain_timer -= delta
+	if _complain_timer > 0.0:
+		return
+	_complain_timer = COMPLAIN_INTERVAL
+	var urin_pos := []
+	for mid in _messes.keys():
+		if int(_mess_kind.get(mid, 0)) == 1:
+			var m := _messes[mid] as Node3D
+			if m:
+				urin_pos.append(m.global_position)
+	if urin_pos.is_empty():
+		return
+	for gid in _guest_sim.keys().duplicate():
+		var g: Dictionary = _guest_sim[gid]
+		if int(g.mode) != 1:
+			continue
+		var near := false
+		for p in urin_pos:
+			if (g.pos as Vector3).distance_to(p) <= COMPLAIN_RADIUS:
+				near = true
+				break
+		if not near:
+			continue
+		_complaints += 1
+		_popularity = maxf(5.0, _popularity - COMPLAIN_POP)
+		if randf() < LEAVE_CHANCE:
+			g.mode = 2
+			g.tgt = ENTRANCE
+			g.ostate = 0
+			_guest_sim[gid] = g
+			_left_guests += 1
+		else:
+			_guest_sim[gid] = g
+
+func _toilet_string() -> String:
+	return "🚻 Toilette: ja" if _has_toilet else "🚻 Toilette: FEHLT (Gäste pinkeln in die Ecke)"
 
 # ================================================= E5: Künstler
 ## Wiesenbüro: Künstler für die nächste Schicht buchen.
@@ -1211,6 +1319,7 @@ func _shift_process(delta: float) -> void:
 		_net_banner.rpc("🌙 Akşam oldu (19:00)! Zelt doluyor, misafirler sabırsız 🍻")
 	_update_guests(delta)
 	_update_staff(delta)
+	_update_complaints(delta)
 	_update_hygiene(delta)
 
 func _start_shift() -> void:
@@ -1277,8 +1386,11 @@ func _end_shift(reason := 0) -> void:
 		_: head = "🌙 22:00 — Feierabend!"
 	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\nServiert %d · Verpasst %d · %s\n😴 Wohnwagen: schlafen → neuer Tag" % [
 		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit,
-		_served, _missed, _stock_string()])
+		_served, _missed, "🚻 Urin %d · Beschwerden %d · Gäste weg %d" % [_urin_count, _complaints, _left_guests]])
 	_goods_cost = 0
+	_urin_count = 0
+	_complaints = 0
+	_left_guests = 0
 	_day += 1
 	if _day > WIESN_DAYS:
 		_day = 1
@@ -1311,7 +1423,8 @@ func _spawn_guest() -> void:
 	_guest_sim[id] = {
 		"seat": si, "mode": 0, "pos": ENTRANCE, "tgt": _seats[si].pos, "yaw": 0.0,
 		"ostate": 0, "okind": 1, "otype": 1, "patience": ORDER_PATIENCE,
-		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0
+		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0,
+		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0
 	}
 	_add_guest.rpc(id, ENTRANCE)
 
@@ -1335,6 +1448,9 @@ func _update_guests(delta: float) -> void:
 		# Oturan misafir: sipariş döngüsü
 		if g.mode == 1:
 			_guest_order(g, id, delta)
+		# E6: Blase (sitzend oder auf dem Weg zur Ecke/Toilette)
+		if g.mode == 1 or g.mode == 3:
+			_update_bladder(g, id, delta)
 		g.pos = pos
 		_guest_sim[id] = g
 		var node = _guests.get(id)
@@ -1425,19 +1541,25 @@ func _update_hygiene(delta: float) -> void:
 
 func _spawn_mess_near(p: Vector3) -> void:
 	var off := Vector3(randf_range(-0.8, 0.8), 0.0, randf_range(-0.8, 0.8))
+	_spawn_mess_at(Vector3(p.x + off.x, 0.02, p.z + off.z), 0)
+
+## kind: 0 = Erbrochenes, 1 = Urin
+func _spawn_mess_at(p: Vector3, kind: int) -> void:
 	var id := _mess_next
 	_mess_next += 1
 	_mess_clean[id] = 0.0
-	_add_mess.rpc(id, Vector3(p.x + off.x, 0.02, p.z + off.z))
+	_mess_kind[id] = kind
+	_add_mess.rpc(id, Vector3(p.x, 0.02, p.z), kind)
 
 @rpc("authority", "reliable", "call_local")
-func _add_mess(id: int, pos: Vector3) -> void:
+func _add_mess(id: int, pos: Vector3, kind: int = 0) -> void:
 	if _messes.has(id):
 		return
 	var m := MESS_SCENE.instantiate()
 	m.mess_id = id
 	m.position = pos
 	_messes_container.add_child(m)
+	m.set_kind(kind)
 	_messes[id] = m
 
 @rpc("authority", "reliable", "call_local")
@@ -1560,7 +1682,7 @@ func _mgmt_string() -> String:
 	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d\n%s" % [
 		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
 		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko,
-		_lic_string() + "\n" + _stock_string() + "\n" + _artist_string()]
+		_lic_string() + "\n" + _stock_string() + "\n" + _artist_string() + " · " + _toilet_string()]
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count)
