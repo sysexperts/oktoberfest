@@ -127,35 +127,36 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3, 2, -1.5)
 shape = SubResource("WallZ")
 
 [node name="Tent" parent="." unique_id=299652560 instance=ExtResource("2_tent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.249283e-05, -0.01563716, 0.00017309189)
 
 [node name="Bar" type="Node3D" parent="." unique_id=1943998888]
 
 [node name="Theke0" parent="Bar" unique_id=17202535 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 1.1512175, -9.3)
 
 [node name="Theke1" parent="Bar" unique_id=932523803 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -6, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -6, 1.1512175, -9.3)
 
 [node name="Theke2" parent="Bar" unique_id=2082290333 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -4, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -4, 1.1512175, -9.3)
 
 [node name="Theke3" parent="Bar" unique_id=1364413750 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -2, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -2, 1.1512175, -9.3)
 
 [node name="Theke4" parent="Bar" unique_id=723584262 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.1512175, -9.3)
 
 [node name="Theke5" parent="Bar" unique_id=771483508 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2, 1.1512175, -9.3)
 
 [node name="Theke6" parent="Bar" unique_id=939940565 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 4, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 4, 1.1512175, -9.3)
 
 [node name="Theke7" parent="Bar" unique_id=689294857 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 6, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 6, 1.1512175, -9.3)
 
 [node name="Theke8" parent="Bar" unique_id=610828452 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8, 0, -9.3)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8, 1.1512175, -9.3)
 
 [node name="Stations" type="Node3D" parent="." unique_id=824174873]
 
@@ -223,6 +224,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 20)
 material_override = SubResource("MatGrass")
 mesh = SubResource("GrassMesh")
+
+[node name="Drehscheibe" parent="Wasen/Grass" unique_id=1892744800 instance=ExtResource("13_dreh")]
+transform = Transform3D(0.76379603, 0, -0.6454576, 0, 1, 0, 0.6454576, 0, 0.76379603, 13.8328495, 0, -7.318158)
 
 [node name="Path" type="MeshInstance3D" parent="Wasen" unique_id=315634950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)

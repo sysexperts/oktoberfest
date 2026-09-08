@@ -4,10 +4,9 @@ extends SceneTree
 ## Prefab'lardaki çarpışma kutusu ve yerleşim yüksekliği bunun çıktısına göre ayarlanır.
 
 const MODELS := [
-	"res://assets/models/drehscheibe.glb",
-	"res://assets/models/enten.glb",
-	"res://assets/models/schiessstand.glb",
-	"res://assets/models/suessigkeiten.glb",
+	"res://assets/models/theke.glb",
+	"res://assets/models/tisch.glb",
+	"res://assets/models/bank.glb",
 ]
 
 func _init() -> void:
