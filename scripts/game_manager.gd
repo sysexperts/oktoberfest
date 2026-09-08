@@ -49,7 +49,7 @@ const CLEAN_PER_CALL := 0.05
 const HYGIENE_DRAIN := 1.2
 const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
-const START_MONEY := 10000   # TEST (yayında 0)
+const START_MONEY := 1000000   # TEST (yayında 0)
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_STAGE_NAMES := {0: "Zelt yok", 1: "Küçük Zelt", 2: "Orta Zelt", 3: "Büyük Zelt"}
