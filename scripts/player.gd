@@ -289,6 +289,13 @@ func _handle_interaction(delta: float) -> void:
 			# Bilgisayar arayüzünü aç (rol seçimi)
 			if _world.has_method("open_computer_ui"):
 				_world.open_computer_ui()
+		elif _current_target is OfficeDesk:
+			# Wiesenbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
+			if _world.has_method("in_intermission") and _world.in_intermission():
+				if _world.has_method("open_booking_ui"):
+					_world.open_booking_ui()
+			else:
+				_sfx("pop")
 		elif _current_target is BookingKiosk:
 			# Zelt buchen / Tisch stellen / upgrade (sadece molada)
 			if _world.has_method("in_intermission") and _world.in_intermission():

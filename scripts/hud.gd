@@ -217,42 +217,70 @@ func set_mgmt(text: String) -> void:
 	if _book_mgmt:
 		_book_mgmt.text = text
 
+## E2: Wiesenbüro — ein Menü mit Reitern (Zelt · Lizenzen · Personal · Künstler · Ware).
 func _build_booking() -> void:
 	_book_panel = PanelContainer.new()
 	_book_panel.anchor_left = 0.5
 	_book_panel.anchor_top = 0.5
 	_book_panel.anchor_right = 0.5
 	_book_panel.anchor_bottom = 0.5
-	_book_panel.offset_left = -280
-	_book_panel.offset_top = -200
-	_book_panel.offset_right = 280
-	_book_panel.offset_bottom = 200
+	_book_panel.offset_left = -330
+	_book_panel.offset_top = -250
+	_book_panel.offset_right = 330
+	_book_panel.offset_bottom = 250
 	_book_panel.visible = false
 	add_child(_book_panel)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 12)
+	vbox.add_theme_constant_override("separation", 10)
 	_book_panel.add_child(vbox)
 
 	var title := Label.new()
-	title.text = "🎪 Zelt Buchung & Aufbau"
-	title.add_theme_font_size_override("font_size", 24)
+	title.text = "🏛 WIESENBÜRO"
+	title.add_theme_font_size_override("font_size", 26)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
 
 	_book_mgmt = Label.new()
-	_book_mgmt.add_theme_font_size_override("font_size", 18)
+	_book_mgmt.add_theme_font_size_override("font_size", 16)
 	_book_mgmt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_book_mgmt)
 
-	vbox.add_child(HSeparator.new())
+	var tabs := TabContainer.new()
+	tabs.custom_minimum_size = Vector2(0, 300)
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(tabs)
 
-	_add_book_button(vbox, "🎪 Zelt buchen (500€)", "net_book_tent")
-	_add_book_button(vbox, "🪑 Tisch stellen (200€)", "net_buy_table")
-	_add_book_button(vbox, "🗑️ Tisch verkaufen (+100€)", "net_sell_table")
-	_add_book_button(vbox, "⬆️ Zelt upgraden", "net_upgrade_tent")
-	_add_book_button(vbox, "📣 Werbung (Popülerlik+)", "net_buy_marketing")
-	_add_book_button(vbox, "🎨 Deko (Gelir+)", "net_buy_deko")
+	# --- Reiter: Zelt ---
+	var t_zelt := VBoxContainer.new()
+	t_zelt.name = "🎪 Zelt"
+	t_zelt.add_theme_constant_override("separation", 8)
+	tabs.add_child(t_zelt)
+	_add_book_button(t_zelt, "🎪 Zelt mieten (500€)", "net_book_tent")
+	_add_book_button(t_zelt, "🪑 Tisch stellen (200€)", "net_buy_table")
+	_add_book_button(t_zelt, "🗑️ Tisch verkaufen (+100€)", "net_sell_table")
+	_add_book_button(t_zelt, "⬆️ Zelt vergrößern", "net_upgrade_tent")
+	_add_book_button(t_zelt, "📣 Werbung (mehr Gäste)", "net_buy_marketing")
+	_add_book_button(t_zelt, "🎨 Deko (mehr Einnahmen)", "net_buy_deko")
+
+	# --- Reiter: Lizenzen ---
+	var t_lic := VBoxContainer.new()
+	t_lic.name = "📜 Lizenzen"
+	t_lic.add_theme_constant_override("separation", 8)
+	tabs.add_child(t_lic)
+	var lic_info := Label.new()
+	lic_info.text = "Ohne Lizenz verkaufst du nur 🍺 Helles."
+	lic_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t_lic.add_child(lic_info)
+	_add_lic_button(t_lic, "🍺 Weizen-Lizenz (800€)", "weizen")
+	_add_lic_button(t_lic, "🍋 Radler-Lizenz (800€)", "radler")
+	_add_lic_button(t_lic, "🥨 Brezn-Lizenz (1200€)", "brezn")
+	_add_lic_button(t_lic, "🌭 Sosis-Lizenz (1200€)", "sosis")
+
+	# --- Reiter, die noch kommen ---
+	_add_soon_tab(tabs, "👷 Personal", "Koch, Kellner und Reinigungskraft einstellen.\nMit Level 1–10 und Lohn pro Schicht.\n\n(nächste Etappe)")
+	_add_soon_tab(tabs, "🎤 Künstler", "Künstler für die Bühne buchen.\nTeuer, bringt aber viele Gäste.\n\n(später)")
+	_add_soon_tab(tabs, "📦 Ware", "Bierfässer und Zutaten einkaufen,\ndann in die Küche verräumen.\n\n(später)")
 
 	var close_btn := Button.new()
 	close_btn.text = "Kapat (Esc)"
@@ -260,12 +288,34 @@ func _build_booking() -> void:
 	close_btn.pressed.connect(close_booking)
 	vbox.add_child(close_btn)
 
+func _add_soon_tab(tabs: TabContainer, tab_name: String, text: String) -> void:
+	var box := VBoxContainer.new()
+	box.name = tab_name
+	tabs.add_child(box)
+	var l := Label.new()
+	l.text = text
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.add_theme_font_size_override("font_size", 18)
+	box.add_child(l)
+
 func _add_book_button(parent: Node, text: String, method: String) -> void:
 	var b := Button.new()
 	b.text = text
-	b.custom_minimum_size = Vector2(0, 44)
+	b.custom_minimum_size = Vector2(0, 40)
 	b.pressed.connect(func(): _call_gm(method))
 	parent.add_child(b)
+
+func _add_lic_button(parent: Node, text: String, key: String) -> void:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 40)
+	b.pressed.connect(func(): _buy_license(key))
+	parent.add_child(b)
+
+func _buy_license(key: String) -> void:
+	var gm := get_parent()
+	if gm and gm.has_method("net_buy_license"):
+		gm.rpc_id(1, "net_buy_license", key)
 
 func _call_gm(method: String) -> void:
 	var gm := get_parent()

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="3_schi"]
 [ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
-[ext_resource type="PackedScene" uid="uid://b7dl2t1kiosk1" path="res://scenes/booking_kiosk.tscn" id="7_kiosk"]
+[ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)
@@ -49,12 +49,6 @@ size = Vector3(0.4, 4, 8)
 [sub_resource type="BoxShape3D" id="BueroColDoor"]
 size = Vector3(3, 4, 0.4)
 
-[sub_resource type="BoxShape3D" id="BoundX"]
-size = Vector3(90, 5, 1)
-
-[sub_resource type="BoxShape3D" id="BoundZ"]
-size = Vector3(1, 5, 90)
-
 [sub_resource type="StandardMaterial3D" id="MatMauer"]
 albedo_color = Color(0.42, 0.32, 0.24, 1)
 
@@ -83,16 +77,22 @@ size = Vector3(0.6, 5, 65)
 size = Vector3(0.6, 5, 65)
 
 [sub_resource type="BoxMesh" id="MauerOstAMesh"]
-size = Vector3(0.6, 5, 54)
+size = Vector3(0.6, 5, 47.286133)
 
 [sub_resource type="BoxShape3D" id="MauerOstACol"]
-size = Vector3(0.6, 5, 54)
+size = Vector3(0.6, 5, 47.286133)
 
 [sub_resource type="BoxMesh" id="MauerOstBMesh"]
-size = Vector3(0.6, 5, 3)
+size = Vector3(0.6, 5, 7.5683594)
 
 [sub_resource type="BoxShape3D" id="MauerOstBCol"]
-size = Vector3(0.6, 5, 3)
+size = Vector3(0.6, 5, 7.5683594)
+
+[sub_resource type="BoxShape3D" id="BoundX"]
+size = Vector3(90, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoundZ"]
+size = Vector3(1, 5, 90)
 
 [node name="Kirmes" type="Node3D" unique_id=382915238]
 
@@ -242,9 +242,6 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 
 [node name="O08_Dreh" parent="StaendeOst" unique_id=1980639239 instance=ExtResource("1_dreh")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 13.5)
 
-[node name="O09_Ente" parent="StaendeOst" unique_id=1737588070 instance=ExtResource("2_ente")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 18)
-
 [node name="StaendeWest" type="Node3D" parent="." unique_id=1556386683]
 
 [node name="W01_Schi" parent="StaendeWest" unique_id=1633308536 instance=ExtResource("3_schi")]
@@ -275,7 +272,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30,
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 18)
 
 [node name="Wiesenbuero" type="Node3D" parent="." unique_id=1735080229]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 38.91375, 0, 18.611069)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 38.128563, 0, 18.444586)
 
 [node name="WallNorth" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1117232724]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
@@ -342,9 +339,6 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 2.5)
 
 [node name="Wohnwagenplatz" type="Node3D" parent="." unique_id=1657274445]
 
-[node name="MeinWohnwagen" parent="Wohnwagenplatz" unique_id=1897164232 instance=ExtResource("6_carav")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.826915, 0, -34.076485)
-
 [node name="Nachbar1" parent="Wohnwagenplatz" unique_id=1159562924 instance=ExtResource("6_carav")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -39)
 is_mine = false
@@ -365,66 +359,70 @@ is_mine = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -43)
 is_mine = false
 
-[node name="Mauern" type="Node3D" parent="."]
+[node name="Mauern" type="Node3D" parent="." unique_id=2046617623]
 
-[node name="MauerNord" type="StaticBody3D" parent="Mauern"]
+[node name="MauerNord" type="StaticBody3D" parent="Mauern" unique_id=1206220130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 31)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerNord"]
+[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerNord" unique_id=625701270]
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerNordMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerNord"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerNord" unique_id=1920666281]
 shape = SubResource("MauerNordCol")
 
-[node name="MauerSuedWest" type="StaticBody3D" parent="Mauern"]
+[node name="MauerSuedWest" type="StaticBody3D" parent="Mauern" unique_id=440453873]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2.5, -34)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerSuedWest"]
+[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerSuedWest" unique_id=1094209022]
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerSuedAMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerSuedWest"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerSuedWest" unique_id=1935129619]
 shape = SubResource("MauerSuedACol")
 
-[node name="MauerSuedOst" type="StaticBody3D" parent="Mauern"]
+[node name="MauerSuedOst" type="StaticBody3D" parent="Mauern" unique_id=1721543857]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 2.5, -34)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerSuedOst"]
+[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerSuedOst" unique_id=1462396721]
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerSuedBMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerSuedOst"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerSuedOst" unique_id=652364204]
 shape = SubResource("MauerSuedBCol")
 
-[node name="MauerWest" type="StaticBody3D" parent="Mauern"]
+[node name="MauerWest" type="StaticBody3D" parent="Mauern" unique_id=510077493]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 2.5, -1.5)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerWest"]
+[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerWest" unique_id=802327189]
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerWestMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerWest"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerWest" unique_id=1761468085]
 shape = SubResource("MauerWestCol")
 
-[node name="MauerOstSued" type="StaticBody3D" parent="Mauern"]
+[node name="MauerOstSued" type="StaticBody3D" parent="Mauern" unique_id=1432029722]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 2.5, -7)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerOstSued"]
+[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerOstSued" unique_id=383111234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3569336)
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerOstAMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerOstSued"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerOstSued" unique_id=627187822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3569336)
 shape = SubResource("MauerOstACol")
 
-[node name="MauerOstNord" type="StaticBody3D" parent="Mauern"]
+[node name="MauerOstNord" type="StaticBody3D" parent="Mauern" unique_id=2104370182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 2.5, 29.5)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerOstNord"]
+[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerOstNord" unique_id=491330369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2841797)
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerOstBMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerOstNord"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerOstNord" unique_id=1790194887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2841797)
 shape = SubResource("MauerOstBCol")
 
 [node name="Grenze" type="Node3D" parent="." unique_id=1939645769]

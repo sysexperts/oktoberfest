@@ -65,6 +65,9 @@ const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
 const MARKETING_BOOST := 15.0
 const DEKO_COST := 600        # her seviye +%15 gelir
 const DEKO_BONUS := 0.15
+# E2.4 Lizenzen — başta sadece Helles satılır, gerisi Wiesenbüro'dan alınır
+const LIC_COST := {"weizen": 800, "radler": 800, "brezn": 1200, "sosis": 1200}
+const LIC_NAMES := {"weizen": "🍺 Weizen", "radler": "🍋 Radler", "brezn": "🥨 Brezn", "sosis": "🌭 Sosis"}
 
 var _hud: HUD
 var _sfx_node: Node
@@ -94,6 +97,8 @@ var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
 var _day := 1            # Wiesn günü
 var _upg_marketing := 0  # Werbung seviyesi (popülerlik enjeksiyonu)
 var _upg_deko := 0       # Deko seviyesi (gelir çarpanı)
+# E2.4: satın alınan lisanslar (Helles lisanssız hep satılır)
+var _lic := {"weizen": false, "radler": false, "brezn": false, "sosis": false}
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -202,6 +207,7 @@ func _save_game() -> void:
 		"popularity": _popularity,
 		"shift_num": _shift_num,
 		"tables": tables,
+		"lic": _lic,
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -230,6 +236,10 @@ func _load_game() -> bool:
 	_upg_deko = int(d.get("upg_deko", 0))
 	_popularity = clampf(float(d.get("popularity", POP_START)), 5.0, 100.0)
 	_shift_num = int(d.get("shift_num", 0))
+	var lic: Variant = d.get("lic", {})
+	if lic is Dictionary:
+		for k in LIC_COST.keys():
+			_lic[k] = bool((lic as Dictionary).get(k, false))
 	var tp: Variant = d.get("tables", [])
 	if tp is Array:
 		var arr: Array = tp
@@ -257,19 +267,21 @@ func _apply_night_visual(night: bool) -> void:
 func _daily_rent() -> int:
 	return DAILY_RENT + (_day - 1) * RENT_PER_DAY
 
-## D2: güne göre açılan içecek tipleri (1 Helles, 2 Weizen, 3 Radler).
+## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
 func _drinks_avail() -> Array:
 	var a := [1]
-	if _day >= 3:
+	if _lic.get("weizen", false):
 		a.append(2)
-	if _day >= 5:
+	if _lic.get("radler", false):
 		a.append(3)
 	return a
 
-## D2: güne göre açılan yemek tipleri (1 Pretzel, 2 Sosis).
+## E2.4: satılabilir yemek tipleri — lisans yoksa hiç yemek satılmaz.
 func _foods_avail() -> Array:
-	var a := [1]
-	if _day >= 2:
+	var a := []
+	if _lic.get("brezn", false):
+		a.append(1)
+	if _lic.get("sosis", false):
 		a.append(2)
 	return a
 
@@ -445,6 +457,34 @@ func net_buy_deko() -> void:
 	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
 	_broadcast_meta()
 
+## Wiesenbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
+@rpc("any_peer", "reliable")
+func net_buy_license(key: String) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if not LIC_COST.has(key):
+		return
+	if _lic.get(key, false):
+		_net_banner.rpc("✅ %s lisansı zaten var" % LIC_NAMES[key])
+		return
+	var cost: int = LIC_COST[key]
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [LIC_NAMES[key], cost])
+		return
+	Game.add_money(-cost)
+	_lic[key] = true
+	_net_banner.rpc("📜 %s lisansı alındı! Artık satabilirsin." % LIC_NAMES[key])
+	_broadcast_meta()
+
+func _lic_string() -> String:
+	var have := []
+	for k in LIC_COST.keys():
+		if _lic.get(k, false):
+			have.append(LIC_NAMES[k])
+	if have.is_empty():
+		return "Lizenz: nur 🍺 Helles"
+	return "Lizenz: 🍺 Helles, " + ", ".join(have)
+
 ## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
 @rpc("any_peer", "reliable")
 func net_upgrade_tent() -> void:
@@ -476,14 +516,9 @@ func net_sleep() -> void:
 		_net_banner.rpc("🪑 Önce en az bir masa yerleştir!")
 		return
 	# Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
-	var unlock := ""
-	match _day:
-		2: unlock = "\n🌭 Sosis açıldı!"
-		3: unlock = "\n🍺 Weizen açıldı!"
-		5: unlock = "\n🍋 Radler açıldı!"
 	_start_shift()
-	_net_banner.rpc("😴 Wiesn-Tag %d/%d · 07:00 — Zelt açık!\n🕗 08:00'de misafirler gelmeye başlar · 22:00 Feierabend%s" % [
-		_day, WIESN_DAYS, unlock])
+	_net_banner.rpc("😴 Wiesn-Tag %d/%d · 07:00 — Zelt açık!\n🕗 08:00'de misafirler gelmeye başlar · 22:00 Feierabend\n%s" % [
+		_day, WIESN_DAYS, _lic_string()])
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
 @rpc("any_peer", "reliable")
@@ -709,12 +744,14 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		g.cooldown -= delta
 		if g.cooldown <= 0.0:
 			g.ostate = 1
-			if randf() < 0.6:
+			var foods: Array = _foods_avail()
+			# Yemek lisansı yoksa sadece içecek istenir
+			if foods.is_empty() or randf() < 0.6:
 				g.okind = 1
 				g.otype = _drinks_avail().pick_random()
 			else:
 				g.okind = 2
-				g.otype = _foods_avail().pick_random()
+				g.otype = foods.pick_random()
 			g.patience = ORDER_PATIENCE
 	elif g.ostate == 1:
 		g.patience -= delta * (PATIENCE_NIGHT_MULT if _night else 1.0)
@@ -904,9 +941,10 @@ func _roster_string() -> String:
 
 func _mgmt_string() -> String:
 	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
-	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d" % [
+	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d\n%s" % [
 		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
-		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko]
+		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko,
+		_lic_string()]
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _roster_string(), _mgmt_string(), _day, _tent_stage, _active_count)
