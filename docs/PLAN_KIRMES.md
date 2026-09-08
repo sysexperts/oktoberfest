@@ -55,12 +55,13 @@ Ersetzt Buchungskiosk **und** Computer. Ein NPC am Schreibtisch, ein Menü mit R
 - [ ] E2.3 Zelt mieten/vergrößern hierher umziehen (weg vom Kiosk)
 - [ ] E2.4 **Lizenzen**: Start = nur Bier. Kaufbar: Weizen/Radler → Brezn/Sosis → mehr
 
-### E3 — Mitarbeiter (das Herzstück) ⭐
-- [ ] E3.1 Einstellen im Büro: **Koch · Kellner · Reinigungskraft**, je mit Lohn/Schicht
-- [ ] E3.2 **Level 1–10.** Kellner: trägt Lv1 = 1 Krug → Lv10 = 10 Krüge. Koch: Zubereitungstempo. Reinigung: Putztempo
-- [ ] E3.3 Mitarbeiter-KI: Kellner holt Bestellungen → Theke → Gast. Koch füllt/kocht. Reinigung putzt Dreck/Urin
-- [ ] E3.4 Löhne werden pro Schicht abgezogen, erscheinen im Report
-- [ ] E3.5 Aufstufen kostet Geld (oder Erfahrung über Schichten)
+### E3 — Mitarbeiter (das Herzstück) ⭐ — v59
+- [x] E3.1 Einstellen im Büro: **Koch 600€ · Kellner 500€ · Reinigung 400€**, Lohn 120/100/80€ pro Schicht
+- [x] E3.2 **Level 1–10.** Kellner trägt Lv Krüge · Koch beschleunigt Essen · Reinigung putzt schneller · alle laufen schneller
+- [x] E3.3 Mitarbeiter-KI: Kellner sammelt Bestellungen → Theke → liefert aus. Koch steht in der Küche. Reinigung läuft zum nächsten Dreck
+- [x] E3.4 Löhne pro Schicht abgezogen, stehen in der Tagesbilanz
+- [x] E3.5 Aufstufen kostet 400€ × aktuelles Level
+- **Offen:** Kündigen, Koch als eigene Station (kommt mit E4/Ware), Erfahrung statt Bezahl-Upgrade
 
 ### E4 — Wirtschaft & Report
 - [ ] E4.1 **Ware einkaufen** im Büro (Bierfässer, Zutaten) → landet im Lager
