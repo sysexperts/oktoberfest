@@ -6,7 +6,13 @@ extends Node3D
 enum Phase { INTERMISSION = 0, SHIFT = 1 }
 
 const INTERMISSION_TIME := 40.0
-const SHIFT_TIME := 200.0
+const SHIFT_TIME := 300.0          # 07:00–22:00 arası gerçek süre (sn)
+# Gün saati (oyun içi saat)
+const DAY_START_HOUR := 7.0        # uyanma / zelt açılış
+const GUEST_START_HOUR := 8.0      # misafirler bu saatten sonra gelir
+const DAY_END_HOUR := 22.0         # en geç kapanış
+const NIGHT_HOUR := 19.0           # bu saatten sonra akşam: karanlık + sabırsız
+const POP_EARLY_CLOSE_PER_HOUR := 1.5   # erken kapatma cezası (saat başına)
 const SYNC_INTERVAL := 0.12
 const MISS_PENALTY := 5
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
@@ -135,7 +141,7 @@ func _ready() -> void:
 	Game.score_changed.connect(_hud.set_score)
 	_hud.set_money(Game.money)
 	_hud.set_score(Game.score)
-	_hud.set_time(_phase_time)
+	_hud.set_time(_clock_hour())
 	_hud.set_phase(_phase_name())
 	_hud.set_day(_day, WIESN_DAYS)
 
@@ -154,13 +160,27 @@ func _ready() -> void:
 		_client_ready.rpc_id(1)
 
 func _phase_name() -> String:
-	return "VARDİYA" if _phase == Phase.SHIFT else "MOLA"
+	return "ZELT AÇIK" if _phase == Phase.SHIFT else "KAPALI (uyu → yeni gün)"
 
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
 
 func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
+
+## Vardiyadaki oyun içi saat (7.0 = 07:00). Kapalıyken -1.
+func _clock_hour() -> float:
+	if _phase != Phase.SHIFT:
+		return -1.0
+	var elapsed: float = SHIFT_TIME - _phase_time
+	return DAY_START_HOUR + (elapsed / SHIFT_TIME) * (DAY_END_HOUR - DAY_START_HOUR)
+
+## Saate göre kalabalık çarpanı: sabah az, akşam çok.
+func _time_factor() -> float:
+	var h: float = _clock_hour()
+	if h < GUEST_START_HOUR:
+		return 0.0
+	return clampf(0.25 + 0.75 * ((h - GUEST_START_HOUR) / (DAY_END_HOUR - GUEST_START_HOUR)), 0.0, 1.0)
 
 # ================================================= kayıt (E3)
 ## Sunucuda ilerlemeyi diske yaz (para, gün, zelt, upgrade, masa konumları).
@@ -452,33 +472,18 @@ func net_sleep() -> void:
 	if _tent_stage == 0:
 		_net_banner.rpc("Önce Zelt buchen, sonra uyu 😴")
 		return
-	var rent := _daily_rent()
-	Game.add_money(-rent)
-	# Tagesbilanz (Wohnwagen)
-	var net_profit := _last_earn - rent
-	var bilanz := ""
-	if _did_shift:
-		bilanz = "📊 Tag %d bilanço: Kazanç %d€ · Kira -%d€ · Net %s%d€\nServis %d · Kaçırılan %d" % [
-			_day, _last_earn, rent, "+" if net_profit >= 0 else "", net_profit, _served, _missed]
-	else:
-		bilanz = "📊 Tag %d: vardiya yok · Kira -%d€" % [_day, rent]
-	_day += 1
-	_phase_time = INTERMISSION_TIME
-	_did_shift = false
-	_last_earn = 0
-	_served = 0
-	_missed = 0
+	if _active_count <= 0:
+		_net_banner.rpc("🪑 Önce en az bir masa yerleştir!")
+		return
+	# Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
 	var unlock := ""
 	match _day:
-		2: unlock = " · 🌭 Sosis açıldı!"
-		3: unlock = " · 🍺 Weizen açıldı!"
-		5: unlock = " · 🍋 Radler açıldı!"
-	if _day > WIESN_DAYS:
-		_net_banner.rpc("🎉 Wiesn bitti! %d gün tamamlandı 🍺\n%s" % [WIESN_DAYS, bilanz])
-		_day = 1
-	else:
-		_net_banner.rpc("%s\n😴 → Wiesn-Tag %d/%d%s" % [bilanz, _day, WIESN_DAYS, unlock])
-	_broadcast_meta()
+		2: unlock = "\n🌭 Sosis açıldı!"
+		3: unlock = "\n🍺 Weizen açıldı!"
+		5: unlock = "\n🍋 Radler açıldı!"
+	_start_shift()
+	_net_banner.rpc("😴 Wiesn-Tag %d/%d · 07:00 — Zelt açık!\n🕗 08:00'de misafirler gelmeye başlar · 22:00 Feierabend%s" % [
+		_day, WIESN_DAYS, unlock])
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
 @rpc("any_peer", "reliable")
@@ -551,17 +556,12 @@ func _process(delta: float) -> void:
 		return
 	if Net.dedicated and _players_nodes.is_empty():
 		return
-	_phase_time -= delta
 	if _phase == Phase.SHIFT:
+		_phase_time -= delta
 		_shift_process(delta)
 		if _phase_time <= 0.0:
-			_end_shift()
-	else:
-		if _phase_time <= 0.0:
-			if _tent_ready():
-				_start_shift()
-			else:
-				_phase_time = INTERMISSION_TIME
+			_end_shift(0)   # 22:00 — normal kapanış
+	# MOLA: otomatik başlangıç YOK. Oyuncu Wohnwagen'de uyuyunca gün başlar.
 	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
@@ -569,18 +569,18 @@ func _process(delta: float) -> void:
 		_broadcast_sync()
 
 func _shift_process(delta: float) -> void:
-	# Popülerliğe göre misafir çağır
+	# Popülerliğe + saate göre misafir çağır (sabah az, akşam çok; 08:00'den önce yok)
 	_guest_spawn_timer -= delta
 	if _guest_spawn_timer <= 0.0:
 		_guest_spawn_timer = GUEST_SPAWN_INTERVAL
-		var target := int(round(_popularity / 100.0 * float(_seats.size())))
+		var target := int(round(_popularity / 100.0 * float(_seats.size()) * _time_factor()))
 		if _guest_sim.size() < target:
 			_spawn_guest()
-	# Gece endspurt: son %25'te sabır daha hızlı azalır
-	if not _night and _phase_time <= SHIFT_TIME * NIGHT_FRACTION:
+	# Akşam: 19:00'dan sonra karanlık + sabırsızlık
+	if not _night and _clock_hour() >= NIGHT_HOUR:
 		_night = true
 		_apply_night_visual(true)   # host görseli
-		_net_banner.rpc("🌙 Gece bastı! Misafirler daha sabırsız 🍻")
+		_net_banner.rpc("🌙 Akşam oldu (19:00)! Zelt doluyor, misafirler sabırsız 🍻")
 	_update_guests(delta)
 	_update_hygiene(delta)
 
@@ -607,12 +607,14 @@ func _start_shift() -> void:
 	for role in [ROLE_KITCHEN, ROLE_CLEAN, ROLE_WAITER]:
 		if not covered.has(role):
 			_npc_roles[role] = true
-	_net_banner.rpc("🍺 VARDİYA %d BAŞLADI!" % _shift_num)
-	_broadcast_meta()
+	_broadcast_meta()   # banner'ı net_sleep gönderir (gün başlangıcı mesajı)
 
-func _end_shift(closed_early := false) -> void:
+## Günü bitir. reason: 0 = 22:00 normal, 1 = çok şikayet, 2 = oyuncu erken kapattı.
+func _end_shift(reason := 0) -> void:
+	var closed_at: float = _clock_hour()          # faz değişmeden önce oku
+	var hours_left: float = maxf(0.0, DAY_END_HOUR - closed_at)
 	_phase = Phase.INTERMISSION
-	_phase_time = INTERMISSION_TIME
+	_phase_time = 0.0
 	_night = false
 	_apply_night_visual(false)
 	# Tüm misafirleri çıkışa yolla
@@ -621,11 +623,35 @@ func _end_shift(closed_early := false) -> void:
 		_guest_sim[gid].tgt = ENTRANCE
 		_guest_sim[gid].ostate = 0
 	_clear_messes()
-	if closed_early:
-		_net_banner.rpc("🚫 Çok şikayet! Çadır kapandı 😅 · Kazanç: %d€" % _last_earn)
-	else:
-		_net_banner.rpc("Vardiya bitti! Kazanç: %d€ · Servis: %d · Kaçırılan: %d" % [_last_earn, _served, _missed])
+
+	# Erken kapatma → popülerlik cezası (ne kadar erken, o kadar çok)
+	var pop_penalty := 0.0
+	if reason == 2:
+		pop_penalty = hours_left * POP_EARLY_CLOSE_PER_HOUR
+		_popularity = maxf(5.0, _popularity - pop_penalty)
+
+	# Günlük bilanço + kira
+	var rent := _daily_rent()
+	Game.add_money(-rent)
+	var net_profit := _last_earn - rent
+	var head := ""
+	match reason:
+		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
+		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
+		_: head = "🌙 22:00 — Feierabend!"
+	_net_banner.rpc("%s\n📊 Tag %d: Kazanç %d€ · Kira -%d€ · Net %s%d€ · Servis %d · Kaçırılan %d\n😴 Wohnwagen'de uyu → yeni gün" % [
+		head, _day, _last_earn, rent, "+" if net_profit >= 0 else "", net_profit, _served, _missed])
+	_day += 1
+	if _day > WIESN_DAYS:
+		_day = 1
 	_broadcast_meta()
+
+## Bilgisayardan zelti erken kapat (popülerlik cezası).
+@rpc("any_peer", "reliable")
+func net_close_tent() -> void:
+	if not multiplayer.is_server() or _phase != Phase.SHIFT:
+		return
+	_end_shift(2)
 
 # ---- Misafirler ----
 func _free_seat() -> int:
@@ -699,7 +725,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			Game.add_score(-MISS_PENALTY)
 			_popularity = maxf(5.0, _popularity - POP_MISS)
 			if _missed >= 20:
-				_end_shift(true)
+				_end_shift(1)
 	elif g.ostate == 2:
 		g.served_t -= delta
 		if g.served_t <= 0.0:
@@ -825,7 +851,7 @@ func _broadcast_sync() -> void:
 	for mid in _messes.keys():
 		ids.append(mid)
 		pr.append(float(_mess_clean.get(mid, 0.0)))
-	_net_env.rpc(Game.money, Game.score, _phase_time, _hygiene, _popularity, ids, pr, _night)
+	_net_env.rpc(Game.money, Game.score, _clock_hour(), _hygiene, _popularity, ids, pr, _night)
 	# Bira masası konumları (taşıma senkronu)
 	var bx := PackedFloat32Array()
 	var bz := PackedFloat32Array()
@@ -849,10 +875,10 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
 
 @rpc("authority", "unreliable")
-func _net_env(money: int, score: int, time_left: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array, night: bool) -> void:
+func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array, night: bool) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
-	_hud.set_time(time_left, night)
+	_hud.set_time(clock, night)
 	_hud.set_hygiene(hygiene)
 	_hud.set_popularity(pop)
 	_apply_night_visual(night)

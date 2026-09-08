@@ -73,7 +73,7 @@ func _ready() -> void:
 	crosshair.offset_top = -18
 	add_child(crosshair)
 
-	_hint_label = _make_label("WASD · E: al/servis/temizle · Kiosk E: Zelt/Tisch · Wohnwagen E: uyu · Bilgisayar E: rol · Masaya E (mola): taşı · Q: Prost · C: kostüm")
+	_hint_label = _make_label("WASD · E: al/servis/temizle · Kiosk E: Zelt/Tisch/Upgrade · 🚐 Wohnwagen E: uyu → gün başlar (07:00) · 💻 Bilgisayar E: rol + zelti kapat · Masaya E (kapalıyken): taşı · Q: Prost · C: kostüm")
 	_hint_label.anchor_top = 1.0
 	_hint_label.anchor_left = 0.0
 	_hint_label.offset_left = 16
@@ -99,8 +99,15 @@ func set_money(v: int) -> void:
 func set_score(v: int) -> void:
 	_score_label.text = "⭐ %d" % v
 
-func set_time(seconds: float, night: bool = false) -> void:
-	_time_label.text = "%s %d" % ["🌙" if night else "⏱", int(ceil(seconds))]
+## clock: oyun içi saat (7.0 = 07:00). Negatifse zelt kapalı.
+func set_time(clock: float, night: bool = false) -> void:
+	if clock < 0.0:
+		_time_label.text = "🚪 KAPALI"
+		_time_label.add_theme_color_override("font_color", Color(0.75, 0.8, 0.9))
+		return
+	var h := int(clock)
+	var m := int((clock - float(h)) * 60.0)
+	_time_label.text = "%s %02d:%02d" % ["🌙" if night else "🕗", h, m]
 	_time_label.add_theme_color_override("font_color", Color(0.7, 0.75, 1) if night else Color.WHITE)
 
 func show_banner(text: String) -> void:
@@ -135,7 +142,7 @@ func set_day(day: int, total: int) -> void:
 
 func set_phase(name: String) -> void:
 	_phase_label.text = name
-	_phase_label.add_theme_color_override("font_color", Color(1, 0.85, 0.3) if name == "VARDİYA" else Color(0.5, 0.85, 1))
+	_phase_label.add_theme_color_override("font_color", Color(1, 0.85, 0.3) if name.begins_with("ZELT AÇIK") else Color(0.5, 0.85, 1))
 
 func set_roster(text: String) -> void:
 	_last_roster = text
@@ -188,11 +195,11 @@ func _build_computer() -> void:
 	_comp_mgmt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_comp_mgmt)
 
-	var buy_btn := Button.new()
-	buy_btn.text = "🪑 Yeni Masa Al"
-	buy_btn.custom_minimum_size = Vector2(0, 40)
-	buy_btn.pressed.connect(_buy_table)
-	vbox.add_child(buy_btn)
+	var close_tent_btn := Button.new()
+	close_tent_btn.text = "🚪 Zelti şimdi kapat (popülerlik cezası)"
+	close_tent_btn.custom_minimum_size = Vector2(0, 44)
+	close_tent_btn.pressed.connect(func(): _call_gm("net_close_tent"))
+	vbox.add_child(close_tent_btn)
 
 	var close_btn := Button.new()
 	close_btn.text = "Kapat (Esc)"
