@@ -1,0 +1,245 @@
+[gd_scene load_steps=20 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="1_dreh"]
+[ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="2_ente"]
+[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="3_schi"]
+[ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
+[ext_resource type="PackedScene" path="res://scenes/props/marktstand.tscn" id="5_stand"]
+[ext_resource type="PackedScene" path="res://scenes/caravan.tscn" id="6_carav"]
+[ext_resource type="PackedScene" path="res://scenes/booking_kiosk.tscn" id="7_kiosk"]
+
+[sub_resource type="StandardMaterial3D" id="MatGround"]
+albedo_color = Color(0.32, 0.38, 0.22, 1)
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+size = Vector3(90, 0.1, 90)
+
+[sub_resource type="StandardMaterial3D" id="MatPath"]
+albedo_color = Color(0.6, 0.54, 0.42, 1)
+
+[sub_resource type="BoxMesh" id="PathNS"]
+size = Vector3(70, 0.12, 8)
+
+[sub_resource type="BoxMesh" id="PathWE"]
+size = Vector3(8, 0.12, 49)
+
+[sub_resource type="BoxShape3D" id="BoundX"]
+size = Vector3(90, 5, 1)
+
+[sub_resource type="BoxShape3D" id="BoundZ"]
+size = Vector3(1, 5, 90)
+
+[sub_resource type="StandardMaterial3D" id="MatBuero"]
+albedo_color = Color(0.85, 0.8, 0.68, 1)
+
+[sub_resource type="BoxMesh" id="BueroWallX"]
+size = Vector3(10, 4, 0.4)
+
+[sub_resource type="BoxMesh" id="BueroWallZ"]
+size = Vector3(0.4, 4, 8)
+
+[sub_resource type="BoxMesh" id="BueroDoorWall"]
+size = Vector3(3, 4, 0.4)
+
+[sub_resource type="BoxMesh" id="BueroRoof"]
+size = Vector3(10.6, 0.4, 8.6)
+
+[sub_resource type="BoxShape3D" id="BueroColX"]
+size = Vector3(10, 4, 0.4)
+
+[sub_resource type="BoxShape3D" id="BueroColZ"]
+size = Vector3(0.4, 4, 8)
+
+[sub_resource type="BoxShape3D" id="BueroColDoor"]
+size = Vector3(3, 4, 0.4)
+
+[node name="Kirmes" type="Node3D"]
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+mesh = SubResource("GroundMesh")
+material_override = SubResource("MatGround")
+
+[node name="Wege" type="Node3D" parent="."]
+
+[node name="PathNorth" type="MeshInstance3D" parent="Wege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19)
+mesh = SubResource("PathNS")
+material_override = SubResource("MatPath")
+
+[node name="PathSouth" type="MeshInstance3D" parent="Wege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
+mesh = SubResource("PathNS")
+material_override = SubResource("MatPath")
+
+[node name="PathWest" type="MeshInstance3D" parent="Wege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -1.5)
+mesh = SubResource("PathWE")
+material_override = SubResource("MatPath")
+
+[node name="PathEast" type="MeshInstance3D" parent="Wege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -1.5)
+mesh = SubResource("PathWE")
+material_override = SubResource("MatPath")
+
+[node name="Staende" type="Node3D" parent="."]
+
+[node name="Drehscheibe" parent="Staende" instance=ExtResource("1_dreh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 27)
+
+[node name="Enten" parent="Staende" instance=ExtResource("2_ente")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 27)
+
+[node name="Schiessstand" parent="Staende" instance=ExtResource("3_schi")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -20, 0, -30)
+
+[node name="Suessigkeiten" parent="Staende" instance=ExtResource("4_sues")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 20, 0, -30)
+
+[node name="StandN1" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 27)
+
+[node name="StandN2" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 27)
+
+[node name="StandN3" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 27)
+
+[node name="StandS1" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -10, 0, -30)
+
+[node name="StandS2" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4, 0, -30)
+
+[node name="StandS3" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4, 0, -30)
+
+[node name="StandS4" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 10, 0, -30)
+
+[node name="StandE1" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, 12)
+
+[node name="StandE2" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, 4)
+
+[node name="StandE3" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, -4)
+
+[node name="StandE4" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 30, 0, -12)
+
+[node name="StandW1" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -30, 0, 12)
+
+[node name="StandW2" parent="Staende" instance=ExtResource("5_stand")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -30, 0, 4)
+
+[node name="Wiesenbuero" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32)
+
+[node name="WallNorth" type="MeshInstance3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+mesh = SubResource("BueroWallX")
+material_override = SubResource("MatBuero")
+
+[node name="WallEast" type="MeshInstance3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 0)
+mesh = SubResource("BueroWallZ")
+material_override = SubResource("MatBuero")
+
+[node name="WallWest" type="MeshInstance3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, 0)
+mesh = SubResource("BueroWallZ")
+material_override = SubResource("MatBuero")
+
+[node name="WallSouthW" type="MeshInstance3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2, -4)
+mesh = SubResource("BueroDoorWall")
+material_override = SubResource("MatBuero")
+
+[node name="WallSouthE" type="MeshInstance3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2, -4)
+mesh = SubResource("BueroDoorWall")
+material_override = SubResource("MatBuero")
+
+[node name="Roof" type="MeshInstance3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
+mesh = SubResource("BueroRoof")
+material_override = SubResource("MatBuero")
+
+[node name="Schild" type="Label3D" parent="Wiesenbuero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, -4.3)
+pixel_size = 0.012
+font_size = 64
+outline_size = 20
+modulate = Color(1, 0.9, 0.5, 1)
+text = "🏛 WIESENBÜRO"
+
+[node name="Kollision" type="StaticBody3D" parent="Wiesenbuero"]
+
+[node name="ColNorth" type="CollisionShape3D" parent="Wiesenbuero/Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+shape = SubResource("BueroColX")
+
+[node name="ColEast" type="CollisionShape3D" parent="Wiesenbuero/Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 0)
+shape = SubResource("BueroColZ")
+
+[node name="ColWest" type="CollisionShape3D" parent="Wiesenbuero/Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, 0)
+shape = SubResource("BueroColZ")
+
+[node name="ColSouthW" type="CollisionShape3D" parent="Wiesenbuero/Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2, -4)
+shape = SubResource("BueroColDoor")
+
+[node name="ColSouthE" type="CollisionShape3D" parent="Wiesenbuero/Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2, -4)
+shape = SubResource("BueroColDoor")
+
+[node name="Schreibtisch" parent="Wiesenbuero" instance=ExtResource("7_kiosk")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 2.5)
+
+[node name="Wohnwagenplatz" type="Node3D" parent="."]
+
+[node name="MeinWohnwagen" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, 0)
+
+[node name="Nachbar1" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, -7)
+is_mine = false
+
+[node name="Nachbar2" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, 7)
+is_mine = false
+
+[node name="Nachbar3" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -33, 0, 14)
+is_mine = false
+
+[node name="Grenze" type="Node3D" parent="."]
+
+[node name="BoundNorth" type="StaticBody3D" parent="Grenze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 45)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundNorth"]
+shape = SubResource("BoundX")
+
+[node name="BoundSouth" type="StaticBody3D" parent="Grenze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundSouth"]
+shape = SubResource("BoundX")
+
+[node name="BoundWest" type="StaticBody3D" parent="Grenze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundWest"]
+shape = SubResource("BoundZ")
+
+[node name="BoundEast" type="StaticBody3D" parent="Grenze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundEast"]
+shape = SubResource("BoundZ")

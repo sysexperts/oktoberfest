@@ -10,12 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b7dl2t1533kgl" path="res://scenes/computer.tscn" id="8_comp"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1536kh8" path="res://scenes/food_station.tscn" id="9_food"]
 [ext_resource type="Script" uid="uid://bkxikn4e2dotl" path="res://scripts/sfx.gd" id="10_sfx"]
-[ext_resource type="PackedScene" uid="uid://b7dl2t1kiosk1" path="res://scenes/booking_kiosk.tscn" id="11_kiosk"]
-[ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="12_carav"]
-[ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="13_dreh"]
-[ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="14_ente"]
-[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="15_schi"]
-[ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="16_sues"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes.tscn" id="17_kirmes"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 
@@ -218,113 +213,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 [node name="BeerTable11" parent="Tables" unique_id=749490663 instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
 
-[node name="Wasen" type="Node3D" parent="." unique_id=1527672435]
-
-[node name="Grass" type="MeshInstance3D" parent="Wasen" unique_id=852581301]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 20)
-material_override = SubResource("MatGrass")
-mesh = SubResource("GrassMesh")
-
-[node name="Drehscheibe" parent="Wasen/Grass" unique_id=1892744800 instance=ExtResource("13_dreh")]
-transform = Transform3D(0.76379603, 0, -0.6454576, 0, 1, 0, 0.6454576, 0, 0.76379603, 13.8328495, 0, -7.318158)
-
-[node name="Path" type="MeshInstance3D" parent="Wasen" unique_id=315634950]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 20)
-material_override = SubResource("MatPath")
-mesh = SubResource("PathMesh")
-
-[node name="Sign" type="MeshInstance3D" parent="Wasen" unique_id=1093877623]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 12)
-material_override = SubResource("MatSign")
-mesh = SubResource("SignMesh")
-
-[node name="SignLabel" type="Label3D" parent="Wasen" unique_id=1710697688]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 12.2)
-pixel_size = 0.01
-text = "🍺 WASENPLATZ 🍺"
-font_size = 60
-outline_size = 20
-
-[node name="Tree1" type="Node3D" parent="Wasen" unique_id=1220300274]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 16)
-
-[node name="Trunk" type="MeshInstance3D" parent="Wasen/Tree1" unique_id=225499967]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-material_override = SubResource("MatTrunk")
-mesh = SubResource("TrunkMesh")
-
-[node name="Leaves" type="MeshInstance3D" parent="Wasen/Tree1" unique_id=1476418471]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
-material_override = SubResource("MatLeaf")
-mesh = SubResource("LeafMesh")
-
-[node name="Tree2" type="Node3D" parent="Wasen" unique_id=1526974768]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 24)
-
-[node name="Trunk" type="MeshInstance3D" parent="Wasen/Tree2" unique_id=33946791]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-material_override = SubResource("MatTrunk")
-mesh = SubResource("TrunkMesh")
-
-[node name="Leaves" type="MeshInstance3D" parent="Wasen/Tree2" unique_id=588251404]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
-material_override = SubResource("MatLeaf")
-mesh = SubResource("LeafMesh")
-
-[node name="Attraktionen" type="Node3D" parent="Wasen" unique_id=1949752971]
-
-[node name="Drehscheibe" parent="Wasen/Attraktionen" unique_id=449281722 instance=ExtResource("13_dreh")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -16.950367, 0, 19.968487)
-
-[node name="Enten" parent="Wasen/Attraktionen" unique_id=2023977199 instance=ExtResource("14_ente")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -16.468296, 0, 24.59126)
-
-[node name="Schiessstand" parent="Wasen/Attraktionen" unique_id=723932437 instance=ExtResource("15_schi")]
-transform = Transform3D(-0.76604444, 0, 0.64278764, 0, 1, 0, -0.64278764, 0, -0.76604444, -14.125762, 0, 28.122778)
-
-[node name="Suessigkeiten" parent="Wasen/Attraktionen" unique_id=1197174967 instance=ExtResource("16_sues")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.993767, 0, 29.712013)
-
-[node name="OuterNorth" type="StaticBody3D" parent="Wasen" unique_id=403282143]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 30)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wasen/OuterNorth" unique_id=14710122]
-shape = SubResource("OuterX")
-
-[node name="OuterWest" type="StaticBody3D" parent="Wasen" unique_id=353232522]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, 2, 20)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wasen/OuterWest" unique_id=900251152]
-shape = SubResource("OuterZ")
-
-[node name="OuterEast" type="StaticBody3D" parent="Wasen" unique_id=510009221]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 2, 20)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wasen/OuterEast" unique_id=957198242]
-shape = SubResource("OuterZ")
+[node name="Kirmes" parent="." instance=ExtResource("17_kirmes")]
 
 [node name="SpawnPoints" type="Node3D" parent="." unique_id=207167847]
 
 [node name="Spawn0" type="Marker3D" parent="SpawnPoints" unique_id=891180890]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0.1, -1.5)
 
 [node name="Spawn1" type="Marker3D" parent="SpawnPoints" unique_id=1959960354]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0.1, 1.5)
 
 [node name="Spawn2" type="Marker3D" parent="SpawnPoints" unique_id=763383624]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.1, 19)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.1, -1.5)
 
 [node name="Spawn3" type="Marker3D" parent="SpawnPoints" unique_id=104223297]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.1, 19)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0.1, 1.5)
 
 [node name="Computer" parent="." unique_id=1426596233 instance=ExtResource("8_comp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
-
-[node name="BookingKiosk" parent="." unique_id=1972560834 instance=ExtResource("11_kiosk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 16)
-
-[node name="Caravan" parent="." unique_id=164612314 instance=ExtResource("12_carav")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, 22)
 
 [node name="Players" type="Node3D" parent="." unique_id=940945055]
 

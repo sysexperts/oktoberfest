@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/theke.glb" id="1_theke"]
+
+[sub_resource type="BoxShape3D" id="Box"]
+size = Vector3(2.85, 2.49, 2.42)
+
+[sub_resource type="BoxMesh" id="AwningMesh"]
+size = Vector3(3.2, 0.25, 1.6)
+
+[sub_resource type="StandardMaterial3D" id="MatAwning"]
+albedo_color = Color(0.75, 0.15, 0.15, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatAwning2"]
+albedo_color = Color(0.95, 0.95, 0.9, 1)
+
+[node name="Marktstand" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_theke")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.245, 0)
+
+[node name="Awning" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -1)
+mesh = SubResource("AwningMesh")
+material_override = SubResource("MatAwning")
+
+[node name="AwningStripe" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.72, -1.02)
+mesh = SubResource("AwningMesh")
+material_override = SubResource("MatAwning2")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -1)
+pixel_size = 0.008
+font_size = 48
+outline_size = 16
+text = "Stand"
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.245, 0)
+shape = SubResource("Box")
