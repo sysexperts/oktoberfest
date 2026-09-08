@@ -160,7 +160,6 @@ func in_intermission() -> bool:
 func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
 
-## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
 ## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
 func _apply_night_visual(night: bool) -> void:
 	if _night_visual == night:
@@ -192,6 +191,7 @@ func _foods_avail() -> Array:
 		a.append(2)
 	return a
 
+## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
 func _tbl_num(n: String) -> int:
 	var digits := ""
 	for i in n.length():
