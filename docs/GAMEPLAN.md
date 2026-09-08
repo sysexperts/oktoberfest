@@ -58,7 +58,7 @@
 ### Faz C — Schicht/Service (Feinschliff bestehend)
 - [x] C1. Gäste kommen nach Beliebtheit, sitzen ganze Schicht, bestellen wiederholt + feiern (v38-40).
 - [x] C2. **Nacht-Endspurt** — son %25 sabır 1.8x hızlı azalır + HUD 🌙 + banner (v43).
-- [~] C3. Sarhoşluk → Kusma/Kir → Temizlik/Hijyen (mess/hijyen var; kusma animasyonu yok).
+- [x] C3. Sarhoşluk → **Kusma-Animation** (Gast beugt sich vor, 🤮, erzeugt Dreck) → Temizlik/Hijyen (v48).
 - [x] C4. Tagesabschluss-**Bilanz** im Wohnwagen (Kazanç/Kira/Net/Servis/Kaçırılan) beim Schlafen (v43).
 
 ### Faz D — Progression & Expand
@@ -67,11 +67,11 @@
 - [x] D3. Ökonomie-Balance: Miete steigt täglich (150€ + 40€/Tag), Bilanz zeigt echte Tagesmiete (v46).
 
 ### Faz E — Politur (später)
-- [~] E1. Optik/Deko cozy, Lichter, Menschenmenge-Ambiente. — Nacht-Beleuchtung ✅ (v47); offen: Zelt-Mesh an der Eingangslücke, größere Zelt-Meshes für Stufe 2/3, Deko-Objekte.
-- [ ] E5. **pck verkleinern** (~226 MB → Texturkompression/Asset-Trim), damit Updates nicht so groß sind.
-- [ ] E2. Echte Audio-Assets statt prozedural.
-- [ ] E3. Speichern/Laden (Fortschritt über Sitzungen).
-- [ ] E4. Steam/itch-Seite.
+- [x] E1. Optik: Nacht-Beleuchtung ✅ (v47), **Zeltwand an der Eingangslücke entfernt** — echter offener Eingang, Laternen beleuchten ihn (v48). Später optional: größere Zelt-Meshes für Stufe 2/3.
+- [x] E5. **pck verkleinert: 216 MB → 96 MB** (Texturen auf 2048 begrenzt, VRAM-Kompression) — v48.
+- [ ] E2. Echte Audio-Assets statt prozedural. — **braucht Dateien von dir** (lizenzfreie Musik/SFX); prozedurale Sounds laufen bis dahin.
+- [x] E3. **Speichern/Laden** — Geld/Tag/Zeltstufe/Tische/Upgrades/Beliebtheit in `user://oktoberfest_save.json`, bei jedem Zustandswechsel gespeichert, beim Start geladen (v48).
+- [ ] E4. Steam/itch-Seite. — **braucht deinen Account + Freigabe**; Store-Texte kann ich vorbereiten.
 
 ## 4. Technische Leitplanken (fix)
 - **Alles als .tscn/Node**, editierbar in Godot — kein prozeduraler Weltaufbau im Code. (Ausnahme: HUD-Overlay.)
