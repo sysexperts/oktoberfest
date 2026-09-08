@@ -100,6 +100,12 @@ var _guest_sim := {}
 var _guest_next := 0
 var _guest_spawn_timer := 1.0
 
+var _sun: DirectionalLight3D
+var _world_env: WorldEnvironment
+var _day_sun_energy := 1.0
+var _day_ambient := 0.35
+var _night_visual := false
+
 var _hygiene := 100.0
 var _messes := {}
 var _mess_clean := {}
@@ -112,6 +118,12 @@ func _ready() -> void:
 	_players_container = $Players
 	_customers_container = $Customers
 	_messes_container = $Messes
+	_sun = $Sun
+	_world_env = $WorldEnvironment
+	_day_sun_energy = _sun.light_energy
+	if _world_env.environment:
+		_day_ambient = _world_env.environment.ambient_light_energy
+	_apply_night_visual(false)
 
 	# Bira masalarını topla (kararlı sıra). Başta zelt kiralanmadı → 0 aktif.
 	_all_tables = get_tree().get_nodes_in_group("beertable")
@@ -149,6 +161,17 @@ func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
 
 ## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
+## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
+func _apply_night_visual(night: bool) -> void:
+	if _night_visual == night:
+		return
+	_night_visual = night
+	if _sun:
+		_sun.light_energy = _day_sun_energy * (0.28 if night else 1.0)
+		_sun.light_color = Color(0.55, 0.6, 0.85) if night else Color(1, 1, 1)
+	if _world_env and _world_env.environment:
+		_world_env.environment.ambient_light_energy = _day_ambient * (0.4 if night else 1.0)
+
 ## D3: kira her gün artar (ekonomi baskısı).
 func _daily_rent() -> int:
 	return DAILY_RENT + (_day - 1) * RENT_PER_DAY
@@ -494,6 +517,7 @@ func _shift_process(delta: float) -> void:
 	# Gece endspurt: son %25'te sabır daha hızlı azalır
 	if not _night and _phase_time <= SHIFT_TIME * NIGHT_FRACTION:
 		_night = true
+		_apply_night_visual(true)   # host görseli
 		_net_banner.rpc("🌙 Gece bastı! Misafirler daha sabırsız 🍻")
 	_update_guests(delta)
 	_update_hygiene(delta)
@@ -507,6 +531,7 @@ func _start_shift() -> void:
 	_guest_spawn_timer = 1.0
 	_hygiene = 100.0
 	_night = false
+	_apply_night_visual(false)
 	_did_shift = true
 	_held.clear()
 	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
@@ -526,6 +551,8 @@ func _start_shift() -> void:
 func _end_shift(closed_early := false) -> void:
 	_phase = Phase.INTERMISSION
 	_phase_time = INTERMISSION_TIME
+	_night = false
+	_apply_night_visual(false)
 	# Tüm misafirleri çıkışa yolla
 	for gid in _guest_sim.keys():
 		_guest_sim[gid].mode = 2
@@ -758,6 +785,7 @@ func _net_env(money: int, score: int, time_left: float, hygiene: float, pop: flo
 	_hud.set_time(time_left, night)
 	_hud.set_hygiene(hygiene)
 	_hud.set_popularity(pop)
+	_apply_night_visual(night)
 	for i in range(ids.size()):
 		var m = _messes.get(ids[i])
 		if m:
