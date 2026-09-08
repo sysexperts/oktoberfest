@@ -50,24 +50,25 @@
 - [x] A5. **Übergang Wasen ↔ Zelt** — räumlich gelöst (v42): Eingangslücke in Nordwand, man läuft physisch rein/raus (kein Teleport, MP-sicher in einer Welt). Offen/Optik: Tent-Mesh hat an der Lücke noch sichtbare Zeltwand (Faz E).
 
 ### Faz B — Aufbau/Prep sauber
-- [x] B1. **Tischlimit je Zeltstufe** (Stufe1=4, Stufe2/3=6) + Kauf-UI im Kiosk-Panel (v41).
+- [x] B1. **Tischlimit je Zeltstufe** (Stufe 1=4, Stufe 2=8, Stufe 3=12) + Kauf-UI im Kiosk-Panel (v41/v45).
 - [x] B2. **Tische kaufen/verkaufen + verschieben:** `net_buy_table` (200€), `net_sell_table` (+100€), verschieben (mola) — v43. Grid/Snap-Feinschliff später.
-- [ ] B3. **Rollenwahl** am Computer beibehalten; leere Rolle = Tasarom-NPC.
+- [x] B3. **Rollenwahl** am Computer (Mutfak/Temizlik/Garson); leere Rolle = Tasarom-NPC (seit v26).
 - [x] B4. **Upgrades-Shop (Kiosk):** Werbung (+Beliebtheit-Schub) & Deko (+Einnahmen) mit Leveln — v44.
 
 ### Faz C — Schicht/Service (Feinschliff bestehend)
-- [ ] C1. Gäste kommen nach Beliebtheit, sitzen ganze Schicht, bestellen wiederholt (steht, balancing v40).
+- [x] C1. Gäste kommen nach Beliebtheit, sitzen ganze Schicht, bestellen wiederholt + feiern (v38-40).
 - [x] C2. **Nacht-Endspurt** — son %25 sabır 1.8x hızlı azalır + HUD 🌙 + banner (v43).
 - [~] C3. Sarhoşluk → Kusma/Kir → Temizlik/Hijyen (mess/hijyen var; kusma animasyonu yok).
 - [x] C4. Tagesabschluss-**Bilanz** im Wohnwagen (Kazanç/Kira/Net/Servis/Kaçırılan) beim Schlafen (v43).
 
 ### Faz D — Progression & Expand
 - [x] D1. **Zelt-Ausbau real:** 12 Tische (3×4) in main.tscn, Tischlimit 4/8/12 je Stufe, natürliche Tischsortierung (v45). (Eigene größere Zelt-Meshes für L2/L3 = Optik, Faz E.)
-- [ ] D2. Freischalt-Kurve: neue Bier-/Essenssorten, Deko, Personal-Slots je Fortschritt.
-- [ ] D3. Ökonomie-Balance: Miete/Kosten pro Tag vs. Einnahmen (soll fordernd bleiben).
+- [x] D2. Freischalt-Kurve: Sorten öffnen sich nach Tag (Sosis T2, Weizen T3, Radler T5) + Unlock-Meldung (v46).
+- [x] D3. Ökonomie-Balance: Miete steigt täglich (150€ + 40€/Tag), Bilanz zeigt echte Tagesmiete (v46).
 
 ### Faz E — Politur (später)
-- [ ] E1. Optik/Deko cozy, Lichter, Menschenmenge-Ambiente.
+- [~] E1. Optik/Deko cozy, Lichter, Menschenmenge-Ambiente. — Nacht-Beleuchtung ✅ (v47); offen: Zelt-Mesh an der Eingangslücke, größere Zelt-Meshes für Stufe 2/3, Deko-Objekte.
+- [ ] E5. **pck verkleinern** (~226 MB → Texturkompression/Asset-Trim), damit Updates nicht so groß sind.
 - [ ] E2. Echte Audio-Assets statt prozedural.
 - [ ] E3. Speichern/Laden (Fortschritt über Sitzungen).
 - [ ] E4. Steam/itch-Seite.
