@@ -69,11 +69,28 @@ const DEKO_BONUS := 0.15
 const LIC_COST := {"weizen": 800, "radler": 800, "brezn": 1200, "sosis": 1200}
 const LIC_NAMES := {"weizen": "🍺 Weizen", "radler": "🍋 Radler", "brezn": "🥨 Brezn", "sosis": "🌭 Sosis"}
 
+# ---- E3: Personal ----
+const STAFF_SCENE := preload("res://scenes/staff.tscn")
+const ROLE_KOCH := 1
+const ROLE_KELLNER := 2
+const ROLE_REINIGUNG := 3
+const STAFF_NAMES := {1: "👨‍🍳 Koch", 2: "🍺 Kellner", 3: "🧹 Reinigung"}
+const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400}
+const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
+const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
+const STAFF_MAX_LEVEL := 10
+const STAFF_BASE_SPEED := 3.0
+const BAR_POINT := Vector3(0, 0.1, -7.0)      # Kellner holt hier ab
+const KITCHEN_POINT := Vector3(7.0, 0.1, -7.0) # Koch steht hier
+const DRINK_PREP := 1.2                        # Sekunden pro Getränk
+const FOOD_PREP := 3.0                         # Sekunden pro Speise (mit Koch)
+
 var _hud: HUD
 var _sfx_node: Node
 var _players_container: Node3D
 var _customers_container: Node3D
 var _messes_container: Node3D
+var _staff_container: Node3D
 var _players_nodes := {}
 var _spawn_index_by_peer := {}
 var _next_spawn := 0
@@ -99,6 +116,12 @@ var _upg_marketing := 0  # Werbung seviyesi (popülerlik enjeksiyonu)
 var _upg_deko := 0       # Deko seviyesi (gelir çarpanı)
 # E2.4: satın alınan lisanslar (Helles lisanssız hep satılır)
 var _lic := {"weizen": false, "radler": false, "brezn": false, "sosis": false}
+# E3: Personal. sim: id -> {role, level, pos, tgt, yaw, state, timer, orders:Array, idx}
+var _staff := {}        # id -> Staff node
+var _staff_sim := {}
+var _staff_next := 0
+var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
+var _wages_last := 0
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -130,6 +153,11 @@ func _ready() -> void:
 	_players_container = $Players
 	_customers_container = $Customers
 	_messes_container = $Messes
+	_staff_container = get_node_or_null("StaffNodes")
+	if _staff_container == null:
+		_staff_container = Node3D.new()
+		_staff_container.name = "StaffNodes"
+		add_child(_staff_container)
 	_sun = $Sun
 	_world_env = $WorldEnvironment
 	_day_sun_energy = _sun.light_energy
@@ -208,6 +236,7 @@ func _save_game() -> void:
 		"shift_num": _shift_num,
 		"tables": tables,
 		"lic": _lic,
+		"staff": _staff_save_list(),
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -240,6 +269,11 @@ func _load_game() -> bool:
 	if lic is Dictionary:
 		for k in LIC_COST.keys():
 			_lic[k] = bool((lic as Dictionary).get(k, false))
+	var st: Variant = d.get("staff", [])
+	if st is Array:
+		for e in (st as Array):
+			if e is Dictionary:
+				_restore_staff(int((e as Dictionary).get("role", 2)), int((e as Dictionary).get("level", 1)))
 	var tp: Variant = d.get("tables", [])
 	if tp is Array:
 		var arr: Array = tp
@@ -310,6 +344,9 @@ func _client_ready() -> void:
 		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position)
 	for gid in _guest_sim.keys():
 		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos)
+	for sid in _staff_sim.keys():
+		var st: Dictionary = _staff_sim[sid]
+		_add_staff.rpc_id(sender, sid, st.pos, int(st.role), int(st.level))
 	_broadcast_meta()
 
 @rpc("authority", "reliable", "call_local")
@@ -456,6 +493,273 @@ func net_buy_deko() -> void:
 	_upg_deko += 1
 	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
 	_broadcast_meta()
+
+# ================================================= E3: Personal
+## Wiesenbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
+@rpc("any_peer", "reliable")
+func net_hire_staff(role: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if not STAFF_HIRE_COST.has(role):
+		return
+	var cost: int = STAFF_HIRE_COST[role]
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [STAFF_NAMES[role], cost])
+		return
+	Game.add_money(-cost)
+	var id := _staff_next
+	_staff_next += 1
+	var start: Vector3 = KITCHEN_POINT if role == ROLE_KOCH else BAR_POINT
+	_staff_sim[id] = {
+		"role": role, "level": 1, "pos": start, "tgt": start, "yaw": 0.0,
+		"state": 0, "timer": 0.0, "orders": [], "idx": 0
+	}
+	_add_staff.rpc(id, start, role, 1)
+	_net_banner.rpc("🤝 %s Lv1 eingestellt! Lohn: %d€/Schicht" % [STAFF_NAMES[role], STAFF_WAGE_BASE[role]])
+	_broadcast_meta()
+
+## Wiesenbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
+@rpc("any_peer", "reliable")
+func net_upgrade_staff(role: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var target := -1
+	var low := 999
+	for sid in _staff_sim.keys():
+		var s: Dictionary = _staff_sim[sid]
+		if int(s.role) == role and int(s.level) < low and int(s.level) < STAFF_MAX_LEVEL:
+			low = int(s.level)
+			target = sid
+	if target < 0:
+		_net_banner.rpc("Kein %s zum Aufstufen (oder schon Lv%d)" % [STAFF_NAMES.get(role, "?"), STAFF_MAX_LEVEL])
+		return
+	var cost: int = STAFF_UPGRADE_BASE * low
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (Aufstufen: %d€)" % cost)
+		return
+	Game.add_money(-cost)
+	var s2: Dictionary = _staff_sim[target]
+	s2.level = low + 1
+	_staff_sim[target] = s2
+	_set_staff_info.rpc(target, role, int(s2.level))
+	var extra := ""
+	if role == ROLE_KELLNER:
+		extra = " — trägt jetzt %d Krüge" % int(s2.level)
+	_net_banner.rpc("⬆️ %s → Lv%d%s" % [STAFF_NAMES[role], int(s2.level), extra])
+	_broadcast_meta()
+
+func _staff_save_list() -> Array:
+	var out := []
+	for s in _staff_sim.values():
+		out.append({"role": int(s.role), "level": int(s.level)})
+	return out
+
+## Beim Laden: Mitarbeiter ohne Kosten wiederherstellen.
+func _restore_staff(role: int, level: int) -> void:
+	if not STAFF_HIRE_COST.has(role):
+		return
+	var id := _staff_next
+	_staff_next += 1
+	var start: Vector3 = KITCHEN_POINT if role == ROLE_KOCH else BAR_POINT
+	_staff_sim[id] = {
+		"role": role, "level": clampi(level, 1, STAFF_MAX_LEVEL), "pos": start, "tgt": start,
+		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0
+	}
+	_add_staff.rpc(id, start, role, clampi(level, 1, STAFF_MAX_LEVEL))
+
+func _staff_wage(role: int, level: int) -> int:
+	return int(round(float(STAFF_WAGE_BASE[role]) * (1.0 + 0.3 * (float(level) - 1.0))))
+
+func _total_wages() -> int:
+	var w := 0
+	for s in _staff_sim.values():
+		w += _staff_wage(int(s.role), int(s.level))
+	return w
+
+func _cook_level() -> int:
+	var lv := 0
+	for s in _staff_sim.values():
+		if int(s.role) == ROLE_KOCH:
+			lv = maxi(lv, int(s.level))
+	return lv
+
+## Ohne Koch dauert Essen 3× so lange.
+func _food_prep_time() -> float:
+	var lv := _cook_level()
+	if lv <= 0:
+		return FOOD_PREP * 3.0
+	return FOOD_PREP / (1.0 + 0.15 * float(lv))
+
+func _staff_string() -> String:
+	if _staff_sim.is_empty():
+		return "Personal: — (Wiesenbüro → Personal)"
+	var counts := {}
+	for s in _staff_sim.values():
+		var r := int(s.role)
+		if not counts.has(r):
+			counts[r] = []
+		(counts[r] as Array).append(int(s.level))
+	var parts := []
+	for r in [ROLE_KOCH, ROLE_KELLNER, ROLE_REINIGUNG]:
+		if counts.has(r):
+			var lv: Array = counts[r]
+			lv.sort()
+			parts.append("%s ×%d (Lv %s)" % [STAFF_NAMES[r], lv.size(), ",".join(lv.map(func(x): return str(x)))])
+	return "Personal: " + " · ".join(parts) + " — Lohn %d€/Schicht" % _total_wages()
+
+## Bewegung Richtung tgt. true = angekommen.
+func _staff_move(s: Dictionary, delta: float) -> bool:
+	var to: Vector3 = s.tgt - s.pos
+	to.y = 0
+	var d := to.length()
+	if d <= 0.35:
+		return true
+	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level))
+	s.pos += to.normalized() * minf(sp * delta, d)
+	s.yaw = atan2(-to.x, -to.z)
+	return false
+
+func _update_staff(delta: float) -> void:
+	for sid in _staff_sim.keys():
+		var s: Dictionary = _staff_sim[sid]
+		match int(s.role):
+			ROLE_KELLNER:
+				_update_waiter(s, sid, delta)
+			ROLE_REINIGUNG:
+				_update_cleaner(s, delta)
+			_:
+				s.tgt = KITCHEN_POINT
+				_staff_move(s, delta)
+		_staff_sim[sid] = s
+		var node = _staff.get(sid)
+		if node:
+			node.set_net(s.pos, s.yaw)
+
+## Kellner: Bestellungen sammeln (Level = Anzahl Krüge) → Theke → ausliefern.
+func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
+	match int(s.state):
+		0:
+			var picked := []
+			var cap := int(s.level)
+			for gid in _guest_sim.keys():
+				if picked.size() >= cap:
+					break
+				var g: Dictionary = _guest_sim[gid]
+				if int(g.ostate) == 1 and not _assigned.has(gid):
+					picked.append(gid)
+					_assigned[gid] = sid
+			if picked.is_empty():
+				s.tgt = BAR_POINT
+				_staff_move(s, delta)
+				return
+			s.orders = picked
+			s.tgt = BAR_POINT
+			s.state = 1
+		1:
+			if _staff_move(s, delta):
+				var t := 0.0
+				for gid in s.orders:
+					if _guest_sim.has(gid):
+						if int(_guest_sim[gid].okind) == 2:
+							t += _food_prep_time()
+						else:
+							t += DRINK_PREP
+				s.timer = t
+				s.state = 2
+		2:
+			s.timer -= delta
+			if s.timer <= 0.0:
+				s.idx = 0
+				s.state = 3
+		3:
+			var orders: Array = s.orders
+			while int(s.idx) < orders.size() and not _guest_sim.has(orders[int(s.idx)]):
+				_assigned.erase(orders[int(s.idx)])
+				s.idx = int(s.idx) + 1
+			if int(s.idx) >= orders.size():
+				s.orders = []
+				s.state = 0
+				return
+			var gid2: int = orders[int(s.idx)]
+			var g2: Dictionary = _guest_sim[gid2]
+			var seat := int(g2.seat)
+			if seat < 0 or seat >= _seats.size():
+				_assigned.erase(gid2)
+				s.idx = int(s.idx) + 1
+				return
+			s.tgt = _seats[seat].pos
+			if _staff_move(s, delta):
+				_serve_by_staff(gid2)
+				_assigned.erase(gid2)
+				s.idx = int(s.idx) + 1
+
+## Reinigung: läuft zum nächsten Dreck und putzt ihn weg.
+func _update_cleaner(s: Dictionary, delta: float) -> void:
+	if _messes.is_empty():
+		s.tgt = BAR_POINT + Vector3(-4.0, 0, 3.0)
+		_staff_move(s, delta)
+		return
+	var best := -1
+	var bestd := 1.0e9
+	for mid in _messes.keys():
+		var m := _messes[mid] as Node3D
+		if m == null:
+			continue
+		var d: float = (m.global_position - s.pos).length()
+		if d < bestd:
+			bestd = d
+			best = mid
+	if best < 0:
+		return
+	var mn := _messes[best] as Node3D
+	s.tgt = mn.global_position
+	if _staff_move(s, delta):
+		var rate: float = 0.2 + 0.06 * float(s.level)
+		_mess_clean[best] = float(_mess_clean.get(best, 0.0)) + rate * delta
+		if float(_mess_clean[best]) >= 1.0:
+			_remove_mess.rpc(best)
+
+## Mitarbeiter serviert: volle Bezahlung, aber kein Trinkgeld (das bekommt nur der Chef).
+func _serve_by_staff(gid: int) -> void:
+	if not _guest_sim.has(gid):
+		return
+	var g: Dictionary = _guest_sim[gid]
+	if int(g.ostate) != 1:
+		return
+	g.ostate = 2
+	g.served_t = SERVED_SHOW
+	_guest_sim[gid] = g
+	_served += 1
+	_popularity = minf(100.0, _popularity + POP_SERVE)
+	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
+	var reward := int(CustomerReward() * hyg * (1.0 + DEKO_BONUS * _upg_deko))
+	_last_earn += reward
+	Game.add_score(reward)
+	Game.add_money(reward)
+
+@rpc("authority", "reliable", "call_local")
+func _add_staff(id: int, pos: Vector3, role: int, level: int) -> void:
+	if _staff.has(id):
+		return
+	var n := STAFF_SCENE.instantiate()
+	n.staff_id = id
+	n.position = pos
+	_staff_container.add_child(n)
+	n.set_info(role, level)
+	_staff[id] = n
+
+@rpc("authority", "reliable", "call_local")
+func _set_staff_info(id: int, role: int, level: int) -> void:
+	var n = _staff.get(id)
+	if n:
+		n.set_info(role, level)
+
+@rpc("authority", "unreliable")
+func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sz: PackedFloat32Array, syaw: PackedFloat32Array) -> void:
+	for i in range(ids.size()):
+		var n = _staff.get(ids[i])
+		if n:
+			n.set_net(Vector3(sx[i], 0.1, sz[i]), syaw[i])
 
 ## Wiesenbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
 @rpc("any_peer", "reliable")
@@ -617,6 +921,7 @@ func _shift_process(delta: float) -> void:
 		_apply_night_visual(true)   # host görseli
 		_net_banner.rpc("🌙 Akşam oldu (19:00)! Zelt doluyor, misafirler sabırsız 🍻")
 	_update_guests(delta)
+	_update_staff(delta)
 	_update_hygiene(delta)
 
 func _start_shift() -> void:
@@ -634,14 +939,15 @@ func _start_shift() -> void:
 	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
 	_clear_messes()
 	_shift_num += 1
-	_npc_roles = {}
-	var covered := {}
-	for r in _roles.values():
-		if r != ROLE_NONE:
-			covered[r] = true
-	for role in [ROLE_KITCHEN, ROLE_CLEAN, ROLE_WAITER]:
-		if not covered.has(role):
-			_npc_roles[role] = true
+	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
+	_assigned.clear()
+	for sid in _staff_sim.keys():
+		var st: Dictionary = _staff_sim[sid]
+		st.state = 0
+		st.orders = []
+		st.idx = 0
+		st.timer = 0.0
+		_staff_sim[sid] = st
 	_broadcast_meta()   # banner'ı net_sleep gönderir (gün başlangıcı mesajı)
 
 ## Günü bitir. reason: 0 = 22:00 normal, 1 = çok şikayet, 2 = oyuncu erken kapattı.
@@ -665,17 +971,19 @@ func _end_shift(reason := 0) -> void:
 		pop_penalty = hours_left * POP_EARLY_CLOSE_PER_HOUR
 		_popularity = maxf(5.0, _popularity - pop_penalty)
 
-	# Günlük bilanço + kira
+	# Günlük bilanço: kira + personel maaşları
 	var rent := _daily_rent()
-	Game.add_money(-rent)
-	var net_profit := _last_earn - rent
+	var wages := _total_wages()
+	_wages_last = wages
+	Game.add_money(-rent - wages)
+	var net_profit := _last_earn - rent - wages
 	var head := ""
 	match reason:
 		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
 		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
 		_: head = "🌙 22:00 — Feierabend!"
-	_net_banner.rpc("%s\n📊 Tag %d: Kazanç %d€ · Kira -%d€ · Net %s%d€ · Servis %d · Kaçırılan %d\n😴 Wohnwagen'de uyu → yeni gün" % [
-		head, _day, _last_earn, rent, "+" if net_profit >= 0 else "", net_profit, _served, _missed])
+	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Netto %s%d€\nServiert %d · Verpasst %d\n😴 Wohnwagen: schlafen → neuer Tag" % [
+		head, _day, _last_earn, rent, wages, "+" if net_profit >= 0 else "", net_profit, _served, _missed])
 	_day += 1
 	if _day > WIESN_DAYS:
 		_day = 1
@@ -882,6 +1190,19 @@ func _broadcast_sync() -> void:
 		ctype.append(g.otype)
 		cratio.append(clampf(g.patience / ORDER_PATIENCE, 0.0, 1.0))
 	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio)
+	# Personal
+	var sids := PackedInt32Array()
+	var sx := PackedFloat32Array()
+	var sz := PackedFloat32Array()
+	var syaw := PackedFloat32Array()
+	for sid in _staff_sim.keys():
+		var st: Dictionary = _staff_sim[sid]
+		sids.append(sid)
+		sx.append(st.pos.x)
+		sz.append(st.pos.z)
+		syaw.append(st.yaw)
+	if sids.size() > 0:
+		_net_staff.rpc(sids, sx, sz, syaw)
 	# Çevre
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()
@@ -947,7 +1268,7 @@ func _mgmt_string() -> String:
 		_lic_string()]
 
 func _broadcast_meta() -> void:
-	net_meta.rpc(_phase, _roster_string(), _mgmt_string(), _day, _tent_stage, _active_count)
+	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count)
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
 
 @rpc("authority", "reliable", "call_local")

@@ -278,7 +278,18 @@ func _build_booking() -> void:
 	_add_lic_button(t_lic, "🌭 Sosis-Lizenz (1200€)", "sosis")
 
 	# --- Reiter, die noch kommen ---
-	_add_soon_tab(tabs, "👷 Personal", "Koch, Kellner und Reinigungskraft einstellen.\nMit Level 1–10 und Lohn pro Schicht.\n\n(nächste Etappe)")
+	# --- Reiter: Personal ---
+	var t_staff := VBoxContainer.new()
+	t_staff.name = "👷 Personal"
+	t_staff.add_theme_constant_override("separation", 6)
+	tabs.add_child(t_staff)
+	var st_info := Label.new()
+	st_info.text = "Level 1–10. Kellner trägt Lv = Anzahl Krüge.\nLohn wird pro Schicht abgezogen."
+	st_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t_staff.add_child(st_info)
+	_add_staff_row(t_staff, "👨‍🍳 Koch", 1, 600)
+	_add_staff_row(t_staff, "🍺 Kellner", 2, 500)
+	_add_staff_row(t_staff, "🧹 Reinigung", 3, 400)
 	_add_soon_tab(tabs, "🎤 Künstler", "Künstler für die Bühne buchen.\nTeuer, bringt aber viele Gäste.\n\n(später)")
 	_add_soon_tab(tabs, "📦 Ware", "Bierfässer und Zutaten einkaufen,\ndann in die Küche verräumen.\n\n(später)")
 
@@ -316,6 +327,27 @@ func _buy_license(key: String) -> void:
 	var gm := get_parent()
 	if gm and gm.has_method("net_buy_license"):
 		gm.rpc_id(1, "net_buy_license", key)
+
+## Eine Zeile im Personal-Reiter: einstellen + aufstufen.
+func _add_staff_row(parent: Node, label: String, role: int, cost: int) -> void:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	parent.add_child(row)
+	var hire := Button.new()
+	hire.text = "%s einstellen (%d€)" % [label, cost]
+	hire.custom_minimum_size = Vector2(300, 38)
+	hire.pressed.connect(func(): _gm_call_int("net_hire_staff", role))
+	row.add_child(hire)
+	var up := Button.new()
+	up.text = "⬆️ aufstufen"
+	up.custom_minimum_size = Vector2(150, 38)
+	up.pressed.connect(func(): _gm_call_int("net_upgrade_staff", role))
+	row.add_child(up)
+
+func _gm_call_int(method: String, v: int) -> void:
+	var gm := get_parent()
+	if gm and gm.has_method(method):
+		gm.rpc_id(1, method, v)
 
 func _call_gm(method: String) -> void:
 	var gm := get_parent()
