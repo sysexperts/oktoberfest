@@ -127,6 +127,7 @@ var _customers_container: Node3D
 var _messes_container: Node3D
 var _staff_container: Node3D
 var _packages_container: Node3D
+var _crowd: Node3D
 var _players_nodes := {}
 var _spawn_index_by_peer := {}
 var _next_spawn := 0
@@ -215,6 +216,7 @@ func _ready() -> void:
 		_staff_container = Node3D.new()
 		_staff_container.name = "StaffNodes"
 		add_child(_staff_container)
+	_crowd = get_node_or_null("Crowd")
 	_packages_container = get_node_or_null("Packages")
 	if _packages_container == null:
 		_packages_container = Node3D.new()
@@ -353,6 +355,15 @@ func _load_game() -> bool:
 	_active_count = clampi(_active_count, 0, _all_tables.size())
 	_apply_tent()
 	return true
+
+## E7: Besucherdichte draußen aus der Uhrzeit ableiten (geschlossen = leer).
+func _apply_crowd(clock: float) -> void:
+	if _crowd == null:
+		return
+	var f := 0.0
+	if clock >= 0.0:
+		f = clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.15, 1.0)
+	_crowd.set_density(f)
 
 ## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
 func _apply_night_visual(night: bool) -> void:
@@ -1295,6 +1306,7 @@ func _process(delta: float) -> void:
 			_end_shift(0)   # 22:00 — normal kapanış
 	# MOLA: otomatik başlangıç YOK. Oyuncu Wohnwagen'de uyuyunca gün başlar.
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
+	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
 	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
@@ -1657,6 +1669,7 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 	_hud.set_hygiene(hygiene)
 	_hud.set_popularity(pop)
 	_apply_night_visual(night)
+	_apply_crowd(clock)
 	for i in range(ids.size()):
 		var m = _messes.get(ids[i])
 		if m:

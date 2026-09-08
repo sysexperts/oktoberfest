@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://bkxikn4e2dotl" path="res://scripts/sfx.gd" id="10_sfx"]
 [ext_resource type="PackedScene" path="res://scenes/lager.tscn" id="18_lager"]
 [ext_resource type="PackedScene" path="res://scenes/buehne.tscn" id="19_buehne"]
+[ext_resource type="Script" path="res://scripts/crowd.gd" id="20_crowd"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes.tscn" id="17_kirmes"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
@@ -239,6 +240,9 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, 2)
 
 [node name="Lager" parent="." instance=ExtResource("18_lager")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -5)
+
+[node name="Crowd" type="Node3D" parent="."]
+script = ExtResource("20_crowd")
 
 [node name="Players" type="Node3D" parent="." unique_id=940945055]
 
