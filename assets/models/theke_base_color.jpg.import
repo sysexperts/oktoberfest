@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bej3ruc7veb0g"
+uid="uid://brboonimf7v1a"
 path.s3tc="res://.godot/imported/theke_base_color.jpg-0adcf57636d4a8f155de0344ba3e8adc.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "4b10b46dfefc8dd17954b7119481d24c"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

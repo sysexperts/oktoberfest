@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cl1hlrtct2aum"
+uid="uid://cbnbuj4b16ih5"
 path.s3tc="res://.godot/imported/theke_metallic_roughness.jpg-25d91a605d8d3c1240fcfa2a268ba9e0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "187be9fee7b30d0620e7d7e4d1c58bcf"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

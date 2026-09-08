@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btthhc6f5y4oa"
+uid="uid://cg722npkon0qw"
 path.s3tc="res://.godot/imported/roof_Baked_BaseColor.png-65b584c2a62fd766ccbe2bee8800c8fd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "176304dcfd7d66f3a0616f0a04654bfd"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

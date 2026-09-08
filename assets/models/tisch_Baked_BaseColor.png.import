@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw6io480gdo57"
+uid="uid://dcmuj626qwr0s"
 path.s3tc="res://.godot/imported/tisch_Baked_BaseColor.png-641b4a4ee228518173d4ae59a5c69647.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "6497611262276ed388f8e73d7ca14943"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

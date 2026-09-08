@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bygugse44fact"
+uid="uid://c4vsqb2fyup6s"
 path.s3tc="res://.godot/imported/roof_Baked_MetallicRoughness.png-15e9dd638bd8d75b4a72f03f184759bd.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "b3d704b5dc04f614b06aa02aa4239e7a"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

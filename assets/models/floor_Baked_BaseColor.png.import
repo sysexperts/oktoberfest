@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://mhtjrg8urfol"
+uid="uid://d3vxxj1siigca"
 path.s3tc="res://.godot/imported/floor_Baked_BaseColor.png-9315754f4c8766fa0684a8fcdeab1a48.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "0cdba55a6ced2f621388cc4b82809cde"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

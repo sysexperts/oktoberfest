@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqu8m2wuj0c1h"
+uid="uid://cuuk0prwcd56u"
 path.s3tc="res://.godot/imported/bank_Baked_MetallicRoughness.png-fc272add6b7092cb48c2388650ff7308.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "0306130f34de0607fe23cb2372e9001f"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

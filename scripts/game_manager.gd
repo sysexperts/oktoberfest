@@ -12,6 +12,7 @@ const MISS_PENALTY := 5
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const CUSTOMER_SCENE := preload("res://scenes/customer.tscn")
 const MESS_SCENE := preload("res://scenes/mess.tscn")
+const SAVE_PATH := "user://oktoberfest_save.json"
 
 # Roller
 const ROLE_NONE := 0
@@ -139,7 +140,8 @@ func _ready() -> void:
 	_hud.set_day(_day, WIESN_DAYS)
 
 	if multiplayer.is_server():
-		Game.add_money(START_MONEY)
+		if not _load_game():
+			Game.add_money(START_MONEY)
 		multiplayer.peer_disconnected.connect(_on_peer_left)
 		if Net.dedicated:
 			_next_spawn = 0
@@ -159,6 +161,66 @@ func in_intermission() -> bool:
 
 func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
+
+# ================================================= kayıt (E3)
+## Sunucuda ilerlemeyi diske yaz (para, gün, zelt, upgrade, masa konumları).
+func _save_game() -> void:
+	if not multiplayer.is_server():
+		return
+	var tables := []
+	for bt in _all_tables:
+		var p: Vector3 = (bt as Node3D).position
+		tables.append({"x": p.x, "z": p.z})
+	var data := {
+		"money": Game.money,
+		"score": Game.score,
+		"day": _day,
+		"tent_stage": _tent_stage,
+		"active_count": _active_count,
+		"upg_marketing": _upg_marketing,
+		"upg_deko": _upg_deko,
+		"popularity": _popularity,
+		"shift_num": _shift_num,
+		"tables": tables,
+	}
+	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(data))
+		f.close()
+
+## Kayıt varsa yükle. Başarılıysa true.
+func _load_game() -> bool:
+	if not FileAccess.file_exists(SAVE_PATH):
+		return false
+	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if f == null:
+		return false
+	var txt := f.get_as_text()
+	f.close()
+	var parsed: Variant = JSON.parse_string(txt)
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return false
+	var d: Dictionary = parsed
+	Game.add_money(int(d.get("money", 0)) - Game.money)
+	Game.add_score(int(d.get("score", 0)) - Game.score)
+	_day = maxi(1, int(d.get("day", 1)))
+	_tent_stage = clampi(int(d.get("tent_stage", 0)), 0, 3)
+	_active_count = int(d.get("active_count", 0))
+	_upg_marketing = int(d.get("upg_marketing", 0))
+	_upg_deko = int(d.get("upg_deko", 0))
+	_popularity = clampf(float(d.get("popularity", POP_START)), 5.0, 100.0)
+	_shift_num = int(d.get("shift_num", 0))
+	var tp: Variant = d.get("tables", [])
+	if tp is Array:
+		var arr: Array = tp
+		for i in range(mini(arr.size(), _all_tables.size())):
+			var e: Variant = arr[i]
+			if e is Dictionary:
+				var ed: Dictionary = e
+				(_all_tables[i] as Node3D).position = Vector3(float(ed.get("x", 0.0)), 0.0, float(ed.get("z", 0.0)))
+	_active_count = clampi(_active_count, 0, _all_tables.size())
+	_apply_tent()
+	return true
 
 ## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
 func _apply_night_visual(night: bool) -> void:
@@ -643,9 +705,10 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		if g.served_t <= 0.0:
 			g.ostate = 0
 			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
-	# Sarhoş: ara sıra kir
+	# Sarhoş: ara sıra kus + kir bırak (C3)
 	if randf() < MESS_CHANCE_PER_SEC * delta:
 		_spawn_mess_near(_seats[g.seat].pos)
+		_net_guest_vomit.rpc(id)
 
 func _despawn_guest(id: int) -> void:
 	if _guest_sim.has(id):
@@ -664,6 +727,13 @@ func _add_guest(id: int, pos: Vector3) -> void:
 	c.position = pos
 	_customers_container.add_child(c)
 	_guests[id] = c
+
+## C3: misafir kusma animasyonunu tetikle (nadir olay, reliable).
+@rpc("authority", "reliable", "call_local")
+func _net_guest_vomit(id: int) -> void:
+	var c = _guests.get(id)
+	if c and c.has_method("play_vomit"):
+		c.play_vomit()
 
 @rpc("authority", "reliable", "call_local")
 func _remove_guest(id: int) -> void:
@@ -814,6 +884,7 @@ func _mgmt_string() -> String:
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _roster_string(), _mgmt_string(), _day, _tent_stage, _active_count)
+	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
 
 @rpc("authority", "reliable", "call_local")
 func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int) -> void:

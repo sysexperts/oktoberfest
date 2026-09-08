@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dglpo2o8nnpxc"
+uid="uid://ysbifeeaoshp"
 path.s3tc="res://.godot/imported/bavarian_bean_texture_0.png-9d783bb1f0cf7434c067c10ba4f6aeb3.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "d2d4e377bb7417550d1181e1e23f36f5"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

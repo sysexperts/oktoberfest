@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dn54f3s5bhqrd"
+uid="uid://dnj7pjkpyv8pj"
 path.s3tc="res://.godot/imported/wall_Baked_Emit.png-5037d7637808b99f5681d0a423842c1e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "b1cb2c16c8d94acfb4e094378dea8585"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

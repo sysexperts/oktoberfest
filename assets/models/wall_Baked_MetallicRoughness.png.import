@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dldajohva7n2r"
+uid="uid://bbufg0bo3nhol"
 path.s3tc="res://.godot/imported/wall_Baked_MetallicRoughness.png-5d1cd4052e8d24b9696de8e36cb1e6bb.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "691e5612a7ff52154ea9907365b87b71"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

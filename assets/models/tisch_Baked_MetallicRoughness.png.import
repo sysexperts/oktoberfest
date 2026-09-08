@@ -2,14 +2,11 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cm7bcxpowumlu"
+uid="uid://do6wuhp1ifnyv"
 path.s3tc="res://.godot/imported/tisch_Baked_MetallicRoughness.png-66f61b5a468088a37786dce3769b8f6b.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "84a5c35681a509398e8e6a43dd9f2272"
 }
 
 [deps]
@@ -40,5 +37,5 @@ process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=0
+process/size_limit=2048
 detect_3d/compress_to=0

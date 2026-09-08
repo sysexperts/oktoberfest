@@ -21,6 +21,8 @@ var _mug: MeshInstance3D
 var _cur := ""
 var _last := Vector3.ZERO
 var _seated := false
+var _vomit_t := 0.0        # C3: kusma süresi (sn), >0 ise öne eğilir
+var _vomit_active := false
 
 @onready var _model: Node3D = $Model
 @onready var _bubble: Label3D = $Bubble
@@ -73,12 +75,37 @@ func set_order(state: int, kind: int, type: int, ratio: float) -> void:
 	patience_ratio = ratio
 	_update_bubble()
 
+## C3: sarhoş misafir kusar — kısa süre öne eğilir + 🤮 baloncuk.
+func play_vomit() -> void:
+	_vomit_t = 1.8
+
+func _update_vomit(delta: float) -> void:
+	if _vomit_t > 0.0:
+		_vomit_t -= delta
+		if not _vomit_active:
+			_vomit_active = true
+			if _bubble:
+				_bubble.visible = true
+				_bubble.text = "🤮"
+				_bubble.modulate = Color(0.6, 0.9, 0.4)
+		if _skel:
+			# öne eğil (model 180 baked → negatif RIGHT ileri)
+			var wob := sin(float(Time.get_ticks_msec()) * 0.02) * 0.12
+			_pose(_skel.find_bone("Spine"), Vector3.RIGHT, -0.85 + wob)
+			_pose(_skel.find_bone("Head"), Vector3.RIGHT, -0.5)
+	elif _vomit_active:
+		_vomit_active = false
+		if _skel:
+			_pose(_skel.find_bone("Spine"), Vector3.RIGHT, 0.0)
+			_pose(_skel.find_bone("Head"), Vector3.RIGHT, 0.0)
+		_update_bubble()
+
 func can_serve(kind: int, type: int) -> bool:
 	return order_state == 1 and kind == order_kind and type == order_type
 
 func _update_bubble() -> void:
-	if _bubble == null:
-		return
+	if _bubble == null or _vomit_active:
+		return   # kusarken 🤮 baloncuğu ezilmesin
 	if order_state == 1:
 		_bubble.visible = true
 		if order_kind == 2:
@@ -115,8 +142,10 @@ func _process(delta: float) -> void:
 		var target_y := 0.05 if _seated else 0.0
 		_model.position.y = lerpf(_model.position.y, target_y, clampf(delta * 6.0, 0.0, 1.0))
 		_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * 0.06 if _seated else 0.0
+	# C3: kusma pozu (kutlamayı bastırır)
+	_update_vomit(delta)
 	# Otururken kutlama: kol kaldır-indir (içme/Prost)
-	if _seated and _skel:
+	if _seated and _skel and not _vomit_active:
 		var tt := float(Time.get_ticks_msec()) * 0.004 + float(cust_id)
 		var fore := _skel.find_bone("RightForeArm")
 		if fore >= 0:
