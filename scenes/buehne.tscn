@@ -1,0 +1,99 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/stage.gd" id="1_script"]
+
+[sub_resource type="BoxMesh" id="PlatformMesh"]
+size = Vector3(8, 0.8, 5)
+
+[sub_resource type="StandardMaterial3D" id="MatPlatform"]
+albedo_color = Color(0.25, 0.18, 0.12, 1)
+
+[sub_resource type="BoxMesh" id="BackMesh"]
+size = Vector3(8, 4, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="MatBack"]
+albedo_color = Color(0.12, 0.1, 0.16, 1)
+
+[sub_resource type="BoxMesh" id="TrussMesh"]
+size = Vector3(8.4, 0.25, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="MatTruss"]
+albedo_color = Color(0.3, 0.3, 0.34, 1)
+
+[sub_resource type="BoxShape3D" id="PlatformCol"]
+size = Vector3(8, 0.8, 5)
+
+[node name="Buehne" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Platform" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("PlatformMesh")
+material_override = SubResource("MatPlatform")
+
+[node name="Rueckwand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -2.4)
+mesh = SubResource("BackMesh")
+material_override = SubResource("MatBack")
+
+[node name="Traverse" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, 0)
+mesh = SubResource("TrussMesh")
+material_override = SubResource("MatTruss")
+
+[node name="Schild" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, -2.2)
+pixel_size = 0.012
+font_size = 64
+outline_size = 18
+modulate = Color(1, 0.85, 0.3, 1)
+text = "🎤 BÜHNE"
+
+[node name="Lichter" type="Node3D" parent="."]
+
+[node name="L1" type="OmniLight3D" parent="Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 4.3, 0)
+light_color = Color(1, 0.2, 0.3, 1)
+light_energy = 2.5
+omni_range = 9.0
+
+[node name="L2" type="OmniLight3D" parent="Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 4.3, 0)
+light_color = Color(0.2, 0.5, 1, 1)
+light_energy = 2.5
+omni_range = 9.0
+
+[node name="L3" type="OmniLight3D" parent="Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 4.3, 0)
+light_color = Color(0.3, 1, 0.4, 1)
+light_energy = 2.5
+omni_range = 9.0
+
+[node name="L4" type="OmniLight3D" parent="Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 4.3, 0)
+light_color = Color(1, 0.9, 0.2, 1)
+light_energy = 2.5
+omni_range = 9.0
+
+[node name="Plaetze" type="Node3D" parent="."]
+
+[node name="P1" type="Marker3D" parent="Plaetze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.5)
+
+[node name="P2" type="Marker3D" parent="Plaetze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.8, -0.3)
+
+[node name="P3" type="Marker3D" parent="Plaetze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.8, -0.3)
+
+[node name="P4" type="Marker3D" parent="Plaetze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0.8, 1)
+
+[node name="P5" type="Marker3D" parent="Plaetze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0.8, 1)
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("PlatformCol")

@@ -293,7 +293,18 @@ func _build_booking() -> void:
 	_add_staff_row(t_staff, "👨‍🍳 Koch", 1, 600)
 	_add_staff_row(t_staff, "🍺 Kellner", 2, 500)
 	_add_staff_row(t_staff, "🧹 Reinigung", 3, 400)
-	_add_soon_tab(tabs, "🎤 Künstler", "Künstler für die Bühne buchen.\nTeuer, bringt aber viele Gäste.\n\n(später)")
+	# --- Reiter: Künstler ---
+	var t_art := VBoxContainer.new()
+	t_art.name = "🎤 Künstler"
+	t_art.add_theme_constant_override("separation", 8)
+	tabs.add_child(t_art)
+	var a_info := Label.new()
+	a_info.text = "Gilt für die nächste Schicht.\nMehr Andrang = mehr Gäste im Zelt."
+	a_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t_art.add_child(a_info)
+	_add_artist_button(t_art, "🎸 Straßenmusiker (500€) — +15% Andrang", 1)
+	_add_artist_button(t_art, "🎺 Blaskapelle (2000€) — +35% Andrang", 2)
+	_add_artist_button(t_art, "⭐ Star-Act (6000€) — +60% Andrang", 3)
 	# --- Reiter: Ware ---
 	var t_ware := VBoxContainer.new()
 	t_ware.name = "📦 Ware"
@@ -377,6 +388,13 @@ func _add_order_row(parent: Node, label: String, kind: int, cost: int) -> void:
 		b.custom_minimum_size = Vector2(70, 38)
 		b.pressed.connect(func(): _order_goods(kind, packs))
 		row.add_child(b)
+
+func _add_artist_button(parent: Node, text: String, tier: int) -> void:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 44)
+	b.pressed.connect(func(): _gm_call_int("net_book_artist", tier))
+	parent.add_child(b)
 
 func _order_goods(kind: int, packs: int) -> void:
 	var gm := get_parent()

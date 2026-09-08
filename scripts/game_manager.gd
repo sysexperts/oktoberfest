@@ -100,6 +100,14 @@ const VAN_END := Vector3(42.0, 0.0, 19.0)
 const VAN_SPEED := 9.0
 const DROP_POINT := Vector3(0.0, 0.0, 15.5)   # wo die Pakete landen
 
+# ---- E5: Bühne & Künstler ----
+const ARTIST_SCENE := preload("res://scenes/artist.tscn")
+const ARTIST_NAMES := {1: "🎸 Straßenmusiker", 2: "🎺 Blaskapelle", 3: "⭐ Star-Act"}
+const ARTIST_COST := {1: 500, 2: 2000, 3: 6000}
+const ARTIST_COUNT := {1: 1, 2: 3, 3: 5}      # wie viele auf der Bühne stehen
+const ARTIST_POP := {1: 5.0, 2: 12.0, 3: 25.0}  # Beliebtheitsschub beim Buchen
+const ARTIST_DRAW := {1: 0.15, 2: 0.35, 3: 0.6} # zusätzliche Auslastung während der Schicht
+
 var _hud: HUD
 var _sfx_node: Node
 var _players_container: Node3D
@@ -149,6 +157,9 @@ var _van_state := 0             # 0 aus, 1 anfahrt, 2 abladen, 3 abfahrt
 var _van_pos := Vector3.ZERO
 var _van_timer := 0.0
 var _van_cargo := []            # [{kind, packs}] die abgeladen werden
+# E5: gebuchter Künstler (gilt für die nächste Schicht, danach verbraucht)
+var _artist_tier := 0
+var _artist_nodes := []
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -533,6 +544,66 @@ func net_buy_deko() -> void:
 	_upg_deko += 1
 	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
 	_broadcast_meta()
+
+# ================================================= E5: Künstler
+## Wiesenbüro: Künstler für die nächste Schicht buchen.
+@rpc("any_peer", "reliable")
+func net_book_artist(tier: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if not ARTIST_COST.has(tier):
+		return
+	if _artist_tier > 0:
+		_net_banner.rpc("🎤 %s ist schon gebucht" % ARTIST_NAMES[_artist_tier])
+		return
+	var cost: int = ARTIST_COST[tier]
+	if Game.money < cost:
+		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [ARTIST_NAMES[tier], cost])
+		return
+	Game.add_money(-cost)
+	_artist_tier = tier
+	_popularity = minf(100.0, _popularity + float(ARTIST_POP[tier]))
+	_net_banner.rpc("🎤 %s gebucht! Popularität +%d%%\nSpielt in der nächsten Schicht." % [
+		ARTIST_NAMES[tier], int(ARTIST_POP[tier])])
+	_broadcast_meta()
+
+## Künstler auf die Bühne stellen (Schichtbeginn).
+func _spawn_artists() -> void:
+	if _artist_tier <= 0:
+		return
+	var stages := get_tree().get_nodes_in_group("stage")
+	if stages.is_empty():
+		return
+	var pts: Array = stages[0].artist_points()
+	if pts.is_empty():
+		return
+	var n: int = mini(int(ARTIST_COUNT[_artist_tier]), pts.size())
+	for i in n:
+		_add_artist.rpc(i, pts[i], _artist_tier)
+
+func _clear_artists() -> void:
+	_remove_artists.rpc()
+
+@rpc("authority", "reliable", "call_local")
+func _add_artist(idx: int, pos: Vector3, tier: int) -> void:
+	var a := ARTIST_SCENE.instantiate()
+	a.name = "Artist%d" % idx
+	a.position = pos
+	_staff_container.add_child(a)
+	a.set_tier(tier)
+	_artist_nodes.append(a)
+
+@rpc("authority", "reliable", "call_local")
+func _remove_artists() -> void:
+	for a in _artist_nodes:
+		if is_instance_valid(a):
+			a.queue_free()
+	_artist_nodes.clear()
+
+func _artist_string() -> String:
+	if _artist_tier <= 0:
+		return "Bühne: kein Künstler gebucht"
+	return "Bühne: %s (+%d%% Andrang)" % [ARTIST_NAMES[_artist_tier], int(ARTIST_DRAW[_artist_tier] * 100.0)]
 
 # ================================================= E4: Ware & Lieferung
 ## Wiesenbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
@@ -1127,7 +1198,10 @@ func _shift_process(delta: float) -> void:
 	_guest_spawn_timer -= delta
 	if _guest_spawn_timer <= 0.0:
 		_guest_spawn_timer = GUEST_SPAWN_INTERVAL
-		var target := int(round(_popularity / 100.0 * float(_seats.size()) * _time_factor()))
+		var draw := 1.0
+		if _artist_tier > 0:
+			draw += float(ARTIST_DRAW[_artist_tier])
+		var target := int(round(_popularity / 100.0 * float(_seats.size()) * _time_factor() * draw))
 		if _guest_sim.size() < target:
 			_spawn_guest()
 	# Akşam: 19:00'dan sonra karanlık + sabırsızlık
@@ -1156,6 +1230,7 @@ func _start_shift() -> void:
 	_shift_num += 1
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
+	_spawn_artists()          # E5: gebuchter Künstler betritt die Bühne
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
 		st.state = 0
@@ -1179,6 +1254,8 @@ func _end_shift(reason := 0) -> void:
 		_guest_sim[gid].tgt = ENTRANCE
 		_guest_sim[gid].ostate = 0
 	_clear_messes()
+	_clear_artists()          # E5: Auftritt vorbei
+	_artist_tier = 0
 
 	# Erken kapatma → popülerlik cezası (ne kadar erken, o kadar çok)
 	var pop_penalty := 0.0
@@ -1483,7 +1560,7 @@ func _mgmt_string() -> String:
 	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d\n%s" % [
 		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
 		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko,
-		_lic_string() + "\n" + _stock_string()]
+		_lic_string() + "\n" + _stock_string() + "\n" + _artist_string()]
 
 func _broadcast_meta() -> void:
 	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count)

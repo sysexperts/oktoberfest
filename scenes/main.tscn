@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b7dl2t1536kh8" path="res://scenes/food_station.tscn" id="9_food"]
 [ext_resource type="Script" uid="uid://bkxikn4e2dotl" path="res://scripts/sfx.gd" id="10_sfx"]
 [ext_resource type="PackedScene" path="res://scenes/lager.tscn" id="18_lager"]
+[ext_resource type="PackedScene" path="res://scenes/buehne.tscn" id="19_buehne"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes.tscn" id="17_kirmes"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
@@ -232,6 +233,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.1, -33)
 
 [node name="Computer" parent="." unique_id=1426596233 instance=ExtResource("8_comp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
+
+[node name="Buehne" parent="." instance=ExtResource("19_buehne")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, 2)
 
 [node name="Lager" parent="." instance=ExtResource("18_lager")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -5)

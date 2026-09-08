@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/artist.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2_model"]
+
+[node name="Artist" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 40
+outline_size = 14
+modulate = Color(1, 0.85, 0.4, 1)
+text = "🎸 Künstler"
