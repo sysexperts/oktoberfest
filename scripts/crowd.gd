@@ -10,7 +10,7 @@ extends Node3D
 const VISITOR := preload("res://scenes/visitor.tscn")
 
 ## Wie viele Besucher bei voller Auslastung. Bei Rucklern hier runterdrehen.
-@export var max_visitors := 24
+@export var max_visitors := 220
 
 var _visitors := []
 var _target := 0
@@ -37,22 +37,25 @@ func _build_ring() -> void:
 
 ## f: 0.0 = leer, 1.0 = volle Kirmes.
 func set_density(f: float) -> void:
-	var want := int(round(clampf(f, 0.0, 1.0) * float(max_visitors)))
-	if want == _target:
-		return
-	_target = want
-	_sync()
+	_target = int(round(clampf(f, 0.0, 1.0) * float(max_visitors)))
 
-func _sync() -> void:
+func _process(_delta: float) -> void:
+	# Nach und nach auf die Zielzahl gehen — sonst ruckelt es beim Spawnen.
+	if _visitors.size() != _target:
+		_sync_step()
+
+func _sync_step() -> void:
 	if _ring.is_empty():
 		_build_ring()
-	while _visitors.size() < _target:
+	var budget := 4
+	while _visitors.size() < _target and budget > 0:
 		var v := VISITOR.instantiate()
 		add_child(v)
-		# zufällige Startposition auf dem Ring, halbe Gruppe läuft andersherum
 		v.set_route(_ring, randi() % _ring.size(), 1 if randf() < 0.5 else -1)
 		_visitors.append(v)
-	while _visitors.size() > _target:
+		budget -= 1
+	while _visitors.size() > _target and budget > 0:
 		var v = _visitors.pop_back()
 		if is_instance_valid(v):
 			v.queue_free()
+		budget -= 1

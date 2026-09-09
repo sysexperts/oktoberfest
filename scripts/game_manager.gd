@@ -12,6 +12,8 @@ const DAY_START_HOUR := 7.0        # uyanma / zelt açılış
 const GUEST_START_HOUR := 8.0      # misafirler bu saatten sonra gelir
 const DAY_END_HOUR := 22.0         # en geç kapanış
 const NIGHT_HOUR := 19.0           # bu saatten sonra akşam: karanlık + sabırsız
+const DUSK_START := 16.5           # Dämmerung beginnt
+const DUSK_END := 21.0             # ab hier ist es ganz dunkel
 const POP_EARLY_CLOSE_PER_HOUR := 1.5   # erken kapatma cezası (saat başına)
 const SYNC_INTERVAL := 0.12
 const MISS_PENALTY := 5
@@ -60,7 +62,9 @@ const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
 const TABLE_COST := 200
-const DAILY_RENT := 120       # Grundmiete; steigt täglich (_daily_rent)
+## Zeltmiete pro Tag — fest je Zeltgröße, steigt nicht mit den Tagen.
+const TENT_RENT := {0: 0, 1: 120, 2: 300, 3: 700}
+const DAILY_RENT := 120       # (nicht mehr verwendet, bleibt für Kompatibilität)
 const RENT_PER_DAY := 30      # Aufschlag pro Tag (Wirtschaftsdruck)
 const WIESN_DAYS := 16
 # Upgrades (kiosk)
@@ -211,6 +215,7 @@ var _day_sun_energy := 1.0
 var _day_ambient := 0.35
 var _day_bg := 1.0
 var _night_visual := false
+var _night_t := -1.0
 
 var _hygiene := 100.0
 var _messes := {}
@@ -392,20 +397,35 @@ func _apply_crowd(clock: float) -> void:
 
 ## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
 func _apply_night_visual(night: bool) -> void:
-	if _night_visual == night:
+	# Alt-Aufruf: leitet auf die stufenlose Variante um
+	_apply_daylight(_clock_hour() if night else -1.0)
+
+## 0.0 = heller Tag, 1.0 = tiefe Nacht. Dazwischen wird weich überblendet.
+func _daylight_factor(clock: float) -> float:
+	if clock < 0.0:
+		return 0.0
+	if clock <= DUSK_START:
+		return 0.0
+	if clock >= DUSK_END:
+		return 1.0
+	return smoothstep(0.0, 1.0, (clock - DUSK_START) / (DUSK_END - DUSK_START))
+
+## Dämmerung stufenlos: Sonne, Himmel und Umgebungslicht wandern langsam runter.
+func _apply_daylight(clock: float) -> void:
+	var t := _daylight_factor(clock)
+	if absf(t - _night_t) < 0.01:
 		return
-	_night_visual = night
+	_night_t = t
 	if _sun:
-		_sun.light_energy = _day_sun_energy * (0.06 if night else 1.0)
-		_sun.light_color = Color(0.45, 0.5, 0.8) if night else Color(1, 1, 1)
-		_sun.shadow_enabled = not night
+		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.06, t)
+		_sun.light_color = Color(1, 1, 1).lerp(Color(0.45, 0.5, 0.8), t)
+		_sun.shadow_enabled = t < 0.5
 	if _world_env and _world_env.environment:
 		var env := _world_env.environment
-		env.ambient_light_energy = _day_ambient * (0.12 if night else 1.0)
-		# Auch den Himmel abdunkeln — sonst bleibt es trotz schwacher Sonne taghell
-		env.background_energy_multiplier = _day_bg * (0.08 if night else 1.0)
+		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.12, t)
+		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.08, t)
 func _daily_rent() -> int:
-	return DAILY_RENT + (_day - 1) * RENT_PER_DAY
+	return int(TENT_RENT.get(_tent_stage, 0))
 
 ## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
 func _drinks_avail() -> Array:
@@ -1486,6 +1506,7 @@ func _process(delta: float) -> void:
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
 	_apply_stage(_clock_hour() >= 0.0)
+	_apply_daylight(_clock_hour())
 	# Tutorial: Fortschritt regelmäßig prüfen (Bedingungen ändern sich im Spiel)
 	_quest_timer -= delta
 	if _quest_timer <= 0.0:
@@ -1890,7 +1911,7 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 	_hud.set_time(clock, night)
 	_hud.set_hygiene(hygiene)
 	_hud.set_popularity(pop)
-	_apply_night_visual(night)
+	_apply_daylight(clock)
 	_apply_crowd(clock)
 	_apply_stage(clock >= 0.0)
 	for i in range(ids.size()):

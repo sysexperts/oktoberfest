@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
+[ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)
@@ -362,6 +363,56 @@ is_mine = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -43)
 is_mine = false
 
+
+[node name="Laternen" type="Node3D" parent="."]
+
+[node name="LN1" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 15.5)
+
+[node name="LN2" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 15.5)
+
+[node name="LN3" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.5)
+
+[node name="LN4" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 15.5)
+
+[node name="LN5" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 15.5)
+
+[node name="LS1" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -18.5)
+
+[node name="LS2" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -18.5)
+
+[node name="LS3" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.5)
+
+[node name="LS4" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -18.5)
+
+[node name="LS5" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -18.5)
+
+[node name="LW1" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, 10)
+
+[node name="LW2" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, 0)
+
+[node name="LW3" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -10)
+
+[node name="LO1" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, 10)
+
+[node name="LO2" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, 0)
+
+[node name="LO3" parent="Laternen" instance=ExtResource("8_lat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, -10)
 [node name="Mauern" type="Node3D" parent="." unique_id=2046617623]
 
 [node name="MauerNord" type="StaticBody3D" parent="Mauern" unique_id=1206220130]

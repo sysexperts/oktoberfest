@@ -48,6 +48,7 @@ func _advance() -> void:
 	_tgt = _route[_idx] + _offset
 
 func _process(delta: float) -> void:
+	_update_lod(delta)
 	if _route.is_empty():
 		return
 	if _pause > 0.0:
@@ -70,3 +71,25 @@ func _set_anim(n: String) -> void:
 	if _anim and n != _cur and _anim.has_animation(n):
 		_anim.play(n)
 		_cur = n
+
+## Abstandsabstufung: weit entfernte Besucher animieren nicht mit.
+## Ohne das kosten hunderte Figuren zu viel Leistung.
+const LOD_DIST := 42.0
+
+var _lod_timer := 0.0
+var _far := false
+
+func _update_lod(delta: float) -> void:
+	_lod_timer -= delta
+	if _lod_timer > 0.0:
+		return
+	_lod_timer = randf_range(0.4, 0.8)
+	var cam := get_viewport().get_camera_3d()
+	if cam == null:
+		return
+	var far := global_position.distance_to(cam.global_position) > LOD_DIST
+	if far == _far:
+		return
+	_far = far
+	if _anim:
+		_anim.active = not far
