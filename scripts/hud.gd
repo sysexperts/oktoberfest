@@ -29,6 +29,7 @@ var _banner_token := 0
 var _comp_open := false
 var _last_roster := ""
 var _report_label: Label
+var _comp_report: Label
 var _last_report := ""
 
 func _ready() -> void:
@@ -105,7 +106,9 @@ func _make_label(text: String) -> Label:
 
 func set_money(v: int) -> void:
 	_money_label.text = "💶 %d€" % v
-
+	# Dispo: bis -200€ erlaubt, Rückzahlung kostet 5% Zinsen
+	_money_label.add_theme_color_override("font_color",
+		Color(1, 0.35, 0.3) if v < 0 else Color.WHITE)
 func set_score(v: int) -> void:
 	_score_label.text = "⭐ %d" % v
 
@@ -178,7 +181,7 @@ func _build_computer() -> void:
 	_comp_panel.add_child(vbox)
 
 	var title := Label.new()
-	title.text = "💻 Vardiya Bilgisayarı — Sıradaki vardiya için rol seç"
+	title.text = "💻 Zelt-Computer — Rollen · Bilanz · Zelt schließen"
 	title.add_theme_font_size_override("font_size", 22)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(title)
@@ -204,6 +207,17 @@ func _build_computer() -> void:
 	_comp_mgmt.add_theme_font_size_override("font_size", 18)
 	_comp_mgmt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_comp_mgmt)
+
+	var sep2 := HSeparator.new()
+	vbox.add_child(sep2)
+
+	# Tagesbilanz auch hier im Zelt nachlesbar
+	_comp_report = Label.new()
+	_comp_report.text = "Noch keine Schicht gespielt."
+	_comp_report.add_theme_font_size_override("font_size", 16)
+	_comp_report.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_comp_report.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(_comp_report)
 
 	var close_tent_btn := Button.new()
 	close_tent_btn.text = "🚪 Zelti şimdi kapat (popülerlik cezası)"
@@ -605,5 +619,7 @@ func play_sleep_fade() -> void:
 ## Letzte Tagesbilanz merken, damit man sie jederzeit nachlesen kann.
 func set_report(text: String) -> void:
 	_last_report = text
+	if _comp_report:
+		_comp_report.text = text if text != "" else "Noch keine Schicht gespielt."
 	if _report_label:
 		_report_label.text = text if text != "" else "Noch keine Schicht gespielt."

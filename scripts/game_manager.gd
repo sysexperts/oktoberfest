@@ -83,6 +83,7 @@ const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 10
 const STAFF_BASE_SPEED := 3.0
+const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
 const BAR_POINT := Vector3(0, 0.1, -7.0)      # Kellner holt hier ab
 const KITCHEN_POINT := Vector3(7.0, 0.1, -7.0) # Koch steht hier
 const DRINK_PREP := 1.2                        # Sekunden pro Getränk
@@ -163,6 +164,7 @@ var _staff_next := 0
 var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
 var _wages_last := 0
 var _clean_tips := 0
+var _interest_paid := 0
 var _last_report := ""
 # E4: Bestand + Lieferungen
 var _stock := {1: 0, 2: 0}      # WARE_BIER / WARE_ESSEN
@@ -207,6 +209,7 @@ var _sun: DirectionalLight3D
 var _world_env: WorldEnvironment
 var _day_sun_energy := 1.0
 var _day_ambient := 0.35
+var _day_bg := 1.0
 var _night_visual := false
 
 var _hygiene := 100.0
@@ -237,6 +240,7 @@ func _ready() -> void:
 	_day_sun_energy = _sun.light_energy
 	if _world_env.environment:
 		_day_ambient = _world_env.environment.ambient_light_energy
+		_day_bg = _world_env.environment.background_energy_multiplier
 	_apply_night_visual(false)
 
 	# Bira masalarını topla (kararlı sıra). Başta zelt kiralanmadı → 0 aktif.
@@ -392,12 +396,14 @@ func _apply_night_visual(night: bool) -> void:
 		return
 	_night_visual = night
 	if _sun:
-		_sun.light_energy = _day_sun_energy * (0.28 if night else 1.0)
-		_sun.light_color = Color(0.55, 0.6, 0.85) if night else Color(1, 1, 1)
+		_sun.light_energy = _day_sun_energy * (0.06 if night else 1.0)
+		_sun.light_color = Color(0.45, 0.5, 0.8) if night else Color(1, 1, 1)
+		_sun.shadow_enabled = not night
 	if _world_env and _world_env.environment:
-		_world_env.environment.ambient_light_energy = _day_ambient * (0.4 if night else 1.0)
-
-## D3: kira her gün artar (ekonomi baskısı).
+		var env := _world_env.environment
+		env.ambient_light_energy = _day_ambient * (0.12 if night else 1.0)
+		# Auch den Himmel abdunkeln — sonst bleibt es trotz schwacher Sonne taghell
+		env.background_energy_multiplier = _day_bg * (0.08 if night else 1.0)
 func _daily_rent() -> int:
 	return DAILY_RENT + (_day - 1) * RENT_PER_DAY
 
@@ -543,7 +549,7 @@ func _apply_tent() -> void:
 func net_book_tent() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION or _tent_stage != 0:
 		return
-	if Game.money < TENT_BOOK_COST:
+	if not _afford(TENT_BOOK_COST):
 		_net_banner.rpc("💶 Yetersiz para! (Zelt: %d€)" % TENT_BOOK_COST)
 		return
 	Game.add_money(-TENT_BOOK_COST)
@@ -568,7 +574,7 @@ func net_buy_table() -> void:
 	# Die ersten zwei Tische sind Pflicht — dafür gilt die Warenreserve nicht
 	if _active_count >= 2 and not _reserve_ok(TABLE_COST):
 		return
-	if Game.money < TABLE_COST:
+	if not _afford(TABLE_COST):
 		_net_banner.rpc("💶 Yetersiz para! (Tisch: %d€)" % TABLE_COST)
 		return
 	Game.add_money(-TABLE_COST)
@@ -585,7 +591,7 @@ func net_buy_marketing() -> void:
 	var cost := MARKETING_COST * (_upg_marketing + 1)
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (Werbung: %d€)" % cost)
 		return
 	Game.add_money(-cost)
@@ -602,7 +608,7 @@ func net_buy_deko() -> void:
 	var cost := DEKO_COST * (_upg_deko + 1)
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (Deko: %d€)" % cost)
 		return
 	Game.add_money(-cost)
@@ -624,7 +630,7 @@ func net_buy_toilet() -> void:
 		return
 	if not _reserve_ok(TOILET_COST):
 		return
-	if Game.money < TOILET_COST:
+	if not _afford(TOILET_COST):
 		_net_banner.rpc("💶 Yetersiz para! (Toilette: %d€)" % TOILET_COST)
 		return
 	Game.add_money(-TOILET_COST)
@@ -702,6 +708,9 @@ func _toilet_string() -> String:
 # ================================================= Tutorial & Schutzregeln
 ## Preis eines Bierpakets — so viel muss übrig bleiben, solange kein Bier da ist.
 const GOODS_RESERVE := 40
+## Dispo: so weit darf das Konto ins Minus. Rückzahlung kostet Zinsen.
+const OVERDRAFT_LIMIT := 200
+const OVERDRAFT_INTEREST := 0.05
 
 ## Popup beim anfragenden Spieler (nicht bei allen).
 func _popup_to_sender(msg: String) -> void:
@@ -791,7 +800,7 @@ func net_book_artist(tier: int) -> void:
 	var cost: int = ARTIST_COST[tier]
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [ARTIST_NAMES[tier], cost])
 		return
 	Game.add_money(-cost)
@@ -856,7 +865,7 @@ func net_order_goods(kind: int, packs: int) -> void:
 	if not PACK_COST.has(kind) or packs <= 0:
 		return
 	var cost: int = PACK_COST[kind] * packs
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (%d× %s: %d€)" % [packs, WARE_NAMES[kind], cost])
 		return
 	Game.add_money(-cost)
@@ -1030,7 +1039,7 @@ func net_hire_staff(role: int) -> void:
 	var cost: int = STAFF_HIRE_COST[role]
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [STAFF_NAMES[role], cost])
 		return
 	Game.add_money(-cost)
@@ -1063,7 +1072,7 @@ func net_upgrade_staff(role: int) -> void:
 	var cost: int = STAFF_UPGRADE_BASE * low
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (Aufstufen: %d€)" % cost)
 		return
 	Game.add_money(-cost)
@@ -1143,11 +1152,28 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 	var d := to.length()
 	if d <= 0.35:
 		return true
+	var dir := to.normalized()
+	# Tische umlaufen — aber nur solange das Ziel noch weit weg ist, sonst
+	# käme der Kellner nie an einem Sitzplatz an (der liegt direkt am Tisch).
+	if d > 2.6:
+		dir = _avoid_tables(s.pos, dir)
 	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level))
-	s.pos += to.normalized() * minf(sp * delta, d)
-	s.yaw = atan2(-to.x, -to.z)
+	s.pos += dir * minf(sp * delta, d)
+	s.yaw = atan2(-dir.x, -dir.z)
 	return false
 
+## Schiebt die Laufrichtung von Tischen weg, damit niemand hindurchläuft.
+func _avoid_tables(pos: Vector3, dir: Vector3) -> Vector3:
+	var out := dir
+	for bt in _beertables:
+		var c: Vector3 = (bt as Node3D).global_position
+		var away: Vector3 = pos - c
+		away.y = 0
+		var dist := away.length()
+		if dist < TABLE_AVOID_RADIUS and dist > 0.01:
+			out += away.normalized() * (1.0 - dist / TABLE_AVOID_RADIUS) * 1.8
+	out.y = 0
+	return out.normalized() if out.length() > 0.01 else dir
 func _update_staff(delta: float) -> void:
 	for sid in _staff_sim.keys():
 		var s: Dictionary = _staff_sim[sid]
@@ -1247,6 +1273,11 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 		var rate: float = 0.2 + 0.06 * float(s.level)
 		_mess_clean[best] = float(_mess_clean.get(best, 0.0)) + rate * delta
 		if float(_mess_clean[best]) >= 1.0:
+			# Trinkgeld gibt es auch, wenn die Reinigungskraft putzt
+			var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+			_add_income(tip)
+			_last_earn += tip
+			_clean_tips += tip
 			_remove_mess.rpc(best)
 
 ## Mitarbeiter serviert: volle Bezahlung, aber kein Trinkgeld (das bekommt nur der Chef).
@@ -1270,7 +1301,7 @@ func _serve_by_staff(gid: int) -> void:
 	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
 	_last_earn += reward
 	Game.add_score(reward)
-	Game.add_money(reward)
+	_add_income(reward)
 
 @rpc("authority", "reliable", "call_local")
 func _add_staff(id: int, pos: Vector3, role: int, level: int) -> void:
@@ -1309,7 +1340,7 @@ func net_buy_license(key: String) -> void:
 	var cost: int = LIC_COST[key]
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [LIC_NAMES[key], cost])
 		return
 	Game.add_money(-cost)
@@ -1338,7 +1369,7 @@ func net_upgrade_tent() -> void:
 	var cost: int = TENT_UPGRADE_COST[nxt]
 	if not _reserve_ok(cost):
 		return
-	if Game.money < cost:
+	if not _afford(cost):
 		_net_banner.rpc("💶 Yetersiz para! (Upgrade: %d€)" % cost)
 		return
 	Game.add_money(-cost)
@@ -1373,7 +1404,7 @@ func net_sell_table() -> void:
 		_net_banner.rpc("🪑 Satılacak masa yok")
 		return
 	_active_count -= 1
-	Game.add_money(int(TABLE_COST / 2))
+	_add_income(int(TABLE_COST / 2))
 	_apply_tent()
 	_net_banner.rpc("🪑 Masa satıldı (+%d€) · %d masa kaldı" % [int(TABLE_COST / 2), _active_count])
 	_broadcast_meta()
@@ -1430,7 +1461,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 		reward = int(reward * 0.5)
 	_last_earn += reward + tip
 	Game.add_score(reward)
-	Game.add_money(reward + tip)
+	_add_income(reward + tip)
 
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
@@ -1449,7 +1480,9 @@ func _process(delta: float) -> void:
 		_shift_process(delta)
 		if _phase_time <= 0.0:
 			_end_shift(0)   # 22:00 — normal kapanış
-	# MOLA: otomatik başlangıç YOK. Oyuncu Wohnwagen'de uyuyunca gün başlar.
+	elif not _guest_sim.is_empty():
+		# Nach Feierabend laufen die restlichen Gäste noch hinaus
+		_update_guests(delta)
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
 	_apply_stage(_clock_hour() >= 0.0)
@@ -1542,20 +1575,21 @@ func _end_shift(reason := 0) -> void:
 	_wages_last = wages
 	Game.add_money(-rent - wages)
 	var goods := _goods_cost      # schon beim Bestellen bezahlt, hier nur ausgewiesen
-	var net_profit := _last_earn - rent - wages - goods
+	var net_profit := _last_earn - rent - wages - goods - _interest_paid
 	var head := ""
 	match reason:
 		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
 		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
 		_: head = "🌙 22:00 — Feierabend!"
-	var report := "%s\n\n📊 TAG %d\nUmsatz  %d€   (davon Trinkgeld fürs Putzen %d€)\nMiete  -%d€\nLöhne  -%d€\nWare   -%d€\n───────────────\nNetto  %s%d€\n\nServiert %d · Verpasst %d\n🚻 Urin %d · Beschwerden %d · Gäste weg %d" % [
-		head, _day, _last_earn, _clean_tips, rent, wages, goods,
+	var report := "%s\n\n📊 TAG %d\nUmsatz  %d€   (davon Trinkgeld fürs Putzen %d€)\nMiete  -%d€\nLöhne  -%d€\nWare   -%d€\nZinsen -%d€\n───────────────\nNetto  %s%d€\n\nServiert %d · Verpasst %d\n🚻 Urin %d · Beschwerden %d · Gäste weg %d" % [
+		head, _day, _last_earn, _clean_tips, rent, wages, goods, _interest_paid,
 		"+" if net_profit >= 0 else "", net_profit,
 		_served, _missed, _urin_count, _complaints, _left_guests]
 	net_report.rpc(report)
 	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\n😴 Wohnwagen: schlafen → neuer Tag  ·  Bilanz: Wiesenbüro → 📊" % [
 		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit])
 	_clean_tips = 0
+	_interest_paid = 0
 	_goods_cost = 0
 	_urin_count = 0
 	_complaints = 0
@@ -1779,7 +1813,7 @@ func net_clean(id: int) -> void:
 	if _mess_clean[id] >= 1.0:
 		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt
 		var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
-		Game.add_money(tip)
+		_add_income(tip)
 		_last_earn += tip
 		_clean_tips += tip
 		_remove_mess.rpc(id)
@@ -1942,3 +1976,22 @@ func net_report(text: String) -> void:
 	_last_report = text
 	if _hud and _hud.has_method("set_report"):
 		_hud.set_report(text)
+
+## Reicht das Geld — inklusive Dispo bis -200€?
+func _afford(cost: int) -> bool:
+	return Game.money - cost >= -OVERDRAFT_LIMIT
+
+## Einnahmen. Steht das Konto im Minus, gehen 5% Zinsen vom Betrag ab,
+## der die Schulden tilgt.
+func _add_income(amount: int) -> void:
+	if amount <= 0:
+		Game.add_money(amount)
+		return
+	if Game.money < 0:
+		var debt: int = -Game.money
+		var repay: int = mini(amount, debt)
+		var interest: int = int(ceil(float(repay) * OVERDRAFT_INTEREST))
+		_interest_paid += interest
+		Game.add_money(amount - interest)
+	else:
+		Game.add_money(amount)
