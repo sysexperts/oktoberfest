@@ -10,10 +10,10 @@
 [ext_resource type="PackedScene" uid="uid://b7dl2t1533kgl" path="res://scenes/computer.tscn" id="8_comp"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1536kh8" path="res://scenes/food_station.tscn" id="9_food"]
 [ext_resource type="Script" uid="uid://bkxikn4e2dotl" path="res://scripts/sfx.gd" id="10_sfx"]
+[ext_resource type="PackedScene" uid="uid://cdtgrn80rfxhm" path="res://scenes/kirmes.tscn" id="17_kirmes"]
 [ext_resource type="PackedScene" path="res://scenes/lager.tscn" id="18_lager"]
 [ext_resource type="PackedScene" path="res://scenes/buehne.tscn" id="19_buehne"]
-[ext_resource type="Script" path="res://scripts/crowd.gd" id="20_crowd"]
-[ext_resource type="PackedScene" path="res://scenes/kirmes.tscn" id="17_kirmes"]
+[ext_resource type="Script" uid="uid://dd87fg21y8vlf" path="res://scripts/crowd.gd" id="20_crowd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.14, 0.18, 0.42, 1)
@@ -41,23 +41,19 @@ ssao_power = 1.6
 glow_enabled = true
 glow_normalized = true
 glow_intensity = 0.7
-glow_strength = 1.0
 glow_bloom = 0.05
 glow_blend_mode = 0
-glow_hdr_threshold = 1.0
-glow_hdr_scale = 2.0
-adjustment_enabled = true
-adjustment_contrast = 1.06
-adjustment_saturation = 1.22
 fog_enabled = true
 fog_light_color = Color(0.78, 0.7, 0.62, 1)
-fog_light_energy = 1.0
 fog_sun_scatter = 0.2
 fog_density = 0.0022
 fog_aerial_perspective = 0.1
 fog_sky_affect = 0.0
 fog_height = 4.0
 fog_height_density = 0.1
+adjustment_enabled = true
+adjustment_contrast = 1.06
+adjustment_saturation = 1.22
 
 [sub_resource type="WorldBoundaryShape3D" id="Ground"]
 
@@ -69,46 +65,6 @@ size = Vector3(9, 4, 0.6)
 
 [sub_resource type="BoxShape3D" id="WallZ"]
 size = Vector3(0.6, 4, 27)
-
-[sub_resource type="StandardMaterial3D" id="MatGrass"]
-albedo_color = Color(0.28, 0.45, 0.2, 1)
-
-[sub_resource type="BoxMesh" id="GrassMesh"]
-size = Vector3(36, 0.1, 22)
-
-[sub_resource type="StandardMaterial3D" id="MatPath"]
-albedo_color = Color(0.62, 0.55, 0.42, 1)
-
-[sub_resource type="BoxMesh" id="PathMesh"]
-size = Vector3(6, 0.12, 22)
-
-[sub_resource type="StandardMaterial3D" id="MatSign"]
-albedo_color = Color(0.55, 0.12, 0.12, 1)
-emission_enabled = true
-emission = Color(0.7, 0.15, 0.15, 1)
-emission_energy_multiplier = 0.8
-
-[sub_resource type="BoxMesh" id="SignMesh"]
-size = Vector3(6, 1.4, 0.3)
-
-[sub_resource type="StandardMaterial3D" id="MatTrunk"]
-albedo_color = Color(0.35, 0.22, 0.1, 1)
-
-[sub_resource type="BoxMesh" id="TrunkMesh"]
-size = Vector3(0.4, 1.6, 0.4)
-
-[sub_resource type="StandardMaterial3D" id="MatLeaf"]
-albedo_color = Color(0.2, 0.5, 0.22, 1)
-
-[sub_resource type="SphereMesh" id="LeafMesh"]
-radius = 1.1
-height = 2.2
-
-[sub_resource type="BoxShape3D" id="OuterX"]
-size = Vector3(34, 4, 0.6)
-
-[sub_resource type="BoxShape3D" id="OuterZ"]
-size = Vector3(0.6, 4, 20)
 
 [node name="Main" type="Node3D" unique_id=1593171838]
 script = ExtResource("1_gm")
@@ -249,7 +205,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 [node name="BeerTable11" parent="Tables" unique_id=749490663 instance=ExtResource("5_table")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
 
-[node name="Kirmes" parent="." instance=ExtResource("17_kirmes")]
+[node name="Kirmes" parent="." unique_id=1802476162 instance=ExtResource("17_kirmes")]
 
 [node name="SpawnPoints" type="Node3D" parent="." unique_id=207167847]
 
@@ -268,16 +224,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.1, -33)
 [node name="Computer" parent="." unique_id=1426596233 instance=ExtResource("8_comp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
 
-[node name="Buehne" parent="." instance=ExtResource("19_buehne")]
+[node name="Buehne" parent="." unique_id=1815018836 instance=ExtResource("19_buehne")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 10, 0, 2)
 
-[node name="Lager" parent="." instance=ExtResource("18_lager")]
+[node name="Lager" parent="." unique_id=262057811 instance=ExtResource("18_lager")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -5)
 
-[node name="Lager2" parent="." instance=ExtResource("18_lager")]
+[node name="Lager2" parent="." unique_id=1060943569 instance=ExtResource("18_lager")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -2)
 
-[node name="Crowd" type="Node3D" parent="."]
+[node name="Crowd" type="Node3D" parent="." unique_id=755531113]
 script = ExtResource("20_crowd")
 
 [node name="Players" type="Node3D" parent="." unique_id=940945055]
