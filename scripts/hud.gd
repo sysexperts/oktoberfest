@@ -106,7 +106,7 @@ func _make_label(text: String) -> Label:
 
 func set_money(v: int) -> void:
 	_money_label.text = "💶 %d€" % v
-	# Dispo: bis -200€ erlaubt, Rückzahlung kostet 5% Zinsen
+	# Dispo: bis -1000€ erlaubt, Rückzahlung kostet 5% Zinsen
 	_money_label.add_theme_color_override("font_color",
 		Color(1, 0.35, 0.3) if v < 0 else Color.WHITE)
 func set_score(v: int) -> void:

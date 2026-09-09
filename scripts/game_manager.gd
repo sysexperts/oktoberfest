@@ -708,8 +708,8 @@ func _toilet_string() -> String:
 # ================================================= Tutorial & Schutzregeln
 ## Preis eines Bierpakets — so viel muss übrig bleiben, solange kein Bier da ist.
 const GOODS_RESERVE := 40
-## Dispo: so weit darf das Konto ins Minus. Rückzahlung kostet Zinsen.
-const OVERDRAFT_LIMIT := 200
+## Dispo: bis hierhin darf das Konto ins Minus. Rückzahlung kostet 5% Zinsen.
+const OVERDRAFT_LIMIT := 1000
 const OVERDRAFT_INTEREST := 0.05
 
 ## Popup beim anfragenden Spieler (nicht bei allen).
@@ -1977,7 +1977,7 @@ func net_report(text: String) -> void:
 	if _hud and _hud.has_method("set_report"):
 		_hud.set_report(text)
 
-## Reicht das Geld — inklusive Dispo bis -200€?
+## Reicht das Geld — inklusive Dispo bis -1000€?
 func _afford(cost: int) -> bool:
 	return Game.money - cost >= -OVERDRAFT_LIMIT
 
