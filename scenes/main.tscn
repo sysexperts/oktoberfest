@@ -16,6 +16,13 @@
 [ext_resource type="PackedScene" path="res://scenes/kirmes.tscn" id="17_kirmes"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.14, 0.18, 0.42, 1)
+sky_horizon_color = Color(0.78, 0.55, 0.42, 1)
+sky_curve = 0.12
+ground_bottom_color = Color(0.09, 0.09, 0.14, 1)
+ground_horizon_color = Color(0.58, 0.44, 0.38, 1)
+sun_angle_max = 40.0
+sun_curve = 0.08
 
 [sub_resource type="Sky" id="Sky"]
 sky_material = SubResource("SkyMat")
@@ -25,15 +32,32 @@ background_mode = 2
 sky = SubResource("Sky")
 ambient_light_source = 3
 ambient_light_energy = 0.35
+tonemap_mode = 3
+tonemap_white = 6.0
+ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 1.4
+ssao_power = 1.6
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.1
+glow_strength = 1.0
+glow_bloom = 0.15
+glow_blend_mode = 0
+glow_hdr_threshold = 0.85
+glow_hdr_scale = 2.0
+adjustment_enabled = true
+adjustment_contrast = 1.06
+adjustment_saturation = 1.22
 fog_enabled = true
-fog_light_color = Color(0.62, 0.66, 0.78, 1)
+fog_light_color = Color(0.78, 0.7, 0.62, 1)
 fog_light_energy = 1.0
-fog_sun_scatter = 0.15
-fog_density = 0.008
-fog_aerial_perspective = 0.35
-fog_sky_affect = 0.25
-fog_height = 2.5
-fog_height_density = 0.35
+fog_sun_scatter = 0.2
+fog_density = 0.0022
+fog_aerial_perspective = 0.2
+fog_sky_affect = 0.0
+fog_height = 4.0
+fog_height_density = 0.1
 
 [sub_resource type="WorldBoundaryShape3D" id="Ground"]
 

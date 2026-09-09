@@ -1,0 +1,210 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/lichterkette.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/kirmes_light.gd" id="2_klight"]
+
+[sub_resource type="BoxMesh" id="MastMesh"]
+size = Vector3(0.12, 5.0, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="MatMast"]
+albedo_color = Color(0.18, 0.16, 0.15, 1)
+
+[sub_resource type="SphereMesh" id="BirneMesh"]
+radius = 0.09
+height = 0.18
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="MatB1"]
+albedo_color = Color(1, 0.22, 0.2, 1)
+emission_enabled = true
+emission = Color(1, 0.22, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB2"]
+albedo_color = Color(1, 0.55, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.55, 0.15, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB3"]
+albedo_color = Color(1, 0.9, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.9, 0.3, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB4"]
+albedo_color = Color(0.35, 1, 0.4, 1)
+emission_enabled = true
+emission = Color(0.35, 1, 0.4, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB5"]
+albedo_color = Color(0.28, 0.75, 1, 1)
+emission_enabled = true
+emission = Color(0.28, 0.75, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB6"]
+albedo_color = Color(0.9, 0.38, 1, 1)
+emission_enabled = true
+emission = Color(0.9, 0.38, 1, 1)
+emission_energy_multiplier = 2.0
+
+[node name="Lichterkette" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="MastLinks" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 2.5, 0)
+mesh = SubResource("MastMesh")
+material_override = SubResource("MatMast")
+
+[node name="MastRechts" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.5, 0)
+mesh = SubResource("MastMesh")
+material_override = SubResource("MatMast")
+
+[node name="Birne0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.800, 5.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Birne1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.277, 4.778, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Birne2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.754, 4.574, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Birne3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.231, 4.388, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Birne4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.708, 4.219, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB5")
+
+[node name="Birne5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.185, 4.068, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB6")
+
+[node name="Birne6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.662, 3.935, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Birne7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.138, 3.820, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Birne8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.615, 3.722, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Birne9" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.092, 3.642, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Birne10" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.569, 3.580, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB5")
+
+[node name="Birne11" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.046, 3.536, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB6")
+
+[node name="Birne12" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.523, 3.509, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Birne13" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000, 3.500, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Birne14" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.523, 3.509, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Birne15" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.046, 3.536, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Birne16" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.569, 3.580, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB5")
+
+[node name="Birne17" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.092, 3.642, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB6")
+
+[node name="Birne18" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.615, 3.722, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Birne19" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.138, 3.820, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Birne20" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.662, 3.935, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Birne21" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.185, 4.068, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Birne22" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.708, 4.219, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB5")
+
+[node name="Birne23" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.231, 4.388, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB6")
+
+[node name="Birne24" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.754, 4.574, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Birne25" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.277, 4.778, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Birne26" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.800, 5.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="LichtMitte" type="OmniLight3D" parent="."]
+script = ExtResource("2_klight")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, 0)
+light_energy = 2.2
+omni_range = 15.0
+omni_attenuation = 1.6
+hue_speed = 0.09
+pulse = 0.4
+

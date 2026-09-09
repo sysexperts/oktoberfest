@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" uid="uid://1us2s8l6w6r4" path="res://assets/kirmes/Models/Foliage/Tree_1.fbx" id="36_87m88"]
 [ext_resource type="PackedScene" path="res://scenes/props/karussell.tscn" id="37_p4kn1"]
 [ext_resource type="PackedScene" path="res://scenes/props/riesenrad.tscn" id="38_swptr"]
+[ext_resource type="PackedScene" path="res://scenes/props/lichterkette.tscn" id="39_lkette"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)
@@ -584,3 +585,53 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 43, 
 
 [node name="Gift_Shop2" parent="." unique_id=1641563156 instance=ExtResource("16_h050s")]
 transform = Transform3D(1.299038, 0, -0.75, 0, 1.5, 0, 0.75, 0, 1.299038, 23.299038, 0, -29.25)
+
+[node name="Lichterketten" type="Node3D" parent="."]
+
+[node name="Kette0" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -28, 0, 19)
+
+[node name="Kette1" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -14, 0, 19)
+
+[node name="Kette2" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 19)
+
+[node name="Kette3" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 14, 0, 19)
+
+[node name="Kette4" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 28, 0, 19)
+
+[node name="Kette5" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -28, 0, -22)
+
+[node name="Kette6" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -14, 0, -22)
+
+[node name="Kette7" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, -22)
+
+[node name="Kette8" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 14, 0, -22)
+
+[node name="Kette9" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 28, 0, -22)
+
+[node name="Kette10" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -18)
+
+[node name="Kette11" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -4)
+
+[node name="Kette12" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 10)
+
+[node name="Kette13" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -18)
+
+[node name="Kette14" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -4)
+
+[node name="Kette15" parent="Lichterketten" instance=ExtResource("39_lkette")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 10)

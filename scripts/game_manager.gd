@@ -219,8 +219,8 @@ var _world_env: WorldEnvironment
 var _day_sun_energy := 1.0
 var _day_ambient := 0.35
 var _day_bg := 1.0
-var _day_fog := 0.008
-var _day_fog_color := Color(0.62, 0.66, 0.78)
+var _day_fog := 0.0022
+var _day_fog_color := Color(0.78, 0.70, 0.62)
 var _night_visual := false
 var _night_t := -1.0
 
@@ -428,17 +428,20 @@ func _apply_daylight(clock: float) -> void:
 		return
 	_night_t = t
 	if _sun:
-		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.06, t)
-		_sun.light_color = Color(1, 1, 1).lerp(Color(0.45, 0.5, 0.8), t)
+		# Nachts bleibt ein weiches, leicht blaues Mondlicht — dunkel genug, dass
+		# die bunten Kirmeslichter wirken, hell genug, dass man alles erkennt.
+		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.14, t)
+		_sun.light_color = Color(1, 1, 1).lerp(Color(0.62, 0.68, 0.92), t)
 		_sun.shadow_enabled = t < 0.5
 	if _world_env and _world_env.environment:
 		var env := _world_env.environment
-		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.12, t)
-		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.08, t)
-		# Nebel: tagsüber nur leichter Dunst, abends ziehen die Nebelmaschinen an
-		# und der Nebel wird dichter und kälter.
-		env.fog_density = lerpf(_day_fog, _day_fog * 3.5, t)
-		env.fog_light_color = _day_fog_color.lerp(Color(0.30, 0.34, 0.48), t)
+		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.30, t)
+		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.22, t)
+		# Nebel bleibt ein dünner Dunst — er soll das Licht der Buden einfangen,
+		# nicht die Sicht nehmen. Nachts etwas dichter und dunkler, damit die
+		# bunten Lichter Schwaden werfen.
+		env.fog_density = lerpf(_day_fog, _day_fog * 1.6, t)
+		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
 func _daily_rent() -> int:
 	return int(TENT_RENT.get(_tent_stage, 0))
 
