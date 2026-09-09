@@ -20,6 +20,8 @@ var _lod_timer := 0.0
 var _far := false
 var _jitter_t := 0.0
 var _jitter := 0.0
+var _idle_speed := 0.5
+var _walk_speed := 1.0
 
 @onready var _model: Node3D = $Model
 
@@ -30,14 +32,16 @@ func _ready() -> void:
 	var aps := _model.find_children("*", "AnimationPlayer", true, false)
 	if aps.size() > 0:
 		_anim = aps[0]
-		for n in ["Idle", "Walk", "Dance"]:
+		for n in ["Walk", "Dance", "Run"]:
 			if _anim.has_animation(n):
 				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		_anim.speed_scale = randf_range(0.85, 1.2)
+		_idle_speed = randf_range(0.35, 0.7)
+		_walk_speed = randf_range(0.85, 1.2)
 		if _anim.has_animation("Walk"):
 			_anim.play("Walk")
 			_cur = "Walk"
 			_anim.seek(randf() * 2.0, true)   # versetzt starten
+			_anim.advance(0.0)                # Pose sofort anwenden (sonst T-Pose)
 
 func setup(crowd: Node) -> void:
 	_crowd = crowd
@@ -62,7 +66,7 @@ func _process(delta: float) -> void:
 		# vor dem Stand stehenbleiben und schauen
 		_pause = randf_range(1.5, 6.0)
 		# ein Teil feiert kurz statt nur dazustehen
-		_set_anim("Dance" if randf() < 0.25 else "Idle")
+		_set_anim(ANIM_IDLE)
 		_tgt = _crowd.next_point(position)
 		return
 	# erst drehen, dann in Blickrichtung laufen — nie seitwärts oder rückwärts
@@ -85,12 +89,19 @@ func _idle_look(delta: float) -> void:
 	_model.rotation.y = lerp_angle(_model.rotation.y,
 		deg_to_rad(model_yaw_offset) + _jitter, clampf(delta * 2.0, 0.0, 1.0))
 
-func _set_anim(n: String) -> void:
-	if _anim and n != _cur and _anim.has_animation(n):
-		_anim.play(n)
-		_anim.seek(randf() * 1.5, true)
-		_cur = n
+## "Idle" im Modell ist nur ein Einzelbild (die T-Pose) — deshalb nehmen wir
+## zum Stehen ein langsam abgespieltes "Dance". Passt zum Bierzelt.
+const ANIM_IDLE := "Dance"
 
+func _set_anim(n: String) -> void:
+	if _anim == null or not _anim.has_animation(n):
+		return
+	_anim.speed_scale = _idle_speed if n == ANIM_IDLE else _walk_speed
+	if n == _cur:
+		return
+	_anim.play(n)
+	_anim.seek(randf() * 2.0, true)
+	_cur = n
 func _update_lod(delta: float) -> void:
 	_lod_timer -= delta
 	if _lod_timer > 0.0:
@@ -104,4 +115,9 @@ func _update_lod(delta: float) -> void:
 		return
 	_far = far
 	if _anim:
-		_anim.active = not far
+		if far:
+			# aktuelle Pose einfrieren, BEVOR wir abschalten — sonst T-Pose
+			_anim.advance(0.0)
+			_anim.active = false
+		else:
+			_anim.active = true

@@ -5,6 +5,9 @@ extends Node3D
 
 const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5)}
 const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹"}
+## "Idle" im Modell ist nur ein Einzelbild (T-Pose) — zum Stehen nehmen wir
+## ein langsam abgespieltes "Dance".
+const ANIM_IDLE := "Dance"
 
 ## Das Bean-Modell schaut nicht in Godots Standardrichtung. Falls jemand
 ## rückwärts läuft, hier auf 0 oder 180 stellen — gilt für alle Angestellten.
@@ -20,11 +23,12 @@ var _net_yaw := 0.0
 var _anim: AnimationPlayer
 var _cur := ""
 var _last := Vector3.ZERO
-var _skel: Skeleton3D
 var _mugs: Node3D
 var _mug_meshes: Array = []
 var _idle_jitter := 0.0
 var _jitter_t := 0.0
+var _idle_speed := 0.45
+var _walk_speed := 1.0
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -44,46 +48,27 @@ func _ready() -> void:
 	var aps := _model.find_children("*", "AnimationPlayer", true, false)
 	if aps.size() > 0:
 		_anim = aps[0]
-		for n in ["Idle", "Walk", "Run"]:
+		for n in ["Walk", "Run", "Dance"]:
 			if _anim.has_animation(n):
 				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		if _anim.has_animation("Idle"):
-			_anim.play("Idle")
+		if _anim.has_animation(ANIM_IDLE):
+			_anim.play(ANIM_IDLE)
 			_anim.seek(randf() * 2.0, true)          # nicht alle im Gleichtakt
 			_anim.speed_scale = randf_range(0.85, 1.15)
-			_cur = "Idle"
-	var sks := _model.find_children("*", "Skeleton3D", true, false)
-	if sks.size() > 0:
-		_skel = sks[0]
-		_build_mugs()
+			_cur = ANIM_IDLE
+			_anim.advance(0.0)   # Pose sofort anwenden, sonst T-Pose
+	_collect_mugs()
 	_refresh_label()
 
-## Bierkrüge in der Hand des Kellners (an den Handknochen gehängt).
-func _build_mugs() -> void:
-	var hand := _skel.find_bone("RightHand")
-	if hand < 0:
+## Die 12 Maßkrüge liegen als echte Knoten in staff.tscn (vor dem Körper,
+## wie eine echte Bedienung sie trägt). Hier werden nur so viele eingeblendet,
+## wie der Kellner gerade ausliefert.
+func _collect_mugs() -> void:
+	var holder := get_node_or_null("Kruege")
+	if holder == null:
 		return
-	var ba := BoneAttachment3D.new()
-	ba.bone_idx = hand
-	_skel.add_child(ba)
-	_mugs = Node3D.new()
-	ba.add_child(_mugs)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.95, 0.75, 0.25)
-	# bis zu 4 sichtbare Krüge — mehr wird über die Zahl am Schild angezeigt
-	for i in 4:
-		var m := MeshInstance3D.new()
-		var cyl := CylinderMesh.new()
-		cyl.top_radius = 0.05
-		cyl.bottom_radius = 0.05
-		cyl.height = 0.14
-		m.mesh = cyl
-		m.material_override = mat
-		m.position = Vector3(0.06 * float(i % 2), 0.12 * float(i / 2), 0.0)
-		m.visible = false
-		_mugs.add_child(m)
-		_mug_meshes.append(m)
-
+	for c in holder.get_children():
+		_mug_meshes.append(c)
 func set_net(pos: Vector3, yaw: float) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
@@ -99,7 +84,7 @@ func set_carrying(n: int) -> void:
 		return
 	carrying = n
 	for i in _mug_meshes.size():
-		(_mug_meshes[i] as MeshInstance3D).visible = i < mini(n, _mug_meshes.size())
+		(_mug_meshes[i] as Node3D).visible = i < n
 	_refresh_label()
 
 func _refresh_label() -> void:
@@ -117,14 +102,15 @@ func _process(delta: float) -> void:
 	rotation.y = lerp_angle(rotation.y, _net_yaw, t)
 	var spd := (position - _last).length() / maxf(delta, 0.001)
 	_last = position
-	var want := "Walk" if spd > 0.4 else "Idle"
+	var want := "Walk" if spd > 0.4 else ANIM_IDLE
 	if want != _cur and _anim and _anim.has_animation(want):
+		_anim.speed_scale = _idle_speed if want == ANIM_IDLE else _walk_speed
 		_anim.play(want)
-		if want == "Idle":
+		if want == ANIM_IDLE:
 			_anim.seek(randf() * 2.0, true)
 		_cur = want
 	# im Stehen leicht umschauen, damit nicht alle wie angewurzelt dastehen
-	if want == "Idle":
+	if want == ANIM_IDLE:
 		_jitter_t -= delta
 		if _jitter_t <= 0.0:
 			_jitter_t = randf_range(1.5, 4.0)
