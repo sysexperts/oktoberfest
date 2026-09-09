@@ -9,8 +9,8 @@
 size = Vector3(17.0, 3.0, 8.4)
 
 [sub_resource type="SphereMesh" id="BirneMesh"]
-radius = 0.14
-height = 0.28
+radius = 0.2
+height = 0.4
 radial_segments = 8
 rings = 4
 
@@ -18,25 +18,25 @@ rings = 4
 albedo_color = Color(1, 0.93, 0.7, 1)
 emission_enabled = true
 emission = Color(1, 0.93, 0.7, 1)
-emission_energy_multiplier = 2.0
+emission_energy_multiplier = 2.8
 
 [sub_resource type="StandardMaterial3D" id="MatB2"]
-albedo_color = Color(1, 0.78, 0.28, 1)
+albedo_color = Color(1, 0.66, 0.1, 1)
 emission_enabled = true
-emission = Color(1, 0.78, 0.28, 1)
-emission_energy_multiplier = 2.0
+emission = Color(1, 0.66, 0.1, 1)
+emission_energy_multiplier = 2.8
 
 [sub_resource type="StandardMaterial3D" id="MatB3"]
-albedo_color = Color(1, 0.3, 0.28, 1)
+albedo_color = Color(1, 0.1, 0.1, 1)
 emission_enabled = true
-emission = Color(1, 0.3, 0.28, 1)
-emission_energy_multiplier = 2.0
+emission = Color(1, 0.1, 0.1, 1)
+emission_energy_multiplier = 2.8
 
 [sub_resource type="StandardMaterial3D" id="MatB4"]
-albedo_color = Color(1, 0.45, 0.85, 1)
+albedo_color = Color(0.85, 0.15, 1, 1)
 emission_enabled = true
-emission = Color(1, 0.45, 0.85, 1)
-emission_energy_multiplier = 2.0
+emission = Color(0.85, 0.15, 1, 1)
+emission_energy_multiplier = 2.8
 
 [node name="Riesenrad" type="Node3D"]
 script = ExtResource("2_script")
@@ -61,8 +61,8 @@ shape = SubResource("Box")
 [node name="Lichter" type="Node3D" parent="Model/FerrisWheel_Rotate"]
 script = ExtResource("4_kette")
 tempo = 0.35
-grund = 1.8
-ausschlag = 1.6
+grund = 2.4
+ausschlag = 1.0
 
 [node name="Felge1" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.450, 0.000, -2.85)
