@@ -8,6 +8,9 @@ var _time_label: Label
 var _hygiene_label: Label
 var _pop_label: Label
 var _stock_label: Label
+var _quest_label: Label
+var _popup_panel: PanelContainer
+var _popup_label: Label
 var _phase_label: Label
 var _day_label: Label
 var _roster_label: Label
@@ -86,6 +89,8 @@ func _ready() -> void:
 	_build_summary()
 	_build_computer()
 	_build_booking()
+	_build_quest()
+	_build_popup()
 
 func _make_label(text: String) -> Label:
 	var l := Label.new()
@@ -495,3 +500,67 @@ func show_summary(served: int, missed: int, money: int, score: int) -> void:
 
 func restart_requested() -> bool:
 	return _restart_pressed
+
+## Tutorial-Anzeige (rechts, unter der Personalliste).
+func _build_quest() -> void:
+	_quest_label = _make_label("")
+	_quest_label.anchor_left = 1.0
+	_quest_label.anchor_right = 1.0
+	_quest_label.offset_left = -430
+	_quest_label.offset_right = -16
+	_quest_label.offset_top = 120
+	_quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_quest_label.add_theme_font_size_override("font_size", 19)
+	_quest_label.add_theme_color_override("font_color", Color(1, 0.92, 0.55))
+	add_child(_quest_label)
+
+func set_quest(text: String) -> void:
+	if _quest_label:
+		_quest_label.text = text
+		_quest_label.visible = text != ""
+
+## Modales Hinweisfenster (z. B. "erst Ware kaufen").
+func _build_popup() -> void:
+	_popup_panel = PanelContainer.new()
+	_popup_panel.anchor_left = 0.5
+	_popup_panel.anchor_top = 0.5
+	_popup_panel.anchor_right = 0.5
+	_popup_panel.anchor_bottom = 0.5
+	_popup_panel.offset_left = -300
+	_popup_panel.offset_top = -130
+	_popup_panel.offset_right = 300
+	_popup_panel.offset_bottom = 130
+	_popup_panel.visible = false
+	add_child(_popup_panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 16)
+	_popup_panel.add_child(vbox)
+
+	_popup_label = Label.new()
+	_popup_label.add_theme_font_size_override("font_size", 20)
+	_popup_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_popup_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(_popup_label)
+
+	var ok := Button.new()
+	ok.text = "Verstanden"
+	ok.custom_minimum_size = Vector2(0, 42)
+	ok.pressed.connect(close_popup)
+	vbox.add_child(ok)
+
+func show_popup(text: String) -> void:
+	if _popup_label == null:
+		return
+	_popup_label.text = text
+	_popup_panel.visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func close_popup() -> void:
+	if _popup_panel:
+		_popup_panel.visible = false
+	if not _comp_open and not _book_open:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func is_popup_open() -> bool:
+	return _popup_panel != null and _popup_panel.visible

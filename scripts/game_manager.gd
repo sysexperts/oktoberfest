@@ -180,6 +180,11 @@ var _complain_timer := 0.0
 var _urin_count := 0          # Tageszähler für den Report
 var _complaints := 0
 var _left_guests := 0
+# Tutorial-Fortschritt
+var _quest_step := 0
+var _quest_served_once := false
+var _ever_artist := false
+var _quest_timer := 0.0
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -305,6 +310,8 @@ func _save_game() -> void:
 		"stock_bier": int(_stock[WARE_BIER]),
 		"stock_essen": int(_stock[WARE_ESSEN]),
 		"toilet": _has_toilet,
+		"quest": _quest_step,
+		"ever_artist": _ever_artist,
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -338,6 +345,8 @@ func _load_game() -> bool:
 		for k in LIC_COST.keys():
 			_lic[k] = bool((lic as Dictionary).get(k, false))
 	_has_toilet = bool(d.get("toilet", false))
+	_quest_step = int(d.get("quest", 0))
+	_ever_artist = bool(d.get("ever_artist", false))
 	_stock[WARE_BIER] = int(d.get("stock_bier", 0))
 	_stock[WARE_ESSEN] = int(d.get("stock_essen", 0))
 	var st: Variant = d.get("staff", [])
@@ -541,6 +550,9 @@ func net_buy_table() -> void:
 	if _active_count >= limit:
 		_net_banner.rpc("🪑 Tisch-Limit dolu (%d). Zelt upgrade et." % limit)
 		return
+	# Die ersten zwei Tische sind Pflicht — dafür gilt die Warenreserve nicht
+	if _active_count >= 2 and not _reserve_ok(TABLE_COST):
+		return
 	if Game.money < TABLE_COST:
 		_net_banner.rpc("💶 Yetersiz para! (Tisch: %d€)" % TABLE_COST)
 		return
@@ -556,6 +568,8 @@ func net_buy_marketing() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	var cost := MARKETING_COST * (_upg_marketing + 1)
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (Werbung: %d€)" % cost)
 		return
@@ -571,6 +585,8 @@ func net_buy_deko() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	var cost := DEKO_COST * (_upg_deko + 1)
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (Deko: %d€)" % cost)
 		return
@@ -590,6 +606,8 @@ func net_buy_toilet() -> void:
 		return
 	if _tent_stage == 0:
 		_net_banner.rpc("Erst ein Zelt mieten!")
+		return
+	if not _reserve_ok(TOILET_COST):
 		return
 	if Game.money < TOILET_COST:
 		_net_banner.rpc("💶 Yetersiz para! (Toilette: %d€)" % TOILET_COST)
@@ -666,6 +684,84 @@ func _update_complaints(delta: float) -> void:
 func _toilet_string() -> String:
 	return "🚻 Toilette: ja" if _has_toilet else "🚻 Toilette: FEHLT (Gäste pinkeln in die Ecke)"
 
+# ================================================= Tutorial & Schutzregeln
+## Preis eines Bierpakets — so viel muss übrig bleiben, solange kein Bier da ist.
+const GOODS_RESERVE := 60
+
+## Popup beim anfragenden Spieler (nicht bei allen).
+func _popup_to_sender(msg: String) -> void:
+	var s := multiplayer.get_remote_sender_id()
+	if s <= 1:
+		net_popup(msg)
+	else:
+		net_popup.rpc_id(s, msg)
+
+@rpc("authority", "reliable", "call_local")
+func net_popup(text: String) -> void:
+	if _hud and _hud.has_method("show_popup"):
+		_hud.show_popup(text)
+
+## Kein Bier im Lager und keine Lieferung unterwegs?
+func _needs_goods() -> bool:
+	return int(_stock.get(WARE_BIER, 0)) <= 0 and _pending.is_empty()
+
+## Verhindert, dass man sein letztes Geld ausgibt, ohne Ware zu haben.
+func _reserve_ok(cost: int) -> bool:
+	if not _needs_goods():
+		return true
+	if Game.money - cost >= GOODS_RESERVE:
+		return true
+	_popup_to_sender("📦 Erst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %d€ für ein Paket Bier —\nsonst kannst du nichts verkaufen.\n\nWiesenbüro → Reiter Ware" % GOODS_RESERVE)
+	return false
+
+# ---- Tutorial ----
+const QUEST_TEXTS := [
+	"🎪 Miete dein Festzelt\nWiesenbüro (Nordosten) → Zelt → Zelt mieten (500€)",
+	"🪑 Stelle 2 Tische auf\nWiesenbüro → Zelt → Tisch stellen (200€)",
+	"🍺 Bestelle Bier\nWiesenbüro → Ware → 🍺 Bier ×1 (60€)",
+	"🚚 Der Lieferwagen kommt (~1 Min) und hupt.\nPakete mit E aufnehmen → ins Lager tragen",
+	"😴 Schlafe im Wohnwagen\n(Südseite, schmale Gasse) → Tag startet um 07:00",
+	"🍻 Bediene einen Gast\nKrug nehmen → am Fass zapfen (E halten) → Gast (E)",
+	"🌙 Halte bis 22:00 durch\nDanach kommt die Tagesbilanz",
+	"👷 Stelle einen Kellner ein\nWiesenbüro → Personal (500€) — er bedient für dich",
+	"📜 Kaufe eine Lizenz\nWiesenbüro → Lizenzen — mehr Auswahl, mehr Umsatz",
+	"🚻 Baue eine Toilette ein (1800€)\nSonst pinkeln die Gäste in die Ecke",
+	"🎤 Buche einen Künstler\nWiesenbüro → Künstler — bringt mehr Gäste",
+]
+
+func _quest_done(step: int) -> bool:
+	match step:
+		0: return _tent_stage > 0
+		1: return _active_count >= 2
+		2: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
+		3: return int(_stock.get(WARE_BIER, 0)) > 0
+		4: return _shift_num >= 1
+		5: return _served >= 1 or _quest_served_once
+		6: return _shift_num >= 1 and _phase == Phase.INTERMISSION
+		7: return _has_staff(ROLE_KELLNER)
+		8: return _lic.values().has(true)
+		9: return _has_toilet
+		10: return _ever_artist
+	return false
+
+func _has_staff(role: int) -> bool:
+	for s in _staff_sim.values():
+		if int(s.role) == role:
+			return true
+	return false
+
+## Schritte weiterschalten, solange sie erfüllt sind. true = etwas hat sich geändert.
+func _check_quest() -> bool:
+	var before := _quest_step
+	while _quest_step < QUEST_TEXTS.size() and _quest_done(_quest_step):
+		_quest_step += 1
+	return _quest_step != before
+
+func _quest_text() -> String:
+	if _quest_step >= QUEST_TEXTS.size():
+		return ""
+	return "📋 Aufgabe %d/%d\n%s" % [_quest_step + 1, QUEST_TEXTS.size(), QUEST_TEXTS[_quest_step]]
+
 # ================================================= E5: Künstler
 ## Wiesenbüro: Künstler für die nächste Schicht buchen.
 @rpc("any_peer", "reliable")
@@ -678,11 +774,14 @@ func net_book_artist(tier: int) -> void:
 		_net_banner.rpc("🎤 %s ist schon gebucht" % ARTIST_NAMES[_artist_tier])
 		return
 	var cost: int = ARTIST_COST[tier]
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [ARTIST_NAMES[tier], cost])
 		return
 	Game.add_money(-cost)
 	_artist_tier = tier
+	_ever_artist = true
 	_popularity = minf(100.0, _popularity + float(ARTIST_POP[tier]))
 	_net_banner.rpc("🎤 %s gebucht! Popularität +%d%%\nSpielt in der nächsten Schicht." % [
 		ARTIST_NAMES[tier], int(ARTIST_POP[tier])])
@@ -735,6 +834,9 @@ func _artist_string() -> String:
 @rpc("any_peer", "reliable")
 func net_order_goods(kind: int, packs: int) -> void:
 	if not multiplayer.is_server():
+		return
+	if _tent_stage == 0:
+		_popup_to_sender("🎪 Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst ein Zelt:\nWiesenbüro → Reiter Zelt → Zelt mieten (500€)")
 		return
 	if not PACK_COST.has(kind) or packs <= 0:
 		return
@@ -909,6 +1011,8 @@ func net_hire_staff(role: int) -> void:
 	if not STAFF_HIRE_COST.has(role):
 		return
 	var cost: int = STAFF_HIRE_COST[role]
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [STAFF_NAMES[role], cost])
 		return
@@ -940,6 +1044,8 @@ func net_upgrade_staff(role: int) -> void:
 		_net_banner.rpc("Kein %s zum Aufstufen (oder schon Lv%d)" % [STAFF_NAMES.get(role, "?"), STAFF_MAX_LEVEL])
 		return
 	var cost: int = STAFF_UPGRADE_BASE * low
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (Aufstufen: %d€)" % cost)
 		return
@@ -1140,6 +1246,7 @@ func _serve_by_staff(gid: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
 	_served += 1
+	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
 	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
 	var reward := int(CustomerReward() * hyg * (1.0 + DEKO_BONUS * _upg_deko))
@@ -1182,6 +1289,8 @@ func net_buy_license(key: String) -> void:
 		_net_banner.rpc("✅ %s lisansı zaten var" % LIC_NAMES[key])
 		return
 	var cost: int = LIC_COST[key]
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [LIC_NAMES[key], cost])
 		return
@@ -1209,6 +1318,8 @@ func net_upgrade_tent() -> void:
 		_net_banner.rpc("🎪 En büyük Zelt zaten!")
 		return
 	var cost: int = TENT_UPGRADE_COST[nxt]
+	if not _reserve_ok(cost):
+		return
 	if Game.money < cost:
 		_net_banner.rpc("💶 Yetersiz para! (Upgrade: %d€)" % cost)
 		return
@@ -1289,6 +1400,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[id] = g
 	_served += 1
+	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
 	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
@@ -1317,6 +1429,12 @@ func _process(delta: float) -> void:
 	# MOLA: otomatik başlangıç YOK. Oyuncu Wohnwagen'de uyuyunca gün başlar.
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
+	# Tutorial: Fortschritt regelmäßig prüfen (Bedingungen ändern sich im Spiel)
+	_quest_timer -= delta
+	if _quest_timer <= 0.0:
+		_quest_timer = 1.0
+		if _check_quest():
+			_broadcast_meta()
 	_update_held_tables()
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
@@ -1724,11 +1842,12 @@ func _mgmt_string() -> String:
 		_lic_string() + "\n" + _stock_string() + "\n" + _artist_string() + " · " + _toilet_string()]
 
 func _broadcast_meta() -> void:
-	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count)
+	_check_quest()
+	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count, _quest_text())
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
 
 @rpc("authority", "reliable", "call_local")
-func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int) -> void:
+func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int, quest: String) -> void:
 	_phase = phase
 	_day = day
 	_tent_stage = tent_stage
@@ -1741,6 +1860,7 @@ func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: in
 	_hud.set_roster(roster)
 	_hud.set_mgmt(mgmt)
 	_hud.set_day(day, WIESN_DAYS)
+	_hud.set_quest(quest)
 	if _sfx_node:
 		if phase == Phase.SHIFT:
 			_sfx_node.play_music()

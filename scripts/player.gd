@@ -135,6 +135,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var hud := _world.get_node_or_null("HUD")
 		if hud and hud.has_method("is_computer_open") and hud.is_computer_open():
 			hud.close_computer()
+		elif hud and hud.has_method("is_popup_open") and hud.is_popup_open():
+			hud.close_popup()
 		elif hud and hud.has_method("is_booking_open") and hud.is_booking_open():
 			hud.close_booking()
 		else:
