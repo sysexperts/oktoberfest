@@ -202,9 +202,9 @@ material_override = SubResource("MatB3")
 [node name="LichtMitte" type="OmniLight3D" parent="."]
 script = ExtResource("2_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.0, 0)
-light_energy = 2.2
-omni_range = 15.0
+light_energy = 0.8
+omni_range = 10.0
 omni_attenuation = 1.6
 hue_speed = 0.09
-pulse = 0.4
+pulse = 0.25
 

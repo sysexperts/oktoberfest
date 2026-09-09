@@ -21,6 +21,6 @@ shape = SubResource("Box")
 script = ExtResource("9_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 1.2)
 light_color = Color(1, 0.82, 0.52, 1)
-light_energy = 2.2
+light_energy = 0.9
 omni_range = 8.0
 omni_attenuation = 1.6

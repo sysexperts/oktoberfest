@@ -34,8 +34,8 @@ material_override = SubResource("MatBulb")
 [node name="Licht" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, 0)
 light_color = Color(1, 0.8, 0.5, 1)
-light_energy = 3.0
-omni_range = 14.0
+light_energy = 1.1
+omni_range = 11.0
 omni_attenuation = 1.5
 
 [node name="Body" type="StaticBody3D" parent="."]

@@ -18,25 +18,25 @@ rings = 4
 albedo_color = Color(1, 0.93, 0.7, 1)
 emission_enabled = true
 emission = Color(1, 0.93, 0.7, 1)
-emission_energy_multiplier = 2.0
+emission_energy_multiplier = 1.2
 
 [sub_resource type="StandardMaterial3D" id="MatB2"]
 albedo_color = Color(1, 0.78, 0.28, 1)
 emission_enabled = true
 emission = Color(1, 0.78, 0.28, 1)
-emission_energy_multiplier = 2.0
+emission_energy_multiplier = 1.2
 
 [sub_resource type="StandardMaterial3D" id="MatB3"]
 albedo_color = Color(1, 0.3, 0.28, 1)
 emission_enabled = true
 emission = Color(1, 0.3, 0.28, 1)
-emission_energy_multiplier = 2.0
+emission_energy_multiplier = 1.2
 
 [sub_resource type="StandardMaterial3D" id="MatB4"]
 albedo_color = Color(1, 0.45, 0.85, 1)
 emission_enabled = true
 emission = Color(1, 0.45, 0.85, 1)
-emission_energy_multiplier = 2.0
+emission_energy_multiplier = 1.2
 
 [node name="Riesenrad" type="Node3D"]
 script = ExtResource("2_script")
@@ -61,8 +61,8 @@ shape = SubResource("Box")
 [node name="Lichter" type="Node3D" parent="Model/FerrisWheel_Rotate"]
 script = ExtResource("4_kette")
 tempo = 0.35
-grund = 2.2
-ausschlag = 1.4
+grund = 1.5
+ausschlag = 1.0
 
 [node name="Felge1" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.600, 0.000, -0.4)
@@ -467,35 +467,35 @@ material_override = SubResource("MatB1")
 [node name="Kirmeslicht1" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0, 9.0, 0)
-light_energy = 2.6
-omni_range = 16.0
+light_energy = 0.6
+omni_range = 11.0
 omni_attenuation = 1.6
 hue_speed = 0.11
-pulse = 0.6
+pulse = 0.3
 
 [node name="Kirmeslicht2" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0, 9.0, 0)
-light_energy = 2.6
-omni_range = 16.0
+light_energy = 0.6
+omni_range = 11.0
 omni_attenuation = 1.6
 hue_speed = 0.11
-pulse = 0.6
+pulse = 0.3
 
 [node name="Kirmeslicht3" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, 6.0)
-light_energy = 2.6
-omni_range = 16.0
+light_energy = 0.6
+omni_range = 11.0
 omni_attenuation = 1.6
 hue_speed = 0.11
-pulse = 0.6
+pulse = 0.3
 
 [node name="Kirmeslicht4" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, -6.0)
-light_energy = 2.6
-omni_range = 16.0
+light_energy = 0.6
+omni_range = 11.0
 omni_attenuation = 1.6
 hue_speed = 0.11
-pulse = 0.6
+pulse = 0.3
