@@ -253,6 +253,7 @@ func _ready() -> void:
 			_next_spawn = 1
 			_add_player(1, 0)
 		_broadcast_meta()
+		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	else:
 		_client_ready.rpc_id(1)
 

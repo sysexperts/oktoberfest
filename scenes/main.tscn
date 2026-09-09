@@ -236,7 +236,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.1, -33)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
 
 [node name="Buehne" parent="." instance=ExtResource("19_buehne")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, 2)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 10, 0, 2)
 
 [node name="Lager" parent="." instance=ExtResource("18_lager")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -5)

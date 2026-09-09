@@ -6,7 +6,7 @@ extends CharacterBody3D
 const SPEED := 4.0
 const SPRINT_SPEED := 7.0
 const ACCEL := 12.0
-const INTERACT_RANGE := 2.2
+const INTERACT_RANGE := 3.0
 const FACING_DOT := 0.35
 const MOUSE_SENS := 0.0025
 const PITCH_LIMIT := deg_to_rad(85.0)
@@ -237,7 +237,11 @@ func _update_target() -> void:
 		var n3 := node as Node3D
 		if n3 == null:
 			continue
-		var to: Vector3 = n3.global_position - origin
+		# Objekte dürfen einen eigenen Ansprechpunkt melden (z. B. Wohnwagen-Tür)
+		var ipos: Vector3 = n3.global_position
+		if n3.has_method("interact_point"):
+			ipos = n3.interact_point()
+		var to: Vector3 = ipos - origin
 		to.y = 0
 		var dist := to.length()
 		if dist > INTERACT_RANGE:

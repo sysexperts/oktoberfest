@@ -12,3 +12,8 @@ func _ready() -> void:
 	var label := get_node_or_null("Label") as Label3D
 	if label and not is_mine:
 		label.visible = false
+
+## Ansprechpunkt an der Tür statt in der Wagenmitte — sonst muss man
+## praktisch im Wohnwagen stehen, um schlafen zu können.
+func interact_point() -> Vector3:
+	return global_position + global_transform.basis.z * 1.1
