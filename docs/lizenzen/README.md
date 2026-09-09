@@ -6,10 +6,10 @@ Nachweis in diesem Ordner liegen.
 | Assets | Dateien | Herkunft | Lizenz | Nachweis | Stand |
 |---|---|---|---|---|---|
 | Kirmes-Pack | `assets/kirmes/**` (126 Modelle) | gekauft | Royalty-Free | fehlt | ⚠️ |
-| Spielfigur | `assets/character/character/bavarian_bean.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
-| Zelt | `assets/models/floor,wall,roof.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
-| Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
-| Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
+| Spielfigur | `assets/character/character/bavarian_bean.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
+| Zelt | `assets/models/floor,wall,roof.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
+| Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
+| Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Ton | `assets/audio/` | — | — | — | leer, alles synthetisch |
 
 Schriftarten: keine eigenen im Projekt, es läuft alles über Godots
@@ -41,9 +41,8 @@ Wir sind auf dem bezahlten Tarif — also kein Credit nötig.
 
 **Zwei Bedingungen bleiben:**
 
-1. Die **Eingabematerialien** dürfen keine fremden Urheberrechte verletzen.
-   Wurden Referenzbilder hochgeladen, müssen das eigene oder freie Bilder
-   gewesen sein. Ein Foto eines echten Festzelts aus dem Netz wäre ein Problem.
+1. ~~Die **Eingabematerialien** dürfen keine fremden Urheberrechte verletzen.~~
+   Erledigt: die Vorlagen stammen alle von Serdar selbst.
 2. Maßgeblich ist der Tarif **zum Zeitpunkt der Erzeugung**, nicht heute. Läuft
    das Abo schon lange genug, ist das unkritisch — die Rechnung zeigt es.
 

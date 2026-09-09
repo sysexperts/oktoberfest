@@ -9,8 +9,9 @@ Stand: geprüft am aktuellen Repo, nicht abgeschrieben. Reihenfolge = Empfehlung
 ### A1 Lizenzen der Assets klären
 **Du, kostet nur Zeit.** Register: `docs/lizenzen/README.md`.
 
-Kirmes-Pack ist **royalty-free** — geklärt, Nachweis fehlt noch. Offen sind
-Spielfigur, Zelt-Modelle und die vier alten Stände.
+Eigene Modelle (Meshy, bezahlter Tarif, eigene Vorlagen): **geklärt**.
+Kirmes-Pack ist **royalty-free** — geklärt, Kaufbeleg fehlt noch. Offen ist nur
+noch das Ablegen der Nachweise.
 
 - Das gekaufte „Amusement Park"-Pack: erlaubt die Lizenz den Vertrieb in einem
   **verkauften** Spiel? Viele Marktplatz-Lizenzen unterscheiden zwischen
