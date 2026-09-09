@@ -5,12 +5,14 @@ extends Node3D
 
 const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5)}
 const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹"}
-## "Idle" im Modell ist nur ein Einzelbild (T-Pose) — zum Stehen nehmen wir
-## ein langsam abgespieltes "Dance".
-const ANIM_IDLE := "Dance"
 
-## Das Bean-Modell schaut nicht in Godots Standardrichtung. Falls jemand
-## rückwärts läuft, hier auf 0 oder 180 stellen — gilt für alle Angestellten.
+## Im Modell ist "Idle" nur ein Einzelbild (die T-Pose). Zum Stehen frieren wir
+## deshalb die Laufanimation an einer neutralen Stelle ein.
+const STAND_ANIM := "Walk"
+const STAND_FRAME := 0.25
+
+## Das Bean-Modell schaut nicht in Godots Standardrichtung. Bei Rückwärtslaufen
+## hier auf 0 oder 180 stellen.
 @export var model_yaw_offset := 180.0
 
 var staff_id := -1
@@ -21,19 +23,14 @@ var carrying := 0
 var _net_pos: Vector3
 var _net_yaw := 0.0
 var _anim: AnimationPlayer
-var _cur := ""
+var _walking := false
 var _last := Vector3.ZERO
-var _mugs: Node3D
-var _mug_meshes: Array = []
+var _mug_nodes: Array = []
+var _carry_pose: CarryPose
 var _idle_jitter := 0.0
 var _jitter_t := 0.0
-var _idle_speed := 0.45
-var _walk_speed := 1.0
-var _skel: Skeleton3D
-var _b_larm := -1
-var _b_lfore := -1
-var _b_rarm := -1
-var _b_rfore := -1
+var _bob := 0.0
+var _model_base_y := 0.0
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -50,32 +47,54 @@ func _ready() -> void:
 	_net_pos = position
 	_last = position
 	_model.rotation.y = deg_to_rad(model_yaw_offset)
+	_model_base_y = _model.position.y
 	var aps := _model.find_children("*", "AnimationPlayer", true, false)
 	if aps.size() > 0:
 		_anim = aps[0]
 		for n in ["Walk", "Run", "Dance"]:
 			if _anim.has_animation(n):
 				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		if _anim.has_animation(ANIM_IDLE):
-			_anim.play(ANIM_IDLE)
-			_anim.seek(randf() * 2.0, true)          # nicht alle im Gleichtakt
-			_anim.speed_scale = randf_range(0.85, 1.15)
-			_cur = ANIM_IDLE
-			_anim.advance(0.0)   # Pose sofort anwenden, sonst T-Pose
+		_set_standing()
 	_collect_mugs()
-	_cache_arm_bones()
-	process_priority = 50   # nach dem AnimationPlayer laufen
+	_setup_carry_pose()
 	_refresh_label()
 
-## Die 12 Maßkrüge liegen als echte Knoten in staff.tscn (vor dem Körper,
-## wie eine echte Bedienung sie trägt). Hier werden nur so viele eingeblendet,
-## wie der Kellner gerade ausliefert.
+## Neutrale Stehpose: Laufanimation an einer Stelle mit geschlossenen Beinen
+## anhalten. Wirkt ruhig statt tanzend oder erstarrt in T-Pose.
+func _set_standing() -> void:
+	if _anim == null or not _anim.has_animation(STAND_ANIM):
+		return
+	_anim.play(STAND_ANIM)
+	_anim.seek(STAND_FRAME, true)
+	_anim.advance(0.0)      # Pose sofort anwenden
+	_anim.speed_scale = 0.0 # eingefroren
+	_walking = false
+
+func _set_walking() -> void:
+	if _anim == null or not _anim.has_animation("Walk"):
+		return
+	if not _walking:
+		_anim.play("Walk")
+	_anim.speed_scale = 1.0
+	_walking = true
+
+## Die Maßkrüge liegen als echte Knoten in staff.tscn (Traube vor dem Körper).
 func _collect_mugs() -> void:
 	var holder := get_node_or_null("Kruege")
 	if holder == null:
 		return
 	for c in holder.get_children():
-		_mug_meshes.append(c)
+		_mug_nodes.append(c)
+
+## Tragehaltung als SkeletonModifier — läuft nach dem AnimationPlayer.
+func _setup_carry_pose() -> void:
+	var sks := _model.find_children("*", "Skeleton3D", true, false)
+	if sks.is_empty():
+		return
+	_carry_pose = CarryPose.new()
+	_carry_pose.name = "CarryPose"
+	(sks[0] as Skeleton3D).add_child(_carry_pose)
+
 func set_net(pos: Vector3, yaw: float) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
@@ -90,8 +109,10 @@ func set_carrying(n: int) -> void:
 	if carrying == n:
 		return
 	carrying = n
-	for i in _mug_meshes.size():
-		(_mug_meshes[i] as Node3D).visible = i < n
+	for i in _mug_nodes.size():
+		(_mug_nodes[i] as Node3D).visible = i < n
+	if _carry_pose:
+		_carry_pose.carrying = n
 	_refresh_label()
 
 func _refresh_label() -> void:
@@ -109,52 +130,20 @@ func _process(delta: float) -> void:
 	rotation.y = lerp_angle(rotation.y, _net_yaw, t)
 	var spd := (position - _last).length() / maxf(delta, 0.001)
 	_last = position
-	var want := "Walk" if spd > 0.4 else ANIM_IDLE
-	if want != _cur and _anim and _anim.has_animation(want):
-		_anim.speed_scale = _idle_speed if want == ANIM_IDLE else _walk_speed
-		_anim.play(want)
-		if want == ANIM_IDLE:
-			_anim.seek(randf() * 2.0, true)
-		_cur = want
-	# im Stehen leicht umschauen, damit nicht alle wie angewurzelt dastehen
-	if want == ANIM_IDLE:
-		_jitter_t -= delta
-		if _jitter_t <= 0.0:
-			_jitter_t = randf_range(1.5, 4.0)
-			_idle_jitter = randf_range(-0.5, 0.5)
-		_model.rotation.y = lerp_angle(_model.rotation.y,
-			deg_to_rad(model_yaw_offset) + _idle_jitter, clampf(delta * 2.0, 0.0, 1.0))
-	else:
+	if spd > 0.4:
+		_set_walking()
 		_model.rotation.y = lerp_angle(_model.rotation.y,
 			deg_to_rad(model_yaw_offset), clampf(delta * 5.0, 0.0, 1.0))
-	_apply_carry_pose()
-
-## --- Tragehaltung -----------------------------------------------------------
-## Die Laufanimation bewirbt die Arme jedes Bild neu. Damit unsere Pose gewinnt,
-## läuft _process dieses Knotens per process_priority NACH dem AnimationPlayer.
-func _cache_arm_bones() -> void:
-	var sks := _model.find_children("*", "Skeleton3D", true, false)
-	if sks.is_empty():
-		return
-	_skel = sks[0]
-	_b_larm = _skel.find_bone("LeftArm")
-	_b_lfore = _skel.find_bone("LeftForeArm")
-	_b_rarm = _skel.find_bone("RightArm")
-	_b_rfore = _skel.find_bone("RightForeArm")
-
-func _pose(bone: int, ang: float) -> void:
-	if bone < 0 or _skel == null:
-		return
-	var rest := _skel.get_bone_rest(bone).basis.get_rotation_quaternion()
-	_skel.set_bone_pose_rotation(bone, rest * Quaternion(Vector3.RIGHT, ang))
-
-## Arme nach vorne anwinkeln, als würde er die Krugtraube tragen.
-func _apply_carry_pose() -> void:
-	if _skel == null:
-		return
-	if carrying <= 0:
-		return
-	_pose(_b_rarm, 0.55)
-	_pose(_b_rfore, 1.25)
-	_pose(_b_larm, 0.55)
-	_pose(_b_lfore, 1.25)
+		_model.position.y = _model_base_y
+	else:
+		if _walking:
+			_set_standing()
+		# im Stehen leicht umschauen und atmen, damit er nicht erstarrt wirkt
+		_jitter_t -= delta
+		if _jitter_t <= 0.0:
+			_jitter_t = randf_range(2.0, 5.0)
+			_idle_jitter = randf_range(-0.35, 0.35)
+		_model.rotation.y = lerp_angle(_model.rotation.y,
+			deg_to_rad(model_yaw_offset) + _idle_jitter, clampf(delta * 1.5, 0.0, 1.0))
+		_bob += delta
+		_model.position.y = _model_base_y + sin(_bob * 1.6) * 0.012
