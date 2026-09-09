@@ -11,6 +11,7 @@ const COLORS := [
 var _lights: Array = []
 var _base_x: Array = []
 var _t := 0.0
+var _active := true
 
 func _ready() -> void:
 	add_to_group("stage")
@@ -22,6 +23,8 @@ func _ready() -> void:
 				_base_x.append((c as OmniLight3D).position.x)
 
 func _process(delta: float) -> void:
+	if not _active:
+		return
 	_t += delta
 	for i in _lights.size():
 		var l := _lights[i] as OmniLight3D
@@ -42,3 +45,11 @@ func artist_points() -> Array:
 			if c is Node3D:
 				arr.append((c as Node3D).global_position)
 	return arr
+
+## Licht nur an, solange das Zelt offen ist. Nach 22:00 ist Feierabend.
+func set_active(on: bool) -> void:
+	if _active == on:
+		return
+	_active = on
+	for l in _lights:
+		(l as OmniLight3D).visible = on

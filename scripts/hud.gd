@@ -28,6 +28,8 @@ var _banner_label: Label
 var _banner_token := 0
 var _comp_open := false
 var _last_roster := ""
+var _report_label: Label
+var _last_report := ""
 
 func _ready() -> void:
 	var top := HBoxContainer.new()
@@ -320,8 +322,20 @@ func _build_booking() -> void:
 	w_info.text = "1 Paket = 10 Einheiten. Lieferung nach ~1 Minute\nper Wagen — dann Pakete ins Lager tragen!"
 	w_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t_ware.add_child(w_info)
-	_add_order_row(t_ware, "🍺 Bier", 1, 60)
-	_add_order_row(t_ware, "🥨 Zutaten", 2, 80)
+	_add_order_row(t_ware, "🍺 Bier", 1, 40)
+	_add_order_row(t_ware, "🥨 Zutaten", 2, 50)
+
+	# --- Reiter: Bilanz (jederzeit nachlesbar) ---
+	var t_rep := VBoxContainer.new()
+	t_rep.name = "📊 Bilanz"
+	tabs.add_child(t_rep)
+	_report_label = Label.new()
+	_report_label.text = "Noch keine Schicht gespielt."
+	_report_label.add_theme_font_size_override("font_size", 18)
+	_report_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_report_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_report_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	t_rep.add_child(_report_label)
 
 	var close_btn := Button.new()
 	close_btn.text = "Kapat (Esc)"
@@ -564,3 +578,32 @@ func close_popup() -> void:
 
 func is_popup_open() -> bool:
 	return _popup_panel != null and _popup_panel.visible
+
+## Kurze Schwarzblende beim Schlafen.
+func play_sleep_fade() -> void:
+	var fade := ColorRect.new()
+	fade.color = Color(0, 0, 0, 0)
+	fade.anchor_right = 1.0
+	fade.anchor_bottom = 1.0
+	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fade)
+	var zzz := _make_label("😴  ...")
+	zzz.anchor_left = 0.5
+	zzz.anchor_top = 0.5
+	zzz.offset_left = -60
+	zzz.add_theme_font_size_override("font_size", 44)
+	zzz.modulate = Color(1, 1, 1, 0)
+	fade.add_child(zzz)
+	var tw := create_tween()
+	tw.tween_property(fade, "color:a", 1.0, 0.7)
+	tw.parallel().tween_property(zzz, "modulate:a", 1.0, 0.7)
+	tw.tween_interval(0.8)
+	tw.tween_property(fade, "color:a", 0.0, 0.9)
+	tw.parallel().tween_property(zzz, "modulate:a", 0.0, 0.5)
+	tw.tween_callback(fade.queue_free)
+
+## Letzte Tagesbilanz merken, damit man sie jederzeit nachlesen kann.
+func set_report(text: String) -> void:
+	_last_report = text
+	if _report_label:
+		_report_label.text = text if text != "" else "Noch keine Schicht gespielt."

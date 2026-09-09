@@ -42,10 +42,13 @@ const PATIENCE_NIGHT_MULT := 1.8    # gece sabır daha hızlı azalır
 const POP_START := 20.0             # az misafirle başla
 const POP_SERVE := 1.5
 const POP_MISS := 3.0
-const MESS_CHANCE_PER_SEC := 0.02   # oturan sarhoş misafir kir yapma olasılığı/sn
+const MESS_CHANCE_PER_SEC := 0.02   # Wahrscheinlichkeit pro Sekunde
+const DRINKS_BEFORE_PUKE := 4       # so viele Getränke, bevor jemandem schlecht wird
 
 # Temizlik
 const CLEAN_PER_CALL := 0.05
+const CLEAN_TIP_MIN := 6      # Trinkgeld fürs Saubermachen
+const CLEAN_TIP_MAX := 12
 const HYGIENE_DRAIN := 1.2
 const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
@@ -57,8 +60,8 @@ const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
 const TABLE_COST := 200
-const DAILY_RENT := 150       # temel kira; her gün artar (_daily_rent)
-const RENT_PER_DAY := 40      # gün başına ek kira (ekonomi baskısı)
+const DAILY_RENT := 120       # Grundmiete; steigt täglich (_daily_rent)
+const RENT_PER_DAY := 30      # Aufschlag pro Tag (Wirtschaftsdruck)
 const WIESN_DAYS := 16
 # Upgrades (kiosk)
 const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
@@ -92,7 +95,7 @@ const WARE_BIER := 1
 const WARE_ESSEN := 2
 const WARE_NAMES := {1: "🍺 Bier", 2: "🥨 Zutaten"}
 const PACK_UNITS := 10                    # Einheiten pro Paket
-const PACK_COST := {1: 60, 2: 80}         # Preis pro Paket
+const PACK_COST := {1: 40, 2: 50}         # Preis pro Paket (10 Einheiten)
 const DELIVERY_DELAY := 60.0              # Lieferzeit nach Bestellung (Sekunden)
 const VAN_START := Vector3(-42.0, 0.0, 19.0)
 const VAN_DROP := Vector3(2.0, 0.0, 19.0)
@@ -159,6 +162,8 @@ var _staff_sim := {}
 var _staff_next := 0
 var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
 var _wages_last := 0
+var _clean_tips := 0
+var _last_report := ""
 # E4: Bestand + Lieferungen
 var _stock := {1: 0, 2: 0}      # WARE_BIER / WARE_ESSEN
 var _goods_cost := 0            # Wareneinsatz des Tages (für die Bilanz)
@@ -366,6 +371,12 @@ func _load_game() -> bool:
 	_apply_tent()
 	return true
 
+## Bühnenlicht nur bei offenem Zelt.
+func _apply_stage(on: bool) -> void:
+	for s in get_tree().get_nodes_in_group("stage"):
+		if s.has_method("set_active"):
+			s.set_active(on)
+
 ## E7: Besucherdichte draußen aus der Uhrzeit ableiten (geschlossen = leer).
 func _apply_crowd(clock: float) -> void:
 	if _crowd == null:
@@ -440,6 +451,7 @@ func _client_ready() -> void:
 		var pk = _packages[pid]
 		_add_package.rpc_id(sender, pid, (pk as Node3D).position, int(pk.kind), int(pk.amount))
 	_push_stock.rpc_id(sender, int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	net_report.rpc_id(sender, _last_report)
 	_broadcast_meta()
 
 @rpc("authority", "reliable", "call_local")
@@ -499,7 +511,10 @@ func _rebuild_seats() -> void:
 			var d: Vector3 = origin - sp
 			d.y = 0
 			var yaw := atan2(-d.x, -d.z) if d.length() > 0.01 else 0.0
-			_seats.append({"pos": sp, "yaw": yaw, "guest": -1, "table": ti})
+			var away: Vector3 = (sp - origin)
+			away.y = 0
+			away = away.normalized() if away.length() > 0.01 else Vector3.FORWARD
+			_seats.append({"pos": sp, "yaw": yaw, "guest": -1, "table": ti, "away": away})
 
 ## Zelt kiralamaya göre masaları aktif/pasif yap + koltukları kur.
 func _apply_tent() -> void:
@@ -686,7 +701,7 @@ func _toilet_string() -> String:
 
 # ================================================= Tutorial & Schutzregeln
 ## Preis eines Bierpakets — so viel muss übrig bleiben, solange kein Bier da ist.
-const GOODS_RESERVE := 60
+const GOODS_RESERVE := 40
 
 ## Popup beim anfragenden Spieler (nicht bei allen).
 func _popup_to_sender(msg: String) -> void:
@@ -915,6 +930,7 @@ func _van_show(on: bool, pos: Vector3) -> void:
 			_van_node = VAN_SCENE.instantiate()
 			add_child(_van_node)
 		_van_node.position = pos
+		_van_node.rotation.y = PI * 0.5   # Wagen zeigt nach +Z, fährt aber nach +X
 	else:
 		if _van_node and is_instance_valid(_van_node):
 			_van_node.queue_free()
@@ -924,6 +940,7 @@ func _van_show(on: bool, pos: Vector3) -> void:
 func _van_move(pos: Vector3) -> void:
 	if _van_node and is_instance_valid(_van_node):
 		_van_node.position = pos
+		_van_node.rotation.y = PI * 0.5   # Wagen zeigt nach +Z, fährt aber nach +X
 
 @rpc("authority", "reliable", "call_local")
 func _van_honk() -> void:
@@ -1246,10 +1263,11 @@ func _serve_by_staff(gid: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
 	_served += 1
+	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
 	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
-	var reward := int(CustomerReward() * hyg * (1.0 + DEKO_BONUS * _upg_deko))
+	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
 	_last_earn += reward
 	Game.add_score(reward)
 	Game.add_money(reward)
@@ -1341,6 +1359,7 @@ func net_sleep() -> void:
 		_net_banner.rpc("🪑 Önce en az bir masa yerleştir!")
 		return
 	# Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
+	net_sleep_fade.rpc()
 	_start_shift()
 	_net_banner.rpc("😴 Wiesn-Tag %d/%d · 07:00 — Zelt açık!\n🕗 08:00'de misafirler gelmeye başlar · 22:00 Feierabend\n%s" % [
 		_day, WIESN_DAYS, _lic_string()])
@@ -1400,11 +1419,12 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[id] = g
 	_served += 1
+	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
 	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
-	var reward := int(CustomerReward() * hyg * (1.0 + DEKO_BONUS * _upg_deko))
+	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
 	var tip := 0 if waiter_npc else randi_range(0, 5)
 	if waiter_npc:
 		reward = int(reward * 0.5)
@@ -1412,10 +1432,13 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	Game.add_score(reward)
 	Game.add_money(reward + tip)
 
-func CustomerReward() -> int:
-	return 10
+## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
+## damit bleibt genug Marge, um Miete und Löhne zu tragen.
+func _reward_for(okind: int) -> int:
+	return 14 if okind == 2 else 15
 
-# ================================================= döngü
+func CustomerReward() -> int:
+	return 15
 func _process(delta: float) -> void:
 	if not multiplayer.is_server():
 		return
@@ -1429,6 +1452,7 @@ func _process(delta: float) -> void:
 	# MOLA: otomatik başlangıç YOK. Oyuncu Wohnwagen'de uyuyunca gün başlar.
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
+	_apply_stage(_clock_hour() >= 0.0)
 	# Tutorial: Fortschritt regelmäßig prüfen (Bedingungen ändern sich im Spiel)
 	_quest_timer -= delta
 	if _quest_timer <= 0.0:
@@ -1524,9 +1548,14 @@ func _end_shift(reason := 0) -> void:
 		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
 		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
 		_: head = "🌙 22:00 — Feierabend!"
-	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\nServiert %d · Verpasst %d · %s\n😴 Wohnwagen: schlafen → neuer Tag" % [
-		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit,
-		_served, _missed, "🚻 Urin %d · Beschwerden %d · Gäste weg %d" % [_urin_count, _complaints, _left_guests]])
+	var report := "%s\n\n📊 TAG %d\nUmsatz  %d€   (davon Trinkgeld fürs Putzen %d€)\nMiete  -%d€\nLöhne  -%d€\nWare   -%d€\n───────────────\nNetto  %s%d€\n\nServiert %d · Verpasst %d\n🚻 Urin %d · Beschwerden %d · Gäste weg %d" % [
+		head, _day, _last_earn, _clean_tips, rent, wages, goods,
+		"+" if net_profit >= 0 else "", net_profit,
+		_served, _missed, _urin_count, _complaints, _left_guests]
+	net_report.rpc(report)
+	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\n😴 Wohnwagen: schlafen → neuer Tag  ·  Bilanz: Wiesenbüro → 📊" % [
+		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit])
+	_clean_tips = 0
 	_goods_cost = 0
 	_urin_count = 0
 	_complaints = 0
@@ -1580,7 +1609,8 @@ func _spawn_guest() -> void:
 		"seat": si, "mode": 0, "pos": ENTRANCE, "tgt": _seats[si].pos, "yaw": 0.0,
 		"ostate": 0, "okind": 1, "otype": 1, "patience": ORDER_PATIENCE,
 		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0,
-		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0
+		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
+		"drinks": 0, "puke_t": 0.0, "puked": false
 	}
 	_add_guest.rpc(id, ENTRANCE)
 
@@ -1605,6 +1635,8 @@ func _update_guests(delta: float) -> void:
 		if g.mode == 1:
 			_guest_order(g, id, delta)
 		# E6: Blase (sitzend oder auf dem Weg zur Ecke/Toilette)
+		if g.mode == 4:
+			_update_puke(g, id, delta)
 		if g.mode == 1 or g.mode == 3:
 			_update_bladder(g, id, delta)
 		g.pos = pos
@@ -1644,9 +1676,15 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			g.ostate = 0
 			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 	# Sarhoş: ara sıra kus + kir bırak (C3)
-	if randf() < MESS_CHANCE_PER_SEC * delta:
-		_spawn_mess_near(_seats[g.seat].pos)
-		_net_guest_vomit.rpc(id)
+	# Betrunken: erst nach ein paar Bier, dann steht der Gast auf und geht
+	# ein paar Schritte vom Tisch weg, bevor er sich übergibt.
+	if int(g.get("drinks", 0)) >= DRINKS_BEFORE_PUKE and randf() < MESS_CHANCE_PER_SEC * delta:
+		var seat: Dictionary = _seats[int(g.seat)]
+		g.mode = 4
+		g.ostate = 0
+		g.puke_t = 7.0
+		g.puked = false
+		g.tgt = (seat.pos as Vector3) + (seat.get("away", Vector3.FORWARD) as Vector3) * 3.2
 
 func _despawn_guest(id: int) -> void:
 	if _guest_sim.has(id):
@@ -1739,7 +1777,13 @@ func net_clean(id: int) -> void:
 		return
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL
 	if _mess_clean[id] >= 1.0:
+		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt
+		var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+		Game.add_money(tip)
+		_last_earn += tip
+		_clean_tips += tip
 		_remove_mess.rpc(id)
+		_net_banner.rpc("🧽 Sauber! Trinkgeld +%d€" % tip)
 
 # ================================================= senkron
 func _broadcast_sync() -> void:
@@ -1814,6 +1858,7 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 	_hud.set_popularity(pop)
 	_apply_night_visual(night)
 	_apply_crowd(clock)
+	_apply_stage(clock >= 0.0)
 	for i in range(ids.size()):
 		var m = _messes.get(ids[i])
 		if m:
@@ -1870,3 +1915,30 @@ func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: in
 @rpc("authority", "reliable", "call_local")
 func _net_banner(text: String) -> void:
 	_hud.show_banner(text)
+
+## Kotz-Ablauf: Gast läuft vom Tisch weg, übergibt sich dort, geht zurück.
+func _update_puke(g: Dictionary, id: int, delta: float) -> void:
+	g.puke_t = float(g.puke_t) - delta
+	var d: Vector3 = (g.tgt as Vector3) - (g.pos as Vector3)
+	d.y = 0
+	if not bool(g.get("puked", false)) and d.length() < 0.7:
+		g.puked = true
+		g.drinks = 0
+		_net_guest_vomit.rpc(id)
+		_spawn_mess_at(g.pos as Vector3, 0)
+	if float(g.puke_t) <= 0.0:
+		g.mode = 1
+		g.tgt = _seats[int(g.seat)].pos
+
+## Kurze Schwarzblende beim Schlafen (bei allen Spielern).
+@rpc("authority", "reliable", "call_local")
+func net_sleep_fade() -> void:
+	if _hud and _hud.has_method("play_sleep_fade"):
+		_hud.play_sleep_fade()
+
+## Letzte Tagesbilanz — im Wiesenbüro jederzeit nachlesbar.
+@rpc("authority", "reliable", "call_local")
+func net_report(text: String) -> void:
+	_last_report = text
+	if _hud and _hud.has_method("set_report"):
+		_hud.set_report(text)
