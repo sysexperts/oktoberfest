@@ -1,11 +1,42 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/FerrisWheel.fbx" id="1_model"]
 [ext_resource type="Script" path="res://scripts/fahrgeschaeft.gd" id="2_script"]
 [ext_resource type="Script" path="res://scripts/kirmes_light.gd" id="3_klight"]
+[ext_resource type="Script" path="res://scripts/lichterkette.gd" id="4_kette"]
 
 [sub_resource type="BoxShape3D" id="Box"]
 size = Vector3(17.0, 3.0, 8.4)
+
+[sub_resource type="SphereMesh" id="BirneMesh"]
+radius = 0.11
+height = 0.22
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="MatB1"]
+albedo_color = Color(1, 0.93, 0.7, 1)
+emission_enabled = true
+emission = Color(1, 0.93, 0.7, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB2"]
+albedo_color = Color(1, 0.78, 0.28, 1)
+emission_enabled = true
+emission = Color(1, 0.78, 0.28, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB3"]
+albedo_color = Color(1, 0.3, 0.28, 1)
+emission_enabled = true
+emission = Color(1, 0.3, 0.28, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="MatB4"]
+albedo_color = Color(1, 0.45, 0.85, 1)
+emission_enabled = true
+emission = Color(1, 0.45, 0.85, 1)
+emission_energy_multiplier = 2.0
 
 [node name="Riesenrad" type="Node3D"]
 script = ExtResource("2_script")
@@ -27,7 +58,413 @@ eigendrehung = 0.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("Box")
 
-[node name="Kirmeslicht0" type="OmniLight3D" parent="."]
+[node name="Lichter" type="Node3D" parent="Model/FerrisWheel_Rotate"]
+script = ExtResource("4_kette")
+tempo = 0.35
+grund = 2.2
+ausschlag = 1.4
+
+[node name="Felge1" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.600, 0.000, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.409, 1.691, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.847, 3.298, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge4" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.942, 4.739, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.739, 5.942, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge6" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.298, 6.847, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge7" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.691, 7.409, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge8" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000, 7.600, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge9" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.691, 7.409, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge10" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.298, 6.847, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge11" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.739, 5.942, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge12" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.942, 4.739, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge13" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.847, 3.298, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge14" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.409, 1.691, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge15" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.600, 0.000, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge16" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.409, -1.691, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge17" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.847, -3.298, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge18" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.942, -4.739, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge19" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.739, -5.942, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge20" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.298, -6.847, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge21" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.691, -7.409, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge22" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000, -7.600, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge23" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.691, -7.409, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge24" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.298, -6.847, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge25" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.739, -5.942, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge26" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.942, -4.739, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge27" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.847, -3.298, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge28" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.409, -1.691, -0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge29" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.600, 0.000, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge30" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.409, 1.691, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge31" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.847, 3.298, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge32" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.942, 4.739, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge33" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.739, 5.942, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge34" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.298, 6.847, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge35" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.691, 7.409, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge36" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000, 7.600, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge37" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.691, 7.409, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge38" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.298, 6.847, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge39" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.739, 5.942, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge40" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.942, 4.739, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge41" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.847, 3.298, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge42" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.409, 1.691, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge43" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.600, 0.000, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge44" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.409, -1.691, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge45" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.847, -3.298, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge46" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.942, -4.739, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge47" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.739, -5.942, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge48" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.298, -6.847, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge49" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.691, -7.409, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge50" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000, -7.600, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge51" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.691, -7.409, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge52" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.298, -6.847, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Felge53" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.739, -5.942, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Felge54" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.942, -4.739, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Felge55" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.847, -3.298, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Felge56" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.409, -1.691, 0.4)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche0_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.300, 0.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Speiche0_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.900, 0.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche0_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.500, 0.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Speiche1_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.626, 1.626, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche1_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.758, 2.758, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Speiche1_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.889, 3.889, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Speiche2_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000, 2.300, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Speiche2_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000, 3.900, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Speiche2_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000, 5.500, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche3_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.626, 1.626, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Speiche3_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.758, 2.758, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Speiche3_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.889, 3.889, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Speiche4_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.300, 0.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Speiche4_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.900, 0.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche4_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.500, 0.000, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Speiche5_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.626, -1.626, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche5_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.758, -2.758, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Speiche5_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.889, -3.889, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Speiche6_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000, -2.300, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Speiche6_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000, -3.900, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Speiche6_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000, -5.500, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB4")
+
+[node name="Speiche7_2" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.626, -1.626, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB2")
+
+[node name="Speiche7_3" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.758, -2.758, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB3")
+
+[node name="Speiche7_5" type="MeshInstance3D" parent="Model/FerrisWheel_Rotate/Lichter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.889, -3.889, 0)
+mesh = SubResource("BirneMesh")
+material_override = SubResource("MatB1")
+
+[node name="Kirmeslicht1" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0, 9.0, 0)
 light_energy = 2.6
@@ -36,7 +473,7 @@ omni_attenuation = 1.6
 hue_speed = 0.11
 pulse = 0.6
 
-[node name="Kirmeslicht1" type="OmniLight3D" parent="."]
+[node name="Kirmeslicht2" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0, 9.0, 0)
 light_energy = 2.6
@@ -45,7 +482,7 @@ omni_attenuation = 1.6
 hue_speed = 0.11
 pulse = 0.6
 
-[node name="Kirmeslicht2" type="OmniLight3D" parent="."]
+[node name="Kirmeslicht3" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, 6.0)
 light_energy = 2.6
@@ -54,7 +491,7 @@ omni_attenuation = 1.6
 hue_speed = 0.11
 pulse = 0.6
 
-[node name="Kirmeslicht3" type="OmniLight3D" parent="."]
+[node name="Kirmeslicht4" type="OmniLight3D" parent="."]
 script = ExtResource("3_klight")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.0, -6.0)
 light_energy = 2.6
