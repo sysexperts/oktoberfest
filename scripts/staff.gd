@@ -29,6 +29,11 @@ var _idle_jitter := 0.0
 var _jitter_t := 0.0
 var _idle_speed := 0.45
 var _walk_speed := 1.0
+var _skel: Skeleton3D
+var _b_larm := -1
+var _b_lfore := -1
+var _b_rarm := -1
+var _b_rfore := -1
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -58,6 +63,8 @@ func _ready() -> void:
 			_cur = ANIM_IDLE
 			_anim.advance(0.0)   # Pose sofort anwenden, sonst T-Pose
 	_collect_mugs()
+	_cache_arm_bones()
+	process_priority = 50   # nach dem AnimationPlayer laufen
 	_refresh_label()
 
 ## Die 12 Maßkrüge liegen als echte Knoten in staff.tscn (vor dem Körper,
@@ -120,3 +127,34 @@ func _process(delta: float) -> void:
 	else:
 		_model.rotation.y = lerp_angle(_model.rotation.y,
 			deg_to_rad(model_yaw_offset), clampf(delta * 5.0, 0.0, 1.0))
+	_apply_carry_pose()
+
+## --- Tragehaltung -----------------------------------------------------------
+## Die Laufanimation bewirbt die Arme jedes Bild neu. Damit unsere Pose gewinnt,
+## läuft _process dieses Knotens per process_priority NACH dem AnimationPlayer.
+func _cache_arm_bones() -> void:
+	var sks := _model.find_children("*", "Skeleton3D", true, false)
+	if sks.is_empty():
+		return
+	_skel = sks[0]
+	_b_larm = _skel.find_bone("LeftArm")
+	_b_lfore = _skel.find_bone("LeftForeArm")
+	_b_rarm = _skel.find_bone("RightArm")
+	_b_rfore = _skel.find_bone("RightForeArm")
+
+func _pose(bone: int, ang: float) -> void:
+	if bone < 0 or _skel == null:
+		return
+	var rest := _skel.get_bone_rest(bone).basis.get_rotation_quaternion()
+	_skel.set_bone_pose_rotation(bone, rest * Quaternion(Vector3.RIGHT, ang))
+
+## Arme nach vorne anwinkeln, als würde er die Krugtraube tragen.
+func _apply_carry_pose() -> void:
+	if _skel == null:
+		return
+	if carrying <= 0:
+		return
+	_pose(_b_rarm, 0.55)
+	_pose(_b_rfore, 1.25)
+	_pose(_b_larm, 0.55)
+	_pose(_b_lfore, 1.25)

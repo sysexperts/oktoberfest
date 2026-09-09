@@ -33,7 +33,7 @@ outline_size = 14
 text = "Kellner"
 
 [node name="Kruege" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.02, 0)
 
 [node name="Krug1" type="Node3D" parent="Kruege"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0, 0.32)
