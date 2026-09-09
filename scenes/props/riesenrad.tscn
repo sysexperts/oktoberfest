@@ -620,4 +620,26 @@ omni_attenuation = 1.6
 hue_speed = 0.11
 pulse = 0.3
 
+[node name="Scheinwerfer1" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.658, 0.753, 0, -0.753, 0.658, 0, 0.5, 9)
+light_color = Color(1, 0.94, 0.82, 1)
+light_energy = 2.5
+light_specular = 0.2
+shadow_enabled = false
+spot_range = 30.0
+spot_attenuation = 0.8
+spot_angle = 32.0
+spot_angle_attenuation = 0.6
+
+[node name="Scheinwerfer2" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.658, 0.753, 0, -0.753, -0.658, 0, 0.5, -9)
+light_color = Color(1, 0.94, 0.82, 1)
+light_energy = 2.5
+light_specular = 0.2
+shadow_enabled = false
+spot_range = 30.0
+spot_attenuation = 0.8
+spot_angle = 32.0
+spot_angle_attenuation = 0.6
+
 [editable path="Model"]

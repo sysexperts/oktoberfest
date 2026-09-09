@@ -1,5 +1,8 @@
 extends Control
-## Ana menü: Host aç veya IP ile katıl.
+## Ana menü: genel sunucuya bağlan, kendi host'unu aç veya IP ile katıl.
+
+## Bizim sabit sunucumuz — kimse IP yazmak zorunda kalmasın.
+const SERVER_IP := "185.248.140.225"
 
 var _ip_edit: LineEdit
 var _status: Label
@@ -30,6 +33,16 @@ func _ready() -> void:
 	ver.add_theme_font_size_override("font_size", 14)
 	vbox.add_child(ver)
 
+	var server_btn := Button.new()
+	server_btn.text = "▶  Sunucuya Bağlan"
+	server_btn.custom_minimum_size = Vector2(0, 56)
+	server_btn.add_theme_font_size_override("font_size", 22)
+	server_btn.pressed.connect(_on_server)
+	vbox.add_child(server_btn)
+
+	var sep0 := HSeparator.new()
+	vbox.add_child(sep0)
+
 	var host_btn := Button.new()
 	host_btn.text = "Host Aç (Oyun Kur)"
 	host_btn.custom_minimum_size = Vector2(0, 44)
@@ -58,6 +71,10 @@ func _ready() -> void:
 	if not Net.connection_failed.is_connected(_on_failed):
 		Net.connection_failed.connect(_on_failed)
 
+## Tek tıkla bizim sunucuya — IP yazmaya gerek yok.
+func _on_server() -> void:
+	_verbinde(SERVER_IP)
+
 func _on_host() -> void:
 	var err := Net.host_game()
 	if err != OK:
@@ -68,6 +85,9 @@ func _on_join() -> void:
 	if ip.is_empty():
 		_status.text = "Lütfen bir IP gir."
 		return
+	_verbinde(ip)
+
+func _verbinde(ip: String) -> void:
 	_status.text = "Bağlanılıyor: %s ..." % ip
 	var err := Net.join_game(ip)
 	if err != OK:
