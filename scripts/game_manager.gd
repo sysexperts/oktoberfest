@@ -85,9 +85,9 @@ const STAFF_NAMES := {1: "👨‍🍳 Koch", 2: "🍺 Kellner", 3: "🧹 Reinigu
 const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400}
 const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
-const STAFF_MAX_LEVEL := 10
+const STAFF_MAX_LEVEL := 5
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
-const WAITER_CAPACITY := {1: 1, 2: 2, 3: 4, 4: 8, 5: 12, 6: 16, 7: 20, 8: 24, 9: 28, 10: 32}
+const WAITER_CAPACITY := {1: 1, 2: 2, 3: 4, 4: 8, 5: 12}
 const STAFF_BASE_SPEED := 3.0
 const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
 const BAR_POINT := Vector3(0, 0.1, -7.0)      # Kellner holt hier ab
@@ -1346,11 +1346,13 @@ func _set_staff_info(id: int, role: int, level: int) -> void:
 		n.set_info(role, level)
 
 @rpc("authority", "unreliable")
-func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sz: PackedFloat32Array, syaw: PackedFloat32Array) -> void:
+func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sz: PackedFloat32Array, syaw: PackedFloat32Array, scarry: PackedInt32Array) -> void:
 	for i in range(ids.size()):
 		var n = _staff.get(ids[i])
 		if n:
 			n.set_net(Vector3(sx[i], 0.1, sz[i]), syaw[i])
+			if i < scarry.size() and n.has_method("set_carrying"):
+				n.set_carrying(scarry[i])
 
 ## Wiesenbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
 @rpc("any_peer", "reliable")
@@ -1872,14 +1874,20 @@ func _broadcast_sync() -> void:
 	var sx := PackedFloat32Array()
 	var sz := PackedFloat32Array()
 	var syaw := PackedFloat32Array()
+	var scarry := PackedInt32Array()
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
 		sids.append(sid)
 		sx.append(st.pos.x)
 		sz.append(st.pos.z)
 		syaw.append(st.yaw)
+		# Krüge in der Hand: nur beim Ausliefern
+		var carr := 0
+		if int(st.role) == ROLE_KELLNER and int(st.state) == 3:
+			carr = maxi(0, (st.orders as Array).size() - int(st.idx))
+		scarry.append(carr)
 	if sids.size() > 0:
-		_net_staff.rpc(sids, sx, sz, syaw)
+		_net_staff.rpc(sids, sx, sz, syaw, scarry)
 	# Çevre
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()

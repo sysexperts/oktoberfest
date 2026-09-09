@@ -309,7 +309,8 @@ func _build_booking() -> void:
 	t_staff.add_theme_constant_override("separation", 6)
 	tabs.add_child(t_staff)
 	var st_info := Label.new()
-	st_info.text = "Level 1–10. Kellner trägt Lv = Anzahl Krüge.\nLohn wird pro Schicht abgezogen."
+	st_info.text = "Level 1–5. Kellner trägt 1 / 2 / 4 / 8 / 12 Krüge.
+Lohn wird pro Schicht abgezogen."
 	st_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t_staff.add_child(st_info)
 	_add_staff_row(t_staff, "👨‍🍳 Koch", 1, 600)
