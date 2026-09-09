@@ -870,9 +870,13 @@ func net_store_package(kind: int, amount: int) -> void:
 func _push_stock(bier: int, essen: int) -> void:
 	_stock[WARE_BIER] = bier
 	_stock[WARE_ESSEN] = essen
-	for l in get_tree().get_nodes_in_group("lager"):
+	# Bestand ist EIN gemeinsames Lager; die Regale zeigen ihn aufgeteilt an
+	var shelves := get_tree().get_nodes_in_group("lager")
+	shelves.sort_custom(func(a, b): return String(a.name) < String(b.name))
+	for i in shelves.size():
+		var l = shelves[i]
 		if l.has_method("set_stock"):
-			l.set_stock(bier, essen)
+			l.set_stock(bier, essen, i)
 	if _hud:
 		_hud.set_stock(bier, essen)
 
