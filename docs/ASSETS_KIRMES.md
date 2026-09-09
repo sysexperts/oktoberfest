@@ -51,14 +51,6 @@ Rand) braucht keine.
 
 Beides nur nötig, wenn Modelle dazukommen oder verschwinden.
 
-## Zwei Notlösungen im Pack
-
-Drei FBX verweisen auf Texturen, die der Pack nicht mitliefert
-(`Models/Shops/Texture.psd`, `Models/Vehicles/Texture.psd`,
-`Models/Foliage/Color.jpg`). Ohne sie wären Buden, Fahrzeuge und ein Teil der
-Bäume weiß. Als Ersatz liegen dort jetzt Kopien der Paletten-Texturen unter
-genau diesen Dateinamen — deshalb nicht löschen.
-
 ## Fahrgeschäfte bewegen
 
 Das Pack bringt **keine fertigen Animationen** mit — aber jedes Fahrgeschäft hat
