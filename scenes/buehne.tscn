@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/stage.gd" id="1_script"]
 
 [sub_resource type="BoxMesh" id="PlatformMesh"]
-size = Vector3(8, 0.8, 5)
+size = Vector3(8, 0.8, 4)
 
 [sub_resource type="StandardMaterial3D" id="MatPlatform"]
 albedo_color = Color(0.25, 0.18, 0.12, 1)
@@ -21,7 +21,7 @@ size = Vector3(8.4, 0.25, 0.25)
 albedo_color = Color(0.3, 0.3, 0.34, 1)
 
 [sub_resource type="BoxShape3D" id="PlatformCol"]
-size = Vector3(8, 0.8, 5)
+size = Vector3(8, 0.8, 4)
 
 [node name="Buehne" type="Node3D"]
 script = ExtResource("1_script")
@@ -32,7 +32,7 @@ mesh = SubResource("PlatformMesh")
 material_override = SubResource("MatPlatform")
 
 [node name="Rueckwand" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -2.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -1.9)
 mesh = SubResource("BackMesh")
 material_override = SubResource("MatBack")
 
@@ -42,7 +42,7 @@ mesh = SubResource("TrussMesh")
 material_override = SubResource("MatTruss")
 
 [node name="Schild" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, -2.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, -1.7)
 pixel_size = 0.012
 font_size = 64
 outline_size = 18
