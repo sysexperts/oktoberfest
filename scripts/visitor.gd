@@ -1,24 +1,26 @@
 class_name Visitor
 extends Node3D
-## Kirmes-Besucher draußen. Reine Kulisse: läuft den Ringweg zwischen den Ständen
-## entlang, hat nichts mit dem Zelt zu tun. Läuft lokal (kein Netz-Traffic).
+## Kirmes-Besucher. Bummelt von Stand zu Stand, bleibt davor stehen, geht weiter.
+## Läuft immer in Blickrichtung — dadurch nie rückwärts oder seitlich schlurfend.
 
-var speed := 1.6
+const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
+const TURN_SPEED := 6.0
 
-var _route: Array = []
-var _idx := 0
-var _dir := 1
-var _offset := Vector3.ZERO   # seitlicher Versatz, damit nicht alle in einer Reihe laufen
+var speed := 1.5
+
+var _crowd: Node = null
 var _tgt := Vector3.ZERO
+var _pause := 0.0
 var _anim: AnimationPlayer
 var _cur := ""
-var _pause := 0.0
+var _lod_timer := 0.0
+var _far := false
 
 @onready var _model: Node3D = $Model
 
 func _ready() -> void:
 	add_to_group("visitor")
-	speed = randf_range(1.1, 2.1)
+	speed = randf_range(1.1, 2.0)
 	var aps := _model.find_children("*", "AnimationPlayer", true, false)
 	if aps.size() > 0:
 		_anim = aps[0]
@@ -28,28 +30,21 @@ func _ready() -> void:
 		if _anim.has_animation("Walk"):
 			_anim.play("Walk")
 			_cur = "Walk"
-			_anim.seek(randf(), true)
+			_anim.seek(randf(), true)   # versetzt starten
 
-## route: geschlossener Rundweg, start: Startpunkt, dir: +1 / -1 Laufrichtung.
-func set_route(route: Array, start: int, dir: int) -> void:
-	_route = route
-	if _route.is_empty():
-		return
-	_idx = start % _route.size()
-	_dir = dir
-	_offset = Vector3(randf_range(-2.2, 2.2), 0.0, randf_range(-2.2, 2.2))
-	position = _route[_idx] + _offset
-	_advance()
-
-func _advance() -> void:
-	if _route.is_empty():
-		return
-	_idx = wrapi(_idx + _dir, 0, _route.size())
-	_tgt = _route[_idx] + _offset
+func setup(crowd: Node) -> void:
+	_crowd = crowd
+	position = crowd.random_start()
+	_tgt = crowd.next_point(position)
+	# gleich in Richtung Ziel schauen, damit der Start nicht rückwärts aussieht
+	var d := _tgt - position
+	d.y = 0
+	if d.length() > 0.01:
+		rotation.y = atan2(-d.x, -d.z)
 
 func _process(delta: float) -> void:
 	_update_lod(delta)
-	if _route.is_empty():
+	if _crowd == null:
 		return
 	if _pause > 0.0:
 		_pause -= delta
@@ -57,27 +52,26 @@ func _process(delta: float) -> void:
 		return
 	var to := _tgt - position
 	to.y = 0
-	if to.length() < 0.6:
-		# ab und zu stehenbleiben, als würde man einen Stand anschauen
-		if randf() < 0.25:
-			_pause = randf_range(1.0, 3.5)
-		_advance()
+	if to.length() < 0.7:
+		# vor dem Stand stehenbleiben und schauen
+		_pause = randf_range(1.5, 6.0)
+		_tgt = _crowd.next_point(position)
 		return
-	position += to.normalized() * speed * delta
-	rotation.y = lerp_angle(rotation.y, atan2(-to.x, -to.z), clampf(delta * 4.0, 0.0, 1.0))
+	# erst drehen, dann in Blickrichtung laufen — nie seitwärts/rückwärts
+	var want := atan2(-to.x, -to.z)
+	rotation.y = lerp_angle(rotation.y, want, clampf(delta * TURN_SPEED, 0.0, 1.0))
+	var fwd := -global_transform.basis.z
+	fwd.y = 0
+	fwd = fwd.normalized()
+	# nur losgehen, wenn er halbwegs in die richtige Richtung schaut
+	if fwd.dot(to.normalized()) > 0.25:
+		position += fwd * speed * delta
 	_set_anim("Walk")
 
 func _set_anim(n: String) -> void:
 	if _anim and n != _cur and _anim.has_animation(n):
 		_anim.play(n)
 		_cur = n
-
-## Abstandsabstufung: weit entfernte Besucher animieren nicht mit.
-## Ohne das kosten hunderte Figuren zu viel Leistung.
-const LOD_DIST := 42.0
-
-var _lod_timer := 0.0
-var _far := false
 
 func _update_lod(delta: float) -> void:
 	_lod_timer -= delta

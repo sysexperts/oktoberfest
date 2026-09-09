@@ -86,6 +86,8 @@ const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400}
 const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 10
+## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
+const WAITER_CAPACITY := {1: 1, 2: 2, 3: 4, 4: 8, 5: 12, 6: 16, 7: 20, 8: 24, 9: 28, 10: 32}
 const STAFF_BASE_SPEED := 3.0
 const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
 const BAR_POINT := Vector3(0, 0.1, -7.0)      # Kellner holt hier ab
@@ -1102,7 +1104,7 @@ func net_upgrade_staff(role: int) -> void:
 	_set_staff_info.rpc(target, role, int(s2.level))
 	var extra := ""
 	if role == ROLE_KELLNER:
-		extra = " — trägt jetzt %d Krüge" % int(s2.level)
+		extra = " — trägt jetzt %d Krüge" % int(WAITER_CAPACITY.get(int(s2.level), 1))
 	_net_banner.rpc("⬆️ %s → Lv%d%s" % [STAFF_NAMES[role], int(s2.level), extra])
 	_broadcast_meta()
 
@@ -1173,16 +1175,19 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 	if d <= 0.35:
 		return true
 	var dir := to.normalized()
-	# Tische umlaufen — aber nur solange das Ziel noch weit weg ist, sonst
-	# käme der Kellner nie an einem Sitzplatz an (der liegt direkt am Tisch).
+	# Tische umlaufen — aber nur solange das Ziel weit weg ist, sonst käme
+	# der Kellner nie an einem Sitzplatz an (der liegt direkt am Tisch).
 	if d > 2.6:
 		dir = _avoid_tables(s.pos, dir)
+	# Blickrichtung weich nachziehen und IMMER vorwärts laufen,
+	# sonst schlurfen die Mitarbeiter seitlich oder rückwärts.
+	var want := atan2(-dir.x, -dir.z)
+	s.yaw = lerp_angle(float(s.yaw), want, clampf(delta * 7.0, 0.0, 1.0))
+	var fwd := Vector3(-sin(float(s.yaw)), 0.0, -cos(float(s.yaw)))
 	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level))
-	s.pos += dir * minf(sp * delta, d)
-	s.yaw = atan2(-dir.x, -dir.z)
+	if fwd.dot(dir) > 0.2:
+		s.pos += fwd * minf(sp * delta, d)
 	return false
-
-## Schiebt die Laufrichtung von Tischen weg, damit niemand hindurchläuft.
 func _avoid_tables(pos: Vector3, dir: Vector3) -> Vector3:
 	var out := dir
 	for bt in _beertables:
@@ -1215,7 +1220,7 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 	match int(s.state):
 		0:
 			var picked := []
-			var cap := int(s.level)
+			var cap: int = int(WAITER_CAPACITY.get(int(s.level), 1))
 			for gid in _guest_sim.keys():
 				if picked.size() >= cap:
 					break
