@@ -15,9 +15,10 @@ Spielfigur, Zelt-Modelle und die vier alten Stände.
 - Das gekaufte „Amusement Park"-Pack: erlaubt die Lizenz den Vertrieb in einem
   **verkauften** Spiel? Viele Marktplatz-Lizenzen unterscheiden zwischen
   „use in a project" und „redistribute".
-- `bavarian_bean.glb` — woher stammt der? Ohne Nachweis nicht releasebar.
-- Die Zelt-Modelle (`floor/wall/roof/tisch/bank/theke.glb`).
-- Schriftarten und Emoji in der UI.
+- Alle anderen Modelle stammen aus **Meshy**, nachbearbeitet in Blender. Ob
+  kommerzielle Nutzung ohne Namensnennung erlaubt ist, haengt am Meshy-Tarif
+  zum Zeitpunkt der Erzeugung.
+- Schriftarten sind unproblematisch: nur Godots Standardschrift im Projekt.
 
 Kaufbelege und EULAs nach `docs/lizenzen/` legen. Das ist der billigste
 Blocker und der einzige, der ein fertiges Spiel im Nachhinein killen kann.
@@ -71,7 +72,11 @@ Gebraucht: Musik im Zelt, Menü-Musik, Außen-Ambiente, SFX für Zapfen, Kasse,
 Kotzen, Putzen, Fahrgeschäfte. Lizenzfrei kaufen (siehe A1).
 
 ### A7 Steamworks
-**Du.** Partner-Account, 100 USD Gebühr pro App, Steuer- und Bankdaten,
+**Du.** Im Content Survey muss angegeben werden, dass Modelle mit KI erzeugt
+wurden (Meshy) — Valve weist das auf der Store-Seite aus. Kein Hindernis, aber
+Pflicht.
+
+Partner-Account, 100 USD Gebühr pro App, Steuer- und Bankdaten,
 dann Store-Seite: Capsules (231×87, 462×174, 616×353, 1232×706), Header,
 Library-Grafiken, Trailer, mindestens 5 Screenshots, Alterseinstufung.
 

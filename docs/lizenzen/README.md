@@ -1,39 +1,58 @@
 # Lizenzregister
 
 Wer was darf. Für den Steam-Release muss jede Zeile auf ✅ stehen und der
-Nachweis (Kaufbeleg, EULA, Store-Seite als PDF) in diesem Ordner liegen.
+Nachweis (Kaufbeleg, Lizenztext, Store-Seite als PDF) in diesem Ordner liegen.
 
 | Assets | Dateien | Herkunft | Lizenz | Nachweis | Stand |
 |---|---|---|---|---|---|
 | Kirmes-Pack | `assets/kirmes/**` (126 Modelle) | gekauft | **Royalty-Free** | fehlt noch | ⚠️ |
-| Spielfigur | `assets/character/character/bavarian_bean.glb` | ? | ? | fehlt | ❌ |
-| Zelt | `assets/models/floor,wall,roof.glb` | ? | ? | fehlt | ❌ |
-| Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | ? | ? | fehlt | ❌ |
-| Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | ? | ? | fehlt | ❌ |
+| Spielfigur | `assets/character/character/bavarian_bean.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
+| Zelt | `assets/models/floor,wall,roof.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
+| Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
+| Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
 | Ton | `assets/audio/` | — | — | — | leer, alles synthetisch |
 
 Schriftarten: keine eigenen im Projekt, es läuft alles über Godots
-Standardschrift. Emoji in der UI werden vom System gerendert.
+Standardschrift. Emoji rendert das System.
 
 ---
 
-## Was „Royalty-Free" abdeckt — und was nicht
+## Kirmes-Pack: was „Royalty-Free" abdeckt
 
-Royalty-free heißt: **keine Abgabe pro verkauftem Exemplar.** Das ist die
-Hauptsorge und damit erledigt. Drei Dinge sagt der Begriff aber *nicht*:
+Royalty-free heißt **keine Abgabe pro verkauftem Exemplar** — die Hauptsorge ist
+damit erledigt. Beim Nachlesen noch zwei Dinge mitnehmen:
 
-**1. Weitergabe im fertigen Spiel.** Bei Marktplätzen für Spiel-Assets ist das
-praktisch immer erlaubt, solange die Modelle Teil eines interaktiven Produkts
-sind und nicht selbst wieder als Asset-Paket verkauft werden. Trotzdem einmal
-nachlesen, ob die Lizenz „Editorial Use Only" oder eine Beschränkung auf
-nicht-kommerzielle Projekte enthält.
+- Steht irgendwo „Editorial Use Only" oder eine Beschränkung auf
+  nicht-kommerzielle Projekte? Dann wird es eng.
+- Verlangt die Lizenz eine **Namensnennung**? Dann brauchen wir einen
+  Credits-Bildschirm.
 
-**2. Namensnennung.** Viele royalty-free Lizenzen verlangen eine Nennung des
-Urhebers. Steht das drin, brauchen wir einen Credits-Bildschirm — den brauchen
-wir für Steam ohnehin.
+## Eigene Modelle: Meshy-Tarif entscheidet
 
-**3. Die anderen Assets.** Die Zeile deckt nur das Kirmes-Pack ab. Figur, Zelt
-und die vier alten Stände stammen aus anderen Quellen und sind noch offen.
+Alle Modelle außerhalb des Kirmes-Packs sind mit **Meshy** erzeugt und in
+**Blender** nachbearbeitet. Damit gehören sie dir — mit einer Einschränkung:
+
+**Meshy räumt die kommerziellen Rechte je nach Tarif unterschiedlich ein.**
+Bei kostenlosen Konten stehen die Ergebnisse üblicherweise unter einer
+Creative-Commons-Lizenz mit **Namensnennungspflicht**; bezahlte Tarife geben in
+der Regel die vollen kommerziellen Rechte ohne Nennung. Welche Fassung für dein
+Konto gilt, steht in Meshys Nutzungsbedingungen und hängt am Tarif zum
+**Zeitpunkt der Erzeugung**.
+
+Zu klären: mit welchem Tarif wurden die Modelle erzeugt? Falls kostenlos →
+entweder Credits-Bildschirm mit Meshy-Nennung, oder neu erzeugen unter einem
+bezahlten Tarif.
+
+## Steam: KI-Inhalte müssen angegeben werden
+
+Valve verlangt seit Anfang 2024 im **Content Survey** eine Angabe, ob und wie
+KI bei der Entwicklung eingesetzt wurde. Vorab erzeugte Inhalte („pre-generated")
+werden auf der Store-Seite ausgewiesen. Für uns betrifft das die Meshy-Modelle.
+
+Das ist **kein Hindernis** — viele Spiele auf Steam machen diese Angabe. Aber
+sie muss gemacht werden, und man sollte dabei sagen können, dass man die Rechte
+an den erzeugten Inhalten hat. Die genaue Formulierung des Fragebogens vor dem
+Ausfüllen in der Steamworks-Dokumentation nachlesen.
 
 ---
 
@@ -43,9 +62,8 @@ Pro Quelle eine Datei hier im Ordner:
 
 ```
 docs/lizenzen/
-  kirmes-pack.pdf        Kaufbeleg + Lizenztext
-  bavarian-bean.pdf
-  zelt-modelle.pdf
+  kirmes-pack.pdf     Kaufbeleg + Lizenztext
+  meshy-tarif.pdf     Rechnung / Tarifübersicht + Nutzungsbedingungen
 ```
 
-Reicht auch als Screenshot der Store-Seite mit sichtbarem Lizenztext und Datum.
+Screenshot der Seite mit sichtbarem Lizenztext und Datum reicht.
