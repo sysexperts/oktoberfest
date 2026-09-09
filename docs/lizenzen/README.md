@@ -1,15 +1,15 @@
 # Lizenzregister
 
 Wer was darf. Für den Steam-Release muss jede Zeile auf ✅ stehen und der
-Nachweis (Kaufbeleg, Lizenztext, Store-Seite als PDF) in diesem Ordner liegen.
+Nachweis in diesem Ordner liegen.
 
 | Assets | Dateien | Herkunft | Lizenz | Nachweis | Stand |
 |---|---|---|---|---|---|
-| Kirmes-Pack | `assets/kirmes/**` (126 Modelle) | gekauft | **Royalty-Free** | fehlt noch | ⚠️ |
-| Spielfigur | `assets/character/character/bavarian_bean.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
-| Zelt | `assets/models/floor,wall,roof.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
-| Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
-| Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | **Meshy → Blender** | Meshy-Tarif prüfen | — | ⚠️ |
+| Kirmes-Pack | `assets/kirmes/**` (126 Modelle) | gekauft | Royalty-Free | fehlt | ⚠️ |
+| Spielfigur | `assets/character/character/bavarian_bean.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
+| Zelt | `assets/models/floor,wall,roof.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
+| Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
+| Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt) → Blender | volle Rechte, keine Nennung | fehlt | ⚠️ |
 | Ton | `assets/audio/` | — | — | — | leer, alles synthetisch |
 
 Schriftarten: keine eigenen im Projekt, es läuft alles über Godots
@@ -27,43 +27,50 @@ damit erledigt. Beim Nachlesen noch zwei Dinge mitnehmen:
 - Verlangt die Lizenz eine **Namensnennung**? Dann brauchen wir einen
   Credits-Bildschirm.
 
-## Eigene Modelle: Meshy-Tarif entscheidet
+## Eigene Modelle: Meshy mit bezahltem Tarif
 
 Alle Modelle außerhalb des Kirmes-Packs sind mit **Meshy** erzeugt und in
-**Blender** nachbearbeitet. Damit gehören sie dir — mit einer Einschränkung:
+**Blender** nachbearbeitet. Laut Meshys Hilfe-Center:
 
-**Meshy räumt die kommerziellen Rechte je nach Tarif unterschiedlich ein.**
-Bei kostenlosen Konten stehen die Ergebnisse üblicherweise unter einer
-Creative-Commons-Lizenz mit **Namensnennungspflicht**; bezahlte Tarife geben in
-der Regel die vollen kommerziellen Rechte ohne Nennung. Welche Fassung für dein
-Konto gilt, steht in Meshys Nutzungsbedingungen und hängt am Tarif zum
-**Zeitpunkt der Erzeugung**.
+- **Kostenloser Tarif:** Ergebnisse stehen unter CC BY 4.0 — kommerzielle
+  Nutzung nur mit Nennung von Meshy.
+- **Bezahlter Tarif:** private Lizenz, **volle Rechte, keine Namensnennung
+  nötig**, verkaufen und verteilen erlaubt.
 
-Zu klären: mit welchem Tarif wurden die Modelle erzeugt? Falls kostenlos →
-entweder Credits-Bildschirm mit Meshy-Nennung, oder neu erzeugen unter einem
-bezahlten Tarif.
+Wir sind auf dem bezahlten Tarif — also kein Credit nötig.
+
+**Zwei Bedingungen bleiben:**
+
+1. Die **Eingabematerialien** dürfen keine fremden Urheberrechte verletzen.
+   Wurden Referenzbilder hochgeladen, müssen das eigene oder freie Bilder
+   gewesen sein. Ein Foto eines echten Festzelts aus dem Netz wäre ein Problem.
+2. Maßgeblich ist der Tarif **zum Zeitpunkt der Erzeugung**, nicht heute. Läuft
+   das Abo schon lange genug, ist das unkritisch — die Rechnung zeigt es.
+
+Meshy stellt **kein Lizenzzertifikat** zum Herunterladen aus. Der Nachweis
+besteht deshalb aus drei Teilen (siehe unten).
 
 ## Steam: KI-Inhalte müssen angegeben werden
 
 Valve verlangt seit Anfang 2024 im **Content Survey** eine Angabe, ob und wie
-KI bei der Entwicklung eingesetzt wurde. Vorab erzeugte Inhalte („pre-generated")
-werden auf der Store-Seite ausgewiesen. Für uns betrifft das die Meshy-Modelle.
+KI eingesetzt wurde. Vorab erzeugte Inhalte werden auf der Store-Seite
+ausgewiesen. Für uns betrifft das die Meshy-Modelle.
 
-Das ist **kein Hindernis** — viele Spiele auf Steam machen diese Angabe. Aber
-sie muss gemacht werden, und man sollte dabei sagen können, dass man die Rechte
-an den erzeugten Inhalten hat. Die genaue Formulierung des Fragebogens vor dem
-Ausfüllen in der Steamworks-Dokumentation nachlesen.
+Kein Hindernis — aber Pflicht, und man muss bestätigen können, dass man die
+Rechte hat. Genaue Formulierung vor dem Ausfüllen in der Steamworks-Doku
+nachlesen.
 
 ---
 
 ## Nachweis ablegen
 
-Pro Quelle eine Datei hier im Ordner:
-
 ```
 docs/lizenzen/
-  kirmes-pack.pdf     Kaufbeleg + Lizenztext
-  meshy-tarif.pdf     Rechnung / Tarifübersicht + Nutzungsbedingungen
+  kirmes-pack.pdf      Kaufbeleg + Lizenztext des Packs
+  meshy-rechnung.pdf   Abo-Rechnung: Tarif + Zeitraum
+  meshy-lizenz.pdf     Hilfe-Center-Seite zur kommerziellen Nutzung, mit Datum
+  meshy-historie.pdf   Erzeugungsdatum der Modelle aus dem Konto
 ```
 
-Screenshot der Seite mit sichtbarem Lizenztext und Datum reicht.
+Screenshots mit sichtbarem Datum reichen. Wichtig ist, dass Rechnungszeitraum
+und Erzeugungsdatum zusammenpassen.
