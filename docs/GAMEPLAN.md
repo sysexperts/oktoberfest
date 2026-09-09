@@ -38,7 +38,7 @@
 
 - **Zeltstufen:** Stufe 1 = kleines Zelt, max 4 Tische (24 Sitze). Stufe 2/3 = größere .tscn-Zelte, mehr Tischlimit + höhere Grundbeliebtheit.
 - **Tischlimit** ist an die Zeltstufe gekoppelt (nicht frei unendlich).
-- **Geld** ist die einzige Ressource für Buchung + Tische + Upgrades. START_MONEY=0 zum Release (aktuell 10000 nur Test).
+- **Geld** ist die einzige Ressource für Buchung + Tische + Upgrades. START_MONEY=1200 — genug für Zelt (500) + 2 Tische (400) + ein Paket Bier (60), damit der Einstieg spielbar ist.
 
 ## 3. Checkliste (Reihenfolge = Umsetzungsplan)
 

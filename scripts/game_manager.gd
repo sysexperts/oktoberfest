@@ -56,7 +56,7 @@ const CLEAN_TIP_MAX := 12
 const HYGIENE_DRAIN := 1.2
 const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
-const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bier 60 (yayında 0)
+const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bier 60
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_STAGE_NAMES := {0: "Zelt yok", 1: "Küçük Zelt", 2: "Orta Zelt", 3: "Büyük Zelt"}
@@ -218,7 +218,7 @@ var _world_env: WorldEnvironment
 var _day_sun_energy := 1.0
 var _day_ambient := 0.35
 var _day_bg := 1.0
-var _day_fog := 0.0022
+var _day_fog := 0.0008
 var _day_fog_color := Color(0.78, 0.70, 0.62)
 var _night_visual := false
 var _night_t := -1.0
@@ -439,7 +439,7 @@ func _apply_daylight(clock: float) -> void:
 		# Nebel bleibt ein dünner Dunst — er soll das Licht der Buden einfangen,
 		# nicht die Sicht nehmen. Nachts etwas dichter und dunkler, damit die
 		# bunten Lichter Schwaden werfen.
-		env.fog_density = lerpf(_day_fog, _day_fog * 1.6, t)
+		env.fog_density = lerpf(_day_fog, _day_fog * 4.0, t)
 		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
 func _daily_rent() -> int:
 	return int(TENT_RENT.get(_tent_stage, 0))
