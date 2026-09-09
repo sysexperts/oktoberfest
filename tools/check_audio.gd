@@ -12,7 +12,9 @@ func _los(s: Node) -> void:
 	var d = s.get("_streams")
 	print("Klänge geladen: %d -> %s" % [d.size(), str(d.keys())])
 	var pl = s.get("_playlist")
-	print("Musikstücke gefunden: %d" % pl.size())
+	print("Musikstuecke gefunden: %d" % pl.size())
+	for m in pl:
+		print("  %s  %.1f s  Loop=%s" % [m.resource_path.get_file(), m.get_length(), str(m.get("loop"))])
 	print("Musik-Bus: %s   Ambiente-Bus: %s" % [s.get("_music_player").bus, s.get("_crowd_player").bus])
 	s.play("cheer")
 	await process_frame

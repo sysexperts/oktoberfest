@@ -10,7 +10,8 @@ Nachweis in diesem Ordner liegen.
 | Zelt | `assets/models/floor,wall,roof.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
-| Ton | `assets/audio/` | — | — | — | leer, alles synthetisch |
+| Zeltmusik | `assets/audio/musik/zelt_01.mp3` | AIMusic.so | Tarif prüfen — nur bezahlt ist kommerziell | Lizenzzertifikat holen | ⚠️ |
+| Ton übrig | `assets/audio/sfx`, `ambiente` | — | — | — | fehlt noch |
 
 Schriftarten: keine eigenen im Projekt, es läuft alles über Godots
 Standardschrift. Emoji rendert das System.
@@ -73,3 +74,21 @@ docs/lizenzen/
 
 Screenshots mit sichtbarem Datum reichen. Wichtig ist, dass Rechnungszeitraum
 und Erzeugungsdatum zusammenpassen.
+
+## Musik aus AIMusic.so
+
+Laut Anbieter: **kostenlose Nutzer haben keine kommerziellen Rechte** — sie
+dürfen die Stücke nur auf nicht-kommerziellen Plattformen teilen und müssen
+„Created with AIMusic.so" nennen. **Bezahlte Nutzer** behalten die vollen
+Rechte an dem, was sie erzeugen, auch nach Ablauf des Abos.
+
+Jahresabonnenten können ein **Lizenzzertifikat** anfordern. Genau das gehört
+hier in den Ordner — es ist der sauberste Nachweis, den es für KI-Musik gibt.
+
+Die Lizenzseite selbst ließ sich nicht abrufen (403), die Angaben stammen aus
+Anbieter-Zusammenfassungen. Vor dem Release einmal selbst im Konto nachlesen.
+
+**Zweite Ebene:** Ob rein KI-erzeugte Musik überhaupt urheberrechtlich
+geschützt ist, ist in vielen Ländern offen. Für die Nutzung im Spiel spielt das
+keine Rolle — es heißt nur, dass man anderen die Weiterverwendung womöglich
+nicht verbieten kann. Kein Blocker, aber gut zu wissen.
