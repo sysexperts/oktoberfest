@@ -39,6 +39,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/karussell.tscn" id="37_p4kn1"]
 [ext_resource type="PackedScene" path="res://scenes/props/riesenrad.tscn" id="38_swptr"]
 [ext_resource type="PackedScene" path="res://scenes/props/lichterkette.tscn" id="39_lkette"]
+[ext_resource type="PackedScene" path="res://scenes/deko.tscn" id="40_deko"]
 [ext_resource type="PackedScene" uid="uid://ckvlxl7lmu2yu" path="res://assets/kirmes/Models/Attractions/OtherRides/Rockets.fbx" id="40_tnypt"]
 [ext_resource type="PackedScene" uid="uid://bdtbmd8or8vgw" path="res://assets/kirmes/Models/Foliage/OakTree_2.fbx" id="41_qoh1t"]
 [ext_resource type="PackedScene" uid="uid://d2u2ysnruff8o" path="res://assets/kirmes/Models/Foliage/Tree_2.fbx" id="42_pswu3"]
@@ -719,3 +720,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -35)
 
 [node name="GardenBed_L12" parent="." unique_id=1621303504 instance=ExtResource("31_p4kn1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -36)
+
+[node name="Deko" parent="." instance=ExtResource("40_deko")]
