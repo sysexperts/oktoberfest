@@ -31,6 +31,7 @@ var _jitter_t := 0.0
 var _bob := 0.0
 var _model_base_y := 0.0
 var _idle_motion: IdleMotion
+var _hand_mugs: Array = []
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -57,6 +58,7 @@ func _ready() -> void:
 		_set_standing()
 	_collect_mugs()
 	_setup_idle_motion()
+	_setup_hand_mugs()
 	_refresh_label()
 
 ## Neutrale Stehpose: Laufanimation an einer Stelle mit geschlossenen Beinen
@@ -96,14 +98,17 @@ func set_info(r: int, lv: int) -> void:
 	_refresh_label()
 
 ## Wie viele Bestellungen der Kellner gerade trägt.
+## 1-2 Krüge landen in den Händen, der Rest als Traube vor dem Bauch.
 func set_carrying(n: int) -> void:
 	if carrying == n:
 		return
 	carrying = n
+	for i in _hand_mugs.size():
+		(_hand_mugs[i] as Node3D).visible = i < n
+	var rest: int = maxi(0, n - _hand_mugs.size())
 	for i in _mug_nodes.size():
-		(_mug_nodes[i] as Node3D).visible = i < n
+		(_mug_nodes[i] as Node3D).visible = i < rest
 	_refresh_label()
-
 func _refresh_label() -> void:
 	if _label == null:
 		return
@@ -140,6 +145,48 @@ func _process(delta: float) -> void:
 			deg_to_rad(model_yaw_offset) + _idle_jitter, clampf(delta * 1.5, 0.0, 1.0))
 
 
+
+## Ein Krug pro Hand, direkt an den Handknochen gehängt — der folgt damit
+## wirklich der Handbewegung. Alles darüber hinaus wird als Traube vor dem
+## Bauch gezeigt (wie eine echte Bedienung mehrere Maß trägt).
+func _setup_hand_mugs() -> void:
+	var sks := _model.find_children("*", "Skeleton3D", true, false)
+	if sks.is_empty():
+		return
+	var sk := sks[0] as Skeleton3D
+	for bone_name in ["RightHand", "LeftHand"]:
+		var b := sk.find_bone(bone_name)
+		if b < 0:
+			continue
+		var ba := BoneAttachment3D.new()
+		ba.bone_idx = b
+		sk.add_child(ba)
+		var krug := Node3D.new()
+		krug.position = Vector3(0.0, -0.05, 0.0)
+		krug.visible = false
+		ba.add_child(krug)
+		var glas := MeshInstance3D.new()
+		var cyl := CylinderMesh.new()
+		cyl.top_radius = 0.032
+		cyl.bottom_radius = 0.032
+		cyl.height = 0.1
+		glas.mesh = cyl
+		var mb := StandardMaterial3D.new()
+		mb.albedo_color = Color(0.95, 0.72, 0.18)
+		glas.material_override = mb
+		krug.add_child(glas)
+		var schaum := MeshInstance3D.new()
+		var cyl2 := CylinderMesh.new()
+		cyl2.top_radius = 0.034
+		cyl2.bottom_radius = 0.034
+		cyl2.height = 0.022
+		schaum.mesh = cyl2
+		var ms := StandardMaterial3D.new()
+		ms.albedo_color = Color(0.98, 0.97, 0.92)
+		schaum.material_override = ms
+		schaum.position = Vector3(0.0, 0.055, 0.0)
+		krug.add_child(schaum)
+		_hand_mugs.append(krug)
 
 ## Organische Stehbewegung (Atmen, Gewicht verlagern, Kopf drehen).
 func _setup_idle_motion() -> void:
