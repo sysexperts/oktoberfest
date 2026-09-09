@@ -6,7 +6,26 @@
 [ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
+[ext_resource type="PackedScene" uid="uid://cd6r4jox2bx2t" path="res://assets/kirmes/Models/Attractions/ShipRide/ShipRide.fbx" id="8_cu5q6"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
+[ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
+[ext_resource type="PackedScene" uid="uid://dusg2jruc7wf4" path="res://assets/kirmes/Models/Ground/Terrain.fbx" id="10_segyt"]
+[ext_resource type="PackedScene" uid="uid://chrmnwixompew" path="res://assets/kirmes/Models/Props/Bench.fbx" id="11_i3lhy"]
+[ext_resource type="PackedScene" uid="uid://bfm6aa8cpnegy" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="12_fgnfp"]
+[ext_resource type="PackedScene" uid="uid://b6oh1keokqrjv" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="13_w4g7w"]
+[ext_resource type="PackedScene" uid="uid://cs041iopbxxx2" path="res://assets/kirmes/Models/Shops/Bld_Bakery.fbx" id="14_bli7h"]
+[ext_resource type="PackedScene" uid="uid://ctkqi8tul1rgb" path="res://assets/kirmes/Models/Shops/Bld_Cafe.fbx" id="15_nlngv"]
+[ext_resource type="PackedScene" uid="uid://dx60hfopv154q" path="res://assets/kirmes/Models/Shops/Gift_Shop.fbx" id="16_h050s"]
+[ext_resource type="PackedScene" uid="uid://bfcs0lyn82yhg" path="res://assets/kirmes/Models/Shops/HotDogs_Shop.fbx" id="17_dbcyo"]
+[ext_resource type="PackedScene" uid="uid://bwn87fe8pqcfv" path="res://assets/kirmes/Models/Shops/OpenAirDisco.fbx" id="18_kucnk"]
+[ext_resource type="PackedScene" uid="uid://d3slp4i2yf4at" path="res://assets/kirmes/Models/Shops/Park_Entrance.fbx" id="19_vog6x"]
+[ext_resource type="PackedScene" uid="uid://db8cnpqaj6dra" path="res://assets/kirmes/Models/Shops/PopCorn_Shop.fbx" id="20_m2aab"]
+[ext_resource type="PackedScene" uid="uid://rg5lahnkcloj" path="res://assets/kirmes/Models/Shops/Soda_Shop.fbx" id="21_6fdsn"]
+[ext_resource type="PackedScene" uid="uid://draf6cd5oqons" path="res://assets/kirmes/Models/Shops/Ticket_Box_A.fbx" id="22_eahg2"]
+[ext_resource type="PackedScene" uid="uid://bprgimokht40o" path="res://assets/kirmes/Models/Shops/Ticket_Box_B.fbx" id="23_87m88"]
+[ext_resource type="PackedScene" uid="uid://dvi72mx42mkbl" path="res://assets/kirmes/Models/Shops/WC.fbx" id="24_p4kn1"]
+[ext_resource type="PackedScene" uid="uid://c6cewhgbdxlfp" path="res://assets/kirmes/Models/Vehicles/Car_1.fbx" id="25_swptr"]
+[ext_resource type="PackedScene" uid="uid://8ykmsjnnr3k3" path="res://assets/kirmes/Models/Vehicles/Van.fbx" id="26_tnypt"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)
@@ -50,14 +69,11 @@ size = Vector3(0.4, 4, 8)
 [sub_resource type="BoxShape3D" id="BueroColDoor"]
 size = Vector3(3, 4, 0.4)
 
-[sub_resource type="StandardMaterial3D" id="MatMauer"]
-albedo_color = Color(0.42, 0.32, 0.24, 1)
-
-[sub_resource type="BoxMesh" id="MauerNordMesh"]
-size = Vector3(68, 5, 0.6)
-
 [sub_resource type="BoxShape3D" id="MauerNordCol"]
 size = Vector3(68, 5, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="MatMauer"]
+albedo_color = Color(0.42, 0.32, 0.24, 1)
 
 [sub_resource type="BoxMesh" id="MauerSuedAMesh"]
 size = Vector3(28, 5, 0.6)
@@ -154,12 +170,6 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4.5, 0, 27)
 
 [node name="N08_Sues" parent="StaendeNord" unique_id=1569190950 instance=ExtResource("4_sues")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 27)
-
-[node name="N09_Dreh" parent="StaendeNord" unique_id=1184047546 instance=ExtResource("1_dreh")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.5, 0, 27)
-
-[node name="N10_Ente" parent="StaendeNord" unique_id=150551566 instance=ExtResource("2_ente")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 9, 0, 27)
 
 [node name="N11_Schi" parent="StaendeNord" unique_id=1580895013 instance=ExtResource("3_schi")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 13.5, 0, 27)
@@ -340,7 +350,7 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 2.5)
 
 [node name="Wohnwagenplatz" type="Node3D" parent="." unique_id=1657274445]
 
-[node name="MeinWohnwagen" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+[node name="MeinWohnwagen" parent="Wohnwagenplatz" unique_id=1672729271 instance=ExtResource("6_carav")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -39)
 
 [node name="Nachbar1" parent="Wohnwagenplatz" unique_id=1159562924 instance=ExtResource("6_carav")]
@@ -363,64 +373,60 @@ is_mine = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -43)
 is_mine = false
 
+[node name="Laternen" type="Node3D" parent="." unique_id=1196246381]
 
-[node name="Laternen" type="Node3D" parent="."]
-
-[node name="LN1" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LN1" parent="Laternen" unique_id=16891652 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 15.5)
 
-[node name="LN2" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LN2" parent="Laternen" unique_id=655809467 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 15.5)
 
-[node name="LN3" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LN3" parent="Laternen" unique_id=518422636 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.5)
 
-[node name="LN4" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LN4" parent="Laternen" unique_id=499402899 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 15.5)
 
-[node name="LN5" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LN5" parent="Laternen" unique_id=2044354531 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 15.5)
 
-[node name="LS1" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LS1" parent="Laternen" unique_id=80624301 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -18.5)
 
-[node name="LS2" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LS2" parent="Laternen" unique_id=507137961 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -18.5)
 
-[node name="LS3" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LS3" parent="Laternen" unique_id=1115296545 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.5)
 
-[node name="LS4" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LS4" parent="Laternen" unique_id=404162568 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -18.5)
 
-[node name="LS5" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LS5" parent="Laternen" unique_id=603727138 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -18.5)
 
-[node name="LW1" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LW1" parent="Laternen" unique_id=1782974606 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, 10)
 
-[node name="LW2" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LW2" parent="Laternen" unique_id=1552747038 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, 0)
 
-[node name="LW3" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LW3" parent="Laternen" unique_id=40884460 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -10)
 
-[node name="LO1" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LO1" parent="Laternen" unique_id=1802386543 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, 10)
 
-[node name="LO2" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LO2" parent="Laternen" unique_id=1671322052 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, 0)
 
-[node name="LO3" parent="Laternen" instance=ExtResource("8_lat")]
+[node name="LO3" parent="Laternen" unique_id=489784495 instance=ExtResource("8_lat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, -10)
+
 [node name="Mauern" type="Node3D" parent="." unique_id=2046617623]
 
 [node name="MauerNord" type="StaticBody3D" parent="Mauern" unique_id=1206220130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 31)
-
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerNord" unique_id=625701270]
-material_override = SubResource("MatMauer")
-mesh = SubResource("MauerNordMesh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerNord" unique_id=1920666281]
 shape = SubResource("MauerNordCol")
@@ -504,3 +510,60 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 2.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundEast" unique_id=1975916934]
 shape = SubResource("BoundZ")
+
+[node name="ShipRide" parent="." unique_id=1850783362 instance=ExtResource("8_cu5q6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.820018, 0, 36.81225)
+
+[node name="Parking" parent="." unique_id=1798203239 instance=ExtResource("9_y5oy2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9337764, 0, 29.594742)
+
+[node name="Terrain" parent="." unique_id=694677288 instance=ExtResource("10_segyt")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.579601, -0.100040436, 11.524668)
+
+[node name="Bench" parent="." unique_id=1685317960 instance=ExtResource("11_i3lhy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.248286, 1.9073486e-06, 22.993784)
+
+[node name="CafeChair" parent="." unique_id=868285371 instance=ExtResource("12_fgnfp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.895702, -1.9073486e-06, 15.80945)
+
+[node name="Lamps" parent="." unique_id=166998723 instance=ExtResource("13_w4g7w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6324625, 0, 10.779305)
+
+[node name="Bld_Bakery" parent="." unique_id=1322933375 instance=ExtResource("14_bli7h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.781834, 0, 21.907244)
+
+[node name="Bld_Cafe" parent="." unique_id=1135817729 instance=ExtResource("15_nlngv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.877804, 0, 37.916306)
+
+[node name="Gift_Shop" parent="." unique_id=777981838 instance=ExtResource("16_h050s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.951471, 0.84420395, 43.64548)
+
+[node name="HotDogs_Shop" parent="." unique_id=659724584 instance=ExtResource("17_dbcyo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3355532, 0, 38.042038)
+
+[node name="OpenAirDisco" parent="." unique_id=1215211321 instance=ExtResource("18_kucnk")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4.3970895, 0, 51.19187)
+
+[node name="Park_Entrance" parent="." unique_id=246717198 instance=ExtResource("19_vog6x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8424854, 0, 26.808226)
+
+[node name="PopCorn_Shop" parent="." unique_id=1761177705 instance=ExtResource("20_m2aab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.756275, 1.9073486e-06, 21.689587)
+
+[node name="Soda_Shop" parent="." unique_id=1490799055 instance=ExtResource("21_6fdsn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.807297, 0, 19.476688)
+
+[node name="Ticket_Box_A" parent="." unique_id=206639782 instance=ExtResource("22_eahg2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.69667, 1.9073486e-06, 24.676308)
+
+[node name="Ticket_Box_B" parent="." unique_id=2108803535 instance=ExtResource("23_87m88")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.190491, 1.9073486e-06, 22.952204)
+
+[node name="WC" parent="." unique_id=1039295226 instance=ExtResource("24_p4kn1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.031954, 0, 24.070768)
+
+[node name="Car_1" parent="." unique_id=2067506652 instance=ExtResource("25_swptr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.256443, 3.623413, 43.243767)
+
+[node name="Van" parent="." unique_id=819599614 instance=ExtResource("26_tnypt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.769068, 2.1972733, 43.26566)

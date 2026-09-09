@@ -1,0 +1,1588 @@
+[gd_scene load_steps=127 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_A.fbx" id="m0"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_B.fbx" id="m1"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_C_Left.fbx" id="m2"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_C_Right.fbx" id="m3"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_Cabin_1.fbx" id="m4"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_Cabin_2.fbx" id="m5"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_Cabin_3.fbx" id="m6"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_Cabin_4.fbx" id="m7"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/CableRailway/Cable_Railway_Station.fbx" id="m8"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/Carousel.fbx" id="m9"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/FerrisWheel.fbx" id="m10"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/RoadTrain_A.fbx" id="m11"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/RoadTrain_B.fbx" id="m12"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/RoadTrain_C.fbx" id="m13"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/RoadTrain_D.fbx" id="m14"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/RoadTrain_E.fbx" id="m15"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/Rockets.fbx" id="m16"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/OtherRides/Tower_Ride.fbx" id="m17"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_A.fbx" id="m18"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_A_Left.fbx" id="m19"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_A_Right.fbx" id="m20"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_B.fbx" id="m21"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_B_Down.fbx" id="m22"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_B_Up.fbx" id="m23"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_C.fbx" id="m24"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_Start.fbx" id="m25"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_Wagon_A.fbx" id="m26"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/RollerCoaster/RollerCoaster_Wagon_B.fbx" id="m27"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/ShipRide/ShipRide.fbx" id="m28"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/TopSpin/TopSpin.fbx" id="m29"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_A.fbx" id="m30"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_B.fbx" id="m31"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_C_Left.fbx" id="m32"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_C_Right.fbx" id="m33"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_D.fbx" id="m34"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_E_Left.fbx" id="m35"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_E_Right.fbx" id="m36"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_Tube_1.fbx" id="m37"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/WaterRide/Water_Ride_Tube_2.fbx" id="m38"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/Wave/Wave.fbx" id="m39"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Bush.fbx" id="m40"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Bush_Berry.fbx" id="m41"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/C.Tree_1.fbx" id="m42"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/C.Tree_2.fbx" id="m43"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/GardenBed_L.fbx" id="m44"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/GardenBed_M.fbx" id="m45"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/GardenBed_S.fbx" id="m46"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Grass_2.fbx" id="m47"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/OakTree_2.fbx" id="m48"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Pond.fbx" id="m49"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Poppies.fbx" id="m50"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Poppies_A.fbx" id="m51"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Poppies_B.fbx" id="m52"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Reeds.fbx" id="m53"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Stone_L.fbx" id="m54"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Stone_M.fbx" id="m55"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Stone_S.fbx" id="m56"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Tree_1.fbx" id="m57"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Tree_2.fbx" id="m58"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Tree_3.fbx" id="m59"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Tree_4.fbx" id="m60"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Tree_Apple.fbx" id="m61"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Tree_Pear.fbx" id="m62"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/WaterLily.fbx" id="m63"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Dirt.fbx" id="m64"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Grass.fbx" id="m65"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Gravel.fbx" id="m66"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Ground.fbx" id="m67"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="m68"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Road_Crossroad.fbx" id="m69"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Road_Straight.fbx" id="m70"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Road_Straight_End.fbx" id="m71"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Road_Turn.fbx" id="m72"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Ground/Sand.fbx" id="m73"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Bench.fbx" id="m74"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="m75"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/CafeMenu.fbx" id="m76"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/CafeTable.fbx" id="m77"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/CafeUmberella.fbx" id="m78"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Dinosaur_A.fbx" id="m79"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Dinosaur_B.fbx" id="m80"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Fence_A.fbx" id="m81"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Fence_B.fbx" id="m82"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Fence_Wood.fbx" id="m83"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/FireHydrant.fbx" id="m84"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Fountain.fbx" id="m85"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Lamp_1.fbx" id="m86"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Lamp_2.fbx" id="m87"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Lamp_3.fbx" id="m88"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="m89"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Park_Fence_A.fbx" id="m90"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Park_Fence_B.fbx" id="m91"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/PicnicTable.fbx" id="m92"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Picnic_Place.fbx" id="m93"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/QueueBarrier_Closed.fbx" id="m94"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/QueueBarrier_Open.fbx" id="m95"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/TrashBag.fbx" id="m96"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/TrashBin.fbx" id="m97"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/TrashCan.fbx" id="m98"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Turnstile_A.fbx" id="m99"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Props/Turnstile_B.fbx" id="m100"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Bld_Bakery.fbx" id="m101"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Bld_Cafe.fbx" id="m102"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Gazebo.fbx" id="m103"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Gift_Shop.fbx" id="m104"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/HotDogs_Shop.fbx" id="m105"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/IceCream_Shop.fbx" id="m106"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/OpenAirDisco.fbx" id="m107"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Park_Entrance.fbx" id="m108"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/PopCorn_Shop.fbx" id="m109"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Soda_Shop.fbx" id="m110"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Ticket_Box_A.fbx" id="m111"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/Ticket_Box_B.fbx" id="m112"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Shops/WC.fbx" id="m113"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Car_1.fbx" id="m114"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Car_2.fbx" id="m115"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Car_3.fbx" id="m116"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Car_1_a.fbx" id="m117"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Car_1_b.fbx" id="m118"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Car_2_a.fbx" id="m119"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Car_2_b.fbx" id="m120"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Car_3.fbx" id="m121"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Car_3_b.fbx" id="m122"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Pick_up_1.fbx" id="m123"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Transport_Pick_up_2.fbx" id="m124"]
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Vehicles/Van.fbx" id="m125"]
+
+[node name="KatalogKirmes" type="Node3D"]
+
+[node name="Attractions" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.00)
+
+[node name="_Titel" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3, 0)
+billboard = 1
+pixel_size = 0.02
+font_size = 64
+outline_size = 16
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Attractions"
+
+[node name="Cable_Railway_A" parent="Attractions" instance=ExtResource("m0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 0.00)
+
+[node name="Cable_Railway_A_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_A"
+
+[node name="Cable_Railway_B" parent="Attractions" instance=ExtResource("m1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, 0, 0.00)
+
+[node name="Cable_Railway_B_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_B"
+
+[node name="Cable_Railway_C_Left" parent="Attractions" instance=ExtResource("m2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, 0, 0.00)
+
+[node name="Cable_Railway_C_Left_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_C_Left"
+
+[node name="Cable_Railway_C_Right" parent="Attractions" instance=ExtResource("m3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, 0, 0.00)
+
+[node name="Cable_Railway_C_Right_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_C_Right"
+
+[node name="Cable_Railway_Cabin_1" parent="Attractions" instance=ExtResource("m4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, 0, 0.00)
+
+[node name="Cable_Railway_Cabin_1_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_Cabin_1"
+
+[node name="Cable_Railway_Cabin_2" parent="Attractions" instance=ExtResource("m5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, 0, 0.00)
+
+[node name="Cable_Railway_Cabin_2_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_Cabin_2"
+
+[node name="Cable_Railway_Cabin_3" parent="Attractions" instance=ExtResource("m6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, 0, 0.00)
+
+[node name="Cable_Railway_Cabin_3_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_Cabin_3"
+
+[node name="Cable_Railway_Cabin_4" parent="Attractions" instance=ExtResource("m7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, 0, 0.00)
+
+[node name="Cable_Railway_Cabin_4_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_Cabin_4"
+
+[node name="Cable_Railway_Station" parent="Attractions" instance=ExtResource("m8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, 0, 0.00)
+
+[node name="Cable_Railway_Station_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Cable_Railway_Station"
+
+[node name="Carousel" parent="Attractions" instance=ExtResource("m9")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, 0, 0.00)
+
+[node name="Carousel_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Carousel"
+
+[node name="FerrisWheel" parent="Attractions" instance=ExtResource("m10")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 18.48)
+
+[node name="FerrisWheel_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "FerrisWheel"
+
+[node name="RoadTrain_A" parent="Attractions" instance=ExtResource("m11")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, 0, 18.48)
+
+[node name="RoadTrain_A_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RoadTrain_A"
+
+[node name="RoadTrain_B" parent="Attractions" instance=ExtResource("m12")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, 0, 18.48)
+
+[node name="RoadTrain_B_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RoadTrain_B"
+
+[node name="RoadTrain_C" parent="Attractions" instance=ExtResource("m13")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, 0, 18.48)
+
+[node name="RoadTrain_C_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RoadTrain_C"
+
+[node name="RoadTrain_D" parent="Attractions" instance=ExtResource("m14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, 0, 18.48)
+
+[node name="RoadTrain_D_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RoadTrain_D"
+
+[node name="RoadTrain_E" parent="Attractions" instance=ExtResource("m15")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, 0, 18.48)
+
+[node name="RoadTrain_E_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RoadTrain_E"
+
+[node name="Rockets" parent="Attractions" instance=ExtResource("m16")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, 0, 18.48)
+
+[node name="Rockets_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Rockets"
+
+[node name="Tower_Ride" parent="Attractions" instance=ExtResource("m17")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, 0, 18.48)
+
+[node name="Tower_Ride_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tower_Ride"
+
+[node name="RollerCoaster_A" parent="Attractions" instance=ExtResource("m18")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, 0, 18.48)
+
+[node name="RollerCoaster_A_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_A"
+
+[node name="RollerCoaster_A_Left" parent="Attractions" instance=ExtResource("m19")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, 0, 18.48)
+
+[node name="RollerCoaster_A_Left_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, -0.4, 18.48)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_A_Left"
+
+[node name="RollerCoaster_A_Right" parent="Attractions" instance=ExtResource("m20")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 36.96)
+
+[node name="RollerCoaster_A_Right_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_A_Right"
+
+[node name="RollerCoaster_B" parent="Attractions" instance=ExtResource("m21")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, 0, 36.96)
+
+[node name="RollerCoaster_B_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_B"
+
+[node name="RollerCoaster_B_Down" parent="Attractions" instance=ExtResource("m22")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, 0, 36.96)
+
+[node name="RollerCoaster_B_Down_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_B_Down"
+
+[node name="RollerCoaster_B_Up" parent="Attractions" instance=ExtResource("m23")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, 0, 36.96)
+
+[node name="RollerCoaster_B_Up_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_B_Up"
+
+[node name="RollerCoaster_C" parent="Attractions" instance=ExtResource("m24")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, 0, 36.96)
+
+[node name="RollerCoaster_C_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_C"
+
+[node name="RollerCoaster_Start" parent="Attractions" instance=ExtResource("m25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, 0, 36.96)
+
+[node name="RollerCoaster_Start_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_Start"
+
+[node name="RollerCoaster_Wagon_A" parent="Attractions" instance=ExtResource("m26")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, 0, 36.96)
+
+[node name="RollerCoaster_Wagon_A_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_Wagon_A"
+
+[node name="RollerCoaster_Wagon_B" parent="Attractions" instance=ExtResource("m27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, 0, 36.96)
+
+[node name="RollerCoaster_Wagon_B_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "RollerCoaster_Wagon_B"
+
+[node name="ShipRide" parent="Attractions" instance=ExtResource("m28")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, 0, 36.96)
+
+[node name="ShipRide_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "ShipRide"
+
+[node name="TopSpin" parent="Attractions" instance=ExtResource("m29")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, 0, 36.96)
+
+[node name="TopSpin_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, -0.4, 36.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "TopSpin"
+
+[node name="Water_Ride_A" parent="Attractions" instance=ExtResource("m30")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 55.44)
+
+[node name="Water_Ride_A_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_A"
+
+[node name="Water_Ride_B" parent="Attractions" instance=ExtResource("m31")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, 0, 55.44)
+
+[node name="Water_Ride_B_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.48, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_B"
+
+[node name="Water_Ride_C_Left" parent="Attractions" instance=ExtResource("m32")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, 0, 55.44)
+
+[node name="Water_Ride_C_Left_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.96, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_C_Left"
+
+[node name="Water_Ride_C_Right" parent="Attractions" instance=ExtResource("m33")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, 0, 55.44)
+
+[node name="Water_Ride_C_Right_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.44, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_C_Right"
+
+[node name="Water_Ride_D" parent="Attractions" instance=ExtResource("m34")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, 0, 55.44)
+
+[node name="Water_Ride_D_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.92, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_D"
+
+[node name="Water_Ride_E_Left" parent="Attractions" instance=ExtResource("m35")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, 0, 55.44)
+
+[node name="Water_Ride_E_Left_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.39, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_E_Left"
+
+[node name="Water_Ride_E_Right" parent="Attractions" instance=ExtResource("m36")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, 0, 55.44)
+
+[node name="Water_Ride_E_Right_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.87, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_E_Right"
+
+[node name="Water_Ride_Tube_1" parent="Attractions" instance=ExtResource("m37")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, 0, 55.44)
+
+[node name="Water_Ride_Tube_1_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 129.35, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_Tube_1"
+
+[node name="Water_Ride_Tube_2" parent="Attractions" instance=ExtResource("m38")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, 0, 55.44)
+
+[node name="Water_Ride_Tube_2_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.83, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Water_Ride_Tube_2"
+
+[node name="Wave" parent="Attractions" instance=ExtResource("m39")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, 0, 55.44)
+
+[node name="Wave_Name" type="Label3D" parent="Attractions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 166.31, -0.4, 55.44)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Wave"
+
+[node name="Foliage" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100.39)
+
+[node name="_Titel" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3, 0)
+billboard = 1
+pixel_size = 0.02
+font_size = 64
+outline_size = 16
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Foliage"
+
+[node name="Bush" parent="Foliage" instance=ExtResource("m40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 0.00)
+
+[node name="Bush_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Bush"
+
+[node name="Bush_Berry" parent="Foliage" instance=ExtResource("m41")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.82, 0, 0.00)
+
+[node name="Bush_Berry_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.82, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Bush_Berry"
+
+[node name="C_Tree_1" parent="Foliage" instance=ExtResource("m42")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.64, 0, 0.00)
+
+[node name="C_Tree_1_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.64, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "C_Tree_1"
+
+[node name="C_Tree_2" parent="Foliage" instance=ExtResource("m43")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.46, 0, 0.00)
+
+[node name="C_Tree_2_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.46, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "C_Tree_2"
+
+[node name="GardenBed_L" parent="Foliage" instance=ExtResource("m44")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.29, 0, 0.00)
+
+[node name="GardenBed_L_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.29, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "GardenBed_L"
+
+[node name="GardenBed_M" parent="Foliage" instance=ExtResource("m45")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84.11, 0, 0.00)
+
+[node name="GardenBed_M_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84.11, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "GardenBed_M"
+
+[node name="GardenBed_S" parent="Foliage" instance=ExtResource("m46")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.93, 0, 0.00)
+
+[node name="GardenBed_S_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.93, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "GardenBed_S"
+
+[node name="Grass_2" parent="Foliage" instance=ExtResource("m47")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.75, 0, 0.00)
+
+[node name="Grass_2_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.75, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Grass_2"
+
+[node name="OakTree_2" parent="Foliage" instance=ExtResource("m48")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 134.57, 0, 0.00)
+
+[node name="OakTree_2_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 134.57, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "OakTree_2"
+
+[node name="Pond" parent="Foliage" instance=ExtResource("m49")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151.39, 0, 0.00)
+
+[node name="Pond_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151.39, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Pond"
+
+[node name="Poppies" parent="Foliage" instance=ExtResource("m50")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 16.82)
+
+[node name="Poppies_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Poppies"
+
+[node name="Poppies_A" parent="Foliage" instance=ExtResource("m51")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.82, 0, 16.82)
+
+[node name="Poppies_A_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.82, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Poppies_A"
+
+[node name="Poppies_B" parent="Foliage" instance=ExtResource("m52")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.64, 0, 16.82)
+
+[node name="Poppies_B_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.64, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Poppies_B"
+
+[node name="Reeds" parent="Foliage" instance=ExtResource("m53")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.46, 0, 16.82)
+
+[node name="Reeds_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.46, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Reeds"
+
+[node name="Stone_L" parent="Foliage" instance=ExtResource("m54")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.29, 0, 16.82)
+
+[node name="Stone_L_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.29, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Stone_L"
+
+[node name="Stone_M" parent="Foliage" instance=ExtResource("m55")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84.11, 0, 16.82)
+
+[node name="Stone_M_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84.11, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Stone_M"
+
+[node name="Stone_S" parent="Foliage" instance=ExtResource("m56")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.93, 0, 16.82)
+
+[node name="Stone_S_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.93, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Stone_S"
+
+[node name="Tree_1" parent="Foliage" instance=ExtResource("m57")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.75, 0, 16.82)
+
+[node name="Tree_1_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.75, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tree_1"
+
+[node name="Tree_2" parent="Foliage" instance=ExtResource("m58")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 134.57, 0, 16.82)
+
+[node name="Tree_2_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 134.57, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tree_2"
+
+[node name="Tree_3" parent="Foliage" instance=ExtResource("m59")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151.39, 0, 16.82)
+
+[node name="Tree_3_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 151.39, -0.4, 16.82)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tree_3"
+
+[node name="Tree_4" parent="Foliage" instance=ExtResource("m60")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 33.64)
+
+[node name="Tree_4_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 33.64)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tree_4"
+
+[node name="Tree_Apple" parent="Foliage" instance=ExtResource("m61")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.82, 0, 33.64)
+
+[node name="Tree_Apple_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.82, -0.4, 33.64)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tree_Apple"
+
+[node name="Tree_Pear" parent="Foliage" instance=ExtResource("m62")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.64, 0, 33.64)
+
+[node name="Tree_Pear_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.64, -0.4, 33.64)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Tree_Pear"
+
+[node name="WaterLily" parent="Foliage" instance=ExtResource("m63")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.46, 0, 33.64)
+
+[node name="WaterLily_Name" type="Label3D" parent="Foliage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.46, -0.4, 33.64)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "WaterLily"
+
+[node name="Ground" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 158.86)
+
+[node name="_Titel" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3, 0)
+billboard = 1
+pixel_size = 0.02
+font_size = 64
+outline_size = 16
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Ground"
+
+[node name="Dirt" parent="Ground" instance=ExtResource("m64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 0.00)
+
+[node name="Dirt_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Dirt"
+
+[node name="Grass" parent="Ground" instance=ExtResource("m65")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.50, 0, 0.00)
+
+[node name="Grass_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.50, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Grass"
+
+[node name="Gravel" parent="Ground" instance=ExtResource("m66")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.00, 0, 0.00)
+
+[node name="Gravel_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Gravel"
+
+[node name="Ground" parent="Ground" instance=ExtResource("m67")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.50, 0, 0.00)
+
+[node name="Ground_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.50, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Ground"
+
+[node name="Parking" parent="Ground" instance=ExtResource("m68")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.00, 0, 0.00)
+
+[node name="Parking_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Parking"
+
+[node name="Road_Crossroad" parent="Ground" instance=ExtResource("m69")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.50, 0, 0.00)
+
+[node name="Road_Crossroad_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.50, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Road_Crossroad"
+
+[node name="Road_Straight" parent="Ground" instance=ExtResource("m70")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.00, 0, 0.00)
+
+[node name="Road_Straight_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Road_Straight"
+
+[node name="Road_Straight_End" parent="Ground" instance=ExtResource("m71")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.50, 0, 0.00)
+
+[node name="Road_Straight_End_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.50, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Road_Straight_End"
+
+[node name="Road_Turn" parent="Ground" instance=ExtResource("m72")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.00, 0, 0.00)
+
+[node name="Road_Turn_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Road_Turn"
+
+[node name="Sand" parent="Ground" instance=ExtResource("m73")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.50, 0, 0.00)
+
+[node name="Sand_Name" type="Label3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.50, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Sand"
+
+[node name="Props" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 179.86)
+
+[node name="_Titel" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3, 0)
+billboard = 1
+pixel_size = 0.02
+font_size = 64
+outline_size = 16
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Props"
+
+[node name="Bench" parent="Props" instance=ExtResource("m74")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 0.00)
+
+[node name="Bench_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Bench"
+
+[node name="CafeChair" parent="Props" instance=ExtResource("m75")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, 0, 0.00)
+
+[node name="CafeChair_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "CafeChair"
+
+[node name="CafeMenu" parent="Props" instance=ExtResource("m76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.55, 0, 0.00)
+
+[node name="CafeMenu_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.55, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "CafeMenu"
+
+[node name="CafeTable" parent="Props" instance=ExtResource("m77")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.83, 0, 0.00)
+
+[node name="CafeTable_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.83, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "CafeTable"
+
+[node name="CafeUmberella" parent="Props" instance=ExtResource("m78")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.11, 0, 0.00)
+
+[node name="CafeUmberella_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.11, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "CafeUmberella"
+
+[node name="Dinosaur_A" parent="Props" instance=ExtResource("m79")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.39, 0, 0.00)
+
+[node name="Dinosaur_A_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.39, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Dinosaur_A"
+
+[node name="Dinosaur_B" parent="Props" instance=ExtResource("m80")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.66, 0, 0.00)
+
+[node name="Dinosaur_B_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.66, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Dinosaur_B"
+
+[node name="Fence_A" parent="Props" instance=ExtResource("m81")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.94, 0, 0.00)
+
+[node name="Fence_A_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.94, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Fence_A"
+
+[node name="Fence_B" parent="Props" instance=ExtResource("m82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.22, 0, 0.00)
+
+[node name="Fence_B_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.22, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Fence_B"
+
+[node name="Fence_Wood" parent="Props" instance=ExtResource("m83")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.49, 0, 0.00)
+
+[node name="Fence_Wood_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.49, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Fence_Wood"
+
+[node name="FireHydrant" parent="Props" instance=ExtResource("m84")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 6.28)
+
+[node name="FireHydrant_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "FireHydrant"
+
+[node name="Fountain" parent="Props" instance=ExtResource("m85")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, 0, 6.28)
+
+[node name="Fountain_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Fountain"
+
+[node name="Lamp_1" parent="Props" instance=ExtResource("m86")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.55, 0, 6.28)
+
+[node name="Lamp_1_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.55, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Lamp_1"
+
+[node name="Lamp_2" parent="Props" instance=ExtResource("m87")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.83, 0, 6.28)
+
+[node name="Lamp_2_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.83, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Lamp_2"
+
+[node name="Lamp_3" parent="Props" instance=ExtResource("m88")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.11, 0, 6.28)
+
+[node name="Lamp_3_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.11, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Lamp_3"
+
+[node name="Lamps" parent="Props" instance=ExtResource("m89")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.39, 0, 6.28)
+
+[node name="Lamps_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.39, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Lamps"
+
+[node name="Park_Fence_A" parent="Props" instance=ExtResource("m90")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.66, 0, 6.28)
+
+[node name="Park_Fence_A_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.66, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Park_Fence_A"
+
+[node name="Park_Fence_B" parent="Props" instance=ExtResource("m91")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.94, 0, 6.28)
+
+[node name="Park_Fence_B_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.94, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Park_Fence_B"
+
+[node name="PicnicTable" parent="Props" instance=ExtResource("m92")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.22, 0, 6.28)
+
+[node name="PicnicTable_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.22, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "PicnicTable"
+
+[node name="Picnic_Place" parent="Props" instance=ExtResource("m93")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.49, 0, 6.28)
+
+[node name="Picnic_Place_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.49, -0.4, 6.28)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Picnic_Place"
+
+[node name="QueueBarrier_Closed" parent="Props" instance=ExtResource("m94")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 12.55)
+
+[node name="QueueBarrier_Closed_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "QueueBarrier_Closed"
+
+[node name="QueueBarrier_Open" parent="Props" instance=ExtResource("m95")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, 0, 12.55)
+
+[node name="QueueBarrier_Open_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.28, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "QueueBarrier_Open"
+
+[node name="TrashBag" parent="Props" instance=ExtResource("m96")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.55, 0, 12.55)
+
+[node name="TrashBag_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.55, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "TrashBag"
+
+[node name="TrashBin" parent="Props" instance=ExtResource("m97")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.83, 0, 12.55)
+
+[node name="TrashBin_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.83, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "TrashBin"
+
+[node name="TrashCan" parent="Props" instance=ExtResource("m98")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.11, 0, 12.55)
+
+[node name="TrashCan_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.11, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "TrashCan"
+
+[node name="Turnstile_A" parent="Props" instance=ExtResource("m99")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.39, 0, 12.55)
+
+[node name="Turnstile_A_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.39, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Turnstile_A"
+
+[node name="Turnstile_B" parent="Props" instance=ExtResource("m100")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.66, 0, 12.55)
+
+[node name="Turnstile_B_Name" type="Label3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.66, -0.4, 12.55)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Turnstile_B"
+
+[node name="Shops" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 206.69)
+
+[node name="_Titel" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3, 0)
+billboard = 1
+pixel_size = 0.02
+font_size = 64
+outline_size = 16
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Shops"
+
+[node name="Bld_Bakery" parent="Shops" instance=ExtResource("m101")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 0.00)
+
+[node name="Bld_Bakery_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Bld_Bakery"
+
+[node name="Bld_Cafe" parent="Shops" instance=ExtResource("m102")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.69, 0, 0.00)
+
+[node name="Bld_Cafe_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.69, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Bld_Cafe"
+
+[node name="Gazebo" parent="Shops" instance=ExtResource("m103")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.39, 0, 0.00)
+
+[node name="Gazebo_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.39, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Gazebo"
+
+[node name="Gift_Shop" parent="Shops" instance=ExtResource("m104")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.08, 0, 0.00)
+
+[node name="Gift_Shop_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.08, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Gift_Shop"
+
+[node name="HotDogs_Shop" parent="Shops" instance=ExtResource("m105")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.77, 0, 0.00)
+
+[node name="HotDogs_Shop_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.77, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "HotDogs_Shop"
+
+[node name="IceCream_Shop" parent="Shops" instance=ExtResource("m106")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.47, 0, 0.00)
+
+[node name="IceCream_Shop_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.47, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "IceCream_Shop"
+
+[node name="OpenAirDisco" parent="Shops" instance=ExtResource("m107")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88.16, 0, 0.00)
+
+[node name="OpenAirDisco_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88.16, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "OpenAirDisco"
+
+[node name="Park_Entrance" parent="Shops" instance=ExtResource("m108")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 102.85, 0, 0.00)
+
+[node name="Park_Entrance_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 102.85, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Park_Entrance"
+
+[node name="PopCorn_Shop" parent="Shops" instance=ExtResource("m109")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.55, 0, 0.00)
+
+[node name="PopCorn_Shop_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.55, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "PopCorn_Shop"
+
+[node name="Soda_Shop" parent="Shops" instance=ExtResource("m110")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 132.24, 0, 0.00)
+
+[node name="Soda_Shop_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 132.24, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Soda_Shop"
+
+[node name="Ticket_Box_A" parent="Shops" instance=ExtResource("m111")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 14.69)
+
+[node name="Ticket_Box_A_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 14.69)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Ticket_Box_A"
+
+[node name="Ticket_Box_B" parent="Shops" instance=ExtResource("m112")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.69, 0, 14.69)
+
+[node name="Ticket_Box_B_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.69, -0.4, 14.69)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Ticket_Box_B"
+
+[node name="WC" parent="Shops" instance=ExtResource("m113")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.39, 0, 14.69)
+
+[node name="WC_Name" type="Label3D" parent="Shops"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.39, -0.4, 14.69)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "WC"
+
+[node name="Vehicles" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 244.08)
+
+[node name="_Titel" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3, 0)
+billboard = 1
+pixel_size = 0.02
+font_size = 64
+outline_size = 16
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Vehicles"
+
+[node name="Car_1" parent="Vehicles" instance=ExtResource("m114")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 0.00)
+
+[node name="Car_1_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Car_1"
+
+[node name="Car_2" parent="Vehicles" instance=ExtResource("m115")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96, 0, 0.00)
+
+[node name="Car_2_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Car_2"
+
+[node name="Car_3" parent="Vehicles" instance=ExtResource("m116")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.92, 0, 0.00)
+
+[node name="Car_3_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.92, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Car_3"
+
+[node name="Transport_Car_1_a" parent="Vehicles" instance=ExtResource("m117")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.88, 0, 0.00)
+
+[node name="Transport_Car_1_a_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.88, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Car_1_a"
+
+[node name="Transport_Car_1_b" parent="Vehicles" instance=ExtResource("m118")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.84, 0, 0.00)
+
+[node name="Transport_Car_1_b_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.84, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Car_1_b"
+
+[node name="Transport_Car_2_a" parent="Vehicles" instance=ExtResource("m119")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.79, 0, 0.00)
+
+[node name="Transport_Car_2_a_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.79, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Car_2_a"
+
+[node name="Transport_Car_2_b" parent="Vehicles" instance=ExtResource("m120")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.75, 0, 0.00)
+
+[node name="Transport_Car_2_b_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.75, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Car_2_b"
+
+[node name="Transport_Car_3" parent="Vehicles" instance=ExtResource("m121")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.71, 0, 0.00)
+
+[node name="Transport_Car_3_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.71, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Car_3"
+
+[node name="Transport_Car_3_b" parent="Vehicles" instance=ExtResource("m122")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.67, 0, 0.00)
+
+[node name="Transport_Car_3_b_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.67, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Car_3_b"
+
+[node name="Transport_Pick_up_1" parent="Vehicles" instance=ExtResource("m123")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.63, 0, 0.00)
+
+[node name="Transport_Pick_up_1_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.63, -0.4, 0.00)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Pick_up_1"
+
+[node name="Transport_Pick_up_2" parent="Vehicles" instance=ExtResource("m124")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, 0, 3.96)
+
+[node name="Transport_Pick_up_2_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00, -0.4, 3.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Transport_Pick_up_2"
+
+[node name="Van" parent="Vehicles" instance=ExtResource("m125")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96, 0, 3.96)
+
+[node name="Van_Name" type="Label3D" parent="Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.96, -0.4, 3.96)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+outline_size = 12
+text = "Van"
