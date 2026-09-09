@@ -483,13 +483,14 @@ func open_booking_ui() -> void:
 
 func _rebuild_seats() -> void:
 	_seats.clear()
-	for bt in _beertables:
+	for ti in _beertables.size():
+		var bt = _beertables[ti]
 		var origin: Vector3 = (bt as Node3D).global_position
 		for sp in bt.seat_points():
 			var d: Vector3 = origin - sp
 			d.y = 0
 			var yaw := atan2(-d.x, -d.z) if d.length() > 0.01 else 0.0
-			_seats.append({"pos": sp, "yaw": yaw, "guest": -1})
+			_seats.append({"pos": sp, "yaw": yaw, "guest": -1, "table": ti})
 
 ## Zelt kiralamaya göre masaları aktif/pasif yap + koltukları kur.
 func _apply_tent() -> void:
@@ -1426,14 +1427,30 @@ func net_close_tent() -> void:
 
 # ---- Misafirler ----
 func _free_seat() -> int:
+	# Gäste auf die Tische verteilen: der am wenigsten besetzte Tisch zuerst.
+	# Rein zufällig blieb bei wenig Andrang sonst ein Tisch den ganzen Tag leer.
+	var occupied := {}
+	for s in _seats:
+		var t := int(s.get("table", 0))
+		if not occupied.has(t):
+			occupied[t] = 0
+		if int(s.guest) != -1:
+			occupied[t] = int(occupied[t]) + 1
+	var best := -1
 	var free := []
 	for i in _seats.size():
-		if _seats[i].guest == -1:
+		if int(_seats[i].guest) != -1:
+			continue
+		var t := int(_seats[i].get("table", 0))
+		var o := int(occupied.get(t, 0))
+		if best < 0 or o < best:
+			best = o
+			free = [i]
+		elif o == best:
 			free.append(i)
 	if free.is_empty():
 		return -1
 	return free.pick_random()
-
 func _spawn_guest() -> void:
 	var si := _free_seat()
 	if si < 0:

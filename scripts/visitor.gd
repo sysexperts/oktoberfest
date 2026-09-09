@@ -1,12 +1,15 @@
 class_name Visitor
 extends Node3D
-## Kirmes-Besucher draußen. Reine Kulisse: läuft zwischen den Ständen umher,
-## hat nichts mit dem Zelt zu tun. Läuft lokal auf jedem Client (kein Netz-Traffic).
+## Kirmes-Besucher draußen. Reine Kulisse: läuft den Ringweg zwischen den Ständen
+## entlang, hat nichts mit dem Zelt zu tun. Läuft lokal (kein Netz-Traffic).
 
 var speed := 1.6
 
+var _route: Array = []
+var _idx := 0
+var _dir := 1
+var _offset := Vector3.ZERO   # seitlicher Versatz, damit nicht alle in einer Reihe laufen
 var _tgt := Vector3.ZERO
-var _pick: Callable
 var _anim: AnimationPlayer
 var _cur := ""
 var _pause := 0.0
@@ -25,16 +28,28 @@ func _ready() -> void:
 		if _anim.has_animation("Walk"):
 			_anim.play("Walk")
 			_cur = "Walk"
-			_anim.seek(randf() * 1.0, true)
+			_anim.seek(randf(), true)
 
-## pick: Callable, die einen neuen Zielpunkt liefert.
-func setup(pick: Callable, start: Vector3) -> void:
-	_pick = pick
-	position = start
-	if _pick.is_valid():
-		_tgt = _pick.call()
+## route: geschlossener Rundweg, start: Startpunkt, dir: +1 / -1 Laufrichtung.
+func set_route(route: Array, start: int, dir: int) -> void:
+	_route = route
+	if _route.is_empty():
+		return
+	_idx = start % _route.size()
+	_dir = dir
+	_offset = Vector3(randf_range(-2.2, 2.2), 0.0, randf_range(-2.2, 2.2))
+	position = _route[_idx] + _offset
+	_advance()
+
+func _advance() -> void:
+	if _route.is_empty():
+		return
+	_idx = wrapi(_idx + _dir, 0, _route.size())
+	_tgt = _route[_idx] + _offset
 
 func _process(delta: float) -> void:
+	if _route.is_empty():
+		return
 	if _pause > 0.0:
 		_pause -= delta
 		_set_anim("Idle")
@@ -42,10 +57,10 @@ func _process(delta: float) -> void:
 	var to := _tgt - position
 	to.y = 0
 	if to.length() < 0.6:
-		# kurz stehenbleiben, als würde man den Stand anschauen
-		_pause = randf_range(0.0, 3.5)
-		if _pick.is_valid():
-			_tgt = _pick.call()
+		# ab und zu stehenbleiben, als würde man einen Stand anschauen
+		if randf() < 0.25:
+			_pause = randf_range(1.0, 3.5)
+		_advance()
 		return
 	position += to.normalized() * speed * delta
 	rotation.y = lerp_angle(rotation.y, atan2(-to.x, -to.z), clampf(delta * 4.0, 0.0, 1.0))
