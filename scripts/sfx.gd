@@ -1,7 +1,16 @@
 class_name Sfx
 extends Node
-## Basit prosedürel ses efektleri (harici dosya yok). Yerelde çalınır.
-## Headless sunucuda üretilmez (sadece istemci).
+## Ton. Läuft rein lokal, auf dem Headless-Server wird nichts erzeugt.
+##
+## Echte Dateien haben Vorrang: liegt unter assets/audio/ eine passende Datei,
+## wird die genommen. Fehlt sie, springt die alte prozedurale Erzeugung ein —
+## so klingt es nie stumm, aber jede gekaufte Datei ersetzt sofort den Piepston.
+## Welche Dateien gebraucht werden, steht in docs/AUDIO.md.
+
+const SFX_DIR := "res://assets/audio/sfx/"
+const MUSIK_DIR := "res://assets/audio/musik/"
+const AMBIENTE := "res://assets/audio/ambiente/kirmes"
+const ENDUNGEN := [".ogg", ".wav", ".mp3"]
 
 var _streams := {}
 var _players: Array[AudioStreamPlayer] = []
@@ -9,12 +18,15 @@ var _idx := 0
 var _ok := false
 var _music_player: AudioStreamPlayer
 var _crowd_player: AudioStreamPlayer
-var _music_stream: AudioStreamWAV
-var _crowd_stream: AudioStreamWAV
+var _music_stream: AudioStream
+var _crowd_stream: AudioStream
+## Alle gefundenen Musikstücke — es wird zufällig durchgewechselt.
+var _playlist: Array[AudioStream] = []
 
 func _ready() -> void:
 	if DisplayServer.get_name() == "headless":
 		return  # sunucuda ses üretme
+	# Ersatzklänge — werden gleich von echten Dateien überschrieben, wo es welche gibt.
 	_streams["pop"] = _tone(760.0, 0.09, "sine", 8.0)
 	_streams["ding"] = _tone(1200.0, 0.28, "sine", 4.0)
 	_streams["glug"] = _tone(170.0, 0.16, "sine", 6.0)
@@ -23,21 +35,82 @@ func _ready() -> void:
 	_streams["splash"] = _tone(0.0, 0.3, "noise", 0.0)
 	_streams["cheer"] = _chord([520.0, 660.0, 790.0], 0.5)
 	_streams["honk"] = _honk()
+	for name: String in _streams.keys():
+		var echt := _lade(SFX_DIR + name)
+		if echt != null:
+			_streams[name] = echt
+	# Namen ohne Ersatzklang: nur nutzbar, wenn eine Datei da ist.
+	for name in ["kasse", "zapfen", "prost", "schritte", "tuer", "muenzen", "fahrgeschaeft"]:
+		var echt := _lade(SFX_DIR + name)
+		if echt != null:
+			_streams[name] = echt
+
 	for i in 6:
 		var p := AudioStreamPlayer.new()
+		p.bus = "SFX"
 		add_child(p)
 		_players.append(p)
-	_music_stream = _music()
-	_crowd_stream = _crowd()
+
+	_playlist = _lade_ordner(MUSIK_DIR)
+	_music_stream = _playlist[0] if not _playlist.is_empty() else _music()
+	_crowd_stream = _lade(AMBIENTE)
+	if _crowd_stream == null:
+		_crowd_stream = _crowd()
+
 	_music_player = AudioStreamPlayer.new()
 	_music_player.stream = _music_stream
-	_music_player.volume_db = -16.0
+	_music_player.bus = "Musik"
+	# Echte Musik ist schon abgemischt, der Ersatzton nicht.
+	_music_player.volume_db = -6.0 if not _playlist.is_empty() else -16.0
+	_music_player.finished.connect(_naechstes_stueck)
 	add_child(_music_player)
+
 	_crowd_player = AudioStreamPlayer.new()
 	_crowd_player.stream = _crowd_stream
-	_crowd_player.volume_db = -22.0
+	_crowd_player.bus = "Ambiente"
+	_crowd_player.volume_db = -10.0 if _crowd_stream != null else -22.0
 	add_child(_crowd_player)
 	_ok = true
+
+## Lädt <basis>.ogg / .wav / .mp3 — je nachdem, was da ist.
+func _lade(basis: String) -> AudioStream:
+	for e in ENDUNGEN:
+		if ResourceLoader.exists(basis + e):
+			return load(basis + e) as AudioStream
+	return null
+
+func _lade_ordner(pfad: String) -> Array[AudioStream]:
+	var out: Array[AudioStream] = []
+	var d := DirAccess.open(pfad)
+	if d == null:
+		return out
+	d.list_dir_begin()
+	var n := d.get_next()
+	while n != "":
+		# Im Projekt liegt daneben eine .import, im fertigen Export eine .remap —
+		# beide Endungen abschneiden, sonst findet der Export die Musik nicht.
+		var clean := n.trim_suffix(".import").trim_suffix(".remap")
+		if clean.get_extension().to_lower() in ["ogg", "wav", "mp3"]:
+			var s := load(pfad + clean) as AudioStream
+			if s != null and not out.has(s):
+				out.append(s)
+		n = d.get_next()
+	d.list_dir_end()
+	out.shuffle()
+	return out
+
+## Nach jedem Stück das nächste — nur wenn es mehrere gibt.
+func _naechstes_stueck() -> void:
+	if _playlist.size() < 2:
+		if _music_player.stream != null:
+			_music_player.play()
+		return
+	var jetzt := _music_player.stream
+	var neu := jetzt
+	while neu == jetzt:
+		neu = _playlist[randi() % _playlist.size()]
+	_music_player.stream = neu
+	_music_player.play()
 
 func play_music() -> void:
 	if not _ok:
