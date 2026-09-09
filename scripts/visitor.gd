@@ -29,6 +29,7 @@ var _jitter := 0.0
 var _bob := 0.0
 var _base_y := 0.0
 var _walk_speed := 1.0
+var _idle_motion: IdleMotion
 
 @onready var _model: Node3D = $Model
 
@@ -45,6 +46,7 @@ func _ready() -> void:
 			if _anim.has_animation(n):
 				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
 		_go_walk()
+	_setup_idle_motion()
 
 func setup(crowd: Node) -> void:
 	_crowd = crowd
@@ -108,11 +110,17 @@ func _process(delta: float) -> void:
 	if fwd.dot(to.normalized()) > 0.25:
 		position += fwd * speed * delta
 	_go_walk()
+	if _idle_motion:
+		_idle_motion.idle = false
 	_model.rotation.y = lerp_angle(_model.rotation.y, deg_to_rad(model_yaw_offset), clampf(delta * 5.0, 0.0, 1.0))
 	_model.position.y = _base_y
 
 ## Beim Stehen leicht umschauen und atmen — nur wenn er nicht gerade feiert.
 func _idle_look(delta: float) -> void:
+	if _idle_motion:
+		_idle_motion.idle = true
+	if _anim and _state == "stand":
+		_anim.seek(STAND_FRAME, true)   # Skelett aktualisieren
 	if _state == "dance":
 		return
 	_jitter_t -= delta
@@ -121,8 +129,8 @@ func _idle_look(delta: float) -> void:
 		_jitter = randf_range(-0.5, 0.5)
 	_model.rotation.y = lerp_angle(_model.rotation.y,
 		deg_to_rad(model_yaw_offset) + _jitter, clampf(delta * 1.5, 0.0, 1.0))
-	_bob += delta
-	_model.position.y = _base_y + sin(_bob * 1.5) * 0.012
+
+
 
 func _update_lod(delta: float) -> void:
 	_lod_timer -= delta
@@ -142,3 +150,12 @@ func _update_lod(delta: float) -> void:
 			_anim.active = false
 		else:
 			_anim.active = true
+
+## Organische Stehbewegung statt eingefrorener Pose.
+func _setup_idle_motion() -> void:
+	var sks := _model.find_children("*", "Skeleton3D", true, false)
+	if sks.is_empty():
+		return
+	_idle_motion = IdleMotion.new()
+	_idle_motion.name = "IdleMotion"
+	(sks[0] as Skeleton3D).add_child(_idle_motion)

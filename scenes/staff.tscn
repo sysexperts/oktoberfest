@@ -33,10 +33,10 @@ outline_size = 14
 text = "Kellner"
 
 [node name="Kruege" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.02, 0)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.9, 0)
 
 [node name="Krug1" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0, 0.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0, 0.26)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug1"]
@@ -49,7 +49,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug2" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, 0, 0.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, 0, 0.26)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug2"]
@@ -62,7 +62,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug3" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.056, 0, 0.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.056, 0, 0.26)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug3"]
@@ -75,7 +75,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug4" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.169, 0, 0.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.169, 0, 0.26)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug4"]
@@ -88,7 +88,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug5" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, -0.03, 0.44)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, -0.03, 0.36)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug5"]
@@ -101,7 +101,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug6" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, -0.03, 0.44)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, -0.03, 0.36)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug6"]
@@ -114,7 +114,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug7" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.056, -0.03, 0.44)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.056, -0.03, 0.36)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug7"]
@@ -127,7 +127,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug8" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.169, -0.03, 0.44)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.169, -0.03, 0.36)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug8"]
@@ -140,7 +140,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug9" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, -0.06, 0.56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, -0.06, 0.46)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug9"]
@@ -153,7 +153,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug10" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, -0.06, 0.56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, -0.06, 0.46)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug10"]
@@ -166,7 +166,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug11" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.056, -0.06, 0.56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.056, -0.06, 0.46)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug11"]
@@ -179,7 +179,7 @@ mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")
 
 [node name="Krug12" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.169, -0.06, 0.56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.169, -0.06, 0.46)
 visible = false
 
 [node name="Glas" type="MeshInstance3D" parent="Kruege/Krug12"]
