@@ -268,6 +268,7 @@ func _ready() -> void:
 	_hud.set_time(_clock_hour())
 	_hud.set_phase(_phase_name())
 	_hud.set_day(_day, WIESN_DAYS)
+	_sichere_wohnwagen()
 
 	if multiplayer.is_server():
 		if not _load_game():
@@ -1419,6 +1420,28 @@ func net_upgrade_tent() -> void:
 	_apply_tent()
 	_net_banner.rpc("🎪 %s! Tisch-Limit: %d" % [TENT_STAGE_NAMES[nxt], TENT_TABLE_LIMIT[nxt]])
 	_broadcast_meta()
+
+## Ohne einen Wohnwagen mit is_mine kann niemand schlafen und der Tag endet nie.
+## Das ist beim Bearbeiten der Map schon zweimal passiert, deshalb hier ein Netz:
+## fehlt der eigene Wohnwagen, wird der erstbeste dazu erklärt.
+func _sichere_wohnwagen() -> void:
+	var alle: Array = []
+	for n in get_tree().get_nodes_in_group("interactable"):
+		if n is Caravan:
+			return   # es gibt schon einen eigenen
+	for n in find_children("*", "Node3D", true, false):
+		if n is Caravan:
+			alle.append(n)
+	if alle.is_empty():
+		push_warning("Kein Wohnwagen in der Map — schlafen ist nicht möglich.")
+		return
+	var w := alle[0] as Caravan
+	w.is_mine = true
+	w.add_to_group("interactable")
+	var label := w.get_node_or_null("Label") as Label3D
+	if label:
+		label.visible = true
+	push_warning("Kein Wohnwagen mit is_mine gefunden — '%s' übernimmt das." % w.name)
 
 ## Wohnwagen: schlafen → nächster Tag (Miete abziehen).
 @rpc("any_peer", "reliable")

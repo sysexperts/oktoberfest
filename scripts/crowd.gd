@@ -10,7 +10,7 @@ extends Node3D
 const VISITOR := preload("res://scenes/visitor.tscn")
 
 ## Bei Rucklern hier runterdrehen.
-@export var max_visitors := 220
+@export var max_visitors := 400
 
 var _visitors := []
 var _target := 0

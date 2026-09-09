@@ -336,6 +336,10 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 2.5)
 
 [node name="Wohnwagenplatz" type="Node3D" parent="." unique_id=1657274445]
 
+[node name="MeinWohnwagen" parent="Wohnwagenplatz" instance=ExtResource("6_carav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -37)
+is_mine = true
+
 [node name="Nachbar1" parent="Wohnwagenplatz" unique_id=1159562924 instance=ExtResource("6_carav")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -39)
 is_mine = false
