@@ -15,7 +15,7 @@ const NIGHT_HOUR := 19.0           # bu saatten sonra akşam: karanlık + sabır
 const DUSK_START := 16.5           # Dämmerung beginnt
 const DUSK_END := 21.0             # ab hier ist es ganz dunkel
 ## Zum Testen der Nachtbeleuchtung auf true stellen — dann ist es immer Nacht.
-const ALWAYS_NIGHT := false
+const ALWAYS_NIGHT := true
 const POP_EARLY_CLOSE_PER_HOUR := 1.5   # erken kapatma cezası (saat başına)
 const SYNC_INTERVAL := 0.12
 const MISS_PENALTY := 5
