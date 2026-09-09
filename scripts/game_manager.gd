@@ -14,6 +14,9 @@ const DAY_END_HOUR := 22.0         # en geç kapanış
 const NIGHT_HOUR := 19.0           # bu saatten sonra akşam: karanlık + sabırsız
 const DUSK_START := 16.5           # Dämmerung beginnt
 const DUSK_END := 21.0             # ab hier ist es ganz dunkel
+## NUR ZUM TESTEN: es ist immer Nacht, egal wie spät es im Spiel ist.
+## Vor dem Release wieder auf false stellen.
+const ALWAYS_NIGHT := true
 const POP_EARLY_CLOSE_PER_HOUR := 1.5   # erken kapatma cezası (saat başına)
 const SYNC_INTERVAL := 0.12
 const MISS_PENALTY := 5
@@ -216,6 +219,8 @@ var _world_env: WorldEnvironment
 var _day_sun_energy := 1.0
 var _day_ambient := 0.35
 var _day_bg := 1.0
+var _day_fog := 0.008
+var _day_fog_color := Color(0.62, 0.66, 0.78)
 var _night_visual := false
 var _night_t := -1.0
 
@@ -248,6 +253,8 @@ func _ready() -> void:
 	if _world_env.environment:
 		_day_ambient = _world_env.environment.ambient_light_energy
 		_day_bg = _world_env.environment.background_energy_multiplier
+		_day_fog = _world_env.environment.fog_density
+		_day_fog_color = _world_env.environment.fog_light_color
 	_apply_night_visual(false)
 
 	# Bira masalarını topla (kararlı sıra). Başta zelt kiralanmadı → 0 aktif.
@@ -404,6 +411,8 @@ func _apply_night_visual(night: bool) -> void:
 
 ## 0.0 = heller Tag, 1.0 = tiefe Nacht. Dazwischen wird weich überblendet.
 func _daylight_factor(clock: float) -> float:
+	if ALWAYS_NIGHT:
+		return 1.0
 	if clock < 0.0:
 		return 0.0
 	if clock <= DUSK_START:
@@ -426,6 +435,10 @@ func _apply_daylight(clock: float) -> void:
 		var env := _world_env.environment
 		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.12, t)
 		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.08, t)
+		# Nebel: tagsüber nur leichter Dunst, abends ziehen die Nebelmaschinen an
+		# und der Nebel wird dichter und kälter.
+		env.fog_density = lerpf(_day_fog, _day_fog * 3.5, t)
+		env.fog_light_color = _day_fog_color.lerp(Color(0.30, 0.34, 0.48), t)
 func _daily_rent() -> int:
 	return int(TENT_RENT.get(_tent_stage, 0))
 

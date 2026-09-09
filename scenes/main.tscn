@@ -25,6 +25,15 @@ background_mode = 2
 sky = SubResource("Sky")
 ambient_light_source = 3
 ambient_light_energy = 0.35
+fog_enabled = true
+fog_light_color = Color(0.62, 0.66, 0.78, 1)
+fog_light_energy = 1.0
+fog_sun_scatter = 0.15
+fog_density = 0.008
+fog_aerial_perspective = 0.35
+fog_sky_affect = 0.25
+fog_height = 2.5
+fog_height_density = 0.35
 
 [sub_resource type="WorldBoundaryShape3D" id="Ground"]
 

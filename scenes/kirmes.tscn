@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
-[ext_resource type="PackedScene" uid="uid://cd6r4jox2bx2t" path="res://assets/kirmes/Models/Attractions/ShipRide/ShipRide.fbx" id="8_cu5q6"]
+[ext_resource type="PackedScene" path="res://scenes/props/schiffschaukel.tscn" id="8_cu5q6"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 [ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
 [ext_resource type="PackedScene" uid="uid://dusg2jruc7wf4" path="res://assets/kirmes/Models/Ground/Terrain.fbx" id="10_segyt"]
@@ -33,11 +33,11 @@
 [ext_resource type="PackedScene" uid="uid://brslon3akh6yr" path="res://assets/kirmes/Models/Foliage/GardenBed_L.fbx" id="31_p4kn1"]
 [ext_resource type="PackedScene" uid="uid://bavcuehytc3i5" path="res://assets/kirmes/Models/Foliage/Grass_2.fbx" id="32_swptr"]
 [ext_resource type="PackedScene" uid="uid://bmdace8063enp" path="res://assets/kirmes/Models/Foliage/Tree_3.fbx" id="33_tnypt"]
-[ext_resource type="PackedScene" uid="uid://d1qcrnt2iotqe" path="res://assets/kirmes/Models/Attractions/TopSpin/TopSpin.fbx" id="34_qoh1t"]
+[ext_resource type="PackedScene" path="res://scenes/props/topspin.tscn" id="34_qoh1t"]
 [ext_resource type="PackedScene" uid="uid://cvd5jsvnn311s" path="res://assets/kirmes/Models/Ground/Ground.fbx" id="35_n8efi"]
 [ext_resource type="PackedScene" uid="uid://1us2s8l6w6r4" path="res://assets/kirmes/Models/Foliage/Tree_1.fbx" id="36_87m88"]
-[ext_resource type="PackedScene" uid="uid://dqkv3up87cbt5" path="res://assets/kirmes/Models/Attractions/OtherRides/Carousel.fbx" id="37_p4kn1"]
-[ext_resource type="PackedScene" uid="uid://bxa2n8kh6di6a" path="res://assets/kirmes/Models/Attractions/OtherRides/FerrisWheel.fbx" id="38_swptr"]
+[ext_resource type="PackedScene" path="res://scenes/props/karussell.tscn" id="37_p4kn1"]
+[ext_resource type="PackedScene" path="res://scenes/props/riesenrad.tscn" id="38_swptr"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)

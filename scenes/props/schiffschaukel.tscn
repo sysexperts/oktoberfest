@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kirmes/Models/Attractions/ShipRide/ShipRide.fbx" id="1_model"]
+[ext_resource type="Script" path="res://scripts/fahrgeschaeft.gd" id="2_script"]
+
+[sub_resource type="BoxShape3D" id="Box"]
+size = Vector3(9.8, 3.0, 4.6)
+
+[node name="Schiffschaukel" type="Node3D"]
+script = ExtResource("2_script")
+teil = NodePath("Model/ShipRide_Base/Ship")
+art = 1
+achse = Vector3(0, 0, 1)
+tempo = 0.0
+ausschlag = 45.0
+dauer = 4.0
+hub = 0.0
+gondeln_gerade = false
+eigendrehung = 0.0
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("Box")

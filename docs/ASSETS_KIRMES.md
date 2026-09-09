@@ -58,3 +58,27 @@ Drei FBX verweisen auf Texturen, die der Pack nicht mitliefert
 `Models/Foliage/Color.jpg`). Ohne sie wären Buden, Fahrzeuge und ein Teil der
 Bäume weiß. Als Ersatz liegen dort jetzt Kopien der Paletten-Texturen unter
 genau diesen Dateinamen — deshalb nicht löschen.
+
+## Fahrgeschäfte bewegen
+
+Das Pack bringt **keine fertigen Animationen** mit — aber jedes Fahrgeschäft hat
+einen sauber gesetzten Dreh-Knoten (`FerrisWheel_Rotate`, `Carousel_Rotate`,
+`Ship`, `TopSpin_Part1` …). Den treibt `scripts/fahrgeschaeft.gd` an.
+
+Fertig eingerichtet in `scenes/props/`: `riesenrad`, `karussell`, `raketen`,
+`turm`, `wave`, `topspin`, `schiffschaukel`. Diese Prefabs in die Map ziehen
+statt der rohen `.fbx` — dann drehen sie sich von selbst.
+
+Im Inspector einstellbar: **Art** (Drehen / Schaukeln / Heben), **Achse**,
+**Tempo**, **Ausschlag**, **Dauer**, **Hub**, **Gondeln gerade** (hält die
+Riesenrad-Gondeln waagerecht) und **Eigendrehung**.
+
+Läuft rein lokal auf jedem Client — kostet kein Netz.
+
+## Fehlende Texturen
+
+14 Modelle (u. a. `Bld_Bakery`, `Bld_Cafe`, alle `Transport_*`) verweisen auf
+Texturen, die der Pack nicht mitliefert, und wären weiß. Alle Modelle des Packs
+benutzen ohnehin dieselbe Palette, deshalb hängt `tools/kirmes_post_import.gd`
+sie beim Import automatisch nach. Das Skript ist in allen 127 `.fbx.import`
+unter `import_script/path` eingetragen — beim Neuimport nicht rauswerfen.
