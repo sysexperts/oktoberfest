@@ -1,0 +1,69 @@
+keys,de,en,tr
+GAME_TITLE,Oktoberfest Simulator,Oktoberfest Simulator,Oktoberfest Simulator
+MENU_CONTINUE,Weiterspielen,Continue,Devam Et
+MENU_NEW_GAME,Neues Spiel,New Game,Yeni Oyun
+MENU_COOP,Koop spielen,Play Co-op,Birlikte Oyna
+MENU_SETTINGS,Einstellungen,Settings,Ayarlar
+MENU_CREDITS,Mitwirkende,Credits,Emeği Geçenler
+MENU_QUIT,Beenden,Quit,Çıkış
+MENU_BACK,Zurück,Back,Geri
+MENU_VERSION,Version %s,Version %s,Sürüm %s
+MENU_CONTINUE_INFO,"Tag %d · %s €","Day %d · €%s","%d. Gün · %s €"
+NEWGAME_CONFIRM_TITLE,Neues Spiel starten?,Start a new game?,Yeni oyun başlatılsın mı?
+NEWGAME_CONFIRM_TEXT,Dein bisheriger Spielstand wird überschrieben.,Your current save will be overwritten.,Mevcut kaydın silinecek.
+NEWGAME_CONFIRM_YES,Ja, neu anfangen,"Yes, start over","Evet, baştan başla"
+NEWGAME_CONFIRM_NO,Abbrechen,Cancel,Vazgeç
+COOP_TITLE,Koop spielen,Play Co-op,Birlikte Oyna
+COOP_JOIN_SERVER,Offiziellem Server beitreten,Join official server,Resmi sunucuya katıl
+COOP_HOST,Eigenes Spiel hosten,Host your own game,Kendi oyununu kur
+COOP_JOIN_IP,Per IP beitreten,Join by IP,IP ile katıl
+COOP_IP_PLACEHOLDER,IP-Adresse,IP address,IP adresi
+COOP_STEAM_SOON,Freunde über Steam einladen folgt,Inviting friends via Steam is coming,Steam üzerinden arkadaş davet etme yakında
+STATUS_CONNECTING,Verbinde mit %s …,Connecting to %s …,%s adresine bağlanılıyor …
+STATUS_CONNECT_FAILED,Verbindung fehlgeschlagen. Ist der Server erreichbar?,Connection failed. Is the server reachable?,Bağlantı başarısız. Sunucu erişilebilir mi?
+STATUS_HOST_FAILED,Spiel konnte nicht gestartet werden (Fehler %d).,Could not start the game (error %d).,Oyun başlatılamadı (hata %d).
+STATUS_ENTER_IP,Bitte eine IP-Adresse eingeben.,Please enter an IP address.,Lütfen bir IP adresi gir.
+STATUS_UPDATE_SEARCH,Suche nach Updates …,Checking for updates …,Güncellemeler aranıyor …
+STATUS_UPDATE_LOAD,Lade Update %d …,Downloading update %d …,Güncelleme %d indiriliyor …
+STATUS_STARTING,Starte …,Starting …,Başlatılıyor …
+PAUSE_TITLE,Pause,Paused,Duraklatıldı
+PAUSE_RESUME,Fortsetzen,Resume,Devam Et
+PAUSE_SAVE_MENU,Speichern und zum Hauptmenü,Save and return to menu,Kaydet ve ana menüye dön
+PAUSE_LEAVE_MENU,Verlassen und zum Hauptmenü,Leave to main menu,Ana menüye dön
+PAUSE_QUIT,Spiel beenden,Quit game,Oyundan çık
+PAUSE_COOP_HINT,Im Koop läuft die Zeit weiter.,Time keeps running in co-op.,Birlikte oyunda zaman durmaz.
+SET_TITLE,Einstellungen,Settings,Ayarlar
+SET_TAB_GRAPHICS,Grafik,Graphics,Grafik
+SET_TAB_AUDIO,Ton,Audio,Ses
+SET_TAB_CONTROLS,Steuerung,Controls,Kontroller
+SET_TAB_LANGUAGE,Sprache,Language,Dil
+SET_FULLSCREEN,Vollbild,Fullscreen,Tam ekran
+SET_VSYNC,VSync,VSync,VSync
+SET_RESOLUTION,Auflösung,Resolution,Çözünürlük
+SET_QUALITY,Grafikqualität,Graphics quality,Grafik kalitesi
+SET_QUALITY_LOW,Niedrig,Low,Düşük
+SET_QUALITY_MEDIUM,Mittel,Medium,Orta
+SET_QUALITY_HIGH,Hoch,High,Yüksek
+SET_VOL_MASTER,Gesamtlautstärke,Master volume,Genel ses
+SET_VOL_MUSIC,Musik,Music,Müzik
+SET_VOL_SFX,Effekte,Effects,Efektler
+SET_VOL_AMBIENT,Umgebung,Ambience,Ortam
+SET_MOUSE_SENS,Mausempfindlichkeit,Mouse sensitivity,Fare hassasiyeti
+SET_INVERT_Y,Maus Y-Achse umkehren,Invert mouse Y axis,Fare Y eksenini ters çevir
+SET_KEYBINDS,Tastenbelegung,Key bindings,Tuş atamaları
+SET_PRESS_KEY,Taste drücken …,Press a key …,Bir tuşa bas …
+SET_RESET_KEYS,Standard wiederherstellen,Restore defaults,Varsayılana dön
+SET_LANGUAGE,Sprache,Language,Dil
+SET_LANG_AUTO,Automatisch (System),Automatic (system),Otomatik (sistem)
+ACTION_MOVE_FORWARD,Vorwärts,Move forward,İleri
+ACTION_MOVE_BACK,Rückwärts,Move back,Geri
+ACTION_MOVE_LEFT,Links,Move left,Sol
+ACTION_MOVE_RIGHT,Rechts,Move right,Sağ
+ACTION_INTERACT,Benutzen,Interact,Etkileşim
+ACTION_SPRINT,Rennen,Sprint,Koş
+ACTION_EMOTE,Prost,Cheers,Şerefe
+ACTION_COSTUME,Kostüm wechseln,Change costume,Kostüm değiştir
+ACTION_PAUSE,Pause,Pause,Duraklat
+ACTION_HELP,Hilfe,Help,Yardım
+CREDITS_TITLE,Mitwirkende,Credits,Emeği Geçenler
+CREDITS_BODY,"Spielidee und Entwicklung\nSerdar Vapur\n\nKirmes-Modelle\nAmusement Park Pack\n\nFiguren und Zelt\nerstellt mit Meshy und Blender\n\nMusik\nerstellt mit AIMusic.so\n\nEngine\nGodot Engine","Game design and development\nSerdar Vapur\n\nFairground models\nAmusement Park Pack\n\nCharacters and tent\ncreated with Meshy and Blender\n\nMusic\ncreated with AIMusic.so\n\nEngine\nGodot Engine","Oyun tasarımı ve geliştirme\nSerdar Vapur\n\nLunapark modelleri\nAmusement Park Pack\n\nKarakterler ve çadır\nMeshy ve Blender ile yapıldı\n\nMüzik\nAIMusic.so ile yapıldı\n\nOyun motoru\nGodot Engine"

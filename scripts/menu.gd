@@ -1,97 +1,109 @@
 extends Control
-## Ana menü: genel sunucuya bağlan, kendi host'unu aç veya IP ile katıl.
+## Hauptmenü. Aussehen und Anordnung liegen als Knoten in menu.tscn und sind im
+## Editor änderbar — hier steht nur, was die Knöpfe tun.
+## Alle sichtbaren Texte sind Übersetzungsschlüssel (locale/texte.csv).
 
-## Bizim sabit sunucumuz — kimse IP yazmak zorunda kalmasın.
+const EINSTELLUNGEN_SZENE := "res://scenes/ui/einstellungen.tscn"
 const SERVER_IP := "185.248.140.225"
 
-var _ip_edit: LineEdit
-var _status: Label
+@onready var _haupt: Control = %Hauptspalte
+@onready var _weiter: Button = %Weiterspielen
+@onready var _weiter_info: Label = %WeiterInfo
+@onready var _neu: Button = %NeuesSpiel
+@onready var _einst: Button = %Einstellungen
+@onready var _koop_panel: Control = %KoopPanel
+@onready var _credits_panel: Control = %CreditsPanel
+@onready var _ip: LineEdit = %IpEingabe
+@onready var _status: Label = %Status
+@onready var _version: Label = %Version
+@onready var _bestaetigen: ConfirmationDialog = %NeuBestaetigen
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	get_tree().paused = false
 
-	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(center)
+	_weiter.pressed.connect(func() -> void: Net.start_solo(false))
+	_neu.pressed.connect(_on_neues_spiel)
+	%Koop.pressed.connect(_zeige.bind(_koop_panel))
+	_einst.pressed.connect(_on_einstellungen)
+	%Credits.pressed.connect(_zeige.bind(_credits_panel))
+	%Beenden.pressed.connect(func() -> void: get_tree().quit())
 
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 14)
-	vbox.custom_minimum_size = Vector2(340, 0)
-	center.add_child(vbox)
+	%ServerBeitreten.pressed.connect(_verbinde.bind(SERVER_IP))
+	%Hosten.pressed.connect(_on_hosten)
+	%IpBeitreten.pressed.connect(_on_ip_beitreten)
+	_ip.text_submitted.connect(func(_t: String) -> void: _on_ip_beitreten())
+	%KoopZurueck.pressed.connect(_zeige.bind(_haupt))
+	%CreditsZurueck.pressed.connect(_zeige.bind(_haupt))
+	_bestaetigen.confirmed.connect(func() -> void: Net.start_solo(true))
 
-	var title := Label.new()
-	title.text = "🍺 Oktoberfest Simulator"
-	title.add_theme_font_size_override("font_size", 34)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(title)
+	# Solange das Einstellungsmenü noch nicht existiert, Knopf nicht anbieten.
+	_einst.disabled = not ResourceLoader.exists(EINSTELLUNGEN_SZENE)
 
-	var ver := Label.new()
-	ver.text = "Build %s" % Net.BUILD
-	ver.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	ver.add_theme_color_override("font_color", Color(0.6, 0.7, 0.85))
-	ver.add_theme_font_size_override("font_size", 14)
-	vbox.add_child(ver)
+	if not Net.connection_failed.is_connected(_on_verbindung_fehlgeschlagen):
+		Net.connection_failed.connect(_on_verbindung_fehlgeschlagen)
+	Einstellungen.geaendert.connect(_texte_aktualisieren)
+	_texte_aktualisieren()
+	_zeige(_haupt)
 
-	var server_btn := Button.new()
-	server_btn.text = "▶  Sunucuya Bağlan"
-	server_btn.custom_minimum_size = Vector2(0, 56)
-	server_btn.add_theme_font_size_override("font_size", 22)
-	server_btn.pressed.connect(_on_server)
-	vbox.add_child(server_btn)
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and not _haupt.visible:
+		_zeige(_haupt)
+		get_viewport().set_input_as_handled()
 
-	var sep0 := HSeparator.new()
-	vbox.add_child(sep0)
+## Texte mit Platzhaltern — die statischen übersetzt Godot von selbst.
+func _texte_aktualisieren() -> void:
+	_version.text = tr("MENU_VERSION") % Net.version_text()
+	var info := Net.speicherstand_info()
+	_weiter.visible = not info.is_empty()
+	_weiter_info.visible = _weiter.visible
+	if _weiter.visible:
+		_weiter_info.text = tr("MENU_CONTINUE_INFO") % [info["day"], _geld(info["money"])]
 
-	var host_btn := Button.new()
-	host_btn.text = "Host Aç (Oyun Kur)"
-	host_btn.custom_minimum_size = Vector2(0, 44)
-	host_btn.pressed.connect(_on_host)
-	vbox.add_child(host_btn)
+func _zeige(panel: Control) -> void:
+	for p: Control in [_haupt, _koop_panel, _credits_panel]:
+		p.visible = p == panel
+	_status.text = ""
+	if panel == _haupt:
+		(_weiter if _weiter.visible else _neu).grab_focus()
 
-	var sep := HSeparator.new()
-	vbox.add_child(sep)
+func _on_neues_spiel() -> void:
+	if Net.speicherstand_info().is_empty():
+		Net.start_solo(true)
+	else:
+		_bestaetigen.popup_centered()
 
-	_ip_edit = LineEdit.new()
-	_ip_edit.placeholder_text = "Host IP (ör. 127.0.0.1)"
-	_ip_edit.text = "127.0.0.1"
-	vbox.add_child(_ip_edit)
+func _on_einstellungen() -> void:
+	var szene := load(EINSTELLUNGEN_SZENE) as PackedScene
+	if szene:
+		add_child(szene.instantiate())
 
-	var join_btn := Button.new()
-	join_btn.text = "IP ile Katıl"
-	join_btn.custom_minimum_size = Vector2(0, 44)
-	join_btn.pressed.connect(_on_join)
-	vbox.add_child(join_btn)
-
-	_status = Label.new()
-	_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_status.add_theme_color_override("font_color", Color(1, 0.6, 0.4))
-	vbox.add_child(_status)
-
-	if not Net.connection_failed.is_connected(_on_failed):
-		Net.connection_failed.connect(_on_failed)
-
-## Tek tıkla bizim sunucuya — IP yazmaya gerek yok.
-func _on_server() -> void:
-	_verbinde(SERVER_IP)
-
-func _on_host() -> void:
+func _on_hosten() -> void:
 	var err := Net.host_game()
 	if err != OK:
-		_status.text = "Host açılamadı (hata %d). Port meşgul olabilir." % err
+		_status.text = tr("STATUS_HOST_FAILED") % err
 
-func _on_join() -> void:
-	var ip := _ip_edit.text.strip_edges()
+func _on_ip_beitreten() -> void:
+	var ip := _ip.text.strip_edges()
 	if ip.is_empty():
-		_status.text = "Lütfen bir IP gir."
+		_status.text = tr("STATUS_ENTER_IP")
 		return
 	_verbinde(ip)
 
 func _verbinde(ip: String) -> void:
-	_status.text = "Bağlanılıyor: %s ..." % ip
-	var err := Net.join_game(ip)
-	if err != OK:
-		_status.text = "Bağlantı başlatılamadı (hata %d)." % err
+	_status.text = tr("STATUS_CONNECTING") % ip
+	if Net.join_game(ip) != OK:
+		_status.text = tr("STATUS_CONNECT_FAILED")
 
-func _on_failed() -> void:
-	_status.text = "Bağlantı başarısız. IP/port'u ve host'un açık olduğunu kontrol et."
+func _on_verbindung_fehlgeschlagen() -> void:
+	_status.text = tr("STATUS_CONNECT_FAILED")
+
+## 12345 -> "12.345" (Deutsch/Türkisch) bzw. "12,345" (Englisch).
+func _geld(betrag: int) -> String:
+	var trenner := "," if Einstellungen.aktive_sprache() == "en" else "."
+	var s := str(absi(betrag))
+	var out := ""
+	while s.length() > 3:
+		out = trenner + s.right(3) + out
+		s = s.left(s.length() - 3)
+	return ("-" if betrag < 0 else "") + s + out

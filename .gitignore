@@ -18,3 +18,7 @@ mono_crash.*.json
 .DS_Store
 Thumbs.db
 *.tmp
+
+# Render-Ausgaben der Testwerkzeuge — nie committen, nie exportieren
+tools/*.png
+tools/*.png.import

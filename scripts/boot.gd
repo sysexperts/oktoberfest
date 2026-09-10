@@ -29,7 +29,7 @@ func _build_ui() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	_label = Label.new()
-	_label.text = "🍺 Oktoberfest Simulator"
+	_label.text = "🍺 " + tr("GAME_TITLE")
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.set_anchors_preset(Control.PRESET_CENTER)
 	_label.add_theme_font_size_override("font_size", 22)
@@ -37,7 +37,7 @@ func _build_ui() -> void:
 
 func _status(t: String) -> void:
 	if _label:
-		_label.text = "🍺 Oktoberfest Simulator\n\n" + t
+		_label.text = "🍺 " + tr("GAME_TITLE") + "\n\n" + t
 
 func _local_version() -> int:
 	if FileAccess.file_exists(VER_FILE):
@@ -50,7 +50,7 @@ func _effective_local() -> int:
 	return maxi(BASE_VERSION, _local_version())
 
 func _check_version() -> void:
-	_status("Suche nach Updates…")
+	_status(tr("STATUS_UPDATE_SEARCH"))
 	_http.request_completed.connect(_on_version, CONNECT_ONE_SHOT)
 	if _http.request(VERSION_URL) != OK:
 		_finish()
@@ -70,7 +70,7 @@ func _on_version(result: int, code: int, _headers: PackedStringArray, body: Pack
 		_finish()
 
 func _download(server_v: int) -> void:
-	_status("Lade Update v%d…" % server_v)
+	_status(tr("STATUS_UPDATE_LOAD") % server_v)
 	_http.download_file = USER_TMP
 	_http.request_completed.connect(_on_download.bind(server_v), CONNECT_ONE_SHOT)
 	if _http.request(PCK_URL) != OK:
@@ -94,5 +94,5 @@ func _finish() -> void:
 	# İndirilmiş güncel pck varsa yükle (gömülü içeriği override eder)
 	if FileAccess.file_exists(USER_PCK) and _local_version() >= BASE_VERSION:
 		ProjectSettings.load_resource_pack(USER_PCK, true)
-	_status("Starte…")
+	_status(tr("STATUS_STARTING"))
 	get_tree().change_scene_to_file(MENU)

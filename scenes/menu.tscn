@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b7dl2t154eahq"]
+[gd_scene load_steps=2 format=3 uid="uid://b7dl2t154eahq"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_menu"]
 
@@ -7,4 +7,236 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_menu")
+
+[node name="Hintergrund" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.06, 0.12, 1)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Hauptspalte" type="VBoxContainer" parent="Mitte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Titel" type="Label" parent="Mitte/Hauptspalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_font_sizes/font_size = 46
+text = "GAME_TITLE"
+horizontal_alignment = 1
+
+[node name="Abstand" type="Control" parent="Mitte/Hauptspalte"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="Weiterspielen" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "MENU_CONTINUE"
+
+[node name="WeiterInfo" type="Label" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.8, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+
+[node name="NeuesSpiel" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MENU_NEW_GAME"
+
+[node name="Koop" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MENU_COOP"
+
+[node name="Einstellungen" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MENU_SETTINGS"
+
+[node name="Credits" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MENU_CREDITS"
+
+[node name="Beenden" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MENU_QUIT"
+
+[node name="KoopPanel" type="PanelContainer" parent="Mitte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+
+[node name="Rand" type="MarginContainer" parent="Mitte/KoopPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/KoopPanel/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="KoopTitel" type="Label" parent="Mitte/KoopPanel/Rand/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "COOP_TITLE"
+horizontal_alignment = 1
+
+[node name="ServerBeitreten" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "COOP_JOIN_SERVER"
+
+[node name="Hosten" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "COOP_HOST"
+
+[node name="Trenner" type="HSeparator" parent="Mitte/KoopPanel/Rand/Spalte"]
+layout_mode = 2
+
+[node name="IpEingabe" type="LineEdit" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+placeholder_text = "COOP_IP_PLACEHOLDER"
+
+[node name="IpBeitreten" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "COOP_JOIN_IP"
+
+[node name="SteamHinweis" type="Label" parent="Mitte/KoopPanel/Rand/Spalte"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.66, 0.76, 1)
+theme_override_font_sizes/font_size = 14
+text = "COOP_STEAM_SOON"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="KoopZurueck" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "MENU_BACK"
+
+[node name="CreditsPanel" type="PanelContainer" parent="Mitte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+
+[node name="Rand" type="MarginContainer" parent="Mitte/CreditsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/CreditsPanel/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="CreditsTitel" type="Label" parent="Mitte/CreditsPanel/Rand/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "CREDITS_TITLE"
+horizontal_alignment = 1
+
+[node name="CreditsText" type="Label" parent="Mitte/CreditsPanel/Rand/Spalte"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "CREDITS_BODY"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CreditsZurueck" type="Button" parent="Mitte/CreditsPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "MENU_BACK"
+
+[node name="Status" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -84.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.62, 0.4, 1)
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
+
+[node name="Version" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -38.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.5, 0.52, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+
+[node name="NeuBestaetigen" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "NEWGAME_CONFIRM_TITLE"
+initial_position = 2
+size = Vector2i(480, 150)
+visible = false
+ok_button_text = "NEWGAME_CONFIRM_YES"
+dialog_text = "NEWGAME_CONFIRM_TEXT"
+cancel_button_text = "NEWGAME_CONFIRM_NO"

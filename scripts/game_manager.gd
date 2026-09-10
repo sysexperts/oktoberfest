@@ -271,8 +271,12 @@ func _ready() -> void:
 	_sichere_wohnwagen()
 
 	if multiplayer.is_server():
-		if not _load_game():
+		if Net.neues_spiel:
+			_loesche_speicherstand()
 			Game.add_money(START_MONEY)
+		elif not _load_game():
+			Game.add_money(START_MONEY)
+		Net.neues_spiel = false
 		multiplayer.peer_disconnected.connect(_on_peer_left)
 		if Net.dedicated:
 			_next_spawn = 0
@@ -310,6 +314,12 @@ func _time_factor() -> float:
 
 # ================================================= kayıt (E3)
 ## Sunucuda ilerlemeyi diske yaz (para, gün, zelt, upgrade, masa konumları).
+## "Neues Spiel" im Menue: alten Stand entfernen, damit "Weiterspielen" ihn
+## nicht mehr anbietet, auch wenn vor dem ersten Speichern beendet wird.
+func _loesche_speicherstand() -> void:
+	if FileAccess.file_exists(SAVE_PATH):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
+
 func _save_game() -> void:
 	if not multiplayer.is_server():
 		return
@@ -530,7 +540,7 @@ func _on_peer_left(peer_id: int) -> void:
 	_broadcast_meta()
 
 # ================================================= rol
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_set_role(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -583,7 +593,7 @@ func _apply_tent() -> void:
 	_rebuild_seats()
 
 ## Kiosk: Zelt buchen (Stufe 1).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_book_tent() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION or _tent_stage != 0:
 		return
@@ -598,7 +608,7 @@ func net_book_tent() -> void:
 	_broadcast_meta()
 
 ## Kiosk: Tisch kaufen/platzieren (limit je Zeltstufe).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_buy_table() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -622,7 +632,7 @@ func net_buy_table() -> void:
 	_broadcast_meta()
 
 ## Kiosk: Werbung — anında popülerlik enjeksiyonu (her seviye daha pahalı).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_buy_marketing() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -639,7 +649,7 @@ func net_buy_marketing() -> void:
 	_broadcast_meta()
 
 ## Kiosk: Deko — kalıcı gelir çarpanı.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_buy_deko() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -656,7 +666,7 @@ func net_buy_deko() -> void:
 
 # ================================================= E6: Klo & Beschwerden
 ## Wiesenbüro: Toilette einbauen — danach pinkelt niemand mehr in die Ecke.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_buy_toilet() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -826,7 +836,7 @@ func _quest_text() -> String:
 
 # ================================================= E5: Künstler
 ## Wiesenbüro: Künstler für die nächste Schicht buchen.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_book_artist(tier: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -893,7 +903,7 @@ func _artist_string() -> String:
 
 # ================================================= E4: Ware & Lieferung
 ## Wiesenbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_order_goods(kind: int, packs: int) -> void:
 	if not multiplayer.is_server():
 		return
@@ -1014,7 +1024,7 @@ func _remove_package(id: int) -> void:
 		_packages.erase(id)
 
 ## Spieler hebt ein Paket auf.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_pickup_package(id: int) -> void:
 	if not multiplayer.is_server():
 		return
@@ -1023,7 +1033,7 @@ func net_pickup_package(id: int) -> void:
 	_remove_package.rpc(id)
 
 ## Spieler lädt getragenes Paket im Lager ab.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_store_package(kind: int, amount: int) -> void:
 	if not multiplayer.is_server():
 		return
@@ -1068,7 +1078,7 @@ func _stock_string() -> String:
 
 # ================================================= E3: Personal
 ## Wiesenbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_hire_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1093,7 +1103,7 @@ func net_hire_staff(role: int) -> void:
 	_broadcast_meta()
 
 ## Wiesenbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_upgrade_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1371,7 +1381,7 @@ func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sz: PackedFloat32
 				n.set_carrying(scarry[i])
 
 ## Wiesenbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_buy_license(key: String) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1401,7 +1411,7 @@ func _lic_string() -> String:
 	return "Lizenz: 🍺 Helles, " + ", ".join(have)
 
 ## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_upgrade_tent() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1444,7 +1454,7 @@ func _sichere_wohnwagen() -> void:
 	push_warning("Kein Wohnwagen mit is_mine gefunden — '%s' übernimmt das." % w.name)
 
 ## Wohnwagen: schlafen → nächster Tag (Miete abziehen).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_sleep() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1461,7 +1471,7 @@ func net_sleep() -> void:
 		_day, WIESN_DAYS, _lic_string()])
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_sell_table() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1475,7 +1485,7 @@ func net_sell_table() -> void:
 	_broadcast_meta()
 
 ## Molada bira masasını tut/bırak (yerleştir).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_move_table(index: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
@@ -1498,7 +1508,7 @@ func _update_held_tables() -> void:
 		_beertables[idx].position = Vector3(p.x, 0.0, p.z)
 
 # ================================================= servis (misafire)
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_serve_guest(id: int, kind: int, type: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
 		return
@@ -1666,7 +1676,7 @@ func _end_shift(reason := 0) -> void:
 	_broadcast_meta()
 
 ## Bilgisayardan zelti erken kapat (popülerlik cezası).
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_close_tent() -> void:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
 		return
@@ -1869,7 +1879,7 @@ func _clear_messes() -> void:
 	for mid in _messes.keys().duplicate():
 		_remove_mess.rpc(mid)
 
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func net_clean(id: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
 		return

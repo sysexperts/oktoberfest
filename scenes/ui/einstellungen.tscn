@@ -1,0 +1,298 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/einstellungen_menu.gd" id="1_e"]
+
+[node name="EinstellungenMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+script = ExtResource("1_e")
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+custom_minimum_size = Vector2(680, 0)
+layout_mode = 2
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 22
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "SET_TITLE"
+horizontal_alignment = 1
+
+[node name="Reiter" type="TabContainer" parent="Mitte/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+current_tab = 0
+
+[node name="Grafik" type="MarginContainer" parent="Mitte/Panel/Rand/Spalte/Reiter"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="VollbildZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/VollbildZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FULLSCREEN"
+
+[node name="Vollbild" type="CheckButton" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/VollbildZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VsyncZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/VsyncZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_VSYNC"
+
+[node name="Vsync" type="CheckButton" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/VsyncZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Ton" type="MarginContainer" parent="Mitte/Panel/Rand/Spalte/Reiter"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MasterZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/MasterZeile"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "SET_VOL_MASTER"
+
+[node name="VolMaster" type="HSlider" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/MasterZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+
+[node name="VolMasterWert" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/MasterZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="MusikZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/MusikZeile"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "SET_VOL_MUSIC"
+
+[node name="VolMusik" type="HSlider" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/MusikZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+
+[node name="VolMusikWert" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/MusikZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="SfxZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/SfxZeile"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "SET_VOL_SFX"
+
+[node name="VolSfx" type="HSlider" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/SfxZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+
+[node name="VolSfxWert" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/SfxZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="AmbienteZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/AmbienteZeile"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "SET_VOL_AMBIENT"
+
+[node name="VolAmbiente" type="HSlider" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/AmbienteZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+
+[node name="VolAmbienteWert" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Ton/Inhalt/AmbienteZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Steuerung" type="MarginContainer" parent="Mitte/Panel/Rand/Spalte/Reiter"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MausZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt/MausZeile"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "SET_MOUSE_SENS"
+
+[node name="Maus" type="HSlider" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt/MausZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.1
+max_value = 3.0
+step = 0.05
+value = 1.0
+
+[node name="MausWert" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt/MausZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="InvertZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt/InvertZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_INVERT_Y"
+
+[node name="MausInvert" type="CheckButton" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt/InvertZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Trenner" type="HSeparator" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="TastenTitel" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "SET_KEYBINDS"
+
+[node name="Rollen" type="ScrollContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="TastenListe" type="GridContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt/Rollen"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 6
+columns = 4
+
+[node name="TastenReset" type="Button" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "SET_RESET_KEYS"
+
+[node name="Sprache" type="MarginContainer" parent="Mitte/Panel/Rand/Spalte/Reiter"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Sprache"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SpracheZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Sprache/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Sprache/Inhalt/SpracheZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_LANGUAGE"
+
+[node name="SpracheWahl" type="OptionButton" parent="Mitte/Panel/Rand/Spalte/Reiter/Sprache/Inhalt/SpracheZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
+[node name="Unten" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte"]
+layout_mode = 2
+alignment = 2
+
+[node name="Schliessen" type="Button" parent="Mitte/Panel/Rand/Spalte/Unten"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "MENU_BACK"

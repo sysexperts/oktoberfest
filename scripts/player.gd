@@ -128,8 +128,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mm := event as InputEventMouseMotion
-		rotate_y(-mm.relative.x * MOUSE_SENS)
-		_pitch = clampf(_pitch - mm.relative.y * MOUSE_SENS, -PITCH_LIMIT, PITCH_LIMIT)
+		var sens := MOUSE_SENS * Einstellungen.maus
+		var y_dir := -1.0 if Einstellungen.maus_y_umkehren else 1.0
+		rotate_y(-mm.relative.x * sens)
+		_pitch = clampf(_pitch - mm.relative.y * sens * y_dir, -PITCH_LIMIT, PITCH_LIMIT)
 		_head.rotation.x = _pitch
 	if event.is_action_pressed("ui_cancel"):
 		var hud := _world.get_node_or_null("HUD")
@@ -140,13 +142,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif hud and hud.has_method("is_booking_open") and hud.is_booking_open():
 			hud.close_booking()
 		else:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	# Q: Prost/dans emote (InputMap yerine doğrudan tuş — autoload'a bağlı değil)
-	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_Q:
+			# Nichts anderes offen — Pausemenue. Ist es offen, faengt es ESC selbst ab.
+			var pause := _world.get_node_or_null("PauseMenu")
+			if pause and pause.has_method("oeffnen"):
+				pause.oeffnen()
+			else:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Prost-Geste — Taste in den Einstellungen umbelegbar (Aktion "emote")
+	if event.is_action_pressed("emote") and not event.is_echo():
 		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
 		_sfx("cheer")
-	# C: kostüm rengini değiştir
-	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).physical_keycode == KEY_C:
+	# Kostümfarbe wechseln — Aktion "costume"
+	if event.is_action_pressed("costume") and not event.is_echo():
 		costume = (costume + 1) % COSTUME_COLORS.size()
 		_apply_costume()
 	if event is InputEventMouseButton:
