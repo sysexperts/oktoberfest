@@ -95,7 +95,9 @@ prüft Solo, Aktionen, Pause, Tastenbelegung und alle drei Sprachen (21 Prüfung
       *Meldungen unten in der Mitte, farbig nach Art; Probleme sieht nur, wer
       sie ausgelöst hat. Alle Servermeldungen jetzt als Schlüssel in drei
       Sprachen — kein Türkisch-Deutsch-Mischmasch mehr.*
-- [ ] **2.6 Hilfeseite (F1)** — Steuerung und Spielablauf auf einen Blick.
+- [x] **2.6 Hilfeseite (F1)** — Steuerung und Spielablauf auf einen Blick.
+      *`scenes/ui/hilfe.tscn`, auch im Pausemenü; Tasten aus der aktuellen
+      Belegung, im Solo steht die Zeit beim Lesen still.*
 
 ## Phase 3 · Spielfluss — Endlos, aber mit Ziel
 

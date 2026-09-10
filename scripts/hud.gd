@@ -58,6 +58,7 @@ func _alles_neu() -> void:
 	set_quest(_quest_step, _quest_total)
 	set_hint(_hint_key)
 	set_buero(_zustand)
+	%HilfeHinweis.text = Texte.mit_tasten("HUD_HELP_HINT")
 
 # ------------------------------------------------------------ Fadenkreuz
 ## Hinweis unter dem Fadenkreuz. key: Übersetzungsschlüssel, "" = ausblenden.

@@ -19,6 +19,10 @@ func _ready() -> void:
 	_zum_menue.pressed.connect(_on_zum_menue)
 	%Beenden.pressed.connect(_on_beenden)
 	%TutorialSkip.pressed.connect(_on_tutorial_skip)
+	%Hilfe.pressed.connect(func() -> void:
+		var hilfe := get_parent().get_node_or_null("Hilfe")
+		if hilfe:
+			hilfe.oeffnen())
 
 func ist_offen() -> bool:
 	return visible

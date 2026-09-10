@@ -78,6 +78,13 @@ class Lauf extends Node:
 		hud.open_computer()
 		await _bild("computer_de")
 		hud.close_computer()
+		var hilfe: CanvasLayer = gm.get_node("Hilfe")
+		for lang in ["de", "tr"]:
+			Einstellungen.sprache = lang
+			Einstellungen.anwenden()
+			hilfe.oeffnen()
+			await _bild("hilfe_%s" % lang)
+			hilfe.schliessen()
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)
 			if _gab_es[pfad]:

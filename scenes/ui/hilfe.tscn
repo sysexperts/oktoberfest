@@ -1,0 +1,107 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hilfe.gd" id="1_hilfe"]
+
+[node name="Hilfe" type="CanvasLayer"]
+process_mode = 3
+layer = 60
+visible = false
+script = ExtResource("1_hilfe")
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+custom_minimum_size = Vector2(940, 0)
+layout_mode = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 30
+text = "HELP_TITLE"
+horizontal_alignment = 1
+
+[node name="Spalten" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Steuerung" type="VBoxContainer" parent="Mitte/Panel/Spalte/Spalten"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SteuerungTitel" type="Label" parent="Mitte/Panel/Spalte/Spalten/Steuerung"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "HELP_CONTROLS"
+
+[node name="TastenListe" type="GridContainer" parent="Mitte/Panel/Spalte/Spalten/Steuerung"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="Trenner" type="VSeparator" parent="Mitte/Panel/Spalte/Spalten"]
+layout_mode = 2
+
+[node name="Ablauf" type="VBoxContainer" parent="Mitte/Panel/Spalte/Spalten"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="AblaufTitel" type="Label" parent="Mitte/Panel/Spalte/Spalten/Ablauf"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "HELP_FLOW_TITLE"
+
+[node name="AblaufText" type="Label" parent="Mitte/Panel/Spalte/Spalten/Ablauf"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "HELP_FLOW"
+autowrap_mode = 3
+
+[node name="Trenner" type="HSeparator" parent="Mitte/Panel/Spalte/Spalten/Ablauf"]
+layout_mode = 2
+
+[node name="TippsTitel" type="Label" parent="Mitte/Panel/Spalte/Spalten/Ablauf"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "HELP_TIPS_TITLE"
+
+[node name="TippsText" type="Label" parent="Mitte/Panel/Spalte/Spalten/Ablauf"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "HELP_TIPS"
+autowrap_mode = 3
+
+[node name="Unten" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+alignment = 2
+
+[node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte/Unten"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+text = "Schließen [F1]"

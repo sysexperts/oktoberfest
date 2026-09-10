@@ -130,6 +130,20 @@ class Lauf extends Node:
 		if marker:
 			_check("Marker ohne Ziel", marker.ziel_suchen() == null, "")
 
+		print("  -- Hilfeseite (2.6)")
+		var hilfe := gm.get_node_or_null("Hilfe")
+		_check("Hilfe in der Szene", hilfe != null, "")
+		if hilfe:
+			_check("F1 ist Hilfe", _taste("help") == KEY_F1, OS.get_keycode_string(_taste("help")))
+			hilfe.oeffnen()
+			await _frames(2)
+			_check("Hilfe offen, Solo pausiert", hilfe.visible and get_tree().paused, "")
+			var zeilen: int = hilfe.get_node("%TastenListe").get_child_count()
+			_check("alle Tasten gelistet", zeilen == (Einstellungen.STANDARD_TASTEN.size() + 2) * 2, str(zeilen))
+			hilfe.schliessen()
+			await _frames(2)
+			_check("Hilfe zu, Pause aufgehoben", not hilfe.visible and not get_tree().paused, "")
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))
