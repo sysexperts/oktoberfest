@@ -29,9 +29,6 @@ const ROLE_NONE := 0
 const ROLE_KITCHEN := 1
 const ROLE_CLEAN := 2
 const ROLE_WAITER := 3
-const ROLE_NAMES := {0: "—", 1: "Mutfak", 2: "Temizlik", 3: "Garson"}
-const ROLE_ICONS := {1: "👨‍🍳", 2: "🧹", 3: "🍺"}
-const TASAROM := "Tasarom Firma Çalışanı"
 
 # Misafir / sipariş / popülerlik
 const ENTRANCE := Vector3(0, 0.1, 12.0)
@@ -173,7 +170,7 @@ var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
 var _wages_last := 0
 var _clean_tips := 0
 var _interest_paid := 0
-var _last_report := ""
+var _last_report := {}   # Zahlen der letzten Tagesbilanz (siehe _end_shift)
 # E4: Bestand + Lieferungen
 var _stock := {1: 0, 2: 0}      # WARE_BIER / WARE_ESSEN
 var _goods_cost := 0            # Wareneinsatz des Tages (für die Bilanz)
@@ -1650,11 +1647,12 @@ func _end_shift(reason := 0) -> void:
 		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
 		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
 		_: head = "🌙 22:00 — Feierabend!"
-	var report := "%s\n\n📊 TAG %d\nUmsatz  %d€   (davon Trinkgeld fürs Putzen %d€)\nMiete  -%d€\nLöhne  -%d€\nWare   -%d€\nZinsen -%d€\n───────────────\nNetto  %s%d€\n\nServiert %d · Verpasst %d\n🚻 Urin %d · Beschwerden %d · Gäste weg %d" % [
-		head, _day, _last_earn, _clean_tips, rent, wages, goods, _interest_paid,
-		"+" if net_profit >= 0 else "", net_profit,
-		_served, _missed, _urin_count, _complaints, _left_guests]
-	net_report.rpc(report)
+	net_report.rpc({
+		"reason": reason, "closed_at": int(closed_at), "pop_penalty": pop_penalty, "day": _day,
+		"earn": _last_earn, "tips": _clean_tips, "rent": rent, "wages": wages, "goods": goods,
+		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
+		"urin": _urin_count, "complaints": _complaints, "left": _left_guests,
+	})
 	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\n😴 Wohnwagen: schlafen → neuer Tag  ·  Bilanz: Wiesenbüro → 📊" % [
 		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit])
 	_clean_tips = 0
@@ -1973,35 +1971,30 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 		if m:
 			m.apply_progress(pr[i])
 
-func _roster_string() -> String:
-	var lines := []
-	for role in [ROLE_KITCHEN, ROLE_CLEAN, ROLE_WAITER]:
-		var who := []
-		for pid in _roles.keys():
-			if int(_roles[pid]) == role:
-				who.append("P%s" % str(pid).substr(0, 3))
-		var val: String
-		if who.is_empty():
-			val = TASAROM if _phase == Phase.SHIFT else "—"
-		else:
-			val = ", ".join(who)
-		lines.append("%s %s: %s" % [ROLE_ICONS[role], ROLE_NAMES[role], val])
-	return "\n".join(lines)
-
-func _mgmt_string() -> String:
-	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
-	return "%s · Masa: %d/%d · Koltuk: %d · Popülerlik: %d%%\nKira/gün: %d€ · Wiesn-Tag: %d/%d · 📣Werbung Lv%d · 🎨Deko Lv%d\n%s" % [
-		TENT_STAGE_NAMES[_tent_stage], _active_count, limit, _seats.size(),
-		int(round(_popularity)), _daily_rent(), _day, WIESN_DAYS, _upg_marketing, _upg_deko,
-		_lic_string() + "\n" + _stock_string() + "\n" + _artist_string() + " · " + _toilet_string()]
+## Alles, was Wiesenbüro, Zelt-Computer und HUD anzeigen — als Zahlen, nicht
+## als Text: übersetzt wird beim Spieler (scripts/ui/texte.gd, wiesenbuero.gd).
+func _buero_state() -> Dictionary:
+	var staff := []
+	for s in _staff_sim.values():
+		staff.append([int(s.role), int(s.level)])
+	var roles := {}
+	for pid in _roles.keys():
+		roles[str(pid)] = int(_roles[pid])
+	return {
+		"stage": _tent_stage, "tables": _active_count, "limit": int(TENT_TABLE_LIMIT[_tent_stage]),
+		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
+		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
+		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
+		"roles": roles, "shift": _phase == Phase.SHIFT,
+	}
 
 func _broadcast_meta() -> void:
 	_check_quest()
-	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count, _quest_step)
+	net_meta.rpc(_phase, _day, _tent_stage, _active_count, _quest_step, _buero_state())
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
 
 @rpc("authority", "reliable", "call_local")
-func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int, quest_step: int) -> void:
+func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_step: int, buero: Dictionary) -> void:
 	_phase = phase
 	_day = day
 	_tent_stage = tent_stage
@@ -2012,8 +2005,7 @@ func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: in
 		_apply_tent()
 	_active_count = active_count
 	_hud.set_phase(phase == Phase.SHIFT)
-	_hud.set_roster(roster)
-	_hud.set_mgmt(mgmt)
+	_hud.set_buero(buero)
 	_hud.set_day(day, WIESN_DAYS)
 	_hud.set_quest(quest_step, QUEST_COUNT)
 	if _sfx_node:
@@ -2048,10 +2040,10 @@ func net_sleep_fade() -> void:
 
 ## Letzte Tagesbilanz — im Wiesenbüro jederzeit nachlesbar.
 @rpc("authority", "reliable", "call_local")
-func net_report(text: String) -> void:
-	_last_report = text
-	if _hud and _hud.has_method("set_report"):
-		_hud.set_report(text)
+func net_report(bilanz: Dictionary) -> void:
+	_last_report = bilanz
+	if _hud:
+		_hud.set_report(bilanz)
 
 ## Reicht das Geld — inklusive Dispo bis -1000€?
 func _afford(cost: int) -> bool:

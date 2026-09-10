@@ -91,10 +91,104 @@ HINT_SLEEP_SHIFT,Schlafen erst nach Feierabend,You can sleep after closing time,
 HINT_MOVE_TABLE,{interact} Tisch verschieben,{interact} Move table,{interact} Masayı taşı
 HINT_COMPUTER,{interact} Zelt-Computer,{interact} Tent computer,{interact} Çadır bilgisayarı
 HINT_CLEAN,{interact} halten: putzen,Hold {interact}: clean,{interact} basılı tut: temizle
+OFFICE_TITLE,🏛 Wiesenbüro,🏛 Fair Office,🏛 Fuar Ofisi
+OFFICE_TAB_TENT,Zelt,Tent,Çadır
+OFFICE_TAB_LICENSES,Lizenzen,Licenses,Lisanslar
+OFFICE_TAB_STAFF,Personal,Staff,Personel
+OFFICE_TAB_ACTS,Künstler,Acts,Sanatçılar
+OFFICE_TAB_GOODS,Ware,Supplies,Malzeme
+OFFICE_TAB_REPORT,Bilanz,Report,Bilanço
+OFFICE_CLOSE,Schließen (Esc),Close (Esc),Kapat (Esc)
+OFFICE_STATUS,%s · Tische %d/%d · %d Plätze · Miete %s pro Tag,%s · Tables %d/%d · %d seats · Rent %s per day,%s · Masa %d/%d · %d koltuk · Günlük kira %s
+TENT_STAGE_0,Kein Zelt,No tent,Çadır yok
+TENT_STAGE_1,Kleines Zelt,Small tent,Küçük çadır
+TENT_STAGE_2,Mittleres Zelt,Medium tent,Orta çadır
+TENT_STAGE_3,Großes Zelt,Large tent,Büyük çadır
+OFFER_TENT_RENT,Zelt mieten,Rent a tent,Çadır kirala
+OFFER_TENT_RENT_INFO,Dein eigenes Festzelt. Ohne Zelt keine Gäste.,"Your own beer tent. No tent, no guests.",Kendi bira çadırın. Çadır yoksa misafir de yok.
+OFFER_TABLE,Tisch aufstellen,Place a table,Masa koy
+OFFER_TABLE_INFO,Jeder Tisch hat 6 Plätze · aufgestellt: %d von %d,Each table seats 6 · placed: %d of %d,Her masa 6 kişilik · kurulu: %d / %d
+OFFER_TABLE_SELL,Tisch verkaufen,Sell a table,Masa sat
+OFFER_TABLE_SELL_INFO,Du bekommst die Hälfte zurück.,You get half the price back.,Fiyatın yarısını geri alırsın.
+OFFER_TENT_UPGRADE,Zelt vergrößern,Enlarge tent,Çadırı büyüt
+OFFER_TENT_UPGRADE_INFO,"Nächste Stufe: %s, bis zu %d Tische","Next: %s, up to %d tables","Sonraki: %s, en fazla %d masa"
+OFFER_TOILET,Toilette einbauen,Install a toilet,Tuvalet kur
+OFFER_TOILET_INFO,Sonst pinkeln Gäste in die Ecke und beschweren sich.,Otherwise guests pee in the corner and complain.,Yoksa misafirler köşeye işer ve şikâyet eder.
+OFFER_MARKETING,Werbung,Advertising,Reklam
+OFFER_MARKETING_INFO,Stufe %d · sofort +%d %% Beliebtheit,Level %d · instantly +%d %% popularity,Seviye %d · anında +%d %% popülerlik
+OFFER_DEKO,Deko,Decoration,Dekorasyon
+OFFER_DEKO_INFO,Stufe %d · +%d %% Einnahmen je Stufe,Level %d · +%d %% income per level,Seviye %d · seviye başına +%d %% gelir
+OFFER_LICENSE_INFO,Ohne Lizenz verkaufst du nur Helles.,Without a license you only sell Helles.,Lisans olmadan sadece Helles satarsın.
+LIC_WEIZEN,Weizen-Lizenz,Wheat beer license,Buğday birası lisansı
+LIC_RADLER,Radler-Lizenz,Radler license,Radler lisansı
+LIC_BREZN,Brezn-Lizenz,Pretzel license,Pretzel lisansı
+LIC_SOSIS,Wurst-Lizenz,Sausage license,Sosis lisansı
+LIC_INFO,Danach bestellen Gäste auch das.,Guests will order it too.,Misafirler bunu da sipariş eder.
+STAFF_COOK,Koch,Cook,Aşçı
+STAFF_WAITER,Kellner,Waiter,Garson
+STAFF_CLEANER,Reinigungskraft,Cleaner,Temizlikçi
+STAFF_INFO_COOK,Bereitet Essen schneller zu.,Prepares food faster.,Yemeği daha hızlı hazırlar.
+STAFF_INFO_WAITER,"Bedient Gäste, trägt je nach Stufe 1 bis 12 Krüge.","Serves guests, carries 1 to 12 mugs depending on level.","Misafirlere servis yapar, seviyeye göre 1–12 kupa taşır."
+STAFF_INFO_CLEANER,Putzt Erbrochenes und Pfützen weg.,Cleans up vomit and puddles.,Kusmuk ve birikintileri temizler.
+STAFF_WAGE,Lohn %s pro Schicht,Wage %s per shift,Vardiya başı maaş %s
+STAFF_EMPLOYED,Im Dienst: %s,Employed: %s,Çalışan: %s
+STAFF_NONE,niemand,nobody,kimse
+STAFF_COUNT,%d (Stufe %s),%d (level %s),%d (seviye %s)
+ACT_1,Straßenmusiker,Street musician,Sokak müzisyeni
+ACT_2,Blaskapelle,Brass band,Bando
+ACT_3,Star-Act,Star act,Yıldız sanatçı
+ACT_INFO,+%d %% Andrang in der nächsten Schicht · sofort +%d %% Beliebtheit,+%d %% crowd next shift · instantly +%d %% popularity,Sonraki vardiyada +%d %% kalabalık · anında +%d %% popülerlik
+ACT_TAB_INFO,Gilt für die nächste Schicht.,Applies to the next shift.,Sonraki vardiya için geçerli.
+GOODS_BEER,Bier,Beer,Bira
+GOODS_FOOD,Zutaten fürs Essen,Food ingredients,Yemek malzemesi
+GOODS_INFO,1 Paket = %d Portionen · %s pro Paket,1 package = %d servings · %s per package,1 paket = %d porsiyon · paket başı %s
+GOODS_STOCK,Im Lager: %d · Lieferungen unterwegs: %d,In storage: %d · deliveries on the way: %d,Depoda: %d · yoldaki teslimat: %d
+GOODS_TAB_INFO,"Der Lieferwagen kommt nach etwa einer Minute. Dann die Pakete ins Lager tragen, sonst kannst du nichts verkaufen.","The delivery van arrives after about a minute. Carry the packages into storage, or you can't sell anything.","Teslimat aracı yaklaşık bir dakika sonra gelir. Paketleri depoya taşı, yoksa hiçbir şey satamazsın."
+BTN_RENT,Mieten · %s,Rent · %s,Kirala · %s
+BTN_PLACE,Aufstellen · %s,Place · %s,Koy · %s
+BTN_SELL,Verkaufen · +%s,Sell · +%s,Sat · +%s
+BTN_BUY,Kaufen · %s,Buy · %s,Satın al · %s
+BTN_HIRE,Einstellen · %s,Hire · %s,İşe al · %s
+BTN_UPGRADE,Aufstufen · %s,Upgrade · %s,Yükselt · %s
+BTN_UPGRADE_PLAIN,Aufstufen,Upgrade,Yükselt
+BTN_BOOK,Buchen · %s,Book · %s,Ayarla · %s
+BTN_PACKS,×%d · %s,×%d · %s,×%d · %s
+DONE_RENTED,✓ Gemietet,✓ Rented,✓ Kiralandı
+DONE_INSTALLED,✓ Eingebaut,✓ Installed,✓ Kuruldu
+DONE_OWNED,✓ Vorhanden,✓ Owned,✓ Alındı
+WHY_NEED_TENT,Zuerst ein Zelt mieten,Rent a tent first,Önce bir çadır kirala
+WHY_MONEY,Zu wenig Geld (Dispo reicht bis %s),Not enough money (overdraft goes down to %s),Yetersiz para (eksi bakiye sınırı %s)
+WHY_RESERVE,"Zuerst Bier bestellen — sonst bleibt kein Geld für Ware","Order beer first — otherwise there's no money left for supplies","Önce bira sipariş et — yoksa malzemeye para kalmaz"
+WHY_TABLE_LIMIT,Tischgrenze erreicht (%d) — Zelt vergrößern,Table limit reached (%d) — enlarge the tent,Masa sınırı doldu (%d) — çadırı büyüt
+WHY_NO_TABLES,Keine Tische aufgestellt,No tables placed,Kurulu masa yok
+WHY_MAX_TENT,✓ Größtes Zelt,✓ Largest tent,✓ En büyük çadır
+WHY_NO_STAFF,Aufstufen: noch niemand eingestellt,Upgrade: nobody hired yet,Yükseltme: henüz kimse işe alınmadı
+WHY_STAFF_MAX,Alle auf höchster Stufe,Everyone is at max level,Hepsi en üst seviyede
+WHY_ACT_BOOKED,Schon gebucht: %s,Already booked: %s,Zaten ayarlandı: %s
+COMP_TITLE,💻 Zelt-Computer,💻 Tent computer,💻 Çadır bilgisayarı
+COMP_ROLES,Aufgaben im Koop,Jobs in co-op,Birlikte oyunda görevler
+COMP_CLOSE_TENT,🚪 Zelt jetzt schließen (kostet Beliebtheit),🚪 Close the tent now (costs popularity),🚪 Çadırı şimdi kapat (popülerlik kaybettirir)
+ROLE_KITCHEN,Küche,Kitchen,Mutfak
+ROLE_CLEAN,Putzen,Cleaning,Temizlik
+ROLE_WAITER,Bedienen,Serving,Servis
+ROLE_NONE,Keine,None,Yok
+REPORT_NONE,Noch keine Schicht gespielt.,No shift played yet.,Henüz vardiya oynanmadı.
+REPORT_END_NORMAL,🌙 22:00 — Feierabend!,🌙 22:00 — closing time!,🌙 22:00 — mesai bitti!
+REPORT_END_COMPLAINTS,🚫 Zu viele Beschwerden — Zelt früh geschlossen,🚫 Too many complaints — tent closed early,🚫 Çok fazla şikâyet — çadır erken kapandı
+REPORT_END_EARLY,🚪 Um %02d:00 geschlossen · Beliebtheit −%d %%,🚪 Closed at %02d:00 · popularity −%d %%,🚪 %02d:00'de kapattın · popülerlik −%d %%
+REPORT_REVENUE,Umsatz,Revenue,Ciro
+REPORT_TIPS,davon Trinkgeld fürs Putzen: %s,incl. tips for cleaning: %s,temizlik bahşişi dahil: %s
+REPORT_RENT,Miete,Rent,Kira
+REPORT_WAGES,Löhne,Wages,Maaşlar
+REPORT_GOODS,Ware,Supplies,Malzeme
+REPORT_INTEREST,Zinsen,Interest,Faiz
+REPORT_NET,Netto,Net,Net
+REPORT_SERVED,Serviert %d · Verpasst %d,Served %d · Missed %d,Servis %d · Kaçırılan %d
+REPORT_MESS,🚻 Pfützen %d · Beschwerden %d · Gäste gegangen %d,🚻 Puddles %d · Complaints %d · Guests who left %d,🚻 Birikinti %d · Şikâyet %d · Giden misafir %d
 QUEST_0_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
 QUEST_0_TEXT,Geh zum Wiesenbüro und miete ein Zelt (500 €).,Go to the Fair Office and rent a tent (€500).,Fuar Ofisine git ve bir çadır kirala (500 €).
 QUEST_1_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
-QUEST_1_TEXT,Wiesenbüro → Zelt → Tisch stellen (200 € pro Tisch).,Fair Office → Tent → Place table (€200 each).,Fuar Ofisi → Çadır → Masa koy (masa başı 200 €).
+QUEST_1_TEXT,Wiesenbüro → Zelt → Tisch aufstellen (200 € pro Tisch).,Fair Office → Tent → Place table (€200 each).,Fuar Ofisi → Çadır → Masa koy (masa başı 200 €).
 QUEST_2_TITLE,Bestelle Bier,Order beer,Bira sipariş et
 QUEST_2_TEXT,Wiesenbüro → Ware → Bier bestellen.,Fair Office → Supplies → order beer.,Fuar Ofisi → Malzeme → bira sipariş et.
 QUEST_3_TITLE,Pakete ins Lager tragen,Carry packages to storage,Paketleri depoya taşı

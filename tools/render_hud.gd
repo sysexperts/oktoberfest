@@ -47,6 +47,29 @@ class Lauf extends Node:
 		hud.set_time(-1.0)
 		hud.show_popup("📦 Erst Ware einkaufen!\n\nDu hast kein Bier im Lager.")
 		await _bild("hud_popup")
+		hud.close_popup()
+
+		# Wiesenbüro: Zelt gemietet, damit nicht alles gesperrt ist; Beispielbilanz
+		gm.net_book_tent.rpc_id(1)
+		gm.net_buy_table.rpc_id(1)
+		await _frames(5)
+		hud.set_money(Game.money)
+		hud.set_report({"reason": 0, "day": 2, "earn": 1840, "tips": 60, "rent": 150, "wages": 100,
+			"goods": 120, "interest": 0, "net": 1470, "served": 46, "missed": 3, "urin": 2, "complaints": 1, "left": 0})
+		for lang in ["de", "tr"]:
+			Einstellungen.sprache = lang
+			Einstellungen.anwenden()
+			hud.open_booking()
+			var reiter: TabContainer = hud.get_node("%Wiesenbuero").get_node("%Reiter")
+			for i in reiter.get_tab_count():
+				reiter.current_tab = i
+				await _bild("buero_%s_%d" % [lang, i])
+			hud.close_booking()
+		Einstellungen.sprache = "de"
+		Einstellungen.anwenden()
+		hud.open_computer()
+		await _bild("computer_de")
+		hud.close_computer()
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)
 			if _gab_es[pfad]:

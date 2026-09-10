@@ -19,6 +19,59 @@ static func euro(betrag: int) -> String:
 		return ("-€" if betrag < 0 else "€") + geld(absi(betrag))
 	return geld(betrag) + " €"
 
+static func _t(schluessel: String) -> String:
+	return String(TranslationServer.translate(schluessel))
+
+## Kopfzeile von Wiesenbüro und Zelt-Computer aus GameManager._buero_state.
+static func buero_status(z: Dictionary) -> String:
+	return _t("OFFICE_STATUS") % [
+		_t("TENT_STAGE_%d" % int(z.get("stage", 0))), int(z.get("tables", 0)), int(z.get("limit", 0)),
+		int(z.get("seats", 0)), euro(int(z.get("rent", 0)))]
+
+const ROLLEN := {1: "ROLE_KITCHEN", 2: "ROLE_CLEAN", 3: "ROLE_WAITER"}
+
+## Wer im Koop welche Aufgabe hat. roles: Peer-ID (Text) -> Rolle.
+static func rollen(roles: Dictionary) -> String:
+	var zeilen := []
+	for rolle: int in ROLLEN:
+		var wer := []
+		for pid in roles:
+			if int(roles[pid]) == rolle:
+				wer.append("P" + str(pid).left(3))
+		zeilen.append("%s: %s" % [_t(ROLLEN[rolle]), ", ".join(wer) if not wer.is_empty() else "—"])
+	return "\n".join(zeilen)
+
+## Tagesbilanz aus den Zahlen, die GameManager._end_shift schickt.
+static func bilanz(b: Dictionary) -> String:
+	if b.is_empty():
+		return _t("REPORT_NONE")
+	var kopf: String
+	match int(b.get("reason", 0)):
+		1:
+			kopf = _t("REPORT_END_COMPLAINTS")
+		2:
+			kopf = _t("REPORT_END_EARLY") % [int(b.get("closed_at", 0)), roundi(float(b.get("pop_penalty", 0.0)))]
+		_:
+			kopf = _t("REPORT_END_NORMAL")
+	var netto := int(b.get("net", 0))
+	var zeilen := [
+		kopf,
+		"",
+		"📊 " + _t("HUD_DAY") % int(b.get("day", 1)),
+		"%s: %s" % [_t("REPORT_REVENUE"), euro(int(b.get("earn", 0)))],
+		"      " + _t("REPORT_TIPS") % euro(int(b.get("tips", 0))),
+		"%s: %s" % [_t("REPORT_RENT"), euro(-int(b.get("rent", 0)))],
+		"%s: %s" % [_t("REPORT_WAGES"), euro(-int(b.get("wages", 0)))],
+		"%s: %s" % [_t("REPORT_GOODS"), euro(-int(b.get("goods", 0)))],
+		"%s: %s" % [_t("REPORT_INTEREST"), euro(-int(b.get("interest", 0)))],
+		"───────────────",
+		"%s: %s%s" % [_t("REPORT_NET"), "+" if netto > 0 else "", euro(netto)],
+		"",
+		_t("REPORT_SERVED") % [int(b.get("served", 0)), int(b.get("missed", 0))],
+		_t("REPORT_MESS") % [int(b.get("urin", 0)), int(b.get("complaints", 0)), int(b.get("left", 0))],
+	]
+	return "\n".join(zeilen)
+
 ## Übersetzt einen Schlüssel und ersetzt {aktion} durch die aktuell belegte
 ## Taste, z. B. "{interact}" -> "[E]". So bleiben Hinweise nach dem Umbelegen
 ## richtig.

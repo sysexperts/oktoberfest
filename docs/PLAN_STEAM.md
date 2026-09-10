@@ -79,16 +79,17 @@ prüft Solo, Aktionen, Pause, Tastenbelegung und alle drei Sprachen (21 Prüfung
       „[E] Gast bedienen", „[E] Schlafen". Zeigt nur, was *jetzt* geht.
       *Zeigt die tatsächlich belegte Taste; reine Auskünfte („Wiesenbüro öffnet
       nach Feierabend") gedämpft.*
-- [ ] **2.3 Geführtes Tutorial** — Zielmarker in der Welt über dem nächsten
+- [x] **2.3 Geführtes Tutorial** — Zielmarker in der Welt über dem nächsten
       Ziel (Wiesenbüro, Fass, Gast), im Wiesenbüro wird der richtige Reiter und
       Knopf hervorgehoben, Haken plus Ton bei jedem erledigten Schritt,
       überspringbar.
-      *Erledigt: Zielmarker (`scenes/ui/zielmarker.tscn`, folgt dem, was man in
-      der Hand hat), Haken plus Ton, Überspringen im Pausemenü. Offen: Reiter und
-      Knopf im Wiesenbüro hervorheben — kommt mit 2.4, wenn das Büro eine Szene
-      mit benannten Knöpfen ist.*
-- [ ] **2.4 Wiesenbüro aufräumen** — einheitliches Layout, Preise sichtbar,
+      *Zielmarker (`scenes/ui/zielmarker.tscn`) folgt dem, was man in der Hand
+      hat; Überspringen im Pausemenü.*
+- [x] **2.4 Wiesenbüro aufräumen** — einheitliches Layout, Preise sichtbar,
       gesperrte Knöpfe sagen *warum* („Zuerst Zelt mieten").
+      *`scenes/ui/wiesenbuero.tscn` aus `angebot.tscn`-Zeilen, Zelt-Computer als
+      eigene Szene. Der Server schickt Zahlen statt Text, die Bilanz wird beim
+      Spieler übersetzt.*
 - [ ] **2.5 Rückmeldung** — schwebende Beträge bei Verkauf und Trinkgeld,
       Benachrichtigungen stapeln sich statt sich zu überschreiben.
 - [ ] **2.6 Hilfeseite (F1)** — Steuerung und Spielablauf auf einen Blick.
