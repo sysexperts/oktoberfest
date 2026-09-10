@@ -4,7 +4,7 @@ extends Node
 ## Aufruf: godot --path . res://tools/render_menu.tscn --resolution 1280x720
 
 func _ready() -> void:
-	var menu: Control = load("res://scenes/menu.tscn").instantiate()
+	var menu: Control = load("res://scenes/ui/hauptmenue.tscn").instantiate()
 	add_child(menu)
 	for lang in ["de", "en", "tr"]:
 		Einstellungen.sprache = lang

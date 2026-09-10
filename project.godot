@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Oktoberfest Simulator"
-config/version="100"
 config/description="Fuehre dein eigenes Festzelt auf der Wiesn — allein oder mit Freunden."
+config/version="100"
 run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
@@ -23,11 +23,11 @@ Einstellungen="*res://autoload/einstellungen.gd"
 Net="*res://autoload/net.gd"
 Game="*res://autoload/game.gd"
 
-[physics]
-
-3d/physics_engine="Jolt Physics"
-
 [internationalization]
 
 locale/translations=PackedStringArray("res://locale/texte.de.translation", "res://locale/texte.en.translation", "res://locale/texte.tr.translation")
 locale/fallback="de"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"

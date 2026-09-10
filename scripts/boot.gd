@@ -5,7 +5,9 @@ extends Node
 
 const VERSION_URL := "https://survival.vapur-it.de/version.json"
 const PCK_URL := "https://survival.vapur-it.de/game.pck"
-const BASE_VERSION := 6          # bu exe'nin içindeki gömülü içerik sürümü
+## Version des in diese .exe eingebauten Builds, aus den Projekteinstellungen.
+## Fehlt der Eintrag (sehr alte .exe), gilt 6 wie früher.
+var BASE_VERSION := int(str(ProjectSettings.get_setting("application/config/version", "6")))
 const MENU := "res://scenes/menu.tscn"
 const USER_PCK := "user://game.pck"
 const USER_TMP := "user://game.pck.tmp"
