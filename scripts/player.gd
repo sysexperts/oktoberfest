@@ -166,6 +166,7 @@ func _physics_process(delta: float) -> void:
 		_sfx_cd -= delta
 		_handle_movement(delta)
 		_update_target()
+		_update_hint()
 		_handle_interaction(delta)
 		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume)
@@ -264,6 +265,56 @@ func _update_target() -> void:
 			best = n3
 	_current_target = best
 	_update_highlight()
+
+## Hinweis am Fadenkreuz — nur neu setzen, wenn er sich ändert.
+var _hint_key := "-"
+
+func _update_hint() -> void:
+	var key := ""
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		key = _hint_for(_current_target)
+	if key == _hint_key:
+		return
+	_hint_key = key
+	var hud := _world.get_node_or_null("HUD")
+	if hud and hud.has_method("set_hint"):
+		hud.set_hint(key)
+
+## Was E beim Ziel *jetzt* bewirkt — muss zu _handle_interaction passen.
+func _hint_for(t: Node3D) -> String:
+	if t == null:
+		return ""
+	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
+	if t is Customer:
+		var g := t as Customer
+		if g.order_state != 1 or not _has_ready():
+			return ""
+		return "HINT_SERVE" if g.can_serve(_carry_kind(), carry_type) else "HINT_WRONG_ORDER"
+	if t is BeerTable:
+		return "HINT_MOVE_TABLE" if geschlossen else ""
+	if t is MugDispenser:
+		return "HINT_TAKE_MUG" if carry_state == 0 else ""
+	if t is KegStation:
+		if carry_state == 1 and carry_fill < 1.0:
+			return "HINT_TAP"
+		return "HINT_NEED_MUG" if carry_state == 0 else ""
+	if t is FoodStation:
+		var ft := (t as FoodStation).food_type
+		var kocht := carry_state == 2 and carry_type == ft and carry_fill < 1.0
+		return "HINT_COOK" if carry_state == 0 or kocht else ""
+	if t is Computer:
+		return "HINT_COMPUTER"
+	if t is Package:
+		return "HINT_PICKUP" if carry_state == 0 else ""
+	if t is Lager:
+		return "HINT_STORE" if carry_state == 3 else "HINT_STORAGE"
+	if t is OfficeDesk or t is BookingKiosk:
+		return "HINT_OFFICE" if geschlossen else "HINT_OFFICE_SHIFT"
+	if t is Caravan:
+		return "HINT_SLEEP" if geschlossen else "HINT_SLEEP_SHIFT"
+	if t is Mess:
+		return "HINT_CLEAN"
+	return ""
 
 func _update_highlight() -> void:
 	if _highlight_ring == null or not _highlight_ring.is_inside_tree():

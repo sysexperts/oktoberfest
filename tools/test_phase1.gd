@@ -48,6 +48,28 @@ class Lauf extends Node:
 		await _frames(5)
 		_check("Tisch kaufen kommt an", gm.get("_active_count") == tische0 + 1, "")
 
+		print("  -- Hinweis am Fadenkreuz (2.2)")
+		var spieler := gm.get_node("Players").get_child(0)
+		var zapfhahn := gm.get_node("Stations/MugDispenser")
+		var fass := gm.get_node("Stations/Keg1")
+		spieler.carry_state = 0
+		_check("Krugspender, Hände leer", spieler._hint_for(zapfhahn) == "HINT_TAKE_MUG", spieler._hint_for(zapfhahn))
+		_check("Fass, Hände leer", spieler._hint_for(fass) == "HINT_NEED_MUG", spieler._hint_for(fass))
+		spieler.carry_state = 1
+		spieler.carry_fill = 0.2
+		_check("Fass mit halbem Krug", spieler._hint_for(fass) == "HINT_TAP", spieler._hint_for(fass))
+		_check("Krugspender mit Krug: nichts", spieler._hint_for(zapfhahn) == "", spieler._hint_for(zapfhahn))
+		spieler.carry_state = 0
+		spieler.carry_fill = 0.0
+		var hud := gm.get_node("HUD")
+		Einstellungen.sprache = "de"
+		Einstellungen.anwenden()
+		hud.set_hint("HINT_TAKE_MUG")
+		var hinweis: String = hud.get_node("%HinweisText").text
+		_check("Hinweistext mit Taste", hinweis == "[E] Krug nehmen" and hud.get_node("%Hinweis").visible, hinweis)
+		hud.set_hint("")
+		_check("Hinweis ausgeblendet", not hud.get_node("%Hinweis").visible, "")
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

@@ -37,6 +37,7 @@ var _bier := 0
 var _essen := 0
 var _quest_step := -1
 var _quest_total := 0
+var _hint_key := ""
 
 var _banner_token := 0
 var _book_panel: PanelContainer
@@ -68,6 +69,20 @@ func _alles_neu() -> void:
 	set_hygiene(_hygiene)
 	set_stock(_bier, _essen)
 	set_quest(_quest_step, _quest_total)
+	set_hint(_hint_key)
+
+# ------------------------------------------------------------ Fadenkreuz
+## Hinweis unter dem Fadenkreuz. key: Übersetzungsschlüssel, "" = ausblenden.
+## Hinweise mit Taste sind Handlungen (hell), ohne Taste nur Auskunft (gedämpft).
+func set_hint(key: String) -> void:
+	_hint_key = key
+	%Hinweis.visible = key != ""
+	if key == "":
+		return
+	var hinweis: Label = %HinweisText
+	hinweis.text = Texte.mit_tasten(key)
+	var handlung := tr(key).contains("{")
+	hinweis.add_theme_color_override("font_color", WEISS if handlung else Color(0.72, 0.7, 0.82))
 
 # ------------------------------------------------------------ Leiste
 func set_money(v: int) -> void:

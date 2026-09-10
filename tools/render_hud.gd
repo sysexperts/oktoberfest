@@ -33,6 +33,7 @@ class Lauf extends Node:
 			Einstellungen.sprache = lang
 			Einstellungen.anwenden()
 			hud.set_quest(5, 11)
+			hud.set_hint("HINT_TAP")
 			await _bild("hud_%s" % lang)
 		hud.set_time(-1.0)
 		hud.show_popup("📦 Erst Ware einkaufen!\n\nDu hast kein Bier im Lager.")

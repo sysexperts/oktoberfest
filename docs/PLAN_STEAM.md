@@ -67,16 +67,18 @@ prüft Solo, Aktionen, Pause, Tastenbelegung und alle drei Sprachen (21 Prüfung
 
 ## Phase 2 · Verständlichkeit — Spieler wissen, was zu tun ist
 
-- [ ] **2.0 Eigenes Theme** — eine `Theme`-Ressource für alle Menüs. Das
+- [x] **2.0 Eigenes Theme** — eine `Theme`-Ressource für alle Menüs. Das
       Godot-Standardtheme ist auf dunklem Grund kaum lesbar: **ausgeschaltete
       Schalter sehen aus wie ein grauer Punkt**, Panelränder verschwinden,
       Knöpfe verschwimmen mit dem Hintergrund. Gefunden in den Renders von
-      Phase 1.
-- [ ] **2.1 Neues HUD als Szene** — obere Leiste (Geld · Tag und Uhrzeit ·
+      Phase 1. *`assets/ui/theme.tres`, Schalter/Haken/Regler als SVG.*
+- [x] **2.1 Neues HUD als Szene** — obere Leiste (Geld · Tag und Uhrzeit ·
       Beliebtheit), darunter Lager und Sauberkeit. Der Riesensatz unten fällt
-      weg.
-- [ ] **2.2 Interaktionshinweis am Fadenkreuz** — „[E] Krug nehmen",
+      weg. *`scenes/ui/hud.tscn`; Tutorialtexte jetzt in allen drei Sprachen.*
+- [x] **2.2 Interaktionshinweis am Fadenkreuz** — „[E] Krug nehmen",
       „[E] Gast bedienen", „[E] Schlafen". Zeigt nur, was *jetzt* geht.
+      *Zeigt die tatsächlich belegte Taste; reine Auskünfte („Wiesenbüro öffnet
+      nach Feierabend") gedämpft.*
 - [ ] **2.3 Geführtes Tutorial** — Zielmarker in der Welt über dem nächsten
       Ziel (Wiesenbüro, Fass, Gast), im Wiesenbüro wird der richtige Reiter und
       Knopf hervorgehoben, Haken plus Ton bei jedem erledigten Schritt,

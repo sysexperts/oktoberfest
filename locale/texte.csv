@@ -72,6 +72,22 @@ HUD_STOCK,Lager,Storage,Depo
 HUD_CLEAN,Sauberkeit,Cleanliness,Temizlik
 HUD_TASK,Aufgabe %d von %d,Task %d of %d,Görev %d / %d
 HUD_OK,Verstanden,Got it,Anladım
+HINT_TAKE_MUG,{interact} Krug nehmen,{interact} Take a mug,{interact} Kupa al
+HINT_TAP,{interact} halten: zapfen,Hold {interact}: pour,{interact} basılı tut: doldur
+HINT_NEED_MUG,Erst einen Krug nehmen,Grab a mug first,Önce bir kupa al
+HINT_SERVE,{interact} Gast bedienen,{interact} Serve guest,{interact} Misafire servis yap
+HINT_WRONG_ORDER,Der Gast möchte etwas anderes,The guest wants something else,Misafir başka bir şey istiyor
+HINT_COOK,{interact} halten: zubereiten,Hold {interact}: prepare,{interact} basılı tut: hazırla
+HINT_PICKUP,{interact} Paket aufnehmen,{interact} Pick up package,{interact} Paketi al
+HINT_STORE,{interact} Paket einlagern,{interact} Store package,{interact} Paketi depola
+HINT_STORAGE,Lager — Pakete hierher bringen,Storage — bring packages here,Depo — paketleri buraya getir
+HINT_OFFICE,{interact} Wiesenbüro öffnen,{interact} Open Fair Office,{interact} Fuar Ofisini aç
+HINT_OFFICE_SHIFT,Wiesenbüro öffnet nach Feierabend,The Fair Office opens after closing time,Fuar Ofisi kapanıştan sonra açılır
+HINT_SLEEP,{interact} Schlafen — neuer Tag,{interact} Sleep — next day,{interact} Uyu — yeni gün
+HINT_SLEEP_SHIFT,Schlafen erst nach Feierabend,You can sleep after closing time,Kapanıştan sonra uyuyabilirsin
+HINT_MOVE_TABLE,{interact} Tisch verschieben,{interact} Move table,{interact} Masayı taşı
+HINT_COMPUTER,{interact} Zelt-Computer,{interact} Tent computer,{interact} Çadır bilgisayarı
+HINT_CLEAN,{interact} halten: putzen,Hold {interact}: clean,{interact} basılı tut: temizle
 QUEST_0_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
 QUEST_0_TEXT,Geh zum Wiesenbüro und miete ein Zelt (500 €).,Go to the Fair Office and rent a tent (€500).,Fuar Ofisine git ve bir çadır kirala (500 €).
 QUEST_1_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
