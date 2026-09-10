@@ -185,6 +185,37 @@ REPORT_INTEREST,Zinsen,Interest,Faiz
 REPORT_NET,Netto,Net,Net
 REPORT_SERVED,Serviert %d · Verpasst %d,Served %d · Missed %d,Servis %d · Kaçırılan %d
 REPORT_MESS,🚻 Pfützen %d · Beschwerden %d · Gäste gegangen %d,🚻 Puddles %d · Complaints %d · Guests who left %d,🚻 Birikinti %d · Şikâyet %d · Giden misafir %d
+MSG_NO_MONEY,💶 Zu wenig Geld für %s (%s),💶 Not enough money for %s (%s),💶 %s için para yetmiyor (%s)
+MSG_NEED_TENT,🎪 Zuerst ein Zelt mieten (Wiesenbüro),🎪 Rent a tent first (Fair Office),🎪 Önce bir çadır kirala (Fuar Ofisi)
+MSG_TENT_RENTED,🎪 %s gemietet! Stell jetzt Tische auf.,🎪 %s rented! Now set up tables.,🎪 %s kiralandı! Şimdi masa kur.
+MSG_TABLE_LIMIT,🪑 Tischgrenze erreicht (%d) — Zelt vergrößern,🪑 Table limit reached (%d) — enlarge the tent,🪑 Masa sınırı doldu (%d) — çadırı büyüt
+MSG_TABLE_PLACED,🪑 Tisch aufgestellt (%d/%d),🪑 Table placed (%d/%d),🪑 Masa kuruldu (%d/%d)
+MSG_MARKETING,📣 Werbung Stufe %d — Beliebtheit +%d %%,📣 Advertising level %d — popularity +%d %%,📣 Reklam seviye %d — popülerlik +%d %%
+MSG_DEKO,🎨 Deko Stufe %d — Einnahmen +%d %%,🎨 Decoration level %d — income +%d %%,🎨 Dekorasyon seviye %d — gelir +%d %%
+MSG_TOILET_HAVE,🚻 Die Toilette ist schon eingebaut,🚻 The toilet is already installed,🚻 Tuvalet zaten kurulu
+MSG_TOILET_DONE,🚻 Toilette eingebaut — keine Pfützen mehr in der Ecke,🚻 Toilet installed — no more puddles in the corner,🚻 Tuvalet kuruldu — köşede artık birikinti yok
+MSG_ACT_BOOKED_ALREADY,🎤 Schon gebucht: %s,🎤 Already booked: %s,🎤 Zaten ayarlandı: %s
+MSG_ACT_BOOKED,🎤 %s gebucht! Beliebtheit +%d %% · spielt in der nächsten Schicht,🎤 %s booked! Popularity +%d %% · plays next shift,🎤 %s ayarlandı! Popülerlik +%d %% · sonraki vardiyada çalar
+MSG_GOODS_ORDERED,🚚 %d× %s bestellt (%s) — Lieferung in etwa einer Minute,🚚 Ordered %d× %s (%s) — delivery in about a minute,🚚 %d× %s sipariş edildi (%s) — yaklaşık bir dakikada teslim
+MSG_GOODS_DELIVERED,📦 %d Paket(e) geliefert — bring sie ins Lager,📦 %d package(s) delivered — carry them to storage,📦 %d paket teslim edildi — depoya taşı
+MSG_STAFF_HIRED,🤝 %s eingestellt · Lohn %s pro Schicht,🤝 %s hired · wage %s per shift,🤝 %s işe alındı · vardiya başı maaş %s
+MSG_STAFF_NONE,Niemand zum Aufstufen: %s,Nobody to upgrade: %s,Yükseltilecek kimse yok: %s
+MSG_STAFF_UP,⬆ %s jetzt Stufe %d,⬆ %s now level %d,⬆ %s artık seviye %d
+MSG_WAITER_UP,⬆ Kellner jetzt Stufe %d — trägt %d Krüge,⬆ Waiter now level %d — carries %d mugs,⬆ Garson artık seviye %d — %d kupa taşır
+MSG_LIC_HAVE,✅ %s ist schon vorhanden,✅ You already have the %s,✅ %s zaten var
+MSG_LIC_DONE,📜 %s gekauft — Gäste bestellen das jetzt auch,📜 %s bought — guests will order it now,📜 %s alındı — misafirler artık bunu da sipariş eder
+MSG_TENT_MAX,🎪 Du hast schon das größte Zelt,🎪 You already have the largest tent,🎪 Zaten en büyük çadır sende
+MSG_TENT_UP,🎪 %s! Jetzt bis zu %d Tische,🎪 %s! Now up to %d tables,🎪 %s! Artık en fazla %d masa
+MSG_SLEEP_NEED_TENT,"😴 Erst ein Zelt mieten, dann schlafen","😴 Rent a tent first, then sleep","😴 Önce çadır kirala, sonra uyu"
+MSG_SLEEP_NEED_TABLE,🪑 Stell zuerst mindestens einen Tisch auf,🪑 Place at least one table first,🪑 Önce en az bir masa kur
+MSG_DAY_START,"☀ Tag %d · 07:00 — Zelt offen! Gäste ab 08:00, Feierabend um 22:00","☀ Day %d · 7:00 — tent open! Guests from 8:00, closing at 22:00","☀ %d. Gün · 07:00 — çadır açık! Misafirler 08:00'den itibaren, kapanış 22:00"
+MSG_TABLE_NONE,🪑 Kein Tisch zum Verkaufen,🪑 No table to sell,🪑 Satılacak masa yok
+MSG_TABLE_SOLD,🪑 Tisch verkauft (+%s) · noch %d,🪑 Table sold (+%s) · %d left,🪑 Masa satıldı (+%s) · %d kaldı
+MSG_STOCK_EMPTY,📦 Lager leer! %s nachbestellen (Wiesenbüro → Ware),📦 Storage empty! Reorder %s (Fair Office → Supplies),📦 Depo boş! %s sipariş et (Fuar Ofisi → Malzeme)
+MSG_EVENING,"🌙 19:00 — das Zelt wird voll, die Gäste werden ungeduldig","🌙 19:00 — the tent fills up, guests get impatient","🌙 19:00 — çadır doluyor, misafirler sabırsızlanıyor"
+MSG_DAY_END,🌙 Feierabend! Netto %s · Bilanz im Wiesenbüro · schlafen startet den nächsten Tag,🌙 Closing time! Net %s · report in the Fair Office · sleep to start the next day,🌙 Mesai bitti! Net %s · bilanço Fuar Ofisinde · uyumak sonraki günü başlatır
+POPUP_RESERVE,"📦 Zuerst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %s für ein Paket Bier — sonst kannst du nichts verkaufen.\n\nWiesenbüro → Ware","📦 Buy supplies first!\n\nYou have no beer in storage and no delivery on the way.\nKeep at least %s for a package of beer — otherwise you can't sell anything.\n\nFair Office → Supplies","📦 Önce malzeme al!\n\nDepoda bira yok ve yolda teslimat yok.\nBir paket bira için en az %s ayır — yoksa hiçbir şey satamazsın.\n\nFuar Ofisi → Malzeme"
+POPUP_NO_TENT,"🎪 Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst eins: Wiesenbüro → Zelt (%s)","🎪 You don't have a tent yet!\n\nWithout a tent you can't store supplies.\nRent one first: Fair Office → Tent (%s)","🎪 Henüz çadırın yok!\n\nÇadır olmadan malzeme depolayamazsın.\nÖnce bir tane kirala: Fuar Ofisi → Çadır (%s)"
 QUEST_0_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
 QUEST_0_TEXT,Geh zum Wiesenbüro und miete ein Zelt (500 €).,Go to the Fair Office and rent a tent (€500).,Fuar Ofisine git ve bir çadır kirala (500 €).
 QUEST_1_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur

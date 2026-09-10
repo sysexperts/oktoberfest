@@ -22,6 +22,21 @@ static func euro(betrag: int) -> String:
 static func _t(schluessel: String) -> String:
 	return String(TranslationServer.translate(schluessel))
 
+## Meldung vom Server: Schlüssel plus Werte. Texte unter den Werten sind selbst
+## Schlüssel (z. B. "LIC_WEIZEN") und werden übersetzt, {"euro": n} wird zum
+## Betrag in der Schreibweise der Sprache, Zahlen bleiben Zahlen.
+static func meldung(schluessel: String, werte: Array = []) -> String:
+	var fertig := []
+	for w in werte:
+		if w is Dictionary and (w as Dictionary).has("euro"):
+			fertig.append(euro(int(w["euro"])))
+		elif w is String or w is StringName:
+			fertig.append(_t(str(w)))
+		else:
+			fertig.append(w)
+	var t := _t(schluessel)
+	return t % fertig if not fertig.is_empty() else t
+
 ## Kopfzeile von Wiesenbüro und Zelt-Computer aus GameManager._buero_state.
 static func buero_status(z: Dictionary) -> String:
 	return _t("OFFICE_STATUS") % [

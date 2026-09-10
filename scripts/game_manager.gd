@@ -56,7 +56,6 @@ const NPC_CLEAN_RATE := 0.06
 const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bier 60
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
-const TENT_STAGE_NAMES := {0: "Zelt yok", 1: "Küçük Zelt", 2: "Orta Zelt", 3: "Büyük Zelt"}
 const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
@@ -73,14 +72,12 @@ const DEKO_COST := 600        # her seviye +%15 gelir
 const DEKO_BONUS := 0.15
 # E2.4 Lizenzen — başta sadece Helles satılır, gerisi Wiesenbüro'dan alınır
 const LIC_COST := {"weizen": 800, "radler": 800, "brezn": 1200, "sosis": 1200}
-const LIC_NAMES := {"weizen": "🍺 Weizen", "radler": "🍋 Radler", "brezn": "🥨 Brezn", "sosis": "🌭 Sosis"}
 
 # ---- E3: Personal ----
 const STAFF_SCENE := preload("res://scenes/staff.tscn")
 const ROLE_KOCH := 1
 const ROLE_KELLNER := 2
 const ROLE_REINIGUNG := 3
-const STAFF_NAMES := {1: "👨‍🍳 Koch", 2: "🍺 Kellner", 3: "🧹 Reinigung"}
 const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400}
 const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
@@ -99,7 +96,6 @@ const PACKAGE_SCENE := preload("res://scenes/package.tscn")
 const VAN_SCENE := preload("res://scenes/delivery_van.tscn")
 const WARE_BIER := 1
 const WARE_ESSEN := 2
-const WARE_NAMES := {1: "🍺 Bier", 2: "🥨 Zutaten"}
 const PACK_UNITS := 10                    # Einheiten pro Paket
 const PACK_COST := {1: 40, 2: 50}         # Preis pro Paket (10 Einheiten)
 const DELIVERY_DELAY := 60.0              # Lieferzeit nach Bestellung (Sekunden)
@@ -111,7 +107,6 @@ const DROP_POINT := Vector3(0.0, 0.0, 15.5)   # wo die Pakete landen
 
 # ---- E5: Bühne & Künstler ----
 const ARTIST_SCENE := preload("res://scenes/artist.tscn")
-const ARTIST_NAMES := {1: "🎸 Straßenmusiker", 2: "🎺 Blaskapelle", 3: "⭐ Star-Act"}
 const ARTIST_COST := {1: 500, 2: 2000, 3: 6000}
 const ARTIST_COUNT := {1: 1, 2: 3, 3: 5}      # wie viele auf der Bühne stehen
 const ARTIST_POP := {1: 5.0, 2: 12.0, 3: 25.0}  # Beliebtheitsschub beim Buchen
@@ -592,13 +587,13 @@ func net_book_tent() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION or _tent_stage != 0:
 		return
 	if not _afford(TENT_BOOK_COST):
-		_net_banner.rpc("💶 Yetersiz para! (Zelt: %d€)" % TENT_BOOK_COST)
+		_fehler("MSG_NO_MONEY", ["OFFER_TENT_RENT", _eur(TENT_BOOK_COST)])
 		return
 	Game.add_money(-TENT_BOOK_COST)
 	_tent_stage = 1
 	_active_count = 0
 	_apply_tent()
-	_net_banner.rpc("🎪 %s kiralandı! Şimdi masa yerleştir." % TENT_STAGE_NAMES[1])
+	_melde("MSG_TENT_RENTED", ["TENT_STAGE_1"], 2)
 	_broadcast_meta()
 
 ## Kiosk: Tisch kaufen/platzieren (limit je Zeltstufe).
@@ -607,22 +602,22 @@ func net_buy_table() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	if _tent_stage == 0:
-		_net_banner.rpc("Önce Zelt buchen! (Kiosk)")
+		_fehler("MSG_NEED_TENT")
 		return
 	var limit: int = TENT_TABLE_LIMIT[_tent_stage]
 	if _active_count >= limit:
-		_net_banner.rpc("🪑 Tisch-Limit dolu (%d). Zelt upgrade et." % limit)
+		_fehler("MSG_TABLE_LIMIT", [limit])
 		return
 	# Die ersten zwei Tische sind Pflicht — dafür gilt die Warenreserve nicht
 	if _active_count >= 2 and not _reserve_ok(TABLE_COST):
 		return
 	if not _afford(TABLE_COST):
-		_net_banner.rpc("💶 Yetersiz para! (Tisch: %d€)" % TABLE_COST)
+		_fehler("MSG_NO_MONEY", ["OFFER_TABLE", _eur(TABLE_COST)])
 		return
 	Game.add_money(-TABLE_COST)
 	_active_count += 1
 	_apply_tent()
-	_net_banner.rpc("🪑 Masa +1 (%d/%d)" % [_active_count, limit])
+	_melde("MSG_TABLE_PLACED", [_active_count, limit], 2)
 	_broadcast_meta()
 
 ## Kiosk: Werbung — anında popülerlik enjeksiyonu (her seviye daha pahalı).
@@ -634,12 +629,12 @@ func net_buy_marketing() -> void:
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (Werbung: %d€)" % cost)
+		_fehler("MSG_NO_MONEY", ["OFFER_MARKETING", _eur(cost)])
 		return
 	Game.add_money(-cost)
 	_upg_marketing += 1
 	_popularity = minf(100.0, _popularity + MARKETING_BOOST)
-	_net_banner.rpc("📣 Werbung Lv%d! Popülerlik +%d%%" % [_upg_marketing, int(MARKETING_BOOST)])
+	_melde("MSG_MARKETING", [_upg_marketing, int(MARKETING_BOOST)], 2)
 	_broadcast_meta()
 
 ## Kiosk: Deko — kalıcı gelir çarpanı.
@@ -651,11 +646,11 @@ func net_buy_deko() -> void:
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (Deko: %d€)" % cost)
+		_fehler("MSG_NO_MONEY", ["OFFER_DEKO", _eur(cost)])
 		return
 	Game.add_money(-cost)
 	_upg_deko += 1
-	_net_banner.rpc("🎨 Deko Lv%d! Gelir +%d%%" % [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)])
+	_melde("MSG_DEKO", [_upg_deko, int(DEKO_BONUS * _upg_deko * 100)], 2)
 	_broadcast_meta()
 
 # ================================================= E6: Klo & Beschwerden
@@ -665,19 +660,19 @@ func net_buy_toilet() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	if _has_toilet:
-		_net_banner.rpc("🚻 Toilette ist schon eingebaut")
+		_fehler("MSG_TOILET_HAVE")
 		return
 	if _tent_stage == 0:
-		_net_banner.rpc("Erst ein Zelt mieten!")
+		_fehler("MSG_NEED_TENT")
 		return
 	if not _reserve_ok(TOILET_COST):
 		return
 	if not _afford(TOILET_COST):
-		_net_banner.rpc("💶 Yetersiz para! (Toilette: %d€)" % TOILET_COST)
+		_fehler("MSG_NO_MONEY", ["OFFER_TOILET", _eur(TOILET_COST)])
 		return
 	Game.add_money(-TOILET_COST)
 	_has_toilet = true
-	_net_banner.rpc("🚻 Toilette eingebaut! Schluss mit Pinkeln in der Ecke.")
+	_melde("MSG_TOILET_DONE", [], 2)
 	_broadcast_meta()
 
 ## Blase der sitzenden Gäste. Ohne Klo → Urinfleck in der Ecke.
@@ -744,8 +739,6 @@ func _update_complaints(delta: float) -> void:
 		else:
 			_guest_sim[gid] = g
 
-func _toilet_string() -> String:
-	return "🚻 Toilette: ja" if _has_toilet else "🚻 Toilette: FEHLT (Gäste pinkeln in die Ecke)"
 
 # ================================================= Tutorial & Schutzregeln
 ## Preis eines Bierpakets — so viel muss übrig bleiben, solange kein Bier da ist.
@@ -755,17 +748,19 @@ const OVERDRAFT_LIMIT := 1000
 const OVERDRAFT_INTEREST := 0.05
 
 ## Popup beim anfragenden Spieler (nicht bei allen).
-func _popup_to_sender(msg: String) -> void:
+func _popup_to_sender(key: String, args: Array = []) -> void:
 	var s := multiplayer.get_remote_sender_id()
 	if s <= 1:
-		net_popup(msg)
+		net_popup(key, args)
 	else:
-		net_popup.rpc_id(s, msg)
+		net_popup.rpc_id(s, key, args)
 
 @rpc("authority", "reliable", "call_local")
-func net_popup(text: String) -> void:
-	if _hud and _hud.has_method("show_popup"):
-		_hud.show_popup(text)
+func net_popup(key: String, args: Array) -> void:
+	if _hud:
+		_hud.show_popup(Texte.meldung(key, args))
+
+const Texte := preload("res://scripts/ui/texte.gd")
 
 ## Kein Bier im Lager und keine Lieferung unterwegs?
 func _needs_goods() -> bool:
@@ -777,7 +772,7 @@ func _reserve_ok(cost: int) -> bool:
 		return true
 	if Game.money - cost >= GOODS_RESERVE:
 		return true
-	_popup_to_sender("📦 Erst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %d€ für ein Paket Bier —\nsonst kannst du nichts verkaufen.\n\nWiesenbüro → Reiter Ware" % GOODS_RESERVE)
+	_popup_to_sender("POPUP_RESERVE", [_eur(GOODS_RESERVE)])
 	return false
 
 # ---- Tutorial ----
@@ -833,20 +828,19 @@ func net_book_artist(tier: int) -> void:
 	if not ARTIST_COST.has(tier):
 		return
 	if _artist_tier > 0:
-		_net_banner.rpc("🎤 %s ist schon gebucht" % ARTIST_NAMES[_artist_tier])
+		_fehler("MSG_ACT_BOOKED_ALREADY", ["ACT_%d" % _artist_tier])
 		return
 	var cost: int = ARTIST_COST[tier]
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [ARTIST_NAMES[tier], cost])
+		_fehler("MSG_NO_MONEY", ["ACT_%d" % tier, _eur(cost)])
 		return
 	Game.add_money(-cost)
 	_artist_tier = tier
 	_ever_artist = true
 	_popularity = minf(100.0, _popularity + float(ARTIST_POP[tier]))
-	_net_banner.rpc("🎤 %s gebucht! Popularität +%d%%\nSpielt in der nächsten Schicht." % [
-		ARTIST_NAMES[tier], int(ARTIST_POP[tier])])
+	_melde("MSG_ACT_BOOKED", ["ACT_%d" % tier, int(ARTIST_POP[tier])], 2)
 	_broadcast_meta()
 
 ## Künstler auf die Bühne stellen (Schichtbeginn).
@@ -886,10 +880,6 @@ func _remove_artists() -> void:
 			a.queue_free()
 	_artist_nodes.clear()
 
-func _artist_string() -> String:
-	if _artist_tier <= 0:
-		return "Bühne: kein Künstler gebucht"
-	return "Bühne: %s (+%d%% Andrang)" % [ARTIST_NAMES[_artist_tier], int(ARTIST_DRAW[_artist_tier] * 100.0)]
 
 # ================================================= E4: Ware & Lieferung
 ## Wiesenbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
@@ -898,18 +888,18 @@ func net_order_goods(kind: int, packs: int) -> void:
 	if not multiplayer.is_server():
 		return
 	if _tent_stage == 0:
-		_popup_to_sender("🎪 Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst ein Zelt:\nWiesenbüro → Reiter Zelt → Zelt mieten (500€)")
+		_popup_to_sender("POPUP_NO_TENT", [_eur(TENT_BOOK_COST)])
 		return
 	if not PACK_COST.has(kind) or packs <= 0:
 		return
 	var cost: int = PACK_COST[kind] * packs
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (%d× %s: %d€)" % [packs, WARE_NAMES[kind], cost])
+		_fehler("MSG_NO_MONEY", [WARE_KEYS[kind], _eur(cost)])
 		return
 	Game.add_money(-cost)
 	_goods_cost += cost
 	_pending.append({"kind": kind, "packs": packs, "t": DELIVERY_DELAY})
-	_net_banner.rpc("🚚 %d× %s bestellt (%d€)\nLieferung in ~1 Minute" % [packs, WARE_NAMES[kind], cost])
+	_melde("MSG_GOODS_ORDERED", [packs, WARE_KEYS[kind], _eur(cost)], 2)
 	_broadcast_meta()
 
 func _update_delivery(delta: float) -> void:
@@ -968,7 +958,7 @@ func _drop_cargo() -> void:
 			_add_package.rpc(id, DROP_POINT + off, int(c.kind), PACK_UNITS)
 			n += 1
 	_van_cargo = []
-	_net_banner.rpc("📦 %d Paket(e) geliefert! Bring sie ins Lager." % n)
+	_melde("MSG_GOODS_DELIVERED", [n])
 
 @rpc("authority", "reliable", "call_local")
 func _van_show(on: bool, pos: Vector3) -> void:
@@ -1057,14 +1047,6 @@ func _consume_stock(okind: int) -> void:
 	_stock[w] = maxi(0, int(_stock.get(w, 0)) - 1)
 	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 
-func _stock_string() -> String:
-	var pend := ""
-	if not _pending.is_empty():
-		var soon := 999.0
-		for o in _pending:
-			soon = minf(soon, float(o.t))
-		pend = " · 🚚 unterwegs (%ds)" % int(ceil(soon))
-	return "Lager: 🍺 %d · 🥨 %d%s" % [int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]), pend]
 
 # ================================================= E3: Personal
 ## Wiesenbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
@@ -1078,7 +1060,7 @@ func net_hire_staff(role: int) -> void:
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [STAFF_NAMES[role], cost])
+		_fehler("MSG_NO_MONEY", [STAFF_KEYS[role], _eur(cost)])
 		return
 	Game.add_money(-cost)
 	var id := _staff_next
@@ -1089,7 +1071,7 @@ func net_hire_staff(role: int) -> void:
 		"state": 0, "timer": 0.0, "orders": [], "idx": 0
 	}
 	_add_staff.rpc(id, start, role, 1)
-	_net_banner.rpc("🤝 %s Lv1 eingestellt! Lohn: %d€/Schicht" % [STAFF_NAMES[role], STAFF_WAGE_BASE[role]])
+	_melde("MSG_STAFF_HIRED", [STAFF_KEYS[role], _eur(STAFF_WAGE_BASE[role])], 2)
 	_broadcast_meta()
 
 ## Wiesenbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
@@ -1105,23 +1087,23 @@ func net_upgrade_staff(role: int) -> void:
 			low = int(s.level)
 			target = sid
 	if target < 0:
-		_net_banner.rpc("Kein %s zum Aufstufen (oder schon Lv%d)" % [STAFF_NAMES.get(role, "?"), STAFF_MAX_LEVEL])
+		_fehler("MSG_STAFF_NONE", [STAFF_KEYS.get(role, "")])
 		return
 	var cost: int = STAFF_UPGRADE_BASE * low
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (Aufstufen: %d€)" % cost)
+		_fehler("MSG_NO_MONEY", ["BTN_UPGRADE_PLAIN", _eur(cost)])
 		return
 	Game.add_money(-cost)
 	var s2: Dictionary = _staff_sim[target]
 	s2.level = low + 1
 	_staff_sim[target] = s2
 	_set_staff_info.rpc(target, role, int(s2.level))
-	var extra := ""
 	if role == ROLE_KELLNER:
-		extra = " — trägt jetzt %d Krüge" % int(WAITER_CAPACITY.get(int(s2.level), 1))
-	_net_banner.rpc("⬆️ %s → Lv%d%s" % [STAFF_NAMES[role], int(s2.level), extra])
+		_melde("MSG_WAITER_UP", [int(s2.level), int(WAITER_CAPACITY.get(int(s2.level), 1))], 2)
+	else:
+		_melde("MSG_STAFF_UP", [STAFF_KEYS[role], int(s2.level)], 2)
 	_broadcast_meta()
 
 func _staff_save_list() -> Array:
@@ -1166,22 +1148,6 @@ func _food_prep_time() -> float:
 		return FOOD_PREP * 3.0
 	return FOOD_PREP / (1.0 + 0.15 * float(lv))
 
-func _staff_string() -> String:
-	if _staff_sim.is_empty():
-		return "Personal: — (Wiesenbüro → Personal)"
-	var counts := {}
-	for s in _staff_sim.values():
-		var r := int(s.role)
-		if not counts.has(r):
-			counts[r] = []
-		(counts[r] as Array).append(int(s.level))
-	var parts := []
-	for r in [ROLE_KOCH, ROLE_KELLNER, ROLE_REINIGUNG]:
-		if counts.has(r):
-			var lv: Array = counts[r]
-			lv.sort()
-			parts.append("%s ×%d (Lv %s)" % [STAFF_NAMES[r], lv.size(), ",".join(lv.map(func(x): return str(x)))])
-	return "Personal: " + " · ".join(parts) + " — Lohn %d€/Schicht" % _total_wages()
 
 ## Bewegung Richtung tgt. true = angekommen.
 func _staff_move(s: Dictionary, delta: float) -> bool:
@@ -1319,6 +1285,7 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 			_add_income(tip)
 			_last_earn += tip
 			_clean_tips += tip
+			_net_betrag.rpc(mn.global_position, tip)
 			_remove_mess.rpc(best)
 
 ## Mitarbeiter serviert: volle Bezahlung, aber kein Trinkgeld (das bekommt nur der Chef).
@@ -1343,6 +1310,7 @@ func _serve_by_staff(gid: int) -> void:
 	_last_earn += reward
 	Game.add_score(reward)
 	_add_income(reward)
+	_net_betrag.rpc(g.pos, reward)
 
 @rpc("authority", "reliable", "call_local")
 func _add_staff(id: int, pos: Vector3, role: int, level: int) -> void:
@@ -1378,27 +1346,19 @@ func net_buy_license(key: String) -> void:
 	if not LIC_COST.has(key):
 		return
 	if _lic.get(key, false):
-		_net_banner.rpc("✅ %s lisansı zaten var" % LIC_NAMES[key])
+		_fehler("MSG_LIC_HAVE", [LIC_KEYS[key]])
 		return
 	var cost: int = LIC_COST[key]
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (%s: %d€)" % [LIC_NAMES[key], cost])
+		_fehler("MSG_NO_MONEY", [LIC_KEYS[key], _eur(cost)])
 		return
 	Game.add_money(-cost)
 	_lic[key] = true
-	_net_banner.rpc("📜 %s lisansı alındı! Artık satabilirsin." % LIC_NAMES[key])
+	_melde("MSG_LIC_DONE", [LIC_KEYS[key]], 2)
 	_broadcast_meta()
 
-func _lic_string() -> String:
-	var have := []
-	for k in LIC_COST.keys():
-		if _lic.get(k, false):
-			have.append(LIC_NAMES[k])
-	if have.is_empty():
-		return "Lizenz: nur 🍺 Helles"
-	return "Lizenz: 🍺 Helles, " + ", ".join(have)
 
 ## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
 @rpc("any_peer", "reliable", "call_local")
@@ -1407,18 +1367,18 @@ func net_upgrade_tent() -> void:
 		return
 	var nxt := _tent_stage + 1
 	if not TENT_UPGRADE_COST.has(nxt):
-		_net_banner.rpc("🎪 En büyük Zelt zaten!")
+		_fehler("MSG_TENT_MAX")
 		return
 	var cost: int = TENT_UPGRADE_COST[nxt]
 	if not _reserve_ok(cost):
 		return
 	if not _afford(cost):
-		_net_banner.rpc("💶 Yetersiz para! (Upgrade: %d€)" % cost)
+		_fehler("MSG_NO_MONEY", ["OFFER_TENT_UPGRADE", _eur(cost)])
 		return
 	Game.add_money(-cost)
 	_tent_stage = nxt
 	_apply_tent()
-	_net_banner.rpc("🎪 %s! Tisch-Limit: %d" % [TENT_STAGE_NAMES[nxt], TENT_TABLE_LIMIT[nxt]])
+	_melde("MSG_TENT_UP", ["TENT_STAGE_%d" % nxt, int(TENT_TABLE_LIMIT[nxt])], 2)
 	_broadcast_meta()
 
 ## Ohne einen Wohnwagen mit is_mine kann niemand schlafen und der Tag endet nie.
@@ -1449,16 +1409,15 @@ func net_sleep() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	if _tent_stage == 0:
-		_net_banner.rpc("Önce Zelt buchen, sonra uyu 😴")
+		_fehler("MSG_SLEEP_NEED_TENT")
 		return
 	if _active_count <= 0:
-		_net_banner.rpc("🪑 Önce en az bir masa yerleştir!")
+		_fehler("MSG_SLEEP_NEED_TABLE")
 		return
 	# Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
 	net_sleep_fade.rpc()
 	_start_shift()
-	_net_banner.rpc("😴 Wiesn-Tag %d/%d · 07:00 — Zelt açık!\n🕗 08:00'de misafirler gelmeye başlar · 22:00 Feierabend\n%s" % [
-		_day, WIESN_DAYS, _lic_string()])
+	_melde("MSG_DAY_START", [_day])
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
 @rpc("any_peer", "reliable", "call_local")
@@ -1466,12 +1425,12 @@ func net_sell_table() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	if _active_count <= 0:
-		_net_banner.rpc("🪑 Satılacak masa yok")
+		_fehler("MSG_TABLE_NONE")
 		return
 	_active_count -= 1
 	_add_income(int(TABLE_COST / 2))
 	_apply_tent()
-	_net_banner.rpc("🪑 Masa satıldı (+%d€) · %d masa kaldı" % [int(TABLE_COST / 2), _active_count])
+	_melde("MSG_TABLE_SOLD", [_eur(int(TABLE_COST / 2)), _active_count])
 	_broadcast_meta()
 
 ## Molada bira masasını tut/bırak (yerleştir).
@@ -1508,7 +1467,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	if g.ostate != 1 or g.okind != kind or g.otype != type:
 		return
 	if not _has_stock(int(g.okind)):
-		_net_banner.rpc("📦 Lager leer! %s nachbestellen (Wiesenbüro → Ware)" % WARE_NAMES[WARE_ESSEN if int(g.okind) == 2 else WARE_BIER])
+		_melde("MSG_STOCK_EMPTY", [WARE_KEYS[WARE_ESSEN if int(g.okind) == 2 else WARE_BIER]], 1)
 		return
 	_consume_stock(int(g.okind))
 	g.ostate = 2
@@ -1527,6 +1486,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_last_earn += reward + tip
 	Game.add_score(reward)
 	_add_income(reward + tip)
+	_net_betrag.rpc(g.pos, reward + tip)
 
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
@@ -1579,7 +1539,7 @@ func _shift_process(delta: float) -> void:
 	if not _night and _clock_hour() >= NIGHT_HOUR:
 		_night = true
 		_apply_night_visual(true)   # host görseli
-		_net_banner.rpc("🌙 Akşam oldu (19:00)! Zelt doluyor, misafirler sabırsız 🍻")
+		_melde("MSG_EVENING")
 	_update_guests(delta)
 	_update_staff(delta)
 	_update_complaints(delta)
@@ -1642,19 +1602,18 @@ func _end_shift(reason := 0) -> void:
 	Game.add_money(-rent - wages)
 	var goods := _goods_cost      # schon beim Bestellen bezahlt, hier nur ausgewiesen
 	var net_profit := _last_earn - rent - wages - goods - _interest_paid
-	var head := ""
-	match reason:
-		1: head = "🚫 Çok şikayet! Zelt erken kapandı 😅"
-		2: head = "🚪 Zelti %02d:00'da kapattın · Popülerlik -%.0f%%" % [int(closed_at), pop_penalty]
-		_: head = "🌙 22:00 — Feierabend!"
 	net_report.rpc({
 		"reason": reason, "closed_at": int(closed_at), "pop_penalty": pop_penalty, "day": _day,
 		"earn": _last_earn, "tips": _clean_tips, "rent": rent, "wages": wages, "goods": goods,
 		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
 		"urin": _urin_count, "complaints": _complaints, "left": _left_guests,
 	})
-	_net_banner.rpc("%s\n📊 Tag %d · Umsatz %d€ · Miete -%d€ · Löhne -%d€ · Ware -%d€ · Netto %s%d€\n😴 Wohnwagen: schlafen → neuer Tag  ·  Bilanz: Wiesenbüro → 📊" % [
-		head, _day, _last_earn, rent, wages, goods, "+" if net_profit >= 0 else "", net_profit])
+	match reason:
+		1:
+			_melde("REPORT_END_COMPLAINTS", [], 1)
+		2:
+			_melde("REPORT_END_EARLY", [int(closed_at), roundi(pop_penalty)], 1)
+	_melde("MSG_DAY_END", [_eur(net_profit)], 2 if net_profit >= 0 else 1)
 	_clean_tips = 0
 	_interest_paid = 0
 	_goods_cost = 0
@@ -1883,8 +1842,8 @@ func net_clean(id: int) -> void:
 		_add_income(tip)
 		_last_earn += tip
 		_clean_tips += tip
+		_net_betrag.rpc((_messes[id] as Node3D).global_position, tip)
 		_remove_mess.rpc(id)
-		_net_banner.rpc("🧽 Sauber! Trinkgeld +%d€" % tip)
 
 # ================================================= senkron
 func _broadcast_sync() -> void:
@@ -2014,9 +1973,44 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 		else:
 			_sfx_node.stop_music()
 
+## Meldung bei allen Spielern. key: Übersetzungsschlüssel, args: Werte dafür —
+## Texte darin sind selbst Schlüssel, _eur(n) wird zum Betrag (texte.gd meldung).
+## art: 0 Info, 1 Problem, 2 Erfolg.
 @rpc("authority", "reliable", "call_local")
-func _net_banner(text: String) -> void:
-	_hud.show_banner(text)
+func _net_banner(key: String, args: Array, art: int) -> void:
+	if _hud:
+		_hud.melde(key, args, art)
+
+func _melde(key: String, args: Array = [], art := 0) -> void:
+	_net_banner.rpc(key, args, art)
+
+## Problem nur beim Spieler, der die Aktion ausgelöst hat — die anderen
+## brauchen nicht zu lesen, dass jemandem das Geld fehlt.
+func _fehler(key: String, args: Array = []) -> void:
+	var s := multiplayer.get_remote_sender_id()
+	if s <= 1:
+		_net_banner(key, args, 1)
+	else:
+		_net_banner.rpc_id(s, key, args, 1)
+
+static func _eur(betrag: int) -> Dictionary:
+	return {"euro": betrag}
+
+## Namen als Übersetzungsschlüssel für Meldungen
+const WARE_KEYS := {1: "GOODS_BEER", 2: "GOODS_FOOD"}
+const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER"}
+const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS"}
+const BETRAG_SZENE := preload("res://scenes/ui/betrag.tscn")
+
+## Schwebender Betrag über Gast oder Pfütze, bei allen Spielern.
+@rpc("authority", "unreliable", "call_local")
+func _net_betrag(pos: Vector3, betrag: int) -> void:
+	if betrag <= 0 or DisplayServer.get_name() == "headless":
+		return
+	var b := BETRAG_SZENE.instantiate()
+	add_child(b)
+	b.global_position = pos + Vector3(0, 2.0, 0)
+	b.starte(betrag)
 
 ## Kotz-Ablauf: Gast läuft vom Tisch weg, übergibt sich dort, geht zurück.
 func _update_puke(g: Dictionary, id: int, delta: float) -> void:

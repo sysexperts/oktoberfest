@@ -31,7 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Mitte"]
-custom_minimum_size = Vector2(860, 620)
+custom_minimum_size = Vector2(860, 580)
 layout_mode = 2
 
 [node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
@@ -65,7 +65,7 @@ text = "Kleines Zelt · Tische 2/4"
 
 [node name="Reiter" type="TabContainer" parent="Mitte/Panel/Spalte"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 460)
+custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0

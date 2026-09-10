@@ -90,8 +90,11 @@ prüft Solo, Aktionen, Pause, Tastenbelegung und alle drei Sprachen (21 Prüfung
       *`scenes/ui/wiesenbuero.tscn` aus `angebot.tscn`-Zeilen, Zelt-Computer als
       eigene Szene. Der Server schickt Zahlen statt Text, die Bilanz wird beim
       Spieler übersetzt.*
-- [ ] **2.5 Rückmeldung** — schwebende Beträge bei Verkauf und Trinkgeld,
+- [x] **2.5 Rückmeldung** — schwebende Beträge bei Verkauf und Trinkgeld,
       Benachrichtigungen stapeln sich statt sich zu überschreiben.
+      *Meldungen unten in der Mitte, farbig nach Art; Probleme sieht nur, wer
+      sie ausgelöst hat. Alle Servermeldungen jetzt als Schlüssel in drei
+      Sprachen — kein Türkisch-Deutsch-Mischmasch mehr.*
 - [ ] **2.6 Hilfeseite (F1)** — Steuerung und Spielablauf auf einen Blick.
 
 ## Phase 3 · Spielfluss — Endlos, aber mit Ziel

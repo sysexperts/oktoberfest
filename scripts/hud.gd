@@ -21,7 +21,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _sauberkeit_wert: Label = %SauberkeitWert
 @onready var _rollen: Control = %Rollen
 @onready var _aufgabe: Control = %Aufgabe
-@onready var _banner: Label = %Banner
+@onready var _meldungen: Control = %Meldungen
 @onready var _hinweisfenster: Control = %Hinweisfenster
 @onready var _buero: Control = %Wiesenbuero
 @onready var _computer: Control = %Zeltcomputer
@@ -40,7 +40,6 @@ var _quest_total := 0
 var _hint_key := ""
 var _zustand := {}
 
-var _banner_token := 0
 var _erledigt_token := 0
 
 func _ready() -> void:
@@ -184,14 +183,20 @@ func _aufgabe_erledigt(schritt: int) -> void:
 		%Erledigt.visible = false
 
 # ------------------------------------------------------------ Meldungen
-func show_banner(text: String) -> void:
-	_banner.text = text
-	_banner.visible = true
-	_banner_token += 1
-	var my := _banner_token
-	await get_tree().create_timer(4.0).timeout
-	if my == _banner_token:
-		_banner.visible = false
+const MELDUNG := preload("res://scenes/ui/meldung.tscn")
+const MAX_MELDUNGEN := 4
+
+## Meldung unten in der Mitte. Neue kommen unten dazu, ältere rutschen hoch;
+## mehr als vier auf einmal verdrängen die ältesten.
+## art: 0 Info, 1 Problem, 2 Erfolg.
+func melde(schluessel: String, werte: Array = [], art := 0) -> void:
+	var m := MELDUNG.instantiate()
+	_meldungen.add_child(m)
+	m.zeige(Texte.meldung(schluessel, werte), art)
+	while _meldungen.get_child_count() > MAX_MELDUNGEN:
+		var alt := _meldungen.get_child(0)
+		_meldungen.remove_child(alt)
+		alt.queue_free()
 
 ## Modales Hinweisfenster (z. B. "erst Ware kaufen").
 func show_popup(text: String) -> void:

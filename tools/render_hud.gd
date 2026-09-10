@@ -32,6 +32,14 @@ class Lauf extends Node:
 			print("  Ziel: ", ziel.name, " in ", roundi(d.length()), " m")
 		await _frames(20)
 		await _bild("hud_marker")
+		# Meldungsstapel und schwebender Betrag vor dem Spieler
+		hud.melde("MSG_GOODS_ORDERED", [1, "GOODS_BEER", {"euro": 40}], 2)
+		hud.melde("MSG_NO_MONEY", ["OFFER_TOILET", {"euro": 1800}], 1)
+		hud.melde("MSG_EVENING")
+		await _frames(25)
+		# Betrag erst kurz vor dem Bild — die Szene rendert langsam, sonst ist er schon weg
+		gm._net_betrag(spieler.global_position - spieler.global_transform.basis.z * 3.0, 23)
+		await _bild("hud_meldungen")
 		hud.set_money(-350)
 		hud.set_popularity(62.0)
 		hud.set_hygiene(34.0)

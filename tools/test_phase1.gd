@@ -95,6 +95,21 @@ class Lauf extends Node:
 		hud.close_booking()
 		_check("Wiesenbüro zu", not hud.is_booking_open(), "")
 
+		print("  -- Meldungen (2.5)")
+		var texte := preload("res://scripts/ui/texte.gd")
+		var meldung: String = texte.meldung("MSG_NO_MONEY", ["OFFER_TOILET", {"euro": 1800}])
+		_check("Meldung übersetzt, Betrag formatiert", meldung == "💶 Zu wenig Geld für Toilette einbauen (1.800 €)", meldung)
+		var popup_text: String = texte.meldung("POPUP_RESERVE", [{"euro": 40}])
+		_check("Popup mit echten Zeilenumbrüchen", popup_text.contains("\n\n") and not popup_text.contains("\\n"), popup_text.left(30))
+		var stapel: Node = hud.get_node("%Meldungen")
+		gm.net_buy_toilet.rpc_id(1)   # 500 € reichen nicht → Fehlermeldung beim Auslöser
+		await _frames(3)
+		var letzte: String = stapel.get_child(stapel.get_child_count() - 1).text() if stapel.get_child_count() > 0 else ""
+		_check("Server-Fehler landet übersetzt im Stapel", letzte.contains("Toilette einbauen"), letzte)
+		for i in 6:
+			hud.melde("MSG_EVENING")
+		_check("höchstens 4 Meldungen gestapelt", stapel.get_child_count() == 4, str(stapel.get_child_count()))
+
 		print("  -- Geführtes Tutorial (2.3)")
 		gm._check_quest()
 		_check("Schritt 1 (Tische) nach Zelt + 1 Tisch", gm._quest_step == 1, "Schritt=%d" % gm._quest_step)

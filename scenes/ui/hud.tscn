@@ -272,29 +272,28 @@ theme_override_font_sizes/font_size = 19
 text = "[E] Krug nehmen"
 horizontal_alignment = 1
 
-[node name="Banner" type="Label" parent="."]
-unique_name_in_owner = true
-visible = false
-auto_translate_mode = 2
-anchors_preset = 5
-anchor_left = 0.5
-anchor_top = 0.24
-anchor_right = 0.5
-anchor_bottom = 0.24
-offset_left = -420.0
-offset_right = 420.0
-grow_horizontal = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 30
-horizontal_alignment = 1
-autowrap_mode = 3
-
 [node name="Wiesenbuero" parent="." instance=ExtResource("2_buero")]
 unique_name_in_owner = true
 
 [node name="Zeltcomputer" parent="." instance=ExtResource("3_comp")]
 unique_name_in_owner = true
+
+[node name="Meldungen" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -14.0
+offset_right = 300.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 2
 
 [node name="Hinweisfenster" type="CenterContainer" parent="."]
 unique_name_in_owner = true
