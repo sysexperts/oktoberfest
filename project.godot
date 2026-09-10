@@ -23,6 +23,10 @@ Einstellungen="*res://autoload/einstellungen.gd"
 Net="*res://autoload/net.gd"
 Game="*res://autoload/game.gd"
 
+[gui]
+
+theme/custom="res://assets/ui/theme.tres"
+
 [internationalization]
 
 locale/translations=PackedStringArray("res://locale/texte.de.translation", "res://locale/texte.en.translation", "res://locale/texte.tr.translation")

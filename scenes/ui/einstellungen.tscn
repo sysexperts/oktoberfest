@@ -28,10 +28,10 @@ layout_mode = 2
 
 [node name="Rand" type="MarginContainer" parent="Mitte/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 26
-theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 26
-theme_override_constants/margin_bottom = 22
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 4
 
 [node name="Spalte" type="VBoxContainer" parent="Mitte/Panel/Rand"]
 layout_mode = 2
@@ -241,7 +241,7 @@ theme_override_font_sizes/font_size = 18
 text = "SET_KEYBINDS"
 
 [node name="Rollen" type="ScrollContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Steuerung/Inhalt"]
-custom_minimum_size = Vector2(0, 180)
+custom_minimum_size = Vector2(0, 230)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
