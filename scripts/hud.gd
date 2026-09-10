@@ -156,14 +156,35 @@ func set_roster(text: String) -> void:
 
 ## step: aktueller Tutorialschritt, total: Anzahl. step >= total = fertig.
 func set_quest(step: int, total: int) -> void:
+	var vorher := _quest_step
 	_quest_step = step
 	_quest_total = total
+	# Haken nur für echten Fortschritt — nicht beim ersten Setzen nach dem Laden
+	# und nicht, wenn Überspringen mitten im Tutorial ans Ende springt.
+	var uebersprungen := step == total and vorher < total - 1
+	if vorher >= 0 and vorher < total and step > vorher and not uebersprungen:
+		_aufgabe_erledigt(vorher)
 	_aufgabe.visible = step >= 0 and step < total
 	if not _aufgabe.visible:
 		return
 	%AufgabeNummer.text = tr("HUD_TASK") % [step + 1, total]
 	%AufgabeTitel.text = tr("QUEST_%d_TITLE" % step)
 	%AufgabeText.text = Texte.mit_tasten("QUEST_%d_TEXT" % step)
+
+var _erledigt_token := 0
+
+## Grüner Haken mit Ton, ein paar Sekunden über der nächsten Aufgabe.
+func _aufgabe_erledigt(schritt: int) -> void:
+	%ErledigtText.text = tr("HUD_TASK_DONE") % tr("QUEST_%d_TITLE" % schritt)
+	%Erledigt.visible = true
+	var sfx := get_parent().get_node_or_null("Sfx")
+	if sfx:
+		sfx.play("ding")
+	_erledigt_token += 1
+	var mein := _erledigt_token
+	await get_tree().create_timer(3.0).timeout
+	if mein == _erledigt_token:
+		%Erledigt.visible = false
 
 # ------------------------------------------------------------ Meldungen
 func show_banner(text: String) -> void:

@@ -60,6 +60,14 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "PAUSE_SAVE_MENU"
 
+[node name="TutorialSkip" type="Button" parent="Mitte/Spalte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "PAUSE_SKIP_TUTORIAL"
+
 [node name="Beenden" type="Button" parent="Mitte/Spalte"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)

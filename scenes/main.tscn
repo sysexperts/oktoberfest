@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/buehne.tscn" id="19_buehne"]
 [ext_resource type="Script" uid="uid://dd87fg21y8vlf" path="res://scripts/crowd.gd" id="20_crowd"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause.tscn" id="90_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/zielmarker.tscn" id="91_ziel"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.14, 0.18, 0.42, 1)
@@ -249,3 +250,5 @@ script = ExtResource("10_sfx")
 [node name="HUD" parent="." unique_id=755919777 instance=ExtResource("6_hud")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("90_pause")]
+
+[node name="Zielmarker" parent="." instance=ExtResource("91_ziel")]

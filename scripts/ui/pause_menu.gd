@@ -18,6 +18,7 @@ func _ready() -> void:
 	%Einstellungen.pressed.connect(_on_einstellungen)
 	_zum_menue.pressed.connect(_on_zum_menue)
 	%Beenden.pressed.connect(_on_beenden)
+	%TutorialSkip.pressed.connect(_on_tutorial_skip)
 
 func ist_offen() -> bool:
 	return visible
@@ -28,6 +29,8 @@ func oeffnen() -> void:
 	visible = true
 	get_tree().paused = Net.solo
 	_koop_hinweis.visible = not Net.solo
+	var gm := get_parent()
+	%TutorialSkip.visible = gm != null and gm.has_method("tutorial_active") and gm.tutorial_active()
 	# Wer den Spielstand hält (Solo oder Host), speichert beim Verlassen.
 	_zum_menue.text = "PAUSE_SAVE_MENU" if multiplayer.is_server() else "PAUSE_LEAVE_MENU"
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -60,6 +63,10 @@ func _on_einstellungen_zu() -> void:
 func _on_zum_menue() -> void:
 	_speichern_falls_host()
 	Net.zum_menue()
+
+func _on_tutorial_skip() -> void:
+	get_parent().net_skip_tutorial.rpc_id(1)
+	schliessen()
 
 func _on_beenden() -> void:
 	_speichern_falls_host()

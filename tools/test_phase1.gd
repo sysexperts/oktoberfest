@@ -70,6 +70,26 @@ class Lauf extends Node:
 		hud.set_hint("")
 		_check("Hinweis ausgeblendet", not hud.get_node("%Hinweis").visible, "")
 
+		print("  -- Geführtes Tutorial (2.3)")
+		gm._check_quest()
+		_check("Schritt 1 (Tische) nach Zelt + 1 Tisch", gm._quest_step == 1, "Schritt=%d" % gm._quest_step)
+		var marker := gm.get_node_or_null("Zielmarker")
+		_check("Zielmarker in der Szene", marker != null, "")
+		if marker:
+			var ziel: Node = marker.ziel_suchen()
+			_check("Marker zeigt aufs Wiesenbüro", ziel is OfficeDesk, str(ziel))
+		# Der Haken für "Zelt mieten" darf noch sichtbar sein — Überspringen darf
+		# nur keinen neuen auslösen.
+		var haken_vorher: int = hud._erledigt_token
+		gm.net_skip_tutorial.rpc_id(1)
+		await _frames(5)
+		_check("Überspringen beendet Tutorial", not gm.tutorial_active(), "Schritt=%d" % gm._quest_step)
+		_check("Aufgabe ausgeblendet", not hud.get_node("%Aufgabe").visible, "")
+		_check("kein Erledigt-Haken fürs Überspringen", hud._erledigt_token == haken_vorher,
+			"%d -> %d" % [haken_vorher, hud._erledigt_token])
+		if marker:
+			_check("Marker ohne Ziel", marker.ziel_suchen() == null, "")
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

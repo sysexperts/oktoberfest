@@ -83,6 +83,10 @@ prüft Solo, Aktionen, Pause, Tastenbelegung und alle drei Sprachen (21 Prüfung
       Ziel (Wiesenbüro, Fass, Gast), im Wiesenbüro wird der richtige Reiter und
       Knopf hervorgehoben, Haken plus Ton bei jedem erledigten Schritt,
       überspringbar.
+      *Erledigt: Zielmarker (`scenes/ui/zielmarker.tscn`, folgt dem, was man in
+      der Hand hat), Haken plus Ton, Überspringen im Pausemenü. Offen: Reiter und
+      Knopf im Wiesenbüro hervorheben — kommt mit 2.4, wenn das Büro eine Szene
+      mit benannten Knöpfen ist.*
 - [ ] **2.4 Wiesenbüro aufräumen** — einheitliches Layout, Preise sichtbar,
       gesperrte Knöpfe sagen *warum* („Zuerst Zelt mieten").
 - [ ] **2.5 Rückmeldung** — schwebende Beträge bei Verkauf und Trinkgeld,

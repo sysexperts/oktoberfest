@@ -23,6 +23,15 @@ class Lauf extends Node:
 		await _frames(60)
 		var gm := get_tree().current_scene
 		var hud: HUD = gm.get_node("HUD")
+		# Spieler zum Zielmarker (Wiesenbüro) drehen, damit er im Bild ist
+		var spieler: Node3D = gm.get_node("Players").get_child(0)
+		var ziel: Node3D = gm.get_node("Zielmarker").ziel_suchen()
+		if ziel:
+			var d := ziel.global_position - spieler.global_position
+			spieler.rotation.y = atan2(-d.x, -d.z)
+			print("  Ziel: ", ziel.name, " in ", roundi(d.length()), " m")
+		await _frames(20)
+		await _bild("hud_marker")
 		hud.set_money(-350)
 		hud.set_popularity(62.0)
 		hud.set_hygiene(34.0)

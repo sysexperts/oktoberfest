@@ -816,6 +816,17 @@ func _check_quest() -> bool:
 		_quest_step += 1
 	return _quest_step != before
 
+func tutorial_active() -> bool:
+	return _quest_step < QUEST_COUNT
+
+## Pausemenü: Tutorial überspringen (gilt für alle, der Host hält den Stand).
+@rpc("any_peer", "reliable", "call_local")
+func net_skip_tutorial() -> void:
+	if not multiplayer.is_server():
+		return
+	_quest_step = QUEST_COUNT
+	_broadcast_meta()
+
 # ================================================= E5: Künstler
 ## Wiesenbüro: Künstler für die nächste Schicht buchen.
 @rpc("any_peer", "reliable", "call_local")
@@ -1994,6 +2005,7 @@ func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: in
 	_phase = phase
 	_day = day
 	_tent_stage = tent_stage
+	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	# Clientlerde masaların görünürlüğünü senkronla
 	if not multiplayer.is_server() and _active_count != active_count:
 		_active_count = active_count

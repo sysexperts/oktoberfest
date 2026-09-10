@@ -167,6 +167,22 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 2
 
+[node name="Erledigt" type="PanelContainer" parent="Rechts"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("AufgabeRahmen")
+
+[node name="ErledigtText" type="Label" parent="Rechts/Erledigt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.93, 0.55, 1)
+theme_override_font_sizes/font_size = 19
+text = "✓ Erledigt: Miete dein Festzelt"
+autowrap_mode = 3
+
 [node name="Aufgabe" type="PanelContainer" parent="Rechts"]
 unique_name_in_owner = true
 visible = false
@@ -201,6 +217,13 @@ theme_override_colors/font_color = Color(0.82, 0.8, 0.9, 1)
 theme_override_font_sizes/font_size = 16
 text = "Geh zum Wiesenbüro und miete ein Zelt."
 autowrap_mode = 3
+
+[node name="AufgabeSkip" type="Label" parent="Rechts/Aufgabe/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.53, 0.66, 1)
+theme_override_font_sizes/font_size = 13
+text = "HUD_TASK_SKIP"
+horizontal_alignment = 2
 
 [node name="Fadenkreuz" type="Label" parent="."]
 unique_name_in_owner = true

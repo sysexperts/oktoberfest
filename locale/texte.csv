@@ -71,6 +71,9 @@ HUD_POPULARITY,Beliebtheit,Popularity,Popülerlik
 HUD_STOCK,Lager,Storage,Depo
 HUD_CLEAN,Sauberkeit,Cleanliness,Temizlik
 HUD_TASK,Aufgabe %d von %d,Task %d of %d,Görev %d / %d
+HUD_TASK_DONE,✓ Erledigt: %s,✓ Done: %s,✓ Tamamlandı: %s
+HUD_TASK_SKIP,ESC → Tutorial überspringen,ESC → Skip tutorial,ESC → Eğitimi atla
+PAUSE_SKIP_TUTORIAL,Tutorial überspringen,Skip tutorial,Eğitimi atla
 HUD_OK,Verstanden,Got it,Anladım
 HINT_TAKE_MUG,{interact} Krug nehmen,{interact} Take a mug,{interact} Kupa al
 HINT_TAP,{interact} halten: zapfen,Hold {interact}: pour,{interact} basılı tut: doldur
