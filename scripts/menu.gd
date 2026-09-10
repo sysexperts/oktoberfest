@@ -5,6 +5,7 @@ extends Control
 
 const EINSTELLUNGEN_SZENE := "res://scenes/ui/einstellungen.tscn"
 const SERVER_IP := "185.248.140.225"
+const Texte := preload("res://scripts/ui/texte.gd")
 
 @onready var _haupt: Control = %Hauptspalte
 @onready var _weiter: Button = %Weiterspielen
@@ -58,7 +59,7 @@ func _texte_aktualisieren() -> void:
 	_weiter.visible = not info.is_empty()
 	_weiter_info.visible = _weiter.visible
 	if _weiter.visible:
-		_weiter_info.text = tr("MENU_CONTINUE_INFO") % [info["day"], _geld(info["money"])]
+		_weiter_info.text = tr("MENU_CONTINUE_INFO") % [info["day"], Texte.geld(info["money"])]
 
 func _zeige(panel: Control) -> void:
 	for p: Control in [_haupt, _koop_panel, _credits_panel]:
@@ -97,13 +98,3 @@ func _verbinde(ip: String) -> void:
 
 func _on_verbindung_fehlgeschlagen() -> void:
 	_status.text = tr("STATUS_CONNECT_FAILED")
-
-## 12345 -> "12.345" (Deutsch/Türkisch) bzw. "12,345" (Englisch).
-func _geld(betrag: int) -> String:
-	var trenner := "," if Einstellungen.aktive_sprache() == "en" else "."
-	var s := str(absi(betrag))
-	var out := ""
-	while s.length() > 3:
-		out = trenner + s.right(3) + out
-		s = s.left(s.length() - 3)
-	return ("-" if betrag < 0 else "") + s + out

@@ -1,31 +1,50 @@
 class_name HUD
 extends CanvasLayer
-## Oyun içi arayüz: para, skor, vardiya süresi + vardiya sonu özet ekranı.
+## Oyun içi arayüz. Aufbau liegt in scenes/ui/hud.tscn — Leiste oben links
+## (Geld · Tag und Uhrzeit · Beliebtheit, darunter Lager und Sauberkeit),
+## Aufgabe rechts, Fadenkreuz, Hinweisfenster, Schlaf-Abblende.
+## Die Werte kommen vom GameManager; hier wird nur angezeigt. Jeder Wert wird
+## gemerkt, damit ein Sprachwechsel alles neu beschriften kann.
+##
+## Noch im Code: Zelt-Computer und Wiesenbüro (werden mit Plan-Punkt 2.4 Szenen).
 
-var _money_label: Label
-var _score_label: Label
-var _time_label: Label
-var _hygiene_label: Label
-var _pop_label: Label
-var _stock_label: Label
-var _quest_label: Label
-var _popup_panel: PanelContainer
-var _popup_label: Label
-var _phase_label: Label
-var _day_label: Label
-var _roster_label: Label
-var _hint_label: Label
+const Texte := preload("res://scripts/ui/texte.gd")
+const ROT := Color(1, 0.42, 0.35)
+const GOLD := Color(1, 0.839, 0.349)
+const WEISS := Color(0.949, 0.933, 0.902)
+
+@onready var _geld: Label = %Geld
+@onready var _zeit: Label = %Zeit
+@onready var _beliebtheit: ProgressBar = %Beliebtheit
+@onready var _beliebtheit_wert: Label = %BeliebtheitWert
+@onready var _lager: Label = %Lager
+@onready var _sauberkeit: ProgressBar = %Sauberkeit
+@onready var _sauberkeit_wert: Label = %SauberkeitWert
+@onready var _rollen: Control = %Rollen
+@onready var _rollen_text: Label = %RollenText
+@onready var _aufgabe: Control = %Aufgabe
+@onready var _banner: Label = %Banner
+@onready var _hinweisfenster: Control = %Hinweisfenster
+
+# Zuletzt gemeldete Werte
+var _money := 0
+var _clock := -1.0
+var _night := false
+var _day := 1
+var _pop := 0.0
+var _hygiene := 100.0
+var _bier := 0
+var _essen := 0
+var _quest_step := -1
+var _quest_total := 0
+
+var _banner_token := 0
 var _book_panel: PanelContainer
 var _book_mgmt: Label
 var _book_open := false
-var _summary_panel: PanelContainer
-var _summary_label: Label
-var _restart_pressed := false
 var _comp_panel: PanelContainer
 var _comp_roster: Label
 var _comp_mgmt: Label
-var _banner_label: Label
-var _banner_token := 0
 var _comp_open := false
 var _last_roster := ""
 var _report_label: Label
@@ -33,136 +52,145 @@ var _comp_report: Label
 var _last_report := ""
 
 func _ready() -> void:
-	var top := HBoxContainer.new()
-	top.anchor_left = 0.0
-	top.anchor_top = 0.0
-	top.offset_left = 16
-	top.offset_top = 12
-	top.add_theme_constant_override("separation", 32)
-	add_child(top)
-
-	_phase_label = _make_label("MOLA")
-	_day_label = _make_label("📅 1/16")
-	_money_label = _make_label("💶 0€")
-	_score_label = _make_label("⭐ 0")
-	_time_label = _make_label("⏱ 0")
-	_hygiene_label = _make_label("🧼 100%")
-	_pop_label = _make_label("🎉 35%")
-	_stock_label = _make_label("📦 0/0")
-	top.add_child(_phase_label)
-	top.add_child(_day_label)
-	top.add_child(_money_label)
-	top.add_child(_score_label)
-	top.add_child(_time_label)
-	top.add_child(_hygiene_label)
-	top.add_child(_pop_label)
-	top.add_child(_stock_label)
-
-	# Rol listesi (sağ üst)
-	_roster_label = _make_label("")
-	_roster_label.anchor_left = 1.0
-	_roster_label.anchor_right = 1.0
-	_roster_label.offset_left = -320
-	_roster_label.offset_right = -16
-	_roster_label.offset_top = 12
-	_roster_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_roster_label.add_theme_font_size_override("font_size", 18)
-	add_child(_roster_label)
-
-	# Nişangah (ekran merkezi)
-	var crosshair := Label.new()
-	crosshair.text = "+"
-	crosshair.add_theme_font_size_override("font_size", 28)
-	crosshair.add_theme_color_override("font_color", Color(1, 1, 1, 0.8))
-	crosshair.add_theme_color_override("font_outline_color", Color.BLACK)
-	crosshair.add_theme_constant_override("outline_size", 4)
-	crosshair.anchor_left = 0.5
-	crosshair.anchor_top = 0.5
-	crosshair.offset_left = -9
-	crosshair.offset_top = -18
-	add_child(crosshair)
-
-	_hint_label = _make_label("WASD · E: al/servis/temizle · Kiosk E: Zelt/Tisch/Upgrade · 🚐 Wohnwagen E: uyu → gün başlar (07:00) · 💻 Bilgisayar E: rol + zelti kapat · Masaya E (kapalıyken): taşı · Q: Prost · C: kostüm")
-	_hint_label.anchor_top = 1.0
-	_hint_label.anchor_left = 0.0
-	_hint_label.offset_left = 16
-	_hint_label.offset_top = -40
-	add_child(_hint_label)
-
-	_build_summary()
+	%HinweisfensterOk.pressed.connect(close_popup)
 	_build_computer()
 	_build_booking()
-	_build_quest()
-	_build_popup()
+	# Hinweisfenster und Abblende müssen über den Code-Panels liegen
+	move_child(_hinweisfenster, -1)
+	move_child(%Abblenden, -1)
+	Einstellungen.geaendert.connect(_alles_neu)
+	_alles_neu()
 
-func _make_label(text: String) -> Label:
-	var l := Label.new()
-	l.text = text
-	l.add_theme_font_size_override("font_size", 24)
-	l.add_theme_color_override("font_color", Color.WHITE)
-	l.add_theme_color_override("font_outline_color", Color.BLACK)
-	l.add_theme_constant_override("outline_size", 6)
-	return l
+func _alles_neu() -> void:
+	set_money(_money)
+	set_time(_clock, _night)
+	set_popularity(_pop)
+	set_hygiene(_hygiene)
+	set_stock(_bier, _essen)
+	set_quest(_quest_step, _quest_total)
 
+# ------------------------------------------------------------ Leiste
 func set_money(v: int) -> void:
-	_money_label.text = "💶 %d€" % v
-	# Dispo: bis -1000€ erlaubt, Rückzahlung kostet 5% Zinsen
-	_money_label.add_theme_color_override("font_color",
-		Color(1, 0.35, 0.3) if v < 0 else Color.WHITE)
-func set_score(v: int) -> void:
-	_score_label.text = "⭐ %d" % v
+	_money = v
+	_geld.text = "💶 " + Texte.euro(v)
+	# Dispo: bis -1000 € erlaubt, Rückzahlung kostet 5 % Zinsen
+	_geld.add_theme_color_override("font_color", ROT if v < 0 else WEISS)
 
-## clock: oyun içi saat (7.0 = 07:00). Negatifse zelt kapalı.
+## Punkte werden nicht mehr angezeigt — Geld und Beliebtheit sagen mehr.
+func set_score(_v: int) -> void:
+	pass
+
+## clock: Spieluhr (7.0 = 07:00). Negativ = Zelt geschlossen.
 func set_time(clock: float, night: bool = false) -> void:
+	_clock = clock
+	_night = night
+	var tag := tr("HUD_DAY") % _day
 	if clock < 0.0:
-		_time_label.text = "🚪 KAPALI"
-		_time_label.add_theme_color_override("font_color", Color(0.75, 0.8, 0.9))
+		_zeit.text = "%s · %s" % [tag, tr("HUD_CLOSED")]
+		_zeit.add_theme_color_override("font_color", Color(0.72, 0.75, 0.88))
 		return
 	var h := int(clock)
 	var m := int((clock - float(h)) * 60.0)
-	_time_label.text = "%s %02d:%02d" % ["🌙" if night else "🕗", h, m]
-	_time_label.add_theme_color_override("font_color", Color(0.7, 0.75, 1) if night else Color.WHITE)
+	_zeit.text = "%s · %s %02d:%02d" % [tag, "🌙" if night else "🕗", h, m]
+	_zeit.add_theme_color_override("font_color", Color(0.72, 0.78, 1) if night else WEISS)
 
-func show_banner(text: String) -> void:
-	if _banner_label == null:
-		_banner_label = _make_label("")
-		_banner_label.anchor_left = 0.5
-		_banner_label.anchor_top = 0.28
-		_banner_label.anchor_right = 0.5
-		_banner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_banner_label.add_theme_font_size_override("font_size", 34)
-		_banner_label.offset_left = -400
-		_banner_label.offset_right = 400
-		add_child(_banner_label)
-	_banner_label.text = text
-	_banner_label.visible = true
-	_banner_token += 1
-	var my := _banner_token
-	await get_tree().create_timer(4.0).timeout
-	if my == _banner_token and _banner_label:
-		_banner_label.visible = false
+func set_day(day: int, _total: int = 0) -> void:
+	_day = day
+	set_time(_clock, _night)
 
-func set_hygiene(v: float) -> void:
-	_hygiene_label.text = "🧼 %d%%" % int(round(v))
-	_hygiene_label.add_theme_color_override("font_color", Color.WHITE if v > 40 else Color(1, 0.4, 0.3))
+## Geöffnet/geschlossen steckt schon in der Uhrzeit (set_time mit -1).
+func set_phase(_offen: bool) -> void:
+	pass
 
 func set_popularity(v: float) -> void:
-	_pop_label.text = "🎉 %d%%" % int(round(v))
+	_pop = v
+	_beliebtheit.value = v
+	_beliebtheit_wert.text = "%d %%" % roundi(v)
 
-func set_day(day: int, total: int) -> void:
-	if _day_label:
-		_day_label.text = "📅 %d/%d" % [day, total]
+func set_hygiene(v: float) -> void:
+	_hygiene = v
+	_sauberkeit.value = v
+	_sauberkeit_wert.text = "%d %%" % roundi(v)
+	var schmutzig := v <= 40.0
+	_sauberkeit_wert.add_theme_color_override("font_color", ROT if schmutzig else WEISS)
+	_balken_farbe(_sauberkeit, ROT if schmutzig else GOLD)
 
-func set_phase(name: String) -> void:
-	_phase_label.text = name
-	_phase_label.add_theme_color_override("font_color", Color(1, 0.85, 0.3) if name.begins_with("ZELT AÇIK") else Color(0.5, 0.85, 1))
+func set_stock(bier: int, essen: int) -> void:
+	_bier = bier
+	_essen = essen
+	_lager.text = "🍺 %d · 🥨 %d" % [bier, essen]
+	_lager.add_theme_color_override("font_color", WEISS if (bier > 0 or essen > 0) else ROT)
 
+## Füllfarbe eines Balkens, ohne das Theme für alle anderen zu ändern.
+func _balken_farbe(balken: ProgressBar, farbe: Color) -> void:
+	var box := balken.get_theme_stylebox("fill")
+	if not balken.has_theme_stylebox_override("fill"):
+		box = box.duplicate()
+		balken.add_theme_stylebox_override("fill", box)
+	if box is StyleBoxFlat:
+		(box as StyleBoxFlat).bg_color = farbe
+
+# ------------------------------------------------------------ Rechts
+## Rollenliste — nur im Koop sinnvoll.
 func set_roster(text: String) -> void:
 	_last_roster = text
-	_roster_label.text = text
+	_rollen_text.text = text
+	_rollen.visible = text != "" and not Net.solo
 	if _comp_roster:
 		_comp_roster.text = text
 
+## step: aktueller Tutorialschritt, total: Anzahl. step >= total = fertig.
+func set_quest(step: int, total: int) -> void:
+	_quest_step = step
+	_quest_total = total
+	_aufgabe.visible = step >= 0 and step < total
+	if not _aufgabe.visible:
+		return
+	%AufgabeNummer.text = tr("HUD_TASK") % [step + 1, total]
+	%AufgabeTitel.text = tr("QUEST_%d_TITLE" % step)
+	%AufgabeText.text = Texte.mit_tasten("QUEST_%d_TEXT" % step)
+
+# ------------------------------------------------------------ Meldungen
+func show_banner(text: String) -> void:
+	_banner.text = text
+	_banner.visible = true
+	_banner_token += 1
+	var my := _banner_token
+	await get_tree().create_timer(4.0).timeout
+	if my == _banner_token:
+		_banner.visible = false
+
+## Modales Hinweisfenster (z. B. "erst Ware kaufen").
+func show_popup(text: String) -> void:
+	%HinweisfensterText.text = text
+	_hinweisfenster.visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	%HinweisfensterOk.grab_focus()
+
+func close_popup() -> void:
+	_hinweisfenster.visible = false
+	if not _comp_open and not _book_open:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func is_popup_open() -> bool:
+	return _hinweisfenster.visible
+
+## Kurze Schwarzblende beim Schlafen.
+func play_sleep_fade() -> void:
+	var fade: ColorRect = %Abblenden
+	var zzz: Label = %Zzz
+	fade.visible = true
+	fade.color.a = 0.0
+	zzz.modulate.a = 0.0
+	var tw := create_tween()
+	tw.tween_property(fade, "color:a", 1.0, 0.7)
+	tw.parallel().tween_property(zzz, "modulate:a", 1.0, 0.7)
+	tw.tween_interval(0.8)
+	tw.tween_property(fade, "color:a", 0.0, 0.9)
+	tw.parallel().tween_property(zzz, "modulate:a", 0.0, 0.5)
+	tw.tween_callback(func() -> void: fade.visible = false)
+
+# ------------------------------------------------------------ Zelt-Computer
 func _build_computer() -> void:
 	_comp_panel = PanelContainer.new()
 	_comp_panel.anchor_left = 0.5
@@ -200,16 +228,14 @@ func _build_computer() -> void:
 	_add_role_button(row, "🍺 Garson", 3)
 	_add_role_button(row, "Vazgeç", 0)
 
-	var sep := HSeparator.new()
-	vbox.add_child(sep)
+	vbox.add_child(HSeparator.new())
 
 	_comp_mgmt = Label.new()
 	_comp_mgmt.add_theme_font_size_override("font_size", 18)
 	_comp_mgmt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(_comp_mgmt)
 
-	var sep2 := HSeparator.new()
-	vbox.add_child(sep2)
+	vbox.add_child(HSeparator.new())
 
 	# Tagesbilanz auch hier im Zelt nachlesbar
 	_comp_report = Label.new()
@@ -230,18 +256,40 @@ func _build_computer() -> void:
 	close_btn.pressed.connect(close_computer)
 	vbox.add_child(close_btn)
 
-func _buy_table() -> void:
-	var gm := get_parent()
-	if gm and gm.has_method("net_buy_table"):
-		gm.net_buy_table.rpc_id(1)
-
 func set_mgmt(text: String) -> void:
 	if _comp_mgmt:
 		_comp_mgmt.text = text
 	if _book_mgmt:
 		_book_mgmt.text = text
 
-## E2: Wiesenbüro — ein Menü mit Reitern (Zelt · Lizenzen · Personal · Künstler · Ware).
+func _add_role_button(parent: Node, text: String, role: int) -> void:
+	var b := Button.new()
+	b.text = text
+	b.custom_minimum_size = Vector2(0, 44)
+	b.pressed.connect(func(): _pick_role(role))
+	parent.add_child(b)
+
+func _pick_role(role: int) -> void:
+	var gm := get_parent()
+	if gm and gm.has_method("net_set_role"):
+		gm.net_set_role.rpc_id(1, role)
+
+func open_computer() -> void:
+	_comp_roster.text = _last_roster
+	_comp_panel.visible = true
+	_comp_open = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func close_computer() -> void:
+	_comp_panel.visible = false
+	_comp_open = false
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+func is_computer_open() -> bool:
+	return _comp_open
+
+# ------------------------------------------------------------ Wiesenbüro
+## Ein Menü mit Reitern (Zelt · Lizenzen · Personal · Künstler · Ware · Bilanz).
 func _build_booking() -> void:
 	_book_panel = PanelContainer.new()
 	_book_panel.anchor_left = 0.5
@@ -275,7 +323,6 @@ func _build_booking() -> void:
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.add_child(tabs)
 
-	# --- Reiter: Zelt ---
 	var t_zelt := VBoxContainer.new()
 	t_zelt.name = "🎪 Zelt"
 	t_zelt.add_theme_constant_override("separation", 8)
@@ -288,7 +335,6 @@ func _build_booking() -> void:
 	_add_book_button(t_zelt, "📣 Werbung (mehr Gäste)", "net_buy_marketing")
 	_add_book_button(t_zelt, "🎨 Deko (mehr Einnahmen)", "net_buy_deko")
 
-	# --- Reiter: Lizenzen ---
 	var t_lic := VBoxContainer.new()
 	t_lic.name = "📜 Lizenzen"
 	t_lic.add_theme_constant_override("separation", 8)
@@ -302,21 +348,18 @@ func _build_booking() -> void:
 	_add_lic_button(t_lic, "🥨 Brezn-Lizenz (1200€)", "brezn")
 	_add_lic_button(t_lic, "🌭 Sosis-Lizenz (1200€)", "sosis")
 
-	# --- Reiter, die noch kommen ---
-	# --- Reiter: Personal ---
 	var t_staff := VBoxContainer.new()
 	t_staff.name = "👷 Personal"
 	t_staff.add_theme_constant_override("separation", 6)
 	tabs.add_child(t_staff)
 	var st_info := Label.new()
-	st_info.text = "Level 1–5. Kellner trägt 1 / 2 / 4 / 8 / 12 Krüge.
-Lohn wird pro Schicht abgezogen."
+	st_info.text = "Level 1–5. Kellner trägt 1 / 2 / 4 / 8 / 12 Krüge.\nLohn wird pro Schicht abgezogen."
 	st_info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t_staff.add_child(st_info)
 	_add_staff_row(t_staff, "👨‍🍳 Koch", 1, 600)
 	_add_staff_row(t_staff, "🍺 Kellner", 2, 500)
 	_add_staff_row(t_staff, "🧹 Reinigung", 3, 400)
-	# --- Reiter: Künstler ---
+
 	var t_art := VBoxContainer.new()
 	t_art.name = "🎤 Künstler"
 	t_art.add_theme_constant_override("separation", 8)
@@ -328,7 +371,7 @@ Lohn wird pro Schicht abgezogen."
 	_add_artist_button(t_art, "🎸 Straßenmusiker (500€) — +15% Andrang", 1)
 	_add_artist_button(t_art, "🎺 Blaskapelle (2000€) — +35% Andrang", 2)
 	_add_artist_button(t_art, "⭐ Star-Act (6000€) — +60% Andrang", 3)
-	# --- Reiter: Ware ---
+
 	var t_ware := VBoxContainer.new()
 	t_ware.name = "📦 Ware"
 	t_ware.add_theme_constant_override("separation", 6)
@@ -340,7 +383,6 @@ Lohn wird pro Schicht abgezogen."
 	_add_order_row(t_ware, "🍺 Bier", 1, 40)
 	_add_order_row(t_ware, "🥨 Zutaten", 2, 50)
 
-	# --- Reiter: Bilanz (jederzeit nachlesbar) ---
 	var t_rep := VBoxContainer.new()
 	t_rep.name = "📊 Bilanz"
 	tabs.add_child(t_rep)
@@ -357,16 +399,6 @@ Lohn wird pro Schicht abgezogen."
 	close_btn.custom_minimum_size = Vector2(0, 40)
 	close_btn.pressed.connect(close_booking)
 	vbox.add_child(close_btn)
-
-func _add_soon_tab(tabs: TabContainer, tab_name: String, text: String) -> void:
-	var box := VBoxContainer.new()
-	box.name = tab_name
-	tabs.add_child(box)
-	var l := Label.new()
-	l.text = text
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	l.add_theme_font_size_override("font_size", 18)
-	box.add_child(l)
 
 func _add_book_button(parent: Node, text: String, method: String) -> void:
 	var b := Button.new()
@@ -436,12 +468,6 @@ func _order_goods(kind: int, packs: int) -> void:
 	if gm and gm.has_method("net_order_goods"):
 		gm.rpc_id(1, "net_order_goods", kind, packs)
 
-func set_stock(bier: int, essen: int) -> void:
-	if _stock_label:
-		_stock_label.text = "📦 %d/%d" % [bier, essen]
-		_stock_label.add_theme_color_override("font_color",
-			Color.WHITE if (bier > 0 or essen > 0) else Color(1, 0.4, 0.3))
-
 func _call_gm(method: String) -> void:
 	var gm := get_parent()
 	if gm and gm.has_method(method):
@@ -461,161 +487,6 @@ func close_booking() -> void:
 
 func is_booking_open() -> bool:
 	return _book_open
-
-func _add_role_button(parent: Node, text: String, role: int) -> void:
-	var b := Button.new()
-	b.text = text
-	b.custom_minimum_size = Vector2(0, 44)
-	b.pressed.connect(func(): _pick_role(role))
-	parent.add_child(b)
-
-func _pick_role(role: int) -> void:
-	var gm := get_parent()
-	if gm and gm.has_method("net_set_role"):
-		gm.net_set_role.rpc_id(1, role)
-
-func open_computer() -> void:
-	_comp_roster.text = _last_roster
-	_comp_panel.visible = true
-	_comp_open = true
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
-func close_computer() -> void:
-	_comp_panel.visible = false
-	_comp_open = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func is_computer_open() -> bool:
-	return _comp_open
-
-func _build_summary() -> void:
-	_summary_panel = PanelContainer.new()
-	_summary_panel.anchor_left = 0.5
-	_summary_panel.anchor_top = 0.5
-	_summary_panel.anchor_right = 0.5
-	_summary_panel.anchor_bottom = 0.5
-	_summary_panel.offset_left = -220
-	_summary_panel.offset_top = -160
-	_summary_panel.offset_right = 220
-	_summary_panel.offset_bottom = 160
-	_summary_panel.visible = false
-	add_child(_summary_panel)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	_summary_panel.add_child(vbox)
-
-	var title := Label.new()
-	title.text = "🍺 Vardiya Bitti!"
-	title.add_theme_font_size_override("font_size", 32)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(title)
-
-	_summary_label = Label.new()
-	_summary_label.add_theme_font_size_override("font_size", 22)
-	_summary_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(_summary_label)
-
-	var btn := Button.new()
-	btn.text = "Tekrar Oyna"
-	btn.pressed.connect(func(): _restart_pressed = true)
-	vbox.add_child(btn)
-
-func show_summary(served: int, missed: int, money: int, score: int) -> void:
-	_summary_label.text = "Servis edilen: %d\nKaçırılan: %d\nKazanç: %d€\nSkor: %d" % [served, missed, money, score]
-	_summary_panel.visible = true
-	_hint_label.visible = false
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
-func restart_requested() -> bool:
-	return _restart_pressed
-
-## Tutorial-Anzeige (rechts, unter der Personalliste).
-func _build_quest() -> void:
-	_quest_label = _make_label("")
-	_quest_label.anchor_left = 1.0
-	_quest_label.anchor_right = 1.0
-	_quest_label.offset_left = -430
-	_quest_label.offset_right = -16
-	_quest_label.offset_top = 120
-	_quest_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_quest_label.add_theme_font_size_override("font_size", 19)
-	_quest_label.add_theme_color_override("font_color", Color(1, 0.92, 0.55))
-	add_child(_quest_label)
-
-func set_quest(text: String) -> void:
-	if _quest_label:
-		_quest_label.text = text
-		_quest_label.visible = text != ""
-
-## Modales Hinweisfenster (z. B. "erst Ware kaufen").
-func _build_popup() -> void:
-	_popup_panel = PanelContainer.new()
-	_popup_panel.anchor_left = 0.5
-	_popup_panel.anchor_top = 0.5
-	_popup_panel.anchor_right = 0.5
-	_popup_panel.anchor_bottom = 0.5
-	_popup_panel.offset_left = -300
-	_popup_panel.offset_top = -130
-	_popup_panel.offset_right = 300
-	_popup_panel.offset_bottom = 130
-	_popup_panel.visible = false
-	add_child(_popup_panel)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 16)
-	_popup_panel.add_child(vbox)
-
-	_popup_label = Label.new()
-	_popup_label.add_theme_font_size_override("font_size", 20)
-	_popup_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_popup_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vbox.add_child(_popup_label)
-
-	var ok := Button.new()
-	ok.text = "Verstanden"
-	ok.custom_minimum_size = Vector2(0, 42)
-	ok.pressed.connect(close_popup)
-	vbox.add_child(ok)
-
-func show_popup(text: String) -> void:
-	if _popup_label == null:
-		return
-	_popup_label.text = text
-	_popup_panel.visible = true
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-
-func close_popup() -> void:
-	if _popup_panel:
-		_popup_panel.visible = false
-	if not _comp_open and not _book_open:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func is_popup_open() -> bool:
-	return _popup_panel != null and _popup_panel.visible
-
-## Kurze Schwarzblende beim Schlafen.
-func play_sleep_fade() -> void:
-	var fade := ColorRect.new()
-	fade.color = Color(0, 0, 0, 0)
-	fade.anchor_right = 1.0
-	fade.anchor_bottom = 1.0
-	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(fade)
-	var zzz := _make_label("😴  ...")
-	zzz.anchor_left = 0.5
-	zzz.anchor_top = 0.5
-	zzz.offset_left = -60
-	zzz.add_theme_font_size_override("font_size", 44)
-	zzz.modulate = Color(1, 1, 1, 0)
-	fade.add_child(zzz)
-	var tw := create_tween()
-	tw.tween_property(fade, "color:a", 1.0, 0.7)
-	tw.parallel().tween_property(zzz, "modulate:a", 1.0, 0.7)
-	tw.tween_interval(0.8)
-	tw.tween_property(fade, "color:a", 0.0, 0.9)
-	tw.parallel().tween_property(zzz, "modulate:a", 0.0, 0.5)
-	tw.tween_callback(fade.queue_free)
 
 ## Letzte Tagesbilanz merken, damit man sie jederzeit nachlesen kann.
 func set_report(text: String) -> void:

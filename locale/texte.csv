@@ -65,5 +65,34 @@ ACTION_EMOTE,Prost,Cheers,Şerefe
 ACTION_COSTUME,Kostüm wechseln,Change costume,Kostüm değiştir
 ACTION_PAUSE,Pause,Pause,Duraklat
 ACTION_HELP,Hilfe,Help,Yardım
+HUD_DAY,Tag %d,Day %d,%d. Gün
+HUD_CLOSED,Zelt geschlossen,Tent closed,Çadır kapalı
+HUD_POPULARITY,Beliebtheit,Popularity,Popülerlik
+HUD_STOCK,Lager,Storage,Depo
+HUD_CLEAN,Sauberkeit,Cleanliness,Temizlik
+HUD_TASK,Aufgabe %d von %d,Task %d of %d,Görev %d / %d
+HUD_OK,Verstanden,Got it,Anladım
+QUEST_0_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
+QUEST_0_TEXT,Geh zum Wiesenbüro und miete ein Zelt (500 €).,Go to the Fair Office and rent a tent (€500).,Fuar Ofisine git ve bir çadır kirala (500 €).
+QUEST_1_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
+QUEST_1_TEXT,Wiesenbüro → Zelt → Tisch stellen (200 € pro Tisch).,Fair Office → Tent → Place table (€200 each).,Fuar Ofisi → Çadır → Masa koy (masa başı 200 €).
+QUEST_2_TITLE,Bestelle Bier,Order beer,Bira sipariş et
+QUEST_2_TEXT,Wiesenbüro → Ware → Bier bestellen.,Fair Office → Supplies → order beer.,Fuar Ofisi → Malzeme → bira sipariş et.
+QUEST_3_TITLE,Pakete ins Lager tragen,Carry packages to storage,Paketleri depoya taşı
+QUEST_3_TEXT,Der Lieferwagen kommt nach etwa einer Minute. Nimm die Pakete mit {interact} und bring sie ins Lager.,The delivery van arrives in about a minute. Pick up the packages with {interact} and carry them to storage.,Teslimat aracı yaklaşık bir dakikada gelir. Paketleri {interact} ile al ve depoya taşı.
+QUEST_4_TITLE,Schlafe im Wohnwagen,Sleep in your caravan,Karavanında uyu
+QUEST_4_TEXT,Dein Wohnwagen steht in der Gasse im Süden. Schlafen startet den Tag um 07:00.,Your caravan is in the lane to the south. Sleeping starts the day at 7:00.,Karavanın güneydeki sokakta. Uyumak günü 07:00'de başlatır.
+QUEST_5_TITLE,Bediene einen Gast,Serve a guest,Bir misafire servis yap
+QUEST_5_TEXT,"Krug nehmen, am Fass {interact} gedrückt halten, dann zum Gast und {interact}.","Grab a mug, hold {interact} at a keg, then go to a guest and press {interact}.","Bir kupa al, fıçıda {interact} tuşunu basılı tut, sonra misafire gidip {interact} bas."
+QUEST_6_TITLE,Halte bis 22:00 durch,Keep going until 22:00,22:00'ye kadar dayan
+QUEST_6_TEXT,Danach kommt die Tagesbilanz.,Then you get the daily report.,Ardından günlük bilanço gelir.
+QUEST_7_TITLE,Stelle einen Kellner ein,Hire a waiter,Bir garson işe al
+QUEST_7_TEXT,Wiesenbüro → Personal. Er bedient die Gäste für dich.,Fair Office → Staff. They serve guests for you.,Fuar Ofisi → Personel. Misafirlere senin yerine servis yapar.
+QUEST_8_TITLE,Kaufe eine Lizenz,Buy a license,Bir lisans satın al
+QUEST_8_TEXT,Wiesenbüro → Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office → Licenses. More choice means more sales.,Fuar Ofisi → Lisanslar. Daha fazla çeşit daha fazla satış demek.
+QUEST_9_TITLE,Baue eine Toilette ein,Install a toilet,Tuvalet kur
+QUEST_9_TEXT,Wiesenbüro → Zelt (1.800 €). Sonst pinkeln die Gäste in die Ecke.,Fair Office → Tent (€1.800). Otherwise guests pee in the corner.,Fuar Ofisi → Çadır (1.800 €). Yoksa misafirler köşeye işer.
+QUEST_10_TITLE,Buche einen Künstler,Book an act,Bir sanatçı ayarla
+QUEST_10_TEXT,Wiesenbüro → Künstler. Musik lockt mehr Gäste an.,Fair Office → Acts. Music draws more guests.,Fuar Ofisi → Sanatçılar. Müzik daha çok misafir çeker.
 CREDITS_TITLE,Mitwirkende,Credits,Emeği Geçenler
 CREDITS_BODY,"Spielidee und Entwicklung\nSerdar Vapur\n\nKirmes-Modelle\nAmusement Park Pack\n\nFiguren und Zelt\nerstellt mit Meshy und Blender\n\nMusik\nerstellt mit AIMusic.so\n\nEngine\nGodot Engine","Game design and development\nSerdar Vapur\n\nFairground models\nAmusement Park Pack\n\nCharacters and tent\ncreated with Meshy and Blender\n\nMusic\ncreated with AIMusic.so\n\nEngine\nGodot Engine","Oyun tasarımı ve geliştirme\nSerdar Vapur\n\nLunapark modelleri\nAmusement Park Pack\n\nKarakterler ve çadır\nMeshy ve Blender ile yapıldı\n\nMüzik\nAIMusic.so ile yapıldı\n\nOyun motoru\nGodot Engine"

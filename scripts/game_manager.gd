@@ -266,7 +266,7 @@ func _ready() -> void:
 	_hud.set_money(Game.money)
 	_hud.set_score(Game.score)
 	_hud.set_time(_clock_hour())
-	_hud.set_phase(_phase_name())
+	_hud.set_phase(_phase == Phase.SHIFT)
 	_hud.set_day(_day, WIESN_DAYS)
 	_sichere_wohnwagen()
 
@@ -288,9 +288,6 @@ func _ready() -> void:
 		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	else:
 		_client_ready.rpc_id(1)
-
-func _phase_name() -> String:
-	return "ZELT AÇIK" if _phase == Phase.SHIFT else "KAPALI (uyu → yeni gün)"
 
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
@@ -787,19 +784,9 @@ func _reserve_ok(cost: int) -> bool:
 	return false
 
 # ---- Tutorial ----
-const QUEST_TEXTS := [
-	"🎪 Miete dein Festzelt\nWiesenbüro (Nordosten) → Zelt → Zelt mieten (500€)",
-	"🪑 Stelle 2 Tische auf\nWiesenbüro → Zelt → Tisch stellen (200€)",
-	"🍺 Bestelle Bier\nWiesenbüro → Ware → 🍺 Bier ×1 (60€)",
-	"🚚 Der Lieferwagen kommt (~1 Min) und hupt.\nPakete mit E aufnehmen → ins Lager tragen",
-	"😴 Schlafe im Wohnwagen\n(Südseite, schmale Gasse) → Tag startet um 07:00",
-	"🍻 Bediene einen Gast\nKrug nehmen → am Fass zapfen (E halten) → Gast (E)",
-	"🌙 Halte bis 22:00 durch\nDanach kommt die Tagesbilanz",
-	"👷 Stelle einen Kellner ein\nWiesenbüro → Personal (500€) — er bedient für dich",
-	"📜 Kaufe eine Lizenz\nWiesenbüro → Lizenzen — mehr Auswahl, mehr Umsatz",
-	"🚻 Baue eine Toilette ein (1800€)\nSonst pinkeln die Gäste in die Ecke",
-	"🎤 Buche einen Künstler\nWiesenbüro → Künstler — bringt mehr Gäste",
-]
+## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
+## übersetzt wird beim Spieler — gesendet wird nur die Schrittnummer.
+const QUEST_COUNT := 11
 
 func _quest_done(step: int) -> bool:
 	match step:
@@ -825,14 +812,9 @@ func _has_staff(role: int) -> bool:
 ## Schritte weiterschalten, solange sie erfüllt sind. true = etwas hat sich geändert.
 func _check_quest() -> bool:
 	var before := _quest_step
-	while _quest_step < QUEST_TEXTS.size() and _quest_done(_quest_step):
+	while _quest_step < QUEST_COUNT and _quest_done(_quest_step):
 		_quest_step += 1
 	return _quest_step != before
-
-func _quest_text() -> String:
-	if _quest_step >= QUEST_TEXTS.size():
-		return ""
-	return "📋 Aufgabe %d/%d\n%s" % [_quest_step + 1, QUEST_TEXTS.size(), QUEST_TEXTS[_quest_step]]
 
 # ================================================= E5: Künstler
 ## Wiesenbüro: Künstler für die nächste Schicht buchen.
@@ -2004,11 +1986,11 @@ func _mgmt_string() -> String:
 
 func _broadcast_meta() -> void:
 	_check_quest()
-	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count, _quest_text())
+	net_meta.rpc(_phase, _staff_string(), _mgmt_string(), _day, _tent_stage, _active_count, _quest_step)
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
 
 @rpc("authority", "reliable", "call_local")
-func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int, quest: String) -> void:
+func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: int, active_count: int, quest_step: int) -> void:
 	_phase = phase
 	_day = day
 	_tent_stage = tent_stage
@@ -2017,11 +1999,11 @@ func net_meta(phase: int, roster: String, mgmt: String, day: int, tent_stage: in
 		_active_count = active_count
 		_apply_tent()
 	_active_count = active_count
-	_hud.set_phase(_phase_name())
+	_hud.set_phase(phase == Phase.SHIFT)
 	_hud.set_roster(roster)
 	_hud.set_mgmt(mgmt)
 	_hud.set_day(day, WIESN_DAYS)
-	_hud.set_quest(quest)
+	_hud.set_quest(quest_step, QUEST_COUNT)
 	if _sfx_node:
 		if phase == Phase.SHIFT:
 			_sfx_node.play_music()

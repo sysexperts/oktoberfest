@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b7dl2t1534eml" path="res://scenes/mug_dispenser.tscn" id="3_disp"]
 [ext_resource type="PackedScene" uid="uid://c5tkds81g8d47" path="res://scenes/keg_station.tscn" id="4_keg"]
 [ext_resource type="PackedScene" uid="uid://b217cd2pklob3" path="res://scenes/beer_table.tscn" id="5_table"]
-[ext_resource type="Script" uid="uid://ctehrw1fc8k5p" path="res://scripts/hud.gd" id="6_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="6_hud"]
 [ext_resource type="PackedScene" uid="uid://dy8ju4n1l0rxd" path="res://assets/models/theke.glb" id="7_theke"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1533kgl" path="res://scenes/computer.tscn" id="8_comp"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1536kh8" path="res://scenes/food_station.tscn" id="9_food"]
@@ -246,7 +246,6 @@ script = ExtResource("20_crowd")
 [node name="Sfx" type="Node" parent="." unique_id=1081538568]
 script = ExtResource("10_sfx")
 
-[node name="HUD" type="CanvasLayer" parent="." unique_id=755919777]
-script = ExtResource("6_hud")
+[node name="HUD" parent="." unique_id=755919777 instance=ExtResource("6_hud")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("90_pause")]

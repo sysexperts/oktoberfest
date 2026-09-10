@@ -257,6 +257,11 @@ content_margin_right = 5.0
 color = Color(0.353, 0.31, 0.502, 1)
 thickness = 2
 
+[sub_resource type="StyleBoxLine" id="TrennerSenkrecht"]
+color = Color(0.353, 0.31, 0.502, 1)
+thickness = 2
+vertical = true
+
 [sub_resource type="StyleBoxFlat" id="MenueEintragHover"]
 content_margin_left = 10.0
 content_margin_right = 10.0
@@ -366,5 +371,7 @@ TabContainer/styles/tab_selected = SubResource("ReiterAktiv")
 TabContainer/styles/tab_unselected = SubResource("ReiterInaktiv")
 TooltipLabel/colors/font_color = Color(0.949, 0.933, 0.902, 1)
 TooltipPanel/styles/panel = SubResource("Tooltip")
+VSeparator/constants/separation = 12
+VSeparator/styles/separator = SubResource("TrennerSenkrecht")
 Window/styles/embedded_border = SubResource("Flaeche")
 Window/colors/title_color = Color(1, 0.839, 0.349, 1)

@@ -1,0 +1,329 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="Leiste"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.07, 0.06, 0.12, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.353, 0.31, 0.502, 0.8)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="AufgabeRahmen"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.07, 0.06, 0.12, 0.82)
+border_width_left = 4
+border_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 4
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Oben" type="VBoxContainer" parent="."]
+offset_left = 14.0
+offset_top = 12.0
+offset_right = 614.0
+offset_bottom = 100.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Leiste" type="PanelContainer" parent="Oben"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Leiste")
+
+[node name="Zeile" type="HBoxContainer" parent="Oben/Leiste"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Geld" type="Label" parent="Oben/Leiste/Zeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "💶 1.200 €"
+
+[node name="Trenner1" type="VSeparator" parent="Oben/Leiste/Zeile"]
+layout_mode = 2
+
+[node name="Zeit" type="Label" parent="Oben/Leiste/Zeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Tag 1 · 🕗 07:00"
+
+[node name="Trenner2" type="VSeparator" parent="Oben/Leiste/Zeile"]
+layout_mode = 2
+
+[node name="BeliebtheitText" type="Label" parent="Oben/Leiste/Zeile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+text = "HUD_POPULARITY"
+
+[node name="Beliebtheit" type="ProgressBar" parent="Oben/Leiste/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 14)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 35.0
+show_percentage = false
+
+[node name="BeliebtheitWert" type="Label" parent="Oben/Leiste/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "35 %"
+
+[node name="Unterzeile" type="PanelContainer" parent="Oben"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Leiste")
+
+[node name="Zeile" type="HBoxContainer" parent="Oben/Unterzeile"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="LagerText" type="Label" parent="Oben/Unterzeile/Zeile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+text = "HUD_STOCK"
+
+[node name="Lager" type="Label" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🍺 0 · 🥨 0"
+
+[node name="Trenner" type="VSeparator" parent="Oben/Unterzeile/Zeile"]
+layout_mode = 2
+
+[node name="SauberkeitText" type="Label" parent="Oben/Unterzeile/Zeile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+text = "HUD_CLEAN"
+
+[node name="Sauberkeit" type="ProgressBar" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 12)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 100.0
+show_percentage = false
+
+[node name="SauberkeitWert" type="Label" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "100 %"
+
+[node name="Rechts" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -374.0
+offset_top = 12.0
+offset_right = -14.0
+offset_bottom = 300.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Rollen" type="PanelContainer" parent="Rechts"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Leiste")
+
+[node name="RollenText" type="Label" parent="Rechts/Rollen"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
+
+[node name="Aufgabe" type="PanelContainer" parent="Rechts"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("AufgabeRahmen")
+
+[node name="Spalte" type="VBoxContainer" parent="Rechts/Aufgabe"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="AufgabeNummer" type="Label" parent="Rechts/Aufgabe/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 14
+text = "Aufgabe 1 von 11"
+
+[node name="AufgabeTitel" type="Label" parent="Rechts/Aufgabe/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "Miete dein Festzelt"
+autowrap_mode = 3
+
+[node name="AufgabeText" type="Label" parent="Rechts/Aufgabe/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Geh zum Wiesenbüro und miete ein Zelt."
+autowrap_mode = 3
+
+[node name="Fadenkreuz" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 28
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hinweis" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = 34.0
+offset_right = 200.0
+offset_bottom = 74.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Leiste")
+
+[node name="HinweisText" type="Label" parent="Hinweis"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "[E] Krug nehmen"
+horizontal_alignment = 1
+
+[node name="Banner" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+auto_translate_mode = 2
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.24
+anchor_right = 0.5
+anchor_bottom = 0.24
+offset_left = -420.0
+offset_right = 420.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Hinweisfenster" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Hinweisfenster"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Hinweisfenster/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HinweisfensterText" type="Label" parent="Hinweisfenster/Panel/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HinweisfensterOk" type="Button" parent="Hinweisfenster/Panel/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "HUD_OK"
+
+[node name="Abblenden" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="Zzz" type="Label" parent="Abblenden"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -30.0
+offset_right = 80.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 44
+text = "😴 …"
+horizontal_alignment = 1
