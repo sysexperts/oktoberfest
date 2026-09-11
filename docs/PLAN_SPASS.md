@@ -52,15 +52,27 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 ## Phase 0 · Messen statt raten (zuerst!)
 
-- [ ] **0.1 Testschalter aus** — `ALWAYS_NIGHT = false`, Tageslicht prüfen. *Ich, S*
-- [ ] **0.2 Spielbot für ganze Tage** — `tools/sim_saison.tscn` spielt 30 Tage
+- [x] **0.1 Testschalter aus** — `ALWAYS_NIGHT = false`, Tageslicht prüfen. *Ich, S*
+- [x] **0.2 Spielbot für ganze Tage** — `tools/sim_saison.tscn` spielt 30 Tage
       im Zeitraffer mit einer einfachen Strategie (bedienen, nachbestellen,
       ausbauen) und schreibt je Tag: Geld, Gäste, verpasste Bestellungen,
       Leerlauf-Sekunden des Spielers, Engpass (Bier leer? Kellner voll?).
       Ergebnis als Tabelle `build/saison.csv`. *Ich, M*
       → beantwortet: Ist das Spiel zu leicht/schwer? Wann ist man „fertig"?
-- [ ] **0.3 Erste-10-Minuten-Messung** — Zeit von „Neues Spiel" bis erster
+- [x] **0.3 Erste-10-Minuten-Messung** — Zeit von „Neues Spiel" bis erster
       bedienter Gast, bis erste Tagesbilanz. Ziel festlegen (siehe Messlatte). *Ich, S*
+
+**Ergebnis Bot, 30 Tage (2026-09-11, `build/saison.csv`, `tools/sim_saison.tscn`):**
+- Erster bedienter Gast nach **3,4 min**, erste Tagesbilanz nach **7 min** (Ziel ≤ 2 min).
+- **Kein Fortschritt:** nach 30 Tagen immer noch kleines Zelt, 4 Tische, 1,5–2,5 k €.
+  Gewinn nur 50–350 € pro Tag, Zeltstufe 2 (3.000 €) nie erreichbar.
+- **Beliebtheit fällt ab Tag 4 auf 5 %** und bleibt dort (Pfützen ohne Klo,
+  Beschwerden, verpasste Bestellungen) → Todesspirale: wenig Gäste, wenig Geld.
+- Nur ~30–38 Bestellungen pro Tag trotz 24 Plätzen; ab Tag 20 bis 20 verpasste.
+- Rund 60 s Leerlauf pro Schicht.
+- Einschränkung: einfache Bot-Strategie (keine Werbung, Klo erst spät).
+  Trotzdem klar: **Wirtschaft zu knapp, Strafen zu hart, Mittelspiel fehlt.**
+  → Phase 1 zusammen mit 6.2 (Balancing) vorziehen.
 - [ ] **0.4 Echter Spieltest** — du spielst 2 Tage allein und 1 Tag im Koop,
       F12 an jeder Stelle, die hakt oder langweilt, danach 5 Sätze Notiz. *Du, S*
 - [ ] **0.5 Außenstehende** (Plan 6.2) — 3 Leute, die das Spiel nie gesehen
