@@ -163,6 +163,15 @@ const POP_ERHOLUNG := 0.25
 ## Höchstens so viel Beliebtheit kosten verpasste Bestellungen pro Tag —
 ## im großen Zelt waren es sonst 100 × 2 Punkte
 const POP_MISS_TAG_MAX := 20.0
+## Gute Stimmung: ab 17 Uhr (oder mit Künstler auf der Bühne) steigen Gäste auf
+## die Tische und tanzen — je Tisch 2 oder 3, jeweils eine Weile.
+const TANZ_AB_STUNDE := 17.0
+const TANZ_BELIEBTHEIT := 55.0
+const TANZ_SAUBERKEIT := 50.0
+const TANZ_PRUEF_INTERVALL := 4.0
+const TANZ_DAUER_MIN := 15.0
+const TANZ_DAUER_MAX := 30.0
+const TANZ_PLAETZE := [-0.6, 0.6, 0.0]   # Versatz entlang der Tischlänge
 
 var _hud: HUD
 var _sfx_node: Node
@@ -184,6 +193,7 @@ var _pop_verlust_heute := 0.0   # Beliebtheit, die verpasste Bestellungen heute 
 ## Verbraucht wird der Lagerbestand erst beim Servieren — deshalb nie mehr
 ## vorbereiten, als im Lager ist.
 var _ausgabe := {}
+var _tanz_timer := 0.0
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -2037,9 +2047,50 @@ func _shift_process(delta: float) -> void:
 		_apply_night_visual(true)   # host görseli
 		_melde("MSG_EVENING")
 	_update_guests(delta)
+	_update_tanz(delta)
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
+
+## Ist die Stimmung gut genug zum Tanzen auf den Tischen?
+func stimmung_gut() -> bool:
+	var abend := _clock_hour() >= TANZ_AB_STUNDE or _artist_tier > 0
+	return abend and _popularity >= TANZ_BELIEBTHEIT and _hygiene >= TANZ_SAUBERKEIT
+
+## Gute Stimmung: satte, zufriedene Gäste steigen auf ihren Tisch und tanzen.
+## Je Tisch fest 2 oder 3, damit nicht das ganze Zelt auf den Tischen steht.
+func _update_tanz(delta: float) -> void:
+	_tanz_timer -= delta
+	if _tanz_timer > 0.0:
+		return
+	_tanz_timer = TANZ_PRUEF_INTERVALL
+	if not stimmung_gut():
+		return
+	var je_tisch := {}
+	for g: Dictionary in _guest_sim.values():
+		if int(g.mode) == 5 and int(g.seat) < _seats.size():
+			var t := int(_seats[int(g.seat)].table)
+			je_tisch[t] = int(je_tisch.get(t, 0)) + 1
+	for id in _guest_sim.keys():
+		var g: Dictionary = _guest_sim[id]
+		if int(g.mode) != 1 or int(g.ostate) != 0 or int(g.get("drinks", 0)) < 1:
+			continue
+		var seat: Dictionary = _seats[int(g.seat)]
+		var ti := int(seat.table)
+		var belegt := int(je_tisch.get(ti, 0))
+		if belegt >= tanz_max(ti) or randf() > 0.35 or ti >= _beertables.size():
+			continue
+		var bt := _beertables[ti] as Node3D
+		var ziel: Vector3 = bt.global_position + bt.global_transform.basis.x * float(TANZ_PLAETZE[belegt % TANZ_PLAETZE.size()])
+		g.mode = 5
+		g.tanz_t = randf_range(TANZ_DAUER_MIN, TANZ_DAUER_MAX)
+		g.tgt = Vector3(ziel.x, 0.1, ziel.z)
+		_guest_sim[id] = g
+		je_tisch[ti] = belegt + 1
+
+## Wie viele Gäste auf diesem Tisch tanzen dürfen: 2 oder 3, fest je Tisch.
+func tanz_max(tisch: int) -> int:
+	return 2 + (tisch % 2)
 
 func _start_shift() -> void:
 	_phase = Phase.SHIFT
@@ -2228,6 +2279,14 @@ func _update_guests(delta: float) -> void:
 		# Oturan misafir: sipariş döngüsü
 		if g.mode == 1:
 			_guest_order(g, id, delta)
+		# Tanzt auf dem Tisch — danach zurück auf den Platz
+		if g.mode == 5:
+			g.tanz_t = float(g.get("tanz_t", 0.0)) - delta
+			if float(g.tanz_t) <= 0.0:
+				g.mode = 0
+				g.weg = []
+				g.tgt = _seats[int(g.seat)].pos
+				g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 		# E6: Blase (sitzend oder auf dem Weg zur Ecke/Toilette)
 		if g.mode == 4:
 			_update_puke(g, id, delta)
@@ -2239,6 +2298,8 @@ func _update_guests(delta: float) -> void:
 		if node:
 			node.set_net(pos, g.yaw)
 			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / _geduld(), 0.0, 1.0))
+			# Host/Solo bekommen _net_guests nicht (kein call_local) — Tanzen direkt setzen
+			node.set_tanz(int(g.mode) == 5)
 
 func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 	if g.ostate == 0:
@@ -2395,6 +2456,7 @@ func _broadcast_sync() -> void:
 	var ckind := PackedInt32Array()
 	var ctype := PackedInt32Array()
 	var cratio := PackedFloat32Array()
+	var ctanz := PackedByteArray()
 	for id in _guest_sim.keys():
 		var g: Dictionary = _guest_sim[id]
 		cids.append(id)
@@ -2405,7 +2467,8 @@ func _broadcast_sync() -> void:
 		ckind.append(g.okind)
 		ctype.append(g.otype)
 		cratio.append(clampf(g.patience / _geduld(), 0.0, 1.0))
-	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio)
+		ctanz.append(1 if int(g.mode) == 5 else 0)
+	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
 	# Personal
 	var sids := PackedInt32Array()
 	var sx := PackedFloat32Array()
@@ -2460,12 +2523,13 @@ func _net_tables(bx: PackedFloat32Array, bz: PackedFloat32Array) -> void:
 			(_beertables[i] as Node3D).position = Vector3(bx[i], 0.0, bz[i])
 
 @rpc("authority", "unreliable")
-func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array) -> void:
+func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array, ctanz: PackedByteArray) -> void:
 	for i in range(cids.size()):
 		var c = _guests.get(cids[i])
 		if c:
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
+			c.set_tanz(i < ctanz.size() and ctanz[i] == 1)
 
 ## call_local: Uhrzeit, Beliebtheit und Sauberkeit braucht auch das HUD des
 ## Hosts bzw. im Solo-Spiel — ohne kam dort nie etwas an („Zelt geschlossen",

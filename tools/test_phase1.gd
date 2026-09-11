@@ -311,6 +311,44 @@ class Lauf extends Node:
 		nehmer.carry_fill = 0.0
 		gm._ausgabe.clear()
 		gm._ausgabe_senden()
+
+		print("  -- Tanzen auf dem Tisch")
+		gm._phase = gm.Phase.SHIFT
+		gm._phase_time = gm.SHIFT_TIME * 0.25   # etwa 18:15
+		gm._popularity = 90.0
+		gm._hygiene = 100.0
+		gm._rebuild_seats()
+		for k in gm._seats.size():
+			gm._spawn_guest()
+		for id in gm._guest_sim.keys():
+			var tg: Dictionary = gm._guest_sim[id]
+			tg.mode = 1
+			tg.ostate = 0
+			tg.drinks = 2
+			tg.pos = gm._seats[int(tg.seat)].pos
+			gm._guest_sim[id] = tg
+		_check("Stimmung gut am Abend", gm.stimmung_gut(), "Uhr %.1f" % gm._clock_hour())
+		for k in 30:
+			gm._tanz_timer = 0.0
+			gm._update_tanz(0.1)
+		var taenzer := {}
+		var zu_viele := false
+		for tg: Dictionary in gm._guest_sim.values():
+			if int(tg.mode) == 5:
+				var ti := int(gm._seats[int(tg.seat)].table)
+				taenzer[ti] = int(taenzer.get(ti, 0)) + 1
+				if int(taenzer[ti]) > gm.tanz_max(ti):
+					zu_viele = true
+		_check("Gäste tanzen auf den Tischen, höchstens 2–3 je Tisch", not taenzer.is_empty() and not zu_viele, str(taenzer))
+		gm._update_guests(0.01)   # überträgt den Zustand an die Gast-Knoten (Host)
+		await _frames(3)
+		var sichtbar_tanzend := 0
+		for c in get_tree().get_nodes_in_group("customer"):
+			if c.tanzt():
+				sichtbar_tanzend += 1
+		_check("Tänzer auch sichtbar", sichtbar_tanzend > 0, str(sichtbar_tanzend))
+		for id in gm._guest_sim.keys().duplicate():
+			gm._despawn_guest(id)
 		gm._phase = gm.Phase.INTERMISSION
 
 		print("  -- Spielstände (3.3)")

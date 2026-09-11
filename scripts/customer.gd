@@ -27,6 +27,10 @@ var _last := Vector3.ZERO
 var _seated := false
 var _vomit_t := 0.0        # C3: kusma süresi (sn), >0 ise öne eğilir
 var _vomit_active := false
+## Tanzt gerade auf dem Tisch (gute Stimmung, vom Server)
+var _tanzt := false
+## Höhe der Tischplatte — so hoch steht ein Tänzer
+const TISCH_HOEHE := 0.78
 
 @onready var _model: Node3D = $Model
 @onready var _bubble: Label3D = $Bubble
@@ -75,6 +79,28 @@ func set_order(state: int, kind: int, type: int, ratio: float) -> void:
 	patience_ratio = ratio
 	_update_bubble()
 
+## Gute Stimmung: auf den Tisch steigen und tanzen (an) bzw. zurück (aus).
+func set_tanz(an: bool) -> void:
+	if an == _tanzt:
+		return
+	_tanzt = an
+	if an:
+		if _seated:
+			_exit_sit()
+		if _anim:
+			_anim.active = true
+		if not _figur.tanzen(randf_range(0.9, 1.15)):
+			_figur.gehen(1.5)
+		_cur = "Tanz"
+		if _mug:
+			_mug.visible = true
+	else:
+		_cur = ""
+	_update_bubble()
+
+func tanzt() -> bool:
+	return _tanzt
+
 ## C3: sarhoş misafir kusar — kısa süre öne eğilir + 🤮 baloncuk.
 func play_vomit() -> void:
 	_vomit_t = 1.8
@@ -114,6 +140,11 @@ func can_serve(kind: int, type: int) -> bool:
 func _update_bubble() -> void:
 	if _bubble == null or _vomit_active:
 		return   # kusarken 🤮 baloncuğu ezilmesin
+	if _tanzt:
+		_bubble.visible = true
+		_bubble.text = "🎶"
+		_bubble.modulate = Color(1, 0.85, 0.4)
+		return
 	if order_state == 1:
 		_bubble.visible = true
 		if order_kind == 2:
@@ -135,6 +166,13 @@ func _process(delta: float) -> void:
 	rotation.y = lerp_angle(rotation.y, _net_yaw, t)
 	var spd := (position - _last).length() / maxf(delta, 0.001)
 	_last = position
+	# Auf dem Tisch: hoch auf die Platte, tanzen, leicht schwanken
+	if _tanzt:
+		if _model:
+			_model.position.y = lerpf(_model.position.y, TISCH_HOEHE, clampf(delta * 5.0, 0.0, 1.0))
+			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.004 + float(cust_id)) * 0.08
+		_update_vomit(delta)
+		return
 	var want := "Walk" if spd > 0.4 else "Idle"
 	# Oturma / kalkma geçişi
 	if want == "Idle" and not _seated:

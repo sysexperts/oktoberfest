@@ -76,6 +76,18 @@ class Lauf extends Node:
 		await _frames(90)
 		get_viewport().get_texture().get_image().save_png("res://tools/gaeste_tisch.png")
 		print("  gespeichert: gaeste_tisch")
+		# Gute Stimmung: zwei Gäste tanzen auf dem Tisch
+		var gaeste := gm.get_node("Customers").get_children().filter(func(n: Node) -> bool: return n is Customer)
+		for k in mini(2, gaeste.size()):
+			var tg: Customer = gaeste[k]
+			var auf_tisch: Vector3 = tisch.global_position + tisch.global_transform.basis.x * (-0.6 + 1.2 * k)
+			tg.set_net(Vector3(auf_tisch.x, 0.1, auf_tisch.z), 0.0)
+			tg.set_tanz(true)
+		await _frames(60)
+		get_viewport().get_texture().get_image().save_png("res://tools/gaeste_tanz.png")
+		print("  gespeichert: gaeste_tanz")
+		for k in mini(2, gaeste.size()):
+			(gaeste[k] as Customer).set_tanz(false)
 		# Näher ran
 		spieler.global_position = tisch.global_position + Vector3(0.6, 0.0, 2.6)
 		spieler.rotation.y = deg_to_rad(15.0)
