@@ -101,6 +101,17 @@ func status_loeschen() -> void:
 	if aktiv:
 		_steam.call("clearRichPresence")
 
+# ------------------------------------------------------------ Errungenschaften (5.4)
+## Schaltet eine Steam-Errungenschaft frei. API-Name = Meilenstein-ID aus
+## scripts/meilensteine.gd — in Steamworks genauso anlegen (docs/steam/errungenschaften.md).
+## Doppelt freischalten schadet nicht. Ohne Steam: false.
+func errungenschaft(id: String) -> bool:
+	if not aktiv:
+		return false
+	var ok := bool(_steam.call("setAchievement", id))
+	_steam.call("storeStats")
+	return ok
+
 # ------------------------------------------------------------ Lobbys (5.3)
 ## Freundes-Lobby erstellen. Das Ergebnis kommt über lobby_created.
 func lobby_erstellen() -> bool:

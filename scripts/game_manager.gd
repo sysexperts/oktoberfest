@@ -305,6 +305,9 @@ func _ready() -> void:
 		elif not _load_game():
 			Game.add_money(START_MONEY)
 		Net.neues_spiel = false
+		# Erreichte Meilensteine nachtragen — falls Steam beim Erreichen nicht lief
+		for ms_id: String in _meilensteine:
+			SteamDienst.errungenschaft(ms_id)
 		multiplayer.peer_disconnected.connect(_on_peer_left)
 		if Net.dedicated:
 			_next_spawn = 0
@@ -954,8 +957,14 @@ func _pruefe_meilensteine() -> bool:
 		_meilensteine.append(m.id)
 		Game.add_money(int(m.belohnung))
 		_melde("MSG_MILESTONE", ["MS_%s_TITLE" % m.id, _eur(int(m.belohnung))], 2)
+		_net_errungenschaft.rpc(m.id)
 		neu = true
 	return neu
+
+## Steam-Errungenschaft bei allen, die gerade mitspielen (Plan 5.4).
+@rpc("authority", "reliable", "call_local")
+func _net_errungenschaft(id: String) -> void:
+	SteamDienst.errungenschaft(id)
 
 func tutorial_active() -> bool:
 	return _quest_step < QUEST_COUNT
@@ -1699,6 +1708,35 @@ func net_rotate_einrichtung() -> void:
 	var did: int = _held_deko[s]
 	_einrichtung[did].rot = wrapf(float(_einrichtung[did].rot) + PI / 4.0, -PI, PI)
 	(_einrichtung_nodes[did] as Node3D).rotation.y = float(_einrichtung[did].rot)
+
+## Getragenen Gegenstand verkaufen — die Hälfte des Kaufpreises kommt zurück.
+@rpc("any_peer", "reliable", "call_local")
+func net_sell_einrichtung() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if not _held_deko.has(s):
+		return
+	var did: int = _held_deko[s]
+	_held_deko.erase(s)
+	if not _einrichtung.has(did):
+		return
+	var art := str(_einrichtung[did].art)
+	var erloes := int(Katalog.ARTEN[art].preis) / 2
+	_einrichtung.erase(did)
+	_remove_einrichtung.rpc(did)
+	Game.add_money(erloes)
+	_melde("MSG_DECO_SOLD", [Katalog.name_key(art), _eur(erloes)], 2)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _remove_einrichtung(did: int) -> void:
+	var n: Node = _einrichtung_nodes.get(did)
+	_einrichtung_nodes.erase(did)
+	if n:
+		n.queue_free()
 
 func _deko_abstellen(s: int) -> void:
 	var did: int = _held_deko[s]

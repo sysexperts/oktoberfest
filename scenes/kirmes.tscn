@@ -122,7 +122,7 @@ size = Vector3(0.6, 5, 7.5683594)
 size = Vector3(90, 5, 1)
 
 [sub_resource type="BoxShape3D" id="BoundZ"]
-size = Vector3(1, 5, 90)
+size = Vector3(1, 5, 107)
 
 [node name="Kirmes" type="Node3D" unique_id=382915238]
 
@@ -474,19 +474,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 45)
 shape = SubResource("BoundX")
 
 [node name="BoundSouth" type="StaticBody3D" parent="Grenze" unique_id=1006130666]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -62)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundSouth" unique_id=207388301]
 shape = SubResource("BoundX")
 
 [node name="BoundWest" type="StaticBody3D" parent="Grenze" unique_id=1340713045]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 2.5, -8.5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundWest" unique_id=913616022]
 shape = SubResource("BoundZ")
 
 [node name="BoundEast" type="StaticBody3D" parent="Grenze" unique_id=171884662]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 2.5, -8.5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundEast" unique_id=1975916934]
 shape = SubResource("BoundZ")

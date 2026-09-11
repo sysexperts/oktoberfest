@@ -12,6 +12,10 @@ Nachweis in diesem Ordner liegen.
 | Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Zeltmusik | `assets/audio/musik/zelt_01.mp3` | AIMusic.so | Tarif prüfen — nur bezahlt ist kommerziell | Lizenzzertifikat holen | ⚠️ |
 | Ton übrig | `assets/audio/sfx`, `ambiente` | — | — | — | fehlt noch |
+| Engine | Godot 4.7 (samt FreeType, Jolt …) | godotengine.org | MIT + Drittlizenzen | Hinweis im Spiel (Mitwirkende) | ✅ |
+| Steam-Anbindung | `addons/godotsteam/**` 4.22.1 | GodotSteam | MIT | `addons/godotsteam/license.md`, Hinweis im Spiel | ✅ |
+| Steamworks SDK | `steam_api64.dll` | Valve | Steamworks SDK-Vereinbarung | gilt mit Steamworks-Partnerkonto | ⚠️ |
+| Einrichtung (Laterne, Stehlampe, Lichterkette) | `scenes/einrichtung/**`, `scenes/props/laterne,lichterkette.tscn` | selbst gebaut in Godot | eigene | — | ✅ |
 
 Schriftarten: keine eigenen im Projekt, es läuft alles über Godots
 Standardschrift. Emoji rendert das System.

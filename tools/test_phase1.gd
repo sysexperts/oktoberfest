@@ -43,6 +43,30 @@ class Lauf extends Node:
 		_check("Startgeld 1200", Game.money == 1200, "Geld=%d" % Game.money)
 
 		print("  -- Spieleraktionen")
+		var schild_vorher: Node = gm.get_node_or_null("ZeltVermietung")
+		if schild_vorher:
+			var titel: String = schild_vorher.get_node("%Titel").text
+			_check("Mietschild übersetzt", titel != "SIGN_TENT_FOR_RENT" and titel == TranslationServer.translate("SIGN_TENT_FOR_RENT"), titel)
+		var wagen: Node3D = null
+		for c in get_tree().get_nodes_in_group("interactable"):
+			if c is Caravan:
+				wagen = c
+		_check("eigener Wohnwagen da", wagen != null, "")
+		if wagen:
+			var tuer: Vector3 = wagen.interact_point()
+			var grenze := gm.get_node_or_null("Kirmes/Grenze/BoundSouth") as Node3D
+			_check("Wohnwagen innerhalb der Kartengrenze", grenze != null and grenze.global_position.z < tuer.z - 1.0,
+				"Tür z=%.1f" % tuer.z)
+			var kapsel := CapsuleShape3D.new()
+			kapsel.radius = 0.35
+			kapsel.height = 1.6
+			var abfrage := PhysicsShapeQueryParameters3D.new()
+			abfrage.shape = kapsel
+			var vor_tuer: Vector3 = tuer + wagen.global_transform.basis.z * 0.5 + Vector3(0, 1.0, 0)
+			abfrage.transform = Transform3D(Basis(), vor_tuer)
+			var treffer: Array = gm.get_world_3d().direct_space_state.intersect_shape(abfrage, 8)
+			_check("vor der Wohnwagentür ist Platz", treffer.is_empty(),
+				str(treffer.map(func(t: Dictionary) -> String: return str(t.collider.name))))
 		var stufe0: int = gm.get("_tent_stage")
 		gm.net_book_tent.rpc_id(1)
 		await _frames(5)
@@ -168,6 +192,8 @@ class Lauf extends Node:
 		var geld_danach: int = Game.money
 		gm._pruefe_meilensteine()
 		_check("keine doppelte Belohnung", Game.money == geld_danach, "")
+		_check("Errungenschaft ohne Steam: kein Absturz, nichts freigeschaltet",
+			SteamDienst.errungenschaft("ERSTE_MASS") == false, "")
 		gm._save_game()
 		var gespeichert: Variant = JSON.parse_string(FileAccess.get_file_as_string(Net.speicherstand_pfad()))
 		_check("Zähler und Meilensteine im Spielstand", gespeichert is Dictionary
@@ -232,6 +258,14 @@ class Lauf extends Node:
 			_check("Einrichtung und Bierpreis im Spielstand", stand is Dictionary
 				and (stand.get("einrichtung", []) as Array).size() == gm._einrichtung.size()
 				and stand.has("bierpreis"), "")
+			var geld_vor: int = Game.money
+			gm.net_move_einrichtung.rpc_id(1, did)
+			await _frames(3)
+			gm.net_sell_einrichtung.rpc_id(1)
+			await _frames(3)
+			_check("verkauft: weg und halber Preis zurück", not gm._einrichtung.has(did)
+				and not gm._einrichtung_nodes.has(did) and Game.money - geld_vor == 45
+				and not gm.haelt_einrichtung(sp.name.to_int()), "%d €" % (Game.money - geld_vor))
 
 		print("  -- Spielstände (3.3)")
 		_check("Stand liegt in Platz 1", Net.speicherstand_pfad() == "user://saves/slot_1.json"

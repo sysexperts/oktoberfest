@@ -114,6 +114,9 @@ func _texte_aktualisieren() -> void:
 		_plaetze_aktualisieren()
 
 func _zeige(panel: Control) -> void:
+	# Lizenztexte sind groß — erst beim ersten Anzeigen der Credits erzeugen
+	if panel == _credits_panel and %LizenzText.text == "":
+		%LizenzText.text = preload("res://scripts/lizenzen.gd").alle_texte()
 	for p: Control in [_haupt, _koop_panel, _credits_panel, _spielstand_panel]:
 		p.visible = p == panel
 	_status.text = ""

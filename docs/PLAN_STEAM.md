@@ -177,7 +177,12 @@ morgen weiterzuspielen.
       vorhanden, ohne Steam kein Absturz, ENet-Netztest weiter bestanden.
       Offen, braucht dich: echter Test mit zwei Steam-Konten auf zwei Rechnern.*
       `SteamMultiplayerPeer` ersetzt `ENetMultiplayerPeer`; die RPCs bleiben.
-- [ ] **5.4 Steam Cloud und Errungenschaften** (aus 3.2)
+- [x] **5.4 Steam Cloud und Errungenschaften** (aus 3.2)
+      *Jeder Meilenstein schaltet die gleichnamige Errungenschaft frei, bei allen
+      Mitspielern; beim Laden werden erreichte nachgetragen
+      (`SteamDienst.errungenschaft`). Cloud per Auto-Cloud ohne Code. Anlegen in
+      Steamworks und Prüfen: `docs/steam/errungenschaften.md`. Braucht dich:
+      Errungenschaften + Symbole in Steamworks, Auto-Cloud-Zeile, eigene App-ID.*
 - [x] **5.5 Robustheit** — Verbindungsabbruch, Host verlässt das Spiel.
       *Host weg → zurück ins Menü mit Meldung; Beitritt gibt nach 10 s auf;
       Server lehnt andere Versionen sauber ab; ohne Spieler nach 15 s zurück;
@@ -198,7 +203,12 @@ morgen weiterzuspielen.
 
 ## Phase 6 · Veröffentlichung
 
-- [ ] **6.1 Credits-Bildschirm**, Lizenzregister vollständig
+- [x] **6.1 Credits-Bildschirm**, Lizenzregister vollständig
+      *Hauptmenü → Mitwirkende: Beteiligte plus scrollbare Lizenzhinweise
+      (Godot, GodotSteam, Steam-Marke, Godots Fremdkomponenten —
+      `scripts/lizenzen.gd`). Register ergänzt. Offen, braucht dich: Nachweise
+      (Kaufbeleg Kirmes-Pack, Meshy-Rechnung, AIMusic-Zertifikat) in
+      `docs/lizenzen/`, dann dort alle Zeilen ✅.*
 - [ ] **6.2 Außenstehende testen lassen** — Leute, die das Spiel nie gesehen
       haben. Zuschauen, nicht erklären.
 - [ ] **6.3 Namensprüfung** — „Oktoberfest"/„Wiesn" sind Marken der Stadt

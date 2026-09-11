@@ -25,6 +25,8 @@ func frei_setzen(frei: bool) -> void:
 	elif not frei and is_in_group("interactable"):
 		remove_from_group("interactable")
 
+## Direkt über den TranslationServer — Node.tr() lieferte im Spiel den rohen
+## Schlüssel ("SIGN_TENT_FOR_RENT"), Label3D übersetzt hier nicht selbst.
 func _beschriften() -> void:
-	%Titel.text = tr("SIGN_TENT_FOR_RENT")
-	%Preis.text = tr("SIGN_TENT_PRICE") % Texte.euro(preis)
+	%Titel.text = TranslationServer.translate("SIGN_TENT_FOR_RENT")
+	%Preis.text = String(TranslationServer.translate("SIGN_TENT_PRICE")) % Texte.euro(preis)

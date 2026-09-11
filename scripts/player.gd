@@ -159,8 +159,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			_sfx("prost")   # Krüge klirren — nur mit Datei
 	# Kostümfarbe wechseln — Aktion "costume"
 	if event.is_action_pressed("costume") and not event.is_echo():
-		costume = (costume + 1) % COSTUME_COLORS.size()
-		_apply_costume()
+		# Wer eine Lampe/Deko trägt, verkauft sie stattdessen
+		if _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int()):
+			_world.net_sell_einrichtung.rpc_id(1)
+		else:
+			costume = (costume + 1) % COSTUME_COLORS.size()
+			_apply_costume()
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:

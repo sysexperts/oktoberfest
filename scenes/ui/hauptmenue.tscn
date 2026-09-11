@@ -184,7 +184,7 @@ text = "MENU_BACK"
 [node name="CreditsPanel" type="PanelContainer" parent="Mitte"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(460, 0)
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
 
 [node name="Rand" type="MarginContainer" parent="Mitte/CreditsPanel"]
@@ -204,12 +204,32 @@ theme_override_font_sizes/font_size = 30
 text = "CREDITS_TITLE"
 horizontal_alignment = 1
 
-[node name="CreditsText" type="Label" parent="Mitte/CreditsPanel/Rand/Spalte"]
-custom_minimum_size = Vector2(400, 0)
+[node name="Lizenzen" type="ScrollContainer" parent="Mitte/CreditsPanel/Rand/Spalte"]
+custom_minimum_size = Vector2(0, 470)
 layout_mode = 2
-theme_override_font_sizes/font_size = 17
+horizontal_scroll_mode = 0
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/CreditsPanel/Rand/Spalte/Lizenzen"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="CreditsText" type="Label" parent="Mitte/CreditsPanel/Rand/Spalte/Lizenzen/Inhalt"]
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "CREDITS_BODY"
 horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="LizenzText" type="Label" parent="Mitte/CreditsPanel/Rand/Spalte/Lizenzen/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 12
 autowrap_mode = 3
 
 [node name="CreditsZurueck" type="Button" parent="Mitte/CreditsPanel/Rand/Spalte"]
