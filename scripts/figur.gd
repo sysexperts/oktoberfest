@@ -31,6 +31,16 @@ extends Node3D
 ## Metallic-Karte mit — dann spiegelt die Figur nur die Umgebung und wirkt in
 ## dunklen Räumen (Zelt bei Nacht) schwarz. Stoff und Haut sind nicht metallisch.
 @export var metall_ignorieren := false
+## Animationen eines anderen Modells mitbenutzen — nur sinnvoll bei gleichem
+## Skelett (gleiche Knochennamen, Pfad Armature/Skeleton3D). Die geliehenen
+## Animationen heißen dann "geliehen/<Name>".
+@export var leih_animationen: PackedScene
+
+const LEIH_BIBLIOTHEK := "geliehen"
+
+## Geliehene Animationsbibliotheken je Quellmodell — einmal geladen, von allen
+## Figuren geteilt.
+static var _leih_bibliotheken := {}
 
 ## Umgewandelte Materialien, geteilt von allen Figuren desselben Modells —
 ## eine Kopie pro Figur würde bei Hunderten Besuchern die Zeichenaufrufe vervielfachen.
@@ -50,6 +60,8 @@ func _ready() -> void:
 		skelett = sks[0]
 	if anim == null:
 		return
+	if leih_animationen:
+		_animationen_ausleihen()
 	# Die importierten Animationen haben keine Schleife gesetzt
 	var schleifen := [anim_stehen, anim_gehen, anim_rennen, anim_sitzen]
 	schleifen.append_array(anim_tanzen)
@@ -57,6 +69,17 @@ func _ready() -> void:
 	for n in schleifen:
 		if hat(n):
 			anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
+
+func _animationen_ausleihen() -> void:
+	var pfad := leih_animationen.resource_path
+	if not _leih_bibliotheken.has(pfad):
+		var quelle := leih_animationen.instantiate()
+		var aps := quelle.find_children("*", "AnimationPlayer", true, false)
+		_leih_bibliotheken[pfad] = (aps[0] as AnimationPlayer).get_animation_library("") if not aps.is_empty() else null
+		quelle.free()
+	var bibliothek: AnimationLibrary = _leih_bibliotheken[pfad]
+	if bibliothek and not anim.has_animation_library(LEIH_BIBLIOTHEK):
+		anim.add_animation_library(LEIH_BIBLIOTHEK, bibliothek)
 
 func _metall_entfernen() -> void:
 	for mi: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):

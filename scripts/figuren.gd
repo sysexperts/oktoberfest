@@ -8,6 +8,7 @@ extends RefCounted
 const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/bean.tscn"),
 	preload("res://scenes/figuren/charakter2.tscn"),
+	preload("res://scenes/figuren/charakter3.tscn"),
 ]
 
 ## Gäste, Personal, Künstler: aus der ID — so sieht jeder Mitspieler dieselbe Figur,

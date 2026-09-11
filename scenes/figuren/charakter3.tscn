@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/figur.gd" id="1_figur"]
+[ext_resource type="PackedScene" path="res://assets/character/character3/character3.glb" id="2_modell"]
+[ext_resource type="PackedScene" path="res://assets/character/character2/character2.glb" id="3_leih"]
+
+[node name="Charakter3" type="Node3D"]
+script = ExtResource("1_figur")
+anim_stehen = "geliehen/Idle_12"
+anim_gehen = "Walking"
+anim_rennen = "Running"
+anim_tanzen = PackedStringArray("Arm_Circle_Shuffle", "geliehen/Hip_Hop_Dance", "geliehen/ymca_dance")
+anim_sitzen = "geliehen/Sit_and_Drink"
+anim_extras = PackedStringArray("geliehen/Confused_Scratch")
+sitz_hoehe = 0.0
+metall_ignorieren = true
+leih_animationen = ExtResource("3_leih")
+
+[node name="Modell" parent="." instance=ExtResource("2_modell")]

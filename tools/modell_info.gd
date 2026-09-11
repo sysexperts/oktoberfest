@@ -7,6 +7,7 @@ extends SceneTree
 const MODELLE := [
 	"res://assets/character/character/bavarian_bean.glb",
 	"res://assets/character/character2/character2.glb",
+	"res://assets/character/character3/character3.glb",
 ]
 ## Knochen, die customer.gd / visitor.gd / staff.gd direkt ansprechen
 const GEBRAUCHTE_KNOCHEN := ["Hips", "Spine", "Head", "RightArm", "RightForeArm", "RightHand",
