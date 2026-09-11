@@ -138,7 +138,9 @@ if [ "$ANZAHL" -gt 0 ]; then
 	if [ -s "$vorhanden" ]; then
 		tar -czf "/opt/_deploy_sicherung/vor_v${ALT}_$(date +%Y%m%d_%H%M%S).tgz" -T "$vorhanden"
 	fi
-	tar -xzf /tmp/deploy_quellen.tgz
+	# --no-same-owner: das Archiv trägt Windows-Benutzerkennungen, die das
+	# Server-Dateisystem ablehnt — sonst endet tar mit Fehler (Deploy v104)
+	tar --no-same-owner -xzf /tmp/deploy_quellen.tgz
 	echo "$ANZAHL Dateien eingespielt"
 fi
 for lauf in 1 2; do
