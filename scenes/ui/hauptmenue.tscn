@@ -59,6 +59,13 @@ theme_override_colors/font_color = Color(0.7, 0.72, 0.8, 1)
 theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
+[node name="Laden" type="Button" parent="Mitte/Hauptspalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "MENU_LOAD"
+
 [node name="NeuesSpiel" type="Button" parent="Mitte/Hauptspalte"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
@@ -193,6 +200,87 @@ horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="CreditsZurueck" type="Button" parent="Mitte/CreditsPanel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "MENU_BACK"
+
+[node name="SpielstandPanel" type="PanelContainer" parent="Mitte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/SpielstandPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SpielstandTitel" type="Label" parent="Mitte/SpielstandPanel/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Spielstand laden"
+horizontal_alignment = 1
+
+[node name="Platz1" type="HBoxContainer" parent="Mitte/SpielstandPanel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PlatzInfo1" type="Label" parent="Mitte/SpielstandPanel/Spalte/Platz1"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+text = "Platz 1 — leer"
+
+[node name="PlatzKnopf1" type="Button" parent="Mitte/SpielstandPanel/Spalte/Platz1"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(170, 46)
+layout_mode = 2
+text = "Laden"
+
+[node name="Platz2" type="HBoxContainer" parent="Mitte/SpielstandPanel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PlatzInfo2" type="Label" parent="Mitte/SpielstandPanel/Spalte/Platz2"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+text = "Platz 2 — leer"
+
+[node name="PlatzKnopf2" type="Button" parent="Mitte/SpielstandPanel/Spalte/Platz2"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(170, 46)
+layout_mode = 2
+text = "Laden"
+
+[node name="Platz3" type="HBoxContainer" parent="Mitte/SpielstandPanel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PlatzInfo3" type="Label" parent="Mitte/SpielstandPanel/Spalte/Platz3"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+text = "Platz 3 — leer"
+
+[node name="PlatzKnopf3" type="Button" parent="Mitte/SpielstandPanel/Spalte/Platz3"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(170, 46)
+layout_mode = 2
+text = "Laden"
+
+[node name="SpielstandZurueck" type="Button" parent="Mitte/SpielstandPanel/Spalte"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2

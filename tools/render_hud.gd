@@ -4,7 +4,8 @@ extends Node
 ## beide am Ende wieder her.
 ## Aufruf: godot --path . res://tools/render_hud.tscn --resolution 1280x720
 
-const DATEIEN := ["user://oktoberfest_save.json", "user://einstellungen.cfg"]
+const DATEIEN := ["user://oktoberfest_save.json", "user://saves/slot_1.json", "user://saves/slot_2.json",
+	"user://saves/slot_3.json", "user://einstellungen.cfg"]
 
 func _ready() -> void:
 	var lauf := Lauf.new()

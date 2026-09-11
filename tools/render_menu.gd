@@ -15,6 +15,8 @@ func _ready() -> void:
 	await _bild("menu_koop_tr")
 	menu._zeige(menu.get_node("%CreditsPanel"))
 	await _bild("menu_credits_tr")
+	menu._zeige_spielstaende(true)
+	await _bild("menu_plaetze_tr")
 	# Einstellung nicht dauerhaft verändern — nur zurücksetzen, nicht speichern
 	Einstellungen.sprache = "auto"
 	Einstellungen.anwenden()

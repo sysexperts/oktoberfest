@@ -6,6 +6,14 @@ MENU_COOP,Koop spielen,Play Co-op,Birlikte Oyna
 MENU_SETTINGS,Einstellungen,Settings,Ayarlar
 MENU_CREDITS,Mitwirkende,Credits,Emeği Geçenler
 MENU_QUIT,Beenden,Quit,Çıkış
+MENU_LOAD,Spielstand laden,Load game,Oyun yükle
+SLOTS_TITLE_NEW,Neues Spiel — Platz wählen,New game — choose a slot,Yeni oyun — yuva seç
+SLOTS_TITLE_LOAD,Spielstand laden,Load game,Oyun yükle
+SLOT_EMPTY,Platz %d — leer,Slot %d — empty,Yuva %d — boş
+SLOT_INFO,Platz %d — Tag %d · %s · %s,Slot %d — Day %d · %s · %s,Yuva %d — %d. Gün · %s · %s
+SLOT_TOO_NEW,Platz %d — aus einer neueren Spielversion,Slot %d — from a newer game version,Yuva %d — daha yeni bir oyun sürümünden
+SLOT_LOAD,Laden,Load,Yükle
+SLOT_NEW,Hier beginnen,Start here,Burada başla
 MENU_BACK,Zurück,Back,Geri
 MENU_VERSION,Version %s,Version %s,Sürüm %s
 MENU_CONTINUE_INFO,"Tag %d · %s €","Day %d · €%s","%d. Gün · %s €"

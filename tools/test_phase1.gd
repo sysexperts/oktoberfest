@@ -4,7 +4,8 @@ extends Node
 ## her — der Test verändert nichts an deinem echten Stand.
 ## Aufruf: godot --headless --path . res://tools/test_phase1.tscn
 
-const DATEIEN := ["user://oktoberfest_save.json", "user://einstellungen.cfg"]
+const DATEIEN := ["user://oktoberfest_save.json", "user://saves/slot_1.json", "user://saves/slot_2.json",
+	"user://saves/slot_3.json", "user://einstellungen.cfg"]
 
 func _ready() -> void:
 	# Der Szenenwechsel würde diesen Knoten freigeben — Testlauf an die Wurzel hängen.
@@ -162,13 +163,26 @@ class Lauf extends Node:
 		gm._pruefe_meilensteine()
 		_check("keine doppelte Belohnung", Game.money == geld_danach, "")
 		gm._save_game()
-		var gespeichert: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://oktoberfest_save.json"))
+		var gespeichert: Variant = JSON.parse_string(FileAccess.get_file_as_string(Net.speicherstand_pfad()))
 		_check("Zähler und Meilensteine im Spielstand", gespeichert is Dictionary
 			and (gespeichert.get("meilensteine", []) as Array).has("MASS_100")
 			and int(gespeichert.get("stats", {}).get("served", 0)) == 100, "")
 		hud.set_buero(gm._buero_state())
 		var ziele: Node = hud.get_node("%Wiesenbuero").get_node("%ZieleListe")
 		_check("Reiter Ziele listet alle", ziele.get_child_count() == gm.Meilensteine.LISTE.size(), str(ziele.get_child_count()))
+
+		print("  -- Spielstände (3.3)")
+		_check("Stand liegt in Platz 1", Net.speicherstand_pfad() == "user://saves/slot_1.json"
+			and FileAccess.file_exists("user://saves/slot_1.json"), Net.speicherstand_pfad())
+		_check("Formatversion und Zeit im Stand", gespeichert is Dictionary
+			and int(gespeichert.get("format", 0)) == Net.SAVE_FORMAT and int(gespeichert.get("saved_at", 0)) > 0, "")
+		_check("Info liefert Tag", int(Net.speicherstand_info(1).get("day", 0)) == gm._day, str(Net.speicherstand_info(1)))
+		var zu_neu := FileAccess.open("user://saves/slot_3.json", FileAccess.WRITE)
+		zu_neu.store_string(JSON.stringify({"format": 99, "day": 5, "money": 1, "saved_at": 9999999999}))
+		zu_neu.close()
+		_check("Stand aus neuerer Version erkannt", Net.speicherstand_info(3).get("zu_neu", false), "")
+		_check("Weiterspielen ignoriert zu neuen Stand", Net.letzter_slot() == 1, str(Net.letzter_slot()))
+		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://saves/slot_3.json"))
 
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")

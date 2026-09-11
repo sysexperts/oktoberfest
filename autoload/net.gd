@@ -1,13 +1,22 @@
 extends Node
 ## Net — startet Spiele: solo, als Host oder als Client.
 ## Das Menü ruft nur diese Funktionen auf und wechselt danach die Szene nicht selbst.
+## Verwaltet außerdem die Spielstand-Plätze (der GameManager liest und schreibt
+## den Stand, Net weiß, welcher Platz gerade gilt).
 
 const DEFAULT_PORT := 8642
 const MAX_PLAYERS := 4
 const GAME_SCENE := "res://scenes/main.tscn"
 const MENU_SCENE := "res://scenes/menu.tscn"
-## Muss zu SAVE_PATH im GameManager passen.
-const SAVE_PATH := "user://oktoberfest_save.json"
+
+## Spielstände: drei Plätze. SAVE_FORMAT steigt, wenn sich der Aufbau so ändert,
+## dass ein älteres Spiel den Stand nicht mehr richtig lesen könnte — solche
+## Stände werden dann angezeigt, aber nicht geladen.
+const SAVE_DIR := "user://saves/"
+const SLOTS := 3
+const SAVE_FORMAT := 1
+## Bis Version 101 gab es nur diesen einen Stand — wird einmalig Platz 1.
+const ALTER_SPIELSTAND := "user://oktoberfest_save.json"
 
 signal connection_failed()
 
@@ -17,8 +26,11 @@ var dedicated := false ## true ise oyuncu spawn edilmez (headless dedicated serv
 var neues_spiel := false
 ## Allein spielen, ganz ohne Netzwerk — keine Firewall-Abfrage.
 var solo := false
+## Spielstand-Platz des laufenden Spiels (1..SLOTS).
+var slot := 1
 
 func _ready() -> void:
+	_alten_spielstand_uebernehmen()
 	# Dedicated server modu: "-- --server" ile başlatılınca otomatik host
 	if OS.get_cmdline_user_args().has("--server"):
 		dedicated = true
@@ -34,15 +46,20 @@ func _start_dedicated() -> void:
 
 ## Einzelspieler ohne Netzwerk. Der OfflineMultiplayerPeer verhält sich wie ein
 ## Host ohne Mitspieler: is_server() ist wahr, die eigene ID ist 1.
-func start_solo(neu: bool) -> void:
+## platz: Spielstand-Platz, 0 = den aktuellen behalten.
+func start_solo(neu: bool, platz: int = 0) -> void:
+	if platz > 0:
+		slot = platz
 	solo = true
 	neues_spiel = neu
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	get_tree().change_scene_to_file(GAME_SCENE)
 
+## Wer hostet, spielt mit seinem zuletzt benutzten Stand weiter.
 func host_game(port: int = DEFAULT_PORT) -> Error:
 	solo = false
 	neues_spiel = false
+	slot = maxi(1, letzter_slot())
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_server(port, MAX_PLAYERS)
 	if err != OK:
@@ -90,16 +107,47 @@ func is_host() -> bool:
 func version_text() -> String:
 	return str(ProjectSettings.get_setting("application/config/version", "dev"))
 
-## Kurzinfo zum Spielstand fürs Menü, ohne das Spiel zu laden.
-## Leer, wenn es keinen gibt.
-func speicherstand_info() -> Dictionary:
-	if not FileAccess.file_exists(SAVE_PATH):
+# ------------------------------------------------------------ Spielstände
+## Pfad eines Platzes; 0 = aktueller Platz.
+func speicherstand_pfad(platz: int = 0) -> String:
+	return SAVE_DIR + "slot_%d.json" % (platz if platz > 0 else slot)
+
+## Kurzinfo zu einem Platz fürs Menü, ohne das Spiel zu laden. Leer = kein Stand.
+## zu_neu: stammt aus einer neueren Spielversion und wird nicht geladen.
+func speicherstand_info(platz: int = 0) -> Dictionary:
+	var pfad := speicherstand_pfad(platz)
+	if not FileAccess.file_exists(pfad):
 		return {}
-	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if f == null:
-		return {}
-	var d: Variant = JSON.parse_string(f.get_as_text())
-	f.close()
+	var d: Variant = JSON.parse_string(FileAccess.get_file_as_string(pfad))
 	if typeof(d) != TYPE_DICTIONARY:
 		return {}
-	return {"day": int((d as Dictionary).get("day", 1)), "money": int((d as Dictionary).get("money", 0))}
+	var stand: Dictionary = d
+	return {
+		"day": int(stand.get("day", 1)),
+		"money": int(stand.get("money", 0)),
+		"saved_at": int(stand.get("saved_at", 0)),
+		"zu_neu": int(stand.get("format", 0)) > SAVE_FORMAT,
+	}
+
+## Zuletzt gespeicherter ladbarer Platz — für „Weiterspielen". 0 = keiner.
+func letzter_slot() -> int:
+	var bester := 0
+	var zeit := -1
+	for platz in range(1, SLOTS + 1):
+		var info := speicherstand_info(platz)
+		if info.is_empty() or info.zu_neu:
+			continue
+		if int(info.saved_at) > zeit:
+			zeit = int(info.saved_at)
+			bester = platz
+	return bester
+
+## Der alte Einzelstand wird Platz 1 — aber nur, wenn Platz 1 noch frei ist.
+func _alten_spielstand_uebernehmen() -> void:
+	if not FileAccess.file_exists(ALTER_SPIELSTAND):
+		return
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SAVE_DIR))
+	if FileAccess.file_exists(speicherstand_pfad(1)):
+		return
+	DirAccess.rename_absolute(ProjectSettings.globalize_path(ALTER_SPIELSTAND),
+		ProjectSettings.globalize_path(speicherstand_pfad(1)))

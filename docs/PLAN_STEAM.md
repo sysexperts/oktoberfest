@@ -110,8 +110,11 @@ morgen weiterzuspielen.
       Werden später 1:1 zu Steam-Errungenschaften.
       *13 Meilensteine in `scripts/meilensteine.gd` mit festen IDs, Geldbelohnung,
       Lebenszeit-Zähler im Spielstand, Reiter „Ziele" im Wiesenbüro.*
-- [ ] **3.3 Spielstände** — mehrere Slots, Formatversion, Autospeichern beim
+- [x] **3.3 Spielstände** — mehrere Slots, Formatversion, Autospeichern beim
       Schlafen, „Weiterspielen" lädt den letzten.
+      *Drei Plätze unter `user://saves/`, der alte Einzelstand wird Platz 1.
+      Stände aus neueren Versionen werden angezeigt, aber nicht geladen.
+      Gespeichert wird bei jeder Zustandsänderung, also auch beim Schlafen.*
 - [ ] **3.4 Wirtschaft fürs Endlosspiel** — Nachfrage und Kosten skalieren mit
       dem Fortschritt, damit Tag 40 nicht trivial wird.
 - [ ] **3.5 Pleite** — was passiert am Dispolimit? Heute nicht definiert.

@@ -22,7 +22,6 @@ const MISS_PENALTY := 5
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const CUSTOMER_SCENE := preload("res://scenes/customer.tscn")
 const MESS_SCENE := preload("res://scenes/mess.tscn")
-const SAVE_PATH := "user://oktoberfest_save.json"
 
 # Roller
 const ROLE_NONE := 0
@@ -309,8 +308,9 @@ func _time_factor() -> float:
 ## "Neues Spiel" im Menue: alten Stand entfernen, damit "Weiterspielen" ihn
 ## nicht mehr anbietet, auch wenn vor dem ersten Speichern beendet wird.
 func _loesche_speicherstand() -> void:
-	if FileAccess.file_exists(SAVE_PATH):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE_PATH))
+	var pfad := Net.speicherstand_pfad()
+	if FileAccess.file_exists(pfad):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(pfad))
 
 func _save_game() -> void:
 	if not multiplayer.is_server():
@@ -339,17 +339,24 @@ func _save_game() -> void:
 		"ever_artist": _ever_artist,
 		"stats": _stats,
 		"meilensteine": _meilensteine,
+		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
+		"format": Net.SAVE_FORMAT,
+		"saved_at": int(Time.get_unix_time_from_system()),
 	}
-	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	# Gespeichert wird bei jeder Zustandsänderung (_broadcast_meta) — also auch
+	# beim Schlafen, wenn der neue Tag beginnt.
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(Net.SAVE_DIR))
+	var f := FileAccess.open(Net.speicherstand_pfad(), FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(data))
 		f.close()
 
 ## Kayıt varsa yükle. Başarılıysa true.
 func _load_game() -> bool:
-	if not FileAccess.file_exists(SAVE_PATH):
+	var pfad := Net.speicherstand_pfad()
+	if not FileAccess.file_exists(pfad):
 		return false
-	var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	var f := FileAccess.open(pfad, FileAccess.READ)
 	if f == null:
 		return false
 	var txt := f.get_as_text()
@@ -358,6 +365,9 @@ func _load_game() -> bool:
 	if typeof(parsed) != TYPE_DICTIONARY:
 		return false
 	var d: Dictionary = parsed
+	if int(d.get("format", 0)) > Net.SAVE_FORMAT:
+		push_warning("Spielstand %s stammt aus einer neueren Version — nicht geladen." % pfad)
+		return false
 	Game.add_money(int(d.get("money", 0)) - Game.money)
 	Game.add_score(int(d.get("score", 0)) - Game.score)
 	_day = maxi(1, int(d.get("day", 1)))
