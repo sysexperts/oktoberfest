@@ -31,6 +31,13 @@ extends Node3D
 ## Metallic-Karte mit — dann spiegelt die Figur nur die Umgebung und wirkt in
 ## dunklen Räumen (Zelt bei Nacht) schwarz. Stoff und Haut sind nicht metallisch.
 @export var metall_ignorieren := false
+## Eigenleuchten mit der Farbtextur, damit alle Figuren im Zelt gleich hell
+## wirken. -1 = so lassen, wie das Modell es mitbringt; 0 = aus.
+## Der Bean bringt volles Eigenleuchten mit und strahlte deshalb weiß.
+@export var eigenleuchten := -1.0
+## Grundfarbe aufhellen (1 = unverändert) — für Modelle, bei denen Eigenleuchten
+## die Textur nicht übernimmt und die Figur nur weiß färben würde (character2).
+@export var helligkeit := 1.0
 ## Animationen eines anderen Modells mitbenutzen — nur sinnvoll bei gleichem
 ## Skelett (gleiche Knochennamen, Pfad Armature/Skeleton3D). Die geliehenen
 ## Animationen heißen dann "geliehen/<Name>".
@@ -42,16 +49,16 @@ const LEIH_BIBLIOTHEK := "geliehen"
 ## Figuren geteilt.
 static var _leih_bibliotheken := {}
 
-## Umgewandelte Materialien, geteilt von allen Figuren desselben Modells —
-## eine Kopie pro Figur würde bei Hunderten Besuchern die Zeichenaufrufe vervielfachen.
-static var _ohne_metall := {}
+## Angepasste Materialien, geteilt von allen Figuren desselben Modells — eine
+## Kopie pro Figur würde bei Hunderten Besuchern die Zeichenaufrufe vervielfachen.
+static var _angepasst := {}
 
 var anim: AnimationPlayer
 var skelett: Skeleton3D
 
 func _ready() -> void:
-	if metall_ignorieren:
-		_metall_entfernen()
+	if metall_ignorieren or eigenleuchten >= 0.0 or helligkeit != 1.0:
+		_material_anpassen()
 	var aps := find_children("*", "AnimationPlayer", true, false)
 	if not aps.is_empty():
 		anim = aps[0]
@@ -81,19 +88,32 @@ func _animationen_ausleihen() -> void:
 	if bibliothek and not anim.has_animation_library(LEIH_BIBLIOTHEK):
 		anim.add_animation_library(LEIH_BIBLIOTHEK, bibliothek)
 
-func _metall_entfernen() -> void:
+func _material_anpassen() -> void:
 	for mi: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):
 		for s in mi.mesh.get_surface_count():
 			var original := mi.get_active_material(s) as BaseMaterial3D
 			if original == null:
 				continue
-			if not _ohne_metall.has(original):
+			var schluessel := [original, metall_ignorieren, eigenleuchten, helligkeit]
+			if not _angepasst.has(schluessel):
 				var kopie := original.duplicate() as BaseMaterial3D
-				kopie.metallic = 0.0
-				kopie.metallic_texture = null
-				kopie.metallic_specular = 0.3
-				_ohne_metall[original] = kopie
-			mi.set_surface_override_material(s, _ohne_metall[original])
+				if helligkeit != 1.0:
+					var c := kopie.albedo_color
+					kopie.albedo_color = Color(c.r * helligkeit, c.g * helligkeit, c.b * helligkeit, c.a)
+				if metall_ignorieren:
+					kopie.metallic = 0.0
+					kopie.metallic_texture = null
+					kopie.metallic_specular = 0.3
+				# Ohne Farbtextur würde das Leuchten die Figur einfarbig weiß färben
+				if eigenleuchten == 0.0 or (eigenleuchten > 0.0 and kopie.albedo_texture == null):
+					kopie.emission_enabled = false
+				elif eigenleuchten > 0.0:
+					kopie.emission_enabled = true
+					kopie.emission = Color.WHITE
+					kopie.emission_texture = kopie.albedo_texture
+					kopie.emission_energy_multiplier = eigenleuchten
+				_angepasst[schluessel] = kopie
+			mi.set_surface_override_material(s, _angepasst[schluessel])
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)

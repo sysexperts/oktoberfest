@@ -47,6 +47,9 @@ class Lauf extends Node:
 		gm.net_book_tent.rpc_id(1)
 		await _frames(5)
 		_check("Zelt mieten kommt an", gm.get("_tent_stage") == stufe0 + 1, "")
+		var schild := gm.get_node_or_null("ZeltVermietung")
+		_check("Vermietungsschild nach dem Mieten weg", schild != null and not schild.visible
+			and not schild.is_in_group("interactable"), str(schild))
 		var tische0: int = gm.get("_active_count")
 		gm.net_buy_table.rpc_id(1)
 		await _frames(5)
@@ -176,7 +179,9 @@ class Lauf extends Node:
 
 		print("  -- Wirtschaft (3.4)")
 		var w := preload("res://scripts/wirtschaft.gd")
-		_check("Tag 1 unverändert", w.miete(120, 1) == 120 and w.verkaufspreis(15, 1) == 15
+		_check("Tag 1–5 mietfrei, Tag 6 zahlt", w.miete(120, 1) == 0 and w.miete(300, 5) == 0
+			and w.miete(120, 6) == 132, str(w.miete(120, 6)))
+		_check("Tag 1 unverändert", w.verkaufspreis(15, 1) == 15
 			and w.paketpreis(40, 1) == 40 and is_equal_approx(w.geduld(38.0, 1), 38.0), "")
 		_check("Tag 11: Ware +20 %", w.paketpreis(40, 11) == 48, str(w.paketpreis(40, 11)))
 		_check("Kosten höchstens doppelt", w.miete(120, 500) == 240, str(w.miete(120, 500)))

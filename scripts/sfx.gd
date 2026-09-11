@@ -53,9 +53,10 @@ func _ready() -> void:
 
 	_playlist = _lade_ordner(MUSIK_DIR)
 	_music_stream = _playlist[0] if not _playlist.is_empty() else _music()
+	# Stimmengewirr nur mit echter Datei (assets/audio/ambiente/kirmes) — der
+	# früher erzeugte Ersatz war gefiltertes Rauschen und klang wie ein lautes
+	# Grundrauschen, sobald das Zelt offen war.
 	_crowd_stream = _lade(AMBIENTE)
-	if _crowd_stream == null:
-		_crowd_stream = _crowd()
 
 	_music_player = AudioStreamPlayer.new()
 	_music_player.stream = _music_stream
@@ -68,7 +69,7 @@ func _ready() -> void:
 	_crowd_player = AudioStreamPlayer.new()
 	_crowd_player.stream = _crowd_stream
 	_crowd_player.bus = "Ambiente"
-	_crowd_player.volume_db = -10.0 if _crowd_stream != null else -22.0
+	_crowd_player.volume_db = -10.0
 	add_child(_crowd_player)
 	_ok = true
 
@@ -118,7 +119,7 @@ func play_music() -> void:
 		return
 	if not _music_player.playing:
 		_music_player.play()
-	if not _crowd_player.playing:
+	if _crowd_stream != null and not _crowd_player.playing:
 		_crowd_player.play()
 
 func stop_music() -> void:
@@ -148,22 +149,6 @@ func _music() -> AudioStreamWAV:
 				c += sin(t * float(f) * TAU)
 			s = (c / 3.0) * exp(-bt * 9.0) * 0.7
 		data.encode_s16(i * 2, int(clampf(s, -1.0, 1.0) * 22000.0))
-	var w := _wav(data, rate)
-	w.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	w.loop_begin = 0
-	w.loop_end = n
-	return w
-
-func _crowd() -> AudioStreamWAV:
-	var rate := 22050
-	var n := int(2.0 * rate)
-	var data := PackedByteArray()
-	data.resize(n * 2)
-	var prev := 0.0
-	for i in n:
-		var raw := randf() * 2.0 - 1.0
-		prev = lerpf(prev, raw, 0.05)  # basit alçak geçiren -> uğultu
-		data.encode_s16(i * 2, int(clampf(prev * 3.0, -1.0, 1.0) * 20000.0))
 	var w := _wav(data, rate)
 	w.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	w.loop_begin = 0

@@ -31,6 +31,14 @@ const ROLE_WAITER := 3
 
 # Misafir / sipariş / popülerlik
 const ENTRANCE := Vector3(0, 0.1, 12.0)
+## Gäste kommen durchs Kirmes-Haupttor und laufen über den Weg ins Zelt.
+const HAUPTTOR := Vector3(6.8, 0.1, 25.5)
+const WEG_REIN := [Vector3(6.8, 0.1, 19.0), Vector3(0.0, 0.1, 19.0), Vector3(0.0, 0.1, 12.0)]
+const WEG_RAUS := [Vector3(0.0, 0.1, 19.0), Vector3(6.8, 0.1, 19.0), Vector3(6.8, 0.1, 25.5)]
+## So viele Sekunden nach dem Aufwachen machen sich die ersten Gäste auf den Weg
+## (plus der Fußweg vom Tor) — der Tag beginnt ruhig.
+const ERSTE_GAESTE_MIN := 45.0
+const ERSTE_GAESTE_MAX := 75.0
 const CUST_SPEED := 3.0
 const GUEST_SPAWN_INTERVAL := 2.0
 const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
@@ -341,6 +349,7 @@ func _save_game() -> void:
 		"stock_essen": int(_stock[WARE_ESSEN]),
 		"toilet": _has_toilet,
 		"quest": _quest_step,
+		"quest_version": QUEST_VERSION,
 		"ever_artist": _ever_artist,
 		"stats": _stats,
 		"meilensteine": _meilensteine,
@@ -389,6 +398,9 @@ func _load_game() -> bool:
 			_lic[k] = bool((lic as Dictionary).get(k, false))
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
+	# Alte Stände: Schritte ab 3 sind durch die zwei neuen Liefer-Schritte eins weiter
+	if int(d.get("quest_version", 1)) < QUEST_VERSION and _quest_step >= 3:
+		_quest_step += 1
 	_ever_artist = bool(d.get("ever_artist", false))
 	var gespeicherte_stats: Variant = d.get("stats", {})
 	if gespeicherte_stats is Dictionary:
@@ -618,8 +630,14 @@ func _rebuild_seats() -> void:
 			away = away.normalized() if away.length() > 0.01 else Vector3.FORWARD
 			_seats.append({"pos": sp, "yaw": yaw, "guest": -1, "table": ti, "away": away})
 
+## „Zu vermieten"-Schild am Zelteingang: nur solange das Zelt noch frei ist.
+func _vermietung_aktualisieren() -> void:
+	for schild in get_tree().get_nodes_in_group("zelt_vermietung"):
+		schild.frei_setzen(_tent_stage == 0)
+
 ## Zelt kiralamaya göre masaları aktif/pasif yap + koltukları kur.
 func _apply_tent() -> void:
+	_vermietung_aktualisieren()
 	for i in _all_tables.size():
 		var bt := _all_tables[i] as Node3D
 		var on: bool = i < _active_count
@@ -745,7 +763,15 @@ func net_buy_toilet() -> void:
 ## Blase der sitzenden Gäste. Ohne Klo → Urinfleck in der Ecke.
 func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 	if int(g.mode) == 3:
-		# unterwegs / gerade dabei
+		# Erst ankommen — Pfütze und Pinkelzeit beginnen am Ziel, nicht beim Losgehen
+		var bis_ziel: Vector3 = (g.tgt as Vector3) - (g.pos as Vector3)
+		bis_ziel.y = 0.0
+		if bis_ziel.length() > 0.3:
+			return
+		if not _has_toilet and not bool(g.get("pfuetze", false)):
+			g.pfuetze = true
+			_spawn_mess_at((g.tgt as Vector3) + Vector3(randf_range(-0.4, 0.4), 0.0, randf_range(-0.4, 0.4)), 1)
+			_urin_count += 1
 		g.pee_t = float(g.pee_t) - delta
 		if float(g.pee_t) <= 0.0:
 			g.mode = 1
@@ -755,20 +781,12 @@ func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 	g.bladder = float(g.bladder) - delta
 	if float(g.bladder) > 0.0:
 		return
-	# Muss mal
-	if _has_toilet:
-		# geht kurz aufs Klo, kein Dreck
-		g.mode = 3
-		g.pee_t = PEE_DURATION
-		g.tgt = TOILET_POINT
-		g.ostate = 0
-	else:
-		g.mode = 3
-		g.pee_t = PEE_DURATION
-		g.tgt = PEE_CORNER
-		g.ostate = 0
-		_spawn_mess_at(PEE_CORNER + Vector3(randf_range(-1.2, 1.2), 0.0, randf_range(-1.2, 1.2)), 1)
-		_urin_count += 1
+	# Muss mal — ohne Klo in die Ecke (leicht gestreut, damit nicht alle auf einen Fleck)
+	g.mode = 3
+	g.pee_t = PEE_DURATION
+	g.ostate = 0
+	g.pfuetze = false
+	g.tgt = TOILET_POINT if _has_toilet else PEE_CORNER + Vector3(randf_range(-1.2, 1.2), 0.0, randf_range(-1.2, 1.2))
 
 ## Beschwerden: Gäste in der Nähe von Urin meckern, manche gehen.
 func _update_complaints(delta: float) -> void:
@@ -845,21 +863,27 @@ func _reserve_ok(cost: int) -> bool:
 # ---- Tutorial ----
 ## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
 ## übersetzt wird beim Spieler — gesendet wird nur die Schrittnummer.
-const QUEST_COUNT := 11
+const QUEST_COUNT := 12
+## Seit Version 2 gibt es die Schritte „auf den Lieferwagen warten" und „Pakete
+## ins Regal räumen" — ältere Spielstände ab Schritt 3 rücken eins weiter.
+const QUEST_VERSION := 2
 
 func _quest_done(step: int) -> bool:
 	match step:
 		0: return _tent_stage > 0
 		1: return _active_count >= 2
 		2: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
-		3: return int(_stock.get(WARE_BIER, 0)) > 0
-		4: return _shift_num >= 1
-		5: return _served >= 1 or _quest_served_once
-		6: return _shift_num >= 1 and _phase == Phase.INTERMISSION
-		7: return _has_staff(ROLE_KELLNER)
-		8: return _lic.values().has(true)
-		9: return _has_toilet
-		10: return _ever_artist
+		# Lieferwagen ist da: Pakete liegen vor dem Zelt (oder schon eingeräumt)
+		3: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
+		# alle Pakete eingeräumt
+		4: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
+		5: return _shift_num >= 1
+		6: return _served >= 1 or _quest_served_once
+		7: return _shift_num >= 1 and _phase == Phase.INTERMISSION
+		8: return _has_staff(ROLE_KELLNER)
+		9: return _lic.values().has(true)
+		10: return _has_toilet
+		11: return _ever_artist
 	return false
 
 func _has_staff(role: int) -> bool:
@@ -1650,7 +1674,7 @@ func _start_shift() -> void:
 	_served = 0
 	_missed = 0
 	_last_earn = 0
-	_guest_spawn_timer = 1.0
+	_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN, ERSTE_GAESTE_MAX)
 	_hygiene = 100.0
 	_night = false
 	_apply_night_visual(false)
@@ -1769,14 +1793,18 @@ func _spawn_guest() -> void:
 	var id := _guest_next
 	_guest_next += 1
 	_seats[si].guest = id
+	# Vom Haupttor über den Weg zum Zelteingang, dann zum Platz
+	var weg: Array = WEG_REIN.duplicate()
+	weg.append(_seats[si].pos)
+	var start: Vector3 = HAUPTTOR + Vector3(randf_range(-1.5, 1.5), 0.0, randf_range(0.0, 1.5))
 	_guest_sim[id] = {
-		"seat": si, "mode": 0, "pos": ENTRANCE, "tgt": _seats[si].pos, "yaw": 0.0,
+		"seat": si, "mode": 0, "pos": start, "tgt": weg.pop_front(), "weg": weg, "yaw": 0.0,
 		"ostate": 0, "okind": 1, "otype": 1, "patience": _geduld(),
 		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0,
 		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
 		"drinks": 0, "puke_t": 0.0, "puked": false
 	}
-	_add_guest.rpc(id, ENTRANCE)
+	_add_guest.rpc(id, start)
 
 func _update_guests(delta: float) -> void:
 	for id in _guest_sim.keys().duplicate():
@@ -1790,11 +1818,25 @@ func _update_guests(delta: float) -> void:
 			g.yaw = atan2(-to.x, -to.z)
 		else:
 			if g.mode == 0:
-				g.mode = 1
-				g.yaw = _seats[g.seat].yaw
+				var weg: Array = g.get("weg", [])
+				if not weg.is_empty():
+					g.tgt = weg.pop_front()   # nächster Wegpunkt Richtung Platz
+					g.weg = weg
+				else:
+					g.mode = 1
+					g.yaw = _seats[g.seat].yaw
 			elif g.mode == 2:
-				_despawn_guest(id)
-				continue
+				# Beim Gehen erst zum Zelteingang (das setzen die Aufrufer), dann über
+				# den Weg zurück zum Haupttor — erst dort verschwinden
+				if not bool(g.get("raus_gesetzt", false)):
+					g.raus_gesetzt = true
+					g.raus = WEG_RAUS.duplicate()
+				var raus: Array = g.get("raus", [])
+				if raus.is_empty():
+					_despawn_guest(id)
+					continue
+				g.tgt = raus.pop_front()
+				g.raus = raus
 		# Oturan misafir: sipariş döngüsü
 		if g.mode == 1:
 			_guest_order(g, id, delta)
@@ -1846,8 +1888,8 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		var seat: Dictionary = _seats[int(g.seat)]
 		g.mode = 4
 		g.ostate = 0
-		g.puke_t = 7.0
 		g.puked = false
+		g.kotzt = false
 		g.tgt = (seat.pos as Vector3) + (seat.get("away", Vector3.FORWARD) as Vector3) * 3.2
 
 func _despawn_guest(id: int) -> void:
@@ -2020,7 +2062,10 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
 
-@rpc("authority", "unreliable")
+## call_local: Uhrzeit, Beliebtheit und Sauberkeit braucht auch das HUD des
+## Hosts bzw. im Solo-Spiel — ohne kam dort nie etwas an („Zelt geschlossen",
+## Beliebtheit stand still).
+@rpc("authority", "unreliable", "call_local")
 func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array, night: bool) -> void:
 	_hud.set_money(money)
 	_hud.set_score(score)
@@ -2064,6 +2109,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_phase = phase
 	_day = day
 	_tent_stage = tent_stage
+	_vermietung_aktualisieren()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	# Clientlerde masaların görünürlüğünü senkronla
 	if not multiplayer.is_server() and _active_count != active_count:
@@ -2126,17 +2172,25 @@ func _net_betrag(pos: Vector3, betrag: int, trinkgeld: bool) -> void:
 		_sfx_node.play("muenzen" if trinkgeld else "kasse", -8.0)
 
 ## Kotz-Ablauf: Gast läuft vom Tisch weg, übergibt sich dort, geht zurück.
+## Reihenfolge: hinlaufen → ankommen → würgen → erst dann der Fleck → zurück.
 func _update_puke(g: Dictionary, id: int, delta: float) -> void:
+	if not bool(g.get("kotzt", false)):
+		var d: Vector3 = (g.tgt as Vector3) - (g.pos as Vector3)
+		d.y = 0
+		if d.length() > 0.2:
+			return   # noch unterwegs
+		g.kotzt = true
+		g.puke_t = 3.5
+		_net_guest_vomit.rpc(id)
 	g.puke_t = float(g.puke_t) - delta
-	var d: Vector3 = (g.tgt as Vector3) - (g.pos as Vector3)
-	d.y = 0
-	if not bool(g.get("puked", false)) and d.length() < 0.7:
+	# nach kurzem Würgen landet es auf dem Boden
+	if not bool(g.get("puked", false)) and float(g.puke_t) <= 2.6:
 		g.puked = true
 		g.drinks = 0
-		_net_guest_vomit.rpc(id)
 		_spawn_mess_at(g.pos as Vector3, 0)
 	if float(g.puke_t) <= 0.0:
 		g.mode = 1
+		g.kotzt = false
 		g.tgt = _seats[int(g.seat)].pos
 
 ## Kurze Schwarzblende beim Schlafen (bei allen Spielern).

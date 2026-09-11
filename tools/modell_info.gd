@@ -66,11 +66,53 @@ func _init() -> void:
 					print("  Material %s: metallic %.2f (Textur %s) · roughness %.2f (Textur %s) · albedo %s (Textur %s) · shading %d" % [
 						bm.resource_name, bm.metallic, bm.metallic_texture != null, bm.roughness,
 						bm.roughness_texture != null, str(bm.albedo_color), bm.albedo_texture != null, bm.shading_mode])
+					print("    emission %s (Energie %.2f, Textur %s) · normal %s · ao %s · rim %s · specular %.2f · vertex_color %s · transparency %d" % [
+						bm.emission_enabled, bm.emission_energy_multiplier, bm.emission_texture != null,
+						bm.normal_enabled, bm.ao_enabled, bm.rim_enabled, bm.metallic_specular,
+						bm.vertex_color_use_as_albedo, bm.transparency])
+					if bm.albedo_texture:
+						print("    Farbtextur: mittlere Helligkeit %.2f" % _mittlere_helligkeit(bm.albedo_texture))
+					if bm.metallic_texture:
+						print("    Metallic-Textur (Kanal %d): Mittelwert %.2f" % [bm.metallic_texture_channel,
+							_mittlerer_kanal(bm.metallic_texture, bm.metallic_texture_channel)])
 		print("  Meshes: %d · Materialien: %s" % [meshes, ", ".join(mats.keys())])
 		print("  Größe (Ruhepose): %.2f × %.2f × %.2f m · Boden bei y=%.2f" % [box.size.x, box.size.y, box.size.z, box.position.y])
 		print("  Wurzel: ", m.get_class(), " · Kinder: ", m.get_children().map(func(c: Node) -> String: return "%s(%s)" % [c.name, c.get_class()]))
 		m.queue_free()
 	quit()
+
+## Mittlere wahrgenommene Helligkeit einer Textur (0 = schwarz, 1 = weiß), grob gerastert.
+func _mittlere_helligkeit(tex: Texture2D) -> float:
+	var bild := tex.get_image()
+	if bild == null:
+		return -1.0
+	if bild.is_compressed():
+		bild.decompress()
+	var summe := 0.0
+	var n := 0
+	var schritt := maxi(1, bild.get_width() / 64)
+	for y in range(0, bild.get_height(), schritt):
+		for x in range(0, bild.get_width(), schritt):
+			var c := bild.get_pixel(x, y)
+			summe += c.r * 0.299 + c.g * 0.587 + c.b * 0.114
+			n += 1
+	return summe / maxf(1.0, float(n))
+
+func _mittlerer_kanal(tex: Texture2D, kanal: int) -> float:
+	var bild := tex.get_image()
+	if bild == null:
+		return -1.0
+	if bild.is_compressed():
+		bild.decompress()
+	var summe := 0.0
+	var n := 0
+	var schritt := maxi(1, bild.get_width() / 64)
+	for y in range(0, bild.get_height(), schritt):
+		for x in range(0, bild.get_width(), schritt):
+			var c := bild.get_pixel(x, y)
+			summe += [c.r, c.g, c.b, c.a][clampi(kanal, 0, 3)]
+			n += 1
+	return summe / maxf(1.0, float(n))
 
 ## Wie weit sich die Hüfte über die Animation waagerecht bewegt. Viel Weg = die
 ## Animation läuft von der Stelle weg (Root Motion) und würde die Figur verschieben.

@@ -325,6 +325,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_PICKUP" if carry_state == 0 else ""
 	if t is Lager:
 		return "HINT_STORE" if carry_state == 3 else "HINT_STORAGE"
+	if t is ZeltVermietung:
+		return "HINT_RENT_TENT"
 	if t is OfficeDesk or t is BookingKiosk:
 		return "HINT_OFFICE" if geschlossen else "HINT_OFFICE_SHIFT"
 	if t is Caravan:
@@ -392,6 +394,10 @@ func _handle_interaction(delta: float) -> void:
 				carry_pkg_amount = 0
 				carry_fill = 0.0
 				_sfx("ding")
+		elif _current_target is ZeltVermietung:
+			# Zelt direkt am Eingang mieten
+			_world.net_book_tent.rpc_id(1)
+			_sfx("pop")
 		elif _current_target is OfficeDesk:
 			# Wiesenbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
 			if _world.has_method("in_intermission") and _world.in_intermission():

@@ -41,15 +41,25 @@ func ziel_suchen() -> Node3D:
 		return null
 	var geschlossen: bool = gm.in_intermission()
 	match int(gm._quest_step):
-		0, 1, 2, 7, 8, 9, 10:
+		0:
+			# Das Schild am Zelteingang — ist es weg (gemietet), bleibt das Wiesenbüro
+			var schild := _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
+			if schild:
+				return schild
+			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
+		1, 2, 8, 9, 10, 11:
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
 		3:
+			# Lieferwagen unterwegs — schon zeigen, wohin die Pakete später gehören
+			return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
+		4:
 			if sp.carry_state == 3:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-			return _naechstes(sp, func(n: Node) -> bool: return n is Package)
-		4:
-			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
+			var paket := _naechstes(sp, func(n: Node) -> bool: return n is Package)
+			return paket if paket else _naechstes(sp, func(n: Node) -> bool: return n is Lager)
 		5:
+			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
+		6:
 			if geschlossen:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Caravan)
 			return _ziel_bedienen(sp)
@@ -84,6 +94,8 @@ func _naechstes(sp: Node3D, passt: Callable) -> Node3D:
 func _hoehe(t: Node3D) -> float:
 	if t is Caravan:
 		return 3.4
+	if t is ZeltVermietung:
+		return 2.4
 	if t is OfficeDesk:
 		return 3.0
 	if t is Package:

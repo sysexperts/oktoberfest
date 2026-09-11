@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/zelt_vermietung.gd" id="1_schild"]
+
+[sub_resource type="StandardMaterial3D" id="Holz"]
+albedo_color = Color(0.42, 0.27, 0.15, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Pfosten"]
+size = Vector3(0.1, 1.9, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Tafel"]
+albedo_color = Color(0.72, 0.12, 0.12, 1)
+roughness = 0.7
+emission_enabled = true
+emission = Color(0.35, 0.05, 0.05, 1)
+
+[sub_resource type="BoxMesh" id="TafelMesh"]
+size = Vector3(1.5, 0.8, 0.06)
+
+[node name="ZeltVermietung" type="Node3D"]
+script = ExtResource("1_schild")
+
+[node name="PfostenLinks" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.95, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("Holz")
+
+[node name="PfostenRechts" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.95, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("Holz")
+
+[node name="Tafel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("TafelMesh")
+surface_material_override/0 = SubResource("Tafel")
+
+[node name="Titel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68, 0.04)
+pixel_size = 0.006
+double_sided = false
+outline_modulate = Color(0.2, 0.02, 0.02, 1)
+text = "ZU VERMIETEN"
+font_size = 48
+outline_size = 10
+
+[node name="Preis" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42, 0.04)
+pixel_size = 0.005
+double_sided = false
+modulate = Color(1, 0.9, 0.55, 1)
+outline_modulate = Color(0.2, 0.02, 0.02, 1)
+text = "Festzelt · 500 €"
+font_size = 40
+outline_size = 10

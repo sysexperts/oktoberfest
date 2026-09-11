@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/zielmarker.tscn" id="91_ziel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hilfe.tscn" id="92_hilfe"]
 [ext_resource type="Script" path="res://scripts/grafikstufe.gd" id="93_grafik"]
+[ext_resource type="PackedScene" path="res://scenes/zelt_vermietung.tscn" id="94_vermietung"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.14, 0.18, 0.42, 1)
@@ -259,3 +260,6 @@ script = ExtResource("10_sfx")
 
 [node name="Grafikstufe" type="Node" parent="."]
 script = ExtResource("93_grafik")
+
+[node name="ZeltVermietung" parent="." instance=ExtResource("94_vermietung")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 0, 13.2)

@@ -14,6 +14,7 @@ anim_sitzen = "geliehen/Sit_and_Drink"
 anim_extras = PackedStringArray("geliehen/Confused_Scratch")
 sitz_hoehe = 0.0
 metall_ignorieren = true
+eigenleuchten = 0.6
 leih_animationen = ExtResource("3_leih")
 
 [node name="Modell" parent="." instance=ExtResource("2_modell")]

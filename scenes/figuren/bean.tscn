@@ -7,5 +7,6 @@
 script = ExtResource("1_figur")
 idle_ist_standbild = true
 anim_tanzen = PackedStringArray("Dance")
+eigenleuchten = 0.6
 
 [node name="Modell" parent="." instance=ExtResource("2_modell")]

@@ -34,7 +34,7 @@ const PAKETE := [1, 5, 10]
 ## Tutorialschritt -> [Reiter, Zeile]; Schritte wie in GameManager._quest_done.
 const TUTORIAL_ZIEL := {
 	0: [0, "ZeltMieten"], 1: [0, "TischStellen"], 2: [4, "Bier"],
-	7: [2, "Kellner"], 8: [1, "LizenzWeizen"], 9: [0, "Toilette"], 10: [3, "Strassenmusiker"],
+	8: [2, "Kellner"], 9: [1, "LizenzWeizen"], 10: [0, "Toilette"], 11: [3, "Strassenmusiker"],
 }
 
 @onready var _reiter: TabContainer = %Reiter

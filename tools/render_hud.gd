@@ -59,7 +59,7 @@ class Lauf extends Node:
 		for lang in ["de", "en", "tr"]:
 			Einstellungen.sprache = lang
 			Einstellungen.anwenden()
-			hud.set_quest(5, 11)
+			hud.set_quest(5, 12)
 			hud.set_hint("HINT_TAP")
 			await _bild("hud_%s" % lang)
 		hud.set_time(-1.0)

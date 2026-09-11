@@ -36,7 +36,12 @@ static func kosten_faktor(tag: int) -> float:
 static func preis_faktor(tag: int) -> float:
 	return minf(1.0 + PREIS_JE_TAG * _vergangen(tag), PREIS_MAX)
 
+## Die ersten Tage kostet das Zelt keine Miete — Zeit zum Einrichten.
+const MIETFREIE_TAGE := 5
+
 static func miete(basis: int, tag: int) -> int:
+	if tag <= MIETFREIE_TAGE:
+		return 0
 	return roundi(float(basis) * kosten_faktor(tag))
 
 static func paketpreis(basis: int, tag: int) -> int:
