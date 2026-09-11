@@ -111,6 +111,14 @@ HUD_TASK_SKIP,ESC → Tutorial überspringen,ESC → Skip tutorial,ESC → Eğit
 PAUSE_SKIP_TUTORIAL,Tutorial überspringen,Skip tutorial,Eğitimi atla
 HUD_OK,Verstanden,Got it,Anladım
 HUD_KOMBO,🔥 Kombo ×%d,🔥 Combo ×%d,🔥 Kombo ×%d
+HUD_DAY_SAISON,Tag %d/%d,Day %d/%d,Gün %d/%d
+EREIGNIS_FINALE_TITEL,🎉 Finale — letzter Wiesn-Tag,🎉 Finale — last day of the fair,🎉 Final — fuarın son günü
+EREIGNIS_FINALE_START,"🎉 Letzter Wiesn-Tag! Der Star-Act spielt gratis, das Zelt wird rappelvoll!","🎉 Last day of the fair! The star act plays for free, the tent will be packed!","🎉 Fuarın son günü! Yıldız sanatçı bedava çıkıyor, çadır tıklım tıklım dolacak!"
+POPUP_SAISON,"🏆 Wiesn %d ist vorbei!\n\nUmsatz: %s\nGewinn: %s\nBedient: %d\nØ Beliebtheit: %d %%\n\nBewertung: %s\n\nMorgen beginnt die nächste Wiesn — die Kosten steigen weiter.","🏆 Fair %d is over!\n\nRevenue: %s\nProfit: %s\nServed: %d\nØ popularity: %d %%\n\nRating: %s\n\nThe next fair starts tomorrow — costs keep rising.","🏆 %d. fuar bitti!\n\nCiro: %s\nKâr: %s\nServis: %d\nOrt. popülerlik: %%%d\n\nPuan: %s\n\nYarın yeni fuar başlıyor — masraflar artmaya devam ediyor."
+MS_SAISON_1_TITLE,Erste Wiesn geschafft,First fair done,İlk fuar tamam
+MS_SAISON_1_TEXT,Spiele eine ganze Wiesn bis zum Finale.,Play a whole fair until the finale.,Bir fuarı finaline kadar oyna.
+MS_WIESN_WIRT_5_TITLE,Fünf Maßkrüge,Five mugs,Beş kupa
+MS_WIESN_WIRT_5_TEXT,Beende eine Wiesn mit der Bestbewertung.,Finish a fair with the top rating.,Bir fuarı en yüksek puanla bitir.
 EREIGNIS_BUS_TITEL,🚌 Touristenbus,🚌 Tourist bus,🚌 Turist otobüsü
 EREIGNIS_BUS_START,"🚌 Heute kommt ein Touristenbus: viel mehr Gäste, aber sie sind ungeduldig!","🚌 A tourist bus arrives today: many more guests, but they're impatient!","🚌 Bugün turist otobüsü geliyor: çok daha fazla misafir ama sabırsızlar!"
 EREIGNIS_KONTROLLE_TITEL,🔍 Hygienekontrolle 15:00,🔍 Hygiene inspection 15:00,🔍 Hijyen denetimi 15:00

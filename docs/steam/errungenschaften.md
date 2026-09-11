@@ -28,6 +28,8 @@ zwei Symbole 64×64 (erreicht, grau). Danach **Publish** nicht vergessen.
 | `MASS_1000` | 1.000 Maß |
 | `ZELT_3` | Zeltstufe 3 |
 | `UMSATZ_100000` | 100.000 € Umsatz |
+| `SAISON_1` | erste Wiesn (16 Tage) bis zum Finale gespielt |
+| `WIESN_WIRT_5` | eine Wiesn mit 5 Maßkrügen bewertet |
 
 Neue Meilensteine nur **anhängen**, IDs nie umbenennen — sonst verlieren Spieler
 ihre Errungenschaften.

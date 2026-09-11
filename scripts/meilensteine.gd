@@ -21,10 +21,12 @@ const LISTE := [
 	{"id": "MASS_1000", "wert": "served", "ziel": 1000, "belohnung": 2000},
 	{"id": "ZELT_3", "wert": "tent_stage", "ziel": 3, "belohnung": 2000},
 	{"id": "UMSATZ_100000", "wert": "earned", "ziel": 100000, "belohnung": 5000},
+	{"id": "SAISON_1", "wert": "saisons", "ziel": 1, "belohnung": 1000},
+	{"id": "WIESN_WIRT_5", "wert": "beste_wertung", "ziel": 5, "belohnung": 3000},
 ]
 
 ## Lebenszeit-Zähler, die der Spielstand mitführt (GameManager._stats).
-const ZAEHLER := ["served", "earned", "days", "cleaned"]
+const ZAEHLER := ["served", "earned", "days", "cleaned", "saisons", "beste_wertung"]
 
 ## Aktuelle Zahl zu einer Meilenstein-Art.
 ## stats: Lebenszeit-Zähler · zustand: GameManager._buero_state (Zelt, Personal, Lizenzen).

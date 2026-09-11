@@ -197,7 +197,13 @@ class Lauf extends Node:
 		gm._end_shift(0)
 		await _frames(3)
 		_check("nach Tag 16 kommt Tag 17", gm._day == 17, "Tag=%d" % gm._day)
-		_check("HUD zeigt Tag 17", String(hud.get_node("%Zeit").text).begins_with("Tag 17"), hud.get_node("%Zeit").text)
+		_check("HUD zeigt Tag 1/16 der neuen Wiesn", String(hud.get_node("%Zeit").text).begins_with("Tag 1/16"), hud.get_node("%Zeit").text)
+		_check("Wiesn nach dem Finale bewertet", gm._saison_nr >= 2 and int(gm._stats.saisons) >= 1
+			and hud.is_popup_open(), "Wiesn %d" % gm._saison_nr)
+		_check("Bewertung 1–5", gm.saison_wertung({"tage": 16, "netto": 16000, "pop_summe": 1500, "bedient": 900, "verpasst": 30}) == 5
+			and gm.saison_wertung({"tage": 16, "netto": -500, "pop_summe": 300, "bedient": 100, "verpasst": 100}) == 1, "")
+		hud.close_popup()
+		gm._meilensteine.append("SAISON_1")   # Belohnung nicht in den Meilenstein-Test unten mischen
 
 		print("  -- Meilensteine (3.2)")
 		var geld_vorher: int = Game.money

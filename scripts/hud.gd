@@ -8,6 +8,7 @@ extends CanvasLayer
 ## gemerkt, damit ein Sprachwechsel alles neu beschriften kann.
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 const ROT := Color(1, 0.42, 0.35)
 const GOLD := Color(1, 0.839, 0.349)
 const WEISS := Color(0.949, 0.933, 0.902)
@@ -100,7 +101,8 @@ func set_score(_v: int) -> void:
 func set_time(clock: float, night: bool = false) -> void:
 	_clock = clock
 	_night = night
-	var tag := tr("HUD_DAY") % _day
+	# Tag innerhalb der Wiesn, z. B. „Tag 5/16"
+	var tag := tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
 	if clock < 0.0:
 		_zeit.text = "%s · %s" % [tag, tr("HUD_CLOSED")]
 		_zeit.add_theme_color_override("font_color", Color(0.72, 0.75, 0.88))

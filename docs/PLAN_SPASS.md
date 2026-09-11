@@ -165,7 +165,9 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 ## Phase 4 · Ein Ziel und ein Grund weiterzuspielen (Langzeit)
 
-- [ ] **4.1 Saison statt endlos** — eine Wiesn dauert **16 Tage**; letzter Tag
+- [x] **4.1 Saison statt endlos** *(v117: Wiesn = 16 Tage, Tag 16 Finale mit Star-Act gratis und
+      1,3× Andrang, danach Bewertung 1–5 Maßkrüge und die nächste Wiesn; Tageszähler läuft weiter,
+      Kosten steigen. HUD „Tag 5/16". Neue Meilensteine SAISON_1, WIESN_WIRT_5)* — eine Wiesn dauert **16 Tage**; letzter Tag
       ist das große Finale (voller Andrang, Star-Act umsonst). Danach Bewertung
       mit 1–5 Maßkrügen (Umsatz, Beliebtheit, Sauberkeit, Meilensteine). *Ich, M*
 - [ ] **4.2 Nächstes Jahr** — nach der Saison geht es weiter mit Bonus

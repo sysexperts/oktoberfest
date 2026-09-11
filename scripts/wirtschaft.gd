@@ -44,6 +44,14 @@ static func miete(basis: int, tag: int) -> int:
 		return 0
 	return roundi(float(basis) * kosten_faktor(tag))
 
+## Eine Wiesn dauert so viele Tage; der letzte ist das Finale (Spaß-Plan 4.1).
+## Der Tageszähler läuft durch — Saison 2 beginnt an Tag 17, Kosten steigen weiter.
+const SAISON_TAGE := 16
+
+## Tag innerhalb der aktuellen Wiesn (1 … SAISON_TAGE).
+static func saison_tag(tag: int) -> int:
+	return (maxi(tag, 1) - 1) % SAISON_TAGE + 1
+
 ## Grundpreise am Tag 1 (vorher 15/14 € — zu wenig Gewinn für Ausbauten, Spielbot)
 const BIER_BASIS := 18
 const ESSEN_BASIS := 16

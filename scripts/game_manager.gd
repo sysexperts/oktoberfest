@@ -187,6 +187,8 @@ const PROSIT_ALLE := 40.0          # Sekunden (~2 Spielstunden)
 const KOMBO_FENSTER_MS := 8000
 const KOMBO_BONUS := 2
 const KOMBO_MAX := 10
+## Finale am letzten Wiesn-Tag: voller Andrang, Star-Act spielt gratis
+const FINALE_ANDRANG := 1.3
 
 var _hud: HUD
 var _sfx_node: Node
@@ -215,6 +217,9 @@ var _ereignis_erledigt := false
 var _prosit_timer := 0.0
 var _fass_kaputt := 0        # Sorte, die heute fehlt (Ereignis "fass")
 var _kombo := {}             # Peer -> {n, t}: Kombo beim Bedienen
+## Zahlen der laufenden Wiesn (für die Bewertung am Finale), wird gespeichert
+var _saison := {"umsatz": 0, "netto": 0, "bedient": 0, "verpasst": 0, "pop_summe": 0, "tage": 0}
+var _saison_nr := 1
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -271,7 +276,7 @@ var _quest_timer := 0.0
 # Meilensteine (Plan 3.2): Lebenszeit-Zähler und erreichte IDs, beides im Spielstand
 const Meilensteine := preload("res://scripts/meilensteine.gd")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
-var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0}
+var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0, "saisons": 0, "beste_wertung": 0}
 var _meilensteine: Array = []
 # Rettungskredit (Plan 3.5): offene Schuld bei der Brauerei, heute getilgt
 var _kredit_rest := 0
@@ -444,6 +449,8 @@ func _save_game() -> void:
 		"kredit": _kredit_rest,
 		"bierpreis": _bierpreis,
 		"einrichtung": _einrichtung.values(),
+		"saison": _saison,
+		"saison_nr": _saison_nr,
 		"format": Net.SAVE_FORMAT,
 		"saved_at": int(Time.get_unix_time_from_system()),
 	}
@@ -500,6 +507,11 @@ func _load_game() -> bool:
 		_meilensteine = (erreicht as Array).map(func(x: Variant) -> String: return str(x))
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
 	_bierpreis = clampf(float(d.get("bierpreis", 1.0)), Wirtschaft.BIERPREIS_MIN, Wirtschaft.BIERPREIS_MAX)
+	_saison_nr = maxi(1, int(d.get("saison_nr", 1 + (_day - 1) / Wirtschaft.SAISON_TAGE)))
+	var gespeicherte_saison: Variant = d.get("saison", {})
+	if gespeicherte_saison is Dictionary:
+		for k in _saison.keys():
+			_saison[k] = int((gespeicherte_saison as Dictionary).get(k, 0))
 	var einr: Variant = d.get("einrichtung", [])
 	if einr is Array:
 		for e: Variant in einr:
@@ -2095,12 +2107,53 @@ func _shift_process(delta: float) -> void:
 	_update_complaints(delta)
 	_update_hygiene(delta)
 
+## Ist heute der letzte Wiesn-Tag?
+func ist_finale() -> bool:
+	return Wirtschaft.saison_tag(_day) == Wirtschaft.SAISON_TAGE
+
+## Bewertung 1–5 Maßkrüge aus Gewinn, Beliebtheit und verpassten Bestellungen.
+func saison_wertung(s: Dictionary) -> int:
+	var tage := maxi(1, int(s.get("tage", 1)))
+	var punkte := 0
+	var netto_tag := float(s.get("netto", 0)) / float(tage)
+	if netto_tag >= 800.0:
+		punkte += 2
+	elif netto_tag >= 300.0:
+		punkte += 1
+	var pop := float(s.get("pop_summe", 0)) / float(tage)
+	if pop >= 80.0:
+		punkte += 2
+	elif pop >= 50.0:
+		punkte += 1
+	var alle := int(s.get("bedient", 0)) + int(s.get("verpasst", 0))
+	if alle > 0 and float(s.get("verpasst", 0)) / float(alle) <= 0.1:
+		punkte += 1
+	return clampi(punkte, 1, 5)
+
+## Finale vorbei: Bewertung zeigen, nächste Wiesn beginnt.
+func _saison_abschluss() -> void:
+	var wertung := saison_wertung(_saison)
+	var tage := maxi(1, int(_saison.tage))
+	net_popup.rpc("POPUP_SAISON", [_saison_nr, _eur(int(_saison.umsatz)), _eur(int(_saison.netto)),
+		int(_saison.bedient), roundi(float(_saison.pop_summe) / float(tage)),
+		"🍺".repeat(wertung) + "▫".repeat(5 - wertung)])
+	_stats.saisons = int(_stats.get("saisons", 0)) + 1
+	_stats.beste_wertung = maxi(int(_stats.get("beste_wertung", 0)), wertung)
+	_saison_nr += 1
+	_saison = {"umsatz": 0, "netto": 0, "bedient": 0, "verpasst": 0, "pop_summe": 0, "tage": 0}
+
 ## Morgens: vielleicht ein Tagesereignis ankündigen. erzwingen = Ereignis-ID (Tests).
 func _ereignis_waehlen(erzwingen := "") -> void:
 	_ereignis = ""
 	_ereignis_erledigt = false
 	_prosit_timer = PROSIT_ALLE
 	_fass_kaputt = 0
+	# Letzter Wiesn-Tag: immer Finale mit Star-Act gratis
+	if erzwingen == "" and ist_finale():
+		_ereignis = "finale"
+		_artist_tier = 3
+		_melde("EREIGNIS_FINALE_START", [], 2)
+		return
 	if erzwingen == "" and (_day < EREIGNIS_AB_TAG or randf() > EREIGNIS_CHANCE):
 		return
 	var auswahl: Array = EREIGNISSE.duplicate()
@@ -2120,6 +2173,8 @@ func _happy_hour() -> bool:
 func _ereignis_andrang() -> float:
 	if _ereignis == "bus":
 		return 1.5
+	if _ereignis == "finale":
+		return FINALE_ANDRANG
 	if _happy_hour():
 		return 1.4
 	return 1.0
@@ -2299,6 +2354,15 @@ func _end_shift(reason := 0) -> void:
 		2:
 			_melde("REPORT_END_EARLY", [int(closed_at), roundi(pop_penalty)], 1)
 	_melde("MSG_DAY_END", [_eur(net_profit)], 2 if net_profit >= 0 else 1)
+	# Wiesn-Zahlen sammeln, am Finale bewerten
+	_saison.umsatz = int(_saison.umsatz) + _last_earn
+	_saison.netto = int(_saison.netto) + net_profit
+	_saison.bedient = int(_saison.bedient) + _served
+	_saison.verpasst = int(_saison.verpasst) + _missed
+	_saison.pop_summe = int(_saison.pop_summe) + roundi(_popularity)
+	_saison.tage = int(_saison.tage) + 1
+	if ist_finale():
+		_saison_abschluss()
 	_clean_tips = 0
 	_interest_paid = 0
 	_kredit_heute = 0
@@ -2689,7 +2753,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
-		"ereignis": _ereignis,
+		"ereignis": _ereignis, "saison_nr": _saison_nr,
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 		"kredit": _kredit_rest,
