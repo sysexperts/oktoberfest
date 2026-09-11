@@ -25,6 +25,14 @@ height = 0.16
 resource_local_to_scene = true
 albedo_color = Color(0.95, 0.65, 0.05, 1)
 
+[sub_resource type="StandardMaterial3D" id="MatBeerX1"]
+resource_local_to_scene = true
+albedo_color = Color(0.95, 0.75, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatBeerX2"]
+resource_local_to_scene = true
+albedo_color = Color(0.95, 0.75, 0.2, 1)
+
 [sub_resource type="TorusMesh" id="Scarf"]
 inner_radius = 0.28
 outer_radius = 0.42
@@ -97,6 +105,26 @@ material_override = SubResource("MatGlass")
 visible = false
 mesh = SubResource("Beer")
 material_override = SubResource("MatBeer")
+
+[node name="ExtraKrug1" type="MeshInstance3D" parent="Head/HoldPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, -0.01, 0.02)
+visible = false
+mesh = SubResource("Glass")
+material_override = SubResource("MatGlass")
+
+[node name="Bier" type="MeshInstance3D" parent="Head/HoldPoint/ExtraKrug1"]
+mesh = SubResource("Beer")
+material_override = SubResource("MatBeerX1")
+
+[node name="ExtraKrug2" type="MeshInstance3D" parent="Head/HoldPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -0.02, 0.04)
+visible = false
+mesh = SubResource("Glass")
+material_override = SubResource("MatGlass")
+
+[node name="Bier" type="MeshInstance3D" parent="Head/HoldPoint/ExtraKrug2"]
+mesh = SubResource("Beer")
+material_override = SubResource("MatBeerX2")
 
 [node name="CarryFood" type="MeshInstance3D" parent="Head/HoldPoint"]
 visible = false

@@ -12,6 +12,10 @@ const MOUSE_SENS := 0.0025
 const PITCH_LIMIT := deg_to_rad(85.0)
 const EYE_HEIGHT := 1.35
 const FILL_RATE := 0.6
+## Volle Krüge auf einmal (1 in der Hand + Rest als extra_kruege) — Spaß-Plan 2.3
+const MAX_KRUEGE := 3
+## Jeder zusätzliche Krug macht so viel langsamer
+const TRAG_BREMSE := 0.12
 
 # 1 Helles, 2 Weizen, 3 Radler
 const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
@@ -26,6 +30,8 @@ var carry_pkg_amount := 0
 var carry_state := 0     # 0 = boş el, 1 = bardak, 2 = yemek, 3 = paket
 var carry_fill := 0.0    # 0..1
 var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler
+## Weitere volle Krüge (Biersorten), zusätzlich zum Krug in der Hand
+var extra_kruege: Array[int] = []
 var emote := 0           # 0 yok, 1 Prost/dans (senkron)
 var costume := 0         # kostüm rengi indeksi (senkron)
 var _applied_costume := -1
@@ -52,6 +58,7 @@ var _net_yaw: float
 @onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
 @onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
+@onready var _extra_nodes: Array[MeshInstance3D] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _scarf: MeshInstance3D = $Scarf
 @onready var _emote_label: Label3D = $Emote
 @onready var _ring: MeshInstance3D = $Ring
@@ -195,7 +202,7 @@ func _physics_process(delta: float) -> void:
 		_update_hint()
 		_handle_interaction(delta)
 		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
-		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume)
+		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
@@ -228,12 +235,15 @@ func _update_animation(delta: float) -> void:
 		_cur_anim = want
 
 @rpc("authority", "unreliable_ordered")
-func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int, em: int, cost: int) -> void:
+func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int, em: int, cost: int, extra: PackedByteArray) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
 	carry_state = cstate
 	carry_fill = cfill
 	carry_type = ctype
+	extra_kruege.clear()
+	for sorte in extra:
+		extra_kruege.append(int(sorte))
 	emote = em
 	costume = cost
 	_apply_costume()
@@ -252,6 +262,7 @@ func _handle_movement(delta: float) -> void:
 	dir.y = 0
 	dir = dir.normalized() if dir.length() > 0.01 else Vector3.ZERO
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
+	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
 	if dir != Vector3.ZERO:
 		velocity.x = move_toward(velocity.x, dir.x * speed, ACCEL * delta * speed)
 		velocity.z = move_toward(velocity.z, dir.z * speed, ACCEL * delta * speed)
@@ -329,11 +340,13 @@ func _hint_for(t: Node3D) -> String:
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
 	if t is Customer:
 		var g := t as Customer
-		if g.order_state != 1 or not _has_ready():
+		if g.order_state != 1 or not (_has_ready() or not extra_kruege.is_empty()):
 			return ""
-		return "HINT_SERVE" if g.can_serve(_carry_kind(), carry_type) else "HINT_WRONG_ORDER"
+		var passt := (_has_ready() and g.can_serve(_carry_kind(), carry_type)) \
+			or (g.order_kind == 1 and extra_kruege.has(g.order_type))
+		return "HINT_SERVE" if passt else "HINT_WRONG_ORDER"
 	if t is Ausgabe:
-		if carry_state != 0:
+		if carry_state != 0 and not kann_weiteren_krug():
 			return ""
 		return "HINT_AUSGABE_TAKE" if (t as Ausgabe).hat_fertiges() else "HINT_AUSGABE_EMPTY"
 	if t is Einrichtung:
@@ -344,7 +357,9 @@ func _hint_for(t: Node3D) -> String:
 	if t is BeerTable:
 		return "HINT_MOVE_TABLE" if geschlossen else ""
 	if t is MugDispenser:
-		return "HINT_TAKE_MUG" if carry_state == 0 else ""
+		if carry_state == 0:
+			return "HINT_TAKE_MUG"
+		return "HINT_TAKE_ANOTHER" if kann_weiteren_krug() else ""
 	if t is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			return "HINT_TAP"
@@ -380,21 +395,28 @@ func _update_highlight() -> void:
 
 func _handle_interaction(delta: float) -> void:
 	if _current_target == null:
-		if Input.is_action_just_pressed("interact") and carry_state != 0:
+		if Input.is_action_just_pressed("interact") and (carry_state != 0 or not extra_kruege.is_empty()):
 			carry_state = 0
 			carry_fill = 0.0
 			carry_type = 0
 			carry_pkg_kind = 0
 			carry_pkg_amount = 0
+			extra_kruege.clear()
 		return
 	if Input.is_action_just_pressed("interact"):
-		if _current_target is Customer and _has_ready():
+		if _current_target is Customer and (_has_ready() or not extra_kruege.is_empty()):
 			var g := _current_target as Customer
-			if g.can_serve(_carry_kind(), carry_type):
+			if _has_ready() and g.can_serve(_carry_kind(), carry_type):
 				_world.net_serve_guest.rpc_id(1, g.cust_id, _carry_kind(), carry_type)
 				carry_state = 0
 				carry_fill = 0.0
 				carry_type = 0
+				_naechster_krug_in_hand()
+				_sfx("ding")
+			elif g.order_state == 1 and g.order_kind == 1 and extra_kruege.has(g.order_type):
+				# Passender Krug aus den zusätzlichen — der in der Hand bleibt
+				_world.net_serve_guest.rpc_id(1, g.cust_id, 1, g.order_type)
+				extra_kruege.erase(g.order_type)
 				_sfx("ding")
 		elif _current_target is BeerTable:
 			# Molada masayı tut/bırak (yerleştir)
@@ -406,12 +428,16 @@ func _handle_interaction(delta: float) -> void:
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
-		elif _current_target is Ausgabe and carry_state == 0:
+		elif _current_target is Ausgabe and (carry_state == 0 or kann_weiteren_krug()):
 			# Fertigen Krug/Teller von der Ausgabe nehmen (Server entscheidet was)
 			if (_current_target as Ausgabe).hat_fertiges():
+				if carry_state != 0:
+					_krug_weglegen()
 				_world.net_take_ausgabe.rpc_id(1)
 				_sfx("pop")
-		elif _current_target is MugDispenser and carry_state == 0:
+		elif _current_target is MugDispenser and (carry_state == 0 or kann_weiteren_krug()):
+			if carry_state != 0:
+				_krug_weglegen()   # vollen Krug zu den anderen, neuen leeren nehmen
 			carry_state = 1
 			carry_fill = 0.0
 			carry_type = 0
@@ -486,6 +512,27 @@ func _handle_interaction(delta: float) -> void:
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
 
+## Noch Platz für einen weiteren vollen Krug? (Hand voll, weniger als MAX_KRUEGE)
+func kann_weiteren_krug() -> bool:
+	return _has_full_mug() and extra_kruege.size() < MAX_KRUEGE - 1
+
+## Vollen Krug aus der Hand zu den zusätzlichen legen — die Hand ist dann frei.
+func _krug_weglegen() -> void:
+	if not _has_full_mug():
+		return
+	extra_kruege.append(carry_type)
+	carry_state = 0
+	carry_fill = 0.0
+	carry_type = 0
+
+## Nach dem Bedienen: nächsten vollen Krug in die Hand nehmen.
+func _naechster_krug_in_hand() -> void:
+	if carry_state != 0 or extra_kruege.is_empty():
+		return
+	carry_state = 1
+	carry_fill = 1.0
+	carry_type = extra_kruege.pop_front()
+
 func _carry_kind() -> int:
 	# 1 = içecek (bardak), 2 = yemek
 	return carry_state
@@ -496,6 +543,14 @@ func _has_ready() -> bool:
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1
 	var has_food := carry_state == 2
+	# Zusätzliche volle Krüge neben dem in der Hand
+	for i in _extra_nodes.size():
+		var n := _extra_nodes[i]
+		n.visible = i < extra_kruege.size()
+		if n.visible:
+			var bm := (n.get_child(0) as MeshInstance3D).material_override as StandardMaterial3D
+			if bm:
+				bm.albedo_color = BEER_COLORS.get(extra_kruege[i], BEER_COLORS[0])
 	_carry_glass.visible = has_mug
 	_carry_beer.visible = has_mug and carry_fill > 0.01
 	if has_mug:

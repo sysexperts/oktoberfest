@@ -132,7 +132,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 - [x] **2.2 Tische reagieren** *(v114: bei guter Stimmung tanzen 2–3 Gäste je Tisch auf dem Tisch)* — bediente Tische stoßen an („Prost!"), ab
       19:00 steigen Gäste auf die Bänke und schunkeln; volle Stimmung = sichtbare
       Wirkung (mehr Trinkgeld). *Ich, M*
-- [ ] **2.3 Mehrere Krüge tragen (Spieler)** — Spieler kann 2, mit Aufstufung
+- [x] **2.3 Mehrere Krüge tragen (Spieler)** *(v123: bis zu 3 volle Krüge, je Krug 12 % langsamer, passender Krug wird automatisch serviert)* — Spieler kann 2, mit Aufstufung
       bis 4 Krüge tragen, dafür langsamer laufen. Belohnt Planung. *Ich, M*
 - [ ] **2.4 Saft & Rückmeldung** — Geld-Zahlen fliegen zur Anzeige, kurze
       Kamera-Wackler bei Kotzen, Konfetti bei Meilenstein, Zapfhahn-Füllanzeige

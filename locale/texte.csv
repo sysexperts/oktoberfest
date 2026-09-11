@@ -163,6 +163,7 @@ MSG_PROSIT,🎺 Ein Prosit! Alle wollen jetzt Bier!,🎺 Ein Prosit! Everyone wa
 EREIGNIS_PROMI_TITEL,📸 Promi im Zelt,📸 Celebrity in the tent,📸 Çadırda ünlü
 EREIGNIS_PROMI_START,📸 Ein Promi feiert heute im Zelt — doppeltes Trinkgeld!,📸 A celebrity is partying in the tent today — double tips!,📸 Bugün çadırda bir ünlü eğleniyor — çift bahşiş!
 HINT_TAKE_MUG,{interact} Krug nehmen,{interact} Take a mug,{interact} Kupa al
+HINT_TAKE_ANOTHER,{interact} Noch einen Krug nehmen (bis zu 3),{interact} Take another mug (up to 3),{interact} Bir kupa daha al (en fazla 3)
 HINT_TAP,{interact} halten: zapfen,Hold {interact}: pour,{interact} basılı tut: doldur
 HINT_NEED_MUG,Erst einen Krug nehmen,Grab a mug first,Önce bir kupa al
 HINT_SERVE,{interact} Gast bedienen,{interact} Serve guest,{interact} Misafire servis yap

@@ -98,6 +98,26 @@ class Lauf extends Node:
 		spieler.carry_fill = 0.2
 		_check("Fass mit halbem Krug", spieler._hint_for(fass) == "HINT_TAP", spieler._hint_for(fass))
 		_check("Krugspender mit Krug: nichts", spieler._hint_for(zapfhahn) == "", spieler._hint_for(zapfhahn))
+		# Mehrere Krüge (Spaß-Plan 2.3)
+		spieler.carry_state = 1
+		spieler.carry_fill = 1.0
+		spieler.carry_type = 2
+		_check("voller Krug: noch einen nehmen", spieler._hint_for(zapfhahn) == "HINT_TAKE_ANOTHER" and spieler.kann_weiteren_krug(),
+			spieler._hint_for(zapfhahn))
+		spieler._krug_weglegen()
+		spieler.carry_state = 1
+		spieler.carry_fill = 1.0
+		spieler.carry_type = 1
+		spieler._krug_weglegen()
+		spieler.carry_state = 1
+		spieler.carry_fill = 1.0
+		spieler.carry_type = 3
+		_check("höchstens 3 Krüge", spieler.extra_kruege.size() == 2 and not spieler.kann_weiteren_krug(), str(spieler.extra_kruege))
+		spieler.carry_state = 0
+		spieler._naechster_krug_in_hand()
+		_check("nächster Krug kommt in die Hand", spieler.carry_state == 1 and spieler.carry_type == 2
+			and spieler.extra_kruege.size() == 1, "Sorte %d" % spieler.carry_type)
+		spieler.extra_kruege.clear()
 		spieler.carry_state = 0
 		spieler.carry_fill = 0.0
 		var hud := gm.get_node("HUD")
