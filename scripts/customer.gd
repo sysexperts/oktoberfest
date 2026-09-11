@@ -1,8 +1,11 @@
 class_name Customer
 extends Node3D
-## Müşteri NPC — oyuncularla aynı bean modeli. Host otoriter konum belirler,
-## tüm peer'lar senkron konuma lerp eder + yürüme/idle animasyonu.
+## Müşteri NPC. Host otoriter konum belirler, tüm peer'lar senkron konuma lerp
+## eder + yürüme/oturma animasyonu.
+## Die Figur kommt aus der Gast-ID (scripts/figuren.gd) — so sieht im Koop jeder
+## Mitspieler denselben Gast, ohne dass die Wahl übers Netz geht.
 
+const Figuren := preload("res://scripts/figuren.gd")
 const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler"}
 const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
 const FOOD_NAMES := {1: "Pretzel", 2: "Sosis"}
@@ -15,6 +18,7 @@ var order_type := 1
 var patience_ratio := 1.0
 var _net_pos: Vector3
 var _net_yaw: float
+var _figur: Figur
 var _anim: AnimationPlayer
 var _skel: Skeleton3D
 var _mug: MeshInstance3D
@@ -33,18 +37,14 @@ func _ready() -> void:
 	_net_pos = position
 	_net_yaw = rotation.y
 	_last = position
-	var aps := _model.find_children("*", "AnimationPlayer", true, false)
-	if aps.size() > 0:
-		_anim = aps[0]
-		for n in ["Idle", "Walk"]:
-			if _anim.has_animation(n):
-				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		if _anim.has_animation("Idle"):
-			_anim.play("Idle")
-			_cur = "Idle"
-	var sks := _model.find_children("*", "Skeleton3D", true, false)
-	if sks.size() > 0:
-		_skel = sks[0]
+	_figur = Figuren.einsetzen(self, Figuren.fuer_id(cust_id))
+	_model = _figur
+	_anim = _figur.anim
+	_skel = _figur.skelett
+	if _anim:
+		_figur.stehen()
+		_cur = "Idle"
+	if _skel:
 		_make_mug()
 
 func _make_mug() -> void:
@@ -84,6 +84,10 @@ func _update_vomit(delta: float) -> void:
 		_vomit_t -= delta
 		if not _vomit_active:
 			_vomit_active = true
+			# Eine laufende Animation (etwa Sitzen mit Trinken) würde die Knochenpose
+			# jedes Bild überschreiben — solange angehalten
+			if _anim:
+				_anim.active = false
 			if _bubble:
 				_bubble.visible = true
 				_bubble.text = "🤮"
@@ -98,6 +102,10 @@ func _update_vomit(delta: float) -> void:
 		if _skel:
 			_pose(_skel.find_bone("Spine"), Vector3.RIGHT, 0.0)
 			_pose(_skel.find_bone("Head"), Vector3.RIGHT, 0.0)
+		# Figuren mit Sitzanimation weitertrinken lassen; die Knochenpose-Sitzer
+		# bleiben ohne Animation, wie beim Hinsetzen
+		if _anim and (not _seated or _figur.kann_sitzen()):
+			_anim.active = true
 		_update_bubble()
 
 func can_serve(kind: int, type: int) -> bool:
@@ -128,24 +136,27 @@ func _process(delta: float) -> void:
 	var spd := (position - _last).length() / maxf(delta, 0.001)
 	_last = position
 	var want := "Walk" if spd > 0.4 else "Idle"
-	# Oturma / kalkma geçişi (iskelet pozu)
+	# Oturma / kalkma geçişi
 	if want == "Idle" and not _seated:
 		_enter_sit()
 	elif want == "Walk" and _seated:
 		_exit_sit()
-	if not _seated:
-		if want != _cur and _anim and _anim.has_animation(want):
-			_anim.play(want)
-			_cur = want
+	if not _seated and want != _cur and _anim:
+		if want == "Walk":
+			_figur.gehen()
+		else:
+			_figur.stehen()
+		_cur = want
 	# Otururken bankta biraz alçal + hafif sarhoş sallanma
 	if _model:
-		var target_y := 0.05 if _seated else 0.0
+		var target_y := _figur.sitz_hoehe if _seated else 0.0
 		_model.position.y = lerpf(_model.position.y, target_y, clampf(delta * 6.0, 0.0, 1.0))
 		_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * 0.06 if _seated else 0.0
 	# C3: kusma pozu (kutlamayı bastırır)
 	_update_vomit(delta)
-	# Otururken kutlama: kol kaldır-indir (içme/Prost)
-	if _seated and _skel and not _vomit_active:
+	# Otururken kutlama: kol kaldır-indir (içme/Prost) — nur ohne Sitzanimation,
+	# die bringt das Trinken selbst mit
+	if _seated and _skel and not _vomit_active and not _figur.kann_sitzen():
 		var tt := float(Time.get_ticks_msec()) * 0.004 + float(cust_id)
 		var fore := _skel.find_bone("RightForeArm")
 		if fore >= 0:
@@ -154,6 +165,12 @@ func _process(delta: float) -> void:
 
 func _enter_sit() -> void:
 	_seated = true
+	if _mug:
+		_mug.visible = true
+	# Figur mit eigener Sitzanimation: die übernimmt Beine, Oberkörper und Trinken
+	if _figur.kann_sitzen():
+		_figur.sitzen()
+		return
 	if _anim:
 		_anim.active = false
 	if _skel == null:
@@ -163,19 +180,16 @@ func _enter_sit() -> void:
 	_pose(_skel.find_bone("RightUpLeg"), Vector3.RIGHT, -1.5)
 	_pose(_skel.find_bone("LeftLeg"), Vector3.RIGHT, 1.6)
 	_pose(_skel.find_bone("RightLeg"), Vector3.RIGHT, 1.6)
-	# Sağ kolu kaldır (bira içme pozu) + bardağı göster
+	# Sağ kolu kaldır (bira içme pozu)
 	_pose(_skel.find_bone("RightArm"), Vector3.RIGHT, 0.8)
 	_pose(_skel.find_bone("RightForeArm"), Vector3.RIGHT, 1.4)
-	if _mug:
-		_mug.visible = true
 
 func _exit_sit() -> void:
 	_seated = false
 	if _mug:
 		_mug.visible = false
 	if _anim:
-		_anim.active = true
-		_anim.play("Walk")
+		_figur.gehen()
 		_cur = "Walk"
 
 func _pose(bone: int, axis: Vector3, ang: float) -> void:
@@ -183,3 +197,7 @@ func _pose(bone: int, axis: Vector3, ang: float) -> void:
 		return
 	var rest := _skel.get_bone_rest(bone).basis.get_rotation_quaternion()
 	_skel.set_bone_pose_rotation(bone, rest * Quaternion(axis, ang))
+
+## Für Tests: ob der Gast gerade sitzt.
+func sitzt() -> bool:
+	return _seated

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/figur.gd" id="1_figur"]
+[ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2_modell"]
+
+[node name="Bean" type="Node3D"]
+script = ExtResource("1_figur")
+idle_ist_standbild = true
+anim_tanzen = PackedStringArray("Dance")
+
+[node name="Modell" parent="." instance=ExtResource("2_modell")]

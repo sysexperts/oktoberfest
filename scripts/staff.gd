@@ -5,13 +5,11 @@ extends Node3D
 
 const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5)}
 const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹"}
+const Figuren := preload("res://scripts/figuren.gd")
+## Versatz, damit Personal und Gäste mit gleicher Nummer nicht gleich aussehen
+const FIGUR_VERSATZ := 1000
 
-## Im Modell ist "Idle" nur ein Einzelbild (die T-Pose). Zum Stehen frieren wir
-## deshalb die Laufanimation an einer neutralen Stelle ein.
-const STAND_ANIM := "Walk"
-const STAND_FRAME := 0.25
-
-## Das Bean-Modell schaut nicht in Godots Standardrichtung. Bei Rückwärtslaufen
+## Die Figuren schauen nicht in Godots Standardrichtung. Bei Rückwärtslaufen
 ## hier auf 0 oder 180 stellen.
 @export var model_yaw_offset := 180.0
 
@@ -22,6 +20,7 @@ var carrying := 0
 
 var _net_pos: Vector3
 var _net_yaw := 0.0
+var _figur: Figur
 var _anim: AnimationPlayer
 var _walking := false
 var _last := Vector3.ZERO
@@ -47,37 +46,30 @@ func _ready() -> void:
 	add_to_group("staff")
 	_net_pos = position
 	_last = position
+	# Figur aus der ID: alle Mitspieler sehen denselben Angestellten
+	_figur = Figuren.einsetzen(self, Figuren.fuer_id(staff_id + FIGUR_VERSATZ))
+	_model = _figur
+	_anim = _figur.anim
 	_model.rotation.y = deg_to_rad(model_yaw_offset)
 	_model_base_y = _model.position.y
-	var aps := _model.find_children("*", "AnimationPlayer", true, false)
-	if aps.size() > 0:
-		_anim = aps[0]
-		for n in ["Walk", "Run", "Dance"]:
-			if _anim.has_animation(n):
-				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		_set_standing()
+	_set_standing()
 	_collect_mugs()
-	_setup_idle_motion()
+	if _figur.braucht_idle_bewegung():
+		_setup_idle_motion()
 	_setup_hand_mugs()
 	_refresh_label()
 
-## Neutrale Stehpose: Laufanimation an einer Stelle mit geschlossenen Beinen
-## anhalten. Wirkt ruhig statt tanzend oder erstarrt in T-Pose.
+## Stehen: echte Stehanimation der Figur, beim Bean die eingefrorene Laufpose.
 func _set_standing() -> void:
-	if _anim == null or not _anim.has_animation(STAND_ANIM):
+	if _anim == null:
 		return
-	_anim.play(STAND_ANIM)
-	_anim.seek(STAND_FRAME, true)
-	_anim.advance(0.0)      # Pose sofort anwenden
-	_anim.speed_scale = 0.0 # eingefroren
+	_figur.stehen()
 	_walking = false
 
 func _set_walking() -> void:
-	if _anim == null or not _anim.has_animation("Walk"):
+	if _anim == null:
 		return
-	if not _walking:
-		_anim.play("Walk")
-	_anim.speed_scale = 1.0
+	_figur.gehen()
 	_walking = true
 
 ## Die Maßkrüge liegen als echte Knoten in staff.tscn (Traube vor dem Körper).
@@ -134,8 +126,7 @@ func _process(delta: float) -> void:
 	else:
 		if _walking:
 			_set_standing()
-		if _anim:
-			_anim.seek(STAND_FRAME, true)   # Skelett aktualisieren, damit die Idle-Bewegung greift
+		_figur.pose_auffrischen()   # Skelett aktualisieren, damit die Idle-Bewegung greift
 		# im Stehen leicht umschauen und atmen, damit er nicht erstarrt wirkt
 		_jitter_t -= delta
 		if _jitter_t <= 0.0:
@@ -150,10 +141,9 @@ func _process(delta: float) -> void:
 ## wirklich der Handbewegung. Alles darüber hinaus wird als Traube vor dem
 ## Bauch gezeigt (wie eine echte Bedienung mehrere Maß trägt).
 func _setup_hand_mugs() -> void:
-	var sks := _model.find_children("*", "Skeleton3D", true, false)
-	if sks.is_empty():
+	var sk := _figur.skelett
+	if sk == null:
 		return
-	var sk := sks[0] as Skeleton3D
 	for bone_name in ["RightHand", "LeftHand"]:
 		var b := sk.find_bone(bone_name)
 		if b < 0:
@@ -188,11 +178,15 @@ func _setup_hand_mugs() -> void:
 		krug.add_child(schaum)
 		_hand_mugs.append(krug)
 
-## Organische Stehbewegung (Atmen, Gewicht verlagern, Kopf drehen).
+## Organische Stehbewegung (Atmen, Gewicht verlagern, Kopf drehen) — nur für
+## Figuren ohne echte Stehanimation.
 func _setup_idle_motion() -> void:
-	var sks := _model.find_children("*", "Skeleton3D", true, false)
-	if sks.is_empty():
+	if _figur.skelett == null:
 		return
 	_idle_motion = IdleMotion.new()
 	_idle_motion.name = "IdleMotion"
-	(sks[0] as Skeleton3D).add_child(_idle_motion)
+	_figur.skelett.add_child(_idle_motion)
+
+## Für Tests: welche Figur dieser Angestellte hat.
+func figur() -> Figur:
+	return _figur

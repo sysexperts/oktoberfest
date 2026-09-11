@@ -258,6 +258,42 @@ class Lauf extends Node:
 			Einstellungen.aufloesung = 1.0
 			Einstellungen.anwenden()
 
+		print("  -- NPC-Figuren")
+		var figuren := preload("res://scripts/figuren.gd")
+		_check("mindestens zwei Figuren", figuren.ALLE.size() >= 2, str(figuren.ALLE.size()))
+		_check("gleiche ID ergibt gleiche Figur", figuren.fuer_id(17) == figuren.fuer_id(17), "")
+		var verteilt := {}
+		for i in 20:
+			verteilt[figuren.fuer_id(i).resource_path] = true
+		_check("IDs verteilen sich auf alle Figuren", verteilt.size() == figuren.ALLE.size(), str(verteilt.size()))
+		for szene: PackedScene in figuren.ALLE:
+			var id := 0
+			while figuren.fuer_id(id) != szene:
+				id += 1
+			var gast: Node3D = load("res://scenes/customer.tscn").instantiate()
+			gast.cust_id = id
+			gm.get_node("Customers").add_child(gast)
+			await _frames(2)
+			var f: Node = gast.get_node("Model")
+			var kurz := szene.resource_path.get_file()
+			_check("Gast %s: Figur mit Animation" % kurz,
+				f is Figur and f.scene_file_path == szene.resource_path and f.anim != null, str(f.scene_file_path))
+			gast._enter_sit()
+			await _frames(2)
+			if f.kann_sitzen():
+				_check("Gast %s: sitzt per Animation" % kurz, f.anim.current_animation == f.anim_sitzen,
+					f.anim.current_animation)
+			else:
+				_check("Gast %s: sitzt per Knochenpose" % kurz, gast.sitzt() and not f.anim.active, "")
+			gast.queue_free()
+		var angestellter: Node3D = load("res://scenes/staff.tscn").instantiate()
+		angestellter.staff_id = 0
+		gm.get_node("Customers").add_child(angestellter)
+		await _frames(2)
+		_check("Personal hat Figur und Krüge an den Händen", angestellter.figur() != null
+			and angestellter._hand_mugs.size() == 2, str(angestellter._hand_mugs.size()))
+		angestellter.queue_free()
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

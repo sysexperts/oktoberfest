@@ -2,17 +2,17 @@ class_name Visitor
 extends Node3D
 ## Kirmes-Besucher. Bummelt von Stand zu Stand, bleibt davor stehen, geht weiter.
 ## Läuft immer in Blickrichtung — dadurch nie rückwärts oder seitlich schlurfend.
+## Jeder Besucher bekommt zufällig eine Figur aus scripts/figuren.gd.
 
+const Figuren := preload("res://scripts/figuren.gd")
 const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
 const TURN_SPEED := 6.0
-## "Idle" im Modell ist nur ein Einzelbild (T-Pose) — zum Stehen frieren wir
-## die Laufanimation an einer neutralen Stelle ein.
-const STAND_ANIM := "Walk"
-const STAND_FRAME := 0.25
 ## So viele Besucher feiern beim Stehenbleiben statt nur dazustehen.
 const DANCE_CHANCE := 0.08
+## So viele machen stattdessen eine Extra-Bewegung (Kopf kratzen …), wenn die Figur eine hat.
+const EXTRA_CHANCE := 0.12
 
-## Das Bean-Modell schaut nicht in Godots Standardrichtung.
+## Die Figuren schauen nicht in Godots Standardrichtung.
 @export var model_yaw_offset := 180.0
 
 var speed := 1.5
@@ -20,13 +20,12 @@ var speed := 1.5
 var _crowd: Node = null
 var _tgt := Vector3.ZERO
 var _pause := 0.0
-var _anim: AnimationPlayer
-var _state := ""        # "walk", "stand" oder "dance"
+var _figur: Figur
+var _state := ""        # "walk", "stand", "dance" oder "extra"
 var _lod_timer := 0.0
 var _far := false
 var _jitter_t := 0.0
 var _jitter := 0.0
-var _bob := 0.0
 var _base_y := 0.0
 var _walk_speed := 1.0
 var _idle_motion: IdleMotion
@@ -35,18 +34,16 @@ var _idle_motion: IdleMotion
 
 func _ready() -> void:
 	add_to_group("visitor")
+	# Draußen läuft alles nur lokal — Zufall reicht, niemand muss dieselbe Figur sehen
+	_figur = Figuren.einsetzen(self, Figuren.zufaellig())
+	_model = _figur
 	speed = randf_range(1.1, 2.0)
 	_walk_speed = randf_range(0.85, 1.15)
 	_model.rotation.y = deg_to_rad(model_yaw_offset)
 	_base_y = _model.position.y
-	var aps := _model.find_children("*", "AnimationPlayer", true, false)
-	if aps.size() > 0:
-		_anim = aps[0]
-		for n in ["Walk", "Dance", "Run"]:
-			if _anim.has_animation(n):
-				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		_go_walk()
-	_setup_idle_motion()
+	_go_walk()
+	if _figur.braucht_idle_bewegung():
+		_setup_idle_motion()
 
 func setup(crowd: Node) -> void:
 	_crowd = crowd
@@ -58,31 +55,30 @@ func setup(crowd: Node) -> void:
 		rotation.y = atan2(-d.x, -d.z)
 
 func _go_walk() -> void:
-	if _anim == null or _state == "walk" or not _anim.has_animation("Walk"):
+	if _state == "walk":
 		return
-	_anim.play("Walk")
-	_anim.seek(randf(), true)
-	_anim.speed_scale = _walk_speed
-	_anim.advance(0.0)
+	_figur.gehen(_walk_speed)
 	_state = "walk"
 
 func _go_stand() -> void:
-	if _anim == null or _state == "stand" or not _anim.has_animation(STAND_ANIM):
+	if _state == "stand":
 		return
-	_anim.play(STAND_ANIM)
-	_anim.seek(STAND_FRAME, true)
-	_anim.advance(0.0)
-	_anim.speed_scale = 0.0   # eingefroren: ruhig stehen, kein Tanzen
+	_figur.stehen()
 	_state = "stand"
 
 func _go_dance() -> void:
-	if _anim == null or _state == "dance" or not _anim.has_animation("Dance"):
-		_go_stand()
+	if _state == "dance":
 		return
-	_anim.play("Dance")
-	_anim.seek(randf() * 4.0, true)
-	_anim.speed_scale = randf_range(0.8, 1.1)
-	_state = "dance"
+	if _figur.tanzen(randf_range(0.8, 1.1)):
+		_state = "dance"
+	else:
+		_go_stand()
+
+func _go_extra() -> void:
+	if _figur.extra():
+		_state = "extra"
+	else:
+		_go_stand()
 
 func _process(delta: float) -> void:
 	_update_lod(delta)
@@ -96,8 +92,11 @@ func _process(delta: float) -> void:
 	to.y = 0
 	if to.length() < 0.7:
 		_pause = randf_range(1.5, 6.0)
-		if randf() < DANCE_CHANCE:
+		var wurf := randf()
+		if wurf < DANCE_CHANCE:
 			_go_dance()
+		elif wurf < DANCE_CHANCE + EXTRA_CHANCE:
+			_go_extra()
 		else:
 			_go_stand()
 		_tgt = _crowd.next_point(position)
@@ -119,9 +118,9 @@ func _process(delta: float) -> void:
 func _idle_look(delta: float) -> void:
 	if _idle_motion:
 		_idle_motion.idle = true
-	if _anim and _state == "stand":
-		_anim.seek(STAND_FRAME, true)   # Skelett aktualisieren
-	if _state == "dance":
+	if _state == "stand":
+		_figur.pose_auffrischen()   # nur beim Standbild-Modell nötig
+	if _state == "dance" or _state == "extra":
 		return
 	_jitter_t -= delta
 	if _jitter_t <= 0.0:
@@ -129,8 +128,6 @@ func _idle_look(delta: float) -> void:
 		_jitter = randf_range(-0.5, 0.5)
 	_model.rotation.y = lerp_angle(_model.rotation.y,
 		deg_to_rad(model_yaw_offset) + _jitter, clampf(delta * 1.5, 0.0, 1.0))
-
-
 
 func _update_lod(delta: float) -> void:
 	_lod_timer -= delta
@@ -144,18 +141,18 @@ func _update_lod(delta: float) -> void:
 	if far == _far:
 		return
 	_far = far
-	if _anim:
+	var anim := _figur.anim
+	if anim:
 		if far:
-			_anim.advance(0.0)      # aktuelle Pose einfrieren, sonst T-Pose
-			_anim.active = false
+			anim.advance(0.0)      # aktuelle Pose einfrieren, sonst T-Pose
+			anim.active = false
 		else:
-			_anim.active = true
+			anim.active = true
 
-## Organische Stehbewegung statt eingefrorener Pose.
+## Organische Stehbewegung — nur für Figuren ohne echte Stehanimation.
 func _setup_idle_motion() -> void:
-	var sks := _model.find_children("*", "Skeleton3D", true, false)
-	if sks.is_empty():
+	if _figur.skelett == null:
 		return
 	_idle_motion = IdleMotion.new()
 	_idle_motion.name = "IdleMotion"
-	(sks[0] as Skeleton3D).add_child(_idle_motion)
+	_figur.skelett.add_child(_idle_motion)

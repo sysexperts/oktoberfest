@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b7dl2t1533qmp"]
 
 [ext_resource type="Script" path="res://scripts/customer.gd" id="1"]
-[ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
 
 [node name="Customer" type="Node3D"]
 script = ExtResource("1")
@@ -10,7 +10,7 @@ script = ExtResource("1")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 
 [node name="Bubble" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
 visible = false
 billboard = 1
 pixel_size = 0.008

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/staff.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2_model"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2_model"]
 
 [sub_resource type="CylinderMesh" id="KrugMesh"]
 top_radius = 0.032
@@ -25,7 +25,7 @@ script = ExtResource("1_script")
 [node name="Model" parent="." instance=ExtResource("2_model")]
 
 [node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
 billboard = 1
 pixel_size = 0.004
 font_size = 40

@@ -1,10 +1,14 @@
 class_name Artist
 extends Node3D
-## Künstler auf der Bühne — tanzt die ganze Schicht (Dance-Animation aus dem Modell).
+## Künstler auf der Bühne — tanzt die ganze Schicht.
+## Figur und Tanz kommen aus scripts/figuren.gd; die Figur hängt am Knotennamen
+## (Artist0, Artist1 …), der bei allen Mitspielern gleich ist.
+
+const Figuren := preload("res://scripts/figuren.gd")
 
 var tier := 1
 
-var _anim: AnimationPlayer
+var _figur: Figur
 var _t := 0.0
 
 @onready var _model: Node3D = $Model
@@ -12,15 +16,10 @@ var _t := 0.0
 
 func _ready() -> void:
 	add_to_group("artist")
-	var aps := _model.find_children("*", "AnimationPlayer", true, false)
-	if aps.size() > 0:
-		_anim = aps[0]
-		if _anim.has_animation("Dance"):
-			_anim.get_animation("Dance").loop_mode = Animation.LOOP_LINEAR
-			_anim.play("Dance")
-		elif _anim.has_animation("Idle"):
-			_anim.get_animation("Idle").loop_mode = Animation.LOOP_LINEAR
-			_anim.play("Idle")
+	_figur = Figuren.einsetzen(self, Figuren.fuer_id(String(name).hash()))
+	_model = _figur
+	if not _figur.tanzen(randf_range(0.9, 1.1)):
+		_figur.stehen()
 	# leicht versetzt starten, damit nicht alle synchron zappeln
 	_t = randf() * 6.0
 
