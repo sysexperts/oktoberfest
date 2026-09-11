@@ -12,5 +12,6 @@ anim_tanzen = PackedStringArray("Hip_Hop_Dance", "ymca_dance")
 anim_sitzen = "Sit_and_Drink"
 anim_extras = PackedStringArray("Confused_Scratch")
 sitz_hoehe = 0.0
+metall_ignorieren = true
 
 [node name="Modell" parent="." instance=ExtResource("2_modell")]

@@ -27,11 +27,21 @@ extends Node3D
 @export var anim_extras: PackedStringArray = []
 ## So weit wird die Figur beim Sitzen angehoben (Bankhöhe).
 @export var sitz_hoehe := 0.05
+## Metallic-Anteil des Modells ignorieren. Manche Modelle bringen eine gebackene
+## Metallic-Karte mit — dann spiegelt die Figur nur die Umgebung und wirkt in
+## dunklen Räumen (Zelt bei Nacht) schwarz. Stoff und Haut sind nicht metallisch.
+@export var metall_ignorieren := false
+
+## Umgewandelte Materialien, geteilt von allen Figuren desselben Modells —
+## eine Kopie pro Figur würde bei Hunderten Besuchern die Zeichenaufrufe vervielfachen.
+static var _ohne_metall := {}
 
 var anim: AnimationPlayer
 var skelett: Skeleton3D
 
 func _ready() -> void:
+	if metall_ignorieren:
+		_metall_entfernen()
 	var aps := find_children("*", "AnimationPlayer", true, false)
 	if not aps.is_empty():
 		anim = aps[0]
@@ -47,6 +57,20 @@ func _ready() -> void:
 	for n in schleifen:
 		if hat(n):
 			anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
+
+func _metall_entfernen() -> void:
+	for mi: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):
+		for s in mi.mesh.get_surface_count():
+			var original := mi.get_active_material(s) as BaseMaterial3D
+			if original == null:
+				continue
+			if not _ohne_metall.has(original):
+				var kopie := original.duplicate() as BaseMaterial3D
+				kopie.metallic = 0.0
+				kopie.metallic_texture = null
+				kopie.metallic_specular = 0.3
+				_ohne_metall[original] = kopie
+			mi.set_surface_override_material(s, _ohne_metall[original])
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)

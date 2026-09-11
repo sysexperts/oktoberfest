@@ -59,6 +59,12 @@ func _init() -> void:
 			for s in mi.mesh.get_surface_count():
 				var mat := mi.get_active_material(s)
 				mats[str(mat.resource_name if mat else "—")] = true
+				# Metallisch wirkt in dunklen Räumen schwarz — deshalb die Werte zeigen
+				if mat is BaseMaterial3D:
+					var bm := mat as BaseMaterial3D
+					print("  Material %s: metallic %.2f (Textur %s) · roughness %.2f (Textur %s) · albedo %s (Textur %s) · shading %d" % [
+						bm.resource_name, bm.metallic, bm.metallic_texture != null, bm.roughness,
+						bm.roughness_texture != null, str(bm.albedo_color), bm.albedo_texture != null, bm.shading_mode])
 		print("  Meshes: %d · Materialien: %s" % [meshes, ", ".join(mats.keys())])
 		print("  Größe (Ruhepose): %.2f × %.2f × %.2f m · Boden bei y=%.2f" % [box.size.x, box.size.y, box.size.z, box.position.y])
 		print("  Wurzel: ", m.get_class(), " · Kinder: ", m.get_children().map(func(c: Node) -> String: return "%s(%s)" % [c.name, c.get_class()]))
