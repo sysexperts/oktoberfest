@@ -112,6 +112,10 @@ PAUSE_SKIP_TUTORIAL,Tutorial überspringen,Skip tutorial,Eğitimi atla
 HUD_OK,Verstanden,Got it,Anladım
 HUD_KOMBO,🔥 Kombo ×%d,🔥 Combo ×%d,🔥 Kombo ×%d
 HUD_DAY_SAISON,Tag %d/%d,Day %d/%d,Gün %d/%d
+DIFF_LABEL,Schwierigkeit,Difficulty,Zorluk
+DIFF_0,"Gemütlich — geduldige Gäste, weniger Miete","Relaxed — patient guests, lower rent","Rahat — sabırlı misafirler, düşük kira"
+DIFF_1,Normal,Normal,Normal
+DIFF_2,"Wiesn-Wahnsinn — mehr Gäste, weniger Geduld","Fair frenzy — more guests, less patience","Fuar çılgınlığı — daha çok misafir, daha az sabır"
 MSG_FEIERABEND_GROSS,🌙 22:00 — Feierabend!,🌙 22:00 — closing time!,🌙 22:00 — mesai bitti!
 COMP_GOODS,📦 Ware nachbestellen,📦 Reorder supplies,📦 Malzeme sipariş et
 COMP_GOODS_STOCK,Im Lager: 🍺 %d · 🥨 %d · Lieferungen unterwegs: %d,In storage: 🍺 %d · 🥨 %d · deliveries on the way: %d,Depoda: 🍺 %d · 🥨 %d · yoldaki teslimat: %d

@@ -39,6 +39,7 @@ func _ready() -> void:
 
 	for platz in range(1, Net.SLOTS + 1):
 		_platz_knopf(platz).pressed.connect(_on_platz.bind(platz))
+	%Schwierigkeit.item_selected.connect(func(i: int) -> void: Net.schwierigkeit = i)
 	%SpielstandZurueck.pressed.connect(_zeige.bind(_haupt))
 
 	%ServerBeitreten.pressed.connect(_verbinde.bind(SERVER_IP))
@@ -132,6 +133,13 @@ func _zeige_spielstaende(neu: bool) -> void:
 
 func _plaetze_aktualisieren() -> void:
 	%SpielstandTitel.text = tr("SLOTS_TITLE_NEW" if _modus_neu else "SLOTS_TITLE_LOAD")
+	# Schwierigkeit nur beim neuen Spiel wählbar
+	%SchwierigkeitZeile.visible = _modus_neu
+	var wahl: OptionButton = %Schwierigkeit
+	wahl.clear()
+	for i in 3:
+		wahl.add_item(tr("DIFF_%d" % i), i)
+	wahl.select(clampi(Net.schwierigkeit, 0, 2))
 	for platz in range(1, Net.SLOTS + 1):
 		var info := Net.speicherstand_info(platz)
 		var knopf := _platz_knopf(platz)

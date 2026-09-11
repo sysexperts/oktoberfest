@@ -384,6 +384,19 @@ class Lauf extends Node:
 		gm._ereignis = ""
 		gm._fass_kaputt = 0
 		gm._lic["weizen"] = weizen_vorher
+
+		print("  -- Schwierigkeit")
+		var geduld_normal: float = gm._geduld()
+		var miete_normal: int = gm._daily_rent()
+		gm._schwierigkeit = 0
+		var geduld_gemuetlich: float = gm._geduld()
+		gm._schwierigkeit = 2
+		var geduld_wahnsinn: float = gm._geduld()
+		var miete_wahnsinn: int = gm._daily_rent()
+		gm._schwierigkeit = 1
+		_check("Gemütlich geduldiger, Wahnsinn ungeduldiger", geduld_gemuetlich > geduld_normal and geduld_wahnsinn < geduld_normal,
+			"%.1f / %.1f / %.1f" % [geduld_gemuetlich, geduld_normal, geduld_wahnsinn])
+		_check("Wiesn-Wahnsinn: Miete höher (oder mietfrei)", miete_wahnsinn >= miete_normal, "%d / %d" % [miete_normal, miete_wahnsinn])
 		gm._phase = gm.Phase.INTERMISSION
 
 		print("  -- Spielstände (3.3)")

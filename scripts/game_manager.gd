@@ -79,6 +79,13 @@ const HYGIENE_MIN_ANTEIL := 0.7
 const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
 const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bier 60
+## Schwierigkeit (Spaß-Plan 6.1): 0 Gemütlich, 1 Normal, 2 Wiesn-Wahnsinn
+const STARTGELD := [1600, 1200, 900]
+const GEDULD_FAKTOR := [1.35, 1.0, 0.8]
+const ANDRANG_FAKTOR := [0.9, 1.0, 1.2]
+const MIETE_FAKTOR := [0.75, 1.0, 1.3]
+## Koop (Spaß-Plan 5.1): je weiterer Spieler so viel mehr Andrang
+const KOOP_ANDRANG_JE_SPIELER := 0.5
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
@@ -222,6 +229,7 @@ var _kombo := {}             # Peer -> {n, t}: Kombo beim Bedienen
 ## Zahlen der laufenden Wiesn (für die Bewertung am Finale), wird gespeichert
 var _saison := {"umsatz": 0, "netto": 0, "bedient": 0, "verpasst": 0, "pop_summe": 0, "tage": 0}
 var _saison_nr := 1
+var _schwierigkeit := 1
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -371,9 +379,10 @@ func _ready() -> void:
 	if multiplayer.is_server():
 		if Net.neues_spiel:
 			_loesche_speicherstand()
-			Game.add_money(START_MONEY)
+			_schwierigkeit = clampi(Net.schwierigkeit, 0, 2)
+			Game.add_money(int(STARTGELD[_schwierigkeit]))
 		elif not _load_game():
-			Game.add_money(START_MONEY)
+			Game.add_money(int(STARTGELD[_schwierigkeit]))
 		Net.neues_spiel = false
 		# Erreichte Meilensteine nachtragen — falls Steam beim Erreichen nicht lief
 		for ms_id: String in _meilensteine:
@@ -457,6 +466,7 @@ func _save_game() -> void:
 		"einrichtung": _einrichtung.values(),
 		"saison": _saison,
 		"saison_nr": _saison_nr,
+		"schwierigkeit": _schwierigkeit,
 		"format": Net.SAVE_FORMAT,
 		"saved_at": int(Time.get_unix_time_from_system()),
 	}
@@ -514,6 +524,7 @@ func _load_game() -> bool:
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
 	_bierpreis = clampf(float(d.get("bierpreis", 1.0)), Wirtschaft.BIERPREIS_MIN, Wirtschaft.BIERPREIS_MAX)
 	_saison_nr = maxi(1, int(d.get("saison_nr", 1 + (_day - 1) / Wirtschaft.SAISON_TAGE)))
+	_schwierigkeit = clampi(int(d.get("schwierigkeit", 1)), 0, 2)
 	var gespeicherte_saison: Variant = d.get("saison", {})
 	if gespeicherte_saison is Dictionary:
 		for k in _saison.keys():
@@ -611,11 +622,11 @@ func _apply_daylight(clock: float) -> void:
 			himmel.set_shader_parameter("regen", r)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
-	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day)
+	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day) * float(GEDULD_FAKTOR[_schwierigkeit])
 	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
-	return Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)
+	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)) * float(MIETE_FAKTOR[_schwierigkeit]))
 
 ## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
 func _drinks_avail() -> Array:
@@ -2116,6 +2127,9 @@ func _shift_process(delta: float) -> void:
 		andrang *= Wirtschaft.preis_andrang(_bierpreis)
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
 		andrang *= _ereignis_andrang()
+		andrang *= float(ANDRANG_FAKTOR[_schwierigkeit])
+		# Koop: mit mehr Spielern kommen mehr Gäste, sonst ist es zu leicht
+		andrang *= 1.0 + KOOP_ANDRANG_JE_SPIELER * float(maxi(1, _players_nodes.size()) - 1)
 		var target := mini(_seats.size(), int(round(andrang * float(_seats.size()) * _time_factor() * draw)))
 		if _guest_sim.size() < target:
 			_spawn_guest()

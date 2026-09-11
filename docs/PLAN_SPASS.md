@@ -185,7 +185,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 ## Phase 5 · Koop mit eigenen Momenten
 
-- [ ] **5.1 Andrang wächst mit Spielerzahl** — 2 Spieler = 1,5× Gäste,
+- [x] **5.1 Andrang wächst mit Spielerzahl** *(v119: +50 % je weiterem Spieler)* — 2 Spieler = 1,5× Gäste,
       4 Spieler = 2,5×, sonst ist Koop zu leicht. *Ich, S*
 - [ ] **5.2 Zusammenarbeit belohnen** — Übergabe von Krügen zwischen Spielern,
       „Team-Kombo" wenn verschiedene Spieler am selben Tisch bedienen. *Ich, M*
@@ -195,7 +195,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 ## Phase 6 · Balancing & Schwierigkeit
 
-- [ ] **6.1 Schwierigkeitsstufen** beim neuen Spiel: *Gemütlich* (geduldige
+- [x] **6.1 Schwierigkeitsstufen** *(v119: Auswahl beim neuen Spiel; Startgeld, Geduld, Andrang, Miete)* beim neuen Spiel: *Gemütlich* (geduldige
       Gäste, kein Kredit-Druck), *Normal*, *Wiesn-Wahnsinn*. *Ich, S*
 - [ ] **6.2 Wirtschaft nach Bot-Daten einstellen** (aus 0.2): Ausbau-Zeitpunkte
       so, dass man etwa alle 2 Tage etwas Neues kaufen kann; Zeltstufe 3 um Tag 12. *Ich, M*

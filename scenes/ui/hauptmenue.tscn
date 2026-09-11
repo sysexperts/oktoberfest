@@ -256,6 +256,23 @@ theme_override_font_sizes/font_size = 28
 text = "Spielstand laden"
 horizontal_alignment = 1
 
+[node name="SchwierigkeitZeile" type="HBoxContainer" parent="Mitte/SpielstandPanel/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SchwierigkeitText" type="Label" parent="Mitte/SpielstandPanel/Spalte/SchwierigkeitZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+text = "DIFF_LABEL"
+
+[node name="Schwierigkeit" type="OptionButton" parent="Mitte/SpielstandPanel/Spalte/SchwierigkeitZeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(300, 42)
+layout_mode = 2
+
 [node name="Platz1" type="HBoxContainer" parent="Mitte/SpielstandPanel/Spalte"]
 layout_mode = 2
 theme_override_constants/separation = 14
