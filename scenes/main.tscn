@@ -261,5 +261,7 @@ script = ExtResource("10_sfx")
 [node name="Grafikstufe" type="Node" parent="."]
 script = ExtResource("93_grafik")
 
+[node name="Einrichtung" type="Node3D" parent="."]
+
 [node name="ZeltVermietung" parent="." instance=ExtResource("94_vermietung")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 0, 13.2)

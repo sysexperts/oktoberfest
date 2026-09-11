@@ -44,7 +44,7 @@ class Lauf extends Node:
 		for i in plaetze.size():
 			var platz: Dictionary = plaetze[i]
 			var gast: Node3D = gm.CUSTOMER_SCENE.instantiate()
-			gast.cust_id = ids[i % ids.size()] + i * Figuren.ALLE.size()
+			gast.cust_id = ids[i % ids.size()] + i * Figuren.GAESTE.size()
 			gast.position = platz.pos
 			gast.rotation.y = float(platz.yaw)
 			gm.get_node("Customers").add_child(gast)
@@ -88,6 +88,13 @@ class Lauf extends Node:
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png("res://tools/gaeste_gegenueber.png")
 		print("  gespeichert: gaeste_gegenueber")
+		# Von der Seite, auf Sitzhöhe — zeigt, ob jemand in der Bank versinkt
+		spieler.global_position = tisch.global_position + Vector3(-3.2, -0.5, 0.0)
+		spieler.rotation.y = -PI / 2.0
+		spieler.get_node("Head").rotation.x = deg_to_rad(-6.0)
+		await _frames(30)
+		get_viewport().get_texture().get_image().save_png("res://tools/gaeste_seite.png")
+		print("  gespeichert: gaeste_seite")
 
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)
@@ -102,9 +109,9 @@ class Lauf extends Node:
 	## Eine ID je Figur, damit am Tisch jede Figur vorkommt.
 	func _ids_je_figur() -> Array:
 		var ids := []
-		for szene in Figuren.ALLE:
+		for szene in Figuren.GAESTE:
 			var id := 0
-			while Figuren.fuer_id(id) != szene:
+			while Figuren.fuer_gast(id) != szene:
 				id += 1
 			ids.append(id)
 		return ids

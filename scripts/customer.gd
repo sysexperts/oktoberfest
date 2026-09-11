@@ -37,7 +37,7 @@ func _ready() -> void:
 	_net_pos = position
 	_net_yaw = rotation.y
 	_last = position
-	_figur = Figuren.einsetzen(self, Figuren.fuer_id(cust_id))
+	_figur = Figuren.einsetzen(self, Figuren.fuer_gast(cust_id))
 	_model = _figur
 	_anim = _figur.anim
 	_skel = _figur.skelett

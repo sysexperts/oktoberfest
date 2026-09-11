@@ -19,7 +19,6 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _lager: Label = %Lager
 @onready var _sauberkeit: ProgressBar = %Sauberkeit
 @onready var _sauberkeit_wert: Label = %SauberkeitWert
-@onready var _rollen: Control = %Rollen
 @onready var _aufgabe: Control = %Aufgabe
 @onready var _meldungen: Control = %Meldungen
 @onready var _hinweisfenster: Control = %Hinweisfenster
@@ -146,15 +145,11 @@ func _balken_farbe(balken: ProgressBar, farbe: Color) -> void:
 		(box as StyleBoxFlat).bg_color = farbe
 
 # ------------------------------------------------------------ Zustand vom Server
-## Zelt, Personal, Lizenzen, Rollen … (GameManager._buero_state).
+## Zelt, Personal, Lizenzen, Bierpreis … (GameManager._buero_state).
 func set_buero(z: Dictionary) -> void:
 	_zustand = z
 	_buero.setze_zustand(z)
 	_computer.setze_zustand(z)
-	# Rollenliste — nur im Koop sinnvoll
-	var roles: Dictionary = z.get("roles", {})
-	%RollenText.text = Texte.rollen(roles)
-	_rollen.visible = not Net.solo and not roles.is_empty()
 
 ## Tagesbilanz (Zahlen, übersetzt wird hier).
 func set_report(b: Dictionary) -> void:

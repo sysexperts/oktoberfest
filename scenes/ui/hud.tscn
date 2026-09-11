@@ -155,20 +155,6 @@ grow_horizontal = 0
 mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="Rollen" type="PanelContainer" parent="Rechts"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 8
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Leiste")
-
-[node name="RollenText" type="Label" parent="Rechts/Rollen"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-horizontal_alignment = 2
-
 [node name="Erledigt" type="PanelContainer" parent="Rechts"]
 unique_name_in_owner = true
 visible = false

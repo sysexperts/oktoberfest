@@ -192,6 +192,47 @@ class Lauf extends Node:
 		_check("Miete im Spiel folgt dem Tag", gm._daily_rent() == w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._day),
 			"Tag %d, Miete %d" % [gm._day, gm._daily_rent()])
 
+		print("  -- Bierpreis")
+		var preis0: int = gm._reward_for(1)
+		gm.net_set_bierpreis.rpc_id(1, -5)
+		await _frames(3)
+		_check("Bierpreis auf 50 %", is_equal_approx(gm._bierpreis, 0.5), str(gm._bierpreis))
+		_check("billig: weniger je Maß, mehr Andrang", gm._reward_for(1) < preis0 and w.preis_andrang(0.5) > 1.0,
+			"%d -> %d" % [preis0, gm._reward_for(1)])
+		gm.net_set_bierpreis.rpc_id(1, 5)
+		await _frames(3)
+		_check("Bierpreis zurück auf 100 %", is_equal_approx(gm._bierpreis, 1.0), str(gm._bierpreis))
+
+		print("  -- Einrichtung")
+		Game.add_money(5000)
+		var deko0: int = gm._einrichtung.size()
+		gm.net_buy_einrichtung.rpc_id(1, "stehlampe")
+		await _frames(5)
+		_check("Stehlampe gekauft und aufgestellt", gm._einrichtung.size() == deko0 + 1
+			and gm.get_node("Einrichtung").get_child_count() == deko0 + 1, str(gm._einrichtung.size()))
+		if gm._einrichtung.size() > deko0:
+			var did: int = gm._einrichtung.keys().max()
+			var lampe: Node3D = gm._einrichtung_nodes[did]
+			var sp: Node3D = gm.get_node("Players").get_child(0)
+			_check("Hinweis Aufnehmen", sp._hint_for(lampe) == "HINT_MOVE_DECO", sp._hint_for(lampe))
+			gm.net_move_einrichtung.rpc_id(1, did)
+			await _frames(3)
+			_check("Spieler trägt die Lampe", gm.haelt_einrichtung(sp.name.to_int()), str(gm._haelt_deko))
+			_check("Hinweis Abstellen", sp._hint_for(lampe) == "HINT_PLACE_DECO", sp._hint_for(lampe))
+			gm.net_rotate_einrichtung.rpc_id(1)
+			sp.global_position = Vector3(40, 0.1, 40)   # weit außerhalb des Zelts
+			await _frames(3)
+			gm.net_move_einrichtung.rpc_id(1, did)
+			await _frames(3)
+			_check("abgestellt, gedreht, im Zelt geblieben", not gm.haelt_einrichtung(sp.name.to_int())
+				and absf(lampe.rotation.y - PI / 4.0) < 0.01
+				and lampe.position.x <= gm.ZELT_MAX.x + 0.01 and lampe.position.z <= gm.ZELT_MAX.z + 0.01, str(lampe.position))
+			gm._save_game()
+			var stand: Variant = JSON.parse_string(FileAccess.get_file_as_string(Net.speicherstand_pfad()))
+			_check("Einrichtung und Bierpreis im Spielstand", stand is Dictionary
+				and (stand.get("einrichtung", []) as Array).size() == gm._einrichtung.size()
+				and stand.has("bierpreis"), "")
+
 		print("  -- Spielstände (3.3)")
 		_check("Stand liegt in Platz 1", Net.speicherstand_pfad() == "user://saves/slot_1.json"
 			and FileAccess.file_exists("user://saves/slot_1.json"), Net.speicherstand_pfad())
@@ -273,9 +314,12 @@ class Lauf extends Node:
 		for i in 20:
 			verteilt[figuren.fuer_id(i).resource_path] = true
 		_check("IDs verteilen sich auf alle Figuren", verteilt.size() == figuren.ALLE.size(), str(verteilt.size()))
-		for szene: PackedScene in figuren.ALLE:
+		# Sitzende Gäste nur aus GAESTE (charakter3 spreizt beim Sitzen den Rock)
+		_check("Gäste ohne charakter3", not figuren.GAESTE.has(preload("res://scenes/figuren/charakter3.tscn"))
+			and figuren.GAESTE.size() >= 2, str(figuren.GAESTE.size()))
+		for szene: PackedScene in figuren.GAESTE:
 			var id := 0
-			while figuren.fuer_id(id) != szene:
+			while figuren.fuer_gast(id) != szene:
 				id += 1
 			var gast: Node3D = load("res://scenes/customer.tscn").instantiate()
 			gast.cust_id = id

@@ -9,7 +9,8 @@ extends Control
 
 const Texte := preload("res://scripts/ui/texte.gd")
 const REITER_TITEL := ["OFFICE_TAB_TENT", "OFFICE_TAB_LICENSES", "OFFICE_TAB_STAFF",
-	"OFFICE_TAB_ACTS", "OFFICE_TAB_GOODS", "OFFICE_TAB_REPORT", "OFFICE_TAB_GOALS"]
+	"OFFICE_TAB_ACTS", "OFFICE_TAB_GOODS", "OFFICE_TAB_REPORT", "OFFICE_TAB_GOALS", "OFFICE_TAB_DECO"]
+const Katalog := preload("res://scripts/einrichtung_katalog.gd")
 const Meilensteine := preload("res://scripts/meilensteine.gd")
 const MEILENSTEIN_ZEILE := preload("res://scenes/ui/meilenstein_zeile.tscn")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
@@ -65,6 +66,8 @@ func _ready() -> void:
 		_verbinde(KUENSTLER[stufe][0], func(_i: int) -> void: _rpc("net_book_artist", [stufe]))
 	for sorte: int in WARE:
 		_verbinde(WARE[sorte][0], func(i: int) -> void: _rpc("net_order_goods", [sorte, PAKETE[i]]))
+	for art: String in Katalog.ARTEN:
+		_verbinde(Katalog.ARTEN[art].zeile, func(_i: int) -> void: _rpc("net_buy_einrichtung", [art]))
 	Einstellungen.geaendert.connect(_neu)
 
 func einrichten(gm: Node) -> void:
@@ -121,6 +124,7 @@ func _neu() -> void:
 	_reiter_kuenstler()
 	_reiter_ware(ohne_zelt)
 	_reiter_ziele()
+	_reiter_einrichtung(ohne_zelt)
 	%BilanzText.text = Texte.bilanz(_bilanz)
 
 func _reiter_zelt(stufe: int, ohne_zelt: String) -> void:
@@ -249,6 +253,18 @@ func _reiter_ware(ohne_zelt: String) -> void:
 			if erster_grund == "":
 				erster_grund = g
 		z.grund(erster_grund)
+
+## Lampen und Deko — gleiche Regeln wie GameManager.net_buy_einrichtung.
+func _reiter_einrichtung(ohne_zelt: String) -> void:
+	var anzahl := int(_z.get("einrichtung", 0))
+	var sperre := ohne_zelt
+	if sperre == "" and anzahl >= int(_gm.DEKO_MAX):
+		sperre = tr("WHY_DECO_LIMIT") % int(_gm.DEKO_MAX)
+	for art: String in Katalog.ARTEN:
+		var d: Dictionary = Katalog.ARTEN[art]
+		var z := _zeile(d.zeile)
+		z.setze("%s %s" % [d.symbol, tr(Katalog.name_key(art))], tr(Katalog.info_key(art)))
+		_einzelkauf(z, "BTN_BUY", int(d.preis), sperre)
 
 ## Meilensteine mit Fortschritt. Die Zeilen entstehen aus Meilensteine.LISTE —
 ## ein neuer Meilenstein erscheint so ohne Szenenänderung.

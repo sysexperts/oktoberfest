@@ -41,6 +41,19 @@ const ERSTE_GAESTE_MIN := 45.0
 const ERSTE_GAESTE_MAX := 75.0
 const CUST_SPEED := 3.0
 const GUEST_SPAWN_INTERVAL := 2.0
+## Anteil der Plätze, der auch bei geringer Beliebtheit belegt wird
+const GRUNDANDRANG := 0.6
+## Ab dieser Uhrzeit kommt der volle Andrang
+const VOLL_AB_STUNDE := 13.0
+## Einrichtung (Lampen, Deko): Katalog, Obergrenze, Tragabstand, Anziehung
+const Katalog := preload("res://scripts/einrichtung_katalog.gd")
+const DEKO_MAX := 16
+const DEKO_ABSTAND := 1.8
+const DEKO_ANDRANG := 0.02        # je Gegenstand 2 % mehr Gäste …
+const DEKO_ANDRANG_MAX := 0.2     # … höchstens 20 %
+## Abgestellt wird nur innerhalb der Zeltwände
+const ZELT_MIN := Vector3(-11.3, 0, -8.0)
+const ZELT_MAX := Vector3(11.3, 0, 10.6)
 const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
 const ORDER_COOLDOWN_MIN := 22.0    # siparişler arası bekleme — uzatıldı
 const ORDER_COOLDOWN_MAX := 45.0
@@ -142,7 +155,7 @@ var _next_spawn := 0
 
 var _phase: int = Phase.INTERMISSION
 var _phase_time := INTERMISSION_TIME
-var _roles := {}
+var _bierpreis := 1.0   # Faktor auf den Tagespreis je Maß (Zelt-Computer)
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -210,6 +223,12 @@ var _seats: Array = []
 var _all_tables: Array = []   # sahnedeki tüm bira masaları (kararlı sıra)
 var _beertables: Array = []   # sadece aktif masalar (servis/oturma)
 var _held := {}   # peer_id -> beertable idx (molada taşıma)
+var _held_deko := {}          # peer_id -> Einrichtungs-ID, die er gerade trägt
+var _einrichtung := {}        # id -> {art, x, z, rot} (Server, wird gespeichert)
+var _einrichtung_nodes := {}  # id -> Einrichtung-Knoten (alle Rechner)
+var _einrichtung_next := 1
+var _einrichtung_container: Node3D
+var _haelt_deko := {}         # vom Server: Peer-ID (Text) -> ID, für Hinweise beim Spieler
 # Misafir sim: id -> {seat:int, mode:int(0 gir,1 otur,2 çık), pos, tgt, yaw,
 #                     ostate, okind, otype, patience, cooldown, served_t}
 var _guests := {}         # id -> Customer node
@@ -250,6 +269,11 @@ func _ready() -> void:
 		_packages_container = Node3D.new()
 		_packages_container.name = "Packages"
 		add_child(_packages_container)
+	_einrichtung_container = get_node_or_null("Einrichtung")
+	if _einrichtung_container == null:
+		_einrichtung_container = Node3D.new()
+		_einrichtung_container.name = "Einrichtung"
+		add_child(_einrichtung_container)
 	_sun = $Sun
 	_world_env = $WorldEnvironment
 	_day_sun_energy = _sun.light_energy
@@ -314,7 +338,8 @@ func _time_factor() -> float:
 	var h: float = _clock_hour()
 	if h < GUEST_START_HOUR:
 		return 0.0
-	return clampf(0.25 + 0.75 * ((h - GUEST_START_HOUR) / (DAY_END_HOUR - GUEST_START_HOUR)), 0.0, 1.0)
+	# ab Mittag voll, morgens schon gut die Hälfte
+	return clampf(0.55 + 0.45 * ((h - GUEST_START_HOUR) / (VOLL_AB_STUNDE - GUEST_START_HOUR)), 0.0, 1.0)
 
 # ================================================= kayıt (E3)
 ## Sunucuda ilerlemeyi diske yaz (para, gün, zelt, upgrade, masa konumları).
@@ -355,6 +380,8 @@ func _save_game() -> void:
 		"meilensteine": _meilensteine,
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
+		"bierpreis": _bierpreis,
+		"einrichtung": _einrichtung.values(),
 		"format": Net.SAVE_FORMAT,
 		"saved_at": int(Time.get_unix_time_from_system()),
 	}
@@ -410,6 +437,17 @@ func _load_game() -> bool:
 	if erreicht is Array:
 		_meilensteine = (erreicht as Array).map(func(x: Variant) -> String: return str(x))
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
+	_bierpreis = clampf(float(d.get("bierpreis", 1.0)), Wirtschaft.BIERPREIS_MIN, Wirtschaft.BIERPREIS_MAX)
+	var einr: Variant = d.get("einrichtung", [])
+	if einr is Array:
+		for e: Variant in einr:
+			if e is Dictionary and Katalog.ARTEN.has(str((e as Dictionary).get("art", ""))):
+				var ed: Dictionary = e
+				var did := _einrichtung_next
+				_einrichtung_next += 1
+				_einrichtung[did] = {"art": str(ed.art), "x": float(ed.get("x", 0.0)),
+					"z": float(ed.get("z", 0.0)), "rot": float(ed.get("rot", 0.0))}
+				_add_einrichtung(did, str(ed.art), float(_einrichtung[did].x), float(_einrichtung[did].z), float(_einrichtung[did].rot))
 	_stock[WARE_BIER] = int(d.get("stock_bier", 0))
 	_stock[WARE_ESSEN] = int(d.get("stock_essen", 0))
 	var st: Variant = d.get("staff", [])
@@ -562,6 +600,9 @@ func _client_ready(version: String) -> void:
 		var pk = _packages[pid]
 		_add_package.rpc_id(sender, pid, (pk as Node3D).position, int(pk.kind), int(pk.amount))
 	_push_stock.rpc_id(sender, int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	for did in _einrichtung.keys():
+		var e: Dictionary = _einrichtung[did]
+		_add_einrichtung.rpc_id(sender, did, str(e.art), float(e.x), float(e.z), float(e.rot))
 	net_report.rpc_id(sender, _last_report)
 	_broadcast_meta()
 
@@ -595,19 +636,20 @@ func _on_peer_left(peer_id: int) -> void:
 	if _spawn_index_by_peer.has(peer_id):
 		_melde("NET_PLAYER_LEFT")
 	_spawn_index_by_peer.erase(peer_id)
-	_roles.erase(peer_id)
+	if _held_deko.has(peer_id):
+		_deko_abstellen(peer_id)
 	_remove_player.rpc(peer_id)
 	_broadcast_meta()
 
-# ================================================= rol
+# ================================================= Bierpreis
+## Zelt-Computer: Bierpreis in 10-%-Schritten ändern — auch während der Schicht.
+## Billig lockt mehr Gäste (Wirtschaft.preis_andrang), bringt aber weniger je Maß.
 @rpc("any_peer", "reliable", "call_local")
-func net_set_role(role: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+func net_set_bierpreis(schritte: int) -> void:
+	if not multiplayer.is_server():
 		return
-	var s := multiplayer.get_remote_sender_id()
-	if s == 0:
-		s = 1
-	_roles[s] = clampi(role, 0, 3)
+	var neu := snappedf(_bierpreis + 0.1 * float(clampi(schritte, -5, 5)), 0.1)
+	_bierpreis = clampf(neu, Wirtschaft.BIERPREIS_MIN, Wirtschaft.BIERPREIS_MAX)
 	_broadcast_meta()
 
 func open_computer_ui() -> void:
@@ -1562,7 +1604,7 @@ func net_move_table(index: int) -> void:
 		s = 1
 	if _held.has(s):
 		_held.erase(s)
-	elif index >= 0 and index < _beertables.size() and not _held.values().has(index):
+	elif index >= 0 and index < _beertables.size() and not _held.values().has(index) and not _held_deko.has(s):
 		_held[s] = index
 
 func _update_held_tables() -> void:
@@ -1574,6 +1616,118 @@ func _update_held_tables() -> void:
 		var fwd: Vector3 = -pl.global_transform.basis.z
 		var p: Vector3 = pl.global_position + fwd * 2.5
 		_beertables[idx].position = Vector3(p.x, 0.0, p.z)
+	# Getragene Einrichtung schwebt vor dem Spieler mit
+	for peer in _held_deko.keys():
+		var did: int = _held_deko[peer]
+		var pl = _players_nodes.get(peer)
+		var n: Node3D = _einrichtung_nodes.get(did)
+		if pl == null or n == null:
+			continue
+		var fwd: Vector3 = -pl.global_transform.basis.z
+		var p: Vector3 = pl.global_position + fwd * DEKO_ABSTAND
+		n.position = Vector3(p.x, 0.0, p.z)
+		_einrichtung[did].x = p.x
+		_einrichtung[did].z = p.z
+
+# ================================================= Einrichtung (Lampen, Deko)
+## Wiesenbüro: Gegenstand kaufen. Er erscheint am Zelteingang (drinnen) — das
+## Büro steht weit weg, dort vor dem Käufer wäre er fehl am Platz.
+@rpc("any_peer", "reliable", "call_local")
+func net_buy_einrichtung(art: String) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if not Katalog.ARTEN.has(art):
+		return
+	if _tent_stage == 0:
+		_fehler("MSG_NEED_TENT")
+		return
+	if _einrichtung.size() >= DEKO_MAX:
+		_fehler("MSG_DECO_LIMIT", [DEKO_MAX])
+		return
+	var preis := int(Katalog.ARTEN[art].preis)
+	if _kredit_sperrt() or not _reserve_ok(preis):
+		return
+	if not _afford(preis):
+		_fehler("MSG_NO_MONEY", [Katalog.name_key(art), _eur(preis)])
+		return
+	Game.add_money(-preis)
+	var did := _einrichtung_next
+	_einrichtung_next += 1
+	var x := -4.0 + float(_einrichtung.size() % 5) * 2.0
+	_einrichtung[did] = {"art": art, "x": x, "z": 8.5, "rot": 0.0}
+	_add_einrichtung.rpc(did, art, x, 8.5, 0.0)
+	_melde("MSG_DECO_BOUGHT", [Katalog.name_key(art)], 2)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _add_einrichtung(did: int, art: String, x: float, z: float, rot: float) -> void:
+	if _einrichtung_nodes.has(did) or not Katalog.ARTEN.has(art):
+		return
+	var n: Node3D = (Katalog.ARTEN[art].szene as PackedScene).instantiate()
+	n.name = "Deko%d" % did
+	n.deko_id = did
+	n.art = art
+	n.position = Vector3(x, 0.0, z)
+	n.rotation.y = rot
+	_einrichtung_container.add_child(n)
+	_einrichtung_nodes[did] = n
+
+## Molada: Gegenstand aufnehmen oder hinstellen (wie Tische).
+@rpc("any_peer", "reliable", "call_local")
+func net_move_einrichtung(did: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _held_deko.has(s):
+		_deko_abstellen(s)
+	elif _einrichtung.has(did) and not _held_deko.values().has(did) and not _held.has(s):
+		_held_deko[s] = did
+	_broadcast_meta()
+
+## Getragenen Gegenstand um 45° drehen.
+@rpc("any_peer", "reliable", "call_local")
+func net_rotate_einrichtung() -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if not _held_deko.has(s):
+		return
+	var did: int = _held_deko[s]
+	_einrichtung[did].rot = wrapf(float(_einrichtung[did].rot) + PI / 4.0, -PI, PI)
+	(_einrichtung_nodes[did] as Node3D).rotation.y = float(_einrichtung[did].rot)
+
+func _deko_abstellen(s: int) -> void:
+	var did: int = _held_deko[s]
+	_held_deko.erase(s)
+	if not _einrichtung.has(did):
+		return
+	var e: Dictionary = _einrichtung[did]
+	e.x = clampf(float(e.x), ZELT_MIN.x, ZELT_MAX.x)
+	e.z = clampf(float(e.z), ZELT_MIN.z, ZELT_MAX.z)
+	_set_einrichtung.rpc(did, float(e.x), float(e.z), float(e.rot))
+
+@rpc("authority", "reliable", "call_local")
+func _set_einrichtung(did: int, x: float, z: float, rot: float) -> void:
+	var n: Node3D = _einrichtung_nodes.get(did)
+	if n:
+		n.position = Vector3(x, 0.0, z)
+		n.rotation.y = rot
+
+@rpc("authority", "unreliable")
+func _net_einrichtung_pos(ids: PackedInt32Array, xs: PackedFloat32Array, zs: PackedFloat32Array, rots: PackedFloat32Array) -> void:
+	for i in ids.size():
+		var n: Node3D = _einrichtung_nodes.get(ids[i])
+		if n:
+			n.position = Vector3(xs[i], 0.0, zs[i])
+			n.rotation.y = rots[i]
+
+## Für den Spieler-Hinweis: trägt dieser Spieler gerade einen Gegenstand?
+func haelt_einrichtung(peer_id: int) -> bool:
+	return _haelt_deko.has(str(peer_id))
 
 # ================================================= servis (misafire)
 @rpc("any_peer", "reliable", "call_local")
@@ -1611,7 +1765,10 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
 func _reward_for(okind: int) -> int:
-	return Wirtschaft.verkaufspreis(14 if okind == 2 else 15, _day)
+	if okind == 2:
+		return Wirtschaft.verkaufspreis(14, _day)
+	# Bier: Tagespreis × selbst gewählter Bierpreis
+	return roundi(float(Wirtschaft.verkaufspreis(15, _day)) * _bierpreis)
 
 func CustomerReward() -> int:
 	return 15
@@ -1655,7 +1812,13 @@ func _shift_process(delta: float) -> void:
 		var draw := 1.0
 		if _artist_tier > 0:
 			draw += float(ARTIST_DRAW[_artist_tier])
-		var target := int(round(_popularity / 100.0 * float(_seats.size()) * _time_factor() * draw))
+		# Grundandrang 50 % der Plätze, Beliebtheit füllt den Rest — mit reiner
+		# Beliebtheit (Start 20 %) kamen bei 2 Tischen am ersten Abend nur 2 Gäste.
+		var andrang := GRUNDANDRANG + (1.0 - GRUNDANDRANG) * _popularity / 100.0
+		# Bierpreis und Einrichtung ziehen mit
+		andrang *= Wirtschaft.preis_andrang(_bierpreis)
+		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
+		var target := mini(_seats.size(), int(round(andrang * float(_seats.size()) * _time_factor() * draw)))
 		if _guest_sim.size() < target:
 			_spawn_guest()
 	# Akşam: 19:00'dan sonra karanlık + sabırsızlık
@@ -1679,6 +1842,8 @@ func _start_shift() -> void:
 	_night = false
 	_apply_night_visual(false)
 	_did_shift = true
+	for s in _held_deko.keys():
+		_deko_abstellen(s)
 	_held.clear()
 	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
 	_clear_messes()
@@ -2047,6 +2212,19 @@ func _broadcast_sync() -> void:
 		bx.append((bt as Node3D).position.x)
 		bz.append((bt as Node3D).position.z)
 	_net_tables.rpc(bx, bz)
+	# Getragene Einrichtung (nur solange jemand trägt)
+	if not _held_deko.is_empty():
+		var dids := PackedInt32Array()
+		var dx := PackedFloat32Array()
+		var dz := PackedFloat32Array()
+		var drot := PackedFloat32Array()
+		for did in _held_deko.values():
+			if _einrichtung.has(did):
+				dids.append(did)
+				dx.append(float(_einrichtung[did].x))
+				dz.append(float(_einrichtung[did].z))
+				drot.append(float(_einrichtung[did].rot))
+		_net_einrichtung_pos.rpc(dids, dx, dz, drot)
 
 @rpc("authority", "unreliable")
 func _net_tables(bx: PackedFloat32Array, bz: PackedFloat32Array) -> void:
@@ -2086,15 +2264,16 @@ func _buero_state() -> Dictionary:
 	var staff := []
 	for s in _staff_sim.values():
 		staff.append([int(s.role), int(s.level)])
-	var roles := {}
-	for pid in _roles.keys():
-		roles[str(pid)] = int(_roles[pid])
+	var haelt := {}
+	for pid in _held_deko.keys():
+		haelt[str(pid)] = int(_held_deko[pid])
 	return {
 		"stage": _tent_stage, "tables": _active_count, "limit": int(TENT_TABLE_LIMIT[_tent_stage]),
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"roles": roles, "shift": _phase == Phase.SHIFT,
+		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
+		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 		"kredit": _kredit_rest,
 	}
@@ -2111,6 +2290,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_tent_stage = tent_stage
 	_vermietung_aktualisieren()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
+	_haelt_deko = buero.get("haelt", {})
 	# Clientlerde masaların görünürlüğünü senkronla
 	if not multiplayer.is_server() and _active_count != active_count:
 		_active_count = active_count

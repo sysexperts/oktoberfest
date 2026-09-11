@@ -11,6 +11,18 @@ const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter3.tscn"),
 ]
 
+## Figuren, die sauber auf der Bank sitzen. charakter3 fehlt: ihr Rock ist an
+## die Beine gewichtet und spreizt sich beim Sitzen zur roten Scheibe — sie
+## bleibt Besucherin, Personal und Künstlerin, bis das Modell Rock-Knochen hat.
+const GAESTE: Array[PackedScene] = [
+	preload("res://scenes/figuren/bean.tscn"),
+	preload("res://scenes/figuren/charakter2.tscn"),
+]
+
+## Sitzende Gäste: wie fuer_id, aber nur aus GAESTE.
+static func fuer_gast(id: int) -> PackedScene:
+	return GAESTE[posmod(id * 7 + 3, GAESTE.size())]
+
 ## Gäste, Personal, Künstler: aus der ID — so sieht jeder Mitspieler dieselbe Figur,
 ## ohne dass die Wahl übers Netz geschickt werden muss.
 static func fuer_id(id: int) -> PackedScene:

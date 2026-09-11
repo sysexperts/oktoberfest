@@ -1,8 +1,9 @@
 extends Control
-## Zelt-Computer: Rollen im Koop wählen, Bilanz lesen, Zelt früher schließen.
+## Zelt-Computer: Bierpreis einstellen, Bilanz lesen, Zelt früher schließen.
 ## Aufbau liegt in scenes/ui/zeltcomputer.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 
 var _gm: Node
 var _z := {}
@@ -10,11 +11,8 @@ var _bilanz := {}
 
 func _ready() -> void:
 	visible = false
-	# Rollen wie GameManager.ROLE_KITCHEN / ROLE_CLEAN / ROLE_WAITER
-	%Kueche.pressed.connect(_rolle.bind(1))
-	%Putzen.pressed.connect(_rolle.bind(2))
-	%Bedienen.pressed.connect(_rolle.bind(3))
-	%Keine.pressed.connect(_rolle.bind(0))
+	%Billiger.pressed.connect(_preis.bind(-1))
+	%Teurer.pressed.connect(_preis.bind(1))
 	%ZeltSchliessen.pressed.connect(func() -> void:
 		if _gm:
 			_gm.net_close_tent.rpc_id(1))
@@ -46,11 +44,17 @@ func ist_offen() -> bool:
 
 func _neu() -> void:
 	%Status.text = Texte.buero_status(_z)
-	%RollenText.text = Texte.rollen(_z.get("roles", {}))
+	# Gleiche Rechnung wie GameManager._reward_for und der Andrang in _shift_process
+	var faktor := float(_z.get("bierpreis", 1.0))
+	var mass := roundi(float(Wirtschaft.verkaufspreis(15, int(_z.get("day", 1)))) * faktor)
+	%PreisText.text = tr("COMP_PRICE_VALUE") % [Texte.euro(mass), roundi(faktor * 100.0),
+		roundi(Wirtschaft.preis_andrang(faktor) * 100.0)]
+	%Billiger.disabled = faktor <= Wirtschaft.BIERPREIS_MIN + 0.001
+	%Teurer.disabled = faktor >= Wirtschaft.BIERPREIS_MAX - 0.001
 	# Früher schließen geht nur, solange das Zelt offen ist
 	%ZeltSchliessen.disabled = not bool(_z.get("shift", false))
 	%BilanzText.text = Texte.bilanz(_bilanz)
 
-func _rolle(rolle: int) -> void:
+func _preis(schritte: int) -> void:
 	if _gm:
-		_gm.net_set_role.rpc_id(1, rolle)
+		_gm.net_set_bierpreis.rpc_id(1, schritte)

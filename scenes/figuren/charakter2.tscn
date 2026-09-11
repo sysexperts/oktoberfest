@@ -11,8 +11,9 @@ anim_rennen = "Running"
 anim_tanzen = PackedStringArray("Hip_Hop_Dance", "ymca_dance")
 anim_sitzen = "Sit_and_Drink"
 anim_extras = PackedStringArray("Confused_Scratch")
-sitz_hoehe = 0.0
+sitz_hoehe = 0.04
 metall_ignorieren = true
-helligkeit = 3.0
+eigenleuchten = 0.5
 
 [node name="Modell" parent="." instance=ExtResource("2_modell")]
+transform = Transform3D(0.93, 0, 0, 0, 0.93, 0, 0, 0, 0.93, 0, 0, 0)

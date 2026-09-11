@@ -150,9 +150,13 @@ func _unhandled_input(event: InputEvent) -> void:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	# Prost-Geste — Taste in den Einstellungen umbelegbar (Aktion "emote")
 	if event.is_action_pressed("emote") and not event.is_echo():
-		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
-		_sfx("cheer")
-		_sfx("prost")   # Krüge klirren — nur mit Datei
+		# Wer eine Lampe/Deko trägt, dreht sie stattdessen
+		if _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int()):
+			_world.net_rotate_einrichtung.rpc_id(1)
+		else:
+			_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
+			_sfx("cheer")
+			_sfx("prost")   # Krüge klirren — nur mit Datei
 	# Kostümfarbe wechseln — Aktion "costume"
 	if event.is_action_pressed("costume") and not event.is_echo():
 		costume = (costume + 1) % COSTUME_COLORS.size()
@@ -307,6 +311,11 @@ func _hint_for(t: Node3D) -> String:
 		if g.order_state != 1 or not _has_ready():
 			return ""
 		return "HINT_SERVE" if g.can_serve(_carry_kind(), carry_type) else "HINT_WRONG_ORDER"
+	if t is Einrichtung:
+		if not geschlossen:
+			return ""
+		var traegt: bool = _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int())
+		return "HINT_PLACE_DECO" if traegt else "HINT_MOVE_DECO"
 	if t is BeerTable:
 		return "HINT_MOVE_TABLE" if geschlossen else ""
 	if t is MugDispenser:
@@ -366,6 +375,11 @@ func _handle_interaction(delta: float) -> void:
 			# Molada masayı tut/bırak (yerleştir)
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_move_table.rpc_id(1, (_current_target as BeerTable).idx)
+				_sfx("pop")
+		elif _current_target is Einrichtung:
+			# Molada Lampe/Deko aufnehmen oder abstellen
+			if _world.has_method("in_intermission") and _world.in_intermission():
+				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1

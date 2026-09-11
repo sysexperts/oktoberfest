@@ -55,48 +55,42 @@ horizontal_alignment = 1
 [node name="Trenner1" type="HSeparator" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 
-[node name="RollenTitel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="PreisTitel" type="Label" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
-text = "COMP_ROLES"
+text = "COMP_PRICE"
 
-[node name="RollenText" type="Label" parent="Mitte/Panel/Spalte"]
-unique_name_in_owner = true
-auto_translate_mode = 2
+[node name="PreisInfo" type="Label" parent="Mitte/Panel/Spalte"]
+custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "COMP_PRICE_INFO"
+autowrap_mode = 3
 
-[node name="Rollen" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+[node name="Preis" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Kueche" type="Button" parent="Mitte/Panel/Spalte/Rollen"]
+[node name="Billiger" type="Button" parent="Mitte/Panel/Spalte/Preis"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 42)
+custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "ROLE_KITCHEN"
+text = "BTN_CHEAPER"
 
-[node name="Putzen" type="Button" parent="Mitte/Panel/Spalte/Rollen"]
+[node name="PreisText" type="Label" parent="Mitte/Panel/Spalte/Preis"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 42)
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-text = "ROLE_CLEAN"
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
 
-[node name="Bedienen" type="Button" parent="Mitte/Panel/Spalte/Rollen"]
+[node name="Teurer" type="Button" parent="Mitte/Panel/Spalte/Preis"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 42)
+custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "ROLE_WAITER"
-
-[node name="Keine" type="Button" parent="Mitte/Panel/Spalte/Rollen"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 42)
-layout_mode = 2
-size_flags_horizontal = 3
-text = "ROLE_NONE"
+text = "BTN_PRICIER"
 
 [node name="Trenner2" type="HSeparator" parent="Mitte/Panel/Spalte"]
 layout_mode = 2

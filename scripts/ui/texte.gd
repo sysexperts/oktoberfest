@@ -55,19 +55,6 @@ static func buero_status(z: Dictionary) -> String:
 
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 
-const ROLLEN := {1: "ROLE_KITCHEN", 2: "ROLE_CLEAN", 3: "ROLE_WAITER"}
-
-## Wer im Koop welche Aufgabe hat. roles: Peer-ID (Text) -> Rolle.
-static func rollen(roles: Dictionary) -> String:
-	var zeilen := []
-	for rolle: int in ROLLEN:
-		var wer := []
-		for pid in roles:
-			if int(roles[pid]) == rolle:
-				wer.append("P" + str(pid).left(3))
-		zeilen.append("%s: %s" % [_t(ROLLEN[rolle]), ", ".join(wer) if not wer.is_empty() else "—"])
-	return "\n".join(zeilen)
-
 ## Tagesbilanz aus den Zahlen, die GameManager._end_shift schickt.
 static func bilanz(b: Dictionary) -> String:
 	if b.is_empty():

@@ -44,6 +44,16 @@ static func miete(basis: int, tag: int) -> int:
 		return 0
 	return roundi(float(basis) * kosten_faktor(tag))
 
+## Bierpreis (Zelt-Computer): Faktor auf den Tagespreis je Maß
+const BIERPREIS_MIN := 0.5
+const BIERPREIS_MAX := 2.0
+## Wie stark der Andrang auf den Preis reagiert: je 10 % billiger 9 % mehr Gäste
+const PREIS_WIRKUNG := 0.9
+
+## Andrang-Faktor zum Bierpreis: 50 % Preis → 145 %, 150 % → 55 %, nie unter 25 %.
+static func preis_andrang(faktor: float) -> float:
+	return clampf(1.0 + (1.0 - faktor) * PREIS_WIRKUNG, 0.25, 1.5)
+
 static func paketpreis(basis: int, tag: int) -> int:
 	return roundi(float(basis) * kosten_faktor(tag))
 

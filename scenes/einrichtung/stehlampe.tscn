@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
+
+[sub_resource type="StandardMaterial3D" id="MatHolz"]
+albedo_color = Color(0.35, 0.22, 0.12, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="Fuss"]
+top_radius = 0.18
+bottom_radius = 0.22
+height = 0.06
+
+[sub_resource type="CylinderMesh" id="Stange"]
+top_radius = 0.03
+bottom_radius = 0.03
+height = 1.7
+
+[sub_resource type="CylinderMesh" id="Schirm"]
+top_radius = 0.18
+bottom_radius = 0.32
+height = 0.35
+
+[sub_resource type="StandardMaterial3D" id="MatSchirm"]
+cull_mode = 2
+albedo_color = Color(1, 0.9, 0.7, 1)
+emission_enabled = true
+emission = Color(1, 0.75, 0.4, 1)
+emission_energy_multiplier = 1.5
+
+[node name="Stehlampe" type="Node3D"]
+script = ExtResource("1_e")
+
+[node name="Fuss" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+mesh = SubResource("Fuss")
+surface_material_override/0 = SubResource("MatHolz")
+
+[node name="Stange" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0)
+mesh = SubResource("Stange")
+surface_material_override/0 = SubResource("MatHolz")
+
+[node name="Schirm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+mesh = SubResource("Schirm")
+surface_material_override/0 = SubResource("MatSchirm")
+
+[node name="Licht" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 1.2
+omni_range = 7.0
+omni_attenuation = 1.4

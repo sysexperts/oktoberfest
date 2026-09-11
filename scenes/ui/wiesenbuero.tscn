@@ -276,6 +276,48 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
+[node name="Einrichtung" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 7
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Einrichtung"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "DECO_TAB_INFO"
+autowrap_mode = 3
+
+[node name="EinrLaterne" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrStehlampe" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrLichterkette" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBlumen" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBusch" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Unten" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 alignment = 2

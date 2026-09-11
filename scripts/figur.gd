@@ -111,6 +111,9 @@ func _material_anpassen() -> void:
 					kopie.emission_enabled = true
 					kopie.emission = Color.WHITE
 					kopie.emission_texture = kopie.albedo_texture
+					# Farbe × Textur. Steht ein Modell auf „Addieren" (charakter2),
+					# ergibt Weiß + Textur eine einfarbig weiße Figur.
+					kopie.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
 					kopie.emission_energy_multiplier = eigenleuchten
 				_angepasst[schluessel] = kopie
 			mi.set_surface_override_material(s, _angepasst[schluessel])
