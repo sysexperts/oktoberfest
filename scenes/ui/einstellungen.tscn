@@ -121,6 +121,28 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 horizontal_alignment = 2
 
+[node name="RendererZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/RendererZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_RENDERER"
+
+[node name="Renderer" type="OptionButton" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/RendererZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 40)
+layout_mode = 2
+
+[node name="RendererHinweis" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.62, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "SET_RENDERER_RESTART"
+horizontal_alignment = 2
+
 [node name="QualitaetHinweis" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 2

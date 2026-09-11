@@ -28,6 +28,10 @@ var vsync := true
 var grafik := 2
 ## Renderauflösung der 3D-Welt (0,5 … 1,0); Menüs bleiben immer scharf
 var aufloesung := 1.0
+## Darstellung: "forward_plus" (Qualität) oder "gl_compatibility" (Leistung).
+## Gilt erst beim nächsten Start — menu_eingang.gd startet dafür neu.
+var renderer := "forward_plus"
+const RENDERER := ["forward_plus", "gl_compatibility"]
 ## Lineare Lautstärke 0..1 je Audiobus.
 var lautstaerke := {"Master": 1.0, "Musik": 0.8, "SFX": 1.0, "Ambiente": 0.8}
 var maus := 1.0
@@ -105,6 +109,7 @@ func speichern() -> void:
 	cfg.set_value("grafik", "vsync", vsync)
 	cfg.set_value("grafik", "qualitaet", grafik)
 	cfg.set_value("grafik", "aufloesung", aufloesung)
+	cfg.set_value("grafik", "renderer", renderer)
 	for bus: String in lautstaerke:
 		cfg.set_value("ton", bus, lautstaerke[bus])
 	cfg.set_value("steuerung", "maus", maus)
@@ -124,6 +129,9 @@ func _lade() -> void:
 	vsync = bool(cfg.get_value("grafik", "vsync", vsync))
 	grafik = clampi(int(cfg.get_value("grafik", "qualitaet", grafik)), 0, 2)
 	aufloesung = clampf(float(cfg.get_value("grafik", "aufloesung", aufloesung)), 0.5, 1.0)
+	renderer = str(cfg.get_value("grafik", "renderer", renderer))
+	if not renderer in RENDERER:
+		renderer = "forward_plus"
 	for bus: String in lautstaerke.keys():
 		lautstaerke[bus] = float(cfg.get_value("ton", bus, lautstaerke[bus]))
 	maus = clampf(float(cfg.get_value("steuerung", "maus", maus)), 0.1, 3.0)

@@ -236,6 +236,18 @@ class Lauf extends Node:
 				and not umgebung.ssao_enabled and not umgebung.glow_enabled, "")
 			_check("Niedrig: ein Drittel der Kirmeslichter", grafik.sichtbare_lichter() <= ceili(alle / 3.0),
 				"%d von %d" % [grafik.sichtbare_lichter(), alle])
+			_check("Niedrig: Farbkorrektur aus", not umgebung.adjustment_enabled, "")
+			var eingang := preload("res://scripts/menu_eingang.gd")
+			_check("Kein Neustart bei gleichem Renderer",
+				eingang.neustart_argumente(false, false, "p", "forward_plus", "forward_plus").is_empty(), "")
+			_check("Neustart mit gewähltem Renderer",
+				Array(eingang.neustart_argumente(false, false, "p", "forward_plus", "gl_compatibility"))
+				== ["--rendering-method", "gl_compatibility"], "")
+			_check("Paket und Renderer im selben Neustart",
+				Array(eingang.neustart_argumente(false, true, "p", "forward_plus", "gl_compatibility"))
+				== ["--main-pack", "p", "--rendering-method", "gl_compatibility"], "")
+			_check("Nach dem Neustart kein zweiter",
+				eingang.neustart_argumente(true, true, "p", "forward_plus", "gl_compatibility").is_empty(), "")
 			Einstellungen.grafik = 2
 			Einstellungen.aufloesung = 0.75
 			Einstellungen.anwenden()

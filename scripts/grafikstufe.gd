@@ -1,6 +1,7 @@
 extends Node
 ## Grafikstufe (Plan 4.4) — schaltet die teuren Dinge je nach Einstellung:
-##   Niedrig: 120 Besucher, jedes dritte Kirmeslicht, kein Glow, Nebel, SSAO
+##   Niedrig: 120 Besucher, jedes dritte Kirmeslicht, kein Glow, Nebel, SSAO,
+##            keine Farbkorrektur
 ##   Mittel:  250 Besucher, zwei von drei Lichtern, Glow und Nebel, kein SSAO
 ##   Hoch:    alles, wie gebaut
 ## Lichter blenden auf Niedrig/Mittel in der Ferne aus. Die Zeltbeleuchtung
@@ -33,6 +34,9 @@ func anwenden() -> void:
 		we.environment.ssao_enabled = stufe >= 2
 		we.environment.glow_enabled = stufe >= 1
 		we.environment.fog_enabled = stufe >= 1
+		# Farbkorrektur kostet einen ganzen Nachbearbeitungsschritt — gemessen
+		# ~13 ms pro Bild auf integrierter Grafik, mehr als Glow und Nebel zusammen
+		we.environment.adjustment_enabled = stufe >= 1
 	var m := get_node_or_null(menge)
 	if m and "max_visitors" in m:
 		m.max_visitors = BESUCHER[stufe]

@@ -141,8 +141,16 @@ morgen weiterzuspielen.
       Fortschritt und Tipp, blendet über Schwarz ins Spiel. Nur Solo — Host und
       Beitritt wechseln weiter direkt, damit keine Netzwerknachricht vor der
       Spielszene ankommt.*
-- [ ] **4.4 Grafikstufen umsetzen und messen** — 400 Besucher, 143 Lichter,
+- [x] **4.4 Grafikstufen umsetzen und messen** — 400 Besucher, 143 Lichter,
       Glow und SSAO pro Stufe schaltbar.
+      *Grafikqualität Niedrig/Mittel/Hoch (`scripts/grafikstufe.gd`),
+      Renderauflösung 50–100 %, Darstellung Qualität/Leistung (Renderer, gilt
+      nach Neustart). Gemessen mit `tools/grafik_messen.tscn` auf dem
+      Entwicklungsrechner (Intel integriert, 1080p): Forward+ Hoch 56 ms,
+      Niedrig 53 ms; Compatibility Niedrig 42 ms. Headless (nur CPU) 8–13 ms —
+      die CPU ist nie der Engpass, Besucher und Skripte kosten kaum etwas.
+      Größter Einzelposten war die Farbkorrektur (~13 ms), deshalb auf Niedrig aus.
+      Auf dedizierter Grafik noch nicht gemessen.*
 
 ## Phase 5 · Steam-Integration
 

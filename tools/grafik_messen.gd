@@ -50,7 +50,8 @@ class Lauf extends Node:
 			Einstellungen.grafik = stufe
 			Einstellungen.anwenden()
 			await _messen("Stufe %d" % stufe, true)
-			get_viewport().get_texture().get_image().save_png("res://tools/grafik_stufe_%d.png" % stufe)
+			if DisplayServer.get_name() != "headless":
+				get_viewport().get_texture().get_image().save_png("res://tools/grafik_stufe_%d.png" % stufe)
 
 		# Engpass suchen, jeweils ausgehend von Stufe 0
 		Einstellungen.aufloesung = 0.5
@@ -77,6 +78,21 @@ class Lauf extends Node:
 
 		spieler.get_node("Head").rotation.x = deg_to_rad(80.0)
 		await _messen("… Blick in den Himmel", false)
+
+		# Welche Skripte laufen jeden Frame? Zählen, dann alle außer dem Spieler anhalten.
+		var laufend := {}
+		for n in _gm.find_children("*", "", true, false):
+			var s: Script = n.get_script()
+			if s and (n.is_processing() or n.is_physics_processing()):
+				laufend[s.resource_path] = int(laufend.get(s.resource_path, 0)) + 1
+		print("  Laufende Skripte: ", laufend)
+		for n in _gm.find_children("*", "", true, false):
+			if n.get_script() and n != spieler:
+				n.set_process(false)
+				n.set_physics_process(false)
+		await _messen("… alle Skripte außer Spieler aus", false)
+		spieler.set_physics_process(false)
+		await _messen("… auch Spieler aus", false)
 
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)

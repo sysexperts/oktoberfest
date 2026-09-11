@@ -60,6 +60,10 @@ SET_QUALITY_LOW,Niedrig,Low,Düşük
 SET_QUALITY_MEDIUM,Mittel,Medium,Orta
 SET_QUALITY_HIGH,Hoch,High,Yüksek
 SET_QUALITY_HINT,"Niedrig: weniger Besucher und Lichter, keine Nachbearbeitung. Ruckelt das Spiel, zuerst die Qualität senken, dann die Auflösung.","Low: fewer visitors and lights, no post-processing. If the game stutters, lower quality first, then resolution.","Düşük: daha az ziyaretçi ve ışık, son işleme yok. Oyun takılırsa önce kaliteyi, sonra çözünürlüğü düşür."
+SET_RENDERER,Darstellung,Renderer,İşleyici
+SET_RENDERER_QUALITY,Qualität (Standard),Quality (default),Kalite (varsayılan)
+SET_RENDERER_PERFORMANCE,Leistung — für schwache Grafikchips,Performance — for weak graphics chips,Performans — zayıf grafik yongaları için
+SET_RENDERER_RESTART,Wird beim nächsten Spielstart übernommen.,Takes effect the next time you start the game.,Oyunu bir sonraki açışında geçerli olur.
 SET_VOL_MASTER,Gesamtlautstärke,Master volume,Genel ses
 SET_VOL_MUSIC,Musik,Music,Müzik
 SET_VOL_SFX,Effekte,Effects,Efektler
