@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menue_hintergrund.gd" id="1_hg"]
+[ext_resource type="PackedScene" uid="uid://cdtgrn80rfxhm" path="res://scenes/kirmes.tscn" id="2_kirmes"]
+[ext_resource type="PackedScene" uid="uid://b7dl2t154lahp" path="res://scenes/tent.tscn" id="3_tent"]
+[ext_resource type="Script" uid="uid://dd87fg21y8vlf" path="res://scripts/crowd.gd" id="4_crowd"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.14, 0.18, 0.42, 1)
+sky_horizon_color = Color(0.78, 0.55, 0.42, 1)
+sky_curve = 0.12
+ground_bottom_color = Color(0.09, 0.09, 0.14, 1)
+ground_horizon_color = Color(0.58, 0.44, 0.38, 1)
+sun_angle_max = 40.0
+sun_curve = 0.08
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMat")
+
+[sub_resource type="Environment" id="Nacht"]
+background_mode = 2
+background_energy_multiplier = 0.22
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_energy = 0.105
+tonemap_mode = 3
+tonemap_white = 6.0
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.7
+glow_bloom = 0.05
+glow_blend_mode = 0
+fog_enabled = true
+fog_light_color = Color(0.26, 0.23, 0.3, 1)
+fog_sun_scatter = 0.2
+fog_density = 0.0032
+fog_aerial_perspective = 0.04
+fog_sky_affect = 0.0
+fog_height = 4.0
+fog_height_density = 0.0
+adjustment_enabled = true
+adjustment_contrast = 1.06
+adjustment_saturation = 1.22
+
+[node name="MenueHintergrund" type="Node3D"]
+script = ExtResource("1_hg")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Nacht")
+
+[node name="Mond" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.819152, -0.401695, 0.409576, 0, 0.713251, 0.700909, -0.573576, -0.574227, 0.585489, 0, 10, 0)
+light_color = Color(0.62, 0.68, 0.92, 1)
+light_energy = 0.14
+
+[node name="Kirmes" parent="." instance=ExtResource("2_kirmes")]
+
+[node name="Tent" parent="." instance=ExtResource("3_tent")]
+
+[node name="Crowd" type="Node3D" parent="."]
+script = ExtResource("4_crowd")
+max_visitors = 120
+
+[node name="Drehpunkt" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Kamera" type="Camera3D" parent="Drehpunkt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 46)
+current = true
+fov = 55.0

@@ -133,7 +133,9 @@ morgen weiterzuspielen.
       passenden Stellen hängen. *Braucht Dateien von dir* (siehe `AUDIO.md`).
       *Code fertig: alle sieben plus Menümusik sind angeschlossen und still,
       solange die Datei fehlt. Offen sind nur noch die Dateien.*
-- [ ] **4.2 Menühintergrund** — der Kirmesplatz bei Nacht hinter dem Hauptmenü.
+- [x] **4.2 Menühintergrund** — der Kirmesplatz bei Nacht hinter dem Hauptmenü.
+      *`scenes/ui/menue_hintergrund.tscn`: Kirmes und Zelt bei Nacht, ein paar
+      Besucher, Kamera fährt langsam im Kreis. Menü lädt über den Ladebildschirm.*
 - [x] **4.3 Ladebildschirm und Übergänge**
       *`scenes/ui/ladebildschirm.tscn`: lädt das Spiel im Hintergrund mit
       Fortschritt und Tipp, blendet über Schwarz ins Spiel. Nur Solo — Host und

@@ -26,7 +26,14 @@ func _ready() -> void:
 	if _neustart_noetig() and _neu_starten():
 		return
 	if ProjectSettings.has_setting("autoload/Einstellungen"):
-		get_tree().change_scene_to_file.call_deferred(HAUPTMENUE)
+		# Über den Ladebildschirm — das Menü hat jetzt den Kirmesplatz im Hintergrund.
+		# Net per Knotenpfad, nicht als Name: alte .exe kennen das Autoload nicht
+		# und würden sonst schon beim Laden dieses Skripts scheitern.
+		var net := get_tree().root.get_node_or_null("Net")
+		if net and net.has_method("wechsle_zu"):
+			net.call_deferred("wechsle_zu", HAUPTMENUE)
+		else:
+			get_tree().change_scene_to_file.call_deferred(HAUPTMENUE)
 		return
 	_zeige_hinweis()
 

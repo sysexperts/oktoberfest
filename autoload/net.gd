@@ -9,6 +9,8 @@ const MAX_PLAYERS := 4
 const GAME_SCENE := "res://scenes/main.tscn"
 const MENU_SCENE := "res://scenes/menu.tscn"
 const LADE_SZENE := "res://scenes/ui/ladebildschirm.tscn"
+## Das eigentliche Hauptmenü (MENU_SCENE ist nur der Eingang für alte .exe).
+const HAUPTMENUE_SCENE := "res://scenes/ui/hauptmenue.tscn"
 
 ## Spielstände: drei Plätze. SAVE_FORMAT steigt, wenn sich der Aufbau so ändert,
 ## dass ein älteres Spiel den Stand nicht mehr richtig lesen könnte — solche
@@ -108,7 +110,7 @@ func disconnect_game() -> void:
 func zum_menue() -> void:
 	get_tree().paused = false
 	disconnect_game()
-	get_tree().change_scene_to_file(MENU_SCENE)
+	wechsle_zu(HAUPTMENUE_SCENE)
 
 func is_host() -> bool:
 	return multiplayer.multiplayer_peer == null or multiplayer.is_server()
