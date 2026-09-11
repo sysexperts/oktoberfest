@@ -401,6 +401,14 @@ class Lauf extends Node:
 		_check("Gemütlich geduldiger, Wahnsinn ungeduldiger", geduld_gemuetlich > geduld_normal and geduld_wahnsinn < geduld_normal,
 			"%.1f / %.1f / %.1f" % [geduld_gemuetlich, geduld_normal, geduld_wahnsinn])
 		_check("Wiesn-Wahnsinn: Miete höher (oder mietfrei)", miete_wahnsinn >= miete_normal, "%d / %d" % [miete_normal, miete_wahnsinn])
+
+		print("  -- Gästetypen")
+		var typen := {}
+		for k in 400:
+			typen[gm._gast_typ_waehlen()] = true
+		_check("alle Gästetypen kommen vor", typen.size() == gm.GAST_TYPEN.size(), str(typen.keys()))
+		_check("VIP doppelter Umsatz, Stammgast geduldiger", gm._typ_umsatz({"typ": "vip"}) == 2.0
+			and gm._geduld_max({"typ": "stamm"}) > gm._geduld() and gm._geduld_max({"typ": "tourist"}) < gm._geduld(), "")
 		gm._phase = gm.Phase.INTERMISSION
 
 		print("  -- Spielstände (3.3)")

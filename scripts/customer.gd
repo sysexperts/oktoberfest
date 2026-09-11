@@ -8,7 +8,10 @@ extends Node3D
 const Figuren := preload("res://scripts/figuren.gd")
 const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler"}
 const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
-const FOOD_NAMES := {1: "Pretzel", 2: "Sosis"}
+const FOOD_NAMES := {1: "Brezn", 2: "Würstl"}
+## Gästetyp vom Server ("" normal, stamm, tourist, tracht, vip) — Symbol in der Blase
+var typ := ""
+const TYP_SYMBOL := {"stamm": "🏠 ", "tourist": "🎒 ", "tracht": "🪶 ", "vip": "⭐ "}
 const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
 
 var cust_id := -1
@@ -161,16 +164,22 @@ func _update_bubble() -> void:
 		return
 	if order_state == 1:
 		_bubble.visible = true
+		var praefix: String = TYP_SYMBOL.get(typ, "")
 		if order_kind == 2:
-			_bubble.text = "🥨 " + FOOD_NAMES.get(order_type, "Yemek")
+			_bubble.text = praefix + "🥨 " + FOOD_NAMES.get(order_type, "")
 			_bubble.modulate = FOOD_COLORS.get(order_type, Color.WHITE)
 		else:
-			_bubble.text = "🍺 " + BEER_NAMES.get(order_type, "Bira")
+			_bubble.text = praefix + "🍺 " + BEER_NAMES.get(order_type, "")
 			_bubble.modulate = BEER_COLORS.get(order_type, Color.WHITE)
 	elif order_state == 2:
 		_bubble.visible = true
 		_bubble.text = "😄"
 		_bubble.modulate = Color.WHITE
+	elif typ == "vip":
+		# VIPs erkennt man auch, wenn sie gerade nichts bestellen
+		_bubble.visible = true
+		_bubble.text = "⭐"
+		_bubble.modulate = Color(1, 0.85, 0.3)
 	else:
 		_bubble.visible = false
 

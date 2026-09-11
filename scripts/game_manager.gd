@@ -198,6 +198,12 @@ const KOMBO_BONUS := 2
 const KOMBO_MAX := 10
 ## Finale am letzten Wiesn-Tag: voller Andrang, Star-Act spielt gratis
 const FINALE_ANDRANG := 1.3
+## Gästetypen (Spaß-Plan 3.2): "" normal, stamm, tourist, tracht, vip — Gewichte
+const GAST_TYPEN := {"": 55, "stamm": 15, "tourist": 15, "tracht": 10, "vip": 5}
+const TYP_GEDULD := {"stamm": 1.5, "tourist": 0.7, "vip": 0.8}
+const TYP_TRINKGELD := {"stamm": 5, "tourist": 3, "vip": 15}
+const TYP_POP := {"stamm": 1.5, "vip": 2.5}   # Beliebtheit beim Bedienen und Verpassen
+const VIP_AB_BELIEBTHEIT := 40.0
 
 var _hud: HUD
 var _sfx_node: Node
@@ -696,7 +702,7 @@ func _client_ready(version: String) -> void:
 	for mid in _messes.keys():
 		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position)
 	for gid in _guest_sim.keys():
-		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos)
+		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos, str(_guest_sim[gid].get("typ", "")))
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
 		_add_staff.rpc_id(sender, sid, st.pos, int(st.role), int(st.level))
@@ -1727,9 +1733,9 @@ func _serve_by_staff(gid: int) -> void:
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
-	_popularity = minf(100.0, _popularity + POP_SERVE)
+	_popularity = minf(100.0, _popularity + POP_SERVE * _typ_pop(g))
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
-	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
+	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
 	_last_earn += reward
 	Game.add_score(reward)
 	_add_income(reward)
@@ -2045,10 +2051,10 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
-	_popularity = minf(100.0, _popularity + POP_SERVE)
+	_popularity = minf(100.0, _popularity + POP_SERVE * _typ_pop(g))
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
-	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
+	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
 	var tip := 0 if waiter_npc else randi_range(TRINKGELD_MIN, TRINKGELD_MAX)
 	# Kombo: wer schnell hintereinander bedient, bekommt mehr Trinkgeld
 	var bediener := multiplayer.get_remote_sender_id()
@@ -2060,6 +2066,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_kombo[bediener] = {"n": kombo, "t": jetzt}
 	_stats.kombo_max = maxi(int(_stats.get("kombo_max", 0)), kombo)
 	tip += mini(KOMBO_MAX, (kombo - 1) * KOMBO_BONUS)
+	tip += _typ_trinkgeld(g)
 	if _ereignis == "promi":
 		tip *= 2
 	if kombo >= 3:
@@ -2148,6 +2155,31 @@ func _shift_process(delta: float) -> void:
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
+
+## Gästetyp nach Gewicht (GAST_TYPEN).
+func _gast_typ_waehlen() -> String:
+	var summe := 0
+	for w in GAST_TYPEN.values():
+		summe += int(w)
+	var r := randi() % summe
+	for t: String in GAST_TYPEN:
+		r -= int(GAST_TYPEN[t])
+		if r < 0:
+			return t
+	return ""
+
+## Volle Geduld dieses Gasts (Grundgeduld × Typ).
+func _geduld_max(g: Dictionary) -> float:
+	return _geduld() * float(TYP_GEDULD.get(str(g.get("typ", "")), 1.0))
+
+func _typ_umsatz(g: Dictionary) -> float:
+	return 2.0 if str(g.get("typ", "")) == "vip" else 1.0
+
+func _typ_trinkgeld(g: Dictionary) -> int:
+	return int(TYP_TRINKGELD.get(str(g.get("typ", "")), 0))
+
+func _typ_pop(g: Dictionary) -> float:
+	return float(TYP_POP.get(str(g.get("typ", "")), 1.0))
 
 ## Ist heute der letzte Wiesn-Tag?
 func ist_finale() -> bool:
@@ -2511,14 +2543,17 @@ func _spawn_guest() -> void:
 	var weg: Array = WEG_REIN.duplicate()
 	weg.append(_seats[si].pos)
 	var start: Vector3 = HAUPTTOR + Vector3(randf_range(-1.5, 1.5), 0.0, randf_range(0.0, 1.5))
+	var typ := _gast_typ_waehlen()
+	if typ == "vip" and _popularity < VIP_AB_BELIEBTHEIT:
+		typ = ""   # VIPs kommen erst in ein beliebtes Zelt
 	_guest_sim[id] = {
-		"seat": si, "mode": 0, "pos": start, "tgt": weg.pop_front(), "weg": weg, "yaw": 0.0,
-		"ostate": 0, "okind": 1, "otype": 1, "patience": _geduld(),
+		"seat": si, "mode": 0, "pos": start, "tgt": weg.pop_front(), "weg": weg, "yaw": 0.0, "typ": typ,
+		"ostate": 0, "okind": 1, "otype": 1, "patience": _geduld() * float(TYP_GEDULD.get(typ, 1.0)),
 		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0,
 		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
 		"drinks": 0, "puke_t": 0.0, "puked": false
 	}
-	_add_guest.rpc(id, start)
+	_add_guest.rpc(id, start, typ)
 
 func _update_guests(delta: float) -> void:
 	for id in _guest_sim.keys().duplicate():
@@ -2582,7 +2617,7 @@ func _update_guests(delta: float) -> void:
 		var node = _guests.get(id)
 		if node:
 			node.set_net(pos, g.yaw)
-			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / _geduld(), 0.0, 1.0))
+			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / _geduld_max(g), 0.0, 1.0))
 			# Host/Solo bekommen _net_guests nicht (kein call_local) — direkt setzen
 			node.set_tanz(int(g.mode) == 5)
 			node.set_laune(_laune(g))
@@ -2593,14 +2628,16 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		if g.cooldown <= 0.0:
 			g.ostate = 1
 			var foods: Array = _foods_avail()
-			# Yemek lisansı yoksa sadece içecek istenir
-			if foods.is_empty() or randf() < 0.6:
+			var typ := str(g.get("typ", ""))
+			# Ohne Essenslizenz nur Getränke; Touristen essen gern, Trachtler trinken nur Helles
+			var essen_chance := 0.7 if typ == "tourist" else 0.4
+			if foods.is_empty() or randf() >= essen_chance:
 				g.okind = 1
-				g.otype = _drinks_avail().pick_random()
+				g.otype = 1 if typ == "tracht" else _drinks_avail().pick_random()
 			else:
 				g.okind = 2
 				g.otype = foods.pick_random()
-			g.patience = _geduld()
+			g.patience = _geduld_max(g)
 	elif g.ostate == 1:
 		g.patience -= delta * (PATIENCE_NIGHT_MULT if _night else 1.0)
 		if g.patience <= 0.0:
@@ -2609,7 +2646,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			_missed += 1
 			Game.add_score(-MISS_PENALTY)
 			g.verpasst_t = 3.0   # kurz 😤 über dem Kopf
-			var abzug := minf(POP_MISS, maxf(0.0, POP_MISS_TAG_MAX - _pop_verlust_heute))
+			var abzug := minf(POP_MISS * _typ_pop(g), maxf(0.0, POP_MISS_TAG_MAX - _pop_verlust_heute))
 			_pop_verlust_heute += abzug
 			_popularity = maxf(POP_MIN, _popularity - abzug)
 			# Zu viele verpasste: Zelt schließt früh. Grenze wächst mit den Plätzen,
@@ -2641,11 +2678,12 @@ func _despawn_guest(id: int) -> void:
 	_remove_guest.rpc(id)
 
 @rpc("authority", "reliable", "call_local")
-func _add_guest(id: int, pos: Vector3) -> void:
+func _add_guest(id: int, pos: Vector3, typ: String = "") -> void:
 	if _guests.has(id):
 		return
 	var c := CUSTOMER_SCENE.instantiate()
 	c.cust_id = id
+	c.typ = typ
 	c.position = pos
 	_customers_container.add_child(c)
 	_guests[id] = c
@@ -2753,7 +2791,7 @@ func _broadcast_sync() -> void:
 		cstate.append(g.ostate)
 		ckind.append(g.okind)
 		ctype.append(g.otype)
-		cratio.append(clampf(g.patience / _geduld(), 0.0, 1.0))
+		cratio.append(clampf(g.patience / _geduld_max(g), 0.0, 1.0))
 		ctanz.append((1 if int(g.mode) == 5 else 0) | (_laune(g) << 1))
 	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
 	# Personal

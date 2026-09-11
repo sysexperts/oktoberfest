@@ -154,7 +154,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       - 🥨 **Brezn-Tag** — Essen doppelt so gefragt
       - 🍺 **Fass kaputt** — eine Sorte fällt aus, Gäste umstimmen
       - 🎺 **„Ein Prosit"** — alle 30 Min. stehen alle auf: 20 s alle Bestellungen doppelt
-- [ ] **3.2 Gästetypen** — Stammgast (geduldig, gibt viel Trinkgeld, merkt sich
+- [x] **3.2 Gästetypen** *(v122: Stammgast, Tourist, Trachtler, VIP — Symbol in der Blase)* — Stammgast (geduldig, gibt viel Trinkgeld, merkt sich
       schlechten Service), Tourist (ungeduldig, bestellt Essen), Trachtler (nur
       Helles, bleibt lange), Kater-Gast (wird schnell übel), VIP. Aussehen über die
       Figuren. *Ich, M*
