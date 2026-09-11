@@ -39,9 +39,18 @@ static func meldung(schluessel: String, werte: Array = []) -> String:
 
 ## Kopfzeile von Wiesenbüro und Zelt-Computer aus GameManager._buero_state.
 static func buero_status(z: Dictionary) -> String:
-	return _t("OFFICE_STATUS") % [
+	var text := _t("OFFICE_STATUS") % [
 		_t("TENT_STAGE_%d" % int(z.get("stage", 0))), int(z.get("tables", 0)), int(z.get("limit", 0)),
 		int(z.get("seats", 0)), euro(int(z.get("rent", 0)))]
+	# Ab Tag 2 steigen Kosten und Preise — damit das nicht heimlich passiert
+	var tag := int(z.get("day", 1))
+	if tag > 1:
+		text += "\n" + _t("OFFICE_SEASON") % [tag,
+			roundi((Wirtschaft.kosten_faktor(tag) - 1.0) * 100.0),
+			roundi((Wirtschaft.preis_faktor(tag) - 1.0) * 100.0)]
+	return text
+
+const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 
 const ROLLEN := {1: "ROLE_KITCHEN", 2: "ROLE_CLEAN", 3: "ROLE_WAITER"}
 

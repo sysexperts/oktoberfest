@@ -171,6 +171,19 @@ class Lauf extends Node:
 		var ziele: Node = hud.get_node("%Wiesenbuero").get_node("%ZieleListe")
 		_check("Reiter Ziele listet alle", ziele.get_child_count() == gm.Meilensteine.LISTE.size(), str(ziele.get_child_count()))
 
+		print("  -- Wirtschaft (3.4)")
+		var w := preload("res://scripts/wirtschaft.gd")
+		_check("Tag 1 unverändert", w.miete(120, 1) == 120 and w.verkaufspreis(15, 1) == 15
+			and w.paketpreis(40, 1) == 40 and is_equal_approx(w.geduld(38.0, 1), 38.0), "")
+		_check("Tag 11: Ware +20 %", w.paketpreis(40, 11) == 48, str(w.paketpreis(40, 11)))
+		_check("Kosten höchstens doppelt", w.miete(120, 500) == 240, str(w.miete(120, 500)))
+		_check("Kosten steigen schneller als Preise", w.kosten_faktor(30) > w.preis_faktor(30), "")
+		_check("Geduld nie unter 60 %", w.geduld(38.0, 999) >= 38.0 * 0.6 - 0.001, str(w.geduld(38.0, 999)))
+		_check("Schonfrist: bis Tag 7 kein Beliebtheitsverlust", w.beliebtheit_verlust(7) == 0.0
+			and w.beliebtheit_verlust(8) > 0.0, "")
+		_check("Miete im Spiel folgt dem Tag", gm._daily_rent() == w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._day),
+			"Tag %d, Miete %d" % [gm._day, gm._daily_rent()])
+
 		print("  -- Spielstände (3.3)")
 		_check("Stand liegt in Platz 1", Net.speicherstand_pfad() == "user://saves/slot_1.json"
 			and FileAccess.file_exists("user://saves/slot_1.json"), Net.speicherstand_pfad())

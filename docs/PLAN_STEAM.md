@@ -115,8 +115,12 @@ morgen weiterzuspielen.
       *Drei Plätze unter `user://saves/`, der alte Einzelstand wird Platz 1.
       Stände aus neueren Versionen werden angezeigt, aber nicht geladen.
       Gespeichert wird bei jeder Zustandsänderung, also auch beim Schlafen.*
-- [ ] **3.4 Wirtschaft fürs Endlosspiel** — Nachfrage und Kosten skalieren mit
+- [x] **3.4 Wirtschaft fürs Endlosspiel** — Nachfrage und Kosten skalieren mit
       dem Fortschritt, damit Tag 40 nicht trivial wird.
+      *`scripts/wirtschaft.gd`: Miete und Ware +2 %/Tag (max. doppelt),
+      Verkaufspreise +1,5 %/Tag (max. +80 %), Geduld −1 %/Tag (min. 60 %),
+      ab Tag 8 −2 Beliebtheit pro Nacht. Wiesenbüro zeigt den Aufschlag.
+      Werte sind erste Schätzung — beim Testen nachjustieren.*
 - [ ] **3.5 Pleite** — was passiert am Dispolimit? Heute nicht definiert.
 
 ## Phase 4 · Ton und Präsentation

@@ -59,10 +59,8 @@ const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
 const TABLE_COST := 200
-## Zeltmiete pro Tag — fest je Zeltgröße, steigt nicht mit den Tagen.
+## Zeltmiete pro Tag am ersten Tag — steigt danach mit Wirtschaft.miete.
 const TENT_RENT := {0: 0, 1: 120, 2: 300, 3: 700}
-const DAILY_RENT := 120       # (nicht mehr verwendet, bleibt für Kompatibilität)
-const RENT_PER_DAY := 30      # Aufschlag pro Tag (Wirtschaftsdruck)
 # Upgrades (kiosk)
 const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
 const MARKETING_BOOST := 15.0
@@ -192,6 +190,7 @@ var _ever_artist := false
 var _quest_timer := 0.0
 # Meilensteine (Plan 3.2): Lebenszeit-Zähler und erreichte IDs, beides im Spielstand
 const Meilensteine := preload("res://scripts/meilensteine.gd")
+const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0}
 var _meilensteine: Array = []
 
@@ -463,8 +462,12 @@ func _apply_daylight(clock: float) -> void:
 		# bunten Lichter Schwaden werfen.
 		env.fog_density = lerpf(_day_fog, _day_fog * 4.0, t)
 		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
+## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
+func _geduld() -> float:
+	return Wirtschaft.geduld(ORDER_PATIENCE, _day)
+
 func _daily_rent() -> int:
-	return int(TENT_RENT.get(_tent_stage, 0))
+	return Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)
 
 ## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
 func _drinks_avail() -> Array:
@@ -930,7 +933,7 @@ func net_order_goods(kind: int, packs: int) -> void:
 		return
 	if not PACK_COST.has(kind) or packs <= 0:
 		return
-	var cost: int = PACK_COST[kind] * packs
+	var cost: int = Wirtschaft.paketpreis(int(PACK_COST[kind]), _day) * packs
 	if not _afford(cost):
 		_fehler("MSG_NO_MONEY", [WARE_KEYS[kind], _eur(cost)])
 		return
@@ -1532,7 +1535,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
 func _reward_for(okind: int) -> int:
-	return 14 if okind == 2 else 15
+	return Wirtschaft.verkaufspreis(14 if okind == 2 else 15, _day)
 
 func CustomerReward() -> int:
 	return 15
@@ -1639,6 +1642,9 @@ func _end_shift(reason := 0) -> void:
 		pop_penalty = hours_left * POP_EARLY_CLOSE_PER_HOUR
 		_popularity = maxf(5.0, _popularity - pop_penalty)
 
+	# Endlos: nach der Schonfrist bröckelt die Beliebtheit jede Nacht etwas
+	_popularity = maxf(5.0, _popularity - Wirtschaft.beliebtheit_verlust(_day))
+
 	# Günlük bilanço: kira + personel maaşları
 	var rent := _daily_rent()
 	var wages := _total_wages()
@@ -1710,7 +1716,7 @@ func _spawn_guest() -> void:
 	_seats[si].guest = id
 	_guest_sim[id] = {
 		"seat": si, "mode": 0, "pos": ENTRANCE, "tgt": _seats[si].pos, "yaw": 0.0,
-		"ostate": 0, "okind": 1, "otype": 1, "patience": ORDER_PATIENCE,
+		"ostate": 0, "okind": 1, "otype": 1, "patience": _geduld(),
 		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0,
 		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
 		"drinks": 0, "puke_t": 0.0, "puked": false
@@ -1747,7 +1753,7 @@ func _update_guests(delta: float) -> void:
 		var node = _guests.get(id)
 		if node:
 			node.set_net(pos, g.yaw)
-			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / ORDER_PATIENCE, 0.0, 1.0))
+			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / _geduld(), 0.0, 1.0))
 
 func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 	if g.ostate == 0:
@@ -1762,7 +1768,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			else:
 				g.okind = 2
 				g.otype = foods.pick_random()
-			g.patience = ORDER_PATIENCE
+			g.patience = _geduld()
 	elif g.ostate == 1:
 		g.patience -= delta * (PATIENCE_NIGHT_MULT if _night else 1.0)
 		if g.patience <= 0.0:
@@ -1909,7 +1915,7 @@ func _broadcast_sync() -> void:
 		cstate.append(g.ostate)
 		ckind.append(g.okind)
 		ctype.append(g.otype)
-		cratio.append(clampf(g.patience / ORDER_PATIENCE, 0.0, 1.0))
+		cratio.append(clampf(g.patience / _geduld(), 0.0, 1.0))
 	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio)
 	# Personal
 	var sids := PackedInt32Array()
@@ -1989,7 +1995,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"roles": roles, "shift": _phase == Phase.SHIFT,
-		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(),
+		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 	}
 
 func _broadcast_meta() -> void:

@@ -12,6 +12,7 @@ const REITER_TITEL := ["OFFICE_TAB_TENT", "OFFICE_TAB_LICENSES", "OFFICE_TAB_STA
 	"OFFICE_TAB_ACTS", "OFFICE_TAB_GOODS", "OFFICE_TAB_REPORT", "OFFICE_TAB_GOALS"]
 const Meilensteine := preload("res://scripts/meilensteine.gd")
 const MEILENSTEIN_ZEILE := preload("res://scenes/ui/meilenstein_zeile.tscn")
+const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 ## Lizenz -> [Zeile, Symbol, Name]
 const LIZENZEN := {
 	"weizen": ["LizenzWeizen", "🍺", "LIC_WEIZEN"],
@@ -234,7 +235,8 @@ func _reiter_ware(ohne_zelt: String) -> void:
 	for sorte: int in WARE:
 		var d: Array = WARE[sorte]
 		var z := _zeile(d[0])
-		var preis := int(_gm.PACK_COST[sorte])
+		# Tagespreis — gleiche Rechnung wie GameManager.net_order_goods
+		var preis := Wirtschaft.paketpreis(int(_gm.PACK_COST[sorte]), int(_z.get("day", 1)))
 		var bestand := int(_z.get("bier" if sorte == 1 else "essen", 0))
 		z.setze("%s %s" % [d[1], tr(d[2])], "%s\n%s" % [
 			tr("GOODS_INFO") % [int(_gm.PACK_UNITS), Texte.euro(preis)],
