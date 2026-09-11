@@ -34,7 +34,17 @@ PRESET="Windows Desktop"
 NICHT_AUF_DEN_SERVER='^(docs|tools|build)/|^\.git'
 
 PROBE=0
-[ "${1:-}" = "--probe" ] && PROBE=1
+MIT_ZIP=0
+for arg in "$@"; do
+	case "$arg" in
+		--probe) PROBE=1 ;;
+		# Auch die Download-ZIP mit aktueller .exe bauen und verlinken — nötig, wenn
+		# application/config/programm_generation gestiegen ist (alte .exe zeigen dann
+		# einen Hinweis zum Neu-Herunterladen und brauchen eine aktuelle ZIP).
+		--mit-zip) MIT_ZIP=1 ;;
+		*) echo "Unbekannte Option: $arg"; exit 2 ;;
+	esac
+done
 
 cd "$(dirname "$0")/.."
 mkdir -p build
@@ -192,6 +202,37 @@ SHA_HTTPS="$(curl -fsS "$URL/game.pck" | sha256sum | cut -c1-64)"
 echo "version.json: $LIVE_NEU · game.pck: $SHA_HTTPS"
 [ "$LIVE_NEU" = "$VERSION" ] || abbruch "version.json über HTTPS ist $LIVE_NEU statt $VERSION."
 [ "$SHA_HTTPS" = "$SHA" ] || abbruch "game.pck über HTTPS weicht ab."
+
+# ------------------------------------------------------------------ Download-ZIP
+if [ "$MIT_ZIP" = 1 ]; then
+	schritt "ZIP: aktuelle .exe bauen, hochladen, auf der Download-Seite verlinken"
+	ZIP_NAME="OktoberfestSimulator_v$VERSION.zip"
+	rm -rf build/zip "build/$ZIP_NAME"
+	mkdir -p build/zip
+	"$GODOT" --headless --path . --export-release "$PRESET" build/zip/OktoberfestSimulator.exe > build/deploy_export_exe.log 2>&1 || true
+	[ -s build/zip/OktoberfestSimulator.exe ] || abbruch "exe-Export fehlgeschlagen (build/deploy_export_exe.log)."
+	ls build/zip
+	powershell -NoProfile -Command "Compress-Archive -Path 'build/zip/*' -DestinationPath 'build/$ZIP_NAME' -Force"
+	[ -s "build/$ZIP_NAME" ] || abbruch "ZIP nicht erstellt."
+	ZIP_SHA="$(sha256sum "build/$ZIP_NAME" | cut -c1-64)"
+	scp_server "build/$ZIP_NAME" "$SERVER:$WEB/$ZIP_NAME.neu"
+	[ "$(ssh_server "sha256sum '$WEB/$ZIP_NAME.neu' | cut -c1-64")" = "$ZIP_SHA" ] || abbruch "ZIP-Prüfsumme auf dem Server weicht ab."
+	ssh_server bash -s -- "$WEB" "$ZIP_NAME" "$VERSION" <<'SERVER_EOF'
+set -euo pipefail
+WEB="$1"; ZIP="$2"; VERSION="$3"
+cd "$WEB"
+chown www-data:www-data "$ZIP.neu"
+mv "$ZIP.neu" "$ZIP"
+# Link und Versionsangabe auf der Download-Seite umstellen (Sicherung daneben)
+cp index.html "index.html.vor_v$VERSION"
+sed -i -E "s/OktoberfestSimulator_v[0-9]+\.zip/$ZIP/g; s/· v[0-9]+</· v$VERSION</g" index.html
+grep -o "href=\"[^\"]*zip\"" index.html
+SERVER_EOF
+	ZIP_HTTPS="$(curl -fsS "$URL/$ZIP_NAME" | sha256sum | cut -c1-64)"
+	[ "$ZIP_HTTPS" = "$ZIP_SHA" ] || abbruch "ZIP über HTTPS weicht ab."
+	curl -fsS "$URL/" | grep -q "$ZIP_NAME" || abbruch "Download-Seite verlinkt $ZIP_NAME nicht."
+	echo "ZIP $ZIP_NAME online und verlinkt"
+fi
 git tag -f "deploy-v$VERSION" > /dev/null
 git push -q -f origin "deploy-v$VERSION"
 echo; echo "DEPLOY v$VERSION FERTIG ($COMMIT)"

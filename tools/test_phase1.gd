@@ -239,15 +239,17 @@ class Lauf extends Node:
 			_check("Niedrig: Farbkorrektur aus", not umgebung.adjustment_enabled, "")
 			var eingang := preload("res://scripts/menu_eingang.gd")
 			_check("Kein Neustart bei gleichem Renderer",
-				eingang.neustart_argumente(false, false, "p", "forward_plus", "forward_plus").is_empty(), "")
-			_check("Neustart mit gewähltem Renderer",
-				Array(eingang.neustart_argumente(false, false, "p", "forward_plus", "gl_compatibility"))
+				eingang.neustart_argumente(false, "forward_plus", "forward_plus").is_empty(), "")
+			_check("Neustart nur mit --rendering-method, nie --main-pack",
+				Array(eingang.neustart_argumente(false, "forward_plus", "gl_compatibility"))
 				== ["--rendering-method", "gl_compatibility"], "")
-			_check("Paket und Renderer im selben Neustart",
-				Array(eingang.neustart_argumente(false, true, "p", "forward_plus", "gl_compatibility"))
-				== ["--main-pack", "p", "--rendering-method", "gl_compatibility"], "")
 			_check("Nach dem Neustart kein zweiter",
-				eingang.neustart_argumente(true, true, "p", "forward_plus", "gl_compatibility").is_empty(), "")
+				eingang.neustart_argumente(true, "forward_plus", "gl_compatibility").is_empty(), "")
+			_check("alte .exe (Generation 1) bekommt den Download-Hinweis",
+				eingang.braucht_neue_exe(1, 2) and not eingang.braucht_neue_exe(2, 2), "")
+			_check("Projekt ist so neu, wie das Paket es verlangt",
+				int(ProjectSettings.get_setting("application/config/programm_generation", 1)) >= eingang.BENOETIGTE_GENERATION,
+				str(ProjectSettings.get_setting("application/config/programm_generation", 1)))
 			Einstellungen.grafik = 2
 			Einstellungen.aufloesung = 0.75
 			Einstellungen.anwenden()
