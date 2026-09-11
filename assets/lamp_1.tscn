@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://boshlcraae56t"]
+
+[ext_resource type="PackedScene" uid="uid://tb0aetry3xuo" path="res://assets/kirmes/Models/Props/Lamp_1.fbx" id="1_cspfg"]
+[ext_resource type="Script" uid="uid://bfbyopsetjt1k" path="res://scripts/kirmes_light.gd" id="2_j46or"]
+
+[node name="Lamp_1" unique_id=900368200 instance=ExtResource("1_cspfg")]
+
+[node name="StandLicht" type="OmniLight3D" parent="." index="1" unique_id=247678214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.70000005, 3.2, 1.2)
+light_color = Color(1, 0.82, 0.52, 1)
+light_energy = 0.9
+omni_range = 8.0
+omni_attenuation = 1.6
+script = ExtResource("2_j46or")

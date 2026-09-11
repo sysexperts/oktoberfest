@@ -42,7 +42,7 @@ const ERSTE_GAESTE_MAX := 75.0
 const CUST_SPEED := 3.0
 const GUEST_SPAWN_INTERVAL := 2.0
 ## Anteil der Plätze, der auch bei geringer Beliebtheit belegt wird
-const GRUNDANDRANG := 0.6
+const GRUNDANDRANG := 0.4
 ## Ab dieser Uhrzeit kommt der volle Andrang
 const VOLL_AB_STUNDE := 13.0
 ## Einrichtung (Lampen, Deko): Katalog, Obergrenze, Tragabstand, Anziehung

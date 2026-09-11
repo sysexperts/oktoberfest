@@ -206,7 +206,7 @@ WHY_ACT_BOOKED,Schon gebucht: %s,Already booked: %s,Zaten ayarlandı: %s
 COMP_TITLE,💻 Zelt-Computer,💻 Tent computer,💻 Çadır bilgisayarı
 COMP_PRICE,🍺 Bierpreis,🍺 Beer price,🍺 Bira fiyatı
 COMP_PRICE_INFO,"Günstig lockt mehr Gäste, bringt aber weniger je Maß. Teuer bringt mehr je Maß, dafür kommen weniger Gäste.","Cheap draws more guests but earns less per mug. Expensive earns more per mug, but fewer guests come.","Ucuz fiyat daha çok misafir çeker ama kupa başına daha az kazandırır. Pahalı fiyat kupa başına daha çok kazandırır ama daha az misafir gelir."
-COMP_PRICE_VALUE,1 Maß: %s · Preis %d %% · Andrang %d %%,1 mug: %s · price %d %% · crowd %d %%,1 kupa: %s · fiyat %d %% · kalabalık %d %%
+COMP_PRICE_VALUE,"🍺 Helles, Weizen, Radler: %s je Maß\n🥨 Brezn, 🌭 Würstl: %s\nPreis %d %% · Andrang %d %%","🍺 Helles, wheat beer, shandy: %s per mug\n🥨 Pretzel, 🌭 sausage: %s\nPrice %d %% · crowd %d %%","🍺 Helles, buğday birası, radler: kupa başı %s\n🥨 Brezel, 🌭 sosis: %s\nFiyat %d %% · kalabalık %d %%"
 BTN_CHEAPER,− 10 %,− 10 %,− 10 %
 BTN_PRICIER,+ 10 %,+ 10 %,+ 10 %
 COMP_CLOSE_TENT,🚪 Zelt jetzt schließen (kostet Beliebtheit),🚪 Close the tent now (costs popularity),🚪 Çadırı şimdi kapat (popülerlik kaybettirir)

@@ -1,15 +1,11 @@
-[gd_resource type="Theme" load_steps=30 format=3]
+[gd_resource type="Theme" format=3 uid="uid://ccqygip3ms7u5"]
 
-; Gemeinsames Aussehen aller Menüs und des HUD (Projekteinstellung gui/theme/custom).
-; Farben: Nachtblau-Violett als Grund, Wiesn-Gold als Akzent.
-;   Grund #120f1f · Fläche #1c1830 · Knopf #2a2445 · Rand #5a4f80 · Gold #ffd659 · Text #f2eee6
-
-[ext_resource type="Texture2D" path="res://assets/ui/schalter_an.svg" id="1_an"]
-[ext_resource type="Texture2D" path="res://assets/ui/schalter_aus.svg" id="2_aus"]
-[ext_resource type="Texture2D" path="res://assets/ui/schalter_gesperrt.svg" id="3_gesp"]
-[ext_resource type="Texture2D" path="res://assets/ui/haken_an.svg" id="4_hakan"]
-[ext_resource type="Texture2D" path="res://assets/ui/haken_aus.svg" id="5_hakaus"]
-[ext_resource type="Texture2D" path="res://assets/ui/regler_knopf.svg" id="6_knopf"]
+[ext_resource type="Texture2D" uid="uid://co7yfue7hvg6t" path="res://assets/ui/schalter_an.svg" id="1_an"]
+[ext_resource type="Texture2D" uid="uid://cxwm22cd2wwhk" path="res://assets/ui/schalter_aus.svg" id="2_aus"]
+[ext_resource type="Texture2D" uid="uid://bja5htguonep1" path="res://assets/ui/schalter_gesperrt.svg" id="3_gesp"]
+[ext_resource type="Texture2D" uid="uid://cluyasasokikr" path="res://assets/ui/haken_an.svg" id="4_hakan"]
+[ext_resource type="Texture2D" uid="uid://bdijl5tefo6eh" path="res://assets/ui/haken_aus.svg" id="5_hakaus"]
+[ext_resource type="Texture2D" uid="uid://d3lgmwv6l21fh" path="res://assets/ui/regler_knopf.svg" id="6_knopf"]
 
 [sub_resource type="StyleBoxFlat" id="Flaeche"]
 content_margin_left = 20.0
@@ -28,54 +24,6 @@ corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 shadow_color = Color(0, 0, 0, 0.45)
 shadow_size = 10
-
-[sub_resource type="StyleBoxFlat" id="KnopfNormal"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.165, 0.141, 0.271, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.353, 0.31, 0.502, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="KnopfHover"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.227, 0.192, 0.376, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(1, 0.839, 0.349, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.906, 0.604, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="KnopfGesperrt"]
 content_margin_left = 16.0
@@ -109,55 +57,118 @@ expand_margin_top = 3.0
 expand_margin_right = 3.0
 expand_margin_bottom = 3.0
 
-[sub_resource type="StyleBoxEmpty" id="Leer"]
-
-[sub_resource type="StyleBoxFlat" id="ReiterFlaeche"]
-content_margin_left = 8.0
-content_margin_top = 8.0
-content_margin_right = 8.0
-content_margin_bottom = 8.0
-bg_color = Color(0.086, 0.071, 0.149, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.353, 0.31, 0.502, 1)
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="ReiterAktiv"]
+[sub_resource type="StyleBoxFlat" id="KnopfHover"]
 content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
 bg_color = Color(0.227, 0.192, 0.376, 1)
-border_width_top = 4
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 border_color = Color(1, 0.839, 0.349, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="ReiterInaktiv"]
+[sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
 content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
-bg_color = Color(0.118, 0.102, 0.18, 1)
-border_width_top = 4
-border_color = Color(0.118, 0.102, 0.18, 1)
+bg_color = Color(1, 0.839, 0.349, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.906, 0.604, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="ReiterHover"]
+[sub_resource type="StyleBoxFlat" id="KnopfNormal"]
 content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
-bg_color = Color(0.184, 0.157, 0.314, 1)
-border_width_top = 4
-border_color = Color(0.604, 0.533, 0.8, 1)
+bg_color = Color(0.165, 0.141, 0.271, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.353, 0.31, 0.502, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="Leer"]
+
+[sub_resource type="StyleBoxFlat" id="ScrollGriff"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(0.353, 0.31, 0.502, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="ScrollGriffHover"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="ScrollRinne"]
+content_margin_left = 5.0
+content_margin_right = 5.0
+bg_color = Color(0.059, 0.047, 0.102, 0.6)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxLine" id="Trenner"]
+color = Color(0.353, 0.31, 0.502, 1)
+thickness = 2
+
+[sub_resource type="StyleBoxFlat" id="RinneGefuellt"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="RinneGefuelltHell"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 0.906, 0.604, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Rinne"]
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.059, 0.047, 0.102, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.353, 0.31, 0.502, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="Eingabe"]
 content_margin_left = 12.0
@@ -175,33 +186,12 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="Rinne"]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.059, 0.047, 0.102, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.353, 0.31, 0.502, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="RinneGefuellt"]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="RinneGefuelltHell"]
-content_margin_top = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 0.906, 0.604, 1)
+[sub_resource type="StyleBoxFlat" id="MenueEintragHover"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0.227, 0.192, 0.376, 1)
+border_width_left = 3
+border_color = Color(1, 0.839, 0.349, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -226,52 +216,53 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[sub_resource type="StyleBoxFlat" id="ScrollGriff"]
-bg_color = Color(0.353, 0.31, 0.502, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-content_margin_left = 5.0
-content_margin_right = 5.0
+[sub_resource type="StyleBoxFlat" id="ReiterFlaeche"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.086, 0.071, 0.149, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.353, 0.31, 0.502, 1)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
-[sub_resource type="StyleBoxFlat" id="ScrollGriffHover"]
-bg_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-content_margin_left = 5.0
-content_margin_right = 5.0
+[sub_resource type="StyleBoxFlat" id="ReiterHover"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.184, 0.157, 0.314, 1)
+border_width_top = 4
+border_color = Color(0.604, 0.533, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
 
-[sub_resource type="StyleBoxFlat" id="ScrollRinne"]
-bg_color = Color(0.059, 0.047, 0.102, 0.6)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-content_margin_left = 5.0
-content_margin_right = 5.0
-
-[sub_resource type="StyleBoxLine" id="Trenner"]
-color = Color(0.353, 0.31, 0.502, 1)
-thickness = 2
-
-[sub_resource type="StyleBoxLine" id="TrennerSenkrecht"]
-color = Color(0.353, 0.31, 0.502, 1)
-thickness = 2
-vertical = true
-
-[sub_resource type="StyleBoxFlat" id="MenueEintragHover"]
-content_margin_left = 10.0
-content_margin_right = 10.0
+[sub_resource type="StyleBoxFlat" id="ReiterAktiv"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
 bg_color = Color(0.227, 0.192, 0.376, 1)
-border_width_left = 3
+border_width_top = 4
 border_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="ReiterInaktiv"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.118, 0.102, 0.18, 1)
+border_width_top = 4
+border_color = Color(0.118, 0.102, 0.18, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
 
 [sub_resource type="StyleBoxFlat" id="Tooltip"]
 content_margin_left = 10.0
@@ -288,6 +279,11 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxLine" id="TrennerSenkrecht"]
+color = Color(0.353, 0.31, 0.502, 1)
+thickness = 2
+vertical = true
 
 [resource]
 default_font_size = 18
@@ -325,6 +321,10 @@ CheckButton/styles/hover = SubResource("Leer")
 CheckButton/styles/hover_pressed = SubResource("Leer")
 CheckButton/styles/normal = SubResource("Leer")
 CheckButton/styles/pressed = SubResource("Leer")
+HScrollBar/styles/grabber = SubResource("ScrollGriff")
+HScrollBar/styles/grabber_highlight = SubResource("ScrollGriffHover")
+HScrollBar/styles/grabber_pressed = SubResource("ScrollGriffHover")
+HScrollBar/styles/scroll = SubResource("ScrollRinne")
 HSeparator/constants/separation = 12
 HSeparator/styles/separator = SubResource("Trenner")
 HSlider/icons/grabber = ExtResource("6_knopf")
@@ -334,9 +334,9 @@ HSlider/styles/grabber_area_highlight = SubResource("RinneGefuelltHell")
 HSlider/styles/slider = SubResource("Rinne")
 Label/colors/font_color = Color(0.949, 0.933, 0.902, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
+LineEdit/colors/caret_color = Color(1, 0.839, 0.349, 1)
 LineEdit/colors/font_color = Color(0.949, 0.933, 0.902, 1)
 LineEdit/colors/font_placeholder_color = Color(0.541, 0.51, 0.659, 1)
-LineEdit/colors/caret_color = Color(1, 0.839, 0.349, 1)
 LineEdit/styles/focus = SubResource("Fokus")
 LineEdit/styles/normal = SubResource("Eingabe")
 OptionButton/colors/font_color = Color(0.949, 0.933, 0.902, 1)
@@ -353,17 +353,9 @@ PopupMenu/styles/hover = SubResource("MenueEintragHover")
 PopupMenu/styles/panel = SubResource("Flaeche")
 ProgressBar/styles/background = SubResource("Balken")
 ProgressBar/styles/fill = SubResource("BalkenFuellung")
-HScrollBar/styles/grabber = SubResource("ScrollGriff")
-HScrollBar/styles/grabber_highlight = SubResource("ScrollGriffHover")
-HScrollBar/styles/grabber_pressed = SubResource("ScrollGriffHover")
-HScrollBar/styles/scroll = SubResource("ScrollRinne")
-VScrollBar/styles/grabber = SubResource("ScrollGriff")
-VScrollBar/styles/grabber_highlight = SubResource("ScrollGriffHover")
-VScrollBar/styles/grabber_pressed = SubResource("ScrollGriffHover")
-VScrollBar/styles/scroll = SubResource("ScrollRinne")
+TabContainer/colors/font_hovered_color = Color(0.949, 0.933, 0.902, 1)
 TabContainer/colors/font_selected_color = Color(1, 0.839, 0.349, 1)
 TabContainer/colors/font_unselected_color = Color(0.659, 0.635, 0.753, 1)
-TabContainer/colors/font_hovered_color = Color(0.949, 0.933, 0.902, 1)
 TabContainer/styles/panel = SubResource("ReiterFlaeche")
 TabContainer/styles/tab_focus = SubResource("Fokus")
 TabContainer/styles/tab_hovered = SubResource("ReiterHover")
@@ -371,7 +363,11 @@ TabContainer/styles/tab_selected = SubResource("ReiterAktiv")
 TabContainer/styles/tab_unselected = SubResource("ReiterInaktiv")
 TooltipLabel/colors/font_color = Color(0.949, 0.933, 0.902, 1)
 TooltipPanel/styles/panel = SubResource("Tooltip")
+VScrollBar/styles/grabber = SubResource("ScrollGriff")
+VScrollBar/styles/grabber_highlight = SubResource("ScrollGriffHover")
+VScrollBar/styles/grabber_pressed = SubResource("ScrollGriffHover")
+VScrollBar/styles/scroll = SubResource("ScrollRinne")
 VSeparator/constants/separation = 12
 VSeparator/styles/separator = SubResource("TrennerSenkrecht")
-Window/styles/embedded_border = SubResource("Flaeche")
 Window/colors/title_color = Color(1, 0.839, 0.349, 1)
+Window/styles/embedded_border = SubResource("Flaeche")

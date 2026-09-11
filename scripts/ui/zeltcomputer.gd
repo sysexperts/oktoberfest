@@ -46,9 +46,11 @@ func _neu() -> void:
 	%Status.text = Texte.buero_status(_z)
 	# Gleiche Rechnung wie GameManager._reward_for und der Andrang in _shift_process
 	var faktor := float(_z.get("bierpreis", 1.0))
-	var mass := roundi(float(Wirtschaft.verkaufspreis(15, int(_z.get("day", 1)))) * faktor)
-	%PreisText.text = tr("COMP_PRICE_VALUE") % [Texte.euro(mass), roundi(faktor * 100.0),
-		roundi(Wirtschaft.preis_andrang(faktor) * 100.0)]
+	var tag := int(_z.get("day", 1))
+	var mass := roundi(float(Wirtschaft.verkaufspreis(15, tag)) * faktor)
+	var essen := Wirtschaft.verkaufspreis(14, tag)
+	%PreisText.text = tr("COMP_PRICE_VALUE") % [Texte.euro(mass), Texte.euro(essen),
+		roundi(faktor * 100.0), roundi(Wirtschaft.preis_andrang(faktor) * 100.0)]
 	%Billiger.disabled = faktor <= Wirtschaft.BIERPREIS_MIN + 0.001
 	%Teurer.disabled = faktor >= Wirtschaft.BIERPREIS_MAX - 0.001
 	# Früher schließen geht nur, solange das Zelt offen ist
