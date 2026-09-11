@@ -128,6 +128,14 @@ theme_override_font_sizes/font_size = 30
 text = "COOP_TITLE"
 horizontal_alignment = 1
 
+[node name="SteamLobby" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "COOP_STEAM_FRIENDS"
+
 [node name="ServerBeitreten" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 54)
@@ -158,6 +166,7 @@ layout_mode = 2
 text = "COOP_JOIN_IP"
 
 [node name="SteamHinweis" type="Label" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.66, 0.76, 1)

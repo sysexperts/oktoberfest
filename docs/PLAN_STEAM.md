@@ -168,7 +168,14 @@ morgen weiterzuspielen.
       `docs/steam/` zum Hochladen. Steam-Name als Spielername.
       Offen, braucht dich: echter Test mit installiertem Steam (Overlay,
       Freundesliste) und die eigene App-ID statt 480.*
-- [ ] **5.3 Koop über Steam-Lobbys** — Freunde einladen, beitreten per Klick.
+- [x] **5.3 Koop über Steam-Lobbys** — Freunde einladen, beitreten per Klick.
+      *Hauptmenü → Koop → „Mit Steam-Freunden spielen" (Lobby nur für Freunde),
+      im Spiel ESC → „Freunde einladen". Beitritt über Overlay-Einladung,
+      „Spiel beitreten" in der Freundesliste oder Start per `+connect_lobby`.
+      `SteamMultiplayerPeer` mit `host_with_lobby`/`connect_to_lobby`, die RPCs
+      bleiben; Versionsvergleich über Lobbydaten. Geprüft: alle Steam-Funktionen
+      vorhanden, ohne Steam kein Absturz, ENet-Netztest weiter bestanden.
+      Offen, braucht dich: echter Test mit zwei Steam-Konten auf zwei Rechnern.*
       `SteamMultiplayerPeer` ersetzt `ENetMultiplayerPeer`; die RPCs bleiben.
 - [ ] **5.4 Steam Cloud und Errungenschaften** (aus 3.2)
 - [x] **5.5 Robustheit** — Verbindungsabbruch, Host verlässt das Spiel.

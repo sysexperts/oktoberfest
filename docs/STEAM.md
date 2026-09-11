@@ -83,6 +83,24 @@ Prüfen: Spiel laufen lassen, im Browser bei Steam angemeldet
 **Overlay** (Shift+Tab) braucht keinen Code, funktioniert aber laut GodotSteam
 nur im exportierten Spiel, das über den Steam-Client läuft — nicht aus dem Editor.
 
+### Koop über Steam-Lobbys (Plan 5.3)
+- **Host:** Hauptmenü → Koop → „Mit Steam-Freunden spielen" erstellt eine
+  Lobby nur für Freunde (`SteamDienst.lobby_erstellen`), dann hostet
+  `Net.host_steam` über `SteamMultiplayerPeer.host_with_lobby`. Im Spiel:
+  ESC → „Freunde einladen" öffnet Steams Einladungsfenster.
+- **Gast:** Einladung im Overlay annehmen oder in der Freundesliste „Spiel
+  beitreten". Läuft das Spiel nicht, startet Steam es mit
+  `+connect_lobby <id>` und das Hauptmenü tritt bei. Vor dem Verbinden wird die
+  Version in den Lobbydaten verglichen.
+- Die RPCs bleiben unverändert — der GameManager sieht nur einen
+  `MultiplayerPeer`. Zeitlimit (25 s über Steam), Host-weg-Meldung und
+  Versionsprüfung gelten wie bei ENet.
+- `SteamMultiplayerPeer` wird nur über `ClassDB.instantiate` erzeugt, damit der
+  Direkt-Build ohne GodotSteam-Bibliothek `net.gd` laden kann.
+- **Testen braucht zwei Steam-Konten auf zwei Rechnern** (oder zwei Konten mit
+  Familienfreigabe), beide mit Steam gestartet. Mit Test-App 480 sehen Freunde
+  das Spiel als „Spacewar".
+
 ### A4 Mehrspieler ohne IP-Eingabe
 Aktuell: fester Server `185.248.140.225` oder IP tippen. Auf Steam erwartet man
 Freundesliste, Einladungen, Lobbys — und Selbst-Hosten scheitert sonst an NAT

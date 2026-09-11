@@ -8,7 +8,14 @@ extends SceneTree
 ## Was steam_dienst.gd über call() aufruft — ein Tippfehler dort fiele sonst
 ## erst im Steam-Client auf.
 const GENUTZTE_FUNKTIONEN := ["steamInitEx", "restartAppIfNecessary", "getPersonaName",
-	"setRichPresence", "clearRichPresence"]
+	"setRichPresence", "clearRichPresence",
+	# Lobbys (5.3)
+	"createLobby", "joinLobby", "leaveLobby", "getLobbyOwner", "getSteamID", "setLobbyJoinable",
+	"setLobbyData", "getLobbyData", "activateGameOverlayInviteDialog"]
+## Signale, die steam_dienst.gd verbindet
+const GENUTZTE_SIGNALE := ["lobby_created", "lobby_joined", "join_requested"]
+## Methoden von SteamMultiplayerPeer, die net.gd aufruft
+const PEER_FUNKTIONEN := ["host_with_lobby", "connect_to_lobby"]
 
 func _init() -> void:
 	for klasse in ["Steam", "SteamMultiplayerPeer"]:
@@ -24,6 +31,16 @@ func _init() -> void:
 		var da := steam.has_method(f)
 		if not da:
 			fehlt += 1
-		print("FUNKTION %-24s %s" % [f, "da" if da else "FEHLT"])
+		print("FUNKTION %-32s %s" % [f, "da" if da else "FEHLT"])
+	for s: String in GENUTZTE_SIGNALE:
+		var da := steam.has_signal(s)
+		if not da:
+			fehlt += 1
+		print("SIGNAL   %-32s %s" % [s, "da" if da else "FEHLT"])
+	for f: String in PEER_FUNKTIONEN:
+		var da := ClassDB.class_has_method("SteamMultiplayerPeer", f)
+		if not da:
+			fehlt += 1
+		print("PEER     %-32s %s" % [f, "da" if da else "FEHLT"])
 	print("ERGEBNIS: %s" % ["BESTANDEN" if fehlt == 0 else "FEHLGESCHLAGEN (%d fehlen)" % fehlt])
 	quit(0 if fehlt == 0 else 1)

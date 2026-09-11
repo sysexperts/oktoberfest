@@ -526,9 +526,10 @@ func _client_ready(version: String) -> void:
 	# statt den Spieler in einer halb synchronen Welt stehen zu lassen.
 	if version != Net.version_text():
 		_net_abgelehnt.rpc_id(sender, "NET_VERSION_MISMATCH", [Net.version_text(), version])
+		# Für jede Netzart (ENet oder Steam) — beide können einzelne Peers trennen
 		get_tree().create_timer(1.0).timeout.connect(func() -> void:
-			var peer := multiplayer.multiplayer_peer as ENetMultiplayerPeer
-			if peer:
+			var peer := multiplayer.multiplayer_peer
+			if peer and not peer is OfflineMultiplayerPeer:
 				peer.disconnect_peer(sender))
 		return
 	for pid in _spawn_index_by_peer.keys():

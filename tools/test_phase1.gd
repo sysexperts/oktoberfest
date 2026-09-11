@@ -308,6 +308,19 @@ class Lauf extends Node:
 			dienst.status_setzen("#Status_Solo", 3)   # darf ohne Steam nichts tun und nicht abstürzen
 			_check("App-ID aus den Projekteinstellungen", dienst.app_id == int(ProjectSettings.get_setting("steam/app_id", 0)),
 				str(dienst.app_id))
+			print("  -- Steam-Lobby (5.3)")
+			_check("Lobby aus dem Startbefehl einer Einladung",
+				regel.lobby_aus_argumenten(PackedStringArray(["--x", "+connect_lobby", "109775241"])) == 109775241
+				and regel.lobby_aus_argumenten(PackedStringArray(["+connect_lobby"])) == 0
+				and regel.lobby_aus_argumenten(PackedStringArray()) == 0, "")
+			_check("ohne Steam: keine Lobby, kein Absturz", not dienst.lobby_erstellen()
+				and not dienst.lobby_beitreten(5) and dienst.lobby_id == 0, "")
+			dienst.freunde_einladen()   # darf ohne Steam nichts tun
+			dienst.lobby_verlassen()
+			# Wichtig: im Editor gibt es die Klasse — ohne laufendes Steam darf trotzdem
+			# weder gehostet noch beigetreten werden (sonst griffe der Peer ins Leere)
+			_check("ohne Steam: Net lehnt Steam-Host und -Beitritt ab",
+				Net.host_steam(1) == ERR_UNAVAILABLE and Net.join_steam(1) == ERR_UNAVAILABLE, "")
 
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")

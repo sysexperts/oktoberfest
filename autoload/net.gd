@@ -100,6 +100,49 @@ func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	if err != OK:
 		return err
 	multiplayer.multiplayer_peer = peer
+	_beitritt_beobachten(peer, BEITRITT_ZEITLIMIT)
+	return OK
+
+# ------------------------------------------------------------ Steam-Lobbys (5.3)
+## Über Steam dauert der Aufbau länger (Vermittlung über Valves Server).
+const STEAM_ZEITLIMIT := 25.0
+
+## Host einer Steam-Lobby. Wird von SteamDienst aufgerufen, sobald die Lobby steht.
+## SteamMultiplayerPeer nur über ClassDB — der Direkt-Build hat die Klasse nicht,
+## ein Klassenname im Code würde dort dieses Autoload unladbar machen.
+func host_steam(lobby_id: int) -> Error:
+	# Ohne laufendes Steam würde der Peer ins Leere greifen — gar nicht erst versuchen
+	if not SteamDienst.aktiv or not ClassDB.class_exists("SteamMultiplayerPeer"):
+		return ERR_UNAVAILABLE
+	solo = false
+	neues_spiel = false
+	meldung = ""
+	slot = maxi(1, letzter_slot())
+	var peer: MultiplayerPeer = ClassDB.instantiate("SteamMultiplayerPeer")
+	var err: Error = peer.call("host_with_lobby", lobby_id)
+	if err != OK:
+		return err
+	multiplayer.multiplayer_peer = peer
+	get_tree().change_scene_to_file(GAME_SCENE)
+	return OK
+
+## Beitritt zu einer Steam-Lobby, in der wir schon Mitglied sind.
+func join_steam(lobby_id: int) -> Error:
+	if not SteamDienst.aktiv or not ClassDB.class_exists("SteamMultiplayerPeer"):
+		return ERR_UNAVAILABLE
+	solo = false
+	neues_spiel = false
+	var peer: MultiplayerPeer = ClassDB.instantiate("SteamMultiplayerPeer")
+	var err: Error = peer.call("connect_to_lobby", lobby_id)
+	if err != OK:
+		return err
+	multiplayer.multiplayer_peer = peer
+	_beitritt_beobachten(peer, STEAM_ZEITLIMIT)
+	return OK
+
+## Gemeinsam für IP- und Steam-Beitritt: bei Verbindung ins Spiel wechseln, bei
+## Fehler oder Zeitüberschreitung mit Meldung zurück, Host-Verlust abfangen.
+func _beitritt_beobachten(peer: MultiplayerPeer, zeitlimit: float) -> void:
 	meldung = ""
 	# Bağlantı kurulunca oyun sahnesine geç
 	if not multiplayer.connected_to_server.is_connected(_on_connected):
@@ -112,12 +155,11 @@ func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	# Die Versuchsnummer sorgt dafür, dass ein alter Timer keinen neuen Versuch abbricht.
 	_beitritt_versuch += 1
 	var versuch := _beitritt_versuch
-	get_tree().create_timer(BEITRITT_ZEITLIMIT).timeout.connect(func() -> void:
+	get_tree().create_timer(zeitlimit).timeout.connect(func() -> void:
 		if versuch == _beitritt_versuch and multiplayer.multiplayer_peer == peer \
 				and peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTING:
 			meldung = "NET_TIMEOUT"
 			_on_connection_failed())
-	return OK
 
 func _on_connected() -> void:
 	_beitritt_versuch += 1
@@ -126,6 +168,7 @@ func _on_connected() -> void:
 func _on_connection_failed() -> void:
 	_beitritt_versuch += 1
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	SteamDienst.lobby_verlassen()
 	if meldung == "":
 		meldung = "STATUS_CONNECT_FAILED"
 	connection_failed.emit()
@@ -146,6 +189,7 @@ func trennen_mit_meldung(schluessel: String, werte: Array = []) -> void:
 
 func disconnect_game() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	SteamDienst.lobby_verlassen()
 	solo = false
 
 ## Zurück ins Hauptmenü, Verbindung sauber trennen.

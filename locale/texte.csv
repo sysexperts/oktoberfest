@@ -30,6 +30,15 @@ COOP_STEAM_SOON,Freunde über Steam einladen folgt,Inviting friends via Steam is
 STATUS_CONNECTING,Verbinde mit %s …,Connecting to %s …,%s adresine bağlanılıyor …
 STATUS_CONNECT_FAILED,Verbindung fehlgeschlagen. Ist der Server erreichbar?,Connection failed. Is the server reachable?,Bağlantı başarısız. Sunucu erişilebilir mi?
 STATUS_HOST_FAILED,Spiel konnte nicht gestartet werden (Fehler %d).,Could not start the game (error %d).,Oyun başlatılamadı (hata %d).
+COOP_STEAM_FRIENDS,🎮 Mit Steam-Freunden spielen,🎮 Play with Steam friends,🎮 Steam arkadaşlarıyla oyna
+COOP_STEAM_HINT,Erstellt ein Spiel nur für Freunde. Einladen im Spiel: ESC → Freunde einladen.,Creates a friends-only game. To invite: ESC → Invite friends.,Sadece arkadaşlara açık bir oyun kurar. Davet için oyunda: ESC → Arkadaş davet et.
+COOP_STEAM_OFFLINE,Steam läuft nicht — starte das Spiel über Steam, um Freunde einzuladen.,Steam is not running — start the game through Steam to invite friends.,Steam çalışmıyor — arkadaş davet etmek için oyunu Steam üzerinden başlat.
+COOP_STEAM_ONLY,Freunde über Steam einladen gibt es in der Steam-Version.,Inviting friends via Steam is available in the Steam version.,Steam üzerinden arkadaş davet etme Steam sürümünde var.
+PAUSE_INVITE,Freunde einladen (Steam),Invite friends (Steam),Arkadaş davet et (Steam)
+STATUS_STEAM_LOBBY,Erstelle Steam-Lobby …,Creating Steam lobby …,Steam lobisi kuruluyor …
+STATUS_STEAM_JOINING,Trete dem Spiel deines Freundes bei …,Joining your friend's game …,Arkadaşının oyununa katılınıyor …
+NET_STEAM_LOBBY_FAILED,Die Steam-Lobby konnte nicht erstellt werden.,The Steam lobby could not be created.,Steam lobisi kurulamadı.
+NET_STEAM_JOIN_FAILED,"Beitritt fehlgeschlagen — das Spiel ist voll, geschlossen oder nicht mehr da.","Could not join — the game is full, closed, or gone.","Katılamadın — oyun dolu, kapalı ya da artık yok."
 NET_TIMEOUT,"Keine Antwort vom Server. Stimmt die Adresse, oder ist der Server voll?","No answer from the server. Is the address right, or is the server full?","Sunucudan yanıt yok. Adres doğru mu, yoksa sunucu dolu mu?"
 NET_HOST_LEFT,Die Verbindung ist abgebrochen — der Host hat das Spiel verlassen.,The connection was lost — the host left the game.,Bağlantı koptu — kurucu oyundan ayrıldı.
 NET_VERSION_MISMATCH,"Der Server hat Version %s, du hast Version %s. Starte das Spiel neu, dann wird aktualisiert.","The server runs version %s, you have version %s. Restart the game to update.","Sunucuda sürüm %s var, sende sürüm %s. Güncellemek için oyunu yeniden başlat."

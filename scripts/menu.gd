@@ -46,6 +46,8 @@ func _ready() -> void:
 	%IpBeitreten.pressed.connect(_on_ip_beitreten)
 	_ip.text_submitted.connect(func(_t: String) -> void: _on_ip_beitreten())
 	%KoopZurueck.pressed.connect(_zeige.bind(_haupt))
+	%SteamLobby.pressed.connect(_on_steam_lobby)
+	SteamDienst.lobby_fehler.connect(_on_steam_fehler)
 	%CreditsZurueck.pressed.connect(_zeige.bind(_haupt))
 	_bestaetigen.confirmed.connect(func() -> void: Net.start_solo(true, _gewaehlter_platz))
 
@@ -59,6 +61,13 @@ func _ready() -> void:
 	_zeige(_haupt)
 	_menue_musik()
 	SteamDienst.status_setzen("#Status_Menue")
+	# Über eine Steam-Einladung gestartet (oder aus dem Spiel heraus angenommen)
+	if SteamDienst.start_lobby > 0:
+		var lobby := SteamDienst.start_lobby
+		SteamDienst.start_lobby = 0
+		_zeige(_koop_panel)
+		_status.text = tr("STATUS_STEAM_JOINING")
+		SteamDienst.lobby_beitreten(lobby)
 	# Warum das letzte Spiel endete (Host weg, andere Version …)
 	if Net.meldung != "":
 		_zeige_meldung()
@@ -88,6 +97,12 @@ func _unhandled_input(event: InputEvent) -> void:
 ## Texte mit Platzhaltern — die statischen übersetzt Godot von selbst.
 func _texte_aktualisieren() -> void:
 	_version.text = tr("MENU_VERSION") % Net.version_text()
+	# Steam-Koop nur, wenn Steam wirklich läuft; sonst sagen, woran es liegt
+	%SteamLobby.visible = SteamDienst.aktiv
+	var hinweis := "COOP_STEAM_HINT"
+	if not SteamDienst.aktiv:
+		hinweis = "COOP_STEAM_OFFLINE" if OS.has_feature("steam") else "COOP_STEAM_ONLY"
+	%SteamHinweis.text = tr(hinweis)
 	var letzter := Net.letzter_slot()
 	_weiter.visible = letzter > 0
 	_weiter_info.visible = _weiter.visible
@@ -172,6 +187,17 @@ func _verbinde(ip: String) -> void:
 	_status.text = tr("STATUS_CONNECTING") % ip
 	if Net.join_game(ip) != OK:
 		_status.text = tr("STATUS_CONNECT_FAILED")
+
+## Freundes-Lobby erstellen — das Spiel startet, sobald Steam sie bestätigt.
+func _on_steam_lobby() -> void:
+	_status.text = tr("STATUS_STEAM_LOBBY")
+	if not SteamDienst.lobby_erstellen():
+		_on_steam_fehler("NET_STEAM_LOBBY_FAILED", [])
+
+func _on_steam_fehler(schluessel: String, werte: Array) -> void:
+	Net.meldung = schluessel
+	Net.meldung_werte = werte
+	_zeige_meldung()
 
 func _on_verbindung_fehlgeschlagen() -> void:
 	if Net.meldung == "":
