@@ -152,6 +152,27 @@ func set_buero(z: Dictionary) -> void:
 	_zustand = z
 	_buero.setze_zustand(z)
 	_computer.setze_zustand(z)
+	# Heutiges Tagesereignis in der Leiste
+	var ereignis := str(z.get("ereignis", ""))
+	%Ereignis.visible = ereignis != ""
+	if ereignis != "":
+		%Ereignis.text = tr("EREIGNIS_%s_TITEL" % ereignis.to_upper())
+
+## Kombo beim Bedienen: kurz groß unter dem Fadenkreuz, dann ausblenden.
+var _kombo_tween: Tween
+
+func zeige_kombo(n: int) -> void:
+	var l: Label = %Kombo
+	l.text = tr("HUD_KOMBO") % n
+	l.visible = true
+	l.modulate.a = 1.0
+	l.scale = Vector2(1.35, 1.35)
+	if _kombo_tween:
+		_kombo_tween.kill()
+	_kombo_tween = create_tween()
+	_kombo_tween.tween_property(l, "scale", Vector2.ONE, 0.15)
+	_kombo_tween.tween_interval(1.2)
+	_kombo_tween.tween_property(l, "modulate:a", 0.0, 0.5)
 
 ## Tagesbilanz (Zahlen, übersetzt wird hier).
 func set_report(b: Dictionary) -> void:

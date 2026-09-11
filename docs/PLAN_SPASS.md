@@ -127,7 +127,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 ## Phase 2 · Bedienen fühlt sich gut an (Moment zu Moment)
 
-- [ ] **2.1 Kombo & Hektik-Bonus** — mehrere Gäste schnell hintereinander
+- [x] **2.1 Kombo & Hektik-Bonus** *(v116: ab 3 schnellen Bedienungen „🔥 Kombo ×n", +2 € Trinkgeld je Stufe, max. +10 €)* — mehrere Gäste schnell hintereinander
       bedienen gibt eine Kombo-Anzeige und steigendes Trinkgeld; reißt nach 8 s ab. *Ich, M*
 - [x] **2.2 Tische reagieren** *(v114: bei guter Stimmung tanzen 2–3 Gäste je Tisch auf dem Tisch)* — bediente Tische stoßen an („Prost!"), ab
       19:00 steigen Gäste auf die Bänke und schunkeln; volle Stimmung = sichtbare
@@ -143,7 +143,8 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 ## Phase 3 · Jeder Tag anders (Abwechslung)
 
-- [ ] **3.1 Tagesereignisse** — morgens wird eins angekündigt (max. 1 pro Tag,
+- [x] **3.1 Tagesereignisse** *(v116: Touristenbus, Hygienekontrolle, Happy Hour, Fass kaputt,
+      Prosit-Tag, Promi — ab Tag 3 zu 70 %, Anzeige in der HUD-Leiste. Offen: Regen, Stromausfall, Junggesellenabschied)* — morgens wird eins angekündigt (max. 1 pro Tag,
       ab Tag 3): *Ich, M–L*
       - 🌧 **Regen** — doppelt so viele Gäste, alle kommen nass rein (mehr Dreck)
       - 📸 **Promi-Besuch** — ein VIP-Tisch, wird er perfekt bedient: +20 % Beliebtheit

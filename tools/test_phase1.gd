@@ -353,6 +353,30 @@ class Lauf extends Node:
 		_check("Tänzer auch sichtbar", sichtbar_tanzend > 0, str(sichtbar_tanzend))
 		for id in gm._guest_sim.keys().duplicate():
 			gm._despawn_guest(id)
+
+		print("  -- Tagesereignisse")
+		var weizen_vorher: bool = gm._lic["weizen"]
+		gm._lic["weizen"] = true
+		gm._ereignis_waehlen("fass")
+		_check("Fass kaputt: Weizen fehlt, Helles bleibt", gm._fass_kaputt == 2
+			and not gm._drinks_avail().has(2) and gm._drinks_avail().has(1), str(gm._drinks_avail()))
+		gm._ereignis_waehlen("bus")
+		_check("Touristenbus: mehr Andrang, weniger Geduld", is_equal_approx(gm._ereignis_andrang(), 1.5)
+			and gm._geduld() < Wirtschaft_geduld(gm), str(gm._ereignis_andrang()))
+		gm._ereignis_waehlen("happy")
+		gm._phase_time = gm.SHIFT_TIME * (1.0 - (18.5 - 7.0) / 15.0)   # 18:30
+		var preis_happy: int = gm._reward_for(1)
+		gm._ereignis = ""
+		_check("Happy Hour: Bier billiger", preis_happy < gm._reward_for(1), "%d < %d" % [preis_happy, gm._reward_for(1)])
+		hud.set_buero(gm._buero_state())
+		gm._ereignis = "promi"
+		hud.set_buero(gm._buero_state())
+		_check("Ereignis in der Leiste", hud.get_node("%Ereignis").visible, hud.get_node("%Ereignis").text)
+		hud.zeige_kombo(4)
+		_check("Kombo-Anzeige", hud.get_node("%Kombo").visible and hud.get_node("%Kombo").text.contains("4"), hud.get_node("%Kombo").text)
+		gm._ereignis = ""
+		gm._fass_kaputt = 0
+		gm._lic["weizen"] = weizen_vorher
 		gm._phase = gm.Phase.INTERMISSION
 
 		print("  -- Spielstände (3.3)")
@@ -539,6 +563,10 @@ class Lauf extends Node:
 			if ev is InputEventKey:
 				return (ev as InputEventKey).physical_keycode
 		return KEY_NONE
+
+	## Geduld ohne Tagesereignis (für den Vergleich im Test)
+	func Wirtschaft_geduld(gm: Node) -> float:
+		return preload("res://scripts/wirtschaft.gd").geduld(gm.ORDER_PATIENCE, gm._day)
 
 	func _frames(n: int) -> void:
 		for i in n:

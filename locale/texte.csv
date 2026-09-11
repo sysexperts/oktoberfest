@@ -110,6 +110,22 @@ HUD_TASK_DONE,✓ Erledigt: %s,✓ Done: %s,✓ Tamamlandı: %s
 HUD_TASK_SKIP,ESC → Tutorial überspringen,ESC → Skip tutorial,ESC → Eğitimi atla
 PAUSE_SKIP_TUTORIAL,Tutorial überspringen,Skip tutorial,Eğitimi atla
 HUD_OK,Verstanden,Got it,Anladım
+HUD_KOMBO,🔥 Kombo ×%d,🔥 Combo ×%d,🔥 Kombo ×%d
+EREIGNIS_BUS_TITEL,🚌 Touristenbus,🚌 Tourist bus,🚌 Turist otobüsü
+EREIGNIS_BUS_START,"🚌 Heute kommt ein Touristenbus: viel mehr Gäste, aber sie sind ungeduldig!","🚌 A tourist bus arrives today: many more guests, but they're impatient!","🚌 Bugün turist otobüsü geliyor: çok daha fazla misafir ama sabırsızlar!"
+EREIGNIS_KONTROLLE_TITEL,🔍 Hygienekontrolle 15:00,🔍 Hygiene inspection 15:00,🔍 Hijyen denetimi 15:00
+EREIGNIS_KONTROLLE_START,🔍 Um 15:00 kommt die Hygienekontrolle — halt das Zelt sauber (mindestens 60 %)!,🔍 The hygiene inspection comes at 15:00 — keep the tent clean (at least 60 %)!,🔍 Saat 15:00'te hijyen denetimi var — çadırı temiz tut (en az %60)!
+MSG_KONTROLLE_OK,🔍 Kontrolle bestanden — Beliebtheit +%d %%,🔍 Inspection passed — popularity +%d %%,🔍 Denetim geçildi — popülerlik +%%%d
+MSG_KONTROLLE_STRAFE,🔍 Kontrolle durchgefallen — Strafe %s,🔍 Inspection failed — fine %s,🔍 Denetimden kalındı — ceza %s
+EREIGNIS_HAPPY_TITEL,🍻 Happy Hour 18–19 Uhr,🍻 Happy hour 18–19,🍻 Happy hour 18–19
+EREIGNIS_HAPPY_START,"🍻 Happy Hour von 18 bis 19 Uhr: Bier billiger, das Zelt wird voll!","🍻 Happy hour from 18 to 19: cheaper beer, the tent fills up!","🍻 18–19 arası happy hour: bira ucuz, çadır dolacak!"
+EREIGNIS_FASS_TITEL,🛢 Fass kaputt,🛢 Broken keg,🛢 Fıçı bozuk
+EREIGNIS_FASS_START,🛢 Ein Fass ist kaputt — eine Sorte gibt es heute nicht.,🛢 A keg is broken — one kind of beer is off today.,🛢 Bir fıçı bozuk — bugün bir çeşit bira yok.
+EREIGNIS_PROSIT_TITEL,🎺 Prosit-Tag,🎺 Prosit day,🎺 Prosit günü
+EREIGNIS_PROSIT_START,🎺 Heute spielt die Kapelle „Ein Prosit“ — dann bestellen alle auf einmal!,🎺 Today the band plays “Ein Prosit” — then everyone orders at once!,🎺 Bugün bando “Ein Prosit” çalıyor — o an herkes aynı anda sipariş verir!
+MSG_PROSIT,🎺 Ein Prosit! Alle wollen jetzt Bier!,🎺 Ein Prosit! Everyone wants beer now!,🎺 Ein Prosit! Herkes şimdi bira istiyor!
+EREIGNIS_PROMI_TITEL,📸 Promi im Zelt,📸 Celebrity in the tent,📸 Çadırda ünlü
+EREIGNIS_PROMI_START,📸 Ein Promi feiert heute im Zelt — doppeltes Trinkgeld!,📸 A celebrity is partying in the tent today — double tips!,📸 Bugün çadırda bir ünlü eğleniyor — çift bahşiş!
 HINT_TAKE_MUG,{interact} Krug nehmen,{interact} Take a mug,{interact} Kupa al
 HINT_TAP,{interact} halten: zapfen,Hold {interact}: pour,{interact} basılı tut: doldur
 HINT_NEED_MUG,Erst einen Krug nehmen,Grab a mug first,Önce bir kupa al

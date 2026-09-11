@@ -143,6 +143,15 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "100 %"
 
+[node name="Ereignis" type="Label" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+visible = false
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 18
+text = "Ereignis"
+
 [node name="Rechts" type="VBoxContainer" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
@@ -273,6 +282,30 @@ auto_translate_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "[E] Krug nehmen"
+horizontal_alignment = 1
+
+[node name="Kombo" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+auto_translate_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -95.0
+offset_right = 150.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+pivot_offset = Vector2(150, 21)
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "🔥 Kombo ×3"
 horizontal_alignment = 1
 
 [node name="Wiesenbuero" parent="." instance=ExtResource("2_buero")]

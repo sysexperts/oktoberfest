@@ -172,6 +172,21 @@ const TANZ_PRUEF_INTERVALL := 4.0
 const TANZ_DAUER_MIN := 15.0
 const TANZ_DAUER_MAX := 30.0
 const TANZ_PLAETZE := [-0.6, 0.6, 0.0]   # Versatz entlang der Tischlänge
+## Tagesereignisse (Spaß-Plan 3.1): ab Tag 3 wird morgens eins angekündigt.
+const EREIGNISSE := ["bus", "kontrolle", "happy", "fass", "prosit", "promi"]
+const EREIGNIS_AB_TAG := 3
+const EREIGNIS_CHANCE := 0.7
+const HAPPY_VON := 18.0
+const HAPPY_BIS := 19.0
+const KONTROLLE_UM := 15.0
+const KONTROLLE_GRENZE := 60.0
+const KONTROLLE_STRAFE := 300
+const KONTROLLE_BONUS := 10.0
+const PROSIT_ALLE := 40.0          # Sekunden (~2 Spielstunden)
+## Kombo: schnell hintereinander bedienen gibt mehr Trinkgeld (Spaß-Plan 2.1)
+const KOMBO_FENSTER_MS := 8000
+const KOMBO_BONUS := 2
+const KOMBO_MAX := 10
 
 var _hud: HUD
 var _sfx_node: Node
@@ -195,6 +210,11 @@ var _pop_verlust_heute := 0.0   # Beliebtheit, die verpasste Bestellungen heute 
 var _ausgabe := {}
 var _tanz_timer := 0.0
 var _ohne_ware_s := 0.0   # Sekunden heute, in denen Gäste warteten, das Lager aber leer war
+var _ereignis := ""          # heutiges Tagesereignis ("" = keins)
+var _ereignis_erledigt := false
+var _prosit_timer := 0.0
+var _fass_kaputt := 0        # Sorte, die heute fehlt (Ereignis "fass")
+var _kombo := {}             # Peer -> {n, t}: Kombo beim Bedienen
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -564,7 +584,8 @@ func _apply_daylight(clock: float) -> void:
 		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
-	return Wirtschaft.geduld(ORDER_PATIENCE, _day)
+	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day)
+	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
 	return Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)
@@ -576,6 +597,8 @@ func _drinks_avail() -> Array:
 		a.append(2)
 	if _lic.get("radler", false):
 		a.append(3)
+	if _fass_kaputt > 0 and a.size() > 1:
+		a.erase(_fass_kaputt)
 	return a
 
 ## E2.4: satılabilir yemek tipleri — lisans yoksa hiç yemek satılmaz.
@@ -1977,6 +2000,19 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
 	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
 	var tip := 0 if waiter_npc else randi_range(TRINKGELD_MIN, TRINKGELD_MAX)
+	# Kombo: wer schnell hintereinander bedient, bekommt mehr Trinkgeld
+	var bediener := multiplayer.get_remote_sender_id()
+	if bediener == 0:
+		bediener = 1
+	var jetzt := Time.get_ticks_msec()
+	var k: Dictionary = _kombo.get(bediener, {"n": 0, "t": 0})
+	var kombo := int(k.n) + 1 if jetzt - int(k.t) <= KOMBO_FENSTER_MS else 1
+	_kombo[bediener] = {"n": kombo, "t": jetzt}
+	tip += mini(KOMBO_MAX, (kombo - 1) * KOMBO_BONUS)
+	if _ereignis == "promi":
+		tip *= 2
+	if kombo >= 3:
+		_net_kombo.rpc_id(bediener, kombo)
 	if waiter_npc:
 		reward = int(reward * 0.5)
 	_last_earn += reward + tip
@@ -1990,7 +2026,8 @@ func _reward_for(okind: int) -> int:
 	if okind == 2:
 		return Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)
 	# Bier: Tagespreis × selbst gewählter Bierpreis
-	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis)
+	var happy := 0.7 if _happy_hour() else 1.0
+	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy)
 
 func CustomerReward() -> int:
 	return 15
@@ -2040,6 +2077,7 @@ func _shift_process(delta: float) -> void:
 		# Bierpreis und Einrichtung ziehen mit
 		andrang *= Wirtschaft.preis_andrang(_bierpreis)
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
+		andrang *= _ereignis_andrang()
 		var target := mini(_seats.size(), int(round(andrang * float(_seats.size()) * _time_factor() * draw)))
 		if _guest_sim.size() < target:
 			_spawn_guest()
@@ -2052,9 +2090,70 @@ func _shift_process(delta: float) -> void:
 	_update_tanz(delta)
 	if int(_stock[WARE_BIER]) <= 0 and not _guest_sim.is_empty():
 		_ohne_ware_s += delta
+	_update_ereignis(delta)
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
+
+## Morgens: vielleicht ein Tagesereignis ankündigen. erzwingen = Ereignis-ID (Tests).
+func _ereignis_waehlen(erzwingen := "") -> void:
+	_ereignis = ""
+	_ereignis_erledigt = false
+	_prosit_timer = PROSIT_ALLE
+	_fass_kaputt = 0
+	if erzwingen == "" and (_day < EREIGNIS_AB_TAG or randf() > EREIGNIS_CHANCE):
+		return
+	var auswahl: Array = EREIGNISSE.duplicate()
+	if _drinks_avail().size() < 2:
+		auswahl.erase("fass")   # nur Helles — dann gibt es nichts, was ausfallen kann
+	_ereignis = erzwingen if erzwingen != "" else str(auswahl.pick_random())
+	if _ereignis == "fass":
+		var sorten := _drinks_avail()
+		sorten.erase(1)   # Helles bleibt immer
+		_fass_kaputt = int(sorten.pick_random()) if not sorten.is_empty() else 0
+	_melde("EREIGNIS_%s_START" % _ereignis.to_upper(), [], 2)
+
+func _happy_hour() -> bool:
+	var uhr := _clock_hour()
+	return _ereignis == "happy" and uhr >= HAPPY_VON and uhr < HAPPY_BIS
+
+func _ereignis_andrang() -> float:
+	if _ereignis == "bus":
+		return 1.5
+	if _happy_hour():
+		return 1.4
+	return 1.0
+
+func _update_ereignis(delta: float) -> void:
+	match _ereignis:
+		"kontrolle":
+			if not _ereignis_erledigt and _clock_hour() >= KONTROLLE_UM:
+				_ereignis_erledigt = true
+				if _hygiene < KONTROLLE_GRENZE:
+					Game.add_money(-KONTROLLE_STRAFE)
+					_popularity = maxf(POP_MIN, _popularity - 5.0)
+					_melde("MSG_KONTROLLE_STRAFE", [_eur(KONTROLLE_STRAFE)], 1)
+				else:
+					_popularity = minf(100.0, _popularity + KONTROLLE_BONUS)
+					_melde("MSG_KONTROLLE_OK", [int(KONTROLLE_BONUS)], 2)
+		"prosit":
+			if _clock_hour() < GUEST_START_HOUR:
+				return
+			_prosit_timer -= delta
+			if _prosit_timer <= 0.0:
+				_prosit_timer = PROSIT_ALLE
+				# „Ein Prosit": alle am Platz wollen gleich nachbestellen
+				for id in _guest_sim.keys():
+					var g: Dictionary = _guest_sim[id]
+					if int(g.mode) == 1 and int(g.ostate) == 0:
+						g.cooldown = randf_range(0.0, 2.0)
+						_guest_sim[id] = g
+				_melde("MSG_PROSIT", [], 2)
+
+@rpc("authority", "reliable", "call_local")
+func _net_kombo(n: int) -> void:
+	if _hud:
+		_hud.zeige_kombo(n)
 
 ## Sichtbare Laune über dem Kopf: 0 normal, 1 verpasste Bestellung (😤), 2 geht genervt (😠).
 func _laune(g: Dictionary) -> int:
@@ -2111,6 +2210,8 @@ func _start_shift() -> void:
 	_missed = 0
 	_pop_verlust_heute = 0.0
 	_ohne_ware_s = 0.0
+	_kombo.clear()
+	_ereignis_waehlen()
 	_ausgabe.clear()
 	_ausgabe_senden()
 	_last_earn = 0
@@ -2157,6 +2258,8 @@ func _end_shift(reason := 0) -> void:
 	_clear_messes()
 	_clear_artists()          # E5: Auftritt vorbei
 	_ausgabe.clear()          # Übriges von der Ausgabe wird weggeräumt
+	_ereignis = ""
+	_fass_kaputt = 0
 	_ausgabe_senden()
 	_artist_tier = 0
 
@@ -2586,6 +2689,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
+		"ereignis": _ereignis,
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 		"kredit": _kredit_rest,
