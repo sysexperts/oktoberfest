@@ -20,6 +20,12 @@ func _ready() -> void:
 	# Dedicated server modunda updater'a girme — Net autoload host'u başlatır.
 	if OS.get_cmdline_user_args().has("--server"):
 		return
+	# Steam-Build (Plan 5.1): Steam liefert Updates selbst. Nichts von unserem
+	# Server nachladen und nie ein früher heruntergeladenes Paket benutzen —
+	# nachgeladener Code fällt beim Steam-Review auf und umgeht Steams Versionen.
+	if OS.has_feature("steam"):
+		get_tree().change_scene_to_file.call_deferred(MENU)
+		return
 	_build_ui()
 	_http = HTTPRequest.new()
 	add_child(_http)

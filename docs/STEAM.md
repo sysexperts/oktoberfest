@@ -45,6 +45,22 @@ if OS.has_feature("steam"):
 
 Der bestehende Updater bleibt für die Direkt-Builds erhalten.
 
+**Umgesetzt (Plan 5.1):** `boot.gd` überspringt mit Merkmal `steam` den Updater,
+`menu_eingang.gd` startet dann nie mit einem heruntergeladenen Paket neu.
+`export_presets.cfg` ist nicht im Git — das zweite Preset von Hand anlegen
+(Kopie von „Windows Desktop", nur diese Felder anders):
+
+```ini
+[preset.1]
+name="Windows Steam"
+custom_features="steam"
+export_path="build/steam/OktoberfestSimulator.exe"
+```
+
+Prüfen, ob das Merkmal im Export ankommt:
+`godot --headless --main-pack <paket mit tools/> --script res://tools/steam_merkmal.gd`
+→ erwartet `MERKMAL steam: true` und `UPDATER aktiv: false`.
+
 ### A4 Mehrspieler ohne IP-Eingabe
 Aktuell: fester Server `185.248.140.225` oder IP tippen. Auf Steam erwartet man
 Freundesliste, Einladungen, Lobbys — und Selbst-Hosten scheitert sonst an NAT

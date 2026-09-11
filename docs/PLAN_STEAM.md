@@ -154,8 +154,12 @@ morgen weiterzuspielen.
 
 ## Phase 5 · Steam-Integration
 
-- [ ] **5.1 Steam-Build-Pfad** — Feature-Tag `steam`, der Auto-Updater wird
+- [x] **5.1 Steam-Build-Pfad** — Feature-Tag `steam`, der Auto-Updater wird
       im Steam-Build übersprungen.
+      *Preset „Windows Steam" (Vorlage in `docs/STEAM.md`, die Preset-Datei ist
+      nicht im Git). `boot.gd` lädt dort nichts nach, `menu_eingang.gd` startet
+      nie mit einem heruntergeladenen Paket neu. Nachgewiesen mit
+      `tools/steam_merkmal.gd` aus beiden exportierten Paketen.*
 - [ ] **5.2 GodotSteam einbinden** — Initialisierung, Overlay, Rich Presence.
 - [ ] **5.3 Koop über Steam-Lobbys** — Freunde einladen, beitreten per Klick.
       `SteamMultiplayerPeer` ersetzt `ENetMultiplayerPeer`; die RPCs bleiben.

@@ -30,7 +30,9 @@ const NEUSTART_MARKE := "--neu-gestartet"
 
 func _ready() -> void:
 	var gesperrt := OS.has_feature("editor") or OS.get_cmdline_user_args().has(NEUSTART_MARKE)
-	var args := neustart_argumente(gesperrt, _paket_neuer(), ProjectSettings.globalize_path(PAKET),
+	# Im Steam-Build nie mit einem heruntergeladenen Paket neu starten (Plan 5.1)
+	var paket_neuer := _paket_neuer() and not OS.has_feature("steam")
+	var args := neustart_argumente(gesperrt, paket_neuer, ProjectSettings.globalize_path(PAKET),
 		RenderingServer.get_current_rendering_method(), _gewuenschter_renderer())
 	if not args.is_empty() and _neu_starten(args):
 		return
