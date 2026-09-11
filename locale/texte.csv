@@ -230,6 +230,11 @@ STAFF_WAGE,Lohn %s pro Schicht,Wage %s per shift,Vardiya başı maaş %s
 STAFF_EMPLOYED,Im Dienst: %s,Employed: %s,Çalışan: %s
 STAFF_NONE,niemand,nobody,kimse
 STAFF_COUNT,%d (Stufe %s),%d (level %s),%d (seviye %s)
+EIG_SCHNELL,⚡ Flink (schneller · Lohn +25 %),⚡ Quick (faster · wage +25 %),⚡ Çevik (daha hızlı · maaş +%25)
+EIG_GEMUETLICH,🐢 Gemütlich (langsamer · Lohn −25 %),🐢 Laid-back (slower · wage −25 %),🐢 Rahat (daha yavaş · maaş −%25)
+EIG_CHARMEUR,😘 Charmeur (+Beliebtheit · Lohn +15 %),😘 Charmer (+popularity · wage +15 %),😘 Çapkın (+popülerlik · maaş +%15)
+EIG_SCHLUCKSPECHT,🍺 Schluckspecht (trinkt nachts Bier · Lohn −30 %),🍺 Boozer (drinks beer at night · wage −30 %),🍺 Ayyaş (gece bira içer · maaş −%30)
+EIG_NORMAL,🙂 Unauffällig,🙂 Ordinary,🙂 Sıradan
 ACT_1,Straßenmusiker,Street musician,Sokak müzisyeni
 ACT_2,Blaskapelle,Brass band,Bando
 ACT_3,Star-Act,Star act,Yıldız sanatçı
@@ -294,7 +299,7 @@ MSG_ACT_BOOKED_ALREADY,🎤 Schon gebucht: %s,🎤 Already booked: %s,🎤 Zaten
 MSG_ACT_BOOKED,🎤 %s gebucht! Beliebtheit +%d %% · spielt in der nächsten Schicht,🎤 %s booked! Popularity +%d %% · plays next shift,🎤 %s ayarlandı! Popülerlik +%d %% · sonraki vardiyada çalar
 MSG_GOODS_ORDERED,🚚 %d× %s bestellt (%s) — Lieferung in etwa 30 Sekunden,🚚 Ordered %d× %s (%s) — delivery in about 30 seconds,🚚 %d× %s sipariş edildi (%s) — yaklaşık 30 saniyede teslim
 MSG_GOODS_DELIVERED,📦 %d Paket(e) geliefert — bring sie ins Lager,📦 %d package(s) delivered — carry them to storage,📦 %d paket teslim edildi — depoya taşı
-MSG_STAFF_HIRED,🤝 %s eingestellt · Lohn %s pro Schicht,🤝 %s hired · wage %s per shift,🤝 %s işe alındı · vardiya başı maaş %s
+MSG_STAFF_HIRED,🤝 %s eingestellt: %s · Lohn %s pro Schicht,🤝 %s hired: %s · wage %s per shift,🤝 %s işe alındı: %s · vardiya başı maaş %s
 MSG_STAFF_NONE,Niemand zum Aufstufen: %s,Nobody to upgrade: %s,Yükseltilecek kimse yok: %s
 MSG_STAFF_UP,⬆ %s jetzt Stufe %d,⬆ %s now level %d,⬆ %s artık seviye %d
 MSG_WAITER_UP,⬆ Kellner jetzt Stufe %d — trägt %d Krüge,⬆ Waiter now level %d — carries %d mugs,⬆ Garson artık seviye %d — %d kupa taşır

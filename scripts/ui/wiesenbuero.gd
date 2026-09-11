@@ -196,9 +196,12 @@ func _reiter_lizenzen() -> void:
 
 func _reiter_personal() -> void:
 	var stufen := {1: [], 2: [], 3: [], 4: []}
+	var eigen := {1: [], 2: [], 3: [], 4: []}
 	for e: Array in _z.get("staff", []):
 		if stufen.has(int(e[0])):
 			(stufen[int(e[0])] as Array).append(int(e[1]))
+			if e.size() > 2:
+				(eigen[int(e[0])] as Array).append(tr("EIG_" + str(e[2]).to_upper()))
 	for rolle: int in PERSONAL:
 		var d: Array = PERSONAL[rolle]
 		var z := _zeile(d[0])
@@ -209,6 +212,10 @@ func _reiter_personal() -> void:
 		z.setze("%s %s" % [d[1], tr(d[2])], "%s\n%s · %s" % [
 			tr(d[3]), tr("STAFF_WAGE") % Texte.euro(int(_gm.STAFF_WAGE_BASE[rolle])),
 			tr("STAFF_EMPLOYED") % im_dienst])
+		if not (eigen[rolle] as Array).is_empty():
+			z.setze("%s %s" % [d[1], tr(d[2])], "%s\n%s · %s\n%s" % [
+				tr(d[3]), tr("STAFF_WAGE") % Texte.euro(int(_gm.STAFF_WAGE_BASE[rolle])),
+				tr("STAFF_EMPLOYED") % im_dienst, ", ".join(eigen[rolle])])
 		var einstellen := int(_gm.STAFF_HIRE_COST[rolle])
 		var grund_einstellen := _kauf_grund(einstellen)
 		# Koch nur mit Brezn- oder Würstl-Lizenz (wie GameManager.net_hire_staff)

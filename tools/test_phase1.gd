@@ -440,6 +440,12 @@ class Lauf extends Node:
 		var miete_w3: int = gm._daily_rent()
 		var geduld_w3: float = gm._geduld()
 		gm._saison_nr = saison_vorher
+
+		print("  -- Personal-Eigenschaften")
+		_check("Flink kostet mehr, Schluckspecht weniger",
+			gm._staff_wage(2, 1, "schnell") > gm._staff_wage(2, 1) and gm._staff_wage(2, 1, "schluckspecht") < gm._staff_wage(2, 1)
+			and gm._staff_wage(2, 1, "quatsch") == gm._staff_wage(2, 1), "")
+		_check("Flink läuft schneller", gm._staff_tempo({"eig": "schnell"}) > gm._staff_tempo({}), "")
 		_check("Wiesn 3: mehr Miete, weniger Geduld", miete_w3 >= miete_w1 and geduld_w3 < geduld_w1,
 			"Miete %d → %d, Geduld %.1f → %.1f" % [miete_w1, miete_w3, geduld_w1, geduld_w3])
 		gm._phase = gm.Phase.INTERMISSION

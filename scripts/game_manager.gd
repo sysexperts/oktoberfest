@@ -115,6 +115,17 @@ const STAFF_MAX_LEVEL := 5
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
 ## Stufe 1 trug nur 1 Krug — mit 4 Tischen blieben 20–35 Bestellungen am Tag liegen (Spielbot).
 const WAITER_CAPACITY := {1: 2, 2: 3, 3: 5, 4: 8, 5: 12}
+## Eigenschaften beim Einstellen (Spaß-Plan 4.4): Tempo- und Lohnfaktor.
+## charmeur: +Beliebtheit je Schicht · schluckspecht: trinkt nachts Bier vom Lager.
+const EIGENSCHAFTEN := {
+	"schnell": {"tempo": 1.3, "lohn": 1.25},
+	"gemuetlich": {"tempo": 0.8, "lohn": 0.75},
+	"charmeur": {"tempo": 1.0, "lohn": 1.15},
+	"schluckspecht": {"tempo": 1.0, "lohn": 0.7},
+	"normal": {"tempo": 1.0, "lohn": 1.0},
+}
+const CHARMEUR_POP := 2.0
+const SCHLUCKSPECHT_BIER := 4
 const STAFF_BASE_SPEED := 4.5   # vorher 3.0 — im großen Zelt blieben bis 100 Bestellungen liegen
 const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
@@ -556,7 +567,8 @@ func _load_game() -> bool:
 	if st is Array:
 		for e in (st as Array):
 			if e is Dictionary:
-				_restore_staff(int((e as Dictionary).get("role", 2)), int((e as Dictionary).get("level", 1)))
+				_restore_staff(int((e as Dictionary).get("role", 2)), int((e as Dictionary).get("level", 1)),
+					str((e as Dictionary).get("eig", "normal")))
 	var tp: Variant = d.get("tables", [])
 	if tp is Array:
 		var arr: Array = tp
@@ -1348,12 +1360,13 @@ func net_hire_staff(role: int) -> void:
 	var id := _staff_next
 	_staff_next += 1
 	var start: Vector3 = _staff_start(role)
+	var eig: String = EIGENSCHAFTEN.keys().pick_random()
 	_staff_sim[id] = {
 		"role": role, "level": 1, "pos": start, "tgt": start, "yaw": 0.0,
-		"state": 0, "timer": 0.0, "orders": [], "idx": 0
+		"state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig
 	}
 	_add_staff.rpc(id, start, role, 1)
-	_melde("MSG_STAFF_HIRED", [STAFF_KEYS[role], _eur(STAFF_WAGE_BASE[role])], 2)
+	_melde("MSG_STAFF_HIRED", [STAFF_KEYS[role], "EIG_" + eig.to_upper(), _eur(_staff_wage(role, 1, eig))], 2)
 	_broadcast_meta()
 
 ## Wiesenbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
@@ -1393,30 +1406,45 @@ func net_upgrade_staff(role: int) -> void:
 func _staff_save_list() -> Array:
 	var out := []
 	for s in _staff_sim.values():
-		out.append({"role": int(s.role), "level": int(s.level)})
+		out.append({"role": int(s.role), "level": int(s.level), "eig": str(s.get("eig", "normal"))})
 	return out
 
 ## Beim Laden: Mitarbeiter ohne Kosten wiederherstellen.
-func _restore_staff(role: int, level: int) -> void:
+func _restore_staff(role: int, level: int, eig := "normal") -> void:
 	if not STAFF_HIRE_COST.has(role):
 		return
+	if not EIGENSCHAFTEN.has(eig):
+		eig = "normal"
 	var id := _staff_next
 	_staff_next += 1
 	var start: Vector3 = _staff_start(role)
 	_staff_sim[id] = {
 		"role": role, "level": clampi(level, 1, STAFF_MAX_LEVEL), "pos": start, "tgt": start,
-		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0
+		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig
 	}
 	_add_staff.rpc(id, start, role, clampi(level, 1, STAFF_MAX_LEVEL))
 
-func _staff_wage(role: int, level: int) -> int:
-	return int(round(float(STAFF_WAGE_BASE[role]) * (1.0 + 0.3 * (float(level) - 1.0))))
+func _staff_wage(role: int, level: int, eig := "normal") -> int:
+	return int(round(float(STAFF_WAGE_BASE[role]) * (1.0 + 0.3 * (float(level) - 1.0))
+		* float(EIGENSCHAFTEN.get(eig, EIGENSCHAFTEN.normal).lohn)))
 
 func _total_wages() -> int:
 	var w := 0
 	for s in _staff_sim.values():
-		w += _staff_wage(int(s.role), int(s.level))
+		w += _staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))
 	return w
+
+func _staff_tempo(s: Dictionary) -> float:
+	return float(EIGENSCHAFTEN.get(str(s.get("eig", "normal")), EIGENSCHAFTEN.normal).tempo)
+
+## Nachts: Charmeure heben die Beliebtheit, Schluckspechte leeren Fässer.
+func _eigenschaften_nacht() -> void:
+	for s in _staff_sim.values():
+		match str(s.get("eig", "")):
+			"charmeur":
+				_popularity = minf(100.0, _popularity + CHARMEUR_POP)
+			"schluckspecht":
+				_stock[WARE_BIER] = maxi(0, int(_stock[WARE_BIER]) - SCHLUCKSPECHT_BIER)
 
 ## Wo ein neuer Mitarbeiter anfängt.
 func _staff_start(role: int) -> Vector3:
@@ -1459,7 +1487,7 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 	var want := atan2(-dir.x, -dir.z)
 	s.yaw = lerp_angle(float(s.yaw), want, clampf(delta * 7.0, 0.0, 1.0))
 	var fwd := Vector3(-sin(float(s.yaw)), 0.0, -cos(float(s.yaw)))
-	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level))
+	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level)) * _staff_tempo(s)
 	if fwd.dot(dir) > 0.2:
 		s.pos += fwd * minf(sp * delta, d)
 	return false
@@ -2460,6 +2488,7 @@ func _end_shift(reason := 0) -> void:
 		_popularity += (POP_ERHOLUNG_ZIEL - _popularity) * POP_ERHOLUNG
 
 	# Günlük bilanço: kira + personel maaşları
+	_eigenschaften_nacht()
 	var rent := _daily_rent()
 	var wages := _total_wages()
 	_wages_last = wages
@@ -2892,7 +2921,7 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 func _buero_state() -> Dictionary:
 	var staff := []
 	for s in _staff_sim.values():
-		staff.append([int(s.role), int(s.level)])
+		staff.append([int(s.role), int(s.level), str(s.get("eig", "normal"))])
 	var haelt := {}
 	for pid in _held_deko.keys():
 		haelt[str(pid)] = int(_held_deko[pid])
