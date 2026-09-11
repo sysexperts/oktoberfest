@@ -197,6 +197,28 @@ class Lauf extends Node:
 		_check("Weiterspielen ignoriert zu neuen Stand", Net.letzter_slot() == 1, str(Net.letzter_slot()))
 		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://saves/slot_3.json"))
 
+		print("  -- Pleite und Rettungskredit (3.5)")
+		Game.add_money(-1500 - Game.money)   # Konto auf −1.500 €
+		gm._pruefe_pleite()
+		_check("Brauerei gleicht Konto aus", Game.money == 0, str(Game.money))
+		_check("Schuld = Fehlbetrag + 20 %", gm._kredit_rest == 1800, str(gm._kredit_rest))
+		var werbung_vorher: int = gm._upg_marketing
+		gm.net_buy_marketing.rpc_id(1)
+		await _frames(3)
+		_check("Ausbau gesperrt", gm._upg_marketing == werbung_vorher, "")
+		hud.set_buero(gm._buero_state())
+		hud.set_money(Game.money)
+		var werbung_zeile: Node = hud.get_node("%Wiesenbuero").get_node("%Werbung")
+		_check("Wiesenbüro nennt den Kredit als Grund", werbung_zeile.grund_text().contains("Rettungskredit"), werbung_zeile.grund_text())
+		gm._add_income(100)
+		_check("25 % jeder Einnahme gehen an die Brauerei", Game.money == 75 and gm._kredit_rest == 1775,
+			"Konto %d, Schuld %d" % [Game.money, gm._kredit_rest])
+		gm._save_game()
+		var mit_kredit: Variant = JSON.parse_string(FileAccess.get_file_as_string(Net.speicherstand_pfad()))
+		_check("Schuld im Spielstand", mit_kredit is Dictionary and int(mit_kredit.get("kredit", 0)) == 1775, "")
+		gm._add_income(100000)
+		_check("Kredit abbezahlt", gm._kredit_rest == 0, str(gm._kredit_rest))
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

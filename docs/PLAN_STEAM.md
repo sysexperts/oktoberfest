@@ -121,7 +121,11 @@ morgen weiterzuspielen.
       Verkaufspreise +1,5 %/Tag (max. +80 %), Geduld −1 %/Tag (min. 60 %),
       ab Tag 8 −2 Beliebtheit pro Nacht. Wiesenbüro zeigt den Aufschlag.
       Werte sind erste Schätzung — beim Testen nachjustieren.*
-- [ ] **3.5 Pleite** — was passiert am Dispolimit? Heute nicht definiert.
+- [x] **3.5 Pleite** — was passiert am Dispolimit? Heute nicht definiert.
+      *Entschieden: Rettungskredit. Liegt das Konto nach dem Tagesabschluss unter
+      −1.000 €, gleicht die Brauerei aus (Schuld +20 %). Bis getilgt: 25 % jeder
+      Einnahme an die Brauerei, Ausbauten gesperrt; Ware und die ersten zwei
+      Tische gehen weiter. Kein Game Over.*
 
 ## Phase 4 · Ton und Präsentation
 

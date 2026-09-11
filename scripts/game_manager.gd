@@ -193,6 +193,9 @@ const Meilensteine := preload("res://scripts/meilensteine.gd")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0}
 var _meilensteine: Array = []
+# Rettungskredit (Plan 3.5): offene Schuld bei der Brauerei, heute getilgt
+var _kredit_rest := 0
+var _kredit_heute := 0
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -339,6 +342,7 @@ func _save_game() -> void:
 		"stats": _stats,
 		"meilensteine": _meilensteine,
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
+		"kredit": _kredit_rest,
 		"format": Net.SAVE_FORMAT,
 		"saved_at": int(Time.get_unix_time_from_system()),
 	}
@@ -390,6 +394,7 @@ func _load_game() -> bool:
 	var erreicht: Variant = d.get("meilensteine", [])
 	if erreicht is Array:
 		_meilensteine = (erreicht as Array).map(func(x: Variant) -> String: return str(x))
+	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
 	_stock[WARE_BIER] = int(d.get("stock_bier", 0))
 	_stock[WARE_ESSEN] = int(d.get("stock_essen", 0))
 	var st: Variant = d.get("staff", [])
@@ -633,6 +638,8 @@ func net_buy_table() -> void:
 	if _active_count >= limit:
 		_fehler("MSG_TABLE_LIMIT", [limit])
 		return
+	if _active_count >= 2 and _kredit_sperrt():
+		return
 	# Die ersten zwei Tische sind Pflicht — dafür gilt die Warenreserve nicht
 	if _active_count >= 2 and not _reserve_ok(TABLE_COST):
 		return
@@ -649,6 +656,8 @@ func net_buy_table() -> void:
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_marketing() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _kredit_sperrt():
 		return
 	var cost := MARKETING_COST * (_upg_marketing + 1)
 	if not _reserve_ok(cost):
@@ -667,6 +676,8 @@ func net_buy_marketing() -> void:
 func net_buy_deko() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
+	if _kredit_sperrt():
+		return
 	var cost := DEKO_COST * (_upg_deko + 1)
 	if not _reserve_ok(cost):
 		return
@@ -683,6 +694,8 @@ func net_buy_deko() -> void:
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_toilet() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _kredit_sperrt():
 		return
 	if _has_toilet:
 		_fehler("MSG_TOILET_HAVE")
@@ -867,6 +880,8 @@ func net_book_artist(tier: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
 	if not ARTIST_COST.has(tier):
+		return
+	if _kredit_sperrt():
 		return
 	if _artist_tier > 0:
 		_fehler("MSG_ACT_BOOKED_ALREADY", ["ACT_%d" % _artist_tier])
@@ -1097,6 +1112,8 @@ func net_hire_staff(role: int) -> void:
 		return
 	if not STAFF_HIRE_COST.has(role):
 		return
+	if _kredit_sperrt():
+		return
 	var cost: int = STAFF_HIRE_COST[role]
 	if not _reserve_ok(cost):
 		return
@@ -1119,6 +1136,8 @@ func net_hire_staff(role: int) -> void:
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _kredit_sperrt():
 		return
 	var target := -1
 	var low := 999
@@ -1388,6 +1407,8 @@ func net_buy_license(key: String) -> void:
 		return
 	if not LIC_COST.has(key):
 		return
+	if _kredit_sperrt():
+		return
 	if _lic.get(key, false):
 		_fehler("MSG_LIC_HAVE", [LIC_KEYS[key]])
 		return
@@ -1407,6 +1428,8 @@ func net_buy_license(key: String) -> void:
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_tent() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _kredit_sperrt():
 		return
 	var nxt := _tent_stage + 1
 	if not TENT_UPGRADE_COST.has(nxt):
@@ -1651,12 +1674,13 @@ func _end_shift(reason := 0) -> void:
 	_wages_last = wages
 	Game.add_money(-rent - wages)
 	var goods := _goods_cost      # schon beim Bestellen bezahlt, hier nur ausgewiesen
-	var net_profit := _last_earn - rent - wages - goods - _interest_paid
+	var net_profit := _last_earn - rent - wages - goods - _interest_paid - _kredit_heute
 	net_report.rpc({
 		"reason": reason, "closed_at": int(closed_at), "pop_penalty": pop_penalty, "day": _day,
 		"earn": _last_earn, "tips": _clean_tips, "rent": rent, "wages": wages, "goods": goods,
 		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
 		"urin": _urin_count, "complaints": _complaints, "left": _left_guests,
+		"loan": _kredit_heute,
 	})
 	match reason:
 		1:
@@ -1666,12 +1690,14 @@ func _end_shift(reason := 0) -> void:
 	_melde("MSG_DAY_END", [_eur(net_profit)], 2 if net_profit >= 0 else 1)
 	_clean_tips = 0
 	_interest_paid = 0
+	_kredit_heute = 0
 	_goods_cost = 0
 	_urin_count = 0
 	_complaints = 0
 	_left_guests = 0
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
 	_stats.days += 1
+	_pruefe_pleite()   # nach Miete und Löhnen — erst dann steht fest, ob es reicht
 	_broadcast_meta()
 
 ## Bilgisayardan zelti erken kapat (popülerlik cezası).
@@ -1996,6 +2022,7 @@ func _buero_state() -> Dictionary:
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"roles": roles, "shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
+		"kredit": _kredit_rest,
 	}
 
 func _broadcast_meta() -> void:
@@ -2090,6 +2117,27 @@ func net_report(bilanz: Dictionary) -> void:
 	if _hud:
 		_hud.set_report(bilanz)
 
+## Pleite (Plan 3.5): Steht das Konto nach dem Tagesabschluss unter dem
+## Dispolimit, springt die Brauerei ein. Konto zurück auf 0, Schuld = Fehlbetrag
+## plus Aufschlag. Bis sie getilgt ist, geht ein Teil jeder Einnahme an die
+## Brauerei und Ausbauten sind gesperrt (_kredit_sperrt). Ein zweites Mal pleite
+## erhöht die Schuld — kein Game Over.
+func _pruefe_pleite() -> void:
+	if Game.money >= -OVERDRAFT_LIMIT:
+		return
+	var fehlbetrag := -Game.money
+	Game.add_money(fehlbetrag)
+	_kredit_rest += roundi(float(fehlbetrag) * (1.0 + Wirtschaft.KREDIT_AUFSCHLAG))
+	net_popup.rpc("POPUP_LOAN", [_eur(-fehlbetrag), _eur(_kredit_rest), roundi(Wirtschaft.KREDIT_ANTEIL * 100.0)])
+	_broadcast_meta()
+
+## Ausbauten sind gesperrt, solange der Rettungskredit läuft. true = gesperrt.
+func _kredit_sperrt() -> bool:
+	if _kredit_rest <= 0:
+		return false
+	_fehler("MSG_LOAN_LOCKED")
+	return true
+
 ## Reicht das Geld — inklusive Dispo bis -1000€?
 func _afford(cost: int) -> bool:
 	return Game.money - cost >= -OVERDRAFT_LIMIT
@@ -2101,6 +2149,15 @@ func _add_income(amount: int) -> void:
 		Game.add_money(amount)
 		return
 	_stats.earned += amount
+	# Rettungskredit: ein Teil jeder Einnahme geht an die Brauerei
+	if _kredit_rest > 0:
+		var tilgung := mini(ceili(float(amount) * Wirtschaft.KREDIT_ANTEIL), _kredit_rest)
+		_kredit_rest -= tilgung
+		_kredit_heute += tilgung
+		amount -= tilgung
+		if _kredit_rest == 0:
+			_melde("MSG_LOAN_PAID", [], 2)
+			_broadcast_meta()
 	if Game.money < 0:
 		var debt: int = -Game.money
 		var repay: int = mini(amount, debt)

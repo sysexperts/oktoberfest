@@ -48,6 +48,9 @@ static func buero_status(z: Dictionary) -> String:
 		text += "\n" + _t("OFFICE_SEASON") % [tag,
 			roundi((Wirtschaft.kosten_faktor(tag) - 1.0) * 100.0),
 			roundi((Wirtschaft.preis_faktor(tag) - 1.0) * 100.0)]
+	var kredit := int(z.get("kredit", 0))
+	if kredit > 0:
+		text += "\n" + _t("OFFICE_LOAN") % [euro(kredit), roundi(Wirtschaft.KREDIT_ANTEIL * 100.0)]
 	return text
 
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
@@ -94,6 +97,9 @@ static func bilanz(b: Dictionary) -> String:
 		_t("REPORT_SERVED") % [int(b.get("served", 0)), int(b.get("missed", 0))],
 		_t("REPORT_MESS") % [int(b.get("urin", 0)), int(b.get("complaints", 0)), int(b.get("left", 0))],
 	]
+	# Kredittilgung direkt unter den Zinsen, nur wenn es sie gab
+	if int(b.get("loan", 0)) > 0:
+		zeilen.insert(9, "%s: %s" % [_t("REPORT_LOAN"), euro(-int(b.get("loan", 0)))])
 	return "\n".join(zeilen)
 
 ## Übersetzt einen Schlüssel und ersetzt {aktion} durch die aktuell belegte

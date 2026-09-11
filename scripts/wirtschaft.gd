@@ -22,6 +22,11 @@ const SCHONFRIST_TAGE := 7
 ## … danach sinkt sie jede Nacht um so viele Punkte
 const BELIEBTHEIT_JE_NACHT := 2.0
 
+## Rettungskredit (Plan 3.5): Aufschlag auf den Fehlbetrag …
+const KREDIT_AUFSCHLAG := 0.2
+## … und dieser Anteil jeder Einnahme geht an die Brauerei, bis alles getilgt ist
+const KREDIT_ANTEIL := 0.25
+
 static func _vergangen(tag: int) -> float:
 	return float(maxi(tag, 1) - 1)
 

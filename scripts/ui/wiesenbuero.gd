@@ -132,7 +132,7 @@ func _reiter_zelt(stufe: int, ohne_zelt: String) -> void:
 	if stufe > 0:
 		_erledigt(z, "DONE_RENTED")
 	else:
-		_einzelkauf(z, "BTN_RENT", int(_gm.TENT_BOOK_COST), "", false)
+		_einzelkauf(z, "BTN_RENT", int(_gm.TENT_BOOK_COST), "", false, false)
 
 	z = _zeile("TischStellen")
 	z.setze("🪑 " + tr("OFFER_TABLE"), tr("OFFER_TABLE_INFO") % [tische, limit])
@@ -140,7 +140,7 @@ func _reiter_zelt(stufe: int, ohne_zelt: String) -> void:
 	if sperre == "" and tische >= limit:
 		sperre = tr("WHY_TABLE_LIMIT") % limit
 	# Die ersten zwei Tische sind Pflicht — dafür gilt die Warenreserve nicht
-	_einzelkauf(z, "BTN_PLACE", int(_gm.TABLE_COST), sperre, tische >= 2)
+	_einzelkauf(z, "BTN_PLACE", int(_gm.TABLE_COST), sperre, tische >= 2, tische >= 2)
 
 	z = _zeile("TischVerkaufen")
 	z.setze("🗑 " + tr("OFFER_TABLE_SELL"), tr("OFFER_TABLE_SELL_INFO"))
@@ -244,7 +244,7 @@ func _reiter_ware(ohne_zelt: String) -> void:
 		var erster_grund := ""
 		for i in PAKETE.size():
 			var kosten: int = preis * int(PAKETE[i])
-			var g := _kauf_grund(kosten, ohne_zelt, false)
+			var g := _kauf_grund(kosten, ohne_zelt, false, false)
 			z.knopf(i, tr("BTN_PACKS") % [PAKETE[i], Texte.euro(kosten)], g != "")
 			if erster_grund == "":
 				erster_grund = g
@@ -270,9 +270,12 @@ func _reiter_ziele() -> void:
 
 # ------------------------------------------------------------ Helfer
 ## Warum ein Kauf gerade nicht geht — "" wenn er geht.
-func _kauf_grund(kosten: int, sperre := "", mit_reserve := true) -> String:
+## ausbau: false für Käufe, die auch mit Rettungskredit gehen (Ware, Zelt, erste Tische).
+func _kauf_grund(kosten: int, sperre := "", mit_reserve := true, ausbau := true) -> String:
 	if sperre != "":
 		return sperre
+	if ausbau and int(_z.get("kredit", 0)) > 0:
+		return tr("WHY_LOAN")
 	var dispo := int(_gm.OVERDRAFT_LIMIT)
 	if _geld - kosten < -dispo:
 		return tr("WHY_MONEY") % Texte.euro(-dispo)
@@ -280,8 +283,8 @@ func _kauf_grund(kosten: int, sperre := "", mit_reserve := true) -> String:
 		return tr("WHY_RESERVE")
 	return ""
 
-func _einzelkauf(z: Node, knopf_schluessel: String, kosten: int, sperre := "", mit_reserve := true) -> void:
-	var g := _kauf_grund(kosten, sperre, mit_reserve)
+func _einzelkauf(z: Node, knopf_schluessel: String, kosten: int, sperre := "", mit_reserve := true, ausbau := true) -> void:
+	var g := _kauf_grund(kosten, sperre, mit_reserve, ausbau)
 	z.knopf(0, tr(knopf_schluessel) % Texte.euro(kosten), g != "")
 	z.grund(g)
 
