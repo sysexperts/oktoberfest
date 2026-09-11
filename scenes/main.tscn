@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c5tkds81g8d47" path="res://scenes/keg_station.tscn" id="4_keg"]
 [ext_resource type="PackedScene" uid="uid://b217cd2pklob3" path="res://scenes/beer_table.tscn" id="5_table"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="6_hud"]
-[ext_resource type="PackedScene" uid="uid://dy8ju4n1l0rxd" path="res://assets/models/theke.glb" id="7_theke"]
+[ext_resource type="PackedScene" path="res://scenes/schanktheke.tscn" id="7_theke"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1533kgl" path="res://scenes/computer.tscn" id="8_comp"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1536kh8" path="res://scenes/food_station.tscn" id="9_food"]
 [ext_resource type="Script" uid="uid://bkxikn4e2dotl" path="res://scripts/sfx.gd" id="10_sfx"]
@@ -121,56 +121,30 @@ shape = SubResource("WallZ")
 [node name="Tent" parent="." unique_id=299652560 instance=ExtResource("2_tent")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.249283e-05, -0.01563716, 0.00017309189)
 
-[node name="Bar" type="Node3D" parent="." unique_id=1943998888]
-
-[node name="Theke0" parent="Bar" unique_id=17202535 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 1.1512175, -9.3)
-
-[node name="Theke1" parent="Bar" unique_id=932523803 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -6, 1.1512175, -9.3)
-
-[node name="Theke2" parent="Bar" unique_id=2082290333 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -4, 1.1512175, -9.3)
-
-[node name="Theke3" parent="Bar" unique_id=1364413750 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -2, 1.1512175, -9.3)
-
-[node name="Theke4" parent="Bar" unique_id=723584262 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 1.1512175, -9.3)
-
-[node name="Theke5" parent="Bar" unique_id=771483508 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2, 1.1512175, -9.3)
-
-[node name="Theke6" parent="Bar" unique_id=939940565 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 4, 1.1512175, -9.3)
-
-[node name="Theke7" parent="Bar" unique_id=689294857 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 6, 1.1512175, -9.3)
-
-[node name="Theke8" parent="Bar" unique_id=610828452 instance=ExtResource("7_theke")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8, 1.1512175, -9.3)
+[node name="Schanktheke" parent="." instance=ExtResource("7_theke")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.3)
 
 [node name="Stations" type="Node3D" parent="." unique_id=824174873]
 
 [node name="MugDispenser" parent="Stations" unique_id=1708846376 instance=ExtResource("3_disp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.42, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.08, -9)
 
 [node name="Keg1" parent="Stations" unique_id=1742639817 instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.33, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.99, -9)
 
 [node name="Keg2" parent="Stations" unique_id=26855945 instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.33, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.99, -9)
 beer_type = 2
 
 [node name="Keg3" parent="Stations" unique_id=1082634527 instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.33, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.99, -9)
 beer_type = 3
 
 [node name="FoodPretzel" parent="Stations" unique_id=581788161 instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1.42, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1.08, -9)
 
 [node name="FoodSosis" parent="Stations" unique_id=911696256 instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.42, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.08, -9)
 food_type = 2
 
 [node name="Tables" type="Node3D" parent="." unique_id=594528377]

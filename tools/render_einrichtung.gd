@@ -57,6 +57,15 @@ class Lauf extends Node:
 		await _frames(90)
 		get_viewport().get_texture().get_image().save_png("res://tools/einrichtung_zelt.png")
 		print("  gespeichert: einrichtung_zelt")
+		# Nahaufnahme der Theke mit Ausgabe, darauf ein paar fertige Krüge und Essen
+		gm._ausgabe = {"1_1": 4, "1_2": 2, "2_1": 2}
+		gm._ausgabe_senden()
+		spieler.global_position = Vector3(-1.0, 0.0, -5.2)
+		spieler.rotation.y = 0.0
+		spieler.get_node("Head").rotation.x = deg_to_rad(-14.0)
+		await _frames(40)
+		get_viewport().get_texture().get_image().save_png("res://tools/theke_nah.png")
+		print("  gespeichert: theke_nah")
 
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)

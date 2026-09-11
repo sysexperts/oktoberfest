@@ -169,6 +169,10 @@ theme_override_constants/separation = 8
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="Zapfer" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Kellner" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" instance=ExtResource("2_ang")]
 unique_name_in_owner = true
 layout_mode = 2

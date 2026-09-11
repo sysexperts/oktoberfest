@@ -1,0 +1,300 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ausgabe.gd" id="1_a"]
+
+[sub_resource type="CylinderMesh" id="Glas"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="MatGlas"]
+transparency = 1
+albedo_color = Color(0.9, 0.95, 1, 0.35)
+
+[sub_resource type="CylinderMesh" id="Bier"]
+top_radius = 0.062
+bottom_radius = 0.062
+height = 0.17
+
+[sub_resource type="StandardMaterial3D" id="MatBier"]
+albedo_color = Color(0.95, 0.75, 0.2, 1)
+emission_enabled = true
+emission = Color(0.4, 0.28, 0.05, 1)
+
+[sub_resource type="CylinderMesh" id="Teller"]
+top_radius = 0.14
+bottom_radius = 0.12
+height = 0.03
+
+[sub_resource type="StandardMaterial3D" id="MatTeller"]
+albedo_color = Color(0.95, 0.94, 0.9, 1)
+
+[sub_resource type="SphereMesh" id="Portion"]
+radius = 0.09
+height = 0.08
+
+[sub_resource type="StandardMaterial3D" id="MatPortion"]
+albedo_color = Color(0.72, 0.45, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="Tablett"]
+size = Vector3(2.2, 0.03, 0.55)
+
+[sub_resource type="StandardMaterial3D" id="MatTablett"]
+albedo_color = Color(0.55, 0.55, 0.58, 1)
+metallic = 0.6
+roughness = 0.35
+
+[node name="Ausgabe" type="Node3D"]
+script = ExtResource("1_a")
+
+[node name="Tablett" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("Tablett")
+surface_material_override/0 = SubResource("MatTablett")
+
+[node name="Kruege" type="Node3D" parent="."]
+
+[node name="Essen" type="Node3D" parent="."]
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 40
+outline_size = 12
+modulate = Color(1, 0.9, 0.55, 1)
+text = "WORLD_AUSGABE"
+
+[node name="Krug0" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0.13, -0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug0"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug1" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73, 0.13, -0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug1"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug2" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51, 0.13, -0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug2"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug3" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29, 0.13, -0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug3"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug4" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0.13, -0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug4"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug5" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.13, -0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug5"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug6" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0.13, 0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug6"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug7" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73, 0.13, 0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug7"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug8" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51, 0.13, 0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug8"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug9" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29, 0.13, 0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug9"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug10" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0.13, 0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug10"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Krug11" type="Node3D" parent="Kruege"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.13, 0.12)
+visible = false
+
+[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug11"]
+mesh = SubResource("Glas")
+surface_material_override/0 = SubResource("MatGlas")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Kruege/Krug11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("Bier")
+material_override = SubResource("MatBier")
+
+[node name="Essen0" type="Node3D" parent="Essen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.045, -0.12)
+visible = false
+
+[node name="Teller" type="MeshInstance3D" parent="Essen/Essen0"]
+mesh = SubResource("Teller")
+surface_material_override/0 = SubResource("MatTeller")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Essen/Essen0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("Portion")
+material_override = SubResource("MatPortion")
+
+[node name="Essen1" type="Node3D" parent="Essen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.045, -0.12)
+visible = false
+
+[node name="Teller" type="MeshInstance3D" parent="Essen/Essen1"]
+mesh = SubResource("Teller")
+surface_material_override/0 = SubResource("MatTeller")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Essen/Essen1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("Portion")
+material_override = SubResource("MatPortion")
+
+[node name="Essen2" type="Node3D" parent="Essen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.045, -0.12)
+visible = false
+
+[node name="Teller" type="MeshInstance3D" parent="Essen/Essen2"]
+mesh = SubResource("Teller")
+surface_material_override/0 = SubResource("MatTeller")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Essen/Essen2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("Portion")
+material_override = SubResource("MatPortion")
+
+[node name="Essen3" type="Node3D" parent="Essen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.045, 0.14)
+visible = false
+
+[node name="Teller" type="MeshInstance3D" parent="Essen/Essen3"]
+mesh = SubResource("Teller")
+surface_material_override/0 = SubResource("MatTeller")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Essen/Essen3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("Portion")
+material_override = SubResource("MatPortion")
+
+[node name="Essen4" type="Node3D" parent="Essen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.045, 0.14)
+visible = false
+
+[node name="Teller" type="MeshInstance3D" parent="Essen/Essen4"]
+mesh = SubResource("Teller")
+surface_material_override/0 = SubResource("MatTeller")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Essen/Essen4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("Portion")
+material_override = SubResource("MatPortion")
+
+[node name="Essen5" type="Node3D" parent="Essen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.045, 0.14)
+visible = false
+
+[node name="Teller" type="MeshInstance3D" parent="Essen/Essen5"]
+mesh = SubResource("Teller")
+surface_material_override/0 = SubResource("MatTeller")
+
+[node name="Inhalt" type="MeshInstance3D" parent="Essen/Essen5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("Portion")
+material_override = SubResource("MatPortion")

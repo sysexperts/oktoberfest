@@ -280,6 +280,39 @@ class Lauf extends Node:
 				and not gm._einrichtung_nodes.has(did) and Game.money - geld_vor == 45
 				and not gm.haelt_einrichtung(sp.name.to_int()), "%d €" % (Game.money - geld_vor))
 
+		print("  -- Zapfer und Ausgabe")
+		Game.add_money(3000)
+		gm._stock[gm.WARE_BIER] = 30
+		gm.net_hire_staff(gm.ROLE_ZAPFER)
+		var zapfer_da := false
+		for st: Dictionary in gm._staff_sim.values():
+			if int(st.role) == gm.ROLE_ZAPFER:
+				zapfer_da = true
+		_check("Zapfer eingestellt", zapfer_da, "")
+		gm._ausgabe.clear()
+		gm._phase = gm.Phase.SHIFT
+		gm._phase_time = gm.SHIFT_TIME   # sonst endet der Tag im nächsten Frame und räumt die Ausgabe
+		for k in 200:
+			gm._update_staff(0.1)
+		await _frames(3)
+		_check("Zapfer stellt Krüge auf die Ausgabe", gm._ausgabe_gesamt(1) >= 3, str(gm._ausgabe))
+		var ausgabe_knoten: Node = get_tree().get_first_node_in_group("ausgabe")
+		_check("Ausgabe zeigt die Krüge", ausgabe_knoten != null and ausgabe_knoten.anzahl(1) == gm._ausgabe_gesamt(1),
+			str(ausgabe_knoten.anzahl(1)) if ausgabe_knoten else "fehlt")
+		var nehmer: Node3D = gm.get_node("Players").get_child(0)
+		nehmer.carry_state = 0
+		var auf_ausgabe: int = gm._ausgabe_gesamt(1)
+		_check("Hinweis an der Ausgabe", nehmer._hint_for(ausgabe_knoten) == "HINT_AUSGABE_TAKE", nehmer._hint_for(ausgabe_knoten))
+		gm.net_take_ausgabe.rpc_id(1)
+		await _frames(3)
+		_check("Spieler nimmt fertigen Krug", nehmer.carry_state == 1 and nehmer.carry_fill >= 1.0
+			and gm._ausgabe_gesamt(1) == auf_ausgabe - 1, "carry=%d" % nehmer.carry_state)
+		nehmer.carry_state = 0
+		nehmer.carry_fill = 0.0
+		gm._ausgabe.clear()
+		gm._ausgabe_senden()
+		gm._phase = gm.Phase.INTERMISSION
+
 		print("  -- Spielstände (3.3)")
 		_check("Stand liegt in Platz 1", Net.speicherstand_pfad() == "user://saves/slot_1.json"
 			and FileAccess.file_exists("user://saves/slot_1.json"), Net.speicherstand_pfad())

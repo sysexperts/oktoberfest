@@ -26,6 +26,7 @@ const PERSONAL := {
 	1: ["Koch", "👨‍🍳", "STAFF_COOK", "STAFF_INFO_COOK"],
 	2: ["Kellner", "🍺", "STAFF_WAITER", "STAFF_INFO_WAITER"],
 	3: ["Reinigung", "🧹", "STAFF_CLEANER", "STAFF_INFO_CLEANER"],
+	4: ["Zapfer", "🍻", "STAFF_TAPSTER", "STAFF_INFO_TAPSTER"],
 }
 ## Stufe -> [Zeile, Symbol]
 const KUENSTLER := {1: ["Strassenmusiker", "🎸"], 2: ["Blaskapelle", "🎺"], 3: ["StarAct", "⭐"]}
@@ -194,7 +195,7 @@ func _reiter_lizenzen() -> void:
 			_einzelkauf(z, "BTN_BUY", int(_gm.LIC_COST[key]))
 
 func _reiter_personal() -> void:
-	var stufen := {1: [], 2: [], 3: []}
+	var stufen := {1: [], 2: [], 3: [], 4: []}
 	for e: Array in _z.get("staff", []):
 		if stufen.has(int(e[0])):
 			(stufen[int(e[0])] as Array).append(int(e[1]))

@@ -165,8 +165,13 @@ LIC_INFO,Danach bestellen Gäste auch das.,Guests will order it too.,Misafirler 
 STAFF_COOK,Koch,Cook,Aşçı
 STAFF_WAITER,Kellner,Waiter,Garson
 STAFF_CLEANER,Reinigungskraft,Cleaner,Temizlikçi
-STAFF_INFO_COOK,Bereitet Essen schneller zu.,Prepares food faster.,Yemeği daha hızlı hazırlar.
-STAFF_INFO_WAITER,"Bedient Gäste, trägt je nach Stufe 1 bis 12 Krüge.","Serves guests, carries 1 to 12 mugs depending on level.","Misafirlere servis yapar, seviyeye göre 1–12 kupa taşır."
+STAFF_INFO_COOK,"Kocht Brezn und Würstl vor und stellt sie auf die Ausgabe an der Theke — du und die Kellner nehmen sie nur noch mit.","Pre-cooks pretzels and sausages and puts them on the pass at the bar — you and the waiters just pick them up.","Brezel ve sosisleri önceden pişirip tezgâhtaki servis yerine koyar — sen ve garsonlar sadece alırsınız."
+STAFF_INFO_WAITER,"Bedient Gäste, trägt je nach Stufe 2 bis 12 Krüge. Ohne Zapfer zapft er jeden Krug selbst.","Serves guests, carries 2 to 12 mugs depending on level. Without a bartender he pours every mug himself.","Misafirlere servis yapar, seviyeye göre 2–12 kupa taşır. Barmen yoksa her kupayı kendisi doldurur."
+STAFF_TAPSTER,Zapfer,Bartender,Barmen
+STAFF_INFO_TAPSTER,"Zapft laufend Bier vor und stellt volle Krüge auf die Ausgabe an der Theke — du und die Kellner müssen nicht mehr selbst zapfen.","Keeps pouring beer and puts full mugs on the pass at the bar — you and the waiters no longer pour yourselves.","Sürekli bira doldurup dolu kupaları tezgâhtaki servis yerine koyar — sen ve garsonlar artık kendiniz doldurmazsınız."
+HINT_AUSGABE_TAKE,{interact} Fertiges von der Ausgabe nehmen,{interact} Take from the pass,{interact} Servis yerinden al
+HINT_AUSGABE_EMPTY,Ausgabe — Zapfer und Koch stellen hier Fertiges ab,Pass — bartender and cook put finished items here,Servis yeri — barmen ve aşçı hazırları buraya koyar
+WORLD_AUSGABE,🍺 %d · 🥨 %d fertig,🍺 %d · 🥨 %d ready,🍺 %d · 🥨 %d hazır
 STAFF_INFO_CLEANER,Putzt Erbrochenes und Pfützen weg.,Cleans up vomit and puddles.,Kusmuk ve birikintileri temizler.
 STAFF_WAGE,Lohn %s pro Schicht,Wage %s per shift,Vardiya başı maaş %s
 STAFF_EMPLOYED,Im Dienst: %s,Employed: %s,Çalışan: %s

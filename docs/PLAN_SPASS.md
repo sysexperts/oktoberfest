@@ -73,6 +73,19 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 - Einschränkung: einfache Bot-Strategie (keine Werbung, Klo erst spät).
   Trotzdem klar: **Wirtschaft zu knapp, Strafen zu hart, Mittelspiel fehlt.**
   → Phase 1 zusammen mit 6.2 (Balancing) vorziehen.
+
+**Behoben nach Bot-Läufen 2–8 (2026-09-11):**
+- Beschwerde-Schleife (jeder Gast alle 6 s erneut) → einmal pro Gast
+- Tagesende doppelt (Tag +2, Miete doppelt) → gesperrt
+- Sauberkeit sank 3× zu schnell, kostete bis 60 % Einnahmen → max. 30 %
+- Preise 18/16 €, Trinkgeld 2–8, Klo 1.000, Zelt 2.000/6.000, Miete 220/450, Lieferung 30 s
+- Kellner trägt ab Stufe 1 zwei Krüge, Essen einer Runde zählt einmal
+- Beliebtheit: Untergrenze 10, nächtliche Erholung Richtung 40, Verlust durch
+  verpasste Bestellungen max. 20/Tag
+- **Neu: Zapfer** (Nutzerwunsch) — zapft vor und stellt Krüge auf die Ausgabe
+  an der neuen Platzhalter-Theke; Koch stellt Essen dorthin. Spieler/Kellner
+  nehmen Fertiges mit, ohne selbst zu zapfen.
+- Ergebnis Lauf 8: Zelt 2 an Tag 8, Zelt 3 an Tag 14, Beliebtheit bis Zelt 2 ~95 %.
 - [ ] **0.4 Echter Spieltest** — du spielst 2 Tage allein und 1 Tag im Koop,
       F12 an jeder Stelle, die hakt oder langweilt, danach 5 Sätze Notiz. *Du, S*
 - [ ] **0.5 Außenstehende** (Plan 6.2) — 3 Leute, die das Spiel nie gesehen

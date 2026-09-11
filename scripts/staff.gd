@@ -3,8 +3,9 @@ extends Node3D
 ## Angestellter (Koch / Kellner / Reinigung). Nur Darstellung —
 ## die Logik läuft serverseitig im GameManager (_staff_sim).
 
-const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5)}
-const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹"}
+const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5), 4: Color(1.0, 0.85, 0.3)}
+const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹", 4: "🍻"}
+const ROLE_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER"}
 const Figuren := preload("res://scripts/figuren.gd")
 ## Versatz, damit Personal und Gäste mit gleicher Nummer nicht gleich aussehen
 const FIGUR_VERSATZ := 1000
@@ -36,11 +37,7 @@ var _hand_mugs: Array = []
 @onready var _label: Label3D = $Label
 
 static func role_name(r: int) -> String:
-	match r:
-		1: return "Koch"
-		2: return "Kellner"
-		3: return "Reinigung"
-	return "?"
+	return String(TranslationServer.translate(ROLE_KEYS.get(r, "?")))
 
 func _ready() -> void:
 	add_to_group("staff")

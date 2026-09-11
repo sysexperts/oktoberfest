@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ausgabe.tscn" id="1_ausgabe"]
+
+[sub_resource type="BoxMesh" id="Korpus"]
+size = Vector3(18, 1.0, 1.1)
+
+[sub_resource type="StandardMaterial3D" id="MatKorpus"]
+albedo_color = Color(0.36, 0.22, 0.12, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="Platte"]
+size = Vector3(18.4, 0.08, 1.35)
+
+[sub_resource type="StandardMaterial3D" id="MatPlatte"]
+albedo_color = Color(0.62, 0.43, 0.25, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="Blende"]
+size = Vector3(18.1, 0.22, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="MatBlau"]
+albedo_color = Color(0.16, 0.36, 0.72, 1)
+
+[sub_resource type="StandardMaterial3D" id="MatWeiss"]
+albedo_color = Color(0.93, 0.93, 0.95, 1)
+
+[sub_resource type="BoxMesh" id="Leiste"]
+size = Vector3(18.1, 0.06, 0.05)
+
+[sub_resource type="BoxMesh" id="Pfosten"]
+size = Vector3(0.14, 1.3, 0.14)
+
+[sub_resource type="BoxMesh" id="Schild"]
+size = Vector3(4.0, 0.6, 0.08)
+
+[sub_resource type="BoxShape3D" id="Kollision"]
+size = Vector3(18.4, 1.1, 1.35)
+
+[node name="Schanktheke" type="Node3D"]
+
+[node name="Korpus" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("Korpus")
+surface_material_override/0 = SubResource("MatKorpus")
+
+[node name="Platte" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04, 0)
+mesh = SubResource("Platte")
+surface_material_override/0 = SubResource("MatPlatte")
+
+[node name="BlendeBlau" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.57)
+mesh = SubResource("Blende")
+surface_material_override/0 = SubResource("MatBlau")
+
+[node name="LeisteOben" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, 0.58)
+mesh = SubResource("Leiste")
+surface_material_override/0 = SubResource("MatWeiss")
+
+[node name="LeisteUnten" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.58)
+mesh = SubResource("Leiste")
+surface_material_override/0 = SubResource("MatWeiss")
+
+[node name="PfostenLinks" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.7, -0.45)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("MatKorpus")
+
+[node name="PfostenRechts" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.7, -0.45)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("MatKorpus")
+
+[node name="Schild" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.6, -0.45)
+mesh = SubResource("Schild")
+surface_material_override/0 = SubResource("MatBlau")
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+shape = SubResource("Kollision")
+
+[node name="Ausgabe" parent="." instance=ExtResource("1_ausgabe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.08, 0.3)

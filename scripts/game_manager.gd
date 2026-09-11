@@ -86,7 +86,7 @@ const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 2000, 3: 6000}   # vorher 3000/10000: im Bot nie erreicht
 const TABLE_COST := 200
 ## Zeltmiete pro Tag am ersten Tag — steigt danach mit Wirtschaft.miete.
-const TENT_RENT := {0: 0, 1: 120, 2: 300, 3: 700}
+const TENT_RENT := {0: 0, 1: 120, 2: 220, 3: 450}   # vorher 300/700: großes Zelt machte Verlust
 # Upgrades (kiosk)
 const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
 const MARKETING_BOOST := 15.0
@@ -100,8 +100,9 @@ const STAFF_SCENE := preload("res://scenes/staff.tscn")
 const ROLE_KOCH := 1
 const ROLE_KELLNER := 2
 const ROLE_REINIGUNG := 3
-const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400}
-const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
+const ROLE_ZAPFER := 4
+const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400, 4: 450}
+const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80, 4: 90}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 5
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
@@ -109,9 +110,15 @@ const STAFF_MAX_LEVEL := 5
 const WAITER_CAPACITY := {1: 2, 2: 3, 3: 5, 4: 8, 5: 12}
 const STAFF_BASE_SPEED := 4.5   # vorher 3.0 — im großen Zelt blieben bis 100 Bestellungen liegen
 const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
-const BAR_POINT := Vector3(0, 0.1, -7.0)      # Kellner holt hier ab
-const KITCHEN_POINT := Vector3(7.0, 0.1, -7.0) # Koch steht hier
-const DRINK_PREP := 0.8                        # Sekunden pro Getränk (vorher 1.2)
+const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
+const KITCHEN_POINT := Vector3(6.5, 0.1, -10.4) # Koch steht hinter der Theke bei den Kochstellen
+const ZAPFER_POINT := Vector3(-2.0, 0.1, -10.4) # Zapfer steht hinter der Theke an der Ausgabe
+## Zapfer und Koch stellen Fertiges auf die Ausgabe (scenes/ausgabe.tscn).
+const ZAPF_ZEIT := 2.2        # Sekunden pro Krug auf Stufe 1
+const KOCH_ZEIT := 4.5        # Sekunden pro Portion auf Stufe 1
+const AUSGABE_MAX_KRUEGE := 6 # + 2 je Stufe des Zapfers, höchstens 12 Plätze
+const AUSGABE_MAX_ESSEN := 3  # + 1 je Stufe des Kochs, höchstens 6 Plätze
+const DRINK_PREP := 1.5                        # Kellner zapft selbst, wenn kein Krug auf der Ausgabe steht
 const FOOD_PREP := 3.0                         # Sekunden pro Speise (mit Koch)
 
 # ---- E4: Ware & Lieferung ----
@@ -173,6 +180,10 @@ var _phase: int = Phase.INTERMISSION
 var _phase_time := INTERMISSION_TIME
 var _bierpreis := 1.0   # Faktor auf den Tagespreis je Maß (Zelt-Computer)
 var _pop_verlust_heute := 0.0   # Beliebtheit, die verpasste Bestellungen heute schon gekostet haben
+## Fertiges auf der Ausgabe: "art_typ" -> Anzahl (art 1 Getränk, 2 Essen).
+## Verbraucht wird der Lagerbestand erst beim Servieren — deshalb nie mehr
+## vorbereiten, als im Lager ist.
+var _ausgabe := {}
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -623,6 +634,7 @@ func _client_ready(version: String) -> void:
 	for did in _einrichtung.keys():
 		var e: Dictionary = _einrichtung[did]
 		_add_einrichtung.rpc_id(sender, did, str(e.art), float(e.x), float(e.z), float(e.rot))
+	_net_ausgabe.rpc_id(sender, _ausgabe)
 	net_report.rpc_id(sender, _last_report)
 	_broadcast_meta()
 
@@ -1245,7 +1257,7 @@ func net_hire_staff(role: int) -> void:
 	Game.add_money(-cost)
 	var id := _staff_next
 	_staff_next += 1
-	var start: Vector3 = KITCHEN_POINT if role == ROLE_KOCH else BAR_POINT
+	var start: Vector3 = _staff_start(role)
 	_staff_sim[id] = {
 		"role": role, "level": 1, "pos": start, "tgt": start, "yaw": 0.0,
 		"state": 0, "timer": 0.0, "orders": [], "idx": 0
@@ -1300,7 +1312,7 @@ func _restore_staff(role: int, level: int) -> void:
 		return
 	var id := _staff_next
 	_staff_next += 1
-	var start: Vector3 = KITCHEN_POINT if role == ROLE_KOCH else BAR_POINT
+	var start: Vector3 = _staff_start(role)
 	_staff_sim[id] = {
 		"role": role, "level": clampi(level, 1, STAFF_MAX_LEVEL), "pos": start, "tgt": start,
 		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0
@@ -1316,6 +1328,15 @@ func _total_wages() -> int:
 		w += _staff_wage(int(s.role), int(s.level))
 	return w
 
+## Wo ein neuer Mitarbeiter anfängt.
+func _staff_start(role: int) -> Vector3:
+	match role:
+		ROLE_KOCH:
+			return KITCHEN_POINT
+		ROLE_ZAPFER:
+			return ZAPFER_POINT
+	return BAR_POINT
+
 func _cook_level() -> int:
 	var lv := 0
 	for s in _staff_sim.values():
@@ -1327,7 +1348,7 @@ func _cook_level() -> int:
 func _food_prep_time() -> float:
 	var lv := _cook_level()
 	if lv <= 0:
-		return FOOD_PREP * 3.0
+		return FOOD_PREP * 2.0   # ohne Koch doppelt so lange (vorher dreifach)
 	return FOOD_PREP / (1.0 + 0.15 * float(lv))
 
 
@@ -1371,6 +1392,10 @@ func _update_staff(delta: float) -> void:
 				_update_waiter(s, sid, delta)
 			ROLE_REINIGUNG:
 				_update_cleaner(s, delta)
+			ROLE_ZAPFER:
+				_update_zapfer(s, delta)
+			ROLE_KOCH:
+				_update_koch(s, delta)
 			_:
 				s.tgt = KITCHEN_POINT
 				_staff_move(s, delta)
@@ -1402,13 +1427,23 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 			s.state = 1
 		1:
 			if _staff_move(s, delta):
+				# Getränke einzeln zapfen, Essen kommt als eine Portion-Runde aus der
+				# Küche — früher zählte jedes Essen voll, ein Kellner mit 5 Essen wartete
+				# 45 s und alle Bestellungen verfielen (Spielbot, Zelt 3).
 				var t := 0.0
+				var mit_essen := false
 				for gid in s.orders:
 					if _guest_sim.has(gid):
-						if int(_guest_sim[gid].okind) == 2:
-							t += _food_prep_time()
+						var art := int(_guest_sim[gid].okind)
+						# Fertiges von der Ausgabe (Zapfer, Koch) kostet keine Zeit
+						if _ausgabe_nehmen(art, int(_guest_sim[gid].otype)):
+							continue
+						if art == 2:
+							mit_essen = true
 						else:
-							t += DRINK_PREP
+							t += DRINK_PREP   # ohne Zapfer zapft der Kellner selbst
+				if mit_essen:
+					t += _food_prep_time()
 				s.timer = t
 				s.state = 2
 		2:
@@ -1437,6 +1472,125 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 				_serve_by_staff(gid2)
 				_assigned.erase(gid2)
 				s.idx = int(s.idx) + 1
+
+## Zapfer: steht hinter der Theke und zapft vor — volle Krüge landen auf der
+## Ausgabe, Spieler und Kellner nehmen sie nur noch mit.
+func _update_zapfer(s: Dictionary, delta: float) -> void:
+	s.tgt = ZAPFER_POINT
+	if not _staff_move(s, delta):
+		return
+	s.timer = float(s.timer) - delta
+	if float(s.timer) > 0.0:
+		return
+	var lv := int(s.level)
+	s.timer = ZAPF_ZEIT / (1.0 + 0.25 * float(lv - 1))
+	var platz := mini(12, AUSGABE_MAX_KRUEGE + 2 * (lv - 1))
+	if _ausgabe_gesamt(1) >= mini(platz, int(_stock[WARE_BIER])):
+		return
+	_ausgabe_hinzufuegen(1, _naechste_sorte(1, _drinks_avail()))
+
+## Koch: kocht Brezn und Würstl vor und stellt sie auf die Ausgabe.
+func _update_koch(s: Dictionary, delta: float) -> void:
+	s.tgt = KITCHEN_POINT
+	if not _staff_move(s, delta):
+		return
+	var sorten := _foods_avail()
+	if sorten.is_empty():
+		return
+	s.timer = float(s.timer) - delta
+	if float(s.timer) > 0.0:
+		return
+	var lv := int(s.level)
+	s.timer = KOCH_ZEIT / (1.0 + 0.2 * float(lv - 1))
+	var platz := mini(6, AUSGABE_MAX_ESSEN + (lv - 1))
+	if _ausgabe_gesamt(2) >= mini(platz, int(_stock[WARE_ESSEN])):
+		return
+	_ausgabe_hinzufuegen(2, _naechste_sorte(2, sorten))
+
+## Welche Sorte als Nächstes: was offen bestellt ist und noch nicht bereitsteht.
+func _naechste_sorte(art: int, sorten: Array) -> int:
+	var beste: int = sorten[0]
+	var bester_wert := -INF
+	for typ: int in sorten:
+		var offen := 0
+		for g: Dictionary in _guest_sim.values():
+			if int(g.ostate) == 1 and int(g.okind) == art and int(g.otype) == typ:
+				offen += 1
+		var wert := float(offen) - float(_ausgabe.get("%d_%d" % [art, typ], 0)) + randf() * 0.1
+		if wert > bester_wert:
+			bester_wert = wert
+			beste = typ
+	return beste
+
+func _ausgabe_gesamt(art: int) -> int:
+	var n := 0
+	for schluessel: String in _ausgabe:
+		if schluessel.begins_with("%d_" % art):
+			n += int(_ausgabe[schluessel])
+	return n
+
+func _ausgabe_hinzufuegen(art: int, typ: int) -> void:
+	var schluessel := "%d_%d" % [art, typ]
+	_ausgabe[schluessel] = int(_ausgabe.get(schluessel, 0)) + 1
+	_ausgabe_senden()
+
+## Nimmt ein fertiges Stück von der Ausgabe. false, wenn keins da ist.
+func _ausgabe_nehmen(art: int, typ: int) -> bool:
+	var schluessel := "%d_%d" % [art, typ]
+	var n := int(_ausgabe.get(schluessel, 0))
+	if n <= 0:
+		return false
+	if n == 1:
+		_ausgabe.erase(schluessel)
+	else:
+		_ausgabe[schluessel] = n - 1
+	_ausgabe_senden()
+	return true
+
+func _ausgabe_senden() -> void:
+	_net_ausgabe.rpc(_ausgabe)
+
+@rpc("authority", "reliable", "call_local")
+func _net_ausgabe(inhalt: Dictionary) -> void:
+	if not multiplayer.is_server():
+		_ausgabe = inhalt.duplicate()
+	for n in get_tree().get_nodes_in_group("ausgabe"):
+		n.set_inhalt(inhalt.duplicate())
+
+## Spieler nimmt an der Ausgabe das, was die wartenden Gäste am meisten brauchen.
+@rpc("any_peer", "reliable", "call_local")
+func net_take_ausgabe() -> void:
+	if not multiplayer.is_server() or _phase != Phase.SHIFT:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var beste := ""
+	var bester_wert := -1
+	for schluessel: String in _ausgabe:
+		var t := schluessel.split("_")
+		var offen := 0
+		for g: Dictionary in _guest_sim.values():
+			if int(g.ostate) == 1 and int(g.okind) == int(t[0]) and int(g.otype) == int(t[1]):
+				offen += 1
+		var wert := offen * 100 + int(_ausgabe[schluessel])
+		if wert > bester_wert:
+			bester_wert = wert
+			beste = schluessel
+	if beste == "":
+		return
+	var teile := beste.split("_")
+	if _ausgabe_nehmen(int(teile[0]), int(teile[1])):
+		_net_ausgabe_genommen.rpc_id(s, int(teile[0]), int(teile[1]))
+
+## Beim nehmenden Spieler: fertigen Krug bzw. Teller in die Hand.
+@rpc("authority", "reliable", "call_local")
+func _net_ausgabe_genommen(art: int, typ: int) -> void:
+	var p = _players_nodes.get(multiplayer.get_unique_id())
+	if p and int(p.carry_state) == 0:
+		p.carry_state = art
+		p.carry_type = typ
+		p.carry_fill = 1.0
 
 ## Reinigung: läuft zum nächsten Dreck und putzt ihn weg.
 func _update_cleaner(s: Dictionary, delta: float) -> void:
@@ -1893,6 +2047,8 @@ func _start_shift() -> void:
 	_served = 0
 	_missed = 0
 	_pop_verlust_heute = 0.0
+	_ausgabe.clear()
+	_ausgabe_senden()
 	_last_earn = 0
 	_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN, ERSTE_GAESTE_MAX)
 	_hygiene = 100.0
@@ -1936,6 +2092,8 @@ func _end_shift(reason := 0) -> void:
 		_guest_sim[gid].ostate = 0
 	_clear_messes()
 	_clear_artists()          # E5: Auftritt vorbei
+	_ausgabe.clear()          # Übriges von der Ausgabe wird weggeräumt
+	_ausgabe_senden()
 	_artist_tier = 0
 
 	# Erken kapatma → popülerlik cezası (ne kadar erken, o kadar çok)
@@ -2403,7 +2561,7 @@ static func _eur(betrag: int) -> Dictionary:
 
 ## Namen als Übersetzungsschlüssel für Meldungen
 const WARE_KEYS := {1: "GOODS_BEER", 2: "GOODS_FOOD"}
-const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER"}
+const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER"}
 const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS"}
 const BETRAG_SZENE := preload("res://scenes/ui/betrag.tscn")
 

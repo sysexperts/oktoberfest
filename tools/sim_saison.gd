@@ -133,6 +133,9 @@ class Lauf extends Node:
 			gm.net_hire_staff(3)
 		if not gm._has_toilet and Game.money > gm.TOILET_COST + RESERVE:
 			gm.net_buy_toilet()
+		# Zapfer ab 4 Tischen — spart Kellnern und Spieler das Zapfen
+		if _anzahl(4) == 0 and gm._active_count >= 4 and Game.money > 450 + RESERVE:
+			gm.net_hire_staff(4)
 		# Personal passend zur Tischzahl: ein Kellner je 3 Tische
 		while _anzahl(2) < ceili(gm._active_count / 3.0) and Game.money > 500 + RESERVE:
 			var vorher_k := _anzahl(2)
@@ -146,6 +149,11 @@ class Lauf extends Node:
 			else:
 				return   # sparen
 		for lic: String in ["weizen", "radler", "brezn", "sosis"]:
+			# Essen erst mit Koch
+			if lic in ["brezn", "sosis"] and _anzahl(1) == 0:
+				if Game.money > 600 + RESERVE * 2:
+					gm.net_hire_staff(1)
+				continue
 			if not gm._lic[lic] and Game.money > int(gm.LIC_COST[lic]) + RESERVE * 2:
 				gm.net_buy_license(lic)
 		if not gm._foods_avail().is_empty() and _anzahl(1) == 0 and Game.money > 600 + RESERVE * 2:
@@ -215,7 +223,9 @@ class Lauf extends Node:
 		if bester >= 0:
 			var g: Dictionary = gm._guest_sim[bester]
 			_gehen(THEKE)
-			beschaeftigt += ZAPFEN
+			# Fertiges von der Ausgabe spart das Zapfen
+			if not gm._ausgabe_nehmen(int(g.okind), int(g.otype)):
+				beschaeftigt += ZAPFEN
 			_gehen(g.pos)
 			gm.net_serve_guest(bester, int(g.okind), int(g.otype))
 			if erster_gast < 0.0:

@@ -315,6 +315,10 @@ func _hint_for(t: Node3D) -> String:
 		if g.order_state != 1 or not _has_ready():
 			return ""
 		return "HINT_SERVE" if g.can_serve(_carry_kind(), carry_type) else "HINT_WRONG_ORDER"
+	if t is Ausgabe:
+		if carry_state != 0:
+			return ""
+		return "HINT_AUSGABE_TAKE" if (t as Ausgabe).hat_fertiges() else "HINT_AUSGABE_EMPTY"
 	if t is Einrichtung:
 		if not geschlossen:
 			return ""
@@ -384,6 +388,11 @@ func _handle_interaction(delta: float) -> void:
 			# Molada Lampe/Deko aufnehmen oder abstellen
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
+				_sfx("pop")
+		elif _current_target is Ausgabe and carry_state == 0:
+			# Fertigen Krug/Teller von der Ausgabe nehmen (Server entscheidet was)
+			if (_current_target as Ausgabe).hat_fertiges():
+				_world.net_take_ausgabe.rpc_id(1)
 				_sfx("pop")
 		elif _current_target is MugDispenser and carry_state == 0:
 			carry_state = 1
