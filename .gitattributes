@@ -1,5 +1,6 @@
 # Normalize line endings for text-based Godot/source files
 * text=auto eol=lf
+*.sh    text eol=lf
 *.gd    text eol=lf
 *.tscn  text eol=lf
 *.tres  text eol=lf
