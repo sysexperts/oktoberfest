@@ -34,6 +34,8 @@ var _vomit_active := false
 var _tanzt := false
 ## Höhe der Tischplatte — so hoch steht ein Tänzer
 const TISCH_HOEHE := 0.78
+## Tanzhöhe: Tischplatte oder Boden (vor der Bühne)
+var _tanz_hoehe := TISCH_HOEHE
 
 @onready var _model: Node3D = $Model
 @onready var _bubble: Label3D = $Bubble
@@ -83,7 +85,8 @@ func set_order(state: int, kind: int, type: int, ratio: float) -> void:
 	_update_bubble()
 
 ## Gute Stimmung: auf den Tisch steigen und tanzen (an) bzw. zurück (aus).
-func set_tanz(an: bool) -> void:
+func set_tanz(an: bool, boden := false) -> void:
+	_tanz_hoehe = 0.0 if boden else TISCH_HOEHE
 	if an == _tanzt:
 		return
 	_tanzt = an
@@ -92,8 +95,9 @@ func set_tanz(an: bool) -> void:
 			_exit_sit()
 		if _anim:
 			_anim.active = true
+		# Ohne Tanz stehen bleiben — die Laufanimation sah aus, als liefe er über den Tisch
 		if not _figur.tanzen(randf_range(0.9, 1.15)):
-			_figur.gehen(1.5)
+			_figur.stehen()
 		_cur = "Tanz"
 		if _mug:
 			_mug.visible = true
@@ -192,7 +196,7 @@ func _process(delta: float) -> void:
 	# Auf dem Tisch: hoch auf die Platte, tanzen, leicht schwanken
 	if _tanzt:
 		if _model:
-			_model.position.y = lerpf(_model.position.y, TISCH_HOEHE, clampf(delta * 5.0, 0.0, 1.0))
+			_model.position.y = lerpf(_model.position.y, _tanz_hoehe, clampf(delta * 5.0, 0.0, 1.0))
 			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.004 + float(cust_id)) * 0.08
 		_update_vomit(delta)
 		return

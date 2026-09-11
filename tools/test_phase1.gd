@@ -372,6 +372,12 @@ class Lauf extends Node:
 				if int(taenzer[ti]) > gm.tanz_max(ti):
 					zu_viele = true
 		_check("Gäste tanzen auf den Tischen, höchstens 2–3 je Tisch", not taenzer.is_empty() and not zu_viele, str(taenzer))
+		# Tänzer ans Ziel setzen — sichtbar tanzen sie erst dort, nicht schon auf dem Weg
+		for id in gm._guest_sim.keys():
+			var tg2: Dictionary = gm._guest_sim[id]
+			if int(tg2.mode) == 5 or int(tg2.mode) == 6:
+				tg2.pos = tg2.tgt
+				gm._guest_sim[id] = tg2
 		gm._update_guests(0.01)   # überträgt den Zustand an die Gast-Knoten (Host)
 		await _frames(3)
 		var sichtbar_tanzend := 0
@@ -440,6 +446,12 @@ class Lauf extends Node:
 		var miete_w3: int = gm._daily_rent()
 		var geduld_w3: float = gm._geduld()
 		gm._saison_nr = saison_vorher
+
+		print("  -- Großes Zelt, Klo, Bühne")
+		_check("Riesenzelt: 24 Tische vorhanden", int(gm.TENT_TABLE_LIMIT[4]) == 24 and gm._all_tables.size() >= 24,
+			str(gm._all_tables.size()))
+		_check("Klo-Container in der Szene", gm.get_node_or_null("KloContainer") != null, "")
+		_check("Tanzplätze vor der Bühne frei", not gm.buehnen_tanzplaetze().is_empty(), str(gm.buehnen_tanzplaetze().size()))
 
 		print("  -- Spätlizenzen")
 		var stufe_vorher: int = gm._tent_stage

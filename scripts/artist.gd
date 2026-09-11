@@ -25,7 +25,10 @@ func _ready() -> void:
 
 func set_tier(t: int) -> void:
 	tier = t
+	# Stufe 0: Alleinunterhalter ohne Buchung — ohne Schild
 	if _label:
+		_label.visible = t > 0
+	if _label and t > 0:
 		var symbol: String = {1: "🎸", 2: "🎺"}.get(t, "⭐")
 		_label.text = "%s %s" % [symbol, TranslationServer.translate("ACT_%d" % clampi(t, 1, 3))]
 

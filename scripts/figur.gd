@@ -179,6 +179,18 @@ func _zufaellig_aus(liste: PackedStringArray, tempo: float) -> bool:
 func _spiele(name: String, tempo: float) -> void:
 	anim.active = true
 	if anim.current_animation != name:
+		# Tänze mit eingebauter Hüftbewegung (Bean-"Dance" wandert 1,26 m) würden
+		# die Figur verschieben — Tänzer liefen über den Tisch. Die Hüftspur wird
+		# beim Tanzen als Root Motion abgezweigt und damit nicht angewendet.
+		anim.root_motion_track = _hueft_spur(name) if name in anim_tanzen else NodePath()
 		anim.play(name)
 		anim.seek(randf() * anim.get_animation(name).length, true)
 	anim.speed_scale = tempo
+
+## Pfad der Hüft-Positionsspur einer Animation (leer, wenn es keine gibt).
+func _hueft_spur(name: String) -> NodePath:
+	var a := anim.get_animation(name)
+	for t in a.get_track_count():
+		if a.track_get_type(t) == Animation.TYPE_POSITION_3D and String(a.track_get_path(t)).ends_with(":Hips"):
+			return a.track_get_path(t)
+	return NodePath()

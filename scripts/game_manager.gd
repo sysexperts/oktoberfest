@@ -88,12 +88,15 @@ const MIETE_FAKTOR := [0.75, 1.0, 1.3]
 const KOOP_ANDRANG_JE_SPIELER := 0.5
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
-const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
+const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 16, 4: 24}   # main.tscn hat 24 Tische
+## Tischanordnung in main.tscn. Ältere Spielstände (12er-Raster) bekommen die neue
+## Anordnung, sonst stünden neue Tische auf alten.
+const TISCH_LAYOUT := 2
 const TENT_BOOK_COST := 500
-const TENT_UPGRADE_COST := {2: 2000, 3: 6000}   # vorher 3000/10000: im Bot nie erreicht
+const TENT_UPGRADE_COST := {2: 2000, 3: 6000, 4: 15000}   # vorher 3000/10000: im Bot nie erreicht
 const TABLE_COST := 200
 ## Zeltmiete pro Tag am ersten Tag — steigt danach mit Wirtschaft.miete.
-const TENT_RENT := {0: 0, 1: 120, 2: 220, 3: 450}   # vorher 300/700: großes Zelt machte Verlust
+const TENT_RENT := {0: 0, 1: 120, 2: 220, 3: 450, 4: 650}   # vorher 300/700: großes Zelt machte Verlust
 # Upgrades (kiosk)
 const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
 const MARKETING_BOOST := 15.0
@@ -132,7 +135,7 @@ const EIGENSCHAFTEN := {
 const CHARMEUR_POP := 2.0
 const SCHLUCKSPECHT_BIER := 4
 const STAFF_BASE_SPEED := 4.5   # vorher 3.0 — im großen Zelt blieben bis 100 Bestellungen liegen
-const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
+const TABLE_AVOID_RADIUS := 1.6   # Mitarbeiter halten Abstand zu Tischen (größer = bleiben in engen Gängen hängen)
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
 const KITCHEN_POINT := Vector3(6.5, 0.1, -10.4) # Koch steht hinter der Theke bei den Kochstellen
 const ZAPFER_POINT := Vector3(-2.0, 0.1, -10.4) # Zapfer steht hinter der Theke an der Ausgabe
@@ -170,8 +173,8 @@ const ARTIST_DRAW := {1: 0.15, 2: 0.35, 3: 0.6} # zusätzliche Auslastung währe
 const TOILET_COST := 1000   # vorher 1800 — fast so teuer wie der Zeltausbau
 const BLADDER_MIN := 70.0        # Sekunden bis ein Gast muss
 const BLADDER_MAX := 150.0
-const PEE_CORNER := Vector3(-10.5, 0.1, 8.0)   # Ecke, in die ohne Klo gepinkelt wird
-const TOILET_POINT := Vector3(10.5, 0.1, 8.0)  # Klo-Ecke (wenn gekauft)
+const PEE_CORNER := Vector3(-12.0, 0.1, 11.0)  # Ecke, in die ohne Klo gepinkelt wird
+const TOILET_POINT := Vector3(8.6, 0.1, 10.2)  # vor dem Klo-Container (main.tscn KloContainer)
 const PEE_DURATION := 4.0
 const COMPLAIN_INTERVAL := 6.0   # wie oft geprüft wird
 const COMPLAIN_RADIUS := 5.0     # Umkreis eines Urinflecks
@@ -467,6 +470,7 @@ func _save_game() -> void:
 		var p: Vector3 = (bt as Node3D).position
 		tables.append({"x": p.x, "z": p.z})
 	var data := {
+		"tisch_layout": TISCH_LAYOUT,
 		"money": Game.money,
 		"score": Game.score,
 		"day": _day,
@@ -525,7 +529,7 @@ func _load_game() -> bool:
 	Game.add_money(int(d.get("money", 0)) - Game.money)
 	Game.add_score(int(d.get("score", 0)) - Game.score)
 	_day = maxi(1, int(d.get("day", 1)))
-	_tent_stage = clampi(int(d.get("tent_stage", 0)), 0, 3)
+	_tent_stage = clampi(int(d.get("tent_stage", 0)), 0, 4)
 	_active_count = int(d.get("active_count", 0))
 	_upg_marketing = int(d.get("upg_marketing", 0))
 	_upg_deko = int(d.get("upg_deko", 0))
@@ -575,7 +579,7 @@ func _load_game() -> bool:
 				_restore_staff(int((e as Dictionary).get("role", 2)), int((e as Dictionary).get("level", 1)),
 					str((e as Dictionary).get("eig", "normal")))
 	var tp: Variant = d.get("tables", [])
-	if tp is Array:
+	if tp is Array and int(d.get("tisch_layout", 1)) == TISCH_LAYOUT:
 		var arr: Array = tp
 		for i in range(mini(arr.size(), _all_tables.size())):
 			var e: Variant = arr[i]
@@ -814,6 +818,16 @@ func _rebuild_seats() -> void:
 			away = away.normalized() if away.length() > 0.01 else Vector3.FORWARD
 			_seats.append({"pos": sp, "yaw": yaw, "guest": -1, "table": ti, "away": away})
 
+## Klo-Container in der Zeltecke: nur, wenn die Toilette gekauft ist. Ausgeblendet
+## ohne Kollision (PROCESS_MODE_DISABLED nimmt den Körper aus der Physik).
+func _klo_anzeigen() -> void:
+	var klo := get_node_or_null("KloContainer") as Node3D
+	if klo == null:
+		return
+	var an := _has_toilet and _tent_stage > 0
+	klo.visible = an
+	klo.process_mode = Node.PROCESS_MODE_INHERIT if an else Node.PROCESS_MODE_DISABLED
+
 ## „Zu vermieten"-Schild am Zelteingang: nur solange das Zelt noch frei ist.
 func _vermietung_aktualisieren() -> void:
 	for schild in get_tree().get_nodes_in_group("zelt_vermietung"):
@@ -822,6 +836,7 @@ func _vermietung_aktualisieren() -> void:
 ## Zelt kiralamaya göre masaları aktif/pasif yap + koltukları kur.
 func _apply_tent() -> void:
 	_vermietung_aktualisieren()
+	_klo_anzeigen()
 	for i in _all_tables.size():
 		var bt := _all_tables[i] as Node3D
 		var on: bool = i < _active_count
@@ -941,6 +956,7 @@ func net_buy_toilet() -> void:
 		return
 	Game.add_money(-TOILET_COST)
 	_has_toilet = true
+	_klo_anzeigen()
 	_melde("MSG_TOILET_DONE", [], 2)
 	_broadcast_meta()
 
@@ -1146,8 +1162,6 @@ func net_book_artist(tier: int) -> void:
 
 ## Künstler auf die Bühne stellen (Schichtbeginn).
 func _spawn_artists() -> void:
-	if _artist_tier <= 0:
-		return
 	var stages := get_tree().get_nodes_in_group("stage")
 	if stages.is_empty():
 		return
@@ -1157,7 +1171,8 @@ func _spawn_artists() -> void:
 	# Künstler zur Publikumsseite drehen (Bühnen-Vorderseite = lokales +Z)
 	var fwd: Vector3 = (stages[0] as Node3D).global_transform.basis.z
 	var yaw := atan2(-fwd.x, -fwd.z)
-	var n: int = mini(int(ARTIST_COUNT[_artist_tier]), pts.size())
+	# Ohne Buchung steht trotzdem einer auf der Bühne und tanzt
+	var n: int = mini(int(ARTIST_COUNT.get(_artist_tier, 1)), pts.size())
 	for i in n:
 		_add_artist.rpc(i, pts[i], _artist_tier, yaw)
 
@@ -2423,6 +2438,55 @@ func _update_tanz(delta: float) -> void:
 		g.tgt = Vector3(ziel.x, 0.1, ziel.z)
 		_guest_sim[id] = g
 		je_tisch[ti] = belegt + 1
+	# Vor der Bühne: auf den freien Plätzen (kein Tisch im Weg) am Boden tanzen
+	var plaetze := buehnen_tanzplaetze()
+	var vergeben := {}
+	for g: Dictionary in _guest_sim.values():
+		if int(g.mode) == 6:
+			vergeben[int(g.get("bplatz", -1))] = true
+	for id in _guest_sim.keys():
+		if vergeben.size() >= plaetze.size():
+			break
+		var g: Dictionary = _guest_sim[id]
+		if int(g.mode) != 1 or int(g.ostate) != 0 or int(g.get("drinks", 0)) < 1 or randf() > 0.25:
+			continue
+		for i in plaetze.size():
+			if not vergeben.has(i):
+				vergeben[i] = true
+				g.mode = 6
+				g.bplatz = i
+				g.tanz_t = randf_range(TANZ_DAUER_MIN, TANZ_DAUER_MAX)
+				g.tgt = plaetze[i]
+				_stats.tanzen = int(_stats.get("tanzen", 0)) + 1
+				_guest_sim[id] = g
+				break
+
+## Tanzplätze vor der Bühne (zwei Reihen), ohne die, an denen ein Tisch steht.
+func buehnen_tanzplaetze() -> Array:
+	var stages := get_tree().get_nodes_in_group("stage")
+	if stages.is_empty():
+		return []
+	var b := stages[0] as Node3D
+	var mitte := b.global_position
+	var vorn := b.global_transform.basis.z.normalized()
+	# Vorderseite = zur Zeltmitte hin
+	if vorn.dot(Vector3(-mitte.x, 0.0, -mitte.z)) < 0.0:
+		vorn = -vorn
+	var seite := b.global_transform.basis.x.normalized()
+	var out := []
+	for reihe in [2.9, 4.0]:
+		for k in [-3.0, -1.5, 0.0, 1.5, 3.0]:
+			var p: Vector3 = mitte + vorn * float(reihe) + seite * float(k)
+			var frei := true
+			for bt in _beertables:
+				var d: Vector3 = (bt as Node3D).global_position - p
+				d.y = 0.0
+				if d.length() < 1.9:
+					frei = false
+					break
+			if frei:
+				out.append(Vector3(p.x, 0.1, p.z))
+	return out
 
 ## Wie viele Gäste auf diesem Tisch tanzen dürfen: 2 oder 3, fest je Tisch.
 func tanz_max(tisch: int) -> int:
@@ -2652,8 +2716,9 @@ func _update_guests(delta: float) -> void:
 				g.ostate = 0
 		if float(g.get("verpasst_t", 0.0)) > 0.0:
 			g.verpasst_t = float(g.verpasst_t) - delta
-		# Tanzt auf dem Tisch — danach zurück auf den Platz
-		if g.mode == 5:
+		# Tanzt auf dem Tisch oder vor der Bühne — erst am Ziel, danach zurück auf den Platz
+		g.tanz_da = (g.mode == 5 or g.mode == 6) and d <= 0.3
+		if g.mode == 5 or g.mode == 6:
 			g.tanz_t = float(g.get("tanz_t", 0.0)) - delta
 			if float(g.tanz_t) <= 0.0:
 				g.mode = 0
@@ -2672,7 +2737,7 @@ func _update_guests(delta: float) -> void:
 			node.set_net(pos, g.yaw)
 			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / _geduld_max(g), 0.0, 1.0))
 			# Host/Solo bekommen _net_guests nicht (kein call_local) — direkt setzen
-			node.set_tanz(int(g.mode) == 5)
+			node.set_tanz(bool(g.tanz_da), int(g.mode) == 6)
 			node.set_laune(_laune(g))
 
 func _guest_order(g: Dictionary, id: int, delta: float) -> void:
@@ -2845,7 +2910,8 @@ func _broadcast_sync() -> void:
 		ckind.append(g.okind)
 		ctype.append(g.otype)
 		cratio.append(clampf(g.patience / _geduld_max(g), 0.0, 1.0))
-		ctanz.append((1 if int(g.mode) == 5 else 0) | (_laune(g) << 1))
+		# Bit 0 tanzt (am Ziel), Bit 1–2 Laune, Bit 3 am Boden vor der Bühne
+		ctanz.append((1 if bool(g.get("tanz_da", false)) else 0) | (_laune(g) << 1) | (8 if int(g.mode) == 6 else 0))
 	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
 	# Personal
 	var sids := PackedInt32Array()
@@ -2910,8 +2976,8 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
 			var bits: int = ctanz[i] if i < ctanz.size() else 0
-			c.set_tanz(bits & 1 == 1)
-			c.set_laune(bits >> 1)
+			c.set_tanz(bits & 1 == 1, bits & 8 == 8)
+			c.set_laune((bits >> 1) & 3)
 
 ## call_local: Uhrzeit, Beliebtheit und Sauberkeit braucht auch das HUD des
 ## Hosts bzw. im Solo-Spiel — ohne kam dort nie etwas an („Zelt geschlossen",
@@ -2965,6 +3031,9 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_day = day
 	_tent_stage = tent_stage
 	_vermietung_aktualisieren()
+	if not multiplayer.is_server():
+		_has_toilet = bool(buero.get("toilet", false))
+	_klo_anzeigen()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	_haelt_deko = buero.get("haelt", {})
 	var ereignis_neu := str(buero.get("ereignis", ""))

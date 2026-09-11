@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dvi72mx42mkbl" path="res://assets/kirmes/Models/Shops/WC.fbx" id="1_wc"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
+
+[sub_resource type="BoxShape3D" id="Kollision"]
+size = Vector3(3.4, 2.3, 2.35)
+
+[node name="KloContainer" type="Node3D"]
+
+[node name="WC" parent="." instance=ExtResource("1_wc")]
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.15, 0.4)
+shape = SubResource("Kollision")
+
+[node name="Schild" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0.4)
+billboard = 1
+pixel_size = 0.01
+font_size = 48
+outline_size = 12
+text = "WORLD_TOILET"
+script = ExtResource("2_wt")
+schluessel = "WORLD_TOILET"
