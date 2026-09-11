@@ -2269,6 +2269,27 @@ func _regen_anzeigen() -> void:
 	_night_t = -1.0   # Licht und Himmel neu setzen
 	_apply_daylight(_clock_hour())
 
+const PING_SZENE := preload("res://scenes/ui/ping_marker.tscn")
+
+## Ping (Spaß-Plan 5.3): Spieler markiert etwas, alle sehen es 5 Sekunden.
+@rpc("any_peer", "reliable", "call_local")
+func net_ping(ziel: Vector3, art: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	_net_ping.rpc(ziel, clampi(art, 0, 3), int(_spawn_index_by_peer.get(s, 0)))
+
+@rpc("authority", "reliable", "call_local")
+func _net_ping(ziel: Vector3, art: int, farbe: int) -> void:
+	var m := PING_SZENE.instantiate()
+	add_child(m)
+	m.global_position = ziel
+	m.zeige(art, farbe)
+	if _sfx_node:
+		_sfx_node.play_oder("ping", "ding", -10.0)
+
 @rpc("authority", "reliable", "call_local")
 func _net_kombo(n: int) -> void:
 	if _hud:

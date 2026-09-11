@@ -427,4 +427,5 @@ WORLD_FOOD_1,"🥨 Brezn ({interact} halten)","🥨 Pretzel (hold {interact})","
 WORLD_FOOD_2,"🌭 Würstl ({interact} halten)","🌭 Sausage (hold {interact})","🌭 Sosis ({interact} basılı tut)"
 WORLD_STORAGE,"📦 LAGER %d\nHier: 🍺 %d · 🥨 %d\nGesamt: 🍺 %d · 🥨 %d\n({interact}: Paket einlagern)","📦 STORAGE %d\nHere: 🍺 %d · 🥨 %d\nTotal: 🍺 %d · 🥨 %d\n({interact}: store package)","📦 DEPO %d\nBurada: 🍺 %d · 🥨 %d\nToplam: 🍺 %d · 🥨 %d\n({interact}: paketi depola)"
 ACTION_SCREENSHOT,Bildschirmfoto,Screenshot,Ekran görüntüsü
+ACTION_PING,Markieren (für Mitspieler),Ping (for teammates),İşaretle (takım arkadaşları için)
 MSG_SCREENSHOT,📸 Bildschirmfoto gespeichert: %s,📸 Screenshot saved: %s,📸 Ekran görüntüsü kaydedildi: %s

@@ -20,6 +20,7 @@ const STANDARD_TASTEN := {
 	"costume": KEY_C,
 	"help": KEY_F1,
 	"screenshot": KEY_F12,
+	"ping": KEY_R,
 }
 
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.

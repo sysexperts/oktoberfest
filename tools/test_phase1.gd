@@ -379,6 +379,10 @@ class Lauf extends Node:
 		gm._ereignis = "promi"
 		hud.set_buero(gm._buero_state())
 		_check("Ereignis in der Leiste", hud.get_node("%Ereignis").visible, hud.get_node("%Ereignis").text)
+		gm.net_ping.rpc_id(1, Vector3(0, 0.1, 5), 1)
+		await _frames(2)
+		_check("Ping-Markierung erscheint", get_tree().get_nodes_in_group("ping").size() > 0,
+			str(get_tree().get_nodes_in_group("ping").size()))
 		hud.zeige_kombo(4)
 		_check("Kombo-Anzeige", hud.get_node("%Kombo").visible and hud.get_node("%Kombo").text.contains("4"), hud.get_node("%Kombo").text)
 		gm._ereignis = ""

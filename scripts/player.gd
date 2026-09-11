@@ -30,6 +30,7 @@ var emote := 0           # 0 yok, 1 Prost/dans (senkron)
 var costume := 0         # kostüm rengi indeksi (senkron)
 var _applied_costume := -1
 var _emote_until := 0.0
+var _letzter_ping := 0   # ms — höchstens ein Ping alle 0,6 s
 var _sfx_node: Node
 var _sfx_cd := 0.0
 
@@ -165,6 +166,22 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			costume = (costume + 1) % COSTUME_COLORS.size()
 			_apply_costume()
+	# Ping: Mitspielern etwas zeigen (Gast, Pfütze, Paket …) — Aktion "ping"
+	if event.is_action_pressed("ping") and not event.is_echo():
+		var jetzt := Time.get_ticks_msec()
+		if jetzt - _letzter_ping > 600:
+			_letzter_ping = jetzt
+			var ziel := global_position - global_transform.basis.z * 5.0
+			var art := 0
+			if _current_target:
+				ziel = _current_target.global_position
+				if _current_target is Customer:
+					art = 1
+				elif _current_target is Mess:
+					art = 2
+				elif _current_target is Package:
+					art = 3
+			_world.net_ping.rpc_id(1, ziel, art)
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:

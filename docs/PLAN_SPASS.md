@@ -189,7 +189,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       4 Spieler = 2,5×, sonst ist Koop zu leicht. *Ich, S*
 - [ ] **5.2 Zusammenarbeit belohnen** — Übergabe von Krügen zwischen Spielern,
       „Team-Kombo" wenn verschiedene Spieler am selben Tisch bedienen. *Ich, M*
-- [ ] **5.3 Ping-System** — Taste markiert Gast/Pfütze/Paket für Mitspieler. *Ich, S*
+- [x] **5.3 Ping-System** *(v121: Taste R markiert Gast/Pfütze/Paket für alle, 5 s, Farbe je Spieler)* — Taste markiert Gast/Pfütze/Paket für Mitspieler. *Ich, S*
 - [ ] **5.4 Koop-Ereignisse** — z. B. Schlägerei am Tisch: zwei Spieler
       gleichzeitig nötig. *Ich, M*
 
