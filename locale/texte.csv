@@ -18,7 +18,7 @@ MENU_BACK,Zurück,Back,Geri
 MENU_VERSION,Version %s,Version %s,Sürüm %s
 MENU_CONTINUE_INFO,"Tag %d · %s €","Day %d · €%s","%d. Gün · %s €"
 NEWGAME_CONFIRM_TITLE,Neues Spiel starten?,Start a new game?,Yeni oyun başlatılsın mı?
-NEWGAME_CONFIRM_TEXT,Dein bisheriger Spielstand wird überschrieben.,Your current save will be overwritten.,Mevcut kaydın silinecek.
+NEWGAME_CONFIRM_TEXT,Dein bisheriger Spielstand wird überschrieben.,Your current save will be overwritten.,Mevcut kaydının üzerine yazılacak.
 NEWGAME_CONFIRM_YES,Ja, neu anfangen,"Yes, start over","Evet, baştan başla"
 NEWGAME_CONFIRM_NO,Abbrechen,Cancel,Vazgeç
 COOP_TITLE,Koop spielen,Play Co-op,Birlikte Oyna
@@ -33,7 +33,7 @@ STATUS_HOST_FAILED,Spiel konnte nicht gestartet werden (Fehler %d).,Could not st
 COOP_STEAM_FRIENDS,🎮 Mit Steam-Freunden spielen,🎮 Play with Steam friends,🎮 Steam arkadaşlarıyla oyna
 COOP_STEAM_HINT,Erstellt ein Spiel nur für Freunde. Einladen im Spiel: ESC → Freunde einladen.,Creates a friends-only game. To invite: ESC → Invite friends.,Sadece arkadaşlara açık bir oyun kurar. Davet için oyunda: ESC → Arkadaş davet et.
 COOP_STEAM_OFFLINE,Steam läuft nicht — starte das Spiel über Steam, um Freunde einzuladen.,Steam is not running — start the game through Steam to invite friends.,Steam çalışmıyor — arkadaş davet etmek için oyunu Steam üzerinden başlat.
-COOP_STEAM_ONLY,Freunde über Steam einladen gibt es in der Steam-Version.,Inviting friends via Steam is available in the Steam version.,Steam üzerinden arkadaş davet etme Steam sürümünde var.
+COOP_STEAM_ONLY,Freunde über Steam einladen gibt es in der Steam-Version.,Inviting friends via Steam is available in the Steam version.,Steam üzerinden arkadaş davet etme Steam sürümünde mevcut.
 PAUSE_INVITE,Freunde einladen (Steam),Invite friends (Steam),Arkadaş davet et (Steam)
 STATUS_STEAM_LOBBY,Erstelle Steam-Lobby …,Creating Steam lobby …,Steam lobisi kuruluyor …
 STATUS_STEAM_JOINING,Trete dem Spiel deines Freundes bei …,Joining your friend's game …,Arkadaşının oyununa katılınıyor …
@@ -75,9 +75,9 @@ SET_QUALITY_LOW,Niedrig,Low,Düşük
 SET_QUALITY_MEDIUM,Mittel,Medium,Orta
 SET_QUALITY_HIGH,Hoch,High,Yüksek
 SET_QUALITY_HINT,"Niedrig: weniger Besucher und Lichter, keine Nachbearbeitung. Ruckelt das Spiel, zuerst die Qualität senken, dann die Auflösung.","Low: fewer visitors and lights, no post-processing. If the game stutters, lower quality first, then resolution.","Düşük: daha az ziyaretçi ve ışık, son işleme yok. Oyun takılırsa önce kaliteyi, sonra çözünürlüğü düşür."
-SET_RENDERER,Darstellung,Renderer,İşleyici
+SET_RENDERER,Darstellung,Renderer,Görüntüleme
 SET_RENDERER_QUALITY,Qualität (Standard),Quality (default),Kalite (varsayılan)
-SET_RENDERER_PERFORMANCE,Leistung — für schwache Grafikchips,Performance — for weak graphics chips,Performans — zayıf grafik yongaları için
+SET_RENDERER_PERFORMANCE,Leistung — für schwache Grafikchips,Performance — for weak graphics chips,Performans — zayıf ekran kartları için
 SET_RENDERER_RESTART,Wird beim nächsten Spielstart übernommen.,Takes effect the next time you start the game.,Oyunu bir sonraki açışında geçerli olur.
 SET_VOL_MASTER,Gesamtlautstärke,Master volume,Genel ses
 SET_VOL_MUSIC,Musik,Music,Müzik
@@ -153,13 +153,13 @@ OFFER_TENT_UPGRADE_INFO,"Nächste Stufe: %s, bis zu %d Tische","Next: %s, up to 
 OFFER_TOILET,Toilette einbauen,Install a toilet,Tuvalet kur
 OFFER_TOILET_INFO,Sonst pinkeln Gäste in die Ecke und beschweren sich.,Otherwise guests pee in the corner and complain.,Yoksa misafirler köşeye işer ve şikâyet eder.
 OFFER_MARKETING,Werbung,Advertising,Reklam
-OFFER_MARKETING_INFO,Stufe %d · sofort +%d %% Beliebtheit,Level %d · instantly +%d %% popularity,Seviye %d · anında +%d %% popülerlik
+OFFER_MARKETING_INFO,Stufe %d · sofort +%d %% Beliebtheit,Level %d · instantly +%d %% popularity,Seviye %d · anında +%%%d popülerlik
 OFFER_DEKO,Deko,Decoration,Dekorasyon
-OFFER_DEKO_INFO,Stufe %d · +%d %% Einnahmen je Stufe,Level %d · +%d %% income per level,Seviye %d · seviye başına +%d %% gelir
+OFFER_DEKO_INFO,Stufe %d · +%d %% Einnahmen je Stufe,Level %d · +%d %% income per level,Seviye %d · seviye başına +%%%d gelir
 OFFER_LICENSE_INFO,Ohne Lizenz verkaufst du nur Helles.,Without a license you only sell Helles.,Lisans olmadan sadece Helles satarsın.
 LIC_WEIZEN,Weizen-Lizenz,Wheat beer license,Buğday birası lisansı
 LIC_RADLER,Radler-Lizenz,Radler license,Radler lisansı
-LIC_BREZN,Brezn-Lizenz,Pretzel license,Pretzel lisansı
+LIC_BREZN,Brezn-Lizenz,Pretzel license,Brezel lisansı
 LIC_SOSIS,Wurst-Lizenz,Sausage license,Sosis lisansı
 LIC_INFO,Danach bestellen Gäste auch das.,Guests will order it too.,Misafirler bunu da sipariş eder.
 STAFF_COOK,Koch,Cook,Aşçı
@@ -175,7 +175,7 @@ STAFF_COUNT,%d (Stufe %s),%d (level %s),%d (seviye %s)
 ACT_1,Straßenmusiker,Street musician,Sokak müzisyeni
 ACT_2,Blaskapelle,Brass band,Bando
 ACT_3,Star-Act,Star act,Yıldız sanatçı
-ACT_INFO,+%d %% Andrang in der nächsten Schicht · sofort +%d %% Beliebtheit,+%d %% crowd next shift · instantly +%d %% popularity,Sonraki vardiyada +%d %% kalabalık · anında +%d %% popülerlik
+ACT_INFO,+%d %% Andrang in der nächsten Schicht · sofort +%d %% Beliebtheit,+%d %% crowd next shift · instantly +%d %% popularity,Sonraki vardiyada +%%%d kalabalık · anında +%%%d popülerlik
 ACT_TAB_INFO,Gilt für die nächste Schicht.,Applies to the next shift.,Sonraki vardiya için geçerli.
 GOODS_BEER,Bier,Beer,Bira
 GOODS_FOOD,Zutaten fürs Essen,Food ingredients,Yemek malzemesi
@@ -206,14 +206,14 @@ WHY_ACT_BOOKED,Schon gebucht: %s,Already booked: %s,Zaten ayarlandı: %s
 COMP_TITLE,💻 Zelt-Computer,💻 Tent computer,💻 Çadır bilgisayarı
 COMP_PRICE,🍺 Bierpreis,🍺 Beer price,🍺 Bira fiyatı
 COMP_PRICE_INFO,"Günstig lockt mehr Gäste, bringt aber weniger je Maß. Teuer bringt mehr je Maß, dafür kommen weniger Gäste.","Cheap draws more guests but earns less per mug. Expensive earns more per mug, but fewer guests come.","Ucuz fiyat daha çok misafir çeker ama kupa başına daha az kazandırır. Pahalı fiyat kupa başına daha çok kazandırır ama daha az misafir gelir."
-COMP_PRICE_VALUE,"🍺 Helles, Weizen, Radler: %s je Maß\n🥨 Brezn, 🌭 Würstl: %s\nPreis %d %% · Andrang %d %%","🍺 Helles, wheat beer, shandy: %s per mug\n🥨 Pretzel, 🌭 sausage: %s\nPrice %d %% · crowd %d %%","🍺 Helles, buğday birası, radler: kupa başı %s\n🥨 Brezel, 🌭 sosis: %s\nFiyat %d %% · kalabalık %d %%"
+COMP_PRICE_VALUE,"🍺 Helles, Weizen, Radler: %s je Maß\n🥨 Brezn, 🌭 Würstl: %s\nPreis %d %% · Andrang %d %%","🍺 Helles, wheat beer, shandy: %s per mug\n🥨 Pretzel, 🌭 sausage: %s\nPrice %d %% · crowd %d %%","🍺 Helles, buğday birası, radler: kupa başı %s\n🥨 Brezel, 🌭 sosis: %s\nFiyat %%%d · kalabalık %%%d"
 BTN_CHEAPER,− 10 %,− 10 %,− 10 %
 BTN_PRICIER,+ 10 %,+ 10 %,+ 10 %
 COMP_CLOSE_TENT,🚪 Zelt jetzt schließen (kostet Beliebtheit),🚪 Close the tent now (costs popularity),🚪 Çadırı şimdi kapat (popülerlik kaybettirir)
 REPORT_NONE,Noch keine Schicht gespielt.,No shift played yet.,Henüz vardiya oynanmadı.
 REPORT_END_NORMAL,🌙 22:00 — Feierabend!,🌙 22:00 — closing time!,🌙 22:00 — mesai bitti!
 REPORT_END_COMPLAINTS,🚫 Zu viele Beschwerden — Zelt früh geschlossen,🚫 Too many complaints — tent closed early,🚫 Çok fazla şikâyet — çadır erken kapandı
-REPORT_END_EARLY,🚪 Um %02d:00 geschlossen · Beliebtheit −%d %%,🚪 Closed at %02d:00 · popularity −%d %%,🚪 %02d:00'de kapattın · popülerlik −%d %%
+REPORT_END_EARLY,🚪 Um %02d:00 geschlossen · Beliebtheit −%d %%,🚪 Closed at %02d:00 · popularity −%d %%,🚪 Kapanış saati %02d:00 · popülerlik −%%%d
 REPORT_REVENUE,Umsatz,Revenue,Ciro
 REPORT_TIPS,davon Trinkgeld fürs Putzen: %s,incl. tips for cleaning: %s,temizlik bahşişi dahil: %s
 REPORT_RENT,Miete,Rent,Kira
@@ -228,8 +228,8 @@ MSG_NEED_TENT,🎪 Zuerst ein Zelt mieten (Wiesenbüro),🎪 Rent a tent first (
 MSG_TENT_RENTED,🎪 %s gemietet! Stell jetzt Tische auf.,🎪 %s rented! Now set up tables.,🎪 %s kiralandı! Şimdi masa kur.
 MSG_TABLE_LIMIT,🪑 Tischgrenze erreicht (%d) — Zelt vergrößern,🪑 Table limit reached (%d) — enlarge the tent,🪑 Masa sınırı doldu (%d) — çadırı büyüt
 MSG_TABLE_PLACED,🪑 Tisch aufgestellt (%d/%d),🪑 Table placed (%d/%d),🪑 Masa kuruldu (%d/%d)
-MSG_MARKETING,📣 Werbung Stufe %d — Beliebtheit +%d %%,📣 Advertising level %d — popularity +%d %%,📣 Reklam seviye %d — popülerlik +%d %%
-MSG_DEKO,🎨 Deko Stufe %d — Einnahmen +%d %%,🎨 Decoration level %d — income +%d %%,🎨 Dekorasyon seviye %d — gelir +%d %%
+MSG_MARKETING,📣 Werbung Stufe %d — Beliebtheit +%d %%,📣 Advertising level %d — popularity +%d %%,📣 Reklam seviye %d — popülerlik +%%%d
+MSG_DEKO,🎨 Deko Stufe %d — Einnahmen +%d %%,🎨 Decoration level %d — income +%d %%,🎨 Dekorasyon seviye %d — gelir +%%%d
 MSG_TOILET_HAVE,🚻 Die Toilette ist schon eingebaut,🚻 The toilet is already installed,🚻 Tuvalet zaten kurulu
 MSG_TOILET_DONE,🚻 Toilette eingebaut — keine Pfützen mehr in der Ecke,🚻 Toilet installed — no more puddles in the corner,🚻 Tuvalet kuruldu — köşede artık birikinti yok
 MSG_ACT_BOOKED_ALREADY,🎤 Schon gebucht: %s,🎤 Already booked: %s,🎤 Zaten ayarlandı: %s
@@ -255,13 +255,13 @@ MSG_DAY_END,🌙 Feierabend! Netto %s · Bilanz im Wiesenbüro · schlafen start
 POPUP_RESERVE,"📦 Zuerst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %s für ein Paket Bier — sonst kannst du nichts verkaufen.\n\nWiesenbüro → Ware","📦 Buy supplies first!\n\nYou have no beer in storage and no delivery on the way.\nKeep at least %s for a package of beer — otherwise you can't sell anything.\n\nFair Office → Supplies","📦 Önce malzeme al!\n\nDepoda bira yok ve yolda teslimat yok.\nBir paket bira için en az %s ayır — yoksa hiçbir şey satamazsın.\n\nFuar Ofisi → Malzeme"
 POPUP_NO_TENT,"🎪 Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst eins: Wiesenbüro → Zelt (%s)","🎪 You don't have a tent yet!\n\nWithout a tent you can't store supplies.\nRent one first: Fair Office → Tent (%s)","🎪 Henüz çadırın yok!\n\nÇadır olmadan malzeme depolayamazsın.\nÖnce bir tane kirala: Fuar Ofisi → Çadır (%s)"
 QUEST_0_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
-QUEST_0_TEXT,"Geh zum Festzelt: Am Eingang auf der Nordseite steht das rote Schild „Zu vermieten“. Dort mit {interact} mieten — 500 €, die ersten 5 Tage ohne Miete.","Go to the beer tent: the red ‘For rent’ sign stands at the entrance on the north side. Rent it there with {interact} — €500, no rent for the first 5 days.","Bira çadırına git: Kuzey taraftaki girişte kırmızı „Kiralık“ tabelası var. Orada {interact} ile kirala — 500 €, ilk 5 gün kira yok."
+QUEST_0_TEXT,"Geh zum Festzelt: Am Eingang auf der Nordseite steht das rote Schild „Zu vermieten“. Dort mit {interact} mieten — 500 €, die ersten 5 Tage ohne Miete.","Go to the beer tent: the red ‘For rent’ sign stands at the entrance on the north side. Rent it there with {interact} — €500, no rent for the first 5 days.","Bira çadırına git: Kuzey taraftaki girişte kırmızı “Kiralık” tabelası var. Orada {interact} ile kirala — 500 €, ilk 5 gün kira yok."
 QUEST_1_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
 QUEST_1_TEXT,Wiesenbüro (im Osten) → Zelt → Tisch aufstellen (200 € pro Tisch).,Fair Office (in the east) → Tent → Place table (€200 each).,Fuar Ofisi (doğuda) → Çadır → Masa koy (masa başı 200 €).
 QUEST_2_TITLE,Bestelle Bier,Order beer,Bira sipariş et
 QUEST_2_TEXT,"Ohne Bier kann niemand bedient werden. Im Wiesenbüro → Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office → Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.","Bira olmadan kimseye servis yapılamaz. Fuar Ofisi → Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al."
 QUEST_3_TITLE,Warte auf den Lieferwagen,Wait for the delivery van,Teslimat aracını bekle
-QUEST_3_TEXT,"Deine Bestellung ist unterwegs. In etwa einer Minute fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about a minute the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık bir dakika içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
+QUEST_3_TEXT,"Deine Bestellung ist unterwegs. In etwa einer Minute fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about a minute the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık bir dakika içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
 QUEST_4_TITLE,Pakete ins Regal räumen,Stock the shelf,Paketleri rafa diz
 QUEST_4_TEXT,"Nimm jedes Paket mit {interact}, trag es ins Zelt zum Lagerregal und räume es dort mit {interact} ein. Erst eingeräumtes Bier kann gezapft werden.","Pick up each package with {interact}, carry it into the tent to the storage shelf and stock it there with {interact}. Only stocked beer can be poured.","Her paketi {interact} ile al, çadırdaki depo rafına taşı ve orada {interact} ile yerleştir. Sadece rafa konan bira doldurulabilir."
 QUEST_5_TITLE,Schlafe im Wohnwagen,Sleep in your caravan,Karavanında uyu
@@ -275,7 +275,7 @@ QUEST_8_TEXT,Wiesenbüro → Personal. Er bedient die Gäste für dich.,Fair Off
 QUEST_9_TITLE,Kaufe eine Lizenz,Buy a license,Bir lisans satın al
 QUEST_9_TEXT,Wiesenbüro → Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office → Licenses. More choice means more sales.,Fuar Ofisi → Lisanslar. Daha fazla çeşit daha fazla satış demek.
 QUEST_10_TITLE,Baue eine Toilette ein,Install a toilet,Tuvalet kur
-QUEST_10_TEXT,Wiesenbüro → Zelt (1.800 €). Sonst pinkeln die Gäste in die Ecke.,Fair Office → Tent (€1.800). Otherwise guests pee in the corner.,Fuar Ofisi → Çadır (1.800 €). Yoksa misafirler köşeye işer.
+QUEST_10_TEXT,Wiesenbüro → Zelt (1.800 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office → Tent (€1,800). Otherwise guests pee in the corner.",Fuar Ofisi → Çadır (1.800 €). Yoksa misafirler köşeye işer.
 QUEST_11_TITLE,Buche einen Künstler,Book an act,Bir sanatçı ayarla
 QUEST_11_TEXT,Wiesenbüro → Künstler. Musik lockt mehr Gäste an.,Fair Office → Acts. Music draws more guests.,Fuar Ofisi → Sanatçılar. Müzik daha çok misafir çeker.
 HELP_TITLE,Hilfe,Help,Yardım
@@ -289,7 +289,7 @@ HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
 HELP_FLOW,"1. Wiesenbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Krug nehmen, am Fass zapfen, Gäste bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug, pour at a keg, serve guests. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Kupa al, fıçıda doldur, misafirlere servis yap. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
 HELP_TIPS_TITLE,Tipps,Tips,İpuçları
 HELP_TIPS,"• Gäste warten nicht ewig — verpasste Bestellungen kosten Beliebtheit.\n• Mehr Beliebtheit bringt mehr Gäste, ein sauberes Zelt mehr Geld pro Bestellung.\n• Ohne Toilette pinkeln Gäste in die Ecke und beschweren sich.\n• Das Konto darf bis −1.000 € ins Minus; beim Zurückzahlen gehen 5 % Zinsen ab.","• Guests don't wait forever — missed orders cost popularity.\n• More popularity brings more guests, a clean tent more money per order.\n• Without a toilet, guests pee in the corner and complain.\n• Your account can go down to −€1,000; paying it back costs 5 % interest.","• Misafirler sonsuza kadar beklemez — kaçırılan siparişler popülerlik kaybettirir.\n• Popülerlik daha çok misafir, temiz çadır sipariş başına daha çok para getirir.\n• Tuvalet yoksa misafirler köşeye işer ve şikâyet eder.\n• Hesabın −1.000 €'ya kadar eksiye düşebilir; geri öderken %5 faiz kesilir."
-OFFICE_SEASON,"Tag %d: Miete und Ware +%d %%, Verkaufspreise +%d %%","Day %d: rent and supplies +%d %%, sale prices +%d %%","%d. gün: kira ve malzeme +%d %%, satış fiyatları +%d %%"
+OFFICE_SEASON,"Tag %d: Miete und Ware +%d %%, Verkaufspreise +%d %%","Day %d: rent and supplies +%d %%, sale prices +%d %%","%d. gün: kira ve malzeme +%%%d, satış fiyatları +%%%d"
 OFFICE_LOAN,Rettungskredit: noch %s offen — %d %% jeder Einnahme gehen an die Brauerei,Rescue loan: %s still owed — %d %% of every income goes to the brewery,Kurtarma kredisi: %s borç kaldı — her gelirin %%%d kadarı bira fabrikasına gider
 WHY_LOAN,"Gesperrt, bis der Rettungskredit abbezahlt ist",Locked until the rescue loan is paid off,Kurtarma kredisi ödenene kadar kilitli
 MSG_LOAN_LOCKED,"🔒 Gesperrt, bis der Rettungskredit abbezahlt ist",🔒 Locked until the rescue loan is paid off,🔒 Kurtarma kredisi ödenene kadar kilitli
@@ -297,8 +297,8 @@ MSG_LOAN_PAID,🍺 Rettungskredit abbezahlt — Ausbauten sind wieder frei,🍺 
 REPORT_LOAN,Kredittilgung,Loan repayment,Kredi ödemesi
 POPUP_LOAN,"🍺 Pleite! Die Brauerei springt ein.\n\nDein Konto stand bei %s. Sie gleicht es aus — du schuldest ihr jetzt %s.\n\nBis der Kredit abbezahlt ist, gehen %d %% jeder Einnahme an die Brauerei und Ausbauten sind gesperrt. Ware und die ersten zwei Tische gehen weiter.","🍺 Broke! The brewery steps in.\n\nYour account was at %s. They cover it — you now owe them %s.\n\nUntil the loan is paid off, %d %% of every income goes to the brewery and expansions are locked. Supplies and the first two tables still work.","🍺 İflas! Bira fabrikası devreye giriyor.\n\nHesabın %s idi. Fabrika bunu kapatıyor — artık ona %s borçlusun.\n\nKredi ödenene kadar her gelirin %%%d kadarı fabrikaya gider ve geliştirmeler kilitlenir. Malzeme ve ilk iki masa yine alınabilir."
 OFFICE_TAB_GOALS,Ziele,Goals,Hedefler
-OFFICE_TAB_DECO,Einrichtung,Furnishing,Döşeme
-DECO_TAB_INFO,"Kaufe Lampen und Deko und stell sie im Zelt auf, wo du willst: aufnehmen und abstellen mit der Benutzen-Taste, drehen mit der Prost-Taste, verkaufen (halber Preis) mit der Kostüm-Taste. Neue Sachen stehen am Zelteingang. Jeder Gegenstand lockt ein paar Gäste mehr an (bis +20 %).","Buy lamps and decorations and place them anywhere in the tent: pick up and put down with the use key, rotate with the cheers key, sell (half price) with the costume key. New items wait at the tent entrance. Each item draws a few more guests (up to +20 %).","Lamba ve dekorasyon al, çadırda istediğin yere koy: kullan tuşuyla al ve bırak, şerefe tuşuyla döndür, kostüm tuşuyla sat (yarı fiyat). Yeni eşyalar çadır girişinde durur. Her eşya biraz daha misafir çeker (en fazla +20 %)."
+OFFICE_TAB_DECO,Einrichtung,Furnishing,Süsleme
+DECO_TAB_INFO,"Kaufe Lampen und Deko und stell sie im Zelt auf, wo du willst: aufnehmen und abstellen mit der Benutzen-Taste, drehen mit der Prost-Taste, verkaufen (halber Preis) mit der Kostüm-Taste. Neue Sachen stehen am Zelteingang. Jeder Gegenstand lockt ein paar Gäste mehr an (bis +20 %).","Buy lamps and decorations and place them anywhere in the tent: pick up and put down with the use key, rotate with the cheers key, sell (half price) with the costume key. New items wait at the tent entrance. Each item draws a few more guests (up to +20 %).","Lamba ve dekorasyon al, çadırda istediğin yere koy: kullan tuşuyla al ve bırak, şerefe tuşuyla döndür, kostüm tuşuyla sat (yarı fiyat). Yeni eşyalar çadır girişinde durur. Her eşya biraz daha misafir çeker (en fazla %20)."
 DECO_LATERNE,Laterne,Lantern,Fener
 DECO_LATERNE_INFO,Hohe Laterne mit warmem Licht.,Tall lantern with warm light.,Sıcak ışıklı uzun fener.
 DECO_STEHLAMPE,Stehlampe,Floor lamp,Ayaklı lamba
