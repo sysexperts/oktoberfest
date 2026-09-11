@@ -16,8 +16,17 @@ var _streams := {}
 var _players: Array[AudioStreamPlayer] = []
 var _idx := 0
 var _ok := false
-var _music_player: AudioStreamPlayer
+## Zeltmusik kommt als 3D-Quelle aus dem Zelt: drinnen normal laut, draußen
+## leiser, je weiter man weggeht. Die Kirmes-Geräusche draußen (Ambiente) sind
+## im Zelt gedämpft.
+var _music_player: AudioStreamPlayer3D
 var _crowd_player: AudioStreamPlayer
+const MUSIK_ORT := Vector3(0.0, 3.0, -2.0)
+## Grundriss des Zelts (für die Kirmes-Geräusche)
+const ZELT_MIN := Vector2(-12.3, -14.3)
+const ZELT_MAX := Vector2(12.3, 11.3)
+var _musik_db := -6.0
+var _musik_tween: Tween
 var _music_stream: AudioStream
 var _crowd_stream: AudioStream
 ## Alle gefundenen Musikstücke — es wird zufällig durchgewechselt.
@@ -58,13 +67,19 @@ func _ready() -> void:
 	# Grundrauschen, sobald das Zelt offen war.
 	_crowd_stream = _lade(AMBIENTE)
 
-	_music_player = AudioStreamPlayer.new()
+	_music_player = AudioStreamPlayer3D.new()
 	_music_player.stream = _music_stream
 	_music_player.bus = "Musik"
 	# Echte Musik ist schon abgemischt, der Ersatzton nicht.
-	_music_player.volume_db = -6.0 if not _playlist.is_empty() else -16.0
+	_musik_db = -2.0 if not _playlist.is_empty() else -12.0
+	_music_player.volume_db = _musik_db
+	# Bis ~14 m voll (das ganze Zelt), danach leiser, ab 110 m nicht mehr hörbar
+	_music_player.unit_size = 14.0
+	_music_player.max_distance = 110.0
+	_music_player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_INVERSE_DISTANCE
 	_music_player.finished.connect(_naechstes_stueck)
 	add_child(_music_player)
+	_music_player.position = MUSIK_ORT
 
 	_crowd_player = AudioStreamPlayer.new()
 	_crowd_player.stream = _crowd_stream
@@ -117,6 +132,10 @@ func _naechstes_stueck() -> void:
 func play_music() -> void:
 	if not _ok:
 		return
+	if _musik_tween:
+		_musik_tween.kill()
+		_musik_tween = null
+	_music_player.volume_db = _musik_db
 	if not _music_player.playing:
 		_music_player.play()
 	if _crowd_stream != null and not _crowd_player.playing:
@@ -127,6 +146,29 @@ func stop_music() -> void:
 		return
 	_music_player.stop()
 	_crowd_player.stop()
+
+## Feierabend: Musik in dauer Sekunden leiser werden lassen, dann aus.
+func musik_ausblenden(dauer: float) -> void:
+	if not _ok or not _music_player.playing or _musik_tween != null:
+		return
+	_musik_tween = create_tween()
+	_musik_tween.tween_property(_music_player, "volume_db", -45.0, dauer)
+	_musik_tween.tween_callback(func() -> void:
+		_music_player.stop()
+		_music_player.volume_db = _musik_db
+		_musik_tween = null)
+
+## Kirmes-Geräusche: draußen voll, im Zelt gedämpft.
+func _process(delta: float) -> void:
+	if not _ok or _crowd_stream == null:
+		return
+	var kamera := get_viewport().get_camera_3d()
+	if kamera == null:
+		return
+	var p := kamera.global_position
+	var im_zelt := p.x > ZELT_MIN.x and p.x < ZELT_MAX.x and p.z > ZELT_MIN.y and p.z < ZELT_MAX.y
+	var ziel := -22.0 if im_zelt else -6.0
+	_crowd_player.volume_db = lerpf(_crowd_player.volume_db, ziel, clampf(delta * 2.0, 0.0, 1.0))
 
 func _music() -> AudioStreamWAV:
 	var rate := 22050

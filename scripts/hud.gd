@@ -160,6 +160,22 @@ func set_buero(z: Dictionary) -> void:
 	if ereignis != "":
 		%Ereignis.text = tr("EREIGNIS_%s_TITEL" % ereignis.to_upper())
 
+## Großer Text oben (z. B. Feierabend): einblenden, stehen lassen, ausblenden.
+var _gross_tween: Tween
+
+func grosser_text(schluessel: String) -> void:
+	var l: Label = %GrosserText
+	l.text = Texte.meldung(schluessel)
+	l.visible = true
+	l.modulate.a = 0.0
+	if _gross_tween:
+		_gross_tween.kill()
+	_gross_tween = create_tween()
+	_gross_tween.tween_property(l, "modulate:a", 1.0, 0.5)
+	_gross_tween.tween_interval(3.5)
+	_gross_tween.tween_property(l, "modulate:a", 0.0, 1.2)
+	_gross_tween.tween_callback(func() -> void: l.visible = false)
+
 ## Kombo beim Bedienen: kurz groß unter dem Fadenkreuz, dann ausblenden.
 var _kombo_tween: Tween
 

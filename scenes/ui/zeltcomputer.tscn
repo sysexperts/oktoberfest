@@ -92,6 +92,50 @@ custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
 text = "BTN_PRICIER"
 
+[node name="WareTitel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "COMP_GOODS"
+
+[node name="WareText" type="Label" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Ware" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BierEins" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BierFuenf" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EssenEins" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EssenFuenf" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Trenner2" type="HSeparator" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 
@@ -101,7 +145,7 @@ theme_override_font_sizes/font_size = 19
 text = "OFFICE_TAB_REPORT"
 
 [node name="BilanzRollen" type="ScrollContainer" parent="Mitte/Panel/Spalte"]
-custom_minimum_size = Vector2(0, 200)
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 horizontal_scroll_mode = 0
 

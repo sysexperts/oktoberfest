@@ -113,6 +113,7 @@ const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
 const KITCHEN_POINT := Vector3(6.5, 0.1, -10.4) # Koch steht hinter der Theke bei den Kochstellen
 const ZAPFER_POINT := Vector3(-2.0, 0.1, -10.4) # Zapfer steht hinter der Theke an der Ausgabe
+const KOCH_ABLAGE := Vector3(-0.8, 0.1, -10.4)  # hier stellt der Koch die Portion auf die Ausgabe
 ## Zapfer und Koch stellen Fertiges auf die Ausgabe (scenes/ausgabe.tscn).
 const ZAPF_ZEIT := 2.2        # Sekunden pro Krug auf Stufe 1
 const KOCH_ZEIT := 4.5        # Sekunden pro Portion auf Stufe 1
@@ -173,7 +174,8 @@ const TANZ_DAUER_MIN := 15.0
 const TANZ_DAUER_MAX := 30.0
 const TANZ_PLAETZE := [-0.6, 0.6, 0.0]   # Versatz entlang der Tischlänge
 ## Tagesereignisse (Spaß-Plan 3.1): ab Tag 3 wird morgens eins angekündigt.
-const EREIGNISSE := ["bus", "kontrolle", "happy", "fass", "prosit", "promi"]
+const EREIGNISSE := ["bus", "kontrolle", "happy", "fass", "prosit", "promi", "regen"]
+const REGEN_VOLL_CHANCE := 0.6   # so oft flüchten bei Regen viele ins Zelt
 const EREIGNIS_AB_TAG := 3
 const EREIGNIS_CHANCE := 0.7
 const HAPPY_VON := 18.0
@@ -309,6 +311,10 @@ var _day_fog := 0.0008
 var _day_fog_color := Color(0.78, 0.70, 0.62)
 var _night_visual := false
 var _night_t := -1.0
+var _regen_t := -1.0
+## Nach 22 Uhr bis zum Schlafen: Zelt geschlossen, aber Nacht
+var _nachts_geschlossen := false
+var _regen_voll := false   # Regen: flüchten heute viele ins Zelt?
 
 var _hygiene := 100.0
 var _messes := {}
@@ -554,6 +560,8 @@ func _apply_crowd(clock: float) -> void:
 	var f := 0.0
 	if clock >= 0.0:
 		f = clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.15, 1.0)
+	if _ereignis == "regen":
+		f *= 0.25   # bei Regen ist draußen kaum jemand
 	_crowd.set_density(f)
 
 ## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
@@ -566,7 +574,8 @@ func _daylight_factor(clock: float) -> float:
 	if ALWAYS_NIGHT:
 		return 1.0
 	if clock < 0.0:
-		return 0.0
+		# Zelt zu: nach Feierabend bleibt es Nacht, erst mit dem Schlafen wird es Tag
+		return 1.0 if _nachts_geschlossen else 0.0
 	if clock <= DUSK_START:
 		return 0.0
 	if clock >= DUSK_END:
@@ -576,24 +585,30 @@ func _daylight_factor(clock: float) -> float:
 ## Dämmerung stufenlos: Sonne, Himmel und Umgebungslicht wandern langsam runter.
 func _apply_daylight(clock: float) -> void:
 	var t := _daylight_factor(clock)
-	if absf(t - _night_t) < 0.01:
+	var r := 1.0 if _ereignis == "regen" else 0.0
+	if absf(t - _night_t) < 0.01 and absf(r - _regen_t) < 0.01:
 		return
 	_night_t = t
+	_regen_t = r
 	if _sun:
 		# Nachts bleibt ein weiches, leicht blaues Mondlicht — dunkel genug, dass
 		# die bunten Kirmeslichter wirken, hell genug, dass man alles erkennt.
-		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.14, t)
+		# Schatten bleiben an: früher gingen sie bei halber Dämmerung aus und die
+		# Sonne schien schlagartig durchs Zeltdach — das Zelt wurde plötzlich hell.
+		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.14, t) * (1.0 - 0.45 * r)
 		_sun.light_color = Color(1, 1, 1).lerp(Color(0.62, 0.68, 0.92), t)
-		_sun.shadow_enabled = t < 0.5
 	if _world_env and _world_env.environment:
 		var env := _world_env.environment
-		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.30, t)
+		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.30, t) * (1.0 - 0.3 * r)
 		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.22, t)
 		# Nebel bleibt ein dünner Dunst — er soll das Licht der Buden einfangen,
-		# nicht die Sicht nehmen. Nachts etwas dichter und dunkler, damit die
-		# bunten Lichter Schwaden werfen.
-		env.fog_density = lerpf(_day_fog, _day_fog * 4.0, t)
+		# nicht die Sicht nehmen. Nachts und bei Regen dichter.
+		env.fog_density = lerpf(_day_fog, _day_fog * 4.0, t) * (1.0 + 3.0 * r)
 		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
+		if env.sky and env.sky.sky_material is ShaderMaterial:
+			var himmel := env.sky.sky_material as ShaderMaterial
+			himmel.set_shader_parameter("nacht", t)
+			himmel.set_shader_parameter("regen", r)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
 	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day)
@@ -1293,6 +1308,10 @@ func net_hire_staff(role: int) -> void:
 		return
 	if not STAFF_HIRE_COST.has(role):
 		return
+	# Ohne Essenslizenz hätte der Koch nichts zu tun
+	if role == ROLE_KOCH and _foods_avail().is_empty():
+		_fehler("MSG_COOK_LICENSE")
+		return
 	if _kredit_sperrt():
 		return
 	var cost: int = STAFF_HIRE_COST[role]
@@ -1536,23 +1555,30 @@ func _update_zapfer(s: Dictionary, delta: float) -> void:
 		return
 	_ausgabe_hinzufuegen(1, _naechste_sorte(1, _drinks_avail()))
 
-## Koch: kocht Brezn und Würstl vor und stellt sie auf die Ausgabe.
+## Koch: kocht an seiner Kochstelle Brezn und Würstl, trägt die Portion zur
+## Ausgabe und geht zurück. Braucht eine Essenslizenz (net_hire_staff sperrt sonst).
 func _update_koch(s: Dictionary, delta: float) -> void:
-	s.tgt = KITCHEN_POINT
-	if not _staff_move(s, delta):
-		return
 	var sorten := _foods_avail()
-	if sorten.is_empty():
-		return
-	s.timer = float(s.timer) - delta
-	if float(s.timer) > 0.0:
-		return
-	var lv := int(s.level)
-	s.timer = KOCH_ZEIT / (1.0 + 0.2 * float(lv - 1))
-	var platz := mini(6, AUSGABE_MAX_ESSEN + (lv - 1))
-	if _ausgabe_gesamt(2) >= mini(platz, int(_stock[WARE_ESSEN])):
-		return
-	_ausgabe_hinzufuegen(2, _naechste_sorte(2, sorten))
+	match int(s.state):
+		1:
+			s.tgt = KOCH_ABLAGE
+			if _staff_move(s, delta):
+				_ausgabe_hinzufuegen(2, int(s.get("typ", 1)))
+				s.state = 0
+		_:
+			s.tgt = KITCHEN_POINT
+			if not _staff_move(s, delta) or sorten.is_empty():
+				return
+			var lv := int(s.level)
+			var platz := mini(6, AUSGABE_MAX_ESSEN + (lv - 1))
+			if _ausgabe_gesamt(2) >= mini(platz, int(_stock[WARE_ESSEN])):
+				return
+			s.timer = float(s.timer) - delta
+			if float(s.timer) > 0.0:
+				return
+			s.timer = KOCH_ZEIT / (1.0 + 0.2 * float(lv - 1))
+			s.typ = _naechste_sorte(2, sorten)
+			s.state = 1
 
 ## Welche Sorte als Nächstes: was offen bestellt ist und noch nicht bereitsteht.
 func _naechste_sorte(art: int, sorten: Array) -> int:
@@ -2165,6 +2191,10 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 		sorten.erase(1)   # Helles bleibt immer
 		_fass_kaputt = int(sorten.pick_random()) if not sorten.is_empty() else 0
 	_melde("EREIGNIS_%s_START" % _ereignis.to_upper(), [], 2)
+	if _ereignis == "regen":
+		_regen_voll = randf() < REGEN_VOLL_CHANCE
+		if _regen_voll:
+			_melde("MSG_REGEN_VOLL", [], 2)
 
 func _happy_hour() -> bool:
 	var uhr := _clock_hour()
@@ -2175,6 +2205,8 @@ func _ereignis_andrang() -> float:
 		return 1.5
 	if _ereignis == "finale":
 		return FINALE_ANDRANG
+	if _ereignis == "regen":
+		return 1.4 if _regen_voll else 0.8
 	if _happy_hour():
 		return 1.4
 	return 1.0
@@ -2204,6 +2236,21 @@ func _update_ereignis(delta: float) -> void:
 						g.cooldown = randf_range(0.0, 2.0)
 						_guest_sim[id] = g
 				_melde("MSG_PROSIT", [], 2)
+
+## Feierabend bei allen: großer Text oben, die Musik blendet aus (net_meta).
+@rpc("authority", "reliable", "call_local")
+func _net_feierabend() -> void:
+	if _hud:
+		_hud.grosser_text("MSG_FEIERABEND_GROSS")
+
+## Regen sichtbar machen (auf allen Rechnern, aus dem Tagesereignis)
+func _regen_anzeigen() -> void:
+	var r := get_node_or_null("Regen")
+	if r and r.has_method("setze"):
+		r.setze(_ereignis == "regen")
+	_apply_crowd(_clock_hour())
+	_night_t = -1.0   # Licht und Himmel neu setzen
+	_apply_daylight(_clock_hour())
 
 @rpc("authority", "reliable", "call_local")
 func _net_kombo(n: int) -> void:
@@ -2273,6 +2320,7 @@ func _start_shift() -> void:
 	_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN, ERSTE_GAESTE_MAX)
 	_hygiene = 100.0
 	_night = false
+	_nachts_geschlossen = false
 	_apply_night_visual(false)
 	_did_shift = true
 	for s in _held_deko.keys():
@@ -2304,12 +2352,14 @@ func _end_shift(reason := 0) -> void:
 	_phase = Phase.INTERMISSION
 	_phase_time = 0.0
 	_night = false
+	_nachts_geschlossen = true
 	_apply_night_visual(false)
-	# Tüm misafirleri çıkışa yolla
+	# Gäste stehen nicht alle auf einmal auf: erst Musik aus und großer Text,
+	# dann brechen sie nach und nach auf (aufbruch_t in _update_guests)
 	for gid in _guest_sim.keys():
-		_guest_sim[gid].mode = 2
-		_guest_sim[gid].tgt = ENTRANCE
+		_guest_sim[gid].aufbruch_t = randf_range(4.0, 14.0)
 		_guest_sim[gid].ostate = 0
+	_net_feierabend.rpc()
 	_clear_messes()
 	_clear_artists()          # E5: Auftritt vorbei
 	_ausgabe.clear()          # Übriges von der Ausgabe wird weggeräumt
@@ -2460,8 +2510,16 @@ func _update_guests(delta: float) -> void:
 				g.tgt = raus.pop_front()
 				g.raus = raus
 		# Oturan misafir: sipariş döngüsü
-		if g.mode == 1:
+		if g.mode == 1 and _phase == Phase.SHIFT:
 			_guest_order(g, id, delta)
+		# Feierabend: nach kurzer Wartezeit aufstehen und zum Ausgang gehen
+		if g.has("aufbruch_t"):
+			g.aufbruch_t = float(g.aufbruch_t) - delta
+			if float(g.aufbruch_t) <= 0.0 and int(g.mode) != 2:
+				g.erase("aufbruch_t")
+				g.mode = 2
+				g.tgt = ENTRANCE
+				g.ostate = 0
 		if float(g.get("verpasst_t", 0.0)) > 0.0:
 			g.verpasst_t = float(g.verpasst_t) - delta
 		# Tanzt auf dem Tisch — danach zurück auf den Platz
@@ -2672,6 +2730,8 @@ func _broadcast_sync() -> void:
 		var carr := 0
 		if int(st.role) == ROLE_KELLNER and int(st.state) == 3:
 			carr = maxi(0, (st.orders as Array).size() - int(st.idx))
+		elif int(st.role) == ROLE_KOCH and int(st.state) == 1:
+			carr = 1   # Koch trägt eine Portion zur Ausgabe
 		scarry.append(carr)
 	if sids.size() > 0:
 		_net_staff.rpc(sids, sx, sz, syaw, scarry)
@@ -2681,7 +2741,7 @@ func _broadcast_sync() -> void:
 	for mid in _messes.keys():
 		ids.append(mid)
 		pr.append(float(_mess_clean.get(mid, 0.0)))
-	_net_env.rpc(Game.money, Game.score, _clock_hour(), _hygiene, _popularity, ids, pr, _night)
+	_net_env.rpc(Game.money, Game.score, _clock_hour(), _hygiene, _popularity, ids, pr, _night or _nachts_geschlossen)
 	# Bira masası konumları (taşıma senkronu)
 	var bx := PackedFloat32Array()
 	var bz := PackedFloat32Array()
@@ -2730,6 +2790,8 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 	_hud.set_time(clock, night)
 	_hud.set_hygiene(hygiene)
 	_hud.set_popularity(pop)
+	if not multiplayer.is_server():
+		_nachts_geschlossen = night and clock < 0.0
 	_apply_daylight(clock)
 	_apply_crowd(clock)
 	_apply_stage(clock >= 0.0)
@@ -2772,6 +2834,11 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_vermietung_aktualisieren()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	_haelt_deko = buero.get("haelt", {})
+	var ereignis_neu := str(buero.get("ereignis", ""))
+	if ereignis_neu != _ereignis or multiplayer.is_server():
+		if not multiplayer.is_server():
+			_ereignis = ereignis_neu
+		_regen_anzeigen()
 	# Clientlerde masaların görünürlüğünü senkronla
 	if not multiplayer.is_server() and _active_count != active_count:
 		_active_count = active_count
@@ -2788,7 +2855,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 		if phase == Phase.SHIFT:
 			_sfx_node.play_music()
 		else:
-			_sfx_node.stop_music()
+			_sfx_node.musik_ausblenden(5.0)   # Feierabend: sanft leiser statt abrupt aus
 
 ## Meldung bei allen Spielern. key: Übersetzungsschlüssel, args: Werte dafür —
 ## Texte darin sind selbst Schlüssel, _eur(n) wird zum Betrag (texte.gd meldung).

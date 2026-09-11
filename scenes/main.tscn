@@ -19,15 +19,11 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hilfe.tscn" id="92_hilfe"]
 [ext_resource type="Script" path="res://scripts/grafikstufe.gd" id="93_grafik"]
 [ext_resource type="PackedScene" path="res://scenes/zelt_vermietung.tscn" id="94_vermietung"]
+[ext_resource type="Shader" path="res://assets/sky/wolken_himmel.gdshader" id="95_himmel"]
+[ext_resource type="PackedScene" path="res://scenes/regen.tscn" id="96_regen"]
 
-[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.14, 0.18, 0.42, 1)
-sky_horizon_color = Color(0.78, 0.55, 0.42, 1)
-sky_curve = 0.12
-ground_bottom_color = Color(0.09, 0.09, 0.14, 1)
-ground_horizon_color = Color(0.58, 0.44, 0.38, 1)
-sun_angle_max = 40.0
-sun_curve = 0.08
+[sub_resource type="ShaderMaterial" id="SkyMat"]
+shader = ExtResource("95_himmel")
 
 [sub_resource type="Sky" id="Sky"]
 sky_material = SubResource("SkyMat")
@@ -236,6 +232,8 @@ script = ExtResource("10_sfx")
 script = ExtResource("93_grafik")
 
 [node name="Einrichtung" type="Node3D" parent="."]
+
+[node name="Regen" parent="." instance=ExtResource("96_regen")]
 
 [node name="ZeltVermietung" parent="." instance=ExtResource("94_vermietung")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2, 0, 13.2)

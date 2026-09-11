@@ -149,13 +149,11 @@ class Lauf extends Node:
 			else:
 				return   # sparen
 		for lic: String in ["weizen", "radler", "brezn", "sosis"]:
-			# Essen erst mit Koch
-			if lic in ["brezn", "sosis"] and _anzahl(1) == 0:
-				if Game.money > 600 + RESERVE * 2:
-					gm.net_hire_staff(1)
-				continue
 			if not gm._lic[lic] and Game.money > int(gm.LIC_COST[lic]) + RESERVE * 2:
 				gm.net_buy_license(lic)
+		# Koch erst, wenn es Essen gibt (sonst sperrt das Spiel)
+		if not gm._foods_avail().is_empty() and _anzahl(1) == 0 and Game.money > 600 + RESERVE:
+			gm.net_hire_staff(1)
 		if not gm._foods_avail().is_empty() and _anzahl(1) == 0 and Game.money > 600 + RESERVE * 2:
 			gm.net_hire_staff(1)
 		if gm._active_count >= limit and gm.TENT_UPGRADE_COST.has(gm._tent_stage + 1) \

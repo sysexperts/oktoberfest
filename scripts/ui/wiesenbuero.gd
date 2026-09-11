@@ -211,6 +211,9 @@ func _reiter_personal() -> void:
 			tr("STAFF_EMPLOYED") % im_dienst])
 		var einstellen := int(_gm.STAFF_HIRE_COST[rolle])
 		var grund_einstellen := _kauf_grund(einstellen)
+		# Koch nur mit Brezn- oder Würstl-Lizenz (wie GameManager.net_hire_staff)
+		if rolle == 1 and not _hat_essenslizenz():
+			grund_einstellen = tr("WHY_COOK_LICENSE")
 		z.knopf(0, tr("BTN_HIRE") % Texte.euro(einstellen), grund_einstellen != "")
 		var aufstufbar := lv.filter(func(x: int) -> bool: return x < int(_gm.STAFF_MAX_LEVEL))
 		var grund_aufstufen := ""
@@ -308,6 +311,10 @@ func _einzelkauf(z: Node, knopf_schluessel: String, kosten: int, sperre := "", m
 func _erledigt(z: Node, schluessel: String) -> void:
 	z.knopf(0, tr(schluessel), true)
 	z.grund("")
+
+func _hat_essenslizenz() -> bool:
+	var lic: Dictionary = _z.get("lic", {})
+	return bool(lic.get("brezn", false)) or bool(lic.get("sosis", false))
 
 ## Kein Bier im Lager und keine Lieferung unterwegs (wie GameManager._needs_goods).
 func _braucht_ware() -> bool:

@@ -202,6 +202,7 @@ class Lauf extends Node:
 			and hud.is_popup_open(), "Wiesn %d" % gm._saison_nr)
 		_check("Bewertung 1–5", gm.saison_wertung({"tage": 16, "netto": 16000, "pop_summe": 1500, "bedient": 900, "verpasst": 30}) == 5
 			and gm.saison_wertung({"tage": 16, "netto": -500, "pop_summe": 300, "bedient": 100, "verpasst": 100}) == 1, "")
+		_check("Nach Feierabend bleibt es Nacht bis zum Schlafen", gm._daylight_factor(-1.0) >= 1.0, "")
 		hud.close_popup()
 		gm._meilensteine.append("SAISON_1")   # Belohnung nicht in den Meilenstein-Test unten mischen
 
