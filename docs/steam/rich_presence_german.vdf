@@ -1,0 +1,11 @@
+"lang"
+{
+	"Language"	"german"
+	"Tokens"
+	{
+		"#Status_Menue"		"Im Hauptmenü"
+		"#Status_Solo"		"Führt ein Festzelt · Tag %tag%"
+		"#Status_Koop"		"Führt mit Freunden ein Festzelt · Tag %tag%"
+		"#Status_Offen"		"Zelt geöffnet · Tag %tag%"
+	}
+}

@@ -58,6 +58,7 @@ func _ready() -> void:
 	_texte_aktualisieren()
 	_zeige(_haupt)
 	_menue_musik()
+	SteamDienst.status_setzen("#Status_Menue")
 	# Warum das letzte Spiel endete (Host weg, andere Version …)
 	if Net.meldung != "":
 		_zeige_meldung()

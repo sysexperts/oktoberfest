@@ -1,0 +1,11 @@
+"lang"
+{
+	"Language"	"turkish"
+	"Tokens"
+	{
+		"#Status_Menue"		"Ana menüde"
+		"#Status_Solo"		"Bira çadırı işletiyor · %tag%. gün"
+		"#Status_Koop"		"Arkadaşlarıyla bira çadırı işletiyor · %tag%. gün"
+		"#Status_Offen"		"Çadır açık · %tag%. gün"
+	}
+}

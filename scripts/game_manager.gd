@@ -2071,6 +2071,9 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_active_count = active_count
 	_hud.set_phase(phase == Phase.SHIFT)
 	_hud.set_buero(buero)
+	# Statusanzeige in der Steam-Freundesliste (tut außerhalb des Steam-Builds nichts)
+	var status := "#Status_Offen" if phase == Phase.SHIFT else ("#Status_Solo" if Net.solo else "#Status_Koop")
+	SteamDienst.status_setzen(status, day)
 	_hud.set_day(day)
 	_hud.set_quest(quest_step, QUEST_COUNT)
 	if _sfx_node:

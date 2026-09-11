@@ -22,6 +22,11 @@ config/icon="res://icon.svg"
 Einstellungen="*res://autoload/einstellungen.gd"
 Net="*res://autoload/net.gd"
 Game="*res://autoload/game.gd"
+SteamDienst="*res://autoload/steam_dienst.gd"
+
+[steam]
+
+app_id=480
 
 [gui]
 

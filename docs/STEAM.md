@@ -61,6 +61,28 @@ Prüfen, ob das Merkmal im Export ankommt:
 `godot --headless --main-pack <paket mit tools/> --script res://tools/steam_merkmal.gd`
 → erwartet `MERKMAL steam: true` und `UPDATER aktiv: false`.
 
+### Steam-Start und Statusanzeige (Plan 5.2)
+`autoload/steam_dienst.gd` startet Steam nur im Steam-Build, nie auf dem
+dedizierten Server, und nur, wenn die GodotSteam-Bibliothek neben der .exe
+liegt. Ohne laufenden Steam-Client meldet es den Grund im Log, das Spiel läuft
+ohne Steam weiter.
+
+**App-ID:** Projekteinstellung `steam/app_id` (steht in `project.godot`).
+Bis zur eigenen ID gilt 480 (Valves Test-App „Spacewar") — dann erscheint in
+der Freundesliste „Spacewar" statt unseres Spiels, und die Statustexte fehlen.
+Mit eigener ID startet das Spiel automatisch über den Steam-Client neu, wenn es
+direkt gestartet wurde.
+
+**Statustexte für die Freundesliste:** `docs/steam/rich_presence_*.vdf`
+(Deutsch, Englisch, Türkisch) in Steamworks unter *Community → Rich Presence
+Localization* hochladen. Das Spiel setzt `steam_display` auf `#Status_Menue`,
+`#Status_Solo`, `#Status_Koop` oder `#Status_Offen` und `tag` auf den Spieltag.
+Prüfen: Spiel laufen lassen, im Browser bei Steam angemeldet
+<https://steamcommunity.com/dev/testrichpresence> öffnen.
+
+**Overlay** (Shift+Tab) braucht keinen Code, funktioniert aber laut GodotSteam
+nur im exportierten Spiel, das über den Steam-Client läuft — nicht aus dem Editor.
+
 ### A4 Mehrspieler ohne IP-Eingabe
 Aktuell: fester Server `185.248.140.225` oder IP tippen. Auf Steam erwartet man
 Freundesliste, Einladungen, Lobbys — und Selbst-Hosten scheitert sonst an NAT

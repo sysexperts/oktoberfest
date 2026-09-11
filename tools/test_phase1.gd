@@ -294,6 +294,21 @@ class Lauf extends Node:
 			and angestellter._hand_mugs.size() == 2, str(angestellter._hand_mugs.size()))
 		angestellter.queue_free()
 
+		print("  -- Steam-Dienst (5.2)")
+		var dienst := get_tree().root.get_node_or_null("SteamDienst")
+		_check("Steam-Dienst geladen", dienst != null, "")
+		if dienst:
+			var regel := preload("res://autoload/steam_dienst.gd")
+			_check("startet nur im Steam-Build mit Bibliothek, nie auf dem Server",
+				regel.soll_starten(true, false, true)
+				and not regel.soll_starten(false, false, true)
+				and not regel.soll_starten(true, true, true)
+				and not regel.soll_starten(true, false, false), "")
+			_check("außerhalb des Steam-Builds inaktiv, mit Grund", not dienst.aktiv and dienst.grund != "", dienst.grund)
+			dienst.status_setzen("#Status_Solo", 3)   # darf ohne Steam nichts tun und nicht abstürzen
+			_check("App-ID aus den Projekteinstellungen", dienst.app_id == int(ProjectSettings.get_setting("steam/app_id", 0)),
+				str(dienst.app_id))
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

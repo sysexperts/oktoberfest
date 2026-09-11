@@ -17,4 +17,10 @@ func _init() -> void:
 		if c is HTTPRequest:
 			laedt = true
 	print("UPDATER aktiv: ", laedt)
+	# Steam-Dienst: ohne laufenden Steam-Client muss er einen Grund nennen, nicht abstürzen
+	var dienst := root.get_node_or_null("SteamDienst")
+	if dienst:
+		print("STEAM aktiv: ", dienst.aktiv, " · Grund: ", dienst.grund if dienst.grund != "" else "—")
+	else:
+		print("STEAM Dienst: FEHLT")
 	quit()

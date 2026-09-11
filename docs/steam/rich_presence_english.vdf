@@ -1,0 +1,11 @@
+"lang"
+{
+	"Language"	"english"
+	"Tokens"
+	{
+		"#Status_Menue"		"In the main menu"
+		"#Status_Solo"		"Running a beer tent · Day %tag%"
+		"#Status_Koop"		"Running a beer tent with friends · Day %tag%"
+		"#Status_Offen"		"Tent open · Day %tag%"
+	}
+}

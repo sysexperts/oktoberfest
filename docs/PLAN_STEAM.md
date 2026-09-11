@@ -160,7 +160,14 @@ morgen weiterzuspielen.
       nicht im Git). `boot.gd` lädt dort nichts nach, `menu_eingang.gd` startet
       nie mit einem heruntergeladenen Paket neu. Nachgewiesen mit
       `tools/steam_merkmal.gd` aus beiden exportierten Paketen.*
-- [ ] **5.2 GodotSteam einbinden** — Initialisierung, Overlay, Rich Presence.
+- [x] **5.2 GodotSteam einbinden** — Initialisierung, Overlay, Rich Presence.
+      *GodotSteam 4.22.1 in `addons/godotsteam` (Windows 64 + Linux 64).
+      `autoload/steam_dienst.gd` startet Steam nur im Steam-Build, meldet ohne
+      Client einen Grund und läuft weiter (geprüft aus dem exportierten Paket).
+      Statusanzeige Menü/Solo/Koop/Zelt offen mit Spieltag, Texte in
+      `docs/steam/` zum Hochladen. Steam-Name als Spielername.
+      Offen, braucht dich: echter Test mit installiertem Steam (Overlay,
+      Freundesliste) und die eigene App-ID statt 480.*
 - [ ] **5.3 Koop über Steam-Lobbys** — Freunde einladen, beitreten per Klick.
       `SteamMultiplayerPeer` ersetzt `ENetMultiplayerPeer`; die RPCs bleiben.
 - [ ] **5.4 Steam Cloud und Errungenschaften** (aus 3.2)
