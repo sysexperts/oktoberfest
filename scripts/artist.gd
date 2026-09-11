@@ -26,10 +26,8 @@ func _ready() -> void:
 func set_tier(t: int) -> void:
 	tier = t
 	if _label:
-		match t:
-			1: _label.text = "🎸 Straßenmusiker"
-			2: _label.text = "🎺 Blaskapelle"
-			_: _label.text = "⭐ Star-Act"
+		var symbol: String = {1: "🎸", 2: "🎺"}.get(t, "⭐")
+		_label.text = "%s %s" % [symbol, TranslationServer.translate("ACT_%d" % clampi(t, 1, 3))]
 
 func _process(delta: float) -> void:
 	_t += delta

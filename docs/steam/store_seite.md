@@ -92,4 +92,8 @@ Vor dem Absenden mit den Nachweisen in `docs/lizenzen/` abgleichen.
 | Library Hero | 3840 × 1240 |
 | Screenshots | mind. 5, 1920 × 1080 |
 
-Screenshots aus dem Spiel: `tools/render_store.tscn` (siehe dort).
+Screenshots aus dem Spiel: im laufenden Spiel **F12** drücken (Taste in den
+Einstellungen umbelegbar). Die Bilder landen in
+`%APPDATA%\Godot\app_userdata\Oktoberfest Simulator\screenshots\`, die Meldung
+unten zeigt den Pfad. Für Store-Bilder in 1920 × 1080 und Vollbild spielen,
+Grafik auf Hoch, ein volles Zelt am Abend wirkt am besten.

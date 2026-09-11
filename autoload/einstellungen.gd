@@ -19,7 +19,12 @@ const STANDARD_TASTEN := {
 	"emote": KEY_Q,
 	"costume": KEY_C,
 	"help": KEY_F1,
+	"screenshot": KEY_F12,
 }
+
+## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.
+signal screenshot_gespeichert(pfad: String)
+const FOTO_ORDNER := "user://screenshots"
 
 var sprache := "auto"
 var vollbild := false
@@ -42,6 +47,27 @@ var tasten := {}
 func _ready() -> void:
 	_lade()
 	anwenden()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("screenshot") and not event.is_echo():
+		bildschirmfoto()
+
+## Speichert das aktuelle Bild. Gibt den Dateipfad zurück, "" wenn es nicht ging.
+func bildschirmfoto() -> String:
+	if DisplayServer.get_name() == "headless":
+		return ""
+	var bild := get_viewport().get_texture().get_image()
+	if bild == null:
+		return ""
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(FOTO_ORDNER))
+	var datei := "oktoberfest_%s.png" % Time.get_datetime_string_from_system().replace(":", "-")
+	var pfad := "%s/%s" % [FOTO_ORDNER, datei]
+	if bild.save_png(pfad) != OK:
+		return ""
+	var echt := ProjectSettings.globalize_path(pfad)
+	print("[Bildschirmfoto] ", echt)
+	screenshot_gespeichert.emit(echt)
+	return echt
 
 func anwenden() -> void:
 	TranslationServer.set_locale(aktive_sprache())

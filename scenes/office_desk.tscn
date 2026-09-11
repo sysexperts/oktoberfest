@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/office_desk.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2_npc"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="3_wt"]
 
 [sub_resource type="BoxMesh" id="DeskMesh"]
 size = Vector3(2.6, 0.9, 0.9)
@@ -46,8 +47,9 @@ pixel_size = 0.006
 font_size = 44
 outline_size = 14
 modulate = Color(1, 0.9, 0.5, 1)
-text = "🏛 Wiesenbüro
-(E: Zelt · Lizenzen · Personal)"
+text = "WORLD_OFFICE"
+script = ExtResource("3_wt")
+schluessel = "WORLD_OFFICE"
 
 [node name="Body" type="StaticBody3D" parent="."]
 

@@ -46,6 +46,8 @@ func _ready() -> void:
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
 	Einstellungen.geaendert.connect(_alles_neu)
+	Einstellungen.screenshot_gespeichert.connect(func(pfad: String) -> void:
+		melde("MSG_SCREENSHOT", [pfad], 2))
 	_alles_neu()
 	_einblenden()
 

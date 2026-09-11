@@ -10,21 +10,34 @@ extends Node3D
 const UNITS_PER_KISTE := 10
 const MAX_KISTEN := 6
 const KAPAZITAET := UNITS_PER_KISTE * MAX_KISTEN   # 60 Einheiten je Regal
+const Texte := preload("res://scripts/ui/texte.gd")
+
+## Zuletzt gemeldeter Stand [Bier gesamt, Essen gesamt, Regalnummer] — für
+## neue Beschriftung nach Sprach- oder Tastenwechsel.
+var _stand := [0, 0, 0]
 
 func _ready() -> void:
 	add_to_group("interactable")
 	add_to_group("lager")
+	Einstellungen.geaendert.connect(_beschriften)
+	_beschriften()
 
 ## bier/essen = Gesamtbestand, index = Nummer dieses Regals (0-basiert).
 func set_stock(bier: int, essen: int, index: int = 0) -> void:
-	var hier_bier := _slice(bier, index)
-	var hier_essen := _slice(essen, index)
+	_stand = [bier, essen, index]
+	_beschriften()
+	_show_kisten("Bier", _slice(bier, index))
+	_show_kisten("Essen", _slice(essen, index))
+
+func _beschriften() -> void:
 	var label := get_node_or_null("Label") as Label3D
-	if label:
-		label.text = "📦 LAGER %d\nHier: 🍺 %d · 🥨 %d\nGesamt: 🍺 %d · 🥨 %d\n(E: Paket abladen)" % [
-			index + 1, hier_bier, hier_essen, bier, essen]
-	_show_kisten("Bier", hier_bier)
-	_show_kisten("Essen", hier_essen)
+	if label == null:
+		return
+	var bier: int = _stand[0]
+	var essen: int = _stand[1]
+	var index: int = _stand[2]
+	label.text = Texte.mit_tasten("WORLD_STORAGE") % [
+		index + 1, _slice(bier, index), _slice(essen, index), bier, essen]
 
 ## Anteil dieses Regals am Gesamtbestand.
 func _slice(total: int, index: int) -> int:

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7dl2t1533kgl"]
 
 [ext_resource type="Script" path="res://scripts/computer.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 
 [sub_resource type="BoxMesh" id="Stand"]
 size = Vector3(0.6, 1.0, 0.5)
@@ -36,5 +37,6 @@ billboard = 1
 pixel_size = 0.005
 font_size = 40
 modulate = Color(0.6, 0.85, 1, 1)
-text = "Vardiya Bilgisayarı
-(Molada E: rol seç)"
+text = "WORLD_COMPUTER"
+script = ExtResource("2_wt")
+schluessel = "WORLD_COMPUTER"

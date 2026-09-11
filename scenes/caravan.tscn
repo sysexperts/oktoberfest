@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7dl2t1carav1"]
 
 [ext_resource type="Script" path="res://scripts/caravan.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 
 [sub_resource type="BoxMesh" id="Body"]
 size = Vector3(3.0, 1.8, 1.8)
@@ -44,5 +45,6 @@ billboard = 1
 pixel_size = 0.006
 font_size = 40
 modulate = Color(1, 0.9, 0.6, 1)
-text = "🚐 Wohnwagen
-(Molada E: uyu → sonraki gün)"
+text = "WORLD_CARAVAN"
+script = ExtResource("2_wt")
+schluessel = "WORLD_CARAVAN"

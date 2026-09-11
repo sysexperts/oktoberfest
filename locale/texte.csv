@@ -347,3 +347,18 @@ MS_UMSATZ_100000_TEXT,Nimm insgesamt 100.000 € ein.,"Earn €100,000 in total.
 CREDITS_TITLE,Mitwirkende,Credits,Emeği Geçenler
 CREDITS_BODY,"Spielidee und Entwicklung\nSerdar Vapur\n\nKirmes-Modelle\nAmusement Park Pack\n\nFiguren und Zelt\nerstellt mit Meshy und Blender\n\nMusik\nerstellt mit AIMusic.so\n\nEngine\nGodot Engine\n\nSteam-Anbindung\nGodotSteam\n\nLizenzhinweise stehen unten.","Game design and development\nSerdar Vapur\n\nFairground models\nAmusement Park Pack\n\nCharacters and tent\ncreated with Meshy and Blender\n\nMusic\ncreated with AIMusic.so\n\nEngine\nGodot Engine\n\nSteam integration\nGodotSteam\n\nLicence notices are below.","Oyun tasarımı ve geliştirme\nSerdar Vapur\n\nLunapark modelleri\nAmusement Park Pack\n\nKarakterler ve çadır\nMeshy ve Blender ile yapıldı\n\nMüzik\nAIMusic.so ile yapıldı\n\nOyun motoru\nGodot Engine\n\nSteam bağlantısı\nGodotSteam\n\nLisans bildirimleri aşağıdadır."
 CREDITS_LICENSES,Lizenzhinweise,Licence notices,Lisans bildirimleri
+WORLD_COMPUTER,"💻 Zelt-Computer\n({interact}: Bierpreis · Bilanz)","💻 Tent computer\n({interact}: beer price · report)","💻 Çadır bilgisayarı\n({interact}: bira fiyatı · bilanço)"
+WORLD_MUGS,"🍺 Krüge ({interact})","🍺 Mugs ({interact})","🍺 Kupalar ({interact})"
+WORLD_OFFICE,"🏛 Wiesenbüro\n({interact}: Zelt · Personal · Ware)","🏛 Fair Office\n({interact}: tent · staff · supplies)","🏛 Fuar Ofisi\n({interact}: çadır · personel · malzeme)"
+WORLD_OFFICE_SIGN,🏛 WIESENBÜRO,🏛 FAIR OFFICE,🏛 FUAR OFİSİ
+WORLD_CARAVAN,"🚐 Wohnwagen\n({interact}: schlafen → nächster Tag)","🚐 Caravan\n({interact}: sleep → next day)","🚐 Karavan\n({interact}: uyu → sonraki gün)"
+WORLD_KIOSK,"🎪 Zelt buchen\n({interact})","🎪 Book a tent\n({interact})","🎪 Çadır kirala\n({interact})"
+WORLD_STAGE,🎤 BÜHNE,🎤 STAGE,🎤 SAHNE
+WORLD_KEG_1,Helles ({interact}),Helles ({interact}),Helles ({interact})
+WORLD_KEG_2,Weizen ({interact}),Wheat beer ({interact}),Buğday birası ({interact})
+WORLD_KEG_3,Radler ({interact}),Shandy ({interact}),Radler ({interact})
+WORLD_FOOD_1,"🥨 Brezn ({interact} halten)","🥨 Pretzel (hold {interact})","🥨 Brezel ({interact} basılı tut)"
+WORLD_FOOD_2,"🌭 Würstl ({interact} halten)","🌭 Sausage (hold {interact})","🌭 Sosis ({interact} basılı tut)"
+WORLD_STORAGE,"📦 LAGER %d\nHier: 🍺 %d · 🥨 %d\nGesamt: 🍺 %d · 🥨 %d\n({interact}: Paket einlagern)","📦 STORAGE %d\nHere: 🍺 %d · 🥨 %d\nTotal: 🍺 %d · 🥨 %d\n({interact}: store package)","📦 DEPO %d\nBurada: 🍺 %d · 🥨 %d\nToplam: 🍺 %d · 🥨 %d\n({interact}: paketi depola)"
+ACTION_SCREENSHOT,Bildschirmfoto,Screenshot,Ekran görüntüsü
+MSG_SCREENSHOT,📸 Bildschirmfoto gespeichert: %s,📸 Screenshot saved: %s,📸 Ekran görüntüsü kaydedildi: %s

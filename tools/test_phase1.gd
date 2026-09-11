@@ -47,6 +47,14 @@ class Lauf extends Node:
 		if schild_vorher:
 			var titel: String = schild_vorher.get_node("%Titel").text
 			_check("Mietschild übersetzt", titel != "SIGN_TENT_FOR_RENT" and titel == TranslationServer.translate("SIGN_TENT_FOR_RENT"), titel)
+		# Keine rohen Schlüssel und keine alten türkischen Reste über den Objekten
+		var roh := []
+		for l: Node in gm.find_children("*", "Label3D", true, false):
+			var t: String = (l as Label3D).text
+			if t.begins_with("WORLD_") or t.begins_with("SIGN_") or t.contains("Molada") \
+					or t.contains("Bardak") or t.contains("Fıçı") or t.contains("Yemek ("):
+				roh.append("%s: %s" % [l.name, t.left(24)])
+		_check("Weltbeschriftungen übersetzt", roh.is_empty(), str(roh))
 		var wagen: Node3D = null
 		for c in get_tree().get_nodes_in_group("interactable"):
 			if c is Caravan:

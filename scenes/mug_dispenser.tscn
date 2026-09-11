@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7dl2t1534eml"]
 
 [ext_resource type="Script" path="res://scripts/mug_dispenser.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 
 [sub_resource type="BoxMesh" id="Box"]
 size = Vector3(0.8, 0.9, 0.6)
@@ -21,4 +22,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 billboard = 1
 pixel_size = 0.006
 font_size = 48
-text = "Boş Bardak"
+text = "WORLD_MUGS"
+script = ExtResource("2_wt")
+schluessel = "WORLD_MUGS"

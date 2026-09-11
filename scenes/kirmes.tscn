@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 [ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
 [ext_resource type="PackedScene" uid="uid://dusg2jruc7wf4" path="res://assets/kirmes/Models/Ground/Terrain.fbx" id="10_segyt"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="99_welttext"]
 [ext_resource type="PackedScene" uid="uid://chrmnwixompew" path="res://assets/kirmes/Models/Props/Bench.fbx" id="11_i3lhy"]
 [ext_resource type="PackedScene" uid="uid://bfm6aa8cpnegy" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="12_fgnfp"]
 [ext_resource type="PackedScene" uid="uid://b6oh1keokqrjv" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="13_w4g7w"]
@@ -320,9 +321,11 @@ mesh = SubResource("BueroRoof")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 4.9, -4.3)
 pixel_size = 0.012
 modulate = Color(1, 0.9, 0.5, 1)
-text = "🏛 WIESENBÜRO"
+text = "WORLD_OFFICE_SIGN"
 font_size = 64
 outline_size = 20
+script = ExtResource("99_welttext")
+schluessel = "WORLD_OFFICE_SIGN"
 
 [node name="Kollision" type="StaticBody3D" parent="Wiesenbuero" unique_id=2116068240]
 

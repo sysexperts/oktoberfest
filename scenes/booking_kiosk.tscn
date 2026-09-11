@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7dl2t1kiosk1"]
 
 [ext_resource type="Script" path="res://scripts/booking_kiosk.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 
 [sub_resource type="BoxMesh" id="Body"]
 size = Vector3(1.2, 1.1, 0.7)
@@ -36,5 +37,6 @@ billboard = 1
 pixel_size = 0.005
 font_size = 40
 modulate = Color(0.6, 1, 0.7, 1)
-text = "🎪 Zelt Buchung
-(Molada E)"
+text = "WORLD_KIOSK"
+script = ExtResource("2_wt")
+schluessel = "WORLD_KIOSK"
