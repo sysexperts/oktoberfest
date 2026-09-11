@@ -191,6 +191,10 @@ var _quest_step := 0
 var _quest_served_once := false
 var _ever_artist := false
 var _quest_timer := 0.0
+# Meilensteine (Plan 3.2): Lebenszeit-Zähler und erreichte IDs, beides im Spielstand
+const Meilensteine := preload("res://scripts/meilensteine.gd")
+var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0}
+var _meilensteine: Array = []
 
 # Koltuklar: her biri {pos:Vector3, yaw:float, guest:int}
 var _seats: Array = []
@@ -333,6 +337,8 @@ func _save_game() -> void:
 		"toilet": _has_toilet,
 		"quest": _quest_step,
 		"ever_artist": _ever_artist,
+		"stats": _stats,
+		"meilensteine": _meilensteine,
 	}
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -368,6 +374,13 @@ func _load_game() -> bool:
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
 	_ever_artist = bool(d.get("ever_artist", false))
+	var gespeicherte_stats: Variant = d.get("stats", {})
+	if gespeicherte_stats is Dictionary:
+		for k in Meilensteine.ZAEHLER:
+			_stats[k] = int((gespeicherte_stats as Dictionary).get(k, 0))
+	var erreicht: Variant = d.get("meilensteine", [])
+	if erreicht is Array:
+		_meilensteine = (erreicht as Array).map(func(x: Variant) -> String: return str(x))
 	_stock[WARE_BIER] = int(d.get("stock_bier", 0))
 	_stock[WARE_ESSEN] = int(d.get("stock_essen", 0))
 	var st: Variant = d.get("staff", [])
@@ -806,6 +819,22 @@ func _check_quest() -> bool:
 	while _quest_step < QUEST_COUNT and _quest_done(_quest_step):
 		_quest_step += 1
 	return _quest_step != before
+
+## Neu erreichte Meilensteine eintragen, Belohnung auszahlen, allen melden.
+## true = mindestens einer neu. Belohnung zählt nicht als Umsatz.
+func _pruefe_meilensteine() -> bool:
+	var zustand := _buero_state()
+	var neu := false
+	for m: Dictionary in Meilensteine.LISTE:
+		if _meilensteine.has(m.id):
+			continue
+		if Meilensteine.wert_von(m.wert, _stats, zustand) < int(m.ziel):
+			continue
+		_meilensteine.append(m.id)
+		Game.add_money(int(m.belohnung))
+		_melde("MSG_MILESTONE", ["MS_%s_TITLE" % m.id, _eur(int(m.belohnung))], 2)
+		neu = true
+	return neu
 
 func tutorial_active() -> bool:
 	return _quest_step < QUEST_COUNT
@@ -1284,6 +1313,7 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 			_add_income(tip)
 			_last_earn += tip
 			_clean_tips += tip
+			_stats.cleaned += 1
 			_net_betrag.rpc(mn.global_position, tip)
 			_remove_mess.rpc(best)
 
@@ -1301,6 +1331,7 @@ func _serve_by_staff(gid: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
 	_served += 1
+	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
@@ -1473,6 +1504,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[id] = g
 	_served += 1
+	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
@@ -1515,7 +1547,10 @@ func _process(delta: float) -> void:
 	_quest_timer -= delta
 	if _quest_timer <= 0.0:
 		_quest_timer = 1.0
-		if _check_quest():
+		var geaendert := _check_quest()
+		if _pruefe_meilensteine():
+			geaendert = true
+		if geaendert:
 			_broadcast_meta()
 	_update_held_tables()
 	_sync_timer -= delta
@@ -1620,6 +1655,7 @@ func _end_shift(reason := 0) -> void:
 	_complaints = 0
 	_left_guests = 0
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
+	_stats.days += 1
 	_broadcast_meta()
 
 ## Bilgisayardan zelti erken kapat (popülerlik cezası).
@@ -1839,6 +1875,7 @@ func net_clean(id: int) -> void:
 		_add_income(tip)
 		_last_earn += tip
 		_clean_tips += tip
+		_stats.cleaned += 1
 		_net_betrag.rpc((_messes[id] as Node3D).global_position, tip)
 		_remove_mess.rpc(id)
 
@@ -1942,6 +1979,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"roles": roles, "shift": _phase == Phase.SHIFT,
+		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(),
 	}
 
 func _broadcast_meta() -> void:
@@ -2046,6 +2084,7 @@ func _add_income(amount: int) -> void:
 	if amount <= 0:
 		Game.add_money(amount)
 		return
+	_stats.earned += amount
 	if Game.money < 0:
 		var debt: int = -Game.money
 		var repay: int = mini(amount, debt)

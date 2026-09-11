@@ -249,5 +249,35 @@ HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
 HELP_FLOW,"1. Wiesenbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Krug nehmen, am Fass zapfen, Gäste bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug, pour at a keg, serve guests. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Kupa al, fıçıda doldur, misafirlere servis yap. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
 HELP_TIPS_TITLE,Tipps,Tips,İpuçları
 HELP_TIPS,"• Gäste warten nicht ewig — verpasste Bestellungen kosten Beliebtheit.\n• Mehr Beliebtheit bringt mehr Gäste, ein sauberes Zelt mehr Geld pro Bestellung.\n• Ohne Toilette pinkeln Gäste in die Ecke und beschweren sich.\n• Das Konto darf bis −1.000 € ins Minus; beim Zurückzahlen gehen 5 % Zinsen ab.","• Guests don't wait forever — missed orders cost popularity.\n• More popularity brings more guests, a clean tent more money per order.\n• Without a toilet, guests pee in the corner and complain.\n• Your account can go down to −€1,000; paying it back costs 5 % interest.","• Misafirler sonsuza kadar beklemez — kaçırılan siparişler popülerlik kaybettirir.\n• Popülerlik daha çok misafir, temiz çadır sipariş başına daha çok para getirir.\n• Tuvalet yoksa misafirler köşeye işer ve şikâyet eder.\n• Hesabın −1.000 €'ya kadar eksiye düşebilir; geri öderken %5 faiz kesilir."
+OFFICE_TAB_GOALS,Ziele,Goals,Hedefler
+MS_REWARD,Belohnung: %s,Reward: %s,Ödül: %s
+MS_DONE,✓ Erreicht,✓ Achieved,✓ Başarıldı
+MSG_MILESTONE,🏆 Meilenstein: %s — Belohnung %s,🏆 Milestone: %s — reward %s,🏆 Kilometre taşı: %s — ödül %s
+MS_ERSTE_MASS_TITLE,Die erste Maß,The first mug,İlk kupa
+MS_ERSTE_MASS_TEXT,Bediene deinen ersten Gast.,Serve your first guest.,İlk misafirine servis yap.
+MS_UMSATZ_1000_TITLE,Die ersten 1.000 €,"The first €1,000",İlk 1.000 €
+MS_UMSATZ_1000_TEXT,Nimm insgesamt 1.000 € ein.,"Earn €1,000 in total.",Toplam 1.000 € kazan.
+MS_TAG_7_TITLE,Eine Woche Wiesn,A week at the fair,Fuarda bir hafta
+MS_TAG_7_TEXT,Schließe 7 Tage ab.,Finish 7 days.,7 günü tamamla.
+MS_MASS_100_TITLE,100 Bestellungen,100 orders,100 sipariş
+MS_MASS_100_TEXT,Bediene insgesamt 100 Bestellungen.,Serve 100 orders in total.,Toplam 100 sipariş servis et.
+MS_ZELT_2_TITLE,Mehr Platz,More room,Daha fazla yer
+MS_ZELT_2_TEXT,Vergrößere dein Zelt auf mittlere Größe.,Enlarge your tent to medium size.,Çadırını orta boya büyüt.
+MS_PUTZ_50_TITLE,Blitzblank,Spotless,Pırıl pırıl
+MS_PUTZ_50_TEXT,Mach 50 Pfützen und Flecken sauber.,Clean up 50 puddles and messes.,50 birikinti ve lekeyi temizle.
+MS_ALLE_LIZENZEN_TITLE,Volle Karte,Full menu,Tam menü
+MS_ALLE_LIZENZEN_TEXT,Kaufe alle vier Lizenzen.,Buy all four licenses.,Dört lisansın hepsini al.
+MS_UMSATZ_10000_TITLE,10.000 € Umsatz,"€10,000 revenue",10.000 € ciro
+MS_UMSATZ_10000_TEXT,Nimm insgesamt 10.000 € ein.,"Earn €10,000 in total.",Toplam 10.000 € kazan.
+MS_KELLNER_5_TITLE,Meisterkellner,Master waiter,Usta garson
+MS_KELLNER_5_TEXT,Bring einen Kellner auf Stufe 5.,Get a waiter to level 5.,Bir garsonu 5. seviyeye çıkar.
+MS_TAG_30_TITLE,Ein Monat Wiesn,A month at the fair,Fuarda bir ay
+MS_TAG_30_TEXT,Schließe 30 Tage ab.,Finish 30 days.,30 günü tamamla.
+MS_MASS_1000_TITLE,1.000 Bestellungen,"1,000 orders",1.000 sipariş
+MS_MASS_1000_TEXT,Bediene insgesamt 1.000 Bestellungen.,"Serve 1,000 orders in total.",Toplam 1.000 sipariş servis et.
+MS_ZELT_3_TITLE,Das große Zelt,The big tent,Büyük çadır
+MS_ZELT_3_TEXT,Vergrößere dein Zelt auf die größte Stufe.,Enlarge your tent to the largest size.,Çadırını en büyük boya büyüt.
+MS_UMSATZ_100000_TITLE,Wiesn-Wirt,Beer tent tycoon,Çadır patronu
+MS_UMSATZ_100000_TEXT,Nimm insgesamt 100.000 € ein.,"Earn €100,000 in total.",Toplam 100.000 € kazan.
 CREDITS_TITLE,Mitwirkende,Credits,Emeği Geçenler
 CREDITS_BODY,"Spielidee und Entwicklung\nSerdar Vapur\n\nKirmes-Modelle\nAmusement Park Pack\n\nFiguren und Zelt\nerstellt mit Meshy und Blender\n\nMusik\nerstellt mit AIMusic.so\n\nEngine\nGodot Engine","Game design and development\nSerdar Vapur\n\nFairground models\nAmusement Park Pack\n\nCharacters and tent\ncreated with Meshy and Blender\n\nMusic\ncreated with AIMusic.so\n\nEngine\nGodot Engine","Oyun tasarımı ve geliştirme\nSerdar Vapur\n\nLunapark modelleri\nAmusement Park Pack\n\nKarakterler ve çadır\nMeshy ve Blender ile yapıldı\n\nMüzik\nAIMusic.so ile yapıldı\n\nOyun motoru\nGodot Engine"

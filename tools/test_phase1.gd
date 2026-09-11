@@ -151,6 +151,25 @@ class Lauf extends Node:
 		_check("nach Tag 16 kommt Tag 17", gm._day == 17, "Tag=%d" % gm._day)
 		_check("HUD zeigt Tag 17", String(hud.get_node("%Zeit").text).begins_with("Tag 17"), hud.get_node("%Zeit").text)
 
+		print("  -- Meilensteine (3.2)")
+		var geld_vorher: int = Game.money
+		gm._stats["served"] = 100
+		gm._pruefe_meilensteine()
+		_check("erste Maß und 100 Bestellungen erreicht",
+			gm._meilensteine.has("ERSTE_MASS") and gm._meilensteine.has("MASS_100"), str(gm._meilensteine))
+		_check("Belohnung 50 + 300 €", Game.money - geld_vorher == 350, "%d" % (Game.money - geld_vorher))
+		var geld_danach: int = Game.money
+		gm._pruefe_meilensteine()
+		_check("keine doppelte Belohnung", Game.money == geld_danach, "")
+		gm._save_game()
+		var gespeichert: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://oktoberfest_save.json"))
+		_check("Zähler und Meilensteine im Spielstand", gespeichert is Dictionary
+			and (gespeichert.get("meilensteine", []) as Array).has("MASS_100")
+			and int(gespeichert.get("stats", {}).get("served", 0)) == 100, "")
+		hud.set_buero(gm._buero_state())
+		var ziele: Node = hud.get_node("%Wiesenbuero").get_node("%ZieleListe")
+		_check("Reiter Ziele listet alle", ziele.get_child_count() == gm.Meilensteine.LISTE.size(), str(ziele.get_child_count()))
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

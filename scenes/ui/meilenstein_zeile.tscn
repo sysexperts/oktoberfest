@@ -1,0 +1,111 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/meilenstein_zeile.gd" id="1_ms"]
+
+[sub_resource type="StyleBoxFlat" id="Zeile"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.141, 0.122, 0.227, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.255, 0.224, 0.361, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="ZeileErreicht"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.13, 0.19, 0.16, 1)
+border_width_left = 4
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.93, 0.55, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="MeilensteinZeile" type="PanelContainer"]
+theme_override_styles/panel = SubResource("Zeile")
+script = ExtResource("1_ms")
+stil_offen = SubResource("Zeile")
+stil_erreicht = SubResource("ZeileErreicht")
+
+[node name="Zeile" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Links" type="VBoxContainer" parent="Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="Titel" type="Label" parent="Zeile/Links"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Die erste Maß"
+
+[node name="Text" type="Label" parent="Zeile/Links"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "Bediene deinen ersten Gast."
+autowrap_mode = 3
+
+[node name="Fortschritt" type="HBoxContainer" parent="Zeile/Links"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Balken" type="ProgressBar" parent="Zeile/Links/Fortschritt"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+show_percentage = false
+
+[node name="Wert" type="Label" parent="Zeile/Links/Fortschritt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "0 / 1"
+horizontal_alignment = 2
+
+[node name="Rechts" type="VBoxContainer" parent="Zeile"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+
+[node name="Belohnung" type="Label" parent="Zeile/Rechts"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 15
+text = "Belohnung: 50 €"
+horizontal_alignment = 2
+
+[node name="Status" type="Label" parent="Zeile/Rechts"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.93, 0.55, 1)
+theme_override_font_sizes/font_size = 15
+text = "MS_DONE"
+horizontal_alignment = 2

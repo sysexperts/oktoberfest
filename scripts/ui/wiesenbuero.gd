@@ -9,7 +9,9 @@ extends Control
 
 const Texte := preload("res://scripts/ui/texte.gd")
 const REITER_TITEL := ["OFFICE_TAB_TENT", "OFFICE_TAB_LICENSES", "OFFICE_TAB_STAFF",
-	"OFFICE_TAB_ACTS", "OFFICE_TAB_GOODS", "OFFICE_TAB_REPORT"]
+	"OFFICE_TAB_ACTS", "OFFICE_TAB_GOODS", "OFFICE_TAB_REPORT", "OFFICE_TAB_GOALS"]
+const Meilensteine := preload("res://scripts/meilensteine.gd")
+const MEILENSTEIN_ZEILE := preload("res://scenes/ui/meilenstein_zeile.tscn")
 ## Lizenz -> [Zeile, Symbol, Name]
 const LIZENZEN := {
 	"weizen": ["LizenzWeizen", "🍺", "LIC_WEIZEN"],
@@ -117,6 +119,7 @@ func _neu() -> void:
 	_reiter_personal()
 	_reiter_kuenstler()
 	_reiter_ware(ohne_zelt)
+	_reiter_ziele()
 	%BilanzText.text = Texte.bilanz(_bilanz)
 
 func _reiter_zelt(stufe: int, ohne_zelt: String) -> void:
@@ -244,6 +247,24 @@ func _reiter_ware(ohne_zelt: String) -> void:
 			if erster_grund == "":
 				erster_grund = g
 		z.grund(erster_grund)
+
+## Meilensteine mit Fortschritt. Die Zeilen entstehen aus Meilensteine.LISTE —
+## ein neuer Meilenstein erscheint so ohne Szenenänderung.
+func _reiter_ziele() -> void:
+	var liste: VBoxContainer = %ZieleListe
+	if liste.get_child_count() != Meilensteine.LISTE.size():
+		for c in liste.get_children():
+			liste.remove_child(c)
+			c.queue_free()
+		for m in Meilensteine.LISTE:
+			liste.add_child(MEILENSTEIN_ZEILE.instantiate())
+	var stats: Dictionary = _z.get("stats", {})
+	var erreicht: Array = _z.get("ms", [])
+	for i in Meilensteine.LISTE.size():
+		var m: Dictionary = Meilensteine.LISTE[i]
+		liste.get_child(i).setze(tr("MS_%s_TITLE" % m.id), tr("MS_%s_TEXT" % m.id),
+			Meilensteine.wert_von(m.wert, stats, _z), int(m.ziel),
+			Texte.euro(int(m.belohnung)), erreicht.has(m.id))
 
 # ------------------------------------------------------------ Helfer
 ## Warum ein Kauf gerade nicht geht — "" wenn er geht.

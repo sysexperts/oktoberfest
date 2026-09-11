@@ -105,9 +105,11 @@ Endlos heißt nicht ziellos. Ohne Saisonende braucht es einen anderen Grund,
 morgen weiterzuspielen.
 
 - [x] **3.1 Tageszähler ohne Rücksprung** — Tag 17, 18, 19 … statt „1/16".
-- [ ] **3.2 Meilensteine** — gestaffelte Ziele (erste 1.000 €, 100 Maß, Zelt
+- [x] **3.2 Meilensteine** — gestaffelte Ziele (erste 1.000 €, 100 Maß, Zelt
       Stufe 2, erster Kellner Level 5 …) mit Belohnung oder Freischaltung.
       Werden später 1:1 zu Steam-Errungenschaften.
+      *13 Meilensteine in `scripts/meilensteine.gd` mit festen IDs, Geldbelohnung,
+      Lebenszeit-Zähler im Spielstand, Reiter „Ziele" im Wiesenbüro.*
 - [ ] **3.3 Spielstände** — mehrere Slots, Formatversion, Autospeichern beim
       Schlafen, „Weiterspielen" lädt den letzten.
 - [ ] **3.4 Wirtschaft fürs Endlosspiel** — Nachfrage und Kosten skalieren mit
