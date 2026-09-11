@@ -30,6 +30,12 @@ COOP_STEAM_SOON,Freunde über Steam einladen folgt,Inviting friends via Steam is
 STATUS_CONNECTING,Verbinde mit %s …,Connecting to %s …,%s adresine bağlanılıyor …
 STATUS_CONNECT_FAILED,Verbindung fehlgeschlagen. Ist der Server erreichbar?,Connection failed. Is the server reachable?,Bağlantı başarısız. Sunucu erişilebilir mi?
 STATUS_HOST_FAILED,Spiel konnte nicht gestartet werden (Fehler %d).,Could not start the game (error %d).,Oyun başlatılamadı (hata %d).
+NET_TIMEOUT,"Keine Antwort vom Server. Stimmt die Adresse, oder ist der Server voll?","No answer from the server. Is the address right, or is the server full?","Sunucudan yanıt yok. Adres doğru mu, yoksa sunucu dolu mu?"
+NET_HOST_LEFT,Die Verbindung ist abgebrochen — der Host hat das Spiel verlassen.,The connection was lost — the host left the game.,Bağlantı koptu — kurucu oyundan ayrıldı.
+NET_VERSION_MISMATCH,"Der Server hat Version %s, du hast Version %s. Starte das Spiel neu, dann wird aktualisiert.","The server runs version %s, you have version %s. Restart the game to update.","Sunucuda sürüm %s var, sende sürüm %s. Güncellemek için oyunu yeniden başlat."
+NET_NO_ANSWER,Der Server hat nicht geantwortet. Vielleicht läuft dort eine andere Version.,The server did not answer. It may be running a different version.,Sunucu yanıt vermedi. Belki orada farklı bir sürüm çalışıyor.
+NET_PLAYER_JOINED,👋 Ein Mitspieler ist dazugekommen,👋 A player joined,👋 Bir oyuncu katıldı
+NET_PLAYER_LEFT,👋 Ein Mitspieler hat das Spiel verlassen,👋 A player left the game,👋 Bir oyuncu oyundan ayrıldı
 STATUS_ENTER_IP,Bitte eine IP-Adresse eingeben.,Please enter an IP address.,Lütfen bir IP adresi gir.
 STATUS_UPDATE_SEARCH,Suche nach Updates …,Checking for updates …,Güncellemeler aranıyor …
 STATUS_UPDATE_LOAD,Lade Update %d …,Downloading update %d …,Güncelleme %d indiriliyor …

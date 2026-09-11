@@ -58,6 +58,15 @@ func _ready() -> void:
 	_texte_aktualisieren()
 	_zeige(_haupt)
 	_menue_musik()
+	# Warum das letzte Spiel endete (Host weg, andere Version …)
+	if Net.meldung != "":
+		_zeige_meldung()
+
+func _zeige_meldung() -> void:
+	var text := tr(Net.meldung)
+	_status.text = text % Net.meldung_werte if not Net.meldung_werte.is_empty() else text
+	Net.meldung = ""
+	Net.meldung_werte = []
 
 ## Menümusik aus assets/audio/musik/menue.* — ohne Datei bleibt es still.
 func _menue_musik() -> void:
@@ -164,4 +173,6 @@ func _verbinde(ip: String) -> void:
 		_status.text = tr("STATUS_CONNECT_FAILED")
 
 func _on_verbindung_fehlgeschlagen() -> void:
-	_status.text = tr("STATUS_CONNECT_FAILED")
+	if Net.meldung == "":
+		Net.meldung = "STATUS_CONNECT_FAILED"
+	_zeige_meldung()

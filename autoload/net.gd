@@ -23,6 +23,15 @@ const ALTER_SPIELSTAND := "user://oktoberfest_save.json"
 
 signal connection_failed()
 
+## So lange wartet ein Beitritt, bevor er als gescheitert gilt (Sekunden).
+const BEITRITT_ZEITLIMIT := 10.0
+
+## Grund, warum das letzte Spiel oder der letzte Beitritt endete — ein
+## Übersetzungsschlüssel, das Hauptmenü zeigt ihn an und leert ihn dann.
+var meldung := ""
+var meldung_werte: Array = []
+var _beitritt_versuch := 0
+
 var player_name: String = "Spieler"
 var dedicated := false ## true ise oyuncu spawn edilmez (headless dedicated server)
 ## Vom Menü gesetzt: vorhandenen Spielstand verwerfen und frisch beginnen.
@@ -49,7 +58,9 @@ func _ready() -> void:
 		call_deferred("_start_dedicated")
 
 func _start_dedicated() -> void:
-	var err := host_game()
+	# --nur-lokal: nur 127.0.0.1 (Netztest auf dem Entwicklungsrechner, ohne Firewall-Abfrage)
+	var nur_lokal := OS.get_cmdline_user_args().has("--nur-lokal")
+	var err := host_game(DEFAULT_PORT, "127.0.0.1" if nur_lokal else "*")
 	if err == OK:
 		print("[DEDICATED] Server açık, port %d" % DEFAULT_PORT)
 	else:
@@ -68,11 +79,12 @@ func start_solo(neu: bool, platz: int = 0) -> void:
 	wechsle_zu(GAME_SCENE)
 
 ## Wer hostet, spielt mit seinem zuletzt benutzten Stand weiter.
-func host_game(port: int = DEFAULT_PORT) -> Error:
+func host_game(port: int = DEFAULT_PORT, bind_ip: String = "*") -> Error:
 	solo = false
 	neues_spiel = false
 	slot = maxi(1, letzter_slot())
 	var peer := ENetMultiplayerPeer.new()
+	peer.set_bind_ip(bind_ip)
 	var err := peer.create_server(port, MAX_PLAYERS)
 	if err != OK:
 		return err
@@ -88,19 +100,49 @@ func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	if err != OK:
 		return err
 	multiplayer.multiplayer_peer = peer
+	meldung = ""
 	# Bağlantı kurulunca oyun sahnesine geç
 	if not multiplayer.connected_to_server.is_connected(_on_connected):
 		multiplayer.connected_to_server.connect(_on_connected)
 	if not multiplayer.connection_failed.is_connected(_on_connection_failed):
 		multiplayer.connection_failed.connect(_on_connection_failed)
+	if not multiplayer.server_disconnected.is_connected(_on_server_weg):
+		multiplayer.server_disconnected.connect(_on_server_weg)
+	# ENet wartet von sich aus sehr lange — nach dem Zeitlimit selbst aufgeben.
+	# Die Versuchsnummer sorgt dafür, dass ein alter Timer keinen neuen Versuch abbricht.
+	_beitritt_versuch += 1
+	var versuch := _beitritt_versuch
+	get_tree().create_timer(BEITRITT_ZEITLIMIT).timeout.connect(func() -> void:
+		if versuch == _beitritt_versuch and multiplayer.multiplayer_peer == peer \
+				and peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTING:
+			meldung = "NET_TIMEOUT"
+			_on_connection_failed())
 	return OK
 
 func _on_connected() -> void:
+	_beitritt_versuch += 1
 	get_tree().change_scene_to_file(GAME_SCENE)
 
 func _on_connection_failed() -> void:
+	_beitritt_versuch += 1
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	if meldung == "":
+		meldung = "STATUS_CONNECT_FAILED"
 	connection_failed.emit()
+
+## Server oder Host ist weg (beendet, abgestürzt, Netz weg). Nur reagieren,
+## wenn wir wirklich im Spiel sind — wer selbst gegangen ist, ist schon im Menü.
+func _on_server_weg() -> void:
+	var szene := get_tree().current_scene
+	if solo or szene == null or not szene.has_method("net_book_tent"):
+		return
+	trennen_mit_meldung("NET_HOST_LEFT")
+
+## Spiel verlassen und im Hauptmenü sagen, warum. werte: Platzhalter im Text.
+func trennen_mit_meldung(schluessel: String, werte: Array = []) -> void:
+	meldung = schluessel
+	meldung_werte = werte
+	zum_menue()
 
 func disconnect_game() -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()

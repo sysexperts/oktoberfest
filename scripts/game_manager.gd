@@ -283,7 +283,10 @@ func _ready() -> void:
 		_broadcast_meta()
 		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	else:
-		_client_ready.rpc_id(1)
+		_client_ready.rpc_id(1, Net.version_text())
+		# Antwortet der Server nicht (etwa ein älterer Stand, der die Nachricht
+		# nicht versteht), nicht ewig in einer leeren Welt stehen
+		get_tree().create_timer(SPAWN_WARTEZEIT).timeout.connect(_pruefe_eigenen_spieler)
 
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
@@ -502,17 +505,39 @@ func _tbl_num(n: String) -> int:
 	return int(digits) if digits != "" else 0
 
 # ================================================= oyuncular
+## Sekunden, die ein Client nach dem Verbinden auf seinen Spieler wartet.
+const SPAWN_WARTEZEIT := 15.0
+
+func _pruefe_eigenen_spieler() -> void:
+	if not multiplayer.is_server() and not _players_nodes.has(multiplayer.get_unique_id()):
+		Net.trennen_mit_meldung("NET_NO_ANSWER")
+
+## Server lehnt den Beitritt ab (z. B. andere Version) — beim Client.
+@rpc("authority", "reliable")
+func _net_abgelehnt(schluessel: String, werte: Array) -> void:
+	Net.trennen_mit_meldung(schluessel, werte)
+
 @rpc("any_peer", "reliable")
-func _client_ready() -> void:
+func _client_ready(version: String) -> void:
 	if not multiplayer.is_server():
 		return
 	var sender := multiplayer.get_remote_sender_id()
+	# Unterschiedliche Stände verstehen ihre Nachrichten nicht — sauber ablehnen,
+	# statt den Spieler in einer halb synchronen Welt stehen zu lassen.
+	if version != Net.version_text():
+		_net_abgelehnt.rpc_id(sender, "NET_VERSION_MISMATCH", [Net.version_text(), version])
+		get_tree().create_timer(1.0).timeout.connect(func() -> void:
+			var peer := multiplayer.multiplayer_peer as ENetMultiplayerPeer
+			if peer:
+				peer.disconnect_peer(sender))
+		return
 	for pid in _spawn_index_by_peer.keys():
 		_add_player.rpc_id(sender, pid, _spawn_index_by_peer[pid])
 	var sidx := _next_spawn
 	_next_spawn += 1
 	_spawn_index_by_peer[sender] = sidx
 	_add_player.rpc(sender, sidx)
+	_melde("NET_PLAYER_JOINED", [], 2)
 	for mid in _messes.keys():
 		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position)
 	for gid in _guest_sim.keys():
@@ -553,6 +578,9 @@ func _remove_player(peer_id: int) -> void:
 func _on_peer_left(peer_id: int) -> void:
 	if not multiplayer.is_server():
 		return
+	# Nur melden, wer wirklich im Spiel war — abgelehnte Beitritte nicht
+	if _spawn_index_by_peer.has(peer_id):
+		_melde("NET_PLAYER_LEFT")
 	_spawn_index_by_peer.erase(peer_id)
 	_roles.erase(peer_id)
 	_remove_player.rpc(peer_id)

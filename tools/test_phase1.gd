@@ -313,6 +313,14 @@ class Lauf extends Node:
 		print("  [%s] %s  %s" % ["OK  " if ok else "FAIL", name, info])
 
 	func _sichern() -> void:
+		# Liegt noch eine Sicherung von einem abgebrochenen Lauf da, ist sie der
+		# echte Stand — erst zurückspielen, sonst sichern wir gleich den Teststand.
+		for pfad: String in DATEIEN:
+			var alt := ProjectSettings.globalize_path(pfad + ".testbackup")
+			if FileAccess.file_exists(pfad + ".testbackup"):
+				DirAccess.copy_absolute(alt, ProjectSettings.globalize_path(pfad))
+				DirAccess.remove_absolute(alt)
+				print("  alte Sicherung zurückgespielt: ", pfad)
 		for pfad: String in DATEIEN:
 			_gab_es[pfad] = FileAccess.file_exists(pfad)
 			if _gab_es[pfad]:

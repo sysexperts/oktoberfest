@@ -24,6 +24,12 @@ class Lauf extends Node:
 
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
+		# Sicherung eines abgebrochenen Laufs ist der echte Stand — zuerst zurück.
+		# (So ist einmal ein Teststand in Platz 1 liegen geblieben.)
+		for pfad: String in DATEIEN:
+			if FileAccess.file_exists(pfad + ".messbackup"):
+				DirAccess.copy_absolute(ProjectSettings.globalize_path(pfad + ".messbackup"), ProjectSettings.globalize_path(pfad))
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(pfad + ".messbackup"))
 		for pfad: String in DATEIEN:
 			_gab_es[pfad] = FileAccess.file_exists(pfad)
 			if _gab_es[pfad]:

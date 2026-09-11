@@ -160,13 +160,23 @@ morgen weiterzuspielen.
 - [ ] **5.3 Koop über Steam-Lobbys** — Freunde einladen, beitreten per Klick.
       `SteamMultiplayerPeer` ersetzt `ENetMultiplayerPeer`; die RPCs bleiben.
 - [ ] **5.4 Steam Cloud und Errungenschaften** (aus 3.2)
-- [ ] **5.5 Robustheit** — Verbindungsabbruch, Host verlässt das Spiel.
-- [ ] **5.6 Deploy aus einem Guss** — Server und Client aus demselben Git-Stand
+- [x] **5.5 Robustheit** — Verbindungsabbruch, Host verlässt das Spiel.
+      *Host weg → zurück ins Menü mit Meldung; Beitritt gibt nach 10 s auf;
+      Server lehnt andere Versionen sauber ab; ohne Spieler nach 15 s zurück;
+      Hinweise bei Beitritt und Verlassen. Geprüft mit `tools/test_netz.sh`
+      (echter lokaler Server und Client, Server wird mitten im Spiel beendet).
+      Wiederverbinden gibt es noch nicht — der Host speichert laufend, ein
+      erneuter Beitritt setzt dort fort.*
+- [x] **5.6 Deploy aus einem Guss** — Server und Client aus demselben Git-Stand
       synchronisieren, per Skript statt Datei für Datei. Beim Deploy von v100
       gefunden: vier Stand-Modelle (`drehscheibe`, `enten`, `schiessstand`,
       `suessigkeiten`) fehlten seit dem 8.9. auf dem Server — alle 46 Stände
       samt Kollision waren dort weg, während die Clients sie hatten. Behoben;
       die Ursache (Handkopie) bleibt, bis das Skript steht.
+      *`bash tools/deploy.sh` — prüft Git und LFS, testet aus dem exportierten
+      Paket, gleicht Serverquellen per Prüfsumme ab, tauscht in der richtigen
+      Reihenfolge, prüft Journal und HTTPS, setzt den Tag `deploy-v<Version>`.
+      `--probe` zeigt nur die Abweichungen (erster Lauf: nichts Wichtiges fehlte).*
 
 ## Phase 6 · Veröffentlichung
 
