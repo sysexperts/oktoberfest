@@ -115,8 +115,13 @@ class Lauf extends Node:
 			var ep := int(ceil(float(maxi(0, essen_bedarf - int(gm._stock[gm.WARE_ESSEN]))) / 10.0))
 			if ep > 0:
 				gm.net_order_goods(2, clampi(ep, 1, 10))
-		# Ausbauten der Reihe nach, solange Geld über der Reserve bleibt
+		# Ausbauten der Reihe nach, solange Geld über der Reserve bleibt.
+		# Mehr als 2 Tische nur mit Kellner — allein schafft man sie nicht.
+		if _anzahl(2) == 0 and gm._active_count >= 2 and Game.money > 500 + RESERVE:
+			gm.net_hire_staff(2)
 		var limit: int = gm.TENT_TABLE_LIMIT[gm._tent_stage]
+		if _anzahl(2) == 0:
+			limit = mini(limit, 2)
 		while gm._active_count < limit and Game.money > gm.TABLE_COST + RESERVE:
 			var vorher: int = gm._active_count
 			gm.net_buy_table()
@@ -128,16 +133,33 @@ class Lauf extends Node:
 			gm.net_hire_staff(3)
 		if not gm._has_toilet and Game.money > gm.TOILET_COST + RESERVE:
 			gm.net_buy_toilet()
+		# Personal passend zur Tischzahl: ein Kellner je 3 Tische
+		while _anzahl(2) < ceili(gm._active_count / 3.0) and Game.money > 500 + RESERVE:
+			var vorher_k := _anzahl(2)
+			gm.net_hire_staff(2)
+			if _anzahl(2) == vorher_k:
+				break
+		# Zeltausbau vor Lizenzen — sonst frisst das Geld den Ausbau immer wieder
+		if gm._active_count >= limit and gm.TENT_UPGRADE_COST.has(gm._tent_stage + 1):
+			if Game.money > int(gm.TENT_UPGRADE_COST[gm._tent_stage + 1]) + RESERVE:
+				gm.net_upgrade_tent()
+			else:
+				return   # sparen
 		for lic: String in ["weizen", "radler", "brezn", "sosis"]:
 			if not gm._lic[lic] and Game.money > int(gm.LIC_COST[lic]) + RESERVE * 2:
 				gm.net_buy_license(lic)
 		if not gm._foods_avail().is_empty() and _anzahl(1) == 0 and Game.money > 600 + RESERVE * 2:
 			gm.net_hire_staff(1)
 		if gm._active_count >= limit and gm.TENT_UPGRADE_COST.has(gm._tent_stage + 1) \
-				and Game.money > int(gm.TENT_UPGRADE_COST[gm._tent_stage + 1]) + RESERVE * 2:
+				and Game.money > int(gm.TENT_UPGRADE_COST[gm._tent_stage + 1]) + RESERVE:
 			gm.net_upgrade_tent()
-		if Game.money > 3000 + RESERVE:
+		# Kellner aufstufen, wenn viel liegen blieb
+		if _anzahl(2) > 0 and int(bericht.get("missed", 0)) >= 8 and Game.money > 800 + RESERVE:
 			gm.net_upgrade_staff(2)
+		# Zweiter Kellner ab 6 Tischen oder wenn viel liegen blieb
+		if _anzahl(2) == 1 and (gm._active_count >= 6 or int(bericht.get("missed", 0)) >= 15) \
+				and Game.money > 500 + RESERVE:
+			gm.net_hire_staff(2)
 
 	func _anzahl(rolle: int) -> int:
 		var n := 0

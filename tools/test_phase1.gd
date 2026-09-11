@@ -141,8 +141,12 @@ class Lauf extends Node:
 		var popup_text: String = texte.meldung("POPUP_RESERVE", [{"euro": 40}])
 		_check("Popup mit echten Zeilenumbrüchen", popup_text.contains("\n\n") and not popup_text.contains("\\n"), popup_text.left(30))
 		var stapel: Node = hud.get_node("%Meldungen")
-		gm.net_buy_toilet.rpc_id(1)   # 500 € reichen nicht → Fehlermeldung beim Auslöser
+		# Toilette (1.000 €) wäre per Dispo bezahlbar — Konto dafür kurz auf −800 €
+		var geld_toilette: int = Game.money
+		Game.add_money(-800 - Game.money)
+		gm.net_buy_toilet.rpc_id(1)   # reicht nicht → Fehlermeldung beim Auslöser
 		await _frames(3)
+		Game.add_money(geld_toilette - Game.money)
 		var letzte: String = stapel.get_child(stapel.get_child_count() - 1).text() if stapel.get_child_count() > 0 else ""
 		_check("Server-Fehler landet übersetzt im Stapel", letzte.contains("Toilette einbauen"), letzte)
 		for i in 6:
@@ -185,6 +189,7 @@ class Lauf extends Node:
 
 		print("  -- Endlos (3.1)")
 		gm._day = 16
+		gm._phase = gm.Phase.SHIFT   # Tagesende gilt nur aus einer laufenden Schicht
 		gm._end_shift(0)
 		await _frames(3)
 		_check("nach Tag 16 kommt Tag 17", gm._day == 17, "Tag=%d" % gm._day)

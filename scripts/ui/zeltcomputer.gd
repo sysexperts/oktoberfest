@@ -47,8 +47,8 @@ func _neu() -> void:
 	# Gleiche Rechnung wie GameManager._reward_for und der Andrang in _shift_process
 	var faktor := float(_z.get("bierpreis", 1.0))
 	var tag := int(_z.get("day", 1))
-	var mass := roundi(float(Wirtschaft.verkaufspreis(15, tag)) * faktor)
-	var essen := Wirtschaft.verkaufspreis(14, tag)
+	var mass := roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, tag)) * faktor)
+	var essen := Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, tag)
 	%PreisText.text = tr("COMP_PRICE_VALUE") % [Texte.euro(mass), Texte.euro(essen),
 		roundi(faktor * 100.0), roundi(Wirtschaft.preis_andrang(faktor) * 100.0)]
 	%Billiger.disabled = faktor <= Wirtschaft.BIERPREIS_MIN + 0.001

@@ -55,14 +55,17 @@ const DEKO_ANDRANG_MAX := 0.2     # … höchstens 20 %
 const ZELT_MIN := Vector3(-11.3, 0, -8.0)
 const ZELT_MAX := Vector3(11.3, 0, 10.6)
 const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
-const ORDER_COOLDOWN_MIN := 22.0    # siparişler arası bekleme — uzatıldı
-const ORDER_COOLDOWN_MAX := 45.0
+const ORDER_COOLDOWN_MIN := 18.0    # Pause zwischen zwei Bestellungen eines Gasts
+const ORDER_COOLDOWN_MAX := 35.0    # (vorher 22–45 s; 15–30 war allein nicht zu schaffen)
 const SERVED_SHOW := 3.0
 const NIGHT_FRACTION := 0.25        # son %25 = "gece" (PlateUp tarzı endspurt)
 const PATIENCE_NIGHT_MULT := 1.8    # gece sabır daha hızlı azalır
 const POP_START := 20.0             # az misafirle başla
 const POP_SERVE := 1.5
-const POP_MISS := 3.0
+const POP_MISS := 2.0
+## Trinkgeld, wenn der Spieler selbst bedient (vorher 0–5 €)
+const TRINKGELD_MIN := 2
+const TRINKGELD_MAX := 8
 const MESS_CHANCE_PER_SEC := 0.02   # Wahrscheinlichkeit pro Sekunde
 const DRINKS_BEFORE_PUKE := 4       # so viele Getränke, bevor jemandem schlecht wird
 
@@ -70,7 +73,9 @@ const DRINKS_BEFORE_PUKE := 4       # so viele Getränke, bevor jemandem schlech
 const CLEAN_PER_CALL := 0.05
 const CLEAN_TIP_MIN := 6      # Trinkgeld fürs Saubermachen
 const CLEAN_TIP_MAX := 12
-const HYGIENE_DRAIN := 1.2
+const HYGIENE_DRAIN := 0.4   # je Fleck pro Sekunde (1.2 hielt die Sauberkeit dauerhaft bei 0)
+## Anteil der Einnahmen, der auch im dreckigsten Zelt bleibt (vorher 40 %)
+const HYGIENE_MIN_ANTEIL := 0.7
 const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
 const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bier 60
@@ -78,7 +83,7 @@ const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bie
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 12}   # sahnede 12 masa var
 const TENT_BOOK_COST := 500
-const TENT_UPGRADE_COST := {2: 3000, 3: 10000}
+const TENT_UPGRADE_COST := {2: 2000, 3: 6000}   # vorher 3000/10000: im Bot nie erreicht
 const TABLE_COST := 200
 ## Zeltmiete pro Tag am ersten Tag — steigt danach mit Wirtschaft.miete.
 const TENT_RENT := {0: 0, 1: 120, 2: 300, 3: 700}
@@ -100,12 +105,13 @@ const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 5
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
-const WAITER_CAPACITY := {1: 1, 2: 2, 3: 4, 4: 8, 5: 12}
-const STAFF_BASE_SPEED := 3.0
+## Stufe 1 trug nur 1 Krug — mit 4 Tischen blieben 20–35 Bestellungen am Tag liegen (Spielbot).
+const WAITER_CAPACITY := {1: 2, 2: 3, 3: 5, 4: 8, 5: 12}
+const STAFF_BASE_SPEED := 4.5   # vorher 3.0 — im großen Zelt blieben bis 100 Bestellungen liegen
 const TABLE_AVOID_RADIUS := 2.2   # Mitarbeiter halten Abstand zu Tischen
 const BAR_POINT := Vector3(0, 0.1, -7.0)      # Kellner holt hier ab
 const KITCHEN_POINT := Vector3(7.0, 0.1, -7.0) # Koch steht hier
-const DRINK_PREP := 1.2                        # Sekunden pro Getränk
+const DRINK_PREP := 0.8                        # Sekunden pro Getränk (vorher 1.2)
 const FOOD_PREP := 3.0                         # Sekunden pro Speise (mit Koch)
 
 # ---- E4: Ware & Lieferung ----
@@ -115,7 +121,7 @@ const WARE_BIER := 1
 const WARE_ESSEN := 2
 const PACK_UNITS := 10                    # Einheiten pro Paket
 const PACK_COST := {1: 40, 2: 50}         # Preis pro Paket (10 Einheiten)
-const DELIVERY_DELAY := 60.0              # Lieferzeit nach Bestellung (Sekunden)
+const DELIVERY_DELAY := 30.0              # Lieferzeit nach Bestellung (Sekunden, vorher 60)
 const VAN_START := Vector3(-42.0, 0.0, 19.0)
 const VAN_DROP := Vector3(2.0, 0.0, 19.0)
 const VAN_END := Vector3(42.0, 0.0, 19.0)
@@ -130,7 +136,7 @@ const ARTIST_POP := {1: 5.0, 2: 12.0, 3: 25.0}  # Beliebtheitsschub beim Buchen
 const ARTIST_DRAW := {1: 0.15, 2: 0.35, 3: 0.6} # zusätzliche Auslastung während der Schicht
 
 # ---- E6: Klo, Urin, Beschwerden ----
-const TOILET_COST := 1800
+const TOILET_COST := 1000   # vorher 1800 — fast so teuer wie der Zeltausbau
 const BLADDER_MIN := 70.0        # Sekunden bis ein Gast muss
 const BLADDER_MAX := 150.0
 const PEE_CORNER := Vector3(-10.5, 0.1, 8.0)   # Ecke, in die ohne Klo gepinkelt wird
@@ -138,8 +144,18 @@ const TOILET_POINT := Vector3(10.5, 0.1, 8.0)  # Klo-Ecke (wenn gekauft)
 const PEE_DURATION := 4.0
 const COMPLAIN_INTERVAL := 6.0   # wie oft geprüft wird
 const COMPLAIN_RADIUS := 5.0     # Umkreis eines Urinflecks
-const COMPLAIN_POP := 2.5        # Beliebtheitsverlust pro Beschwerde
-const LEAVE_CHANCE := 0.25       # Wahrscheinlichkeit, dass ein Gast deshalb geht
+## Jeder Gast beschwert sich höchstens einmal — früher alle 6 s erneut, das
+## trieb die Beliebtheit binnen Tagen auf 5 % (Spielbot, 30 Tage).
+const COMPLAIN_POP := 1.0        # Beliebtheitsverlust pro Beschwerde
+const LEAVE_CHANCE := 0.15       # Wahrscheinlichkeit, dass ein Gast deshalb geht
+## Untergrenze der Beliebtheit — darunter kommt kaum noch jemand, das Spiel wäre verloren
+const POP_MIN := 10.0
+## Nächtliche Erholung: 25 % des Abstands zu 40 % Beliebtheit
+const POP_ERHOLUNG_ZIEL := 40.0
+const POP_ERHOLUNG := 0.25
+## Höchstens so viel Beliebtheit kosten verpasste Bestellungen pro Tag —
+## im großen Zelt waren es sonst 100 × 2 Punkte
+const POP_MISS_TAG_MAX := 20.0
 
 var _hud: HUD
 var _sfx_node: Node
@@ -156,6 +172,7 @@ var _next_spawn := 0
 var _phase: int = Phase.INTERMISSION
 var _phase_time := INTERMISSION_TIME
 var _bierpreis := 1.0   # Faktor auf den Tagespreis je Maß (Zelt-Computer)
+var _pop_verlust_heute := 0.0   # Beliebtheit, die verpasste Bestellungen heute schon gekostet haben
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -856,10 +873,11 @@ func _update_complaints(delta: float) -> void:
 			if (g.pos as Vector3).distance_to(p) <= COMPLAIN_RADIUS:
 				near = true
 				break
-		if not near:
+		if not near or bool(g.get("beschwert", false)):
 			continue
+		g.beschwert = true
 		_complaints += 1
-		_popularity = maxf(5.0, _popularity - COMPLAIN_POP)
+		_popularity = maxf(POP_MIN, _popularity - COMPLAIN_POP)
 		if randf() < LEAVE_CHANCE:
 			g.mode = 2
 			g.tgt = ENTRANCE
@@ -1471,7 +1489,7 @@ func _serve_by_staff(gid: int) -> void:
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
-	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
+	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
 	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
 	_last_earn += reward
 	Game.add_score(reward)
@@ -1790,9 +1808,9 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE)
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
-	var hyg := 0.4 + 0.6 * (_hygiene / 100.0)
+	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
 	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko))
-	var tip := 0 if waiter_npc else randi_range(0, 5)
+	var tip := 0 if waiter_npc else randi_range(TRINKGELD_MIN, TRINKGELD_MAX)
 	if waiter_npc:
 		reward = int(reward * 0.5)
 	_last_earn += reward + tip
@@ -1804,9 +1822,9 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
 func _reward_for(okind: int) -> int:
 	if okind == 2:
-		return Wirtschaft.verkaufspreis(14, _day)
+		return Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)
 	# Bier: Tagespreis × selbst gewählter Bierpreis
-	return roundi(float(Wirtschaft.verkaufspreis(15, _day)) * _bierpreis)
+	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis)
 
 func CustomerReward() -> int:
 	return 15
@@ -1874,6 +1892,7 @@ func _start_shift() -> void:
 	_phase_time = SHIFT_TIME
 	_served = 0
 	_missed = 0
+	_pop_verlust_heute = 0.0
 	_last_earn = 0
 	_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN, ERSTE_GAESTE_MAX)
 	_hygiene = 100.0
@@ -1900,6 +1919,10 @@ func _start_shift() -> void:
 
 ## Günü bitir. reason: 0 = 22:00 normal, 1 = çok şikayet, 2 = oyuncu erken kapattı.
 func _end_shift(reason := 0) -> void:
+	# Nur einmal pro Tag: mehrere verpasste Bestellungen im selben Moment riefen
+	# das doppelt auf — Tag +2, Miete und Löhne doppelt (Spielbot, 30 Tage).
+	if _phase != Phase.SHIFT:
+		return
 	var closed_at: float = _clock_hour()          # faz değişmeden önce oku
 	var hours_left: float = maxf(0.0, DAY_END_HOUR - closed_at)
 	_phase = Phase.INTERMISSION
@@ -1919,10 +1942,14 @@ func _end_shift(reason := 0) -> void:
 	var pop_penalty := 0.0
 	if reason == 2:
 		pop_penalty = hours_left * POP_EARLY_CLOSE_PER_HOUR
-		_popularity = maxf(5.0, _popularity - pop_penalty)
+		_popularity = maxf(POP_MIN, _popularity - pop_penalty)
 
 	# Endlos: nach der Schonfrist bröckelt die Beliebtheit jede Nacht etwas
-	_popularity = maxf(5.0, _popularity - Wirtschaft.beliebtheit_verlust(_day))
+	_popularity = maxf(POP_MIN, _popularity - Wirtschaft.beliebtheit_verlust(_day))
+	# Über Nacht erholt sich eine schlechte Beliebtheit ein Stück — sonst bleibt
+	# ein überlastetes Zelt für immer bei der Untergrenze (Spielbot, 30 Tage).
+	if _popularity < POP_ERHOLUNG_ZIEL:
+		_popularity += (POP_ERHOLUNG_ZIEL - _popularity) * POP_ERHOLUNG
 
 	# Günlük bilanço: kira + personel maaşları
 	var rent := _daily_rent()
@@ -2076,8 +2103,12 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 			_missed += 1
 			Game.add_score(-MISS_PENALTY)
-			_popularity = maxf(5.0, _popularity - POP_MISS)
-			if _missed >= 20:
+			var abzug := minf(POP_MISS, maxf(0.0, POP_MISS_TAG_MAX - _pop_verlust_heute))
+			_pop_verlust_heute += abzug
+			_popularity = maxf(POP_MIN, _popularity - abzug)
+			# Zu viele verpasste: Zelt schließt früh. Grenze wächst mit den Plätzen,
+			# sonst endet mit 4 Tischen fast jeder Tag vorzeitig.
+			if _missed >= maxi(20, _seats.size() * 2):
 				_end_shift(1)
 	elif g.ostate == 2:
 		g.served_t -= delta

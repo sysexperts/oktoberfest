@@ -181,7 +181,7 @@ GOODS_BEER,Bier,Beer,Bira
 GOODS_FOOD,Zutaten fürs Essen,Food ingredients,Yemek malzemesi
 GOODS_INFO,1 Paket = %d Portionen · %s pro Paket,1 package = %d servings · %s per package,1 paket = %d porsiyon · paket başı %s
 GOODS_STOCK,Im Lager: %d · Lieferungen unterwegs: %d,In storage: %d · deliveries on the way: %d,Depoda: %d · yoldaki teslimat: %d
-GOODS_TAB_INFO,"Der Lieferwagen kommt nach etwa einer Minute. Dann die Pakete ins Lager tragen, sonst kannst du nichts verkaufen.","The delivery van arrives after about a minute. Carry the packages into storage, or you can't sell anything.","Teslimat aracı yaklaşık bir dakika sonra gelir. Paketleri depoya taşı, yoksa hiçbir şey satamazsın."
+GOODS_TAB_INFO,"Der Lieferwagen kommt nach etwa 30 Sekunden. Dann die Pakete ins Lager tragen, sonst kannst du nichts verkaufen.","The delivery van arrives after about 30 seconds. Carry the packages into storage, or you can't sell anything.","Teslimat aracı yaklaşık 30 saniye sonra gelir. Paketleri depoya taşı, yoksa hiçbir şey satamazsın."
 BTN_RENT,Mieten · %s,Rent · %s,Kirala · %s
 BTN_PLACE,Aufstellen · %s,Place · %s,Koy · %s
 BTN_SELL,Verkaufen · +%s,Sell · +%s,Sat · +%s
@@ -234,7 +234,7 @@ MSG_TOILET_HAVE,🚻 Die Toilette ist schon eingebaut,🚻 The toilet is already
 MSG_TOILET_DONE,🚻 Toilette eingebaut — keine Pfützen mehr in der Ecke,🚻 Toilet installed — no more puddles in the corner,🚻 Tuvalet kuruldu — köşede artık birikinti yok
 MSG_ACT_BOOKED_ALREADY,🎤 Schon gebucht: %s,🎤 Already booked: %s,🎤 Zaten ayarlandı: %s
 MSG_ACT_BOOKED,🎤 %s gebucht! Beliebtheit +%d %% · spielt in der nächsten Schicht,🎤 %s booked! Popularity +%d %% · plays next shift,🎤 %s ayarlandı! Popülerlik +%d %% · sonraki vardiyada çalar
-MSG_GOODS_ORDERED,🚚 %d× %s bestellt (%s) — Lieferung in etwa einer Minute,🚚 Ordered %d× %s (%s) — delivery in about a minute,🚚 %d× %s sipariş edildi (%s) — yaklaşık bir dakikada teslim
+MSG_GOODS_ORDERED,🚚 %d× %s bestellt (%s) — Lieferung in etwa 30 Sekunden,🚚 Ordered %d× %s (%s) — delivery in about 30 seconds,🚚 %d× %s sipariş edildi (%s) — yaklaşık 30 saniyede teslim
 MSG_GOODS_DELIVERED,📦 %d Paket(e) geliefert — bring sie ins Lager,📦 %d package(s) delivered — carry them to storage,📦 %d paket teslim edildi — depoya taşı
 MSG_STAFF_HIRED,🤝 %s eingestellt · Lohn %s pro Schicht,🤝 %s hired · wage %s per shift,🤝 %s işe alındı · vardiya başı maaş %s
 MSG_STAFF_NONE,Niemand zum Aufstufen: %s,Nobody to upgrade: %s,Yükseltilecek kimse yok: %s
@@ -261,7 +261,7 @@ QUEST_1_TEXT,Wiesenbüro (im Osten) → Zelt → Tisch aufstellen (200 € pro T
 QUEST_2_TITLE,Bestelle Bier,Order beer,Bira sipariş et
 QUEST_2_TEXT,"Ohne Bier kann niemand bedient werden. Im Wiesenbüro → Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office → Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.","Bira olmadan kimseye servis yapılamaz. Fuar Ofisi → Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al."
 QUEST_3_TITLE,Warte auf den Lieferwagen,Wait for the delivery van,Teslimat aracını bekle
-QUEST_3_TEXT,"Deine Bestellung ist unterwegs. In etwa einer Minute fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about a minute the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık bir dakika içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
+QUEST_3_TEXT,"Deine Bestellung ist unterwegs. In etwa 30 Sekunden fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about 30 seconds the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık 30 saniye içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
 QUEST_4_TITLE,Pakete ins Regal räumen,Stock the shelf,Paketleri rafa diz
 QUEST_4_TEXT,"Nimm jedes Paket mit {interact}, trag es ins Zelt zum Lagerregal und räume es dort mit {interact} ein. Erst eingeräumtes Bier kann gezapft werden.","Pick up each package with {interact}, carry it into the tent to the storage shelf and stock it there with {interact}. Only stocked beer can be poured.","Her paketi {interact} ile al, çadırdaki depo rafına taşı ve orada {interact} ile yerleştir. Sadece rafa konan bira doldurulabilir."
 QUEST_5_TITLE,Schlafe im Wohnwagen,Sleep in your caravan,Karavanında uyu
@@ -275,7 +275,7 @@ QUEST_8_TEXT,Wiesenbüro → Personal. Er bedient die Gäste für dich.,Fair Off
 QUEST_9_TITLE,Kaufe eine Lizenz,Buy a license,Bir lisans satın al
 QUEST_9_TEXT,Wiesenbüro → Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office → Licenses. More choice means more sales.,Fuar Ofisi → Lisanslar. Daha fazla çeşit daha fazla satış demek.
 QUEST_10_TITLE,Baue eine Toilette ein,Install a toilet,Tuvalet kur
-QUEST_10_TEXT,Wiesenbüro → Zelt (1.800 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office → Tent (€1,800). Otherwise guests pee in the corner.",Fuar Ofisi → Çadır (1.800 €). Yoksa misafirler köşeye işer.
+QUEST_10_TEXT,Wiesenbüro → Zelt (1.000 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office → Tent (€1,000). Otherwise guests pee in the corner.",Fuar Ofisi → Çadır (1.000 €). Yoksa misafirler köşeye işer.
 QUEST_11_TITLE,Buche einen Künstler,Book an act,Bir sanatçı ayarla
 QUEST_11_TEXT,Wiesenbüro → Künstler. Musik lockt mehr Gäste an.,Fair Office → Acts. Music draws more guests.,Fuar Ofisi → Sanatçılar. Müzik daha çok misafir çeker.
 HELP_TITLE,Hilfe,Help,Yardım

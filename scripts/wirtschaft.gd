@@ -44,6 +44,10 @@ static func miete(basis: int, tag: int) -> int:
 		return 0
 	return roundi(float(basis) * kosten_faktor(tag))
 
+## Grundpreise am Tag 1 (vorher 15/14 € — zu wenig Gewinn für Ausbauten, Spielbot)
+const BIER_BASIS := 18
+const ESSEN_BASIS := 16
+
 ## Bierpreis (Zelt-Computer): Faktor auf den Tagespreis je Maß
 const BIERPREIS_MIN := 0.5
 const BIERPREIS_MAX := 2.0
