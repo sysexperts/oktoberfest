@@ -100,7 +100,12 @@ const MARKETING_BOOST := 15.0
 const DEKO_COST := 600        # her seviye +%15 gelir
 const DEKO_BONUS := 0.15
 # E2.4 Lizenzen — başta sadece Helles satılır, gerisi Wiesenbüro'dan alınır
-const LIC_COST := {"weizen": 800, "radler": 800, "brezn": 1200, "sosis": 1200}
+const LIC_COST := {"weizen": 800, "radler": 800, "brezn": 1200, "sosis": 1200, "festbier": 4000, "hendl": 5000}
+## Spätlizenzen (Spaß-Plan 4.3): erst ab Zeltstufe 3 oder der 2. Wiesn, dafür teurer im Verkauf
+const LIC_SPAET := ["festbier", "hendl"]
+const BIER_FESTBIER := 4
+const ESSEN_HENDL := 3
+const PREIS_FAKTOR_SORTE := {"1_4": 1.35, "2_3": 1.6}
 
 # ---- E3: Personal ----
 const STAFF_SCENE := preload("res://scenes/staff.tscn")
@@ -268,7 +273,7 @@ var _day := 1            # Wiesn günü
 var _upg_marketing := 0  # Werbung seviyesi (popülerlik enjeksiyonu)
 var _upg_deko := 0       # Deko seviyesi (gelir çarpanı)
 # E2.4: satın alınan lisanslar (Helles lisanssız hep satılır)
-var _lic := {"weizen": false, "radler": false, "brezn": false, "sosis": false}
+var _lic := {"weizen": false, "radler": false, "brezn": false, "sosis": false, "festbier": false, "hendl": false}
 # E3: Personal. sim: id -> {role, level, pos, tgt, yaw, state, timer, orders:Array, idx}
 var _staff := {}        # id -> Staff node
 var _staff_sim := {}
@@ -660,6 +665,8 @@ func _drinks_avail() -> Array:
 		a.append(2)
 	if _lic.get("radler", false):
 		a.append(3)
+	if _lic.get("festbier", false):
+		a.append(BIER_FESTBIER)
 	if _fass_kaputt > 0 and a.size() > 1:
 		a.erase(_fass_kaputt)
 	return a
@@ -671,7 +678,13 @@ func _foods_avail() -> Array:
 		a.append(1)
 	if _lic.get("sosis", false):
 		a.append(2)
+	if _lic.get("hendl", false):
+		a.append(ESSEN_HENDL)
 	return a
+
+## Spätlizenzen kaufbar? (Zeltstufe 3 oder ab der 2. Wiesn)
+func spaetlizenz_frei() -> bool:
+	return _tent_stage >= 3 or _saison_nr >= 2
 
 ## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
 func _tbl_num(n: String) -> int:
@@ -1769,7 +1782,7 @@ func _serve_by_staff(gid: int) -> void:
 	_quest_served_once = true
 	_popularity = minf(100.0, _popularity + POP_SERVE * _typ_pop(g))
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
-	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
+	var reward := int(_reward_for(int(g.okind), int(g.otype)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
 	_last_earn += reward
 	Game.add_score(reward)
 	_add_income(reward)
@@ -1812,6 +1825,9 @@ func net_buy_license(key: String) -> void:
 		return
 	if _lic.get(key, false):
 		_fehler("MSG_LIC_HAVE", [LIC_KEYS[key]])
+		return
+	if key in LIC_SPAET and not spaetlizenz_frei():
+		_fehler("WHY_LIC_LATE")
 		return
 	var cost: int = LIC_COST[key]
 	if not _reserve_ok(cost):
@@ -2088,7 +2104,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_popularity = minf(100.0, _popularity + POP_SERVE * _typ_pop(g))
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
-	var reward := int(_reward_for(int(g.okind)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
+	var reward := int(_reward_for(int(g.okind), int(g.otype)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
 	var tip := 0 if waiter_npc else randi_range(TRINKGELD_MIN, TRINKGELD_MAX)
 	# Kombo: wer schnell hintereinander bedient, bekommt mehr Trinkgeld
 	var bediener := multiplayer.get_remote_sender_id()
@@ -2114,12 +2130,13 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
-func _reward_for(okind: int) -> int:
+func _reward_for(okind: int, otype := 1) -> int:
+	var sorte := float(PREIS_FAKTOR_SORTE.get("%d_%d" % [okind, otype], 1.0))
 	if okind == 2:
-		return Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)
+		return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)) * sorte)
 	# Bier: Tagespreis × selbst gewählter Bierpreis
 	var happy := 0.7 if _happy_hour() else 1.0
-	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy)
+	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy * sorte)
 
 func CustomerReward() -> int:
 	return 15
@@ -2999,7 +3016,8 @@ static func _eur(betrag: int) -> Dictionary:
 ## Namen als Übersetzungsschlüssel für Meldungen
 const WARE_KEYS := {1: "GOODS_BEER", 2: "GOODS_FOOD"}
 const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER"}
-const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS"}
+const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS",
+	"festbier": "LIC_FESTBIER", "hendl": "LIC_HENDL"}
 const BETRAG_SZENE := preload("res://scenes/ui/betrag.tscn")
 
 ## Schwebender Betrag über Gast oder Pfütze, bei allen Spielern — mit Kasse

@@ -441,6 +441,18 @@ class Lauf extends Node:
 		var geduld_w3: float = gm._geduld()
 		gm._saison_nr = saison_vorher
 
+		print("  -- Spätlizenzen")
+		var stufe_vorher: int = gm._tent_stage
+		gm._tent_stage = 1
+		gm._saison_nr = 1
+		_check("Festbier/Hendl gesperrt vor Zeltstufe 3", not gm.spaetlizenz_frei(), "")
+		gm._tent_stage = 3
+		_check("Festbier/Hendl ab Zeltstufe 3", gm.spaetlizenz_frei(), "")
+		gm._tent_stage = stufe_vorher
+		gm._saison_nr = saison_vorher
+		_check("Festbier teurer als Helles, Hendl teurer als Brezn",
+			gm._reward_for(1, 4) > gm._reward_for(1, 1) and gm._reward_for(2, 3) > gm._reward_for(2, 1), "")
+
 		print("  -- Personal-Eigenschaften")
 		_check("Flink kostet mehr, Schluckspecht weniger",
 			gm._staff_wage(2, 1, "schnell") > gm._staff_wage(2, 1) and gm._staff_wage(2, 1, "schluckspecht") < gm._staff_wage(2, 1)

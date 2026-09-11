@@ -3,9 +3,9 @@ extends Node3D
 ## Fıçı istasyonu. Her fıçının bir bira tipi var (editörden beer_type ile ayarlanır).
 ## Dolum mantığı Player içinde.
 
-# 1 = Helles, 2 = Weizen, 3 = Radler
-const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler"}
-const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
+# 1 = Helles, 2 = Weizen, 3 = Radler, 4 = Festbier
+const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler", 4: "Festbier"}
+const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08)}
 
 @export var beer_type := 1
 
@@ -28,4 +28,4 @@ func _ready() -> void:
 func _beschriften() -> void:
 	var label := get_node_or_null("Label") as Label3D
 	if label:
-		label.text = Texte.mit_tasten("WORLD_KEG_%d" % clampi(beer_type, 1, 3))
+		label.text = Texte.mit_tasten("WORLD_KEG_%d" % clampi(beer_type, 1, 4))

@@ -20,6 +20,8 @@ const LIZENZEN := {
 	"radler": ["LizenzRadler", "🍋", "LIC_RADLER"],
 	"brezn": ["LizenzBrezn", "🥨", "LIC_BREZN"],
 	"sosis": ["LizenzSosis", "🌭", "LIC_SOSIS"],
+	"festbier": ["LizenzFestbier", "🍻", "LIC_FESTBIER"],
+	"hendl": ["LizenzHendl", "🍗", "LIC_HENDL"],
 }
 ## Rolle -> [Zeile, Symbol, Name, Beschreibung]
 const PERSONAL := {
@@ -188,11 +190,14 @@ func _reiter_lizenzen() -> void:
 	for key: String in LIZENZEN:
 		var d: Array = LIZENZEN[key]
 		var z := _zeile(d[0])
-		z.setze("%s %s" % [d[1], tr(d[2])], tr("LIC_INFO"))
+		var spaet: bool = key in _gm.LIC_SPAET
+		z.setze("%s %s" % [d[1], tr(d[2])], tr("LIC_INFO_LATE" if spaet else "LIC_INFO"))
 		if bool(lic.get(key, false)):
 			_erledigt(z, "DONE_OWNED")
 		else:
-			_einzelkauf(z, "BTN_BUY", int(_gm.LIC_COST[key]))
+			# Gleiche Regel wie GameManager.spaetlizenz_frei
+			var frei := int(_z.get("stage", 0)) >= 3 or int(_z.get("saison_nr", 1)) >= 2
+			_einzelkauf(z, "BTN_BUY", int(_gm.LIC_COST[key]), "" if frei or not spaet else tr("WHY_LIC_LATE"))
 
 func _reiter_personal() -> void:
 	var stufen := {1: [], 2: [], 3: [], 4: []}
@@ -321,7 +326,7 @@ func _erledigt(z: Node, schluessel: String) -> void:
 
 func _hat_essenslizenz() -> bool:
 	var lic: Dictionary = _z.get("lic", {})
-	return bool(lic.get("brezn", false)) or bool(lic.get("sosis", false))
+	return bool(lic.get("brezn", false)) or bool(lic.get("sosis", false)) or bool(lic.get("hendl", false))
 
 ## Kein Bier im Lager und keine Lieferung unterwegs (wie GameManager._needs_goods).
 func _braucht_ware() -> bool:

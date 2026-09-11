@@ -150,6 +150,14 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="LizenzFestbier" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LizenzHendl" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Personal" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter"]
 visible = false
 layout_mode = 2

@@ -6,13 +6,13 @@ extends Node3D
 ## Mitspieler denselben Gast, ohne dass die Wahl übers Netz geht.
 
 const Figuren := preload("res://scripts/figuren.gd")
-const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler"}
-const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
-const FOOD_NAMES := {1: "Brezn", 2: "Würstl"}
+const BEER_NAMES := {1: "Helles", 2: "Weizen", 3: "Radler", 4: "Festbier"}
+const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08)}
+const FOOD_NAMES := {1: "Brezn", 2: "Würstl", 3: "Hendl"}
 ## Gästetyp vom Server ("" normal, stamm, tourist, tracht, vip) — Symbol in der Blase
 var typ := ""
 const TYP_SYMBOL := {"stamm": "🏠 ", "tourist": "🎒 ", "tracht": "🪶 ", "vip": "⭐ "}
-const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
+const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2), 3: Color(0.9, 0.6, 0.25)}
 
 var cust_id := -1
 var order_state := 0     # 0 yok, 1 bekliyor, 2 servis edildi (senkron)

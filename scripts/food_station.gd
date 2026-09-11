@@ -3,8 +3,8 @@ extends Node3D
 ## Yemek hazırlama istasyonu (Mutfak). E basılı tut -> yemek hazırla.
 ## 1 = Pretzel, 2 = Sosis. Mantık Player içinde.
 
-const FOOD_NAMES := {1: "Pretzel", 2: "Sosis"}
-const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
+const FOOD_NAMES := {1: "Pretzel", 2: "Sosis", 3: "Hendl"}
+const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2), 3: Color(0.9, 0.6, 0.25)}
 
 @export var food_type := 1
 
@@ -27,4 +27,4 @@ func _ready() -> void:
 func _beschriften() -> void:
 	var l := get_node_or_null("Label") as Label3D
 	if l:
-		l.text = Texte.mit_tasten("WORLD_FOOD_%d" % clampi(food_type, 1, 2))
+		l.text = Texte.mit_tasten("WORLD_FOOD_%d" % clampi(food_type, 1, 3))

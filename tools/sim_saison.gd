@@ -148,7 +148,7 @@ class Lauf extends Node:
 				gm.net_upgrade_tent()
 			else:
 				return   # sparen
-		for lic: String in ["weizen", "radler", "brezn", "sosis"]:
+		for lic: String in ["weizen", "radler", "brezn", "sosis", "festbier", "hendl"]:
 			if not gm._lic[lic] and Game.money > int(gm.LIC_COST[lic]) + RESERVE * 2:
 				gm.net_buy_license(lic)
 		# Koch erst, wenn es Essen gibt (sonst sperrt das Spiel)

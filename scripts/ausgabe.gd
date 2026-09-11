@@ -7,8 +7,8 @@ extends Node3D
 
 const Texte := preload("res://scripts/ui/texte.gd")
 ## Farben wie beim Spieler (player.gd BEER_COLORS / FOOD_COLORS)
-const BIER_FARBEN := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45)}
-const ESSEN_FARBEN := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2)}
+const BIER_FARBEN := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08)}
+const ESSEN_FARBEN := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2), 3: Color(0.9, 0.6, 0.25)}
 
 ## "kind_typ" -> Anzahl, z. B. {"1_1": 3, "2_1": 1}
 var inhalt := {}

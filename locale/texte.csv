@@ -215,6 +215,10 @@ LIC_RADLER,Radler-Lizenz,Radler license,Radler lisansı
 LIC_BREZN,Brezn-Lizenz,Pretzel license,Brezel lisansı
 LIC_SOSIS,Wurst-Lizenz,Sausage license,Sosis lisansı
 LIC_INFO,Danach bestellen Gäste auch das.,Guests will order it too.,Misafirler bunu da sipariş eder.
+LIC_FESTBIER,Festbier-Lizenz,Festival beer license,Festival birası lisansı
+LIC_HENDL,Hendl-Lizenz,Roast chicken license,Tavuk lisansı
+LIC_INFO_LATE,Premium: Gäste zahlen deutlich mehr dafür.,Premium: guests pay a lot more for it.,Premium: misafirler bunun için çok daha fazla öder.
+WHY_LIC_LATE,Erst ab Zeltstufe 3 oder der 2. Wiesn,Only from tent level 3 or the 2nd season,Ancak çadır seviyesi 3 veya 2. sezondan itibaren
 STAFF_COOK,Koch,Cook,Aşçı
 STAFF_WAITER,Kellner,Waiter,Garson
 STAFF_CLEANER,Reinigungskraft,Cleaner,Temizlikçi
@@ -429,6 +433,8 @@ WORLD_STAGE,🎤 BÜHNE,🎤 STAGE,🎤 SAHNE
 WORLD_KEG_1,Helles ({interact}),Helles ({interact}),Helles ({interact})
 WORLD_KEG_2,Weizen ({interact}),Wheat beer ({interact}),Buğday birası ({interact})
 WORLD_KEG_3,Radler ({interact}),Shandy ({interact}),Radler ({interact})
+WORLD_KEG_4,Festbier ({interact}),Festival beer ({interact}),Festival birası ({interact})
+WORLD_FOOD_3,"🍗 Hendl ({interact} halten)","🍗 Roast chicken (hold {interact})","🍗 Tavuk ({interact} basılı tut)"
 WORLD_FOOD_1,"🥨 Brezn ({interact} halten)","🥨 Pretzel (hold {interact})","🥨 Brezel ({interact} basılı tut)"
 WORLD_FOOD_2,"🌭 Würstl ({interact} halten)","🌭 Sausage (hold {interact})","🌭 Sosis ({interact} basılı tut)"
 WORLD_STORAGE,"📦 LAGER %d\nHier: 🍺 %d · 🥨 %d\nGesamt: 🍺 %d · 🥨 %d\n({interact}: Paket einlagern)","📦 STORAGE %d\nHere: 🍺 %d · 🥨 %d\nTotal: 🍺 %d · 🥨 %d\n({interact}: store package)","📦 DEPO %d\nBurada: 🍺 %d · 🥨 %d\nToplam: 🍺 %d · 🥨 %d\n({interact}: paketi depola)"

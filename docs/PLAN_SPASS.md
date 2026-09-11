@@ -175,7 +175,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       Offen: echte Geldsenken/Freischaltungen 4.3, Personal-Eigenschaften 4.4)* — nach der Saison geht es weiter mit Bonus
       (Startgeld, freigeschaltete Dinge bleiben), aber schwerer: teurere Miete,
       anspruchsvollere Gäste. Endlosmodus bleibt als Option. *Ich, M*
-- [ ] **4.3 Freischaltungen über Saisons** — neues Essen (Hendl, Obatzda,
+- [~] **4.3 Freischaltungen über Saisons** *(v126: Festbier 4000 € und Hendl 5000 € als Spätlizenzen ab Zeltstufe 3/2. Wiesn, Verkaufspreis ×1,35/×1,6, eigenes Fass und eigene Station an der Theke; offen: Zeltthemen, Kostüme, weitere Einrichtung — braucht Modelle)* — neues Essen (Hendl, Obatzda,
       Radi), Getränke (Alkoholfrei, Spezi), Zeltthemen (Hofbräu-Blau, Hacker-Rot),
       Kostüme für den Spieler, weitere Einrichtung (Maibaum, Lebkuchenherzen,
       Hirschgeweih). *Ich, M–L · Du: Modelle*

@@ -63,7 +63,7 @@ func _neu() -> void:
 		%WareText.text = tr("COMP_GOODS_STOCK") % [int(_z.get("bier", 0)), int(_z.get("essen", 0)), int(_z.get("pending", 0))]
 		var ohne_zelt := int(_z.get("stage", 0)) == 0
 		var lic: Dictionary = _z.get("lic", {})
-		var essen_ok := bool(lic.get("brezn", false)) or bool(lic.get("sosis", false))
+		var essen_ok := bool(lic.get("brezn", false)) or bool(lic.get("sosis", false)) or bool(lic.get("hendl", false))
 		for d: Array in [[%BierEins, 1, 1, "🍺"], [%BierFuenf, 1, 5, "🍺"], [%EssenEins, 2, 1, "🥨"], [%EssenFuenf, 2, 5, "🥨"]]:
 			var preis: int = Wirtschaft.paketpreis(int(_gm.PACK_COST[d[1]]), tag) * int(d[2])
 			(d[0] as Button).text = "%s %s" % [d[3], tr("BTN_PACKS") % [int(d[2]), Texte.euro(preis)]]
