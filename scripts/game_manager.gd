@@ -64,7 +64,6 @@ const TABLE_COST := 200
 const TENT_RENT := {0: 0, 1: 120, 2: 300, 3: 700}
 const DAILY_RENT := 120       # (nicht mehr verwendet, bleibt für Kompatibilität)
 const RENT_PER_DAY := 30      # Aufschlag pro Tag (Wirtschaftsdruck)
-const WIESN_DAYS := 16
 # Upgrades (kiosk)
 const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
 const MARKETING_BOOST := 15.0
@@ -259,7 +258,7 @@ func _ready() -> void:
 	_hud.set_score(Game.score)
 	_hud.set_time(_clock_hour())
 	_hud.set_phase(_phase == Phase.SHIFT)
-	_hud.set_day(_day, WIESN_DAYS)
+	_hud.set_day(_day)
 	_sichere_wohnwagen()
 
 	if multiplayer.is_server():
@@ -1620,9 +1619,7 @@ func _end_shift(reason := 0) -> void:
 	_urin_count = 0
 	_complaints = 0
 	_left_guests = 0
-	_day += 1
-	if _day > WIESN_DAYS:
-		_day = 1
+	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
 	_broadcast_meta()
 
 ## Bilgisayardan zelti erken kapat (popülerlik cezası).
@@ -1965,7 +1962,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_active_count = active_count
 	_hud.set_phase(phase == Phase.SHIFT)
 	_hud.set_buero(buero)
-	_hud.set_day(day, WIESN_DAYS)
+	_hud.set_day(day)
 	_hud.set_quest(quest_step, QUEST_COUNT)
 	if _sfx_node:
 		if phase == Phase.SHIFT:

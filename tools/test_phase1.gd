@@ -144,6 +144,13 @@ class Lauf extends Node:
 			await _frames(2)
 			_check("Hilfe zu, Pause aufgehoben", not hilfe.visible and not get_tree().paused, "")
 
+		print("  -- Endlos (3.1)")
+		gm._day = 16
+		gm._end_shift(0)
+		await _frames(3)
+		_check("nach Tag 16 kommt Tag 17", gm._day == 17, "Tag=%d" % gm._day)
+		_check("HUD zeigt Tag 17", String(hud.get_node("%Zeit").text).begins_with("Tag 17"), hud.get_node("%Zeit").text)
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))

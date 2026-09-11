@@ -99,7 +99,7 @@ func set_time(clock: float, night: bool = false) -> void:
 	_zeit.text = "%s · %s %02d:%02d" % [tag, "🌙" if night else "🕗", h, m]
 	_zeit.add_theme_color_override("font_color", Color(0.72, 0.78, 1) if night else WEISS)
 
-func set_day(day: int, _total: int = 0) -> void:
+func set_day(day: int) -> void:
 	_day = day
 	set_time(_clock, _night)
 

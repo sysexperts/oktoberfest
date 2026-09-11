@@ -104,7 +104,7 @@ prüft Solo, Aktionen, Pause, Tastenbelegung und alle drei Sprachen (21 Prüfung
 Endlos heißt nicht ziellos. Ohne Saisonende braucht es einen anderen Grund,
 morgen weiterzuspielen.
 
-- [ ] **3.1 Tageszähler ohne Rücksprung** — Tag 17, 18, 19 … statt „1/16".
+- [x] **3.1 Tageszähler ohne Rücksprung** — Tag 17, 18, 19 … statt „1/16".
 - [ ] **3.2 Meilensteine** — gestaffelte Ziele (erste 1.000 €, 100 Maß, Zelt
       Stufe 2, erster Kellner Level 5 …) mit Belohnung oder Freischaltung.
       Werden später 1:1 zu Steam-Errungenschaften.
