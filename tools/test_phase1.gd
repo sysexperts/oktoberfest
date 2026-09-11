@@ -23,7 +23,10 @@ class Lauf extends Node:
 		_sichern()
 		get_tree().create_timer(60.0).timeout.connect(_abbruch)
 		Net.start_solo(true)
-		await _frames(40)
+		await _frames(2)
+		var zuerst: String = String(get_tree().current_scene.name) if get_tree().current_scene else ""
+		await _warte_auf_spiel()
+		_check("Ladebildschirm vor dem Spiel (4.3)", zuerst == "Ladebildschirm", zuerst)
 		await _pruefen()
 		_wiederherstellen()
 		print("ERGEBNIS: %s (%d Fehler)" % ["BESTANDEN" if fehler == 0 else "FEHLGESCHLAGEN", fehler])
@@ -219,6 +222,30 @@ class Lauf extends Node:
 		gm._add_income(100000)
 		_check("Kredit abbezahlt", gm._kredit_rest == 0, str(gm._kredit_rest))
 
+		print("  -- Grafikstufen (4.4)")
+		var grafik := gm.get_node_or_null("Grafikstufe")
+		_check("Grafikstufe in der Szene", grafik != null and grafik.lichter_gesamt() > 0,
+			str(grafik.lichter_gesamt()) if grafik else "")
+		if grafik:
+			var umgebung: Environment = gm.get_node("WorldEnvironment").environment
+			var alle: int = grafik.lichter_gesamt()
+			Einstellungen.grafik = 0
+			Einstellungen.anwenden()
+			await _frames(2)
+			_check("Niedrig: 120 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 120
+				and not umgebung.ssao_enabled and not umgebung.glow_enabled, "")
+			_check("Niedrig: ein Drittel der Kirmeslichter", grafik.sichtbare_lichter() <= ceili(alle / 3.0),
+				"%d von %d" % [grafik.sichtbare_lichter(), alle])
+			Einstellungen.grafik = 2
+			Einstellungen.aufloesung = 0.75
+			Einstellungen.anwenden()
+			await _frames(2)
+			_check("Hoch: alle Lichter, SSAO an", grafik.sichtbare_lichter() == alle and umgebung.ssao_enabled, "")
+			_check("Renderauflösung 75 %", is_equal_approx(get_tree().root.scaling_3d_scale, 0.75),
+				str(get_tree().root.scaling_3d_scale))
+			Einstellungen.aufloesung = 1.0
+			Einstellungen.anwenden()
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))
@@ -248,6 +275,15 @@ class Lauf extends Node:
 			Einstellungen.anwenden()
 			var t := tr("MENU_NEW_GAME")
 			_check("%s übersetzt" % lang, t != "MENU_NEW_GAME", t)
+
+	## Der Ladebildschirm braucht unterschiedlich lange — warten, bis das Spiel da ist.
+	func _warte_auf_spiel() -> void:
+		for i in 3000:
+			var s := get_tree().current_scene
+			if s != null and s.has_method("net_book_tent") and s.is_node_ready():
+				break
+			await get_tree().process_frame
+		await _frames(30)
 
 	func _taste(aktion: String) -> int:
 		for ev in InputMap.action_get_events(aktion):

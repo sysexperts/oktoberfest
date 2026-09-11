@@ -8,6 +8,7 @@ const DEFAULT_PORT := 8642
 const MAX_PLAYERS := 4
 const GAME_SCENE := "res://scenes/main.tscn"
 const MENU_SCENE := "res://scenes/menu.tscn"
+const LADE_SZENE := "res://scenes/ui/ladebildschirm.tscn"
 
 ## Spielstände: drei Plätze. SAVE_FORMAT steigt, wenn sich der Aufbau so ändert,
 ## dass ein älteres Spiel den Stand nicht mehr richtig lesen könnte — solche
@@ -28,6 +29,15 @@ var neues_spiel := false
 var solo := false
 ## Spielstand-Platz des laufenden Spiels (1..SLOTS).
 var slot := 1
+## Welche Szene der Ladebildschirm laden soll (wechsle_zu).
+var ziel_szene := ""
+
+## Szenenwechsel über den Ladebildschirm: lädt im Hintergrund, zeigt Fortschritt.
+## Nur für Solo — beim Hosten und Beitreten gleich wechseln, sonst könnten
+## Netzwerknachrichten ankommen, bevor die Spielszene da ist.
+func wechsle_zu(pfad: String) -> void:
+	ziel_szene = pfad
+	get_tree().change_scene_to_file(LADE_SZENE)
 
 func _ready() -> void:
 	_alten_spielstand_uebernehmen()
@@ -53,7 +63,7 @@ func start_solo(neu: bool, platz: int = 0) -> void:
 	solo = true
 	neues_spiel = neu
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-	get_tree().change_scene_to_file(GAME_SCENE)
+	wechsle_zu(GAME_SCENE)
 
 ## Wer hostet, spielt mit seinem zuletzt benutzten Stand weiter.
 func host_game(port: int = DEFAULT_PORT) -> Error:

@@ -34,6 +34,13 @@ STATUS_ENTER_IP,Bitte eine IP-Adresse eingeben.,Please enter an IP address.,Lüt
 STATUS_UPDATE_SEARCH,Suche nach Updates …,Checking for updates …,Güncellemeler aranıyor …
 STATUS_UPDATE_LOAD,Lade Update %d …,Downloading update %d …,Güncelleme %d indiriliyor …
 STATUS_STARTING,Starte …,Starting …,Başlatılıyor …
+LOADING,Lädt …,Loading …,Yükleniyor …
+LOAD_TIP_1,Tipp: Halte immer ein Paket Bier auf Vorrat — ohne Ware verkaufst du nichts.,Tip: Always keep a package of beer in stock — without supplies you sell nothing.,İpucu: Depoda her zaman bir paket bira bulundur — malzeme olmadan hiçbir şey satamazsın.
+LOAD_TIP_2,Tipp: Ein sauberes Zelt bringt mehr Geld pro Bestellung. {interact} gedrückt halten zum Putzen.,Tip: A clean tent earns more per order. Hold {interact} to clean.,İpucu: Temiz bir çadır sipariş başına daha çok kazandırır. Temizlemek için {interact} basılı tut.
+LOAD_TIP_3,Tipp: Kellner auf höherer Stufe tragen bis zu 12 Krüge auf einmal.,Tip: Higher-level waiters carry up to 12 mugs at once.,İpucu: Üst seviye garsonlar tek seferde 12 kupaya kadar taşır.
+LOAD_TIP_4,Tipp: Ab 19 Uhr wird das Zelt voll und die Gäste werden ungeduldig.,Tip: From 19:00 the tent fills up and guests get impatient.,İpucu: Saat 19:00'dan sonra çadır dolar ve misafirler sabırsızlanır.
+LOAD_TIP_5,Tipp: {help} öffnet die Hilfe mit allen Tasten.,Tip: {help} opens help with all controls.,İpucu: {help} tüm tuşlarla yardımı açar.
+LOAD_TIP_6,Tipp: Meilensteine im Wiesenbüro bringen Bonusgeld.,Tip: Milestones in the Fair Office pay bonus money.,İpucu: Fuar Ofisindeki kilometre taşları bonus para kazandırır.
 PAUSE_TITLE,Pause,Paused,Duraklatıldı
 PAUSE_RESUME,Fortsetzen,Resume,Devam Et
 PAUSE_SAVE_MENU,Speichern und zum Hauptmenü,Save and return to menu,Kaydet ve ana menüye dön
@@ -52,6 +59,7 @@ SET_QUALITY,Grafikqualität,Graphics quality,Grafik kalitesi
 SET_QUALITY_LOW,Niedrig,Low,Düşük
 SET_QUALITY_MEDIUM,Mittel,Medium,Orta
 SET_QUALITY_HIGH,Hoch,High,Yüksek
+SET_QUALITY_HINT,"Niedrig: weniger Besucher und Lichter, keine Nachbearbeitung. Ruckelt das Spiel, zuerst die Qualität senken, dann die Auflösung.","Low: fewer visitors and lights, no post-processing. If the game stutters, lower quality first, then resolution.","Düşük: daha az ziyaretçi ve ışık, son işleme yok. Oyun takılırsa önce kaliteyi, sonra çözünürlüğü düşür."
 SET_VOL_MASTER,Gesamtlautstärke,Master volume,Genel ses
 SET_VOL_MUSIC,Musik,Music,Müzik
 SET_VOL_SFX,Effekte,Effects,Efektler

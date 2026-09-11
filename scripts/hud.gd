@@ -48,6 +48,16 @@ func _ready() -> void:
 	_computer.einrichten(get_parent())
 	Einstellungen.geaendert.connect(_alles_neu)
 	_alles_neu()
+	_einblenden()
+
+## Beim Spielstart aus dem Schwarz des Ladebildschirms einblenden.
+func _einblenden() -> void:
+	var fade: ColorRect = %Abblenden
+	fade.visible = true
+	fade.color.a = 1.0
+	var tw := create_tween()
+	tw.tween_property(fade, "color:a", 0.0, 0.6)
+	tw.tween_callback(func() -> void: fade.visible = false)
 
 func _alles_neu() -> void:
 	set_money(_money)

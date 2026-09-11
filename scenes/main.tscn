@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/pause.tscn" id="90_pause"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zielmarker.tscn" id="91_ziel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hilfe.tscn" id="92_hilfe"]
+[ext_resource type="Script" path="res://scripts/grafikstufe.gd" id="93_grafik"]
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
 sky_top_color = Color(0.14, 0.18, 0.42, 1)
@@ -255,3 +256,6 @@ script = ExtResource("10_sfx")
 [node name="Zielmarker" parent="." instance=ExtResource("91_ziel")]
 
 [node name="Hilfe" parent="." instance=ExtResource("92_hilfe")]
+
+[node name="Grafikstufe" type="Node" parent="."]
+script = ExtResource("93_grafik")

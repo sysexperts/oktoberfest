@@ -24,6 +24,10 @@ const STANDARD_TASTEN := {
 var sprache := "auto"
 var vollbild := false
 var vsync := true
+## 0 Niedrig, 1 Mittel, 2 Hoch — was das bewirkt, steht in scripts/grafikstufe.gd
+var grafik := 2
+## Renderauflösung der 3D-Welt (0,5 … 1,0); Menüs bleiben immer scharf
+var aufloesung := 1.0
 ## Lineare Lautstärke 0..1 je Audiobus.
 var lautstaerke := {"Master": 1.0, "Musik": 0.8, "SFX": 1.0, "Ambiente": 0.8}
 var maus := 1.0
@@ -42,6 +46,7 @@ func anwenden() -> void:
 			DisplayServer.WINDOW_MODE_FULLSCREEN if vollbild else DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_vsync_mode(
 			DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED)
+	get_tree().root.scaling_3d_scale = aufloesung
 	for bus: String in lautstaerke:
 		_bus_anwenden(bus)
 	_tasten_anwenden()
@@ -98,6 +103,8 @@ func speichern() -> void:
 	cfg.set_value("allgemein", "sprache", sprache)
 	cfg.set_value("grafik", "vollbild", vollbild)
 	cfg.set_value("grafik", "vsync", vsync)
+	cfg.set_value("grafik", "qualitaet", grafik)
+	cfg.set_value("grafik", "aufloesung", aufloesung)
 	for bus: String in lautstaerke:
 		cfg.set_value("ton", bus, lautstaerke[bus])
 	cfg.set_value("steuerung", "maus", maus)
@@ -115,6 +122,8 @@ func _lade() -> void:
 		sprache = "auto"
 	vollbild = bool(cfg.get_value("grafik", "vollbild", vollbild))
 	vsync = bool(cfg.get_value("grafik", "vsync", vsync))
+	grafik = clampi(int(cfg.get_value("grafik", "qualitaet", grafik)), 0, 2)
+	aufloesung = clampf(float(cfg.get_value("grafik", "aufloesung", aufloesung)), 0.5, 1.0)
 	for bus: String in lautstaerke.keys():
 		lautstaerke[bus] = float(cfg.get_value("ton", bus, lautstaerke[bus]))
 	maus = clampf(float(cfg.get_value("steuerung", "maus", maus)), 0.1, 3.0)

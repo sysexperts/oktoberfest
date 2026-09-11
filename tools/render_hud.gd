@@ -21,6 +21,10 @@ class Lauf extends Node:
 			if _gab_es[pfad]:
 				DirAccess.copy_absolute(ProjectSettings.globalize_path(pfad), ProjectSettings.globalize_path(pfad + ".renderbackup"))
 		Net.start_solo(true)
+		for i in 3000:   # Ladebildschirm abwarten
+			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
+				break
+			await get_tree().process_frame
 		await _frames(60)
 		var gm := get_tree().current_scene
 		var hud: HUD = gm.get_node("HUD")

@@ -13,6 +13,11 @@ const REITER_TITEL := ["SET_TAB_GRAPHICS", "SET_TAB_AUDIO", "SET_TAB_CONTROLS", 
 @onready var _reiter: TabContainer = %Reiter
 @onready var _vollbild: CheckButton = %Vollbild
 @onready var _vsync: CheckButton = %Vsync
+@onready var _qualitaet: OptionButton = %Qualitaet
+@onready var _aufloesung: HSlider = %Aufloesung
+@onready var _aufloesung_wert: Label = %AufloesungWert
+
+const QUALITAETEN := ["SET_QUALITY_LOW", "SET_QUALITY_MEDIUM", "SET_QUALITY_HIGH"]
 @onready var _maus: HSlider = %Maus
 @onready var _maus_wert: Label = %MausWert
 @onready var _invert: CheckButton = %MausInvert
@@ -34,6 +39,8 @@ func _ready() -> void:
 	_werte_laden()
 	_vollbild.toggled.connect(_on_vollbild)
 	_vsync.toggled.connect(_on_vsync)
+	_qualitaet.item_selected.connect(_on_qualitaet)
+	_aufloesung.value_changed.connect(_on_aufloesung)
 	_maus.value_changed.connect(_on_maus)
 	_invert.toggled.connect(_on_invert)
 	for bus: String in _regler:
@@ -48,6 +55,7 @@ func _ready() -> void:
 func _werte_laden() -> void:
 	_vollbild.set_pressed_no_signal(Einstellungen.vollbild)
 	_vsync.set_pressed_no_signal(Einstellungen.vsync)
+	_aufloesung.set_value_no_signal(Einstellungen.aufloesung)
 	_maus.set_value_no_signal(Einstellungen.maus)
 	_invert.set_pressed_no_signal(Einstellungen.maus_y_umkehren)
 	for bus: String in _regler:
@@ -62,6 +70,12 @@ func _texte() -> void:
 	for i in mini(REITER_TITEL.size(), _reiter.get_tab_count()):
 		_reiter.set_tab_title(i, tr(REITER_TITEL[i]))
 	_maus_wert.text = "%.2f×" % Einstellungen.maus
+	# Qualitätsstufen neu beschriften (OptionButton übersetzt seine Einträge nicht selbst)
+	_qualitaet.clear()
+	for i in QUALITAETEN.size():
+		_qualitaet.add_item(tr(QUALITAETEN[i]), i)
+	_qualitaet.select(Einstellungen.grafik)
+	_aufloesung_wert.text = "%d %%" % roundi(Einstellungen.aufloesung * 100.0)
 	for bus: String in _regler:
 		(_regler[bus][1] as Label).text = "%d %%" % roundi(float(Einstellungen.lautstaerke[bus]) * 100.0)
 	_tasten_aufbauen()
@@ -119,6 +133,16 @@ func _on_vollbild(an: bool) -> void:
 func _on_vsync(an: bool) -> void:
 	Einstellungen.vsync = an
 	Einstellungen.anwenden()
+
+func _on_qualitaet(index: int) -> void:
+	Einstellungen.grafik = index
+	Einstellungen.anwenden()   # Grafikstufe im Spiel hört auf "geaendert"
+
+## Beim Ziehen direkt auf das Fenster — ohne das Menü jedes Mal neu aufzubauen.
+func _on_aufloesung(wert: float) -> void:
+	Einstellungen.aufloesung = wert
+	get_tree().root.scaling_3d_scale = wert
+	_aufloesung_wert.text = "%d %%" % roundi(wert * 100.0)
 
 ## Die Maus liest der Spieler bei jeder Bewegung frisch — kein anwenden() nötig.
 func _on_maus(wert: float) -> void:

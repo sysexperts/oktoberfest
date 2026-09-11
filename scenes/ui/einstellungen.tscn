@@ -84,6 +84,51 @@ text = "SET_VSYNC"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="QualitaetZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/QualitaetZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_QUALITY"
+
+[node name="Qualitaet" type="OptionButton" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/QualitaetZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+
+[node name="AufloesungZeile" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/AufloesungZeile"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "SET_RESOLUTION"
+
+[node name="Aufloesung" type="HSlider" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/AufloesungZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="AufloesungWert" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt/AufloesungZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="QualitaetHinweis" type="Label" parent="Mitte/Panel/Rand/Spalte/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "SET_QUALITY_HINT"
+autowrap_mode = 3
+
 [node name="Ton" type="MarginContainer" parent="Mitte/Panel/Rand/Spalte/Reiter"]
 visible = false
 layout_mode = 2

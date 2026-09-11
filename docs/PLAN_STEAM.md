@@ -134,7 +134,11 @@ morgen weiterzuspielen.
       *Code fertig: alle sieben plus Menümusik sind angeschlossen und still,
       solange die Datei fehlt. Offen sind nur noch die Dateien.*
 - [ ] **4.2 Menühintergrund** — der Kirmesplatz bei Nacht hinter dem Hauptmenü.
-- [ ] **4.3 Ladebildschirm und Übergänge**
+- [x] **4.3 Ladebildschirm und Übergänge**
+      *`scenes/ui/ladebildschirm.tscn`: lädt das Spiel im Hintergrund mit
+      Fortschritt und Tipp, blendet über Schwarz ins Spiel. Nur Solo — Host und
+      Beitritt wechseln weiter direkt, damit keine Netzwerknachricht vor der
+      Spielszene ankommt.*
 - [ ] **4.4 Grafikstufen umsetzen und messen** — 400 Besucher, 143 Lichter,
       Glow und SSAO pro Stufe schaltbar.
 

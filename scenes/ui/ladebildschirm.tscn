@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ladebildschirm.gd" id="1_lade"]
+
+[node name="Ladebildschirm" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lade")
+
+[node name="Hintergrund" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.06, 0.12, 1)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Titel" type="Label" parent="Mitte/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 42
+text = "GAME_TITLE"
+horizontal_alignment = 1
+
+[node name="Balken" type="ProgressBar" parent="Mitte/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+show_percentage = false
+
+[node name="Status" type="Label" parent="Mitte/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+text = "LOADING"
+horizontal_alignment = 1
+
+[node name="Tipp" type="Label" parent="Mitte/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "Tipp: …"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Schwarz" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
