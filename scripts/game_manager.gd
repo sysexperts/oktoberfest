@@ -198,6 +198,10 @@ const KOMBO_BONUS := 2
 const KOMBO_MAX := 10
 ## Finale am letzten Wiesn-Tag: voller Andrang, Star-Act spielt gratis
 const FINALE_ANDRANG := 1.3
+## Nächste Wiesn wird anspruchsvoller (Spaß-Plan 4.2) — je Wiesn nach der ersten:
+const SAISON_MIETE := 0.2       # +20 % Miete
+const SAISON_GEDULD := 0.06     # −6 % Geduld (nie unter 70 %)
+const SAISON_ANDRANG := 0.1     # +10 % Gäste
 ## Gästetypen (Spaß-Plan 3.2): "" normal, stamm, tourist, tracht, vip — Gewichte
 const GAST_TYPEN := {"": 55, "stamm": 15, "tourist": 15, "tracht": 10, "vip": 5}
 const TYP_GEDULD := {"stamm": 1.5, "tourist": 0.7, "vip": 0.8}
@@ -629,11 +633,13 @@ func _apply_daylight(clock: float) -> void:
 			himmel.set_shader_parameter("regen", r)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
-	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day) * float(GEDULD_FAKTOR[_schwierigkeit])
+	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day) * float(GEDULD_FAKTOR[_schwierigkeit]) \
+		* maxf(0.7, 1.0 - SAISON_GEDULD * float(_saison_nr - 1))
 	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
-	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)) * float(MIETE_FAKTOR[_schwierigkeit]))
+	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)) * float(MIETE_FAKTOR[_schwierigkeit])
+		* (1.0 + SAISON_MIETE * float(_saison_nr - 1)))
 
 ## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
 func _drinks_avail() -> Array:
@@ -2137,6 +2143,7 @@ func _shift_process(delta: float) -> void:
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
 		andrang *= _ereignis_andrang()
 		andrang *= float(ANDRANG_FAKTOR[_schwierigkeit])
+		andrang *= 1.0 + SAISON_ANDRANG * float(_saison_nr - 1)   # jede Wiesn voller
 		# Koop: mit mehr Spielern kommen mehr Gäste, sonst ist es zu leicht
 		andrang *= 1.0 + KOOP_ANDRANG_JE_SPIELER * float(maxi(1, _players_nodes.size()) - 1)
 		var target := mini(_seats.size(), int(round(andrang * float(_seats.size()) * _time_factor() * draw)))

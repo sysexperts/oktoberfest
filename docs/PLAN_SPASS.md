@@ -170,7 +170,9 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       Kosten steigen. HUD „Tag 5/16". Neue Meilensteine SAISON_1, WIESN_WIRT_5)* — eine Wiesn dauert **16 Tage**; letzter Tag
       ist das große Finale (voller Andrang, Star-Act umsonst). Danach Bewertung
       mit 1–5 Maßkrügen (Umsatz, Beliebtheit, Sauberkeit, Meilensteine). *Ich, M*
-- [ ] **4.2 Nächstes Jahr** — nach der Saison geht es weiter mit Bonus
+- [x] **4.2 Nächstes Jahr** *(v124: je weiterer Wiesn +20 % Miete, −6 % Geduld, +10 % Gäste.
+      Anlass: Bot-Lauf mit Gästetypen — ab Tag 12 alles ausgebaut, Geld stieg bis Tag 30 auf 21.000 €.
+      Offen: echte Geldsenken/Freischaltungen 4.3, Personal-Eigenschaften 4.4)* — nach der Saison geht es weiter mit Bonus
       (Startgeld, freigeschaltete Dinge bleiben), aber schwerer: teurere Miete,
       anspruchsvollere Gäste. Endlosmodus bleibt als Option. *Ich, M*
 - [ ] **4.3 Freischaltungen über Saisons** — neues Essen (Hendl, Obatzda,

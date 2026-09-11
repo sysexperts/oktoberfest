@@ -259,7 +259,8 @@ class Lauf extends Node:
 		_check("Geduld nie unter 60 %", w.geduld(38.0, 999) >= 38.0 * 0.6 - 0.001, str(w.geduld(38.0, 999)))
 		_check("Schonfrist: bis Tag 7 kein Beliebtheitsverlust", w.beliebtheit_verlust(7) == 0.0
 			and w.beliebtheit_verlust(8) > 0.0, "")
-		_check("Miete im Spiel folgt dem Tag", gm._daily_rent() == w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._day),
+		gm._saison_nr = 1   # Wiesn-Aufschlag separat geprüft
+		_check("Miete im Spiel folgt dem Tag", gm._daily_rent() ==w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._day),
 			"Tag %d, Miete %d" % [gm._day, gm._daily_rent()])
 
 		print("  -- Bierpreis")
@@ -429,6 +430,18 @@ class Lauf extends Node:
 		_check("alle Gästetypen kommen vor", typen.size() == gm.GAST_TYPEN.size(), str(typen.keys()))
 		_check("VIP doppelter Umsatz, Stammgast geduldiger", gm._typ_umsatz({"typ": "vip"}) == 2.0
 			and gm._geduld_max({"typ": "stamm"}) > gm._geduld() and gm._geduld_max({"typ": "tourist"}) < gm._geduld(), "")
+
+		print("  -- Nächste Wiesn schwerer")
+		var saison_vorher: int = gm._saison_nr
+		gm._saison_nr = 1
+		var miete_w1: int = gm._daily_rent()
+		var geduld_w1: float = gm._geduld()
+		gm._saison_nr = 3
+		var miete_w3: int = gm._daily_rent()
+		var geduld_w3: float = gm._geduld()
+		gm._saison_nr = saison_vorher
+		_check("Wiesn 3: mehr Miete, weniger Geduld", miete_w3 >= miete_w1 and geduld_w3 < geduld_w1,
+			"Miete %d → %d, Geduld %.1f → %.1f" % [miete_w1, miete_w3, geduld_w1, geduld_w3])
 		gm._phase = gm.Phase.INTERMISSION
 
 		print("  -- Spielstände (3.3)")
