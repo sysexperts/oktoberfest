@@ -1,7 +1,8 @@
 # Ton — was gebraucht wird
 
-Das Spiel hat aktuell **keine einzige Audiodatei**. Alles Hörbare erzeugt
-`scripts/sfx.gd` als Rechteck- und Rauschtöne — daher der 8-Bit-Eindruck.
+**Stand 2026-09-11:** eine Zeltmusik (`musik/zelt_01.mp3`), sonst noch keine
+Audiodatei. Alles andere erzeugt `scripts/sfx.gd` als Ersatztöne — daher der
+8-Bit-Eindruck.
 
 Das System nimmt jetzt **echte Dateien, sobald sie da sind**, und fällt nur auf
 die Piepstöne zurück, wo noch nichts liegt. Du musst also nichts programmieren:
@@ -88,8 +89,12 @@ Kurz, trocken, ohne Hall. Namen genau so, sonst werden sie nicht gefunden.
 | `muenzen.ogg` | 0,5 s | Trinkgeld |
 | `fahrgeschaeft.ogg` | 2 s, loopbar | Motorbrummen, in der Nähe der Fahrgeschäfte |
 
-Diese sind im Code schon vorgesehen, aber noch nirgends ausgelöst — sobald die
-Dateien da sind, hänge ich sie an die passenden Stellen.
+**Alle sind angeschlossen** (Plan 4.1) und erklingen, sobald die Datei da ist:
+`kasse` beim Bedienen · `muenzen` beim Trinkgeld fürs Putzen · `prost` mit der
+Prost-Taste · `zapfen` beim Ansetzen am Fass · `schritte` beim Laufen ·
+`tuer` beim Schlafen im Wohnwagen (bis dahin der Klick) · `fahrgeschaeft` als
+Raumklang an jedem Fahrgeschäft · `musik/menue.ogg` als Menümusik.
+Datei ablegen, neu exportieren — mehr ist nicht nötig.
 
 ---
 

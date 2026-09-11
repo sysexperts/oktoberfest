@@ -1346,7 +1346,7 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 			_last_earn += tip
 			_clean_tips += tip
 			_stats.cleaned += 1
-			_net_betrag.rpc(mn.global_position, tip)
+			_net_betrag.rpc(mn.global_position, tip, true)
 			_remove_mess.rpc(best)
 
 ## Mitarbeiter serviert: volle Bezahlung, aber kein Trinkgeld (das bekommt nur der Chef).
@@ -1372,7 +1372,7 @@ func _serve_by_staff(gid: int) -> void:
 	_last_earn += reward
 	Game.add_score(reward)
 	_add_income(reward)
-	_net_betrag.rpc(g.pos, reward)
+	_net_betrag.rpc(g.pos, reward, false)
 
 @rpc("authority", "reliable", "call_local")
 func _add_staff(id: int, pos: Vector3, role: int, level: int) -> void:
@@ -1553,7 +1553,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_last_earn += reward + tip
 	Game.add_score(reward)
 	_add_income(reward + tip)
-	_net_betrag.rpc(g.pos, reward + tip)
+	_net_betrag.rpc(g.pos, reward + tip, false)
 
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
@@ -1918,7 +1918,7 @@ func net_clean(id: int) -> void:
 		_last_earn += tip
 		_clean_tips += tip
 		_stats.cleaned += 1
-		_net_betrag.rpc((_messes[id] as Node3D).global_position, tip)
+		_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
 		_remove_mess.rpc(id)
 
 # ================================================= senkron
@@ -2080,15 +2080,18 @@ const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER"}
 const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS"}
 const BETRAG_SZENE := preload("res://scenes/ui/betrag.tscn")
 
-## Schwebender Betrag über Gast oder Pfütze, bei allen Spielern.
+## Schwebender Betrag über Gast oder Pfütze, bei allen Spielern — mit Kasse
+## (Verkauf) oder Münzen (Trinkgeld), sobald die Tondateien da sind.
 @rpc("authority", "unreliable", "call_local")
-func _net_betrag(pos: Vector3, betrag: int) -> void:
+func _net_betrag(pos: Vector3, betrag: int, trinkgeld: bool) -> void:
 	if betrag <= 0 or DisplayServer.get_name() == "headless":
 		return
 	var b := BETRAG_SZENE.instantiate()
 	add_child(b)
 	b.global_position = pos + Vector3(0, 2.0, 0)
 	b.starte(betrag)
+	if _sfx_node:
+		_sfx_node.play("muenzen" if trinkgeld else "kasse", -8.0)
 
 ## Kotz-Ablauf: Gast läuft vom Tisch weg, übergibt sich dort, geht zurück.
 func _update_puke(g: Dictionary, id: int, delta: float) -> void:

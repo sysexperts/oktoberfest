@@ -90,7 +90,8 @@ func _lade_ordner(pfad: String) -> Array[AudioStream]:
 		# Im Projekt liegt daneben eine .import, im fertigen Export eine .remap —
 		# beide Endungen abschneiden, sonst findet der Export die Musik nicht.
 		var clean := n.trim_suffix(".import").trim_suffix(".remap")
-		if clean.get_extension().to_lower() in ["ogg", "wav", "mp3"]:
+		# menue.* ist die Menümusik (hauptmenue) — nicht im Zelt spielen
+		if clean.get_extension().to_lower() in ["ogg", "wav", "mp3"] and clean.get_basename() != "menue":
 			var s := load(pfad + clean) as AudioStream
 			if s != null and not out.has(s):
 				out.append(s)
@@ -168,6 +169,10 @@ func _crowd() -> AudioStreamWAV:
 	w.loop_begin = 0
 	w.loop_end = n
 	return w
+
+## Klang abspielen — gibt es dafür (noch) keine Datei, den Ersatzklang.
+func play_oder(name: String, ersatz: String, vol_db := -6.0) -> void:
+	play(name if _streams.has(name) else ersatz, vol_db)
 
 func play(name: String, vol_db := -6.0) -> void:
 	if not _ok or not _streams.has(name):

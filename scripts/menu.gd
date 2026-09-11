@@ -57,6 +57,18 @@ func _ready() -> void:
 	Einstellungen.geaendert.connect(_texte_aktualisieren)
 	_texte_aktualisieren()
 	_zeige(_haupt)
+	_menue_musik()
+
+## Menümusik aus assets/audio/musik/menue.* — ohne Datei bleibt es still.
+func _menue_musik() -> void:
+	var spieler: AudioStreamPlayer = %MenueMusik
+	for endung in [".ogg", ".wav", ".mp3"]:
+		var pfad: String = "res://assets/audio/musik/menue" + endung
+		if ResourceLoader.exists(pfad):
+			spieler.stream = load(pfad)
+			spieler.finished.connect(spieler.play)
+			spieler.play()
+			return
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not _haupt.visible:

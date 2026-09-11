@@ -131,6 +131,8 @@ morgen weiterzuspielen.
 
 - [ ] **4.1 Soundeffekte anschließen** — die sieben neuen Namen an die
       passenden Stellen hängen. *Braucht Dateien von dir* (siehe `AUDIO.md`).
+      *Code fertig: alle sieben plus Menümusik sind angeschlossen und still,
+      solange die Datei fehlt. Offen sind nur noch die Dateien.*
 - [ ] **4.2 Menühintergrund** — der Kirmesplatz bei Nacht hinter dem Hauptmenü.
 - [ ] **4.3 Ladebildschirm und Übergänge**
 - [ ] **4.4 Grafikstufen umsetzen und messen** — 400 Besucher, 143 Lichter,

@@ -36,6 +36,7 @@ var _rest := Transform3D()
 var _t := 0.0
 
 func _ready() -> void:
+	_geraeusch()
 	_teil = get_node_or_null(teil) as Node3D
 	if _teil == null:
 		_teil = _erstes_kind()
@@ -49,6 +50,27 @@ func _ready() -> void:
 				_gondeln.append(c)
 	# Damit nicht alle Fahrgeschäfte im Gleichschritt laufen.
 	_t = randf() * dauer
+
+## Motorbrummen in der Nähe, sobald assets/audio/sfx/fahrgeschaeft.* existiert
+## (docs/AUDIO.md). Der Player entsteht hier im Code, weil es ohne Datei nichts
+## zu hören gibt — so bleiben die Fahrgeschäft-Szenen ohne leere Audio-Knoten.
+func _geraeusch() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	for endung in [".ogg", ".wav", ".mp3"]:
+		var pfad: String = "res://assets/audio/sfx/fahrgeschaeft" + endung
+		if not ResourceLoader.exists(pfad):
+			continue
+		var p := AudioStreamPlayer3D.new()
+		p.stream = load(pfad)
+		p.bus = "Ambiente"
+		p.max_distance = 28.0
+		p.unit_size = 6.0
+		p.volume_db = -8.0
+		add_child(p)
+		p.finished.connect(p.play)   # Endlosschleife, auch ohne Loop-Haken beim Import
+		p.play(randf() * 1.5)        # nicht alle im Gleichtakt
+		return
 
 func _erstes_kind() -> Node3D:
 	for c in get_children():

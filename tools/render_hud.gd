@@ -39,7 +39,7 @@ class Lauf extends Node:
 		hud.melde("MSG_EVENING")
 		await _frames(25)
 		# Betrag erst kurz vor dem Bild — die Szene rendert langsam, sonst ist er schon weg
-		gm._net_betrag(spieler.global_position - spieler.global_transform.basis.z * 3.0, 23)
+		gm._net_betrag(spieler.global_position - spieler.global_transform.basis.z * 3.0, 23, false)
 		await _bild("hud_meldungen")
 		hud.set_money(-350)
 		hud.set_popularity(62.0)

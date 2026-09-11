@@ -152,6 +152,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("emote") and not event.is_echo():
 		_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
 		_sfx("cheer")
+		_sfx("prost")   # Krüge klirren — nur mit Datei
 	# Kostümfarbe wechseln — Aktion "costume"
 	if event.is_action_pressed("costume") and not event.is_echo():
 		costume = (costume + 1) % COSTUME_COLORS.size()
@@ -237,6 +238,22 @@ func _handle_movement(delta: float) -> void:
 	else:
 		velocity.y = 0.0
 	move_and_slide()
+	_schritte(delta)
+
+var _schritt_t := 0.0
+
+## Schrittgeräusch im Takt der Bewegung, beim Rennen schneller.
+## Stumm, solange assets/audio/sfx/schritte fehlt.
+func _schritte(delta: float) -> void:
+	var tempo := Vector2(velocity.x, velocity.z).length()
+	if not is_on_floor() or tempo < 1.0:
+		_schritt_t = 0.0
+		return
+	_schritt_t -= delta
+	if _schritt_t <= 0.0:
+		_schritt_t = 0.32 if tempo > 5.0 else 0.45
+		if _sfx_node:
+			_sfx_node.play("schritte", -14.0)
 
 func _update_target() -> void:
 	var best: Node3D = null
@@ -391,9 +408,12 @@ func _handle_interaction(delta: float) -> void:
 			# Uyu → sonraki gün (sadece molada)
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_sleep.rpc_id(1)
-				_sfx("pop")
+				if _sfx_node:
+					_sfx_node.play_oder("tuer", "pop")
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
+			if carry_fill <= 0.0:
+				_sfx("zapfen")   # Zapfhahn auf — nur mit Datei
 			carry_type = (_current_target as KegStation).beer_type
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
 			_sfx_loop("glug")
