@@ -140,6 +140,10 @@ class Lauf extends Node:
 		_check("Meldung übersetzt, Betrag formatiert", meldung == "💶 Zu wenig Geld für Toilette einbauen (1.800 €)", meldung)
 		var popup_text: String = texte.meldung("POPUP_RESERVE", [{"euro": 40}])
 		_check("Popup mit echten Zeilenumbrüchen", popup_text.contains("\n\n") and not popup_text.contains("\\n"), popup_text.left(30))
+		var tipp_bilanz: String = texte.bilanz({"day": 3, "missed": 15, "kellner": false, "zapfer": false,
+			"urin": 5, "toilet": false, "net": 120, "pop": 40})
+		_check("Bilanz nennt Tipps (Kellner, Toilette)", tipp_bilanz.contains(TranslationServer.translate("TIPP_KELLNER"))
+			and tipp_bilanz.contains(TranslationServer.translate("TIPP_TOILETTE")), tipp_bilanz.right(80))
 		var stapel: Node = hud.get_node("%Meldungen")
 		# Toilette (1.000 €) wäre per Dispo bezahlbar — Konto dafür kurz auf −800 €
 		var geld_toilette: int = Game.money

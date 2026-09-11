@@ -101,6 +101,15 @@ func set_tanz(an: bool) -> void:
 func tanzt() -> bool:
 	return _tanzt
 
+## 0 normal, 1 verpasste Bestellung (😤), 2 geht genervt (😠) — vom Server.
+var _laune := 0
+
+func set_laune(l: int) -> void:
+	if l == _laune:
+		return
+	_laune = l
+	_update_bubble()
+
 ## C3: sarhoş misafir kusar — kısa süre öne eğilir + 🤮 baloncuk.
 func play_vomit() -> void:
 	_vomit_t = 1.8
@@ -140,6 +149,11 @@ func can_serve(kind: int, type: int) -> bool:
 func _update_bubble() -> void:
 	if _bubble == null or _vomit_active:
 		return   # kusarken 🤮 baloncuğu ezilmesin
+	if _laune > 0:
+		_bubble.visible = true
+		_bubble.text = "😠" if _laune == 2 else "😤"
+		_bubble.modulate = Color(1, 0.45, 0.35)
+		return
 	if _tanzt:
 		_bubble.visible = true
 		_bubble.text = "🎶"

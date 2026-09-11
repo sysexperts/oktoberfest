@@ -87,7 +87,35 @@ static func bilanz(b: Dictionary) -> String:
 	# Kredittilgung direkt unter den Zinsen, nur wenn es sie gab
 	if int(b.get("loan", 0)) > 0:
 		zeilen.insert(9, "%s: %s" % [_t("REPORT_LOAN"), euro(-int(b.get("loan", 0)))])
+	var tipp_liste := tipps(b)
+	if not tipp_liste.is_empty():
+		zeilen.append("")
+		zeilen.append(_t("TIPP_TITEL"))
+		for t in tipp_liste:
+			zeilen.append("• " + t)
 	return "\n".join(zeilen)
+
+## Höchstens 3 Tipps für morgen aus der Tagesbilanz — sagt, woran es hakte.
+static func tipps(b: Dictionary) -> Array:
+	var aus := []
+	var verpasst := int(b.get("missed", 0))
+	if int(b.get("ohne_ware", 0)) >= 20:
+		aus.append(_t("TIPP_WARE"))
+	if verpasst >= 10 and not bool(b.get("kellner", true)):
+		aus.append(_t("TIPP_KELLNER"))
+	elif verpasst >= 10 and not bool(b.get("zapfer", true)):
+		aus.append(_t("TIPP_ZAPFER"))
+	elif verpasst >= 25:
+		aus.append(_t("TIPP_MEHR_PERSONAL"))
+	if int(b.get("urin", 0)) >= 3 and not bool(b.get("toilet", true)):
+		aus.append(_t("TIPP_TOILETTE"))
+	if int(b.get("complaints", 0)) >= 5 and not bool(b.get("reinigung", true)):
+		aus.append(_t("TIPP_REINIGUNG"))
+	if int(b.get("net", 0)) < 0 and aus.size() < 3:
+		aus.append(_t("TIPP_VERLUST"))
+	if int(b.get("pop", 100)) >= 55 and aus.is_empty():
+		aus.append(_t("TIPP_LAEUFT"))
+	return aus.slice(0, 3)
 
 ## Übersetzt einen Schlüssel und ersetzt {aktion} durch die aktuell belegte
 ## Taste, z. B. "{interact}" -> "[E]". So bleiben Hinweise nach dem Umbelegen

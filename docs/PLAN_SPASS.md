@@ -114,10 +114,11 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       dem Tor/Lieferwagen). *Ich, S*
 - [ ] **1.3 Wiesenbüro näher ans Zelt** oder zweiter Schreibtisch im Zelt —
       38 m Weg für jeden Einkauf nervt. *Ich, S (Map: Du entscheidest Platz)*
-- [ ] **1.4 „Warum?" sichtbar machen** — Gast geht: Symbol über dem Kopf
+- [x] **1.4 „Warum?" sichtbar machen** *(v115: 😤 bei verpasster Bestellung,
+      😠 wenn ein Gast genervt geht; Bilanz nennt bis zu 3 Tipps. Offen: 💸 zu teuer)* — Gast geht: Symbol über dem Kopf
       (😠 zu lange gewartet, 🤢 schmutzig, 💸 zu teuer). Tagesbilanz nennt die
       größten 3 Verlustgründe mit Tipp. *Ich, M*
-- [ ] **1.5 Pausephase führen** — nach Feierabend ein kurzer Bildschirm
+- [x] **1.5 Pausephase führen** *(v115: „💡 Tipps für morgen" in der Tagesbilanz)* — nach Feierabend ein kurzer Bildschirm
       „Morgen: …" mit 1–2 Empfehlungen (Bier reicht nicht, Kellner lohnt sich). *Ich, S*
 - [ ] **1.6 Ton (Pflicht)** — mindestens 12 Sounds: Zapfen, Krug abstellen,
       Kasse, Trinkgeld, Jubel/Prost, Beschwerde, Kotzen, Putzen, Lieferwagen,
@@ -128,7 +129,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 - [ ] **2.1 Kombo & Hektik-Bonus** — mehrere Gäste schnell hintereinander
       bedienen gibt eine Kombo-Anzeige und steigendes Trinkgeld; reißt nach 8 s ab. *Ich, M*
-- [ ] **2.2 Tische reagieren** — bediente Tische stoßen an („Prost!"), ab
+- [x] **2.2 Tische reagieren** *(v114: bei guter Stimmung tanzen 2–3 Gäste je Tisch auf dem Tisch)* — bediente Tische stoßen an („Prost!"), ab
       19:00 steigen Gäste auf die Bänke und schunkeln; volle Stimmung = sichtbare
       Wirkung (mehr Trinkgeld). *Ich, M*
 - [ ] **2.3 Mehrere Krüge tragen (Spieler)** — Spieler kann 2, mit Aufstufung

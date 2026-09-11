@@ -194,6 +194,7 @@ var _pop_verlust_heute := 0.0   # Beliebtheit, die verpasste Bestellungen heute 
 ## vorbereiten, als im Lager ist.
 var _ausgabe := {}
 var _tanz_timer := 0.0
+var _ohne_ware_s := 0.0   # Sekunden heute, in denen Gäste warteten, das Lager aber leer war
 var _npc_roles := {}
 var _sync_timer := 0.0
 var _served := 0
@@ -904,6 +905,7 @@ func _update_complaints(delta: float) -> void:
 			g.mode = 2
 			g.tgt = ENTRANCE
 			g.ostate = 0
+			g.wuetend = true   # zeigt 😠 beim Gehen — der Spieler sieht warum
 			_guest_sim[gid] = g
 			_left_guests += 1
 		else:
@@ -2048,9 +2050,19 @@ func _shift_process(delta: float) -> void:
 		_melde("MSG_EVENING")
 	_update_guests(delta)
 	_update_tanz(delta)
+	if int(_stock[WARE_BIER]) <= 0 and not _guest_sim.is_empty():
+		_ohne_ware_s += delta
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
+
+## Sichtbare Laune über dem Kopf: 0 normal, 1 verpasste Bestellung (😤), 2 geht genervt (😠).
+func _laune(g: Dictionary) -> int:
+	if bool(g.get("wuetend", false)):
+		return 2
+	if float(g.get("verpasst_t", 0.0)) > 0.0:
+		return 1
+	return 0
 
 ## Ist die Stimmung gut genug zum Tanzen auf den Tischen?
 func stimmung_gut() -> bool:
@@ -2098,6 +2110,7 @@ func _start_shift() -> void:
 	_served = 0
 	_missed = 0
 	_pop_verlust_heute = 0.0
+	_ohne_ware_s = 0.0
 	_ausgabe.clear()
 	_ausgabe_senden()
 	_last_earn = 0
@@ -2173,6 +2186,9 @@ func _end_shift(reason := 0) -> void:
 		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
 		"urin": _urin_count, "complaints": _complaints, "left": _left_guests,
 		"loan": _kredit_heute,
+		# für die Tipps in der Bilanz (Texte.tipps)
+		"toilet": _has_toilet, "kellner": _has_staff(ROLE_KELLNER), "zapfer": _has_staff(ROLE_ZAPFER),
+		"reinigung": _has_staff(ROLE_REINIGUNG), "ohne_ware": roundi(_ohne_ware_s), "pop": roundi(_popularity),
 	})
 	match reason:
 		1:
@@ -2279,6 +2295,8 @@ func _update_guests(delta: float) -> void:
 		# Oturan misafir: sipariş döngüsü
 		if g.mode == 1:
 			_guest_order(g, id, delta)
+		if float(g.get("verpasst_t", 0.0)) > 0.0:
+			g.verpasst_t = float(g.verpasst_t) - delta
 		# Tanzt auf dem Tisch — danach zurück auf den Platz
 		if g.mode == 5:
 			g.tanz_t = float(g.get("tanz_t", 0.0)) - delta
@@ -2298,8 +2316,9 @@ func _update_guests(delta: float) -> void:
 		if node:
 			node.set_net(pos, g.yaw)
 			node.set_order(g.ostate, g.okind, g.otype, clampf(g.patience / _geduld(), 0.0, 1.0))
-			# Host/Solo bekommen _net_guests nicht (kein call_local) — Tanzen direkt setzen
+			# Host/Solo bekommen _net_guests nicht (kein call_local) — direkt setzen
 			node.set_tanz(int(g.mode) == 5)
+			node.set_laune(_laune(g))
 
 func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 	if g.ostate == 0:
@@ -2322,6 +2341,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 			_missed += 1
 			Game.add_score(-MISS_PENALTY)
+			g.verpasst_t = 3.0   # kurz 😤 über dem Kopf
 			var abzug := minf(POP_MISS, maxf(0.0, POP_MISS_TAG_MAX - _pop_verlust_heute))
 			_pop_verlust_heute += abzug
 			_popularity = maxf(POP_MIN, _popularity - abzug)
@@ -2467,7 +2487,7 @@ func _broadcast_sync() -> void:
 		ckind.append(g.okind)
 		ctype.append(g.otype)
 		cratio.append(clampf(g.patience / _geduld(), 0.0, 1.0))
-		ctanz.append(1 if int(g.mode) == 5 else 0)
+		ctanz.append((1 if int(g.mode) == 5 else 0) | (_laune(g) << 1))
 	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
 	# Personal
 	var sids := PackedInt32Array()
@@ -2529,7 +2549,9 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat
 		if c:
 			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
-			c.set_tanz(i < ctanz.size() and ctanz[i] == 1)
+			var bits: int = ctanz[i] if i < ctanz.size() else 0
+			c.set_tanz(bits & 1 == 1)
+			c.set_laune(bits >> 1)
 
 ## call_local: Uhrzeit, Beliebtheit und Sauberkeit braucht auch das HUD des
 ## Hosts bzw. im Solo-Spiel — ohne kam dort nie etwas an („Zelt geschlossen",
