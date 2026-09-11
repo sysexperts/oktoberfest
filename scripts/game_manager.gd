@@ -286,7 +286,8 @@ var _quest_timer := 0.0
 # Meilensteine (Plan 3.2): Lebenszeit-Zähler und erreichte IDs, beides im Spielstand
 const Meilensteine := preload("res://scripts/meilensteine.gd")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
-var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0, "saisons": 0, "beste_wertung": 0}
+var _stats := {"served": 0, "earned": 0, "days": 0, "cleaned": 0, "saisons": 0, "beste_wertung": 0,
+	"tanzen": 0, "gekotzt": 0, "kombo_max": 0, "tage_sauber": 0, "ereignisse": 0}
 var _meilensteine: Array = []
 # Rettungskredit (Plan 3.5): offene Schuld bei der Brauerei, heute getilgt
 var _kredit_rest := 0
@@ -2057,6 +2058,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	var k: Dictionary = _kombo.get(bediener, {"n": 0, "t": 0})
 	var kombo := int(k.n) + 1 if jetzt - int(k.t) <= KOMBO_FENSTER_MS else 1
 	_kombo[bediener] = {"n": kombo, "t": jetzt}
+	_stats.kombo_max = maxi(int(_stats.get("kombo_max", 0)), kombo)
 	tip += mini(KOMBO_MAX, (kombo - 1) * KOMBO_BONUS)
 	if _ereignis == "promi":
 		tip *= 2
@@ -2205,6 +2207,7 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 		sorten.erase(1)   # Helles bleibt immer
 		_fass_kaputt = int(sorten.pick_random()) if not sorten.is_empty() else 0
 	_melde("EREIGNIS_%s_START" % _ereignis.to_upper(), [], 2)
+	_stats.ereignisse = int(_stats.get("ereignisse", 0)) + 1
 	if _ereignis == "regen":
 		_regen_voll = randf() < REGEN_VOLL_CHANCE
 		if _regen_voll:
@@ -2311,6 +2314,7 @@ func _update_tanz(delta: float) -> void:
 		var ziel: Vector3 = bt.global_position + bt.global_transform.basis.x * float(TANZ_PLAETZE[belegt % TANZ_PLAETZE.size()])
 		g.mode = 5
 		g.tanz_t = randf_range(TANZ_DAUER_MIN, TANZ_DAUER_MAX)
+		_stats.tanzen = int(_stats.get("tanzen", 0)) + 1
 		g.tgt = Vector3(ziel.x, 0.1, ziel.z)
 		_guest_sim[id] = g
 		je_tisch[ti] = belegt + 1
@@ -2425,6 +2429,9 @@ func _end_shift(reason := 0) -> void:
 	_saison.verpasst = int(_saison.verpasst) + _missed
 	_saison.pop_summe = int(_saison.pop_summe) + roundi(_popularity)
 	_saison.tage = int(_saison.tage) + 1
+	# Tag ohne eine einzige Pfütze (und mit Betrieb) — Meilenstein SAUBER_5
+	if _urin_count == 0 and _served >= 10:
+		_stats.tage_sauber = int(_stats.get("tage_sauber", 0)) + 1
 	if ist_finale():
 		_saison_abschluss()
 	_clean_tips = 0
@@ -2929,6 +2936,7 @@ func _update_puke(g: Dictionary, id: int, delta: float) -> void:
 	if not bool(g.get("puked", false)) and float(g.puke_t) <= 2.6:
 		g.puked = true
 		g.drinks = 0
+		_stats.gekotzt = int(_stats.get("gekotzt", 0)) + 1
 		_spawn_mess_at(g.pos as Vector3, 0)
 	if float(g.puke_t) <= 0.0:
 		g.mode = 1

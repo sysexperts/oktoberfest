@@ -179,7 +179,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       Hirschgeweih). *Ich, M–L · Du: Modelle*
 - [ ] **4.4 Personal mit Eigenschaften** — Bewerber haben 1 Eigenschaft
       („schnell", „trinkt heimlich", „Charmeur: +Trinkgeld"), Lohn verhandeln. *Ich, M*
-- [ ] **4.5 Mehr Meilensteine** — 13 → 30, darunter witzige („100 Mal
+- [x] **4.5 Mehr Meilensteine** *(v120: 15 → 23, u. a. Tanzen, Kotzbrocken-Zelt, Kombo ×10, Tage ohne Pfütze)* — 13 → 30, darunter witzige („100 Mal
       gekotzt wurde in deinem Zelt", „Schließe einen Tag ohne Pfütze"). *Ich, S*
 - [ ] **4.6 Rangliste** — Steam-Bestenliste „bester Saisonumsatz". *Ich, S (braucht App-ID)*
 

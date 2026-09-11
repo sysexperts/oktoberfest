@@ -30,6 +30,14 @@ zwei Symbole 64×64 (erreicht, grau). Danach **Publish** nicht vergessen.
 | `UMSATZ_100000` | 100.000 € Umsatz |
 | `SAISON_1` | erste Wiesn (16 Tage) bis zum Finale gespielt |
 | `WIESN_WIRT_5` | eine Wiesn mit 5 Maßkrügen bewertet |
+| `TANZ_50` | 50 Mal tanzen Gäste auf den Tischen |
+| `KOTZE_100` | 100 Mal wurde im Zelt gekotzt |
+| `KOMBO_10` | Kombo ×10 beim Bedienen |
+| `SAUBER_5` | 5 Tage ohne Pfütze (mit mind. 10 Bestellungen) |
+| `DEKO_10` | 10 Einrichtungsgegenstände im Zelt |
+| `EREIGNIS_10` | 10 Tagesereignisse erlebt |
+| `PERSONAL_8` | 8 Angestellte gleichzeitig |
+| `SAISON_3` | drei Wiesn bis zum Finale |
 
 Neue Meilensteine nur **anhängen**, IDs nie umbenennen — sonst verlieren Spieler
 ihre Errungenschaften.

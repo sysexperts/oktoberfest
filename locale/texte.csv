@@ -131,6 +131,22 @@ MS_SAISON_1_TITLE,Erste Wiesn geschafft,First fair done,İlk fuar tamam
 MS_SAISON_1_TEXT,Spiele eine ganze Wiesn bis zum Finale.,Play a whole fair until the finale.,Bir fuarı finaline kadar oyna.
 MS_WIESN_WIRT_5_TITLE,Fünf Maßkrüge,Five mugs,Beş kupa
 MS_WIESN_WIRT_5_TEXT,Beende eine Wiesn mit der Bestbewertung.,Finish a fair with the top rating.,Bir fuarı en yüksek puanla bitir.
+MS_TANZ_50_TITLE,Auf den Tischen,On the tables,Masaların üstünde
+MS_TANZ_50_TEXT,50 Mal sind Gäste auf deine Tische gestiegen und haben getanzt.,Guests climbed onto your tables and danced 50 times.,Misafirler 50 kez masalarına çıkıp dans etti.
+MS_KOTZE_100_TITLE,Kotzbrocken-Zelt,The barf tent,Kusmuk çadırı
+MS_KOTZE_100_TEXT,In deinem Zelt wurde 100 Mal gekotzt. Glückwunsch?,Guests threw up 100 times in your tent. Congratulations?,Çadırında 100 kez kusuldu. Tebrikler?
+MS_KOMBO_10_TITLE,Flinke Hände,Quick hands,Çevik eller
+MS_KOMBO_10_TEXT,Schaffe eine Kombo ×10 beim Bedienen.,Reach a ×10 combo while serving.,Servis yaparken ×10 kombo yap.
+MS_SAUBER_5_TITLE,Keine Pfütze,Not a single puddle,Tek birikinti yok
+MS_SAUBER_5_TEXT,Schließe 5 Tage ohne eine einzige Pfütze ab.,Finish 5 days without a single puddle.,Tek bir birikinti olmadan 5 gün bitir.
+MS_DEKO_10_TITLE,Gemütlich eingerichtet,Cosy furnished,Rahat döşenmiş
+MS_DEKO_10_TEXT,Stell 10 Einrichtungsgegenstände in dein Zelt.,Place 10 furnishing items in your tent.,Çadırına 10 eşya yerleştir.
+MS_EREIGNIS_10_TITLE,Wiesn-Veteran,Fair veteran,Fuar kurdu
+MS_EREIGNIS_10_TEXT,Erlebe 10 Tagesereignisse.,Experience 10 daily events.,10 günlük olay yaşa.
+MS_PERSONAL_8_TITLE,Großbetrieb,Big business,Büyük işletme
+MS_PERSONAL_8_TEXT,Beschäftige 8 Leute gleichzeitig.,Employ 8 people at the same time.,Aynı anda 8 kişi çalıştır.
+MS_SAISON_3_TITLE,Drei Wiesn,Three fairs,Üç fuar
+MS_SAISON_3_TEXT,Spiele drei ganze Wiesn bis zum Finale.,Play three whole fairs until the finale.,Üç fuarı finaline kadar oyna.
 EREIGNIS_BUS_TITEL,🚌 Touristenbus,🚌 Tourist bus,🚌 Turist otobüsü
 EREIGNIS_BUS_START,"🚌 Heute kommt ein Touristenbus: viel mehr Gäste, aber sie sind ungeduldig!","🚌 A tourist bus arrives today: many more guests, but they're impatient!","🚌 Bugün turist otobüsü geliyor: çok daha fazla misafir ama sabırsızlar!"
 EREIGNIS_KONTROLLE_TITEL,🔍 Hygienekontrolle 15:00,🔍 Hygiene inspection 15:00,🔍 Hijyen denetimi 15:00

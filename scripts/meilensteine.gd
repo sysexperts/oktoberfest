@@ -23,10 +23,19 @@ const LISTE := [
 	{"id": "UMSATZ_100000", "wert": "earned", "ziel": 100000, "belohnung": 5000},
 	{"id": "SAISON_1", "wert": "saisons", "ziel": 1, "belohnung": 1000},
 	{"id": "WIESN_WIRT_5", "wert": "beste_wertung", "ziel": 5, "belohnung": 3000},
+	{"id": "TANZ_50", "wert": "tanzen", "ziel": 50, "belohnung": 400},
+	{"id": "KOTZE_100", "wert": "gekotzt", "ziel": 100, "belohnung": 500},
+	{"id": "KOMBO_10", "wert": "kombo_max", "ziel": 10, "belohnung": 600},
+	{"id": "SAUBER_5", "wert": "tage_sauber", "ziel": 5, "belohnung": 800},
+	{"id": "DEKO_10", "wert": "einrichtung", "ziel": 10, "belohnung": 500},
+	{"id": "EREIGNIS_10", "wert": "ereignisse", "ziel": 10, "belohnung": 700},
+	{"id": "PERSONAL_8", "wert": "personal", "ziel": 8, "belohnung": 1000},
+	{"id": "SAISON_3", "wert": "saisons", "ziel": 3, "belohnung": 4000},
 ]
 
 ## Lebenszeit-Zähler, die der Spielstand mitführt (GameManager._stats).
-const ZAEHLER := ["served", "earned", "days", "cleaned", "saisons", "beste_wertung"]
+const ZAEHLER := ["served", "earned", "days", "cleaned", "saisons", "beste_wertung",
+	"tanzen", "gekotzt", "kombo_max", "tage_sauber", "ereignisse"]
 
 ## Aktuelle Zahl zu einer Meilenstein-Art.
 ## stats: Lebenszeit-Zähler · zustand: GameManager._buero_state (Zelt, Personal, Lizenzen).
@@ -40,6 +49,10 @@ static func wert_von(art: String, stats: Dictionary, zustand: Dictionary) -> int
 				if int(e[0]) == 2:   # GameManager.ROLE_KELLNER
 					bester = maxi(bester, int(e[1]))
 			return bester
+		"einrichtung":
+			return int(zustand.get("einrichtung", 0))
+		"personal":
+			return (zustand.get("staff", []) as Array).size()
 		"licenses":
 			var n := 0
 			for hat in (zustand.get("lic", {}) as Dictionary).values():
