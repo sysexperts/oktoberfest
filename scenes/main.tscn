@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://b217cd2pklob3" path="res://scenes/beer_table.tscn" id="5_table"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="6_hud"]
 [ext_resource type="PackedScene" path="res://scenes/schanktheke.tscn" id="7_theke"]
-[ext_resource type="PackedScene" uid="uid://b7dl2t1533kgl" path="res://scenes/computer.tscn" id="8_comp"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1536kh8" path="res://scenes/food_station.tscn" id="9_food"]
 [ext_resource type="Script" uid="uid://bkxikn4e2dotl" path="res://scripts/sfx.gd" id="10_sfx"]
 [ext_resource type="PackedScene" uid="uid://cdtgrn80rfxhm" path="res://scenes/kirmes.tscn" id="17_kirmes"]
@@ -22,6 +21,9 @@
 [ext_resource type="Shader" path="res://assets/sky/wolken_himmel.gdshader" id="95_himmel"]
 [ext_resource type="PackedScene" path="res://scenes/regen.tscn" id="96_regen"]
 [ext_resource type="PackedScene" path="res://scenes/klo_container.tscn" id="97_klo"]
+[ext_resource type="PackedScene" path="res://scenes/rueckwand_regal.tscn" id="98_regalwand"]
+[ext_resource type="PackedScene" path="res://scenes/kochtheke.tscn" id="99_kochtheke"]
+[ext_resource type="PackedScene" path="res://scenes/bueroraum.tscn" id="100_buero"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -140,10 +142,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.99, -9)
 beer_type = 3
 
 [node name="FoodPretzel" parent="Stations" unique_id=581788161 instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 1.08, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, 1.1, -12.9)
 
 [node name="FoodSosis" parent="Stations" unique_id=911696256 instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.08, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.1, -12.9)
 food_type = 2
 
 [node name="Keg4Festbier" parent="Stations" instance=ExtResource("4_keg")]
@@ -151,85 +153,94 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3, 0.99, -9)
 beer_type = 4
 
 [node name="FoodHendl" parent="Stations" instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.08, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7, 1.1, -12.9)
 food_type = 3
+
+[node name="RueckwandRegal" parent="." instance=ExtResource("98_regalwand")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -13.55)
+
+[node name="Kochtheke" parent="." instance=ExtResource("99_kochtheke")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -13.3)
+
+[node name="Bueroraum" parent="." instance=ExtResource("100_buero")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
 
 [node name="Tables" type="Node3D" parent="." unique_id=594528377]
 
 [node name="BeerTable0" parent="Tables" unique_id=1224091674 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, 0.2)
 
 [node name="BeerTable1" parent="Tables" unique_id=836916953 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0.2)
 
 [node name="BeerTable2" parent="Tables" unique_id=943958192 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, -2.8)
 
 [node name="BeerTable3" parent="Tables" unique_id=159317598 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2.8)
 
 [node name="BeerTable4" parent="Tables" unique_id=454279060 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, 0.2)
 
 [node name="BeerTable5" parent="Tables" unique_id=1190853080 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, -2.8)
 
 [node name="BeerTable6" parent="Tables" unique_id=797854417 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, 4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, 3.2)
 
 [node name="BeerTable7" parent="Tables" unique_id=1125872822 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 3.2)
 
 [node name="BeerTable8" parent="Tables" unique_id=1664286162 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, 4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, 3.2)
 
 [node name="BeerTable9" parent="Tables" unique_id=2079082574 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, -4.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, -5.8)
 
 [node name="BeerTable10" parent="Tables" unique_id=414903919 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, -4.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5.8)
 
 [node name="BeerTable11" parent="Tables" unique_id=749490663 instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, -4.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, -5.8)
 
 [node name="BeerTable12" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 0, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0, 0.2)
 
 [node name="BeerTable13" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0, -2.8)
 
 [node name="BeerTable14" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 0, 4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0, 3.2)
 
 [node name="BeerTable15" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 0, -4.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0, -5.8)
 
 [node name="BeerTable16" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0, 7.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, 6.2)
 
 [node name="BeerTable17" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, 7.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 6.2)
 
 [node name="BeerTable18" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 0, 7.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, 6.2)
 
 [node name="BeerTable19" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 7.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0, -2.8)
 
 [node name="BeerTable20" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0, -5.8)
 
 [node name="BeerTable21" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -1.6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0, 6.2)
 
 [node name="BeerTable22" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 4.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, 9.2)
 
 [node name="BeerTable23" parent="Tables" instance=ExtResource("5_table")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 7.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0, 9.2)
 
 [node name="KloContainer" parent="." instance=ExtResource("97_klo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.8, 0, 9.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4, 0, 9.6)
 visible = false
 
 [node name="Kirmes" parent="." unique_id=1802476162 instance=ExtResource("17_kirmes")]
@@ -247,9 +258,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.1, -33)
 
 [node name="Spawn3" type="Marker3D" parent="SpawnPoints" unique_id=104223297]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.1, -33)
-
-[node name="Computer" parent="." unique_id=1426596233 instance=ExtResource("8_comp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7)
 
 [node name="Buehne" parent="." unique_id=1815018836 instance=ExtResource("19_buehne")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 10, 0, 2)

@@ -52,8 +52,8 @@ const DEKO_ABSTAND := 1.8
 const DEKO_ANDRANG := 0.02        # je Gegenstand 2 % mehr Gäste …
 const DEKO_ANDRANG_MAX := 0.2     # … höchstens 20 %
 ## Abgestellt wird nur innerhalb der Zeltwände
-const ZELT_MIN := Vector3(-11.3, 0, -8.0)
-const ZELT_MAX := Vector3(11.3, 0, 10.6)
+const ZELT_MIN := Vector3(-11.6, 0, -13.6)
+const ZELT_MAX := Vector3(11.6, 0, 10.6)
 const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
 const ORDER_COOLDOWN_MIN := 18.0    # Pause zwischen zwei Bestellungen eines Gasts
 const ORDER_COOLDOWN_MAX := 35.0    # (vorher 22–45 s; 15–30 war allein nicht zu schaffen)
@@ -91,7 +91,7 @@ const KOOP_ANDRANG_JE_SPIELER := 0.5
 const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 16, 4: 24}   # main.tscn hat 24 Tische
 ## Tischanordnung in main.tscn. Ältere Spielstände (12er-Raster) bekommen die neue
 ## Anordnung, sonst stünden neue Tische auf alten.
-const TISCH_LAYOUT := 2
+const TISCH_LAYOUT := 3
 const TENT_BOOK_COST := 500
 const TENT_UPGRADE_COST := {2: 2000, 3: 6000, 4: 15000}   # vorher 3000/10000: im Bot nie erreicht
 const TABLE_COST := 200
@@ -137,7 +137,7 @@ const SCHLUCKSPECHT_BIER := 4
 const STAFF_BASE_SPEED := 4.5   # vorher 3.0 — im großen Zelt blieben bis 100 Bestellungen liegen
 const TABLE_AVOID_RADIUS := 1.6   # Mitarbeiter halten Abstand zu Tischen (größer = bleiben in engen Gängen hängen)
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
-const KITCHEN_POINT := Vector3(6.5, 0.1, -10.4) # Koch steht hinter der Theke bei den Kochstellen
+const KITCHEN_POINT := Vector3(5.0, 0.1, -12.2) # Koch steht vor der Kochtheke an der Rückwand
 const ZAPFER_POINT := Vector3(-2.0, 0.1, -10.4) # Zapfer steht hinter der Theke an der Ausgabe
 const KOCH_ABLAGE := Vector3(-0.8, 0.1, -10.4)  # hier stellt der Koch die Portion auf die Ausgabe
 ## Zapfer und Koch stellen Fertiges auf die Ausgabe (scenes/ausgabe.tscn).
@@ -173,8 +173,8 @@ const ARTIST_DRAW := {1: 0.15, 2: 0.35, 3: 0.6} # zusätzliche Auslastung währe
 const TOILET_COST := 1000   # vorher 1800 — fast so teuer wie der Zeltausbau
 const BLADDER_MIN := 70.0        # Sekunden bis ein Gast muss
 const BLADDER_MAX := 150.0
-const PEE_CORNER := Vector3(-12.0, 0.1, 11.0)  # Ecke, in die ohne Klo gepinkelt wird
-const TOILET_POINT := Vector3(8.6, 0.1, 10.2)  # vor dem Klo-Container (main.tscn KloContainer)
+const PEE_CORNER := Vector3(11.2, 0.1, 7.6)    # Ecke, in die ohne Klo gepinkelt wird (dort kommt später das Klo hin)
+const TOILET_POINT := Vector3(8.4, 0.1, 9.9)   # vor dem Klo-Container (main.tscn KloContainer)
 const PEE_DURATION := 4.0
 const COMPLAIN_INTERVAL := 6.0   # wie oft geprüft wird
 const COMPLAIN_RADIUS := 5.0     # Umkreis eines Urinflecks
@@ -1990,9 +1990,10 @@ func net_buy_einrichtung(art: String) -> void:
 	Game.add_money(-preis)
 	var did := _einrichtung_next
 	_einrichtung_next += 1
-	var x := -4.0 + float(_einrichtung.size() % 5) * 2.0
-	_einrichtung[did] = {"art": art, "x": x, "z": 8.5, "rot": 0.0}
-	_add_einrichtung.rpc(did, art, x, 8.5, 0.0)
+	# Neben dem Eingang (freie Fläche zwischen den Tischreihen)
+	var x := -2.4 + float(_einrichtung.size() % 5) * 1.2
+	_einrichtung[did] = {"art": art, "x": x, "z": 10.3, "rot": 0.0}
+	_add_einrichtung.rpc(did, art, x, 10.3, 0.0)
 	_melde("MSG_DECO_BOUGHT", [Katalog.name_key(art)], 2)
 	_broadcast_meta()
 

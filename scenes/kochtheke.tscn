@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/modell_szene.gd" id="1_s"]
+[ext_resource type="PackedScene" path="res://assets/models/kochtheke.glb" id="2_modell"]
+
+[sub_resource type="BoxShape3D" id="Kollision"]
+size = Vector3(2.66, 1.1, 1.2)
+
+[node name="Kochtheke" type="Node3D"]
+script = ExtResource("1_s")
+
+[node name="Modell" parent="." instance=ExtResource("2_modell")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 1.3, 0)
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+shape = SubResource("Kollision")

@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://b7dl2t1533kgl" path="res://scenes/computer.tscn" id="1_comp"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
+
+[sub_resource type="StandardMaterial3D" id="MatWand"]
+albedo_color = Color(0.93, 0.89, 0.8, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="MatBalken"]
+albedo_color = Color(0.36, 0.22, 0.12, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="WandSuedLang"]
+size = Vector3(2.4, 2.6, 0.12)
+
+[sub_resource type="BoxMesh" id="WandSuedKurz"]
+size = Vector3(0.6, 2.6, 0.12)
+
+[sub_resource type="BoxMesh" id="WandOst"]
+size = Vector3(0.12, 2.6, 4.0)
+
+[sub_resource type="BoxMesh" id="Tuersturz"]
+size = Vector3(1.0, 0.5, 0.14)
+
+[sub_resource type="BoxMesh" id="Pfosten"]
+size = Vector3(0.14, 2.6, 0.14)
+
+[sub_resource type="BoxShape3D" id="KolSuedLang"]
+size = Vector3(2.4, 2.6, 0.12)
+
+[sub_resource type="BoxShape3D" id="KolSuedKurz"]
+size = Vector3(0.6, 2.6, 0.12)
+
+[sub_resource type="BoxShape3D" id="KolOst"]
+size = Vector3(0.12, 2.6, 4.0)
+
+[node name="Bueroraum" type="Node3D"]
+
+[node name="WandSuedLinks" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 1.3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WandSuedLinks"]
+mesh = SubResource("WandSuedLang")
+surface_material_override/0 = SubResource("MatWand")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WandSuedLinks"]
+shape = SubResource("KolSuedLang")
+
+[node name="WandSuedRechts" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 1.3, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WandSuedRechts"]
+mesh = SubResource("WandSuedKurz")
+surface_material_override/0 = SubResource("MatWand")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WandSuedRechts"]
+shape = SubResource("KolSuedKurz")
+
+[node name="Tuersturz" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 2.35, 0)
+mesh = SubResource("Tuersturz")
+surface_material_override/0 = SubResource("MatBalken")
+
+[node name="PfostenTuerLinks" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 1.3, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("MatBalken")
+
+[node name="PfostenTuerRechts" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 1.3, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("MatBalken")
+
+[node name="PfostenEcke" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = SubResource("MatBalken")
+
+[node name="WandOst" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 2.0)
+
+[node name="Mesh" type="MeshInstance3D" parent="WandOst"]
+mesh = SubResource("WandOst")
+surface_material_override/0 = SubResource("MatWand")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WandOst"]
+shape = SubResource("KolOst")
+
+[node name="Schild" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -1.1, 2.35, -0.09)
+pixel_size = 0.006
+font_size = 48
+outline_size = 12
+modulate = Color(1, 0.9, 0.6, 1)
+text = "WORLD_BUERO"
+script = ExtResource("2_wt")
+schluessel = "WORLD_BUERO"
+
+[node name="Computer" parent="." instance=ExtResource("1_comp")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.2, 0, 3.4)

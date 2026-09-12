@@ -194,6 +194,7 @@ TENT_STAGE_2,Mittleres Zelt,Medium tent,Orta çadır
 TENT_STAGE_3,Großes Zelt,Large tent,Büyük çadır
 TENT_STAGE_4,Riesenzelt,Huge tent,Dev çadır
 WORLD_TOILET,🚻 WC,🚻 WC,🚻 WC
+WORLD_BUERO,🗂 Büro,🗂 Office,🗂 Ofis
 OFFER_TENT_RENT,Zelt mieten,Rent a tent,Çadır kirala
 OFFER_TENT_RENT_INFO,Dein eigenes Festzelt. Ohne Zelt keine Gäste. Die ersten 5 Tage ohne Miete.,"Your own beer tent. No tent, no guests. No rent for the first 5 days.",Kendi bira çadırın. Çadır yoksa misafir de yok. İlk 5 gün kira yok.
 HINT_RENT_TENT,{interact} Festzelt mieten,{interact} Rent the beer tent,{interact} Bira çadırını kirala

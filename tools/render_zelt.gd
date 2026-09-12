@@ -79,7 +79,14 @@ class Lauf extends Node:
 		gm._artist_tier = 3
 		gm._spawn_artists()
 		await _foto(Vector3(1.5, 0.0, 2.0), -90.0, -8.0, "zelt_buehne")
-		# Übersicht von oben
+		# Rückwand: Regal mit Gläsern und Kochtheke
+		await _foto(Vector3(0.0, 0.0, -10.4), 0.0, -8.0, "zelt_rueckwand")
+		# Büroraum durch die Tür
+		await _foto(Vector3(-9.1, 0.0, 4.6), 180.0, -10.0, "zelt_buero")
+		# Übersicht von oben — Dach und Deckenlampen ausblenden
+		for n in gm.find_children("*", "Node3D", true, false):
+			if (n as Node3D).global_position.y > 3.0 and n.get_parent() and String(n.get_parent().name) == "Tent":
+				(n as Node3D).visible = false
 		spieler.global_position = Vector3(0.0, 22.0, 0.0)
 		spieler.rotation.y = 0.0
 		spieler.get_node("Head").rotation.x = deg_to_rad(-89.0)

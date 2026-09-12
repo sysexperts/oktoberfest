@@ -1,0 +1,236 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="1_krug"]
+
+[sub_resource type="StandardMaterial3D" id="MatHolzDunkel"]
+albedo_color = Color(0.34, 0.21, 0.11, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="MatHolzHell"]
+albedo_color = Color(0.55, 0.37, 0.21, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="Unterschrank"]
+size = Vector3(8, 0.86, 0.7)
+
+[sub_resource type="BoxMesh" id="Arbeitsplatte"]
+size = Vector3(8.1, 0.06, 0.78)
+
+[sub_resource type="BoxMesh" id="Rueckwand"]
+size = Vector3(8, 1.9, 0.05)
+
+[sub_resource type="BoxMesh" id="Brett"]
+size = Vector3(8, 0.04, 0.34)
+
+[sub_resource type="BoxMesh" id="Seite"]
+size = Vector3(0.06, 1.9, 0.36)
+
+[sub_resource type="BoxShape3D" id="Kollision"]
+size = Vector3(8.1, 0.92, 0.78)
+
+[node name="RueckwandRegal" type="Node3D"]
+
+[node name="Unterschrank" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, 0)
+mesh = SubResource("Unterschrank")
+surface_material_override/0 = SubResource("MatHolzDunkel")
+
+[node name="Arbeitsplatte" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.89, 0.02)
+mesh = SubResource("Arbeitsplatte")
+surface_material_override/0 = SubResource("MatHolzHell")
+
+[node name="Rueckwand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.87, -0.33)
+mesh = SubResource("Rueckwand")
+surface_material_override/0 = SubResource("MatHolzDunkel")
+
+[node name="SeiteLinks" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.97, 1.87, -0.16)
+mesh = SubResource("Seite")
+surface_material_override/0 = SubResource("MatHolzDunkel")
+
+[node name="SeiteRechts" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.97, 1.87, -0.16)
+mesh = SubResource("Seite")
+surface_material_override/0 = SubResource("MatHolzDunkel")
+
+[node name="Brett1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.16)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolzHell")
+
+[node name="Brett2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, -0.16)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolzHell")
+
+[node name="Brett3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -0.16)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolzHell")
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
+shape = SubResource("Kollision")
+
+[node name="Glaeser" type="Node3D" parent="."]
+
+[node name="Reihe1" type="Node3D" parent="Glaeser"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47, -0.16)
+
+[node name="K1" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, 0)
+fuellung = 0.0
+
+[node name="K2" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 0, 0)
+fuellung = 0.0
+
+[node name="K3" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, 0)
+fuellung = 0.0
+
+[node name="K4" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0, 0)
+fuellung = 0.0
+
+[node name="K5" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
+fuellung = 0.0
+
+[node name="K6" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
+fuellung = 0.0
+
+[node name="K7" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
+fuellung = 0.0
+
+[node name="K8" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
+fuellung = 0.0
+
+[node name="K9" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, 0)
+fuellung = 0.0
+
+[node name="K10" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0, 0)
+fuellung = 0.0
+
+[node name="K11" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0)
+fuellung = 0.0
+
+[node name="K12" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9, 0, 0)
+fuellung = 0.0
+
+[node name="K13" parent="Glaeser/Reihe1" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, 0)
+fuellung = 0.0
+
+[node name="Reihe2" type="Node3D" parent="Glaeser"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.97, -0.16)
+
+[node name="K1" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0, 0)
+fuellung = 0.0
+
+[node name="K2" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9, 0, 0)
+fuellung = 0.0
+
+[node name="K3" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 0)
+fuellung = 0.0
+
+[node name="K4" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, 0)
+fuellung = 0.0
+
+[node name="K5" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0, 0)
+fuellung = 0.0
+
+[node name="K6" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
+fuellung = 0.0
+
+[node name="K7" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0)
+fuellung = 0.0
+
+[node name="K8" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 0, 0)
+fuellung = 0.0
+
+[node name="K9" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 0)
+fuellung = 0.0
+
+[node name="K10" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, 0)
+fuellung = 0.0
+
+[node name="K11" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 0, 0)
+fuellung = 0.0
+
+[node name="K12" parent="Glaeser/Reihe2" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, 0)
+fuellung = 0.0
+
+[node name="Reihe3" type="Node3D" parent="Glaeser"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.47, -0.16)
+
+[node name="K1" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, 0)
+fuellung = 0.0
+
+[node name="K2" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 0, 0)
+fuellung = 0.0
+
+[node name="K3" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, 0)
+fuellung = 0.0
+
+[node name="K4" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
+fuellung = 0.0
+
+[node name="K5" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, 0)
+fuellung = 0.0
+
+[node name="K6" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0)
+fuellung = 0.0
+
+[node name="K7" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
+fuellung = 0.0
+
+[node name="K8" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0, 0)
+fuellung = 0.0
+
+[node name="K9" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, 0)
+fuellung = 0.0
+
+[node name="K10" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0)
+fuellung = 0.0
+
+[node name="K11" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9, 0, 0)
+fuellung = 0.0
+
+[node name="K12" parent="Glaeser/Reihe3" instance=ExtResource("1_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0, 0)
+fuellung = 0.0
