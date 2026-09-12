@@ -1,6 +1,6 @@
 # Release-Checkliste
 
-Stand: 12.09.2026 (v127). ⚠️ = Pflicht vor der Veröffentlichung.
+Stand: 12.09.2026 (v130). ⚠️ = Pflicht vor der Veröffentlichung.
 **Du** = Nutzer liefert/erledigt · **Ich** = Code.
 
 Reihenfolge-Tipp: Maßkrug + Essen und Ton zuerst → Figuren + Map → parallel
@@ -13,15 +13,15 @@ früh Namensprüfung und Steamworks starten (dauern am längsten).
 Aktuell Platzhalter aus Grundformen (Box/Zylinder).
 
 ### Im Zelt
-- [ ] ⚠️ Maßkrug (leer + voll mit Schaum) — Spielerhand, Kellner-Tablett, Ausgabe, Tisch
-- [ ] ⚠️ Essen auf Teller: Brezn, Würstl, Hendl
-- [ ] ⚠️ Bierfass mit Zapfhahn (ein Modell, Sorte per Farbe im Code)
-- [ ] ⚠️ Krugspender/-regal an der Theke
+- [x] ⚠️ Maßkrug (leer + voll mit Schaum) — Spielerhand, Kellner-Tablett, Ausgabe, Tisch *(v128: krug.glb als Glas mit Füllstand)*
+- [x] ⚠️ Essen auf Teller: Brezn, Würstl, Hendl *(v128)*
+- [x] ⚠️ Bierfass mit Zapfhahn (ein Modell, Sorte per Farbe im Code) *(v128)*
+- [x] ⚠️ Krugspender/-regal an der Theke *(v128/v129: Krugstapel + Regalwand mit leeren Gläsern)*
 - [ ] ⚠️ Schanktheke (`scenes/schanktheke.tscn` ist Platzhalter)
-- [ ] Kochstelle/Grill für die Essensstationen
-- [ ] Bühne (Podest, Rückwand, Traverse) + Lautsprecher, Instrumente
+- [x] Kochstelle/Grill für die Essensstationen *(v129: kochtheke.glb an der Rückwand)*
+- [x] Bühne (Podest, Rückwand, Traverse) + Lautsprecher, Instrumente *(v128: buehne.glb)*
 - [ ] Lager-Regal mit Bierkästen und Zutatenkisten
-- [ ] Computer am Schreibtisch
+- [x] Computer am Schreibtisch *(v129: schreibtisch.glb im Büroraum)*
 - [ ] Stehlampe (Einrichtung)
 - [ ] Pfütze und Erbrochenes (Bodenflecken)
 - [ ] Zeltteile in `scenes/tent.tscn` (12 Platzhalter-Meshes)
@@ -38,10 +38,12 @@ Aktuell Platzhalter aus Grundformen (Box/Zylinder).
 ### Einrichtung zum Kaufen (Spätspiel)
 - [ ] Maibaum
 - [ ] Lebkuchenherz-Wand
-- [ ] Hirschgeweih
-- [ ] Fahnen / Wimpel
+- [x] Hirschgeweih *(v130: Geweih-Kronleuchter, deco_1)*
+- [x] Fahnen / Wimpel *(v130: Banner deco_7, Wimpelkette deco_8)*
 - [ ] Blumenkübel
-- [ ] Weitere Lampen (Kronleuchter, Laternen)
+- [x] Weitere Lampen (Kronleuchter, Laternen) *(v130: Kronleuchter, Lichtergirlande, Hängelaterne)*
+- [x] Regal zum Umstellen *(v130: regal.glb)*
+- [x] Weitere Deko *(v130: Hopfengirlande, Riesenbrezel, Deko-Fass)*
 - [ ] Zeltthemen: andere Stoff-/Dachfarben (Texturen)
 
 ## 2. Figuren *(Du, Einbau: Ich)*
