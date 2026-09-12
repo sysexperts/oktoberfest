@@ -16,9 +16,13 @@ Nachweis in diesem Ordner liegen.
 | Steam-Anbindung | `addons/godotsteam/**` 4.22.1 | GodotSteam | MIT | `addons/godotsteam/license.md`, Hinweis im Spiel | ✅ |
 | Steamworks SDK | `steam_api64.dll` | Valve | Steamworks SDK-Vereinbarung | gilt mit Steamworks-Partnerkonto | ⚠️ |
 | Einrichtung (Laterne, Stehlampe, Lichterkette) | `scenes/einrichtung/**`, `scenes/props/laterne,lichterkette.tscn` | selbst gebaut in Godot | eigene | — | ✅ |
+| Neue Modelle (2026-09-12) | `assets/models/krug, *_mit_teller, fass_mit_zapfhahn, kochtheke, buehne, regal, schreibtisch, deco_1…8.glb` | vom Nutzer geliefert — Herkunft vermutlich Meshy | prüfen | Rechnung/Erzeugungsdatum ablegen | ⚠️ |
+| UI-Grafiken | `assets/ui/menue_vorlage.png, ui_bogen.png, knopf_zustaende.png` (+ daraus freigestellt `knopf_*.png`) | ChatGPT-Bilderzeugung (Dateiname) | laut OpenAI-Nutzungsbedingungen gehören Ausgaben dem Nutzer — vor Release selbst nachlesen, KI-Angabe bei Steam | Konto-Tarif + Datum ablegen | ⚠️ |
+| Schrift UnifrakturCook | `assets/fonts/UnifrakturCook-Bold.ttf` | Google Fonts (j. 'mach' wust, Peter Wiegel) | SIL Open Font License 1.1 — frei, auch kommerziell, im Spiel bündeln erlaubt | `assets/fonts/UnifrakturCook-OFL.txt` | ✅ |
 
-Schriftarten: keine eigenen im Projekt, es läuft alles über Godots
-Standardschrift. Emoji rendert das System.
+Schriftarten: UnifrakturCook (OFL, siehe oben) für das Wiesn-UI, sonst Godots
+Standardschrift. Die OFL verlangt, dass der Lizenztext mitgeliefert wird und die
+Schrift nicht allein verkauft wird. Emoji rendert das System.
 
 ---
 

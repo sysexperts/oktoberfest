@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menue_test.gd" id="1_s"]
+[ext_resource type="Texture2D" path="res://assets/ui/menue_vorlage.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="3_bogen"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
+
+[sub_resource type="AtlasTexture" id="Logo"]
+atlas = ExtResource("3_bogen")
+region = Rect2(24, 16, 1068, 318)
+
+[sub_resource type="AtlasTexture" id="KnopfNeu"]
+atlas = ExtResource("3_bogen")
+region = Rect2(40, 352, 590, 122)
+
+[sub_resource type="AtlasTexture" id="KnopfLaden"]
+atlas = ExtResource("3_bogen")
+region = Rect2(40, 474, 582, 104)
+
+[sub_resource type="AtlasTexture" id="KnopfEinst"]
+atlas = ExtResource("3_bogen")
+region = Rect2(40, 578, 582, 108)
+
+[sub_resource type="AtlasTexture" id="KnopfCredits"]
+atlas = ExtResource("3_bogen")
+region = Rect2(40, 688, 582, 107)
+
+[sub_resource type="AtlasTexture" id="KnopfBeenden"]
+atlas = ExtResource("3_bogen")
+region = Rect2(40, 795, 582, 107)
+
+[sub_resource type="AtlasTexture" id="Zahnrad"]
+atlas = ExtResource("3_bogen")
+region = Rect2(1132, 84, 144, 136)
+
+[node name="MenueTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s")
+
+[node name="Leinwand" type="Control" parent="."]
+layout_mode = 0
+offset_right = 1607.0
+offset_bottom = 979.0
+
+[node name="Hintergrund" type="TextureRect" parent="Leinwand"]
+layout_mode = 0
+offset_right = 1607.0
+offset_bottom = 979.0
+texture = ExtResource("2_bg")
+
+[node name="Logo" type="TextureRect" parent="Leinwand"]
+layout_mode = 0
+offset_left = 298.0
+offset_top = 24.0
+offset_right = 1340.0
+offset_bottom = 334.0
+texture = SubResource("Logo")
+expand_mode = 1
+
+[node name="Knoepfe" type="Control" parent="Leinwand"]
+layout_mode = 0
+
+[node name="NeuesSpiel" type="TextureButton" parent="Leinwand/Knoepfe"]
+layout_mode = 0
+offset_left = 515.0
+offset_top = 340.0
+offset_right = 1095.0
+offset_bottom = 460.0
+texture_normal = SubResource("KnopfNeu")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="SpielLaden" type="TextureButton" parent="Leinwand/Knoepfe"]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 468.0
+offset_right = 1082.0
+offset_bottom = 567.0
+texture_normal = SubResource("KnopfLaden")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Einstellungen" type="TextureButton" parent="Leinwand/Knoepfe"]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 571.0
+offset_right = 1082.0
+offset_bottom = 674.0
+texture_normal = SubResource("KnopfEinst")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Credits" type="TextureButton" parent="Leinwand/Knoepfe"]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 676.0
+offset_right = 1082.0
+offset_bottom = 778.0
+texture_normal = SubResource("KnopfCredits")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Beenden" type="TextureButton" parent="Leinwand/Knoepfe"]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 782.0
+offset_right = 1082.0
+offset_bottom = 884.0
+texture_normal = SubResource("KnopfBeenden")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Zahnrad" type="TextureButton" parent="Leinwand/Knoepfe"]
+layout_mode = 0
+offset_left = 1486.0
+offset_top = 10.0
+offset_right = 1592.0
+offset_bottom = 110.0
+texture_normal = SubResource("Zahnrad")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Spruch" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 260.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_colors/font_outline_color = Color(0.23, 0.13, 0.06, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 54
+text = "O'zapft is!"
+horizontal_alignment = 1
