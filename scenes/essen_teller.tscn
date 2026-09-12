@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/essen_teller.gd" id="1_teller"]
+[ext_resource type="PackedScene" path="res://assets/models/brezel_mit_teller.glb" id="2_brezn"]
+[ext_resource type="PackedScene" path="res://assets/models/wuerstl_mit_teller.glb" id="3_wuerstl"]
+[ext_resource type="PackedScene" path="res://assets/models/handl_mit_teller.glb" id="4_hendl"]
+
+[node name="EssenTeller" type="Node3D"]
+script = ExtResource("1_teller")
+
+[node name="Brezn" parent="." instance=ExtResource("2_brezn")]
+transform = Transform3D(0.137, 0, 0, 0, 0.137, 0, 0, 0, 0.137, 0, 0.028, 0)
+
+[node name="Wuerstl" parent="." instance=ExtResource("3_wuerstl")]
+transform = Transform3D(0.137, 0, 0, 0, 0.137, 0, 0, 0, 0.137, 0, 0.034, 0)
+visible = false
+
+[node name="Hendl" parent="." instance=ExtResource("4_hendl")]
+transform = Transform3D(0.137, 0, 0, 0, 0.137, 0, 0, 0, 0.137, 0, 0.047, 0)
+visible = false

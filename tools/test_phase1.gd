@@ -582,8 +582,10 @@ class Lauf extends Node:
 		angestellter.staff_id = 0
 		gm.get_node("Customers").add_child(angestellter)
 		await _frames(2)
-		_check("Personal hat Figur und Krüge an den Händen", angestellter.figur() != null
-			and angestellter._hand_mugs.size() == 2, str(angestellter._hand_mugs.size()))
+		angestellter.set_carrying(3)
+		_check("Personal hat Figur und Tablett mit Krügen", angestellter.figur() != null
+			and angestellter._mug_nodes.size() == 12 and (angestellter.get_node("Tablett") as Node3D).visible,
+			str(angestellter._mug_nodes.size()))
 		angestellter.queue_free()
 
 		print("  -- Steam-Dienst (5.2)")

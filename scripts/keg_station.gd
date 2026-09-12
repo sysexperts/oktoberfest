@@ -10,6 +10,7 @@ const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: C
 @export var beer_type := 1
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Modell := preload("res://scripts/modell_material.gd")
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -18,11 +19,10 @@ func _ready() -> void:
 		label.modulate = BEER_COLORS.get(beer_type, Color.WHITE)
 		Einstellungen.geaendert.connect(_beschriften)
 		_beschriften()
-	var mesh := get_node_or_null("Mesh") as MeshInstance3D
-	if mesh and mesh.material_override is StandardMaterial3D:
-		var m := (mesh.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
-		m.albedo_color = (BEER_COLORS.get(beer_type, Color(0.45, 0.3, 0.15)) as Color).darkened(0.3)
-		mesh.material_override = m
+	# Fass-Modell (assets/models/fass_mit_zapfhahn.glb) — die Sorte zeigt das Schild
+	var fass := get_node_or_null("Fass")
+	if fass:
+		Modell.ohne_metall(fass)
 
 ## Name der Sorte in der Spielsprache, mit der aktuell belegten Taste.
 func _beschriften() -> void:

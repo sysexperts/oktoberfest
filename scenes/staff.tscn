@@ -1,23 +1,21 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/staff.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2_model"]
+[ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
+[ext_resource type="PackedScene" path="res://scenes/essen_teller.tscn" id="4_teller"]
 
-[sub_resource type="CylinderMesh" id="KrugMesh"]
-top_radius = 0.032
-bottom_radius = 0.032
-height = 0.1
+[sub_resource type="CylinderMesh" id="TablettMesh"]
+top_radius = 0.27
+bottom_radius = 0.25
+height = 0.02
+radial_segments = 24
+rings = 1
 
-[sub_resource type="StandardMaterial3D" id="MatBier"]
-albedo_color = Color(0.95, 0.72, 0.18, 1)
-
-[sub_resource type="CylinderMesh" id="SchaumMesh"]
-top_radius = 0.034
-bottom_radius = 0.034
-height = 0.022
-
-[sub_resource type="StandardMaterial3D" id="MatSchaum"]
-albedo_color = Color(0.98, 0.97, 0.92, 1)
+[sub_resource type="StandardMaterial3D" id="MatTablett"]
+albedo_color = Color(0.62, 0.63, 0.66, 1)
+metallic = 0.7
+roughness = 0.3
 
 [node name="Staff" type="Node3D"]
 script = ExtResource("1_script")
@@ -32,161 +30,63 @@ font_size = 40
 outline_size = 14
 text = "Kellner"
 
-[node name="Kruege" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+[node name="Tablett" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.4)
+visible = false
+mesh = SubResource("TablettMesh")
+surface_material_override/0 = SubResource("MatTablett")
 
-[node name="Krug1" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0, -0.16)
+[node name="Teller" parent="Tablett" instance=ExtResource("4_teller")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug1"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
+[node name="Kruege" type="Node3D" parent="Tablett"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0.01, 0)
 
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug2" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, -0.16)
+[node name="Krug1" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0, 0)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug2"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug3" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, -0.16)
+[node name="Krug2" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0, 0)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug3"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug4" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, -0.16)
+[node name="Krug3" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.13)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug4"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug5" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, -0.015, -0.23)
+[node name="Krug4" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.13)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug5"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug6" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, -0.015, -0.23)
+[node name="Krug5" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 0)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug6"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug7" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.015, -0.23)
+[node name="Krug6" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug7"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug8" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.015, -0.23)
+[node name="Krug7" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 0, -0.13)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug8"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug9" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, -0.03, -0.3)
+[node name="Krug8" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, 0, -0.13)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug9"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug10" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, -0.03, -0.3)
+[node name="Krug9" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13, 0, 0.13)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug10"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug11" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.03, -0.3)
+[node name="Krug10" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, 0, 0.13)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug11"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
-
-[node name="Krug12" type="Node3D" parent="Kruege"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.03, -0.3)
+[node name="Krug11" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.26)
 visible = false
 
-[node name="Glas" type="MeshInstance3D" parent="Kruege/Krug12"]
-mesh = SubResource("KrugMesh")
-material_override = SubResource("MatBier")
-
-[node name="Schaum" type="MeshInstance3D" parent="Kruege/Krug12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0)
-mesh = SubResource("SchaumMesh")
-material_override = SubResource("MatSchaum")
+[node name="Krug12" parent="Tablett/Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.26)
+visible = false

@@ -55,10 +55,11 @@ var _net_yaw: float
 @onready var _head: Node3D = $Head
 @onready var _cam: Camera3D = $Head/Camera3D
 @onready var _hold_point: Node3D = $Head/HoldPoint
-@onready var _carry_glass: MeshInstance3D = $Head/HoldPoint/CarryGlass
-@onready var _carry_beer: MeshInstance3D = $Head/HoldPoint/CarryGlass/CarryBeer
+@onready var _carry_glass: Krug = $Head/HoldPoint/CarryGlass
+## Kiste, wenn ein Paket getragen wird
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
-@onready var _extra_nodes: Array[MeshInstance3D] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
+@onready var _carry_teller: EssenTeller = $Head/HoldPoint/CarryTeller
+@onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _scarf: MeshInstance3D = $Scarf
 @onready var _emote_label: Label3D = $Emote
 @onready var _ring: MeshInstance3D = $Ring
@@ -548,30 +549,25 @@ func _update_carry_visual() -> void:
 		var n := _extra_nodes[i]
 		n.visible = i < extra_kruege.size()
 		if n.visible:
-			var bm := (n.get_child(0) as MeshInstance3D).material_override as StandardMaterial3D
-			if bm:
-				bm.albedo_color = BEER_COLORS.get(extra_kruege[i], BEER_COLORS[0])
+			n.farbe = BEER_COLORS.get(extra_kruege[i], BEER_COLORS[0])
+	# Glaskrug mit Füllstand: beim Zapfen steigt das Bier
 	_carry_glass.visible = has_mug
-	_carry_beer.visible = has_mug and carry_fill > 0.01
 	if has_mug:
-		_carry_beer.scale.y = maxf(carry_fill, 0.001)
-		_carry_beer.position.y = -0.08 + (0.16 * carry_fill) * 0.5
-		var m := _carry_beer.material_override as StandardMaterial3D
-		if m:
-			m.albedo_color = BEER_COLORS.get(carry_type, BEER_COLORS[0])
+		_carry_glass.fuellung = carry_fill
+		_carry_glass.farbe = BEER_COLORS.get(carry_type, BEER_COLORS[0])
 	# Paket wird als große Kiste in der Hand gezeigt
 	if carry_state == 3:
+		_carry_teller.visible = false
 		_carry_food.visible = true
 		_carry_food.scale = Vector3(2.2, 2.2, 2.2)
 		var pm := _carry_food.material_override as StandardMaterial3D
 		if pm:
 			pm.albedo_color = Color(0.75, 0.55, 0.35) if carry_pkg_kind == 1 else Color(0.6, 0.45, 0.3)
 		return
-	_carry_food.visible = has_food
+	_carry_food.visible = false
+	_carry_teller.visible = has_food
 	if has_food:
-		# pişerken büyür (görsel geri bildirim)
+		# Beim Kochen wächst die Portion (sichtbarer Fortschritt)
 		var s := lerpf(0.5, 1.0, clampf(carry_fill, 0.0, 1.0))
-		_carry_food.scale = Vector3(s, s, s)
-		var fm := _carry_food.material_override as StandardMaterial3D
-		if fm:
-			fm.albedo_color = FOOD_COLORS.get(carry_type, FOOD_COLORS[1])
+		_carry_teller.scale = Vector3(s, s, s)
+		_carry_teller.sorte = clampi(carry_type, 1, 3)

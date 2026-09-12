@@ -15,6 +15,9 @@ var _active := true
 
 func _ready() -> void:
 	add_to_group("stage")
+	var modell := get_node_or_null("Modell")
+	if modell:
+		preload("res://scripts/modell_material.gd").ohne_metall(modell)
 	var holder := get_node_or_null("Lichter")
 	if holder:
 		for c in holder.get_children():

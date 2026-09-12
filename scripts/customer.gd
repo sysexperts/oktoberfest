@@ -24,7 +24,8 @@ var _net_yaw: float
 var _figur: Figur
 var _anim: AnimationPlayer
 var _skel: Skeleton3D
-var _mug: MeshInstance3D
+var _mug: Node3D
+const KRUG := preload("res://scenes/krug.tscn")
 var _cur := ""
 var _last := Vector3.ZERO
 var _seated := false
@@ -60,16 +61,10 @@ func _make_mug() -> void:
 	var ba := BoneAttachment3D.new()
 	ba.bone_name = "RightHand"
 	_skel.add_child(ba)
-	_mug = MeshInstance3D.new()
-	var cyl := CylinderMesh.new()
-	cyl.top_radius = 0.05
-	cyl.bottom_radius = 0.045
-	cyl.height = 0.13
-	_mug.mesh = cyl
-	var m := StandardMaterial3D.new()
-	m.albedo_color = Color(0.95, 0.7, 0.1)
-	_mug.material_override = m
-	_mug.position = Vector3(0.04, 0.02, 0.0)
+	# Glaskrug aus scenes/krug.tscn — Ursprung am Boden, daher etwas tiefer
+	_mug = KRUG.instantiate()
+	_mug.scale = Vector3.ONE * 0.85
+	_mug.position = Vector3(0.04, -0.06, 0.0)
 	_mug.visible = false
 	ba.add_child(_mug)
 

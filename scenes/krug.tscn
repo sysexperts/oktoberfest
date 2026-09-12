@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/krug.gd" id="1_krug"]
+[ext_resource type="PackedScene" path="res://assets/models/krug.glb" id="2_glas"]
+
+[sub_resource type="StandardMaterial3D" id="MatGlas"]
+transparency = 1
+albedo_color = Color(0.9, 0.95, 1, 0.3)
+metallic_specular = 0.9
+roughness = 0.08
+
+[sub_resource type="CylinderMesh" id="BierMesh"]
+top_radius = 0.047
+bottom_radius = 0.044
+height = 1.0
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CylinderMesh" id="SchaumMesh"]
+top_radius = 0.046
+bottom_radius = 0.048
+height = 0.014
+radial_segments = 16
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MatSchaum"]
+albedo_color = Color(0.98, 0.96, 0.9, 1)
+roughness = 0.9
+
+[node name="Krug" type="Node3D"]
+script = ExtResource("1_krug")
+glas_material = SubResource("MatGlas")
+
+[node name="Glas" parent="." instance=ExtResource("2_glas")]
+transform = Transform3D(0.105, 0, 0, 0, 0.105, 0, 0, 0, 0.105, 0, 0.1, 0)
+
+[node name="Bier" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.16, 0, 0, 0, 1, -0.022, 0.094, 0)
+mesh = SubResource("BierMesh")
+
+[node name="Schaum" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022, 0.18, 0)
+mesh = SubResource("SchaumMesh")
+material_override = SubResource("MatSchaum")

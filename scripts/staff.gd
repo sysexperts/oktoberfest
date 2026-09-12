@@ -31,7 +31,6 @@ var _jitter_t := 0.0
 var _bob := 0.0
 var _model_base_y := 0.0
 var _idle_motion: IdleMotion
-var _hand_mugs: Array = []
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -53,7 +52,6 @@ func _ready() -> void:
 	_collect_mugs()
 	if _figur.braucht_idle_bewegung():
 		_setup_idle_motion()
-	_setup_hand_mugs()
 	_refresh_label()
 
 ## Stehen: echte Stehanimation der Figur, beim Bean die eingefrorene Laufpose.
@@ -69,9 +67,9 @@ func _set_walking() -> void:
 	_figur.gehen()
 	_walking = true
 
-## Die Maßkrüge liegen als echte Knoten in staff.tscn (Traube vor dem Körper).
+## Die Maßkrüge stehen als echte Knoten auf dem Tablett in staff.tscn.
 func _collect_mugs() -> void:
-	var holder := get_node_or_null("Kruege")
+	var holder := get_node_or_null("Tablett/Kruege")
 	if holder == null:
 		return
 	for c in holder.get_children():
@@ -92,11 +90,14 @@ func set_carrying(n: int) -> void:
 	if carrying == n:
 		return
 	carrying = n
-	for i in _hand_mugs.size():
-		(_hand_mugs[i] as Node3D).visible = i < n
-	var rest: int = maxi(0, n - _hand_mugs.size())
+	# Tablett vor dem Körper: Kellner mit Krügen, Koch mit einem Teller
+	var koch := role == 1
+	var tablett := get_node_or_null("Tablett") as Node3D
+	if tablett:
+		tablett.visible = n > 0
+		(tablett.get_node("Teller") as Node3D).visible = koch and n > 0
 	for i in _mug_nodes.size():
-		(_mug_nodes[i] as Node3D).visible = i < rest
+		(_mug_nodes[i] as Node3D).visible = not koch and i < n
 	_refresh_label()
 func _refresh_label() -> void:
 	if _label == null:
@@ -133,47 +134,6 @@ func _process(delta: float) -> void:
 			deg_to_rad(model_yaw_offset) + _idle_jitter, clampf(delta * 1.5, 0.0, 1.0))
 
 
-
-## Ein Krug pro Hand, direkt an den Handknochen gehängt — der folgt damit
-## wirklich der Handbewegung. Alles darüber hinaus wird als Traube vor dem
-## Bauch gezeigt (wie eine echte Bedienung mehrere Maß trägt).
-func _setup_hand_mugs() -> void:
-	var sk := _figur.skelett
-	if sk == null:
-		return
-	for bone_name in ["RightHand", "LeftHand"]:
-		var b := sk.find_bone(bone_name)
-		if b < 0:
-			continue
-		var ba := BoneAttachment3D.new()
-		ba.bone_idx = b
-		sk.add_child(ba)
-		var krug := Node3D.new()
-		krug.position = Vector3(0.0, -0.05, 0.0)
-		krug.visible = false
-		ba.add_child(krug)
-		var glas := MeshInstance3D.new()
-		var cyl := CylinderMesh.new()
-		cyl.top_radius = 0.032
-		cyl.bottom_radius = 0.032
-		cyl.height = 0.1
-		glas.mesh = cyl
-		var mb := StandardMaterial3D.new()
-		mb.albedo_color = Color(0.95, 0.72, 0.18)
-		glas.material_override = mb
-		krug.add_child(glas)
-		var schaum := MeshInstance3D.new()
-		var cyl2 := CylinderMesh.new()
-		cyl2.top_radius = 0.034
-		cyl2.bottom_radius = 0.034
-		cyl2.height = 0.022
-		schaum.mesh = cyl2
-		var ms := StandardMaterial3D.new()
-		ms.albedo_color = Color(0.98, 0.97, 0.92)
-		schaum.material_override = ms
-		schaum.position = Vector3(0.0, 0.055, 0.0)
-		krug.add_child(schaum)
-		_hand_mugs.append(krug)
 
 ## Organische Stehbewegung (Atmen, Gewicht verlagern, Kopf drehen) — nur für
 ## Figuren ohne echte Stehanimation.
