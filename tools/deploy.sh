@@ -49,7 +49,9 @@ done
 cd "$(dirname "$0")/.."
 mkdir -p build
 
-ssh_server() { ssh -i "$SCHLUESSEL" -o BatchMode=yes "$SERVER" "$@"; }
+# Keepalive: der Serverimport vieler neuer Modelle dauert Minuten ohne Ausgabe —
+# ohne Lebenszeichen trennte die Verbindung (v128: "Connection reset by peer").
+ssh_server() { ssh -i "$SCHLUESSEL" -o BatchMode=yes -o ServerAliveInterval=20 -o ServerAliveCountMax=60 "$SERVER" "$@"; }
 scp_server() { scp -q -i "$SCHLUESSEL" -o BatchMode=yes "$@"; }
 schritt() { echo; echo "=== $*"; }
 abbruch() { echo; echo "ABBRUCH: $*" >&2; exit 1; }
