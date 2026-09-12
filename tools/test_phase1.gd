@@ -453,6 +453,16 @@ class Lauf extends Node:
 		_check("Klo-Container in der Szene", gm.get_node_or_null("KloContainer") != null, "")
 		_check("Tanzplätze vor der Bühne frei", not gm.buehnen_tanzplaetze().is_empty(), str(gm.buehnen_tanzplaetze().size()))
 
+		print("  -- Einrichtung an Wand und Decke")
+		var lage_wand: Dictionary = gm._deko_platz("banner", 3.0, -12.9, 0.0)
+		_check("Wanddeko rastet an der Rückwand ein", is_equal_approx(float(lage_wand.z), gm.WAND_HINTEN)
+			and float(lage_wand.y) > 1.5 and is_zero_approx(float(lage_wand.rot)), str(lage_wand))
+		var lage_west: Dictionary = gm._deko_platz("hopfen", -10.8, 0.0, 0.0)
+		_check("Wanddeko an der Westwand schaut ins Zelt", is_equal_approx(float(lage_west.x), -gm.WAND_X)
+			and is_equal_approx(float(lage_west.rot), PI / 2.0), str(lage_west))
+		_check("Deckendeko hängt oben, Bodendeko steht unten", gm.Katalog.hoehe("kronleuchter") > 3.0
+			and is_zero_approx(float(gm._deko_platz("regal", 0.0, 0.0, 0.0).y)), "")
+
 		print("  -- Spätlizenzen")
 		var stufe_vorher: int = gm._tent_stage
 		gm._tent_stage = 1

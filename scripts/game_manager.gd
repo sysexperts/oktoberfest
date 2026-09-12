@@ -47,13 +47,19 @@ const GRUNDANDRANG := 0.4
 const VOLL_AB_STUNDE := 13.0
 ## Einrichtung (Lampen, Deko): Katalog, Obergrenze, Tragabstand, Anziehung
 const Katalog := preload("res://scripts/einrichtung_katalog.gd")
-const DEKO_MAX := 16
+const DEKO_MAX := 30
 const DEKO_ABSTAND := 1.8
 const DEKO_ANDRANG := 0.02        # je Gegenstand 2 % mehr Gäste …
 const DEKO_ANDRANG_MAX := 0.2     # … höchstens 20 %
 ## Abgestellt wird nur innerhalb der Zeltwände
 const ZELT_MIN := Vector3(-11.6, 0, -13.6)
 const ZELT_MAX := Vector3(11.6, 0, 10.6)
+## Innenseiten der Zeltwände — hier hängt Wanddeko (scripts/einrichtung_katalog.gd "wand")
+const WAND_X := 11.75
+const WAND_HINTEN := -13.75
+const WAND_VORN := 10.75
+## Beim Tragen rastet Wanddeko erst ein, wenn eine Wand so nah ist
+const WAND_FANG := 3.5
 const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
 const ORDER_COOLDOWN_MIN := 18.0    # Pause zwischen zwei Bestellungen eines Gasts
 const ORDER_COOLDOWN_MAX := 35.0    # (vorher 22–45 s; 15–30 war allein nicht zu schaffen)
@@ -1962,9 +1968,14 @@ func _update_held_tables() -> void:
 			continue
 		var fwd: Vector3 = -pl.global_transform.basis.z
 		var p: Vector3 = pl.global_position + fwd * DEKO_ABSTAND
-		n.position = Vector3(p.x, 0.0, p.z)
-		_einrichtung[did].x = p.x
-		_einrichtung[did].z = p.z
+		var e: Dictionary = _einrichtung[did]
+		# Wanddeko rastet schon beim Tragen an der nahen Wand ein
+		var lage := _deko_platz(str(e.art), p.x, p.z, float(e.rot), true)
+		e.x = lage.x
+		e.z = lage.z
+		e.rot = lage.rot
+		n.position = Vector3(lage.x, lage.y, lage.z)
+		n.rotation.y = lage.rot
 
 # ================================================= Einrichtung (Lampen, Deko)
 ## Wiesenbüro: Gegenstand kaufen. Er erscheint am Zelteingang (drinnen) — das
@@ -1992,8 +2003,9 @@ func net_buy_einrichtung(art: String) -> void:
 	_einrichtung_next += 1
 	# Neben dem Eingang (freie Fläche zwischen den Tischreihen)
 	var x := -2.4 + float(_einrichtung.size() % 5) * 1.2
-	_einrichtung[did] = {"art": art, "x": x, "z": 10.3, "rot": 0.0}
-	_add_einrichtung.rpc(did, art, x, 10.3, 0.0)
+	var lage := _deko_platz(art, x, 10.3, 0.0)
+	_einrichtung[did] = {"art": art, "x": lage.x, "z": lage.z, "rot": lage.rot}
+	_add_einrichtung.rpc(did, art, float(lage.x), float(lage.z), float(lage.rot))
 	_melde("MSG_DECO_BOUGHT", [Katalog.name_key(art)], 2)
 	_broadcast_meta()
 
@@ -2005,7 +2017,7 @@ func _add_einrichtung(did: int, art: String, x: float, z: float, rot: float) -> 
 	n.name = "Deko%d" % did
 	n.deko_id = did
 	n.art = art
-	n.position = Vector3(x, 0.0, z)
+	n.position = Vector3(x, Katalog.hoehe(art), z)
 	n.rotation.y = rot
 	_einrichtung_container.add_child(n)
 	_einrichtung_nodes[did] = n
@@ -2073,15 +2085,46 @@ func _deko_abstellen(s: int) -> void:
 	if not _einrichtung.has(did):
 		return
 	var e: Dictionary = _einrichtung[did]
-	e.x = clampf(float(e.x), ZELT_MIN.x, ZELT_MAX.x)
-	e.z = clampf(float(e.z), ZELT_MIN.z, ZELT_MAX.z)
+	var lage := _deko_platz(str(e.art), float(e.x), float(e.z), float(e.rot))
+	e.x = lage.x
+	e.z = lage.z
+	e.rot = lage.rot
 	_set_einrichtung.rpc(did, float(e.x), float(e.z), float(e.rot))
+
+## Wo ein Gegenstand wirklich hinkommt: im Zelt, Wanddeko an der nächsten Wand
+## (Vorderseite ins Zelt), Decken- und Wanddeko auf ihrer Höhe aus dem Katalog.
+## frei = beim Tragen: weit weg von jeder Wand noch nicht einrasten.
+## Liefert {x, z, rot, y}.
+func _deko_platz(art: String, x: float, z: float, rot: float, frei := false) -> Dictionary:
+	x = clampf(x, ZELT_MIN.x, ZELT_MAX.x)
+	z = clampf(z, ZELT_MIN.z, ZELT_MAX.z)
+	if Katalog.platz(art) == "wand":
+		var abstand := {"west": x + WAND_X, "ost": WAND_X - x, "hinten": z - WAND_HINTEN, "vorn": WAND_VORN - z}
+		var naechste := "west"
+		for w: String in abstand:
+			if float(abstand[w]) < float(abstand[naechste]):
+				naechste = w
+		if not frei or float(abstand[naechste]) <= WAND_FANG:
+			match naechste:
+				"west":
+					x = -WAND_X
+					rot = PI / 2.0
+				"ost":
+					x = WAND_X
+					rot = -PI / 2.0
+				"hinten":
+					z = WAND_HINTEN
+					rot = 0.0
+				"vorn":
+					z = WAND_VORN
+					rot = PI
+	return {"x": x, "z": z, "rot": rot, "y": Katalog.hoehe(art)}
 
 @rpc("authority", "reliable", "call_local")
 func _set_einrichtung(did: int, x: float, z: float, rot: float) -> void:
 	var n: Node3D = _einrichtung_nodes.get(did)
 	if n:
-		n.position = Vector3(x, 0.0, z)
+		n.position = Vector3(x, Katalog.hoehe(n.art), z)
 		n.rotation.y = rot
 
 @rpc("authority", "unreliable")
@@ -2089,7 +2132,7 @@ func _net_einrichtung_pos(ids: PackedInt32Array, xs: PackedFloat32Array, zs: Pac
 	for i in ids.size():
 		var n: Node3D = _einrichtung_nodes.get(ids[i])
 		if n:
-			n.position = Vector3(xs[i], 0.0, zs[i])
+			n.position = Vector3(xs[i], Katalog.hoehe(n.art), zs[i])
 			n.rotation.y = rots[i]
 
 ## Für den Spieler-Hinweis: trägt dieser Spieler gerade einen Gegenstand?

@@ -388,6 +388,24 @@ DECO_BLUMEN,Blumenbeet,Flower bed,Çiçek tarhı
 DECO_BLUMEN_INFO,Ein bisschen Grün fürs Zelt.,A bit of green for the tent.,Çadıra biraz yeşillik.
 DECO_BUSCH,Busch,Bush,Çalı
 DECO_BUSCH_INFO,Großer Busch als Raumteiler.,Large bush as a room divider.,Oda bölücü olarak büyük çalı.
+DECO_REGAL,Holzregal,Wooden shelf,Ahşap raf
+DECO_REGAL_INFO,Freistehendes Regal — frei verschieb- und drehbar.,Free-standing shelf — move and rotate it anywhere.,Serbest duran raf — istediğin yere taşı ve döndür.
+DECO_FASS,Deko-Fass,Decorative barrel,Süs fıçısı
+DECO_FASS_INFO,Großes Holzfass für eine gemütliche Ecke.,Big wooden barrel for a cosy corner.,Sıcak bir köşe için büyük ahşap fıçı.
+DECO_KRONLEUCHTER,Geweih-Kronleuchter,Antler chandelier,Boynuzlu avize
+DECO_KRONLEUCHTER_INFO,Hängt unter dem Dach und gibt warmes Licht.,Hangs from the roof and gives warm light.,Çatıdan sarkar ve sıcak ışık verir.
+DECO_LICHTERGIRLANDE,Lichtergirlande,Light garland,Işık girlandı
+DECO_LICHTERGIRLANDE_INFO,Glühbirnen-Girlande für die Decke.,Bulb garland for the ceiling.,Tavan için ampul girlandı.
+DECO_HAENGELATERNE,Hängelaterne,Hanging lantern,Asma fener
+DECO_HAENGELATERNE_INFO,Kleine Laterne unter dem Dach.,Small lantern under the roof.,Çatının altında küçük fener.
+DECO_HOPFEN,Hopfengirlande,Hop garland,Şerbetçiotu girlandı
+DECO_HOPFEN_INFO,Hängt an der Zeltwand.,Hangs on the tent wall.,Çadır duvarına asılır.
+DECO_RIESENBREZEL,Riesenbrezel,Giant pretzel,Dev brezel
+DECO_RIESENBREZEL_INFO,Das Wahrzeichen jeder Wiesn — für die Wand.,The landmark of every fair — for the wall.,Her panayırın simgesi — duvar için.
+DECO_BANNER,Wirtshaus-Banner,Tavern banner,Meyhane sancağı
+DECO_BANNER_INFO,Banner mit Maßkrug für die Zeltwand.,Banner with a beer mug for the tent wall.,Çadır duvarı için bira kupalı sancak.
+DECO_WIMPEL,Wimpelkette,Bunting,Flama zinciri
+DECO_WIMPEL_INFO,Blau-weiße Wimpel für die Wand.,Blue and white pennants for the wall.,Duvar için mavi-beyaz flamalar.
 WHY_DECO_LIMIT,Höchstens %d Gegenstände im Zelt,At most %d items in the tent,Çadırda en fazla %d eşya
 MSG_DECO_LIMIT,🪴 Höchstens %d Gegenstände im Zelt,🪴 At most %d items in the tent,🪴 Çadırda en fazla %d eşya
 MSG_DECO_BOUGHT,🪴 %s gekauft — steht am Zelteingang,🪴 %s bought — waiting at the tent entrance,🪴 %s alındı — çadır girişinde duruyor

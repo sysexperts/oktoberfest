@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
+[ext_resource type="PackedScene" path="res://assets/models/deco_2.glb" id="2_m"]
+
+[node name="Lichtergirlande" type="Node3D"]
+script = ExtResource("1_e")
+
+[node name="Modell" parent="." instance=ExtResource("2_m")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, -0.55, 0)
+
+[node name="Licht" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+light_color = Color(1, 0.86, 0.6, 1)
+light_energy = 0.7
+omni_range = 5.0

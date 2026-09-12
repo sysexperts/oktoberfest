@@ -330,6 +330,42 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="EinrRegal" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrFass" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrKronleuchter" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrLichtergirlande" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrHaengelaterne" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrHopfen" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrRiesenbrezel" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBanner" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrWimpel" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Unten" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 alignment = 2

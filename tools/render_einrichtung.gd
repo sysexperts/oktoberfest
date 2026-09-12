@@ -42,12 +42,22 @@ class Lauf extends Node:
 			await _frames(3)
 		print("  gekauft: %d von %d" % [gm._einrichtung.size(), arten.size()])
 		gm.set_process(false)
-		# In einer Reihe quer durchs Zelt, die Lichterkette in die Mitte
+		# Boden- und Deckendeko in einer Reihe quer durchs Zelt, Wanddeko an der Westwand
 		var i := 0
+		var j := 0
 		for did in gm._einrichtung.keys():
-			var n: Node3D = gm._einrichtung_nodes[did]
-			n.position = Vector3(-8.0 + i * 4.0, 0.0, 2.0)
-			i += 1
+			var art := str(gm._einrichtung[did].art)
+			var p := Vector3(-8.0 + i * 1.8, 0.0, 1.6)
+			if gm.Katalog.platz(art) == "wand":
+				p = Vector3(-11.0, 0.0, -4.0 + j * 2.6)
+				j += 1
+			else:
+				i += 1
+			var lage: Dictionary = gm._deko_platz(art, p.x, p.z, 0.0)
+			gm._einrichtung[did].x = lage.x
+			gm._einrichtung[did].z = lage.z
+			gm._einrichtung[did].rot = lage.rot
+			gm._set_einrichtung(did, lage.x, lage.z, lage.rot)
 		var spieler: Node3D = gm.get_node("Players").get_child(0)
 		spieler.set_physics_process(false)
 		spieler.global_position = Vector3(0.0, 0.0, 10.0)
@@ -57,6 +67,13 @@ class Lauf extends Node:
 		await _frames(90)
 		get_viewport().get_texture().get_image().save_png("res://tools/einrichtung_zelt.png")
 		print("  gespeichert: einrichtung_zelt")
+		# Blick auf die Westwand mit der Wanddeko
+		spieler.global_position = Vector3(-5.5, 0.0, 0.0)
+		spieler.rotation.y = PI / 2.0
+		spieler.get_node("Head").rotation.x = deg_to_rad(12.0)
+		await _frames(40)
+		get_viewport().get_texture().get_image().save_png("res://tools/einrichtung_wand.png")
+		print("  gespeichert: einrichtung_wand")
 		# Nahaufnahme der Theke mit Ausgabe, darauf ein paar fertige Krüge und Essen
 		gm._ausgabe = {"1_1": 4, "1_2": 2, "2_1": 2}
 		gm._ausgabe_senden()
