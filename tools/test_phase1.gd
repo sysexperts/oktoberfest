@@ -473,6 +473,19 @@ class Lauf extends Node:
 		gm._klo_setzen(-1)
 		gm._has_toilet = klo_vorher
 
+		print("  -- Lobby und Teamleiter")
+		_check("Abteilung je Personal-Rolle", gm.abteilung_fuer_rolle(gm.ROLE_KOCH) == "kueche"
+			and gm.abteilung_fuer_rolle(gm.ROLE_KELLNER) == "service" and gm.abteilung_fuer_rolle(gm.ROLE_ZAPFER) == "service"
+			and gm.abteilung_fuer_rolle(gm.ROLE_REINIGUNG) == "sauberkeit", "")
+		_check("Solo: Personal ohne Teamleiter erlaubt", gm._darf_personal(gm.ROLE_KOCH), "")
+		gm.net_lobby_setzen("  Wiesn-Sepp mit viel zu langem Namen ", 3, "kueche")
+		var eigen: Dictionary = gm._spieler_info.get(1, {})
+		_check("Lobby-Wahl gespeichert, Name gekürzt", str(eigen.get("abteilung", "")) == "kueche"
+			and str(eigen.get("name", "")).length() <= gm.SPIELERNAME_MAX and int(eigen.get("farbe", -1)) == 3,
+			str(eigen))
+		_check("Meldungen nutzen den Lobby-Namen", gm._spieler_bezeichnung(1) == str(eigen.get("name", "")), "")
+		gm._spieler_info.clear()
+
 		print("  -- Zeltname")
 		_check("Zeltname wird bereinigt", gm.zeltname_pruefen("  Zum\nHirsch  ") == "ZumHirsch"
 			and gm.zeltname_pruefen("x".repeat(40)).length() == gm.ZELTNAME_MAX, "")

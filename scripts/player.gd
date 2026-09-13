@@ -16,6 +16,10 @@ const FILL_RATE := 0.6
 const MAX_KRUEGE := 3
 ## Jeder zusätzliche Krug macht so viel langsamer
 const TRAG_BREMSE := 0.12
+## Teamleiter-Boni in der eigenen Abteilung (Putzen: GameManager.BONUS_PUTZEN)
+const BONUS_ZAPFEN := 1.4
+const BONUS_KOCHEN := 1.6
+const BONUS_LAGER_TEMPO := 1.2
 
 # 1 Helles, 2 Weizen, 3 Radler
 const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08)}
@@ -62,6 +66,10 @@ var _net_yaw: float
 @onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _scarf: MeshInstance3D = $Scarf
 @onready var _emote_label: Label3D = $Emote
+@onready var _namensschild: Label3D = $Namensschild
+## Abteilung, die dieser Spieler leitet ("" = keine) — aus der Lobby (GameManager._spieler_info)
+var abteilung := ""
+const ABT_SYMBOL := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
 @onready var _ring: MeshInstance3D = $Ring
 
 func _ready() -> void:
@@ -103,10 +111,29 @@ func _ready() -> void:
 		rm.albedo_color = col
 		rm.emission = col
 
+	_namensschild.visible = false
 	if _is_local:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		_make_highlight_ring()
 		_sfx_node = _world.get_node_or_null("Sfx")
+		# Mehrspieler: Lobby (Name, Farbe, Abteilung, Anleitung) beim Einstieg
+		if not Net.solo and _world.has_method("open_lobby_ui"):
+			_world.call_deferred("open_lobby_ui")
+
+## Name, Schalfarbe und Abteilung aus der Lobby (vom Server an alle).
+func set_info(spielername: String, farbe: int, abt: String) -> void:
+	abteilung = abt
+	costume = clampi(farbe, 0, COSTUME_COLORS.size() - 1)
+	_apply_costume()
+	if _is_local:
+		return
+	var symbol: String = ABT_SYMBOL.get(abt, "")
+	_namensschild.text = (symbol + " " if symbol != "" else "") + spielername
+	_namensschild.visible = spielername != ""
+
+## Bonus in der eigenen Abteilung — sonst normales Tempo.
+func _bonus(abt: String, faktor: float) -> float:
+	return faktor if abteilung == abt else 1.0
 
 func _sfx(name: String) -> void:
 	if _sfx_node:
@@ -148,6 +175,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			hud.close_rent()
 		elif hud and hud.has_method("is_vote_open") and hud.is_vote_open():
 			hud.close_vote()
+		elif hud and hud.has_method("is_lobby_open") and hud.is_lobby_open():
+			hud.close_lobby()
 		elif hud and hud.has_method("is_computer_open") and hud.is_computer_open():
 			hud.close_computer()
 		elif hud and hud.has_method("is_popup_open") and hud.is_popup_open():
@@ -273,7 +302,8 @@ func _tippt() -> bool:
 		return false
 	# Auch während der Abstimmung: Maus ist frei, Tasten sollen nichts auslösen
 	return (hud.has_method("is_rent_open") and hud.is_rent_open()) \
-		or (hud.has_method("is_vote_open") and hud.is_vote_open())
+		or (hud.has_method("is_vote_open") and hud.is_vote_open()) \
+		or (hud.has_method("is_lobby_open") and hud.is_lobby_open())
 
 func _handle_movement(delta: float) -> void:
 	var input_dir := Vector2.ZERO if _tippt() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -282,6 +312,8 @@ func _handle_movement(delta: float) -> void:
 	dir = dir.normalized() if dir.length() > 0.01 else Vector3.ZERO
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
 	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
+	if carry_state == 3:
+		speed *= _bonus("lager", BONUS_LAGER_TEMPO)   # Lager-Teamleiter trägt Pakete flotter
 	if dir != Vector3.ZERO:
 		velocity.x = move_toward(velocity.x, dir.x * speed, ACCEL * delta * speed)
 		velocity.z = move_toward(velocity.z, dir.z * speed, ACCEL * delta * speed)
@@ -511,7 +543,7 @@ func _handle_interaction(delta: float) -> void:
 			if carry_fill <= 0.0:
 				_sfx("zapfen")   # Zapfhahn auf — nur mit Datei
 			carry_type = (_current_target as KegStation).beer_type
-			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+			carry_fill = minf(carry_fill + FILL_RATE * _bonus("service", BONUS_ZAPFEN) * delta, 1.0)
 			_sfx_loop("glug")
 	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
 	if Input.is_action_pressed("interact") and _current_target is FoodStation:
@@ -521,7 +553,7 @@ func _handle_interaction(delta: float) -> void:
 			carry_type = ft
 			carry_fill = 0.0
 		if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
-			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+			carry_fill = minf(carry_fill + FILL_RATE * _bonus("kueche", BONUS_KOCHEN) * delta, 1.0)
 			_sfx_loop("sizzle")
 	# Kir temizle (E basılı tut)
 	if Input.is_action_pressed("interact") and _current_target is Mess:

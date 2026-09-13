@@ -27,6 +27,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _computer: Control = %Zeltcomputer
 @onready var _mieten: Control = %ZeltMieten
 @onready var _abstimmung: Control = %Abstimmung
+@onready var _lobby: Control = %Lobby
 
 # Zuletzt gemeldete Werte
 var _money := 0
@@ -50,6 +51,7 @@ func _ready() -> void:
 	_computer.einrichten(get_parent())
 	_mieten.einrichten(get_parent())
 	_abstimmung.einrichten(get_parent())
+	_lobby.einrichten(get_parent())
 	Einstellungen.geaendert.connect(_alles_neu)
 	Einstellungen.screenshot_gespeichert.connect(func(pfad: String) -> void:
 		melde("MSG_SCREENSHOT", [pfad], 2))
@@ -258,7 +260,7 @@ func show_popup(text: String) -> void:
 
 func close_popup() -> void:
 	_hinweisfenster.visible = false
-	if not _computer.ist_offen() and not _buero.ist_offen() and not _mieten.ist_offen():
+	if not _computer.ist_offen() and not _buero.ist_offen() and not _mieten.ist_offen() and not _lobby.ist_offen():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func is_popup_open() -> bool:
@@ -314,6 +316,19 @@ func zeige_abstimmung(aktiv: bool, starter: String, ja: int, nein: int, gesamt: 
 
 func is_vote_open() -> bool:
 	return _abstimmung.ist_offen()
+
+## Lobby: Name, Farbe, Abteilung (scenes/ui/lobby.tscn)
+func open_lobby() -> void:
+	_lobby.oeffnen()
+
+func close_lobby() -> void:
+	_lobby.schliessen()
+
+func is_lobby_open() -> bool:
+	return _lobby.ist_offen()
+
+func lobby_aktualisieren(info: Dictionary) -> void:
+	_lobby.aktualisieren(info)
 
 func close_vote() -> void:
 	_abstimmung.schliessen()

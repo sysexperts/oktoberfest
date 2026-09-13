@@ -164,6 +164,12 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "COMP_CLOSE_TENT"
 
+[node name="Abteilung" type="Button" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "COMP_DEPT"
+
 [node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)

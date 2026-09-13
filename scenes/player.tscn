@@ -59,6 +59,15 @@ pixel_size = 0.01
 font_size = 64
 text = "Prost! 🍻"
 
+[node name="Namensschild" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
+billboard = 1
+pixel_size = 0.005
+modulate = Color(1, 0.95, 0.8, 1)
+outline_modulate = Color(0.1, 0.06, 0.02, 1)
+font_size = 44
+outline_size = 14
+
 [node name="Scarf" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 1.15, 0)
 mesh = SubResource("Scarf")

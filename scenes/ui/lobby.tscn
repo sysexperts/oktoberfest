@@ -1,0 +1,265 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/lobby.gd" id="1_lobby"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
+
+[node name="Lobby" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lobby")
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+custom_minimum_size = Vector2(780, 0)
+layout_mode = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.02, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 38
+text = "LOBBY_TITLE"
+horizontal_alignment = 1
+
+[node name="Untertitel" type="Label" parent="Mitte/Panel/Spalte"]
+custom_minimum_size = Vector2(740, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.83, 0.92, 1)
+theme_override_font_sizes/font_size = 15
+text = "LOBBY_SUB"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NameZeile" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameTitel" type="Label" parent="Mitte/Panel/Spalte/NameZeile"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "LOBBY_NAME"
+
+[node name="Name" type="LineEdit" parent="Mitte/Panel/Spalte/NameZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+placeholder_text = "LOBBY_NAME_PLACEHOLDER"
+max_length = 16
+
+[node name="FarbZeile" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FarbTitel" type="Label" parent="Mitte/Panel/Spalte/FarbZeile"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "LOBBY_COLOR"
+
+[node name="Farben" type="HBoxContainer" parent="Mitte/Panel/Spalte/FarbZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Farbe0" type="Button" parent="Mitte/Panel/Spalte/FarbZeile/Farben"]
+custom_minimum_size = Vector2(46, 40)
+layout_mode = 2
+
+[node name="Flaeche" type="ColorRect" parent="Mitte/Panel/Spalte/FarbZeile/Farben/Farbe0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+
+[node name="Farbe1" type="Button" parent="Mitte/Panel/Spalte/FarbZeile/Farben"]
+custom_minimum_size = Vector2(46, 40)
+layout_mode = 2
+
+[node name="Flaeche" type="ColorRect" parent="Mitte/Panel/Spalte/FarbZeile/Farben/Farbe1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+
+[node name="Farbe2" type="Button" parent="Mitte/Panel/Spalte/FarbZeile/Farben"]
+custom_minimum_size = Vector2(46, 40)
+layout_mode = 2
+
+[node name="Flaeche" type="ColorRect" parent="Mitte/Panel/Spalte/FarbZeile/Farben/Farbe2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+
+[node name="Farbe3" type="Button" parent="Mitte/Panel/Spalte/FarbZeile/Farben"]
+custom_minimum_size = Vector2(46, 40)
+layout_mode = 2
+
+[node name="Flaeche" type="ColorRect" parent="Mitte/Panel/Spalte/FarbZeile/Farben/Farbe3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+
+[node name="Farbe4" type="Button" parent="Mitte/Panel/Spalte/FarbZeile/Farben"]
+custom_minimum_size = Vector2(46, 40)
+layout_mode = 2
+
+[node name="Flaeche" type="ColorRect" parent="Mitte/Panel/Spalte/FarbZeile/Farben/Farbe4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+
+[node name="Farbe5" type="Button" parent="Mitte/Panel/Spalte/FarbZeile/Farben"]
+custom_minimum_size = Vector2(46, 40)
+layout_mode = 2
+
+[node name="Flaeche" type="ColorRect" parent="Mitte/Panel/Spalte/FarbZeile/Farben/Farbe5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+
+[node name="AbteilungTitel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "LOBBY_DEPT"
+
+[node name="Abteilungen" type="GridContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="Kueche" type="Button" parent="Mitte/Panel/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(380, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+
+[node name="Service" type="Button" parent="Mitte/Panel/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(380, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+
+[node name="Sauberkeit" type="Button" parent="Mitte/Panel/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(380, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+
+[node name="Lager" type="Button" parent="Mitte/Panel/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(380, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+
+[node name="Trenner" type="HSeparator" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+
+[node name="AnleitungTitel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "LOBBY_HOWTO_TITLE"
+
+[node name="Anleitung" type="Label" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(740, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3
+
+[node name="Hinweis" type="Label" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.45, 1)
+theme_override_font_sizes/font_size = 15
+text = "LOBBY_PICK_DEPT"
+horizontal_alignment = 1
+
+[node name="Los" type="Button" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 26
+text = "LOBBY_GO"

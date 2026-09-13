@@ -96,6 +96,11 @@ const KOOP_ANDRANG_JE_SPIELER := 0.2   # vorher 0.5 — zu viert war das nur noc
 const ABSTIMMUNG_ZEIT := 30.0
 ## Klo: so lange wartet ein Gast vor besetztem Klo, dann geht er irgendwo ins Zelt
 const KLO_WARTEN := 8.0
+## Teamleiter (Plan Koop): jeder Spieler leitet eine Abteilung. Er stellt deren
+## Personal ein und bekommt dort einen kleinen Bonus. Solo gilt nichts davon.
+const ABTEILUNGEN := ["kueche", "service", "sauberkeit", "lager"]
+const BONUS_PUTZEN := 2.0
+const SPIELERNAME_MAX := 16
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 16, 4: 24}   # main.tscn hat 24 Tische
@@ -290,6 +295,8 @@ var _zelt_name := ""
 var _klo_gast := -1
 ## Laufende Abstimmung: {starter, ja: {peer: true}, nein: {peer: true}, rest: Sekunden}
 var _abstimmung := {}
+## Spieler aus der Lobby: {peer: {name, farbe, abteilung}}
+var _spieler_info := {}
 const ZELTNAME_MAX := 24
 var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
 var _day := 1            # Wiesn günü
@@ -785,6 +792,8 @@ func _client_ready(version: String) -> void:
 	_spawn_index_by_peer[sender] = sidx
 	_add_player.rpc(sender, sidx)
 	_melde("NET_PLAYER_JOINED", [], 2)
+	# Namen, Farben und Abteilungen der anderen (Lobby)
+	_net_spieler_info.rpc_id(sender, _spieler_info)
 	for mid in _messes.keys():
 		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position)
 	for gid in _guest_sim.keys():
@@ -836,6 +845,10 @@ func _on_peer_left(peer_id: int) -> void:
 	if _held_deko.has(peer_id):
 		_deko_abstellen(peer_id)
 	_remove_player.rpc(peer_id)
+	# Abteilung wird frei — NPC-Personal dafür kann wieder jeder buchen
+	if _spieler_info.has(peer_id):
+		_spieler_info.erase(peer_id)
+		_net_spieler_info.rpc(_spieler_info)
 	_broadcast_meta()
 	# Laufende Abstimmung neu auswerten — ohne den Spieler kann die Mehrheit kippen
 	_abstimmung_pruefen(false)
@@ -1517,6 +1530,8 @@ func net_hire_staff(role: int) -> void:
 		return
 	if not STAFF_HIRE_COST.has(role):
 		return
+	if not _darf_personal(role):
+		return
 	# Ohne Essenslizenz hätte der Koch nichts zu tun
 	if role == ROLE_KOCH and _foods_avail().is_empty():
 		_fehler("MSG_COOK_LICENSE")
@@ -1546,6 +1561,8 @@ func net_hire_staff(role: int) -> void:
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if not _darf_personal(role):
 		return
 	if _kredit_sperrt():
 		return
@@ -2076,10 +2093,83 @@ func _tag_starten() -> void:
 	_start_shift()
 	_melde("MSG_DAY_START", [_day])
 
-## Anzeigename eines Spielers in Meldungen (bis zur Lobby mit Namen: „Spieler 2").
+## Anzeigename eines Spielers in Meldungen: Name aus der Lobby, sonst „Spieler 2".
 func _spieler_bezeichnung(peer: int) -> String:
+	var n := str((_spieler_info.get(peer, {}) as Dictionary).get("name", ""))
+	if n != "":
+		return n
 	var nummer := int(_spawn_index_by_peer.get(peer, 0)) + 1
 	return tr("PLAYER_N") % nummer
+
+# ================================================= Lobby und Teamleiter
+func open_lobby_ui() -> void:
+	if _hud and _hud.has_method("open_lobby"):
+		_hud.lobby_aktualisieren(_spieler_info)
+		_hud.open_lobby()
+
+## Welche Abteilung ist für diese Personal-Rolle zuständig?
+static func abteilung_fuer_rolle(role: int) -> String:
+	match role:
+		ROLE_KOCH:
+			return "kueche"
+		ROLE_KELLNER, ROLE_ZAPFER:
+			return "service"
+		ROLE_REINIGUNG:
+			return "sauberkeit"
+	return ""
+
+func _abteilung_von(peer: int) -> String:
+	return str((_spieler_info.get(peer, {}) as Dictionary).get("abteilung", ""))
+
+## Darf dieser Absender Personal dieser Rolle einstellen oder aufstufen?
+## Solo und allein: immer. Hat die Abteilung Teamleiter, nur sie — sonst jeder.
+func _darf_personal(role: int) -> bool:
+	if Net.solo or _players_nodes.size() <= 1:
+		return true
+	var abt := abteilung_fuer_rolle(role)
+	var leiter: Array[String] = []
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	for peer in _spieler_info.keys():
+		if _players_nodes.has(peer) and _abteilung_von(peer) == abt:
+			if int(peer) == s:
+				return true
+			leiter.append(_spieler_bezeichnung(peer))
+	if leiter.is_empty():
+		return true
+	_fehler("MSG_ABT_NUR_LEITER", ["ABT_" + abt.to_upper(), ", ".join(leiter)])
+	return false
+
+## Lobby-Wahl eines Spielers speichern und allen schicken.
+@rpc("any_peer", "reliable", "call_local")
+func net_lobby_setzen(spielername: String, farbe: int, abt: String) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var n := zeltname_pruefen(spielername)
+	if n.length() > SPIELERNAME_MAX:
+		n = n.substr(0, SPIELERNAME_MAX).strip_edges()
+	if not abt in ABTEILUNGEN:
+		abt = ""
+	var vorher := _abteilung_von(s)
+	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5), "abteilung": abt}
+	_net_spieler_info.rpc(_spieler_info)
+	if abt != "" and abt != vorher:
+		_melde("MSG_ABT_GEWAEHLT", [_spieler_bezeichnung(s), "ABT_" + abt.to_upper()], 2)
+
+@rpc("authority", "reliable", "call_local")
+func _net_spieler_info(info: Dictionary) -> void:
+	_spieler_info = info
+	for peer in info.keys():
+		var p = _players_nodes.get(int(peer))
+		if p and p.has_method("set_info"):
+			var d: Dictionary = info[peer]
+			p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), str(d.get("abteilung", "")))
+	if _hud and _hud.has_method("lobby_aktualisieren"):
+		_hud.lobby_aktualisieren(info)
 
 ## Ergebnis einer Abstimmung: 1 = Tag starten, -1 = abbrechen, 0 = noch offen.
 ## Mehrheit aller Spieler — wer nicht abstimmt, zählt nicht als Ja.
@@ -3153,7 +3243,11 @@ func net_clean(id: int) -> void:
 		return
 	if not _messes.has(id):
 		return
-	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL
+	var putzer := multiplayer.get_remote_sender_id()
+	if putzer == 0:
+		putzer = 1
+	var putz_faktor := BONUS_PUTZEN if _abteilung_von(putzer) == "sauberkeit" else 1.0
+	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
 		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt
 		var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
