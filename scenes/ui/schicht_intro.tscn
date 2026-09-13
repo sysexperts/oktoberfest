@@ -1,0 +1,109 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/schicht_intro.gd" id="1_intro"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
+
+[node name="SchichtIntro" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_intro")
+
+[node name="Zeit" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -170.0
+offset_right = 544.0
+offset_bottom = 170.0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Rand" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="Spalte" type="VBoxContainer" parent="Panel/Rand"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 7
+
+[node name="Titel" type="Label" parent="Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_outline_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 32
+text = "INTRO_TITLE"
+
+[node name="Unterzeile" type="Label" parent="Panel/Rand/Spalte"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.78, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "INTRO_SUB"
+autowrap_mode = 3
+
+[node name="Zapfen" type="Label" parent="Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Servieren" type="Label" parent="Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Kueche" type="Label" parent="Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Lager" type="Label" parent="Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Putzen" type="Label" parent="Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Schliessen" type="Label" parent="Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.68, 0.8, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2

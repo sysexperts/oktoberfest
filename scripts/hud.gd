@@ -52,6 +52,7 @@ func _ready() -> void:
 	_mieten.einrichten(get_parent())
 	_abstimmung.einrichten(get_parent())
 	_lobby.einrichten(get_parent())
+	%SchichtIntro.einrichten(get_parent())
 	Einstellungen.geaendert.connect(_alles_neu)
 	Einstellungen.screenshot_gespeichert.connect(func(pfad: String) -> void:
 		melde("MSG_SCREENSHOT", [pfad], 2))
@@ -123,8 +124,10 @@ func set_day(day: int) -> void:
 	set_time(_clock, _night)
 
 ## Geöffnet/geschlossen steckt schon in der Uhrzeit (set_time mit -1).
-func set_phase(_offen: bool) -> void:
-	pass
+## Beim ersten Schichtbeginn: kurze Einführung, wer was macht.
+func set_phase(offen: bool) -> void:
+	if offen:
+		%SchichtIntro.beim_schichtbeginn()
 
 func set_popularity(v: float) -> void:
 	_pop = v
