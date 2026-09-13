@@ -411,6 +411,9 @@ func _hint_for(t: Node3D) -> String:
 			or (g.order_kind == 1 and extra_kruege.has(g.order_type))
 		return "HINT_SERVE" if passt else "HINT_WRONG_ORDER"
 	if t is Ausgabe:
+		# Von hinten mit vollem Krug: abstellen (Fässer stehen hinten am Regal)
+		if _has_full_mug() and hinter_der_theke(t):
+			return "HINT_AUSGABE_PUT"
 		if carry_state != 0 and not kann_weiteren_krug():
 			return ""
 		return "HINT_AUSGABE_TAKE" if (t as Ausgabe).hat_fertiges() else "HINT_AUSGABE_EMPTY"
@@ -493,6 +496,10 @@ func _handle_interaction(delta: float) -> void:
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
+		elif _current_target is Ausgabe and _has_full_mug() and hinter_der_theke(_current_target):
+			# Von hinten (Fassseite): vollen Krug für die Kellner abstellen
+			_world.net_put_ausgabe.rpc_id(1, carry_type)
+			_sfx("pop")
 		elif _current_target is Ausgabe and (carry_state == 0 or kann_weiteren_krug()):
 			# Fertigen Krug/Teller von der Ausgabe nehmen (Server entscheidet was)
 			if (_current_target as Ausgabe).hat_fertiges():
@@ -590,6 +597,20 @@ func _krug_weglegen() -> void:
 	carry_state = 0
 	carry_fill = 0.0
 	carry_type = 0
+
+## Steht der Spieler auf der Fassseite der Ausgabe? Die Theke läuft quer (x),
+## die Gäste stehen davor (größeres z), Fässer und Regal dahinter.
+func hinter_der_theke(ausgabe: Node3D) -> bool:
+	return global_position.z < ausgabe.global_position.z - 0.2
+
+## Server hat den Krug aus der Hand auf die Ausgabe gestellt.
+func krug_abgestellt() -> void:
+	if not _has_full_mug():
+		return
+	carry_state = 0
+	carry_fill = 0.0
+	carry_type = 0
+	_naechster_krug_in_hand()
 
 ## Nach dem Bedienen: nächsten vollen Krug in die Hand nehmen.
 func _naechster_krug_in_hand() -> void:

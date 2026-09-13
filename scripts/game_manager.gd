@@ -157,7 +157,7 @@ const Figuren := preload("res://scripts/figuren.gd")
 const TABLE_AVOID_RADIUS := 1.6   # Mitarbeiter halten Abstand zu Tischen (größer = bleiben in engen Gängen hängen)
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
 const KITCHEN_POINT := Vector3(5.0, 0.1, -12.2) # Koch steht vor der Kochtheke an der Rückwand
-const ZAPFER_POINT := Vector3(-2.0, 0.1, -10.4) # Zapfer steht hinter der Theke an der Ausgabe
+const ZAPFER_POINT := Vector3(-4.2, 0.1, -12.6) # Zapfer steht hinten an den Fässern am Rückwandregal
 const KOCH_ABLAGE := Vector3(-0.8, 0.1, -10.4)  # hier stellt der Koch die Portion auf die Ausgabe
 ## Zapfer und Koch stellen Fertiges auf die Ausgabe (scenes/ausgabe.tscn).
 const ZAPF_ZEIT := 2.2        # Sekunden pro Krug auf Stufe 1
@@ -1937,6 +1937,33 @@ func net_take_ausgabe() -> void:
 	var teile := beste.split("_")
 	if _ausgabe_nehmen(int(teile[0]), int(teile[1])):
 		_net_ausgabe_genommen.rpc_id(s, int(teile[0]), int(teile[1]))
+
+## Spieler stellt einen vollen Krug auf die Ausgabe (vordere Theke). Die Fässer
+## stehen hinten am Rückwandregal: zapfen, vorne abstellen, Kellner holen ab.
+const AUSGABE_PLAETZE_KRUEGE := 12
+
+@rpc("any_peer", "reliable", "call_local")
+func net_put_ausgabe(typ: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _ausgabe_gesamt(1) >= AUSGABE_PLAETZE_KRUEGE:
+		_fehler("MSG_AUSGABE_FULL", [AUSGABE_PLAETZE_KRUEGE])
+		return
+	_ausgabe_hinzufuegen(1, clampi(typ, 1, 4))
+	if s == multiplayer.get_unique_id():
+		_net_ausgabe_abgestellt()
+	else:
+		_net_ausgabe_abgestellt.rpc_id(s)
+
+## Beim abstellenden Spieler: Krug aus der Hand (nächster Krug rückt nach).
+@rpc("authority", "reliable", "call_local")
+func _net_ausgabe_abgestellt() -> void:
+	var p = _players_nodes.get(multiplayer.get_unique_id())
+	if p and p.has_method("krug_abgestellt"):
+		p.krug_abgestellt()
 
 ## Beim nehmenden Spieler: fertigen Krug bzw. Teller in die Hand.
 @rpc("authority", "reliable", "call_local")

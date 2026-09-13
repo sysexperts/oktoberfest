@@ -548,3 +548,5 @@ LOBBY_ERR_NOT_HOST,Nur der Gastgeber kann das Spiel starten.,Only the host can s
 LOBBY_ERR_START,Das Spiel konnte nicht starten. Nochmal versuchen?,The game could not start. Try again?,Oyun başlatılamadı. Tekrar denensin mi?
 LOBBY_ERR_GONE,Du warst zu lange weg und wurdest aus dem Warteraum genommen.,You were away too long and left the waiting room.,Çok uzun süre yoktun ve bekleme odasından çıkarıldın.
 LOBBY_ERR_SERVER,Der Lobby-Server antwortet nicht. Ist das Internet an?,The lobby server is not answering. Are you online?,Lobi sunucusu yanıt vermiyor. İnternet açık mı?
+HINT_AUSGABE_PUT,{interact} Krug auf die Ausgabe stellen,{interact} Put mug on the pass,{interact} Kupayı servis yerine koy
+MSG_AUSGABE_FULL,Die Ausgabe ist voll (%s Krüge) — erst abholen lassen,The counter is full (%s mugs) — let someone pick them up first,Tezgah dolu (%s kupa) — önce birinin alması lazım
