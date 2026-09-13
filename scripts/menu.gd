@@ -1,4 +1,5 @@
 extends Control
+const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Hauptmenü. Aussehen und Anordnung liegen als Knoten in scenes/ui/hauptmenue.tscn
 ## und sind im Editor änderbar — hier steht nur, was die Knöpfe tun.
 ## Alle sichtbaren Texte sind Übersetzungsschlüssel (locale/texte.csv).
@@ -29,6 +30,8 @@ var _gewaehlter_platz := 0
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_tree().paused = false
+	# Für Fehlersuche und tools/test_exe.sh: welche Spieldaten-Version wirklich läuft
+	print("[Menü] Version %s (exe %s)" % [KoopDaten.version(), ProjectSettings.get_setting("application/config/version", "?")])
 
 	_weiter.pressed.connect(func() -> void: Net.start_solo(false, Net.letzter_slot()))
 	_laden.pressed.connect(_zeige_spielstaende.bind(false))
@@ -72,8 +75,8 @@ func _ready() -> void:
 		_status.text = tr("STATUS_STEAM_JOINING")
 		SteamDienst.lobby_beitreten(lobby)
 	# Aus dem Warteraum: „Offizieller Server / IP"
-	if Net.menue_koop:
-		Net.menue_koop = false
+	if KoopDaten.menue_koop:
+		KoopDaten.menue_koop = false
 		_zeige(_koop_panel)
 	# Warum das letzte Spiel endete (Host weg, andere Version …)
 	if Net.meldung != "":
@@ -103,7 +106,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Texte mit Platzhaltern — die statischen übersetzt Godot von selbst.
 func _texte_aktualisieren() -> void:
-	_version.text = tr("MENU_VERSION") % Net.version_text()
+	_version.text = tr("MENU_VERSION") % KoopDaten.version()
 	# Steam-Koop nur, wenn Steam wirklich läuft; sonst sagen, woran es liegt
 	%SteamLobby.visible = SteamDienst.aktiv
 	var hinweis := "COOP_STEAM_HINT"

@@ -1,4 +1,5 @@
 extends Node
+const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Tritt mit dem aktuellen Projektstand dem LIVE-Server bei und meldet, was passiert:
 ## eigener Spieler erscheint (BEITRITT OK) oder Meldung beim Zurück ins Menü.
 ## Für die Fehlersuche „lädt kurz, dann wieder im Menü". Schreibt keinen Spielstand
@@ -15,7 +16,7 @@ func _ready() -> void:
 class Lauf extends Node:
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		print("[LIVE] Version dieses Clients: ", Net.version_text())
+		print("[LIVE] Version dieses Clients: ", KoopDaten.version())
 		var err := Net.join_game(SERVER)
 		print("[LIVE] join_game: ", err)
 		var t := 0.0

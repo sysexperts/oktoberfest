@@ -44,14 +44,10 @@ var solo := false
 var slot := 1
 ## Welche Szene der Ladebildschirm laden soll (wechsle_zu).
 var ziel_szene := ""
-## Vermittler für Warteräume mit Einladungscode (tools/server/vermittler.py)
-const LOBBY_URL := "https://survival.vapur-it.de/lobby/"
-## Dedizierter Server, vom Vermittler für einen Code gestartet: eigener Spielstand
+## Dedizierter Server, vom Vermittler für einen Code gestartet: eigener Spielstand.
+## Nur auf dem Server benutzt — Client-Daten stehen in scripts/koop_daten.gd, weil
+## Spieler mit älterer .exe ein älteres Net haben.
 var spiel_code := ""
-## Wahl aus dem Warteraum {name, figur, abt} — nach dem Beitritt an den Server
-var lobby_wahl := {}
-## Warteraum → „Offizieller Server / IP": Hauptmenü öffnet gleich das Koop-Feld
-var menue_koop := false
 
 ## Szenenwechsel über den Ladebildschirm: lädt im Hintergrund, zeigt Fortschritt.
 ## Nur für Solo — beim Hosten und Beitreten gleich wechseln, sonst könnten

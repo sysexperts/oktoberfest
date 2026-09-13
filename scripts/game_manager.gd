@@ -1,4 +1,5 @@
 extends Node3D
+const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## GameManager. Faz: MOLA <-> VARDİYA. Misafirler popülerliğe göre gelir,
 ## bira masalarındaki koltuklara oturur, TÜM vardiya boyunca kalır ve
 ## tekrar tekrar sipariş verir; otururken kutlar. Rol için insan yoksa NPC (Tasarom).
@@ -465,7 +466,7 @@ func _ready() -> void:
 		_broadcast_meta()
 		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	else:
-		_client_ready.rpc_id(1, Net.version_text())
+		_client_ready.rpc_id(1, KoopDaten.version())
 		# Antwortet der Server nicht (etwa ein älterer Stand, der die Nachricht
 		# nicht versteht), nicht ewig in einer leeren Welt stehen
 		get_tree().create_timer(SPAWN_WARTEZEIT).timeout.connect(_pruefe_eigenen_spieler)
@@ -790,8 +791,8 @@ func _client_ready(version: String) -> void:
 	var sender := multiplayer.get_remote_sender_id()
 	# Unterschiedliche Stände verstehen ihre Nachrichten nicht — sauber ablehnen,
 	# statt den Spieler in einer halb synchronen Welt stehen zu lassen.
-	if version != Net.version_text():
-		_net_abgelehnt.rpc_id(sender, "NET_VERSION_MISMATCH", [Net.version_text(), version])
+	if version != KoopDaten.version():
+		_net_abgelehnt.rpc_id(sender, "NET_VERSION_MISMATCH", [KoopDaten.version(), version])
 		# Für jede Netzart (ENet oder Steam) — beide können einzelne Peers trennen
 		get_tree().create_timer(1.0).timeout.connect(func() -> void:
 			var peer := multiplayer.multiplayer_peer

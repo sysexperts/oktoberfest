@@ -1,4 +1,5 @@
 extends Control
+const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Warteraum mit Einladungscode. Einer erstellt ein Spiel und bekommt einen Code,
 ## Freunde treten damit bei. Jeder wählt Name, Figur und Abteilung (Teamleiter);
 ## der Gastgeber drückt „Los", der Server startet ein eigenes Spiel und alle
@@ -14,7 +15,7 @@ const ABTEILUNGEN := {"kueche": "Kueche", "service": "Service", "sauberkeit": "S
 const SYMBOLE := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
 
 ## Vermittler-Adresse; Tests setzen sie auf einen lokalen Vermittler
-var lobby_url := Net.LOBBY_URL
+var lobby_url := KoopDaten.LOBBY_URL
 
 var _code := ""
 var _id := ""
@@ -34,7 +35,7 @@ func _ready() -> void:
 	%CodeEingabe.text_submitted.connect(func(_t: String) -> void: _beitreten())
 	%Zurueck.pressed.connect(_zum_menue)
 	%Mehr.pressed.connect(func() -> void:
-		Net.menue_koop = true
+		KoopDaten.menue_koop = true
 		_zum_menue())
 	%Kopieren.pressed.connect(_kopieren)
 	%Verlassen.pressed.connect(_verlassen)
@@ -96,7 +97,7 @@ func _erstellen() -> void:
 	if n == "":
 		return
 	_status(tr("KOOP_WORKING"))
-	_anfrage("erstellen", {"name": n, "version": Net.version_text()}, _on_raum_betreten)
+	_anfrage("erstellen", {"name": n, "version": KoopDaten.version()}, _on_raum_betreten)
 
 func _beitreten() -> void:
 	var n := _eingegebener_name()
@@ -108,7 +109,7 @@ func _beitreten() -> void:
 		%CodeEingabe.grab_focus()
 		return
 	_status(tr("KOOP_WORKING"))
-	_anfrage("beitreten", {"code": code, "name": n, "version": Net.version_text()}, _on_raum_betreten)
+	_anfrage("beitreten", {"code": code, "name": n, "version": KoopDaten.version()}, _on_raum_betreten)
 
 func _on_raum_betreten(antwort: Dictionary) -> void:
 	_id = str(antwort.get("id", ""))
@@ -262,7 +263,7 @@ func _ins_spiel() -> void:
 		return
 	_verbinde = true
 	%Takt.stop()
-	Net.lobby_wahl = {"name": _name_gesendet, "figur": _figur, "abt": _abt}
+	KoopDaten.lobby_wahl = {"name": _name_gesendet, "figur": _figur, "abt": _abt}
 	Net.player_name = _name_gesendet
 	_anzeigen()
 	if Net.join_game(SERVER_IP, int(_raum.get("port", 0))) != OK:
@@ -272,7 +273,7 @@ func _on_verbindung_fehlgeschlagen() -> void:
 	if not _verbinde:
 		return
 	_verbinde = false
-	Net.lobby_wahl = {}
+	KoopDaten.lobby_wahl = {}
 	_status(tr(Net.meldung if Net.meldung != "" else "STATUS_CONNECT_FAILED"), true)
 	Net.meldung = ""
 	%Takt.start()

@@ -1,4 +1,5 @@
 extends Node
+const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Ende-zu-Ende gegen den LIVE-Vermittler: Raum erstellen, Figur und Abteilung
 ## wählen, „Los", warten bis das Spiel läuft, beitreten und prüfen, dass der
 ## eigene Spieler mit Name, Figur und Abteilung ankommt. Danach verlassen — das
@@ -16,7 +17,7 @@ class Lauf extends Node:
 
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		var r := await _post("erstellen", {"name": "Testbot", "version": Net.version_text()})
+		var r := await _post("erstellen", {"name": "Testbot", "version": KoopDaten.version()})
 		_pruefe("Raum erstellt", r.get("ok", false), str(r))
 		if not r.get("ok", false):
 			return _ende()
@@ -38,7 +39,7 @@ class Lauf extends Node:
 		_pruefe("Spiel läuft", port > 0, "Port %d nach %d ms" % [port, Time.get_ticks_msec() - t0])
 		if port == 0:
 			return _ende()
-		Net.lobby_wahl = {"name": "Testbot", "figur": 2, "abt": "lager"}
+		KoopDaten.lobby_wahl = {"name": "Testbot", "figur": 2, "abt": "lager"}
 		Net.join_game(SERVER, port)
 		var gm: Node = null
 		t0 = Time.get_ticks_msec()
@@ -68,7 +69,7 @@ class Lauf extends Node:
 	func _post(pfad: String, daten: Dictionary) -> Dictionary:
 		var http := HTTPRequest.new()
 		add_child(http)
-		http.request(Net.LOBBY_URL + pfad, PackedStringArray(["Content-Type: application/json"]), HTTPClient.METHOD_POST, JSON.stringify(daten))
+		http.request(KoopDaten.LOBBY_URL + pfad, PackedStringArray(["Content-Type: application/json"]), HTTPClient.METHOD_POST, JSON.stringify(daten))
 		var antwort: Array = await http.request_completed
 		http.queue_free()
 		var d: Variant = JSON.parse_string((antwort[3] as PackedByteArray).get_string_from_utf8())

@@ -1,5 +1,6 @@
 class_name Player
 extends CharacterBody3D
+const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Ağ-farkında oyuncu (FPS). Görsel yapı player.tscn'de gerçek düğümlerdir.
 ## Yerel oyuncu (authority) girdi işler + durum yayınlar; uzaklar senkron görünür.
 
@@ -106,9 +107,9 @@ func _ready() -> void:
 		_make_highlight_ring()
 		_sfx_node = _world.get_node_or_null("Sfx")
 		if not Net.solo:
-			if not Net.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
+			if not KoopDaten.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
 				# Aus dem Warteraum (Einladungscode): Name, Figur, Abteilung stehen schon fest
-				var w := Net.lobby_wahl
+				var w := KoopDaten.lobby_wahl
 				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, str(w.get("abt", "")), int(w.get("figur", 0)))
 			elif _world.has_method("open_lobby_ui"):
 				# Direkt beigetreten (IP, offizieller Server): Lobby-Fenster im Spiel
