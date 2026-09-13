@@ -3,7 +3,8 @@ extends Node3D
 ## Geliefertes Warenpaket. Spieler nimmt es mit E auf und trägt es zum Lager.
 ## kind: 1 = Bier, 2 = Essen.
 
-const KIND_NAMES := {1: "🍺 Bierfass", 2: "🥨 Zutaten"}
+const Texte := preload("res://scripts/ui/texte.gd")
+## Beschriftung je Sorte: WORLD_PACKAGE_1 (Bier), WORLD_PACKAGE_2 (Zutaten) in texte.csv
 const KIND_COLORS := {1: Color(0.75, 0.55, 0.2), 2: Color(0.6, 0.45, 0.3)}
 
 var pkg_id := -1
@@ -24,7 +25,7 @@ func set_info(k: int, amt: int) -> void:
 func _refresh() -> void:
 	var label := get_node_or_null("Label") as Label3D
 	if label:
-		label.text = "%s ×%d\n(E: aufnehmen)" % [KIND_NAMES.get(kind, "Ware"), amount]
+		label.text = Texte.mit_tasten("WORLD_PACKAGE_%d" % clampi(kind, 1, 2)) % amount
 	var mesh := get_node_or_null("Box") as MeshInstance3D
 	if mesh and mesh.material_override is StandardMaterial3D:
 		var m := (mesh.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D

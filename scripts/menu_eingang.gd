@@ -23,6 +23,12 @@ extends Control
 ##
 ## Absichtlich nur Engine-Funktionen und keine Übersetzungen: In einer alten
 ## .exe gibt es weder unsere Autoloads noch die Übersetzungstabelle.
+##
+## Übersetzungen: Die .exe lädt beim Start die Tabellen aus ihrem eingebauten
+## Paket. Der Updater tauscht die Dateien danach aus, die schon geladenen Tabellen
+## bleiben aber die alten — alle Texte, die seit dem Bau der .exe dazukamen,
+## erschienen als rohe Schlüssel (SIGN_TENT_FOR_RENT …). Diese Szene kommt schon
+## aus dem neuen Paket und liest die Tabellen deshalb neu ein.
 
 const HAUPTMENUE := "res://scenes/ui/hauptmenue.tscn"
 const DOWNLOAD_SEITE := "https://survival.vapur-it.de/"
@@ -46,7 +52,11 @@ func _ready() -> void:
 	if not args.is_empty() and _neu_starten(args):
 		return
 	if ProjectSettings.has_setting("autoload/Einstellungen"):
-		print("[Eingang] weiter ins Hauptmenü")
+		var tabellen := uebersetzungen_neu_laden()
+		var einstellungen := get_tree().root.get_node_or_null("Einstellungen")
+		if einstellungen and einstellungen.has_method("anwenden"):
+			einstellungen.anwenden()   # Sprache neu setzen, Beschriftungen aktualisieren
+		print("[Eingang] %d Übersetzungstabellen neu geladen, weiter ins Hauptmenü" % tabellen)
 		# Über den Ladebildschirm — das Menü hat den Kirmesplatz im Hintergrund.
 		# Net per Knotenpfad, nicht als Name: Eine alte .exe kennt das Autoload
 		# womöglich nicht und würde sonst schon beim Laden dieses Skripts scheitern.
@@ -57,6 +67,22 @@ func _ready() -> void:
 			get_tree().change_scene_to_file.call_deferred(HAUPTMENUE)
 		return
 	_zeige_hinweis()
+
+## Übersetzungstabellen aus dem aktuell geladenen Paket neu einlesen (siehe oben).
+## Gibt die Zahl der geladenen Tabellen zurück; 0 = nichts geändert.
+static func uebersetzungen_neu_laden() -> int:
+	var pfade: PackedStringArray = ProjectSettings.get_setting("internationalization/locale/translations", PackedStringArray())
+	var neu: Array[Translation] = []
+	for pfad in pfade:
+		var t := ResourceLoader.load(pfad, "", ResourceLoader.CACHE_MODE_REPLACE) as Translation
+		if t:
+			neu.append(t)
+	if neu.is_empty():
+		return 0
+	TranslationServer.clear()
+	for t in neu:
+		TranslationServer.add_translation(t)
+	return neu.size()
 
 ## Reicht diese .exe für das geladene Paket?
 static func braucht_neue_exe(exe_generation: int, benoetigt: int) -> bool:

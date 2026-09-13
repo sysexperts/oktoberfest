@@ -1,0 +1,380 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="1_bogen"]
+[ext_resource type="Texture2D" path="res://assets/ui/knopf_leer_blau.png" id="2_blau"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
+[ext_resource type="Texture2D" path="res://tools/zelt_theke.png" id="4_bild"]
+
+[sub_resource type="AtlasTexture" id="Pergament"]
+atlas = ExtResource("1_bogen")
+region = Rect2(664, 516, 484, 320)
+
+[sub_resource type="AtlasTexture" id="Holzschild"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1224, 376, 388, 172)
+
+[sub_resource type="AtlasTexture" id="Band"]
+atlas = ExtResource("1_bogen")
+region = Rect2(668, 332, 516, 152)
+
+[sub_resource type="AtlasTexture" id="Medaillon"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1192, 612, 200, 204)
+
+[sub_resource type="AtlasTexture" id="Fahne"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1500, 544, 148, 356)
+
+[sub_resource type="AtlasTexture" id="IconKrug"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1312, 104, 108, 104)
+
+[sub_resource type="AtlasTexture" id="IconDisk"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1440, 112, 84, 84)
+
+[sub_resource type="AtlasTexture" id="IconZahnrad"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1540, 112, 84, 84)
+
+[sub_resource type="AtlasTexture" id="IconLeute"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1332, 220, 104, 80)
+
+[sub_resource type="AtlasTexture" id="IconRaus"]
+atlas = ExtResource("1_bogen")
+region = Rect2(1464, 216, 96, 84)
+
+[sub_resource type="LabelSettings" id="Titel"]
+font = ExtResource("3_fraktur")
+font_size = 46
+font_color = Color(0.3, 0.17, 0.07, 1)
+
+[sub_resource type="LabelSettings" id="SchildText"]
+font = ExtResource("3_fraktur")
+font_size = 34
+font_color = Color(0.97, 0.9, 0.76, 1)
+outline_size = 8
+outline_color = Color(0.2, 0.11, 0.04, 1)
+
+[sub_resource type="LabelSettings" id="KnopfText"]
+font = ExtResource("3_fraktur")
+font_size = 30
+font_color = Color(1, 0.97, 0.9, 1)
+outline_size = 8
+outline_color = Color(0.06, 0.16, 0.38, 1)
+
+[sub_resource type="LabelSettings" id="Zeile"]
+font_size = 22
+font_color = Color(0.25, 0.15, 0.07, 1)
+
+[sub_resource type="LabelSettings" id="ZeileKlein"]
+font_size = 16
+font_color = Color(0.45, 0.32, 0.2, 1)
+
+[sub_resource type="LabelSettings" id="Gesperrt"]
+font_size = 16
+font_color = Color(0.66, 0.2, 0.12, 1)
+
+[node name="IngameTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Spielbild" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("4_bild")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.35)
+
+[node name="HudTag" type="NinePatchRect" parent="."]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 316.0
+offset_bottom = 112.0
+texture = SubResource("Holzschild")
+patch_margin_left = 60
+patch_margin_top = 40
+patch_margin_right = 60
+patch_margin_bottom = 40
+
+[node name="Text" type="Label" parent="HudTag"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Tag 7 · 19:40"
+label_settings = SubResource("SchildText")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HudGeld" type="TextureRect" parent="."]
+offset_left = 1452.0
+offset_top = 6.0
+offset_right = 1582.0
+offset_bottom = 139.0
+texture = SubResource("Medaillon")
+expand_mode = 1
+
+[node name="GeldSchild" type="NinePatchRect" parent="."]
+offset_left = 1224.0
+offset_top = 30.0
+offset_right = 1464.0
+offset_bottom = 110.0
+texture = SubResource("Holzschild")
+patch_margin_left = 60
+patch_margin_top = 40
+patch_margin_right = 60
+patch_margin_bottom = 40
+
+[node name="Text" type="Label" parent="GeldSchild"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "2.340 €"
+label_settings = SubResource("SchildText")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Ereignis" type="TextureRect" parent="."]
+offset_left = 580.0
+offset_top = 0.0
+offset_right = 1020.0
+offset_bottom = 130.0
+texture = SubResource("Band")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="Ereignis"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 88.0
+offset_right = 440.0
+offset_bottom = 136.0
+text = "Happy Hour!"
+label_settings = SubResource("SchildText")
+horizontal_alignment = 1
+
+[node name="FahneLinks" type="TextureRect" parent="."]
+offset_left = 250.0
+offset_top = 170.0
+offset_right = 346.0
+offset_bottom = 400.0
+texture = SubResource("Fahne")
+expand_mode = 1
+
+[node name="Buero" type="NinePatchRect" parent="."]
+offset_left = 330.0
+offset_top = 150.0
+offset_right = 1270.0
+offset_bottom = 830.0
+texture = SubResource("Pergament")
+patch_margin_left = 90
+patch_margin_top = 110
+patch_margin_right = 90
+patch_margin_bottom = 80
+
+[node name="Titel" type="Label" parent="Buero"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 62.0
+offset_right = 940.0
+offset_bottom = 120.0
+text = "Wiesenbüro"
+label_settings = SubResource("Titel")
+horizontal_alignment = 1
+
+[node name="Reiter" type="HBoxContainer" parent="Buero"]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 124.0
+offset_right = 690.0
+offset_bottom = 194.0
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="Krug" type="TextureRect" parent="Buero/Reiter"]
+custom_minimum_size = Vector2(70, 68)
+layout_mode = 2
+texture = SubResource("IconKrug")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Disk" type="TextureRect" parent="Buero/Reiter"]
+modulate = Color(0.8, 0.8, 0.8, 1)
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = SubResource("IconDisk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Zahnrad" type="TextureRect" parent="Buero/Reiter"]
+modulate = Color(0.8, 0.8, 0.8, 1)
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = SubResource("IconZahnrad")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Leute" type="TextureRect" parent="Buero/Reiter"]
+modulate = Color(0.8, 0.8, 0.8, 1)
+custom_minimum_size = Vector2(66, 52)
+layout_mode = 2
+texture = SubResource("IconLeute")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Liste" type="VBoxContainer" parent="Buero"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 214.0
+offset_right = 830.0
+offset_bottom = 600.0
+theme_override_constants/separation = 14
+
+[node name="Festbier" type="HBoxContainer" parent="Buero/Liste"]
+layout_mode = 2
+
+[node name="Text" type="VBoxContainer" parent="Buero/Liste/Festbier"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Name" type="Label" parent="Buero/Liste/Festbier/Text"]
+layout_mode = 2
+text = "Festbier-Lizenz"
+label_settings = SubResource("Zeile")
+
+[node name="Info" type="Label" parent="Buero/Liste/Festbier/Text"]
+layout_mode = 2
+text = "Premium: Gäste zahlen deutlich mehr dafür."
+label_settings = SubResource("ZeileKlein")
+
+[node name="Knopf" type="TextureRect" parent="Buero/Liste/Festbier"]
+custom_minimum_size = Vector2(250, 58)
+layout_mode = 2
+texture = ExtResource("2_blau")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="Buero/Liste/Festbier/Knopf"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "4.000 €"
+label_settings = SubResource("KnopfText")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hendl" type="HBoxContainer" parent="Buero/Liste"]
+layout_mode = 2
+
+[node name="Text" type="VBoxContainer" parent="Buero/Liste/Hendl"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Name" type="Label" parent="Buero/Liste/Hendl/Text"]
+layout_mode = 2
+text = "Hendl-Lizenz"
+label_settings = SubResource("Zeile")
+
+[node name="Info" type="Label" parent="Buero/Liste/Hendl/Text"]
+layout_mode = 2
+text = "Erst ab Zeltstufe 3 oder der 2. Wiesn"
+label_settings = SubResource("Gesperrt")
+
+[node name="Knopf" type="TextureRect" parent="Buero/Liste/Hendl"]
+modulate = Color(0.55, 0.55, 0.55, 1)
+custom_minimum_size = Vector2(250, 58)
+layout_mode = 2
+texture = ExtResource("2_blau")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="Buero/Liste/Hendl/Knopf"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Gesperrt"
+label_settings = SubResource("KnopfText")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Weizen" type="HBoxContainer" parent="Buero/Liste"]
+layout_mode = 2
+
+[node name="Text" type="VBoxContainer" parent="Buero/Liste/Weizen"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Name" type="Label" parent="Buero/Liste/Weizen/Text"]
+layout_mode = 2
+text = "Weizen-Lizenz"
+label_settings = SubResource("Zeile")
+
+[node name="Info" type="Label" parent="Buero/Liste/Weizen/Text"]
+layout_mode = 2
+text = "Danach bestellen Gäste auch das."
+label_settings = SubResource("ZeileKlein")
+
+[node name="Knopf" type="NinePatchRect" parent="Buero/Liste/Weizen"]
+custom_minimum_size = Vector2(250, 58)
+layout_mode = 2
+texture = SubResource("Holzschild")
+patch_margin_left = 60
+patch_margin_top = 40
+patch_margin_right = 60
+patch_margin_bottom = 40
+
+[node name="Text" type="Label" parent="Buero/Liste/Weizen/Knopf"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Gekauft"
+label_settings = SubResource("SchildText")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Schliessen" type="TextureRect" parent="Buero"]
+layout_mode = 0
+offset_left = 850.0
+offset_top = 40.0
+offset_right = 920.0
+offset_bottom = 101.0
+texture = SubResource("IconRaus")
+expand_mode = 1
+
+[node name="Hinweis" type="NinePatchRect" parent="."]
+offset_left = 610.0
+offset_top = 836.0
+offset_right = 990.0
+offset_bottom = 896.0
+texture = SubResource("Holzschild")
+patch_margin_left = 60
+patch_margin_top = 30
+patch_margin_right = 60
+patch_margin_bottom = 30
+
+[node name="Text" type="Label" parent="Hinweis"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "[E] Zapfen · [Esc] Schließen"
+label_settings = SubResource("SchildText")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -547,6 +547,16 @@ class Lauf extends Node:
 			_check("Projekt ist so neu, wie das Paket es verlangt",
 				int(ProjectSettings.get_setting("application/config/programm_generation", 1)) >= eingang.BENOETIGTE_GENERATION,
 				str(ProjectSettings.get_setting("application/config/programm_generation", 1)))
+			# Alte .exe + neues Paket: Tabellen der .exe fehlen neue Texte → rohe Schlüssel.
+			# Nachgestellt durch Leeren des TranslationServers.
+			TranslationServer.clear()
+			var uebersetzung_roh := TranslationServer.translate("WORLD_BUERO") == "WORLD_BUERO"
+			var tabellen: int = eingang.uebersetzungen_neu_laden()
+			Einstellungen.anwenden()
+			_check("Übersetzungen nach dem Update neu geladen (keine rohen Schlüssel)",
+				uebersetzung_roh and tabellen == 3 and TranslationServer.translate("WORLD_BUERO") != "WORLD_BUERO"
+				and TranslationServer.translate("SIGN_TENT_FOR_RENT") != "SIGN_TENT_FOR_RENT",
+				"%d Tabellen · %s" % [tabellen, TranslationServer.translate("SIGN_TENT_FOR_RENT")])
 			Einstellungen.grafik = 2
 			Einstellungen.aufloesung = 0.75
 			Einstellungen.anwenden()
