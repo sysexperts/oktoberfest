@@ -29,6 +29,8 @@ const KRUG := preload("res://scenes/krug.tscn")
 var _cur := ""
 var _last := Vector3.ZERO
 var _seated := false
+## Stehgast (Figuren.ist_stehgast): setzt sich nie, steht hinter der Bank
+var _steht := false
 var _vomit_t := 0.0        # C3: kusma süresi (sn), >0 ise öne eğilir
 var _vomit_active := false
 ## Tanzt gerade auf dem Tisch (gute Stimmung, vom Server)
@@ -48,6 +50,7 @@ func _ready() -> void:
 	_net_yaw = rotation.y
 	_last = position
 	_figur = Figuren.einsetzen(self, Figuren.fuer_gast(cust_id))
+	_steht = Figuren.ist_stehgast(cust_id)
 	_model = _figur
 	_anim = _figur.anim
 	_skel = _figur.skelett
@@ -197,10 +200,13 @@ func _process(delta: float) -> void:
 		return
 	var want := "Walk" if spd > 0.4 else "Idle"
 	# Oturma / kalkma geçişi
-	if want == "Idle" and not _seated:
+	if want == "Idle" and not _seated and not _steht:
 		_enter_sit()
 	elif want == "Walk" and _seated:
 		_exit_sit()
+	# Stehgäste halten am Tisch ihren Krug, beim Gehen nicht
+	if _steht and _mug:
+		_mug.visible = want == "Idle"
 	if not _seated and want != _cur and _anim:
 		if want == "Walk":
 			_figur.gehen()

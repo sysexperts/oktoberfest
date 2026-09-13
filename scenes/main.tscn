@@ -258,6 +258,104 @@ outline_size = 36
 metadata/breite = 12.5
 metadata/pixel_basis = 0.02
 
+[node name="Deckenlichter" type="Node3D" parent="."]
+
+[node name="Licht1" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.5, -5.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht2" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.5, -0.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht3" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.5, 4.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht4" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.5, 9)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht5" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 3.5, -5.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht6" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 3.5, -0.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht7" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 3.5, 4.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht8" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 3.5, 9)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht9" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3.5, -5.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht10" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3.5, -0.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht11" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3.5, 4.5)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
+[node name="Licht12" type="OmniLight3D" parent="Deckenlichter" groups=["deckenlicht"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3.5, 9)
+visible = false
+light_color = Color(1, 0.8, 0.55, 1)
+light_energy = 0.0
+omni_range = 7.0
+omni_attenuation = 1.6
+
 [node name="Kirmes" parent="." unique_id=1802476162 instance=ExtResource("17_kirmes")]
 
 [node name="SpawnPoints" type="Node3D" parent="." unique_id=207167847]

@@ -282,15 +282,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -1
 [node name="@OmniLight3D@51" type="OmniLight3D" parent="." unique_id=901555168]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@52" type="OmniLight3D" parent="." unique_id=181455757]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@53" parent="." unique_id=557963686 instance=ExtResource("2_p0mqa")]
@@ -302,15 +302,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -9
 [node name="@OmniLight3D@55" type="OmniLight3D" parent="." unique_id=815868609]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55804, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@56" type="OmniLight3D" parent="." unique_id=1750314871]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.55804, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@57" parent="." unique_id=498298949 instance=ExtResource("2_p0mqa")]
@@ -322,15 +322,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -7
 [node name="@OmniLight3D@59" type="OmniLight3D" parent="." unique_id=1495333715]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@60" type="OmniLight3D" parent="." unique_id=1114764368]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.11608, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@61" parent="." unique_id=1972380587 instance=ExtResource("2_p0mqa")]
@@ -342,15 +342,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -4
 [node name="@OmniLight3D@63" type="OmniLight3D" parent="." unique_id=311012412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.67412, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@64" type="OmniLight3D" parent="." unique_id=1659396707]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.67412, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@65" parent="." unique_id=1416549807 instance=ExtResource("2_p0mqa")]
@@ -359,15 +359,15 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -2.23216, 1.5, -14)
 [node name="@OmniLight3D@67" type="OmniLight3D" parent="." unique_id=531234750]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@68" type="OmniLight3D" parent="." unique_id=117401578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.23216, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@69" parent="." unique_id=1590106185 instance=ExtResource("2_p0mqa")]
@@ -376,15 +376,15 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.2098, 1.5, -14)
 [node name="@OmniLight3D@71" type="OmniLight3D" parent="." unique_id=2077621051]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2098, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@72" type="OmniLight3D" parent="." unique_id=804024023]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2098, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@73" parent="." unique_id=27073633 instance=ExtResource("2_p0mqa")]
@@ -393,15 +393,15 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.65176, 1.5, -14)
 [node name="@OmniLight3D@75" type="OmniLight3D" parent="." unique_id=1670928086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@76" type="OmniLight3D" parent="." unique_id=550700418]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65176, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@77" parent="." unique_id=1673183560 instance=ExtResource("2_p0mqa")]
@@ -413,15 +413,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 5.
 [node name="@OmniLight3D@79" type="OmniLight3D" parent="." unique_id=1369062551]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09372, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@80" type="OmniLight3D" parent="." unique_id=728288165]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.09372, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@81" parent="." unique_id=1846458374 instance=ExtResource("2_p0mqa")]
@@ -433,15 +433,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 7.
 [node name="@OmniLight3D@83" type="OmniLight3D" parent="." unique_id=1040267340]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@84" type="OmniLight3D" parent="." unique_id=132398889]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.53568, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@85" parent="." unique_id=1409957521 instance=ExtResource("2_p0mqa")]
@@ -453,15 +453,15 @@ transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 9.
 [node name="@OmniLight3D@87" type="OmniLight3D" parent="." unique_id=887083403]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.97764, 2.602, -13.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@88" type="OmniLight3D" parent="." unique_id=1142345714]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.97764, 2.602, 10.75)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@89" parent="." unique_id=1313687122 instance=ExtResource("2_p0mqa")]
@@ -473,15 +473,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@91" type="OmniLight3D" parent="." unique_id=1791528476]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -14)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@92" type="OmniLight3D" parent="." unique_id=91312896]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -14)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@93" parent="." unique_id=183394077 instance=ExtResource("2_p0mqa")]
@@ -493,15 +493,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@95" type="OmniLight3D" parent="." unique_id=950028477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -11.55804)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@96" type="OmniLight3D" parent="." unique_id=1716576059]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -11.55804)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@97" parent="." unique_id=1324862872 instance=ExtResource("2_p0mqa")]
@@ -513,15 +513,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@99" type="OmniLight3D" parent="." unique_id=3893145]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -9.11608)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@100" type="OmniLight3D" parent="." unique_id=950450896]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -9.11608)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@101" parent="." unique_id=1739092596 instance=ExtResource("2_p0mqa")]
@@ -533,15 +533,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@103" type="OmniLight3D" parent="." unique_id=12608504]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -6.67412)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@104" type="OmniLight3D" parent="." unique_id=831791047]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -6.67412)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@105" parent="." unique_id=1470511335 instance=ExtResource("2_p0mqa")]
@@ -553,15 +553,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@107" type="OmniLight3D" parent="." unique_id=2039313644]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -4.23216)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@108" type="OmniLight3D" parent="." unique_id=1252358430]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -4.23216)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@109" parent="." unique_id=330046367 instance=ExtResource("2_p0mqa")]
@@ -573,15 +573,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@111" type="OmniLight3D" parent="." unique_id=1900104521]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, -1.7902)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@112" type="OmniLight3D" parent="." unique_id=119072223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, -1.7902)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@113" parent="." unique_id=701511659 instance=ExtResource("2_p0mqa")]
@@ -593,15 +593,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@115" type="OmniLight3D" parent="." unique_id=1125239431]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 0.65176)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@116" type="OmniLight3D" parent="." unique_id=800596614]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 0.65176)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@117" parent="." unique_id=1173297586 instance=ExtResource("2_p0mqa")]
@@ -613,15 +613,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@119" type="OmniLight3D" parent="." unique_id=1944292686]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 3.09372)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@120" type="OmniLight3D" parent="." unique_id=1600089717]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 3.09372)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@121" parent="." unique_id=2111910112 instance=ExtResource("2_p0mqa")]
@@ -633,15 +633,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@123" type="OmniLight3D" parent="." unique_id=640104054]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 5.53568)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@124" type="OmniLight3D" parent="." unique_id=463910805]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 5.53568)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@125" parent="." unique_id=26328723 instance=ExtResource("2_p0mqa")]
@@ -653,15 +653,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@127" type="OmniLight3D" parent="." unique_id=1731487199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 7.97764)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@128" type="OmniLight3D" parent="." unique_id=1909616315]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 7.97764)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@129" parent="." unique_id=1481004281 instance=ExtResource("2_p0mqa")]
@@ -673,15 +673,15 @@ transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 12, 
 [node name="@OmniLight3D@131" type="OmniLight3D" parent="." unique_id=456437860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, 2.602, 10.4196)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@OmniLight3D@132" type="OmniLight3D" parent="." unique_id=284360230]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.75, 2.602, 10.4196)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.7
-omni_range = 4.0
+light_energy = 1.05
+omni_range = 5.2
 omni_attenuation = 1.8
 
 [node name="@Node3D@174" parent="." unique_id=584492760 instance=ExtResource("3_0wtp6")]
@@ -695,8 +695,8 @@ mesh = SubResource("SphereMesh_hf87r")
 [node name="@OmniLight3D@189" type="OmniLight3D" parent="." unique_id=609467089]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -8)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@190" type="MeshInstance3D" parent="." unique_id=762005514]
@@ -707,8 +707,8 @@ mesh = SubResource("SphereMesh_4626l")
 [node name="@OmniLight3D@191" type="OmniLight3D" parent="." unique_id=528445513]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, -3)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@192" type="MeshInstance3D" parent="." unique_id=1757051617]
@@ -719,8 +719,8 @@ mesh = SubResource("SphereMesh_2262p")
 [node name="@OmniLight3D@193" type="OmniLight3D" parent="." unique_id=1329781259]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, 2)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@194" type="MeshInstance3D" parent="." unique_id=504350825]
@@ -731,8 +731,8 @@ mesh = SubResource("SphereMesh_3mwne")
 [node name="@OmniLight3D@195" type="OmniLight3D" parent="." unique_id=238767689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.4, 7)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@196" type="MeshInstance3D" parent="." unique_id=2130126443]
@@ -743,8 +743,8 @@ mesh = SubResource("SphereMesh_un0bi")
 [node name="@OmniLight3D@197" type="OmniLight3D" parent="." unique_id=859958253]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -8)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@198" type="MeshInstance3D" parent="." unique_id=930873957]
@@ -755,8 +755,8 @@ mesh = SubResource("SphereMesh_ym5l2")
 [node name="@OmniLight3D@199" type="OmniLight3D" parent="." unique_id=922404726]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, -3)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@200" type="MeshInstance3D" parent="." unique_id=1457131269]
@@ -767,8 +767,8 @@ mesh = SubResource("SphereMesh_187du")
 [node name="@OmniLight3D@201" type="OmniLight3D" parent="." unique_id=431748100]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 2)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@202" type="MeshInstance3D" parent="." unique_id=1097229290]
@@ -779,8 +779,8 @@ mesh = SubResource("SphereMesh_qngs5")
 [node name="@OmniLight3D@203" type="OmniLight3D" parent="." unique_id=203802221]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 7)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@204" type="MeshInstance3D" parent="." unique_id=583118531]
@@ -791,8 +791,8 @@ mesh = SubResource("SphereMesh_13e6d")
 [node name="@OmniLight3D@205" type="OmniLight3D" parent="." unique_id=1124217175]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, -8)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@206" type="MeshInstance3D" parent="." unique_id=1409404473]
@@ -803,8 +803,8 @@ mesh = SubResource("SphereMesh_n47ql")
 [node name="@OmniLight3D@207" type="OmniLight3D" parent="." unique_id=174916759]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, -3)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@208" type="MeshInstance3D" parent="." unique_id=1485996037]
@@ -815,8 +815,8 @@ mesh = SubResource("SphereMesh_tjt02")
 [node name="@OmniLight3D@209" type="OmniLight3D" parent="." unique_id=714617771]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, 2)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="@MeshInstance3D@210" type="MeshInstance3D" parent="." unique_id=76935789]
@@ -827,8 +827,8 @@ mesh = SubResource("SphereMesh_ictml")
 [node name="@OmniLight3D@211" type="OmniLight3D" parent="." unique_id=1136365925]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.4, 7)
 light_color = Color(1, 0.72, 0.4, 1)
-light_energy = 0.9
-omni_range = 6.0
+light_energy = 1.35
+omni_range = 7.8
 omni_attenuation = 1.8
 
 [node name="_Node3D_174" parent="." unique_id=147204350 instance=ExtResource("3_0wtp6")]

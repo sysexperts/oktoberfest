@@ -591,6 +591,23 @@ class Lauf extends Node:
 		# Sitzende Gäste nur aus GAESTE (charakter3 spreizt beim Sitzen den Rock)
 		_check("Gäste ohne charakter3", not figuren.GAESTE.has(preload("res://scenes/figuren/charakter3.tscn"))
 			and figuren.GAESTE.size() >= 2, str(figuren.GAESTE.size()))
+		# Weibliche Gäste: charakter3 kommt als Stehgast, etwa jeder dritte
+		var stehend := 0
+		for i in 30:
+			if figuren.ist_stehgast(i):
+				stehend += 1
+				if figuren.fuer_gast(i) != preload("res://scenes/figuren/charakter3.tscn"):
+					stehend = -99
+		_check("Stehgäste (charakter3) etwa jeder dritte", stehend >= 8 and stehend <= 12, str(stehend))
+		var steh_id := 0
+		while not figuren.ist_stehgast(steh_id):
+			steh_id += 1
+		var steh_gast: Node3D = load("res://scenes/customer.tscn").instantiate()
+		steh_gast.cust_id = steh_id
+		gm.get_node("Customers").add_child(steh_gast)
+		await _frames(20)
+		_check("Stehgast setzt sich nicht", not steh_gast._seated and steh_gast._steht, "")
+		steh_gast.queue_free()
 		for szene: PackedScene in figuren.GAESTE:
 			var id := 0
 			while figuren.fuer_gast(id) != szene:

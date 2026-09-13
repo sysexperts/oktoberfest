@@ -141,6 +141,9 @@ const EIGENSCHAFTEN := {
 const CHARMEUR_POP := 2.0
 const SCHLUCKSPECHT_BIER := 4
 const STAFF_BASE_SPEED := 4.5   # vorher 3.0 — im großen Zelt blieben bis 100 Bestellungen liegen
+## So weit hinter der Bank stehen Stehgäste
+const STEHABSTAND := 0.55
+const Figuren := preload("res://scripts/figuren.gd")
 const TABLE_AVOID_RADIUS := 1.6   # Mitarbeiter halten Abstand zu Tischen (größer = bleiben in engen Gängen hängen)
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
 const KITCHEN_POINT := Vector3(5.0, 0.1, -12.2) # Koch steht vor der Kochtheke an der Rückwand
@@ -356,8 +359,15 @@ var _day_ambient := 0.35
 var _day_bg := 1.0
 var _day_fog := 0.0008
 var _day_fog_color := Color(0.78, 0.70, 0.62)
+## Tageswerte für den Lichterfest-Abend (Leuchten, Belichtung, Sättigung)
+var _day_glow := 0.7
+var _day_bloom := 0.05
+var _day_exposure := 1.0
+var _day_saettigung := 1.0
 var _night_visual := false
 var _night_t := -1.0
+## Helligkeit der Deckenlichter bei voller Nacht
+const DECKENLICHT_ENERGIE := 0.55
 var _regen_t := -1.0
 ## Nach 22 Uhr bis zum Schlafen: Zelt geschlossen, aber Nacht
 var _nachts_geschlossen := false
@@ -399,6 +409,10 @@ func _ready() -> void:
 		_day_bg = _world_env.environment.background_energy_multiplier
 		_day_fog = _world_env.environment.fog_density
 		_day_fog_color = _world_env.environment.fog_light_color
+		_day_glow = _world_env.environment.glow_intensity
+		_day_bloom = _world_env.environment.glow_bloom
+		_day_exposure = _world_env.environment.tonemap_exposure
+		_day_saettigung = _world_env.environment.adjustment_saturation
 	_apply_night_visual(false)
 
 	# Bira masalarını topla (kararlı sıra). Başta zelt kiralanmadı → 0 aktif.
@@ -657,8 +671,26 @@ func _apply_daylight(clock: float) -> void:
 		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.22, t)
 		# Nebel bleibt ein dünner Dunst — er soll das Licht der Buden einfangen,
 		# nicht die Sicht nehmen. Nachts und bei Regen dichter.
-		env.fog_density = lerpf(_day_fog, _day_fog * 4.0, t) * (1.0 + 3.0 * r)
+		# (vorher ×4 nachts — mit dem Lichterfest-Look wirkte das Zelt dann milchig)
+		env.fog_density = lerpf(_day_fog, _day_fog * 1.5, t) * (1.0 + 3.0 * r)
 		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
+		# Lichterfest-Abend (Stilvorschau tools/render_licht.tscn): Lichterketten
+		# leuchten warm, etwas höher belichtet, kräftigere Farben. Lichtnebel nur
+		# auf Grafikstufe Hoch — der ist teuer (Glow/Farbkorrektur schaltet grafikstufe.gd).
+		env.glow_intensity = lerpf(_day_glow, 1.5, t)
+		env.glow_bloom = lerpf(_day_bloom, 0.22, t)
+		env.tonemap_exposure = lerpf(_day_exposure, 1.25, t)
+		env.adjustment_saturation = lerpf(_day_saettigung, _day_saettigung * 1.1, t)
+		env.volumetric_fog_enabled = Einstellungen.grafik >= 2 and t > 0.02
+		env.volumetric_fog_density = 0.006 * t
+		env.volumetric_fog_albedo = Color(1.0, 0.82, 0.62)
+	# Warme Deckenlichter über den Tischen (main.tscn Deckenlichter) — nur abends,
+	# ohne Schatten; sonst ist das Zelt nachts zu dunkel
+	for d in get_tree().get_nodes_in_group("deckenlicht"):
+		(d as Light3D).light_energy = DECKENLICHT_ENERGIE * t
+		(d as Light3D).visible = t > 0.01
+	if _world_env and _world_env.environment:
+		var env := _world_env.environment
 		if env.sky and env.sky.sky_material is ShaderMaterial:
 			var himmel := env.sky.sky_material as ShaderMaterial
 			himmel.set_shader_parameter("nacht", t)
@@ -814,6 +846,15 @@ func open_computer_ui() -> void:
 
 func open_booking_ui() -> void:
 	_hud.open_booking()
+
+## Wo der Gast an seinem Platz ist: sitzend auf der Bank, Stehgäste (Figuren.ist_stehgast)
+## ein Stück dahinter — mit Blick zum Tisch wie die Sitzenden.
+func _platz_pos_fuer(gast_id: int, si: int) -> Vector3:
+	var s: Dictionary = _seats[si]
+	var p: Vector3 = s.pos
+	if Figuren.ist_stehgast(gast_id):
+		p += (s.away as Vector3) * STEHABSTAND
+	return p
 
 func _rebuild_seats() -> void:
 	_seats.clear()
@@ -1021,7 +1062,7 @@ func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 		g.pee_t = float(g.pee_t) - delta
 		if float(g.pee_t) <= 0.0:
 			g.mode = 1
-			g.tgt = _seats[int(g.seat)].pos
+			g.tgt = _platz_pos_fuer(id, int(g.seat))
 			g.bladder = randf_range(BLADDER_MIN, BLADDER_MAX)
 		return
 	g.bladder = float(g.bladder) - delta
@@ -1659,7 +1700,7 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 				_assigned.erase(gid2)
 				s.idx = int(s.idx) + 1
 				return
-			s.tgt = _seats[seat].pos
+			s.tgt = _platz_pos_fuer(gid2, seat)
 			if _staff_move(s, delta):
 				_serve_by_staff(gid2)
 				_assigned.erase(gid2)
@@ -2742,7 +2783,7 @@ func _spawn_guest() -> void:
 	_seats[si].guest = id
 	# Vom Haupttor über den Weg zum Zelteingang, dann zum Platz
 	var weg: Array = WEG_REIN.duplicate()
-	weg.append(_seats[si].pos)
+	weg.append(_platz_pos_fuer(id, si))
 	var start: Vector3 = HAUPTTOR + Vector3(randf_range(-1.5, 1.5), 0.0, randf_range(0.0, 1.5))
 	var typ := _gast_typ_waehlen()
 	if typ == "vip" and _popularity < VIP_AB_BELIEBTHEIT:
@@ -2807,7 +2848,7 @@ func _update_guests(delta: float) -> void:
 			if float(g.tanz_t) <= 0.0:
 				g.mode = 0
 				g.weg = []
-				g.tgt = _seats[int(g.seat)].pos
+				g.tgt = _platz_pos_fuer(id, int(g.seat))
 				g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 		# E6: Blase (sitzend oder auf dem Weg zur Ecke/Toilette)
 		if g.mode == 4:
@@ -3210,7 +3251,7 @@ func _update_puke(g: Dictionary, id: int, delta: float) -> void:
 	if float(g.puke_t) <= 0.0:
 		g.mode = 1
 		g.kotzt = false
-		g.tgt = _seats[int(g.seat)].pos
+		g.tgt = _platz_pos_fuer(id, int(g.seat))
 
 ## Kurze Schwarzblende beim Schlafen (bei allen Spielern).
 @rpc("authority", "reliable", "call_local")

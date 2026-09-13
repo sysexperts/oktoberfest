@@ -19,8 +19,22 @@ const GAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter2.tscn"),
 ]
 
-## Sitzende Gäste: wie fuer_id, aber nur aus GAESTE.
+## Stehende Gäste: stehen hinter der Bank am Tisch statt zu sitzen, bestellen,
+## trinken und tanzen sonst wie alle. charakter3 steht hier, bis ihr Modell
+## Rock-Knochen hat — so gibt es weibliche Gäste, ohne die Rockscheibe beim Sitzen.
+const STEHGAESTE: Array[PackedScene] = [
+	preload("res://scenes/figuren/charakter3.tscn"),
+]
+
+## Steht dieser Gast? Etwa jeder dritte. Aus der ID, damit Server (Platz hinter
+## der Bank) und alle Mitspieler (Figur, kein Hinsetzen) dasselbe entscheiden.
+static func ist_stehgast(id: int) -> bool:
+	return posmod(id * 5 + 1, 3) == 0
+
+## Gäste: Stehgäste aus STEHGAESTE, alle anderen sitzen und kommen aus GAESTE.
 static func fuer_gast(id: int) -> PackedScene:
+	if ist_stehgast(id):
+		return STEHGAESTE[posmod(id, STEHGAESTE.size())]
 	return GAESTE[posmod(id * 7 + 3, GAESTE.size())]
 
 ## Gäste, Personal, Künstler: aus der ID — so sieht jeder Mitspieler dieselbe Figur,
