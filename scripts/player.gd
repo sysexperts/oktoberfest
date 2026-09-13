@@ -64,7 +64,6 @@ var _net_yaw: float
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
 @onready var _carry_teller: EssenTeller = $Head/HoldPoint/CarryTeller
 @onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
-@onready var _scarf: MeshInstance3D = $Scarf
 @onready var _emote_label: Label3D = $Emote
 @onready var _namensschild: Label3D = $Namensschild
 ## Abteilung, die dieser Spieler leitet ("" = keine) — aus der Lobby (GameManager._spieler_info)
@@ -84,7 +83,6 @@ func _ready() -> void:
 
 	# Kendi modelini gizle (FPS), kameranı aç; uzak oyuncularda tersi
 	_model.visible = not _is_local
-	_scarf.visible = not _is_local
 	_cam.current = _is_local
 	costume = int(abs(auth)) % COSTUME_COLORS.size()  # kimliğe göre başlangıç rengi
 	_apply_costume()
@@ -287,12 +285,11 @@ func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int
 	_apply_costume()
 
 func _apply_costume() -> void:
-	if costume == _applied_costume or _scarf == null:
+	if costume == _applied_costume or _namensschild == null:
 		return
 	_applied_costume = costume
-	var m := _scarf.material_override as StandardMaterial3D
-	if m:
-		m.albedo_color = COSTUME_COLORS[costume % COSTUME_COLORS.size()]
+	# Spielerfarbe zeigt das Namensschild (der Schal-Ring sah nicht gut aus)
+	_namensschild.modulate = COSTUME_COLORS[costume % COSTUME_COLORS.size()].lerp(Color.WHITE, 0.25)
 
 ## Tippt der Spieler gerade in ein Textfeld (Zeltname)? Dann zählen W/A/S/D, E, Q …
 ## als Buchstaben, nicht als Steuerung — Input liest die Tasten sonst trotzdem.
