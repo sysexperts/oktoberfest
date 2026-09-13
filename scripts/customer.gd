@@ -174,9 +174,9 @@ func _update_bubble() -> void:
 			_bubble.text = praefix + "🍺 " + BEER_NAMES.get(order_type, "")
 			_bubble.modulate = BEER_COLORS.get(order_type, Color.WHITE)
 	elif order_state == 2:
-		_bubble.visible = true
-		_bubble.text = "😄"
-		_bubble.modulate = Color.WHITE
+		# Bedient und zufrieden: keine Blase — im vollen Zelt sieht man sonst nur
+		# noch Smileys statt der offenen Bestellungen
+		_bubble.visible = false
 	elif typ == "vip":
 		# VIPs erkennt man auch, wenn sie gerade nichts bestellen
 		_bubble.visible = true
