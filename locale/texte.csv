@@ -195,6 +195,13 @@ TENT_STAGE_3,Großes Zelt,Large tent,Büyük çadır
 TENT_STAGE_4,Riesenzelt,Huge tent,Dev çadır
 WORLD_TOILET,🚻 WC,🚻 WC,🚻 WC
 WORLD_BUERO,🗂 Büro,🗂 Office,🗂 Ofis
+RENT_DIALOG_TITLE,🎪 Festzelt mieten,🎪 Rent a beer tent,🎪 Bira çadırı kirala
+RENT_DIALOG_INFO,Das Festzelt kostet einmalig %s. Die ersten 5 Tage zahlst du keine Miete.,The beer tent costs %s once. You pay no rent for the first 5 days.,Bira çadırı bir kereliğine %s. İlk 5 gün kira ödemezsin.
+RENT_DIALOG_NAME,Wie soll dein Zelt heißen?,What should your tent be called?,Çadırının adı ne olsun?
+RENT_DIALOG_PLACEHOLDER,z. B. Zum Durstigen Hirsch,e.g. The Thirsty Stag,örn. Susamış Geyik
+RENT_DIALOG_CONFIRM,Mieten · %s,Rent · %s,Kirala · %s
+RENT_DIALOG_CANCEL,Abbrechen,Cancel,Vazgeç
+TENT_NAME_DEFAULT,Festzelt,Beer Tent,Bira Çadırı
 WORLD_MESS,🤢 Putzen ({interact}),🤢 Clean up ({interact}),🤢 Temizle ({interact})
 WORLD_PACKAGE_1,"🍺 Bierfass ×%d\n({interact}: aufnehmen)","🍺 Beer keg ×%d\n({interact}: pick up)","🍺 Bira fıçısı ×%d\n({interact}: al)"
 WORLD_PACKAGE_2,"🥨 Zutaten ×%d\n({interact}: aufnehmen)","🥨 Ingredients ×%d\n({interact}: pick up)","🥨 Malzemeler ×%d\n({interact}: al)"

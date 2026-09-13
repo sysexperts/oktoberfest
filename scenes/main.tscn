@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" path="res://scenes/rueckwand_regal.tscn" id="98_regalwand"]
 [ext_resource type="PackedScene" path="res://scenes/kochtheke.tscn" id="99_kochtheke"]
 [ext_resource type="PackedScene" path="res://scenes/bueroraum.tscn" id="100_buero"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -242,6 +243,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0, 9.2)
 [node name="KloContainer" parent="." instance=ExtResource("97_klo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.4, 0, 9.6)
 visible = false
+
+[node name="ZeltnameEingang" type="Label3D" parent="." groups=["zeltname"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25, 11.9)
+visible = false
+pixel_size = 0.02
+double_sided = false
+modulate = Color(1, 0.86, 0.45, 1)
+outline_modulate = Color(0.22, 0.12, 0.04, 1)
+text = "Festzelt"
+font = ExtResource("101_fraktur")
+font_size = 160
+outline_size = 36
+metadata/breite = 12.5
+metadata/pixel_basis = 0.02
 
 [node name="Kirmes" parent="." unique_id=1802476162 instance=ExtResource("17_kirmes")]
 

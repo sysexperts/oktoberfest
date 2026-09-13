@@ -53,7 +53,11 @@ var _schritt := -1
 func _ready() -> void:
 	visible = false
 	%Schliessen.pressed.connect(schliessen)
-	_verbinde("ZeltMieten", func(_i: int) -> void: _rpc("net_book_tent"))
+	_verbinde("ZeltMieten", func(_i: int) -> void:
+		# Erst den Zeltnamen abfragen, gemietet wird im Dialog
+		schliessen()
+		if _gm:
+			_gm.open_rent_ui())
 	_verbinde("TischStellen", func(_i: int) -> void: _rpc("net_buy_table"))
 	_verbinde("TischVerkaufen", func(_i: int) -> void: _rpc("net_sell_table"))
 	_verbinde("ZeltVergroessern", func(_i: int) -> void: _rpc("net_upgrade_tent"))

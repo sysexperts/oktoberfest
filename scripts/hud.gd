@@ -25,6 +25,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _hinweisfenster: Control = %Hinweisfenster
 @onready var _buero: Control = %Wiesenbuero
 @onready var _computer: Control = %Zeltcomputer
+@onready var _mieten: Control = %ZeltMieten
 
 # Zuletzt gemeldete Werte
 var _money := 0
@@ -46,6 +47,7 @@ func _ready() -> void:
 	%HinweisfensterOk.pressed.connect(close_popup)
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
+	_mieten.einrichten(get_parent())
 	Einstellungen.geaendert.connect(_alles_neu)
 	Einstellungen.screenshot_gespeichert.connect(func(pfad: String) -> void:
 		melde("MSG_SCREENSHOT", [pfad], 2))
@@ -254,7 +256,7 @@ func show_popup(text: String) -> void:
 
 func close_popup() -> void:
 	_hinweisfenster.visible = false
-	if not _computer.ist_offen() and not _buero.ist_offen():
+	if not _computer.ist_offen() and not _buero.ist_offen() and not _mieten.ist_offen():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func is_popup_open() -> bool:
@@ -293,3 +295,13 @@ func close_computer() -> void:
 
 func is_computer_open() -> bool:
 	return _computer.ist_offen()
+
+## Zelt mieten mit Namenseingabe (scenes/ui/zelt_mieten.tscn)
+func open_rent() -> void:
+	_mieten.oeffnen()
+
+func close_rent() -> void:
+	_mieten.schliessen()
+
+func is_rent_open() -> bool:
+	return _mieten.ist_offen()

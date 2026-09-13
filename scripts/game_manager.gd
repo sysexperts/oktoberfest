@@ -277,6 +277,9 @@ var _popularity := POP_START
 
 # Zelt / makro-döngü durumu
 var _tent_stage := 0     # 0 = kiralanmadı, 1..3 zelt büyüklüğü
+## Vom Spieler beim Mieten vergeben ("" = Standardname)
+var _zelt_name := ""
+const ZELTNAME_MAX := 24
 var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
 var _day := 1            # Wiesn günü
 var _upg_marketing := 0  # Werbung seviyesi (popülerlik enjeksiyonu)
@@ -481,6 +484,7 @@ func _save_game() -> void:
 		"score": Game.score,
 		"day": _day,
 		"tent_stage": _tent_stage,
+		"zelt_name": _zelt_name,
 		"active_count": _active_count,
 		"upg_marketing": _upg_marketing,
 		"upg_deko": _upg_deko,
@@ -536,6 +540,7 @@ func _load_game() -> bool:
 	Game.add_score(int(d.get("score", 0)) - Game.score)
 	_day = maxi(1, int(d.get("day", 1)))
 	_tent_stage = clampi(int(d.get("tent_stage", 0)), 0, 4)
+	_zelt_name = zeltname_pruefen(str(d.get("zelt_name", "")))
 	_active_count = int(d.get("active_count", 0))
 	_upg_marketing = int(d.get("upg_marketing", 0))
 	_upg_deko = int(d.get("upg_deko", 0))
@@ -843,6 +848,7 @@ func _vermietung_aktualisieren() -> void:
 func _apply_tent() -> void:
 	_vermietung_aktualisieren()
 	_klo_anzeigen()
+	_zeltname_anzeigen()
 	for i in _all_tables.size():
 		var bt := _all_tables[i] as Node3D
 		var on: bool = i < _active_count
@@ -863,9 +869,9 @@ func _apply_tent() -> void:
 		_beertables.append(_all_tables[i])
 	_rebuild_seats()
 
-## Kiosk: Zelt buchen (Stufe 1).
+## Zelt mieten (Stufe 1) — der Name kommt aus dem Mietdialog (scenes/ui/zelt_mieten.tscn).
 @rpc("any_peer", "reliable", "call_local")
-func net_book_tent() -> void:
+func net_book_tent(zelt_name := "") -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION or _tent_stage != 0:
 		return
 	if not _afford(TENT_BOOK_COST):
@@ -874,9 +880,43 @@ func net_book_tent() -> void:
 	Game.add_money(-TENT_BOOK_COST)
 	_tent_stage = 1
 	_active_count = 0
+	_zelt_name = zeltname_pruefen(zelt_name)
 	_apply_tent()
-	_melde("MSG_TENT_RENTED", ["TENT_STAGE_1"], 2)
+	_melde("MSG_TENT_RENTED", [_zelt_name if _zelt_name != "" else "TENT_NAME_DEFAULT"], 2)
 	_broadcast_meta()
+
+## Mietdialog öffnen (vom Schild und aus dem Wiesenbüro)
+func open_rent_ui() -> void:
+	_hud.open_rent()
+
+## Zeltname vom Spieler: ohne Steuerzeichen/Zeilenumbrüche, getrimmt, höchstens
+## ZELTNAME_MAX Zeichen. "" = Standardname (TENT_NAME_DEFAULT, in der Spielersprache).
+static func zeltname_pruefen(roh: String) -> String:
+	var s := ""
+	for i in roh.length():
+		if roh.unicode_at(i) >= 32:
+			s += roh[i]
+	s = s.strip_edges()
+	if s.length() > ZELTNAME_MAX:
+		s = s.substr(0, ZELTNAME_MAX).strip_edges()
+	return s
+
+## Zeltname groß am Eingang und über der Theke (Label3D in der Gruppe "zeltname").
+## Zu lange Namen werden kleiner gesetzt, damit sie auf Schild/Giebel passen:
+## metadata/breite = höchste Breite in Metern, metadata/pixel_basis = normale Größe.
+func _zeltname_anzeigen() -> void:
+	var text := _zelt_name if _zelt_name != "" else String(TranslationServer.translate("TENT_NAME_DEFAULT"))
+	for knoten in get_tree().get_nodes_in_group("zeltname"):
+		var l := knoten as Label3D
+		if l == null:
+			continue
+		l.visible = _tent_stage > 0
+		l.text = text
+		var basis := float(l.get_meta("pixel_basis", l.pixel_size))
+		var breite := float(l.get_meta("breite", 0.0))
+		var schrift: Font = l.font if l.font else ThemeDB.fallback_font
+		var px := schrift.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, l.font_size).x
+		l.pixel_size = basis if breite <= 0.0 or px * basis <= breite else breite / px
 
 ## Kiosk: Tisch kaufen/platzieren (limit je Zeltstufe).
 @rpc("any_peer", "reliable", "call_local")
@@ -3062,6 +3102,7 @@ func _buero_state() -> Dictionary:
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 		"kredit": _kredit_rest,
+		"zelt_name": _zelt_name,
 	}
 
 func _broadcast_meta() -> void:
@@ -3077,7 +3118,9 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_vermietung_aktualisieren()
 	if not multiplayer.is_server():
 		_has_toilet = bool(buero.get("toilet", false))
+		_zelt_name = str(buero.get("zelt_name", ""))
 	_klo_anzeigen()
+	_zeltname_anzeigen()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	_haelt_deko = buero.get("haelt", {})
 	var ereignis_neu := str(buero.get("ereignis", ""))

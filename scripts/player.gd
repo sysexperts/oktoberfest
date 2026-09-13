@@ -144,7 +144,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		_head.rotation.x = _pitch
 	if event.is_action_pressed("ui_cancel"):
 		var hud := _world.get_node_or_null("HUD")
-		if hud and hud.has_method("is_computer_open") and hud.is_computer_open():
+		if hud and hud.has_method("is_rent_open") and hud.is_rent_open():
+			hud.close_rent()
+		elif hud and hud.has_method("is_computer_open") and hud.is_computer_open():
 			hud.close_computer()
 		elif hud and hud.has_method("is_popup_open") and hud.is_popup_open():
 			hud.close_popup()
@@ -157,6 +159,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				pause.oeffnen()
 			else:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Beim Tippen des Zeltnamens sind Q, C, R … Buchstaben
+	if _tippt():
+		return
 	# Prost-Geste — Taste in den Einstellungen umbelegbar (Aktion "emote")
 	if event.is_action_pressed("emote") and not event.is_echo():
 		# Wer eine Lampe/Deko trägt, dreht sie stattdessen
@@ -201,7 +206,8 @@ func _physics_process(delta: float) -> void:
 		_handle_movement(delta)
 		_update_target()
 		_update_hint()
-		_handle_interaction(delta)
+		if not _tippt():
+			_handle_interaction(delta)
 		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
@@ -257,8 +263,14 @@ func _apply_costume() -> void:
 	if m:
 		m.albedo_color = COSTUME_COLORS[costume % COSTUME_COLORS.size()]
 
+## Tippt der Spieler gerade in ein Textfeld (Zeltname)? Dann zählen W/A/S/D, E, Q …
+## als Buchstaben, nicht als Steuerung — Input liest die Tasten sonst trotzdem.
+func _tippt() -> bool:
+	var hud := _world.get_node_or_null("HUD") if _world else null
+	return hud != null and hud.has_method("is_rent_open") and hud.is_rent_open()
+
 func _handle_movement(delta: float) -> void:
-	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var input_dir := Vector2.ZERO if _tippt() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var dir := (transform.basis.x * input_dir.x) + (transform.basis.z * input_dir.y)
 	dir.y = 0
 	dir = dir.normalized() if dir.length() > 0.01 else Vector3.ZERO
@@ -466,8 +478,9 @@ func _handle_interaction(delta: float) -> void:
 				carry_fill = 0.0
 				_sfx("ding")
 		elif _current_target is ZeltVermietung:
-			# Zelt direkt am Eingang mieten
-			_world.net_book_tent.rpc_id(1)
+			# Mietdialog: Preis sehen, Zeltnamen eingeben, bestätigen
+			if _world.has_method("open_rent_ui"):
+				_world.open_rent_ui()
 			_sfx("pop")
 		elif _current_target is OfficeDesk:
 			# Wiesenbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)

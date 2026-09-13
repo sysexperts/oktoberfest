@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/ausgabe.tscn" id="1_ausgabe"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
 
 [sub_resource type="BoxMesh" id="Korpus"]
 size = Vector3(18, 1.0, 1.1)
@@ -87,3 +88,17 @@ shape = SubResource("Kollision")
 
 [node name="Ausgabe" parent="." instance=ExtResource("1_ausgabe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.08, 0.3)
+
+[node name="Zeltname" type="Label3D" parent="." groups=["zeltname"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.6, -0.4)
+visible = false
+pixel_size = 0.006
+double_sided = false
+modulate = Color(1, 0.93, 0.74, 1)
+outline_modulate = Color(0.07, 0.15, 0.36, 1)
+text = "Festzelt"
+font = ExtResource("2_fraktur")
+font_size = 80
+outline_size = 18
+metadata/breite = 3.7
+metadata/pixel_basis = 0.006

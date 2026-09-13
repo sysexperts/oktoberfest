@@ -40,6 +40,7 @@ class Lauf extends Node:
 		gm._tent_stage = 4
 		gm._active_count = 24
 		gm._has_toilet = true
+		gm._zelt_name = "Zum Durstigen Hirsch"
 		gm._apply_tent()
 		gm.set_process(false)
 		spieler = gm.get_node("Players").get_child(0)
@@ -81,6 +82,9 @@ class Lauf extends Node:
 		await _foto(Vector3(1.5, 0.0, 2.0), -90.0, -8.0, "zelt_buehne")
 		# Rückwand: Regal mit Gläsern und Kochtheke
 		await _foto(Vector3(0.0, 0.0, -10.4), 0.0, -8.0, "zelt_rueckwand")
+		# Zeltname: von draußen auf den Eingang, drinnen über die Theke
+		await _foto(Vector3(0.0, 0.0, 22.0), 0.0, 8.0, "zelt_name_eingang")
+		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")
 		# Büroraum durch die Tür
 		await _foto(Vector3(-9.1, 0.0, 4.6), 180.0, -10.0, "zelt_buero")
 		# Übersicht von oben — Dach und Deckenlampen ausblenden

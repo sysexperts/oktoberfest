@@ -453,6 +453,19 @@ class Lauf extends Node:
 		_check("Klo-Container in der Szene", gm.get_node_or_null("KloContainer") != null, "")
 		_check("Tanzplätze vor der Bühne frei", not gm.buehnen_tanzplaetze().is_empty(), str(gm.buehnen_tanzplaetze().size()))
 
+		print("  -- Zeltname")
+		_check("Zeltname wird bereinigt", gm.zeltname_pruefen("  Zum\nHirsch  ") == "ZumHirsch"
+			and gm.zeltname_pruefen("x".repeat(40)).length() == gm.ZELTNAME_MAX, "")
+		var name_vorher: String = gm._zelt_name
+		gm._zelt_name = "Zum Durstigen Hirsch"
+		gm._zeltname_anzeigen()
+		var schilder := get_tree().get_nodes_in_group("zeltname")
+		_check("Zeltname am Eingang und über der Theke", schilder.size() >= 2
+			and schilder.all(func(n: Node) -> bool: return (n as Label3D).text == "Zum Durstigen Hirsch" and (n as Label3D).visible),
+			str(schilder.size()))
+		gm._zelt_name = name_vorher
+		gm._zeltname_anzeigen()
+
 		print("  -- Einrichtung an Wand und Decke")
 		var lage_wand: Dictionary = gm._deko_platz("banner", 3.0, -12.9, 0.0)
 		_check("Wanddeko rastet an der Rückwand ein", is_equal_approx(float(lage_wand.z), gm.WAND_HINTEN)
