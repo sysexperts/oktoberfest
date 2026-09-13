@@ -246,6 +246,13 @@ def a_beitreten(d):
     raum = raeume.get(schluessel(d.get("code", "")))
     if raum is None:
         return {"ok": False, "fehler": "LOBBY_ERR_CODE"}
+    # Wiederkommen nach Absturz/Rausfliegen: Wer mit gleichem Namen zurückkommt,
+    # übernimmt seinen alten Platz — sonst hieße es bis zur Abgangsmeldung „voll".
+    name = name_pruefen(d.get("name", "")).lower()
+    for sid in [s for s, x in raum["spieler"].items()
+                if name and x["name"].lower() == name
+                and (x.get("im_spiel") or jetzt() - x["zuletzt"] > 5)]:
+        del raum["spieler"][sid]
     if len(raum["spieler"]) >= MAX_SPIELER:
         return {"ok": False, "fehler": "LOBBY_ERR_ROOM_FULL"}
     sid = secrets.token_hex(6)
