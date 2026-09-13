@@ -202,6 +202,16 @@ RENT_DIALOG_PLACEHOLDER,z. B. Zum Durstigen Hirsch,e.g. The Thirsty Stag,örn. S
 RENT_DIALOG_CONFIRM,Mieten · %s,Rent · %s,Kirala · %s
 RENT_DIALOG_CANCEL,Abbrechen,Cancel,Vazgeç
 TENT_NAME_DEFAULT,Festzelt,Beer Tent,Bira Çadırı
+PLAYER_N,Spieler %d,Player %d,Oyuncu %d
+VOTE_TITLE,Feierabend?,Call it a night?,Paydos mu?
+VOTE_TEXT,%s will schlafen gehen und den nächsten Tag starten.,%s wants to go to bed and start the next day.,%s yatmak ve sonraki günü başlatmak istiyor.
+VOTE_COUNT,Ja %d · Nein %d · %d Spieler · noch %d s,Yes %d · No %d · %d players · %d s left,Evet %d · Hayır %d · %d oyuncu · %d sn kaldı
+VOTE_YES,✅ Ja,✅ Yes,✅ Evet
+VOTE_NO,"🍺 Nein, noch eine Maß","🍺 No, one more round","🍺 Hayır, bir kupa daha"
+VOTE_DONE,Abgestimmt — warte auf die anderen …,Voted — waiting for the others …,Oy verildi — diğerleri bekleniyor …
+MSG_VOTE_STARTED,🗳 %s will schlafen gehen — stimmt ab!,🗳 %s wants to go to bed — vote now!,🗳 %s yatmak istiyor — oy verin!
+MSG_VOTE_YES,😴 Mehrheit dafür (%d von %d) — gute Nacht!,😴 Majority agrees (%d of %d) — good night!,😴 Çoğunluk kabul etti (%d / %d) — iyi geceler!
+MSG_VOTE_NO,🍻 Keine Mehrheit (%d von %d) — es wird weitergefeiert!,🍻 No majority (%d of %d) — the party goes on!,🍻 Çoğunluk yok (%d / %d) — parti devam!
 WORLD_MESS,🤢 Putzen ({interact}),🤢 Clean up ({interact}),🤢 Temizle ({interact})
 WORLD_PACKAGE_1,"🍺 Bierfass ×%d\n({interact}: aufnehmen)","🍺 Beer keg ×%d\n({interact}: pick up)","🍺 Bira fıçısı ×%d\n({interact}: al)"
 WORLD_PACKAGE_2,"🥨 Zutaten ×%d\n({interact}: aufnehmen)","🥨 Ingredients ×%d\n({interact}: pick up)","🥨 Malzemeler ×%d\n({interact}: al)"

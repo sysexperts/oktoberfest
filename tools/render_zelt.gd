@@ -82,6 +82,12 @@ class Lauf extends Node:
 		await _foto(Vector3(1.5, 0.0, 2.0), -90.0, -8.0, "zelt_buehne")
 		# Rückwand: Regal mit Gläsern und Kochtheke
 		await _foto(Vector3(0.0, 0.0, -10.4), 0.0, -8.0, "zelt_rueckwand")
+		# Klo-Container: Lampe über der Tür frei (grün) und besetzt (rot)
+		gm._klo_setzen(-1)
+		await _foto(Vector3(5.2, 0.0, 9.0), -90.0, 4.0, "zelt_klo_frei")
+		gm._klo_setzen(1)
+		await _foto(Vector3(5.2, 0.0, 9.0), -90.0, 4.0, "zelt_klo_besetzt")
+		gm._klo_setzen(-1)
 		# Zeltname: von draußen auf den Eingang, drinnen über die Theke
 		await _foto(Vector3(0.0, 0.0, 22.0), 0.0, 8.0, "zelt_name_eingang")
 		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")

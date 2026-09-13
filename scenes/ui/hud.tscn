@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/wiesenbuero.tscn" id="2_buero"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zeltcomputer.tscn" id="3_comp"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zelt_mieten.tscn" id="4_mieten"]
+[ext_resource type="PackedScene" path="res://scenes/ui/abstimmung.tscn" id="5_abst"]
 
 [sub_resource type="StyleBoxFlat" id="Leiste"]
 content_margin_left = 14.0
@@ -337,6 +338,9 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="ZeltMieten" parent="." instance=ExtResource("4_mieten")]
+unique_name_in_owner = true
+
+[node name="Abstimmung" parent="." instance=ExtResource("5_abst")]
 unique_name_in_owner = true
 
 [node name="Meldungen" type="VBoxContainer" parent="."]

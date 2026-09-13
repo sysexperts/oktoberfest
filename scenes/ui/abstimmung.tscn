@@ -1,0 +1,94 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/abstimmung.gd" id="1_abst"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
+
+[node name="Abstimmung" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_abst")
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 90.0
+offset_bottom = 330.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_outline_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 38
+text = "VOTE_TITLE"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Balken" type="ProgressBar" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+show_percentage = false
+
+[node name="Stand" type="Label" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+
+[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Nein" type="Button" parent="Mitte/Panel/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "VOTE_NO"
+
+[node name="Ja" type="Button" parent="Mitte/Panel/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "VOTE_YES"
+
+[node name="Warten" type="Label" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "VOTE_DONE"
+horizontal_alignment = 1

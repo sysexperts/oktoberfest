@@ -146,6 +146,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var hud := _world.get_node_or_null("HUD")
 		if hud and hud.has_method("is_rent_open") and hud.is_rent_open():
 			hud.close_rent()
+		elif hud and hud.has_method("is_vote_open") and hud.is_vote_open():
+			hud.close_vote()
 		elif hud and hud.has_method("is_computer_open") and hud.is_computer_open():
 			hud.close_computer()
 		elif hud and hud.has_method("is_popup_open") and hud.is_popup_open():
@@ -267,7 +269,11 @@ func _apply_costume() -> void:
 ## als Buchstaben, nicht als Steuerung — Input liest die Tasten sonst trotzdem.
 func _tippt() -> bool:
 	var hud := _world.get_node_or_null("HUD") if _world else null
-	return hud != null and hud.has_method("is_rent_open") and hud.is_rent_open()
+	if hud == null:
+		return false
+	# Auch während der Abstimmung: Maus ist frei, Tasten sollen nichts auslösen
+	return (hud.has_method("is_rent_open") and hud.is_rent_open()) \
+		or (hud.has_method("is_vote_open") and hud.is_vote_open())
 
 func _handle_movement(delta: float) -> void:
 	var input_dir := Vector2.ZERO if _tippt() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")

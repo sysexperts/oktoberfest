@@ -91,7 +91,11 @@ const GEDULD_FAKTOR := [1.35, 1.0, 0.8]
 const ANDRANG_FAKTOR := [0.9, 1.0, 1.2]
 const MIETE_FAKTOR := [0.75, 1.0, 1.3]
 ## Koop (Spaß-Plan 5.1): je weiterer Spieler so viel mehr Andrang
-const KOOP_ANDRANG_JE_SPIELER := 0.5
+const KOOP_ANDRANG_JE_SPIELER := 0.2   # vorher 0.5 — zu viert war das nur noch Schleppen
+## Abstimmung „Nächster Tag?": so lange läuft sie (Sekunden)
+const ABSTIMMUNG_ZEIT := 30.0
+## Klo: so lange wartet ein Gast vor besetztem Klo, dann geht er irgendwo ins Zelt
+const KLO_WARTEN := 8.0
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
 const TENT_TABLE_LIMIT := {0: 0, 1: 4, 2: 8, 3: 16, 4: 24}   # main.tscn hat 24 Tische
@@ -282,6 +286,10 @@ var _popularity := POP_START
 var _tent_stage := 0     # 0 = kiralanmadı, 1..3 zelt büyüklüğü
 ## Vom Spieler beim Mieten vergeben ("" = Standardname)
 var _zelt_name := ""
+## Gast auf dem Klo (-1 = frei) — eine Person gleichzeitig
+var _klo_gast := -1
+## Laufende Abstimmung: {starter, ja: {peer: true}, nein: {peer: true}, rest: Sekunden}
+var _abstimmung := {}
 const ZELTNAME_MAX := 24
 var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
 var _day := 1            # Wiesn günü
@@ -829,6 +837,8 @@ func _on_peer_left(peer_id: int) -> void:
 		_deko_abstellen(peer_id)
 	_remove_player.rpc(peer_id)
 	_broadcast_meta()
+	# Laufende Abstimmung neu auswerten — ohne den Spieler kann die Mehrheit kippen
+	_abstimmung_pruefen(false)
 
 # ================================================= Bierpreis
 ## Zelt-Computer: Bierpreis in 10-%-Schritten ändern — auch während der Schicht.
@@ -1050,30 +1060,78 @@ func net_buy_toilet() -> void:
 ## Blase der sitzenden Gäste. Ohne Klo → Urinfleck in der Ecke.
 func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 	if int(g.mode) == 3:
+		# Wartet vor besetztem Klo: wird es frei, hinein — sonst irgendwann ins Zelt
+		if bool(g.get("klo_wartet", false)):
+			if _klo_gast < 0:
+				g.klo_wartet = false
+				_klo_setzen(id)
+				g.tgt = TOILET_POINT
+			else:
+				g.warte_t = float(g.get("warte_t", 0.0)) - delta
+				if float(g.warte_t) <= 0.0:
+					g.klo_wartet = false
+					g.wild = true
+					g.tgt = _wildpinkel_punkt(g)
+			return
 		# Erst ankommen — Pfütze und Pinkelzeit beginnen am Ziel, nicht beim Losgehen
 		var bis_ziel: Vector3 = (g.tgt as Vector3) - (g.pos as Vector3)
 		bis_ziel.y = 0.0
 		if bis_ziel.length() > 0.3:
 			return
-		if not _has_toilet and not bool(g.get("pfuetze", false)):
+		if (not _has_toilet or bool(g.get("wild", false))) and not bool(g.get("pfuetze", false)):
 			g.pfuetze = true
 			_spawn_mess_at((g.tgt as Vector3) + Vector3(randf_range(-0.4, 0.4), 0.0, randf_range(-0.4, 0.4)), 1)
 			_urin_count += 1
 		g.pee_t = float(g.pee_t) - delta
 		if float(g.pee_t) <= 0.0:
 			g.mode = 1
+			g.wild = false
+			if _klo_gast == id:
+				_klo_setzen(-1)
 			g.tgt = _platz_pos_fuer(id, int(g.seat))
 			g.bladder = randf_range(BLADDER_MIN, BLADDER_MAX)
 		return
 	g.bladder = float(g.bladder) - delta
 	if float(g.bladder) > 0.0:
 		return
-	# Muss mal — ohne Klo in die Ecke (leicht gestreut, damit nicht alle auf einen Fleck)
+	# Muss mal: freies Klo → hinein · besetzt → kurz anstellen · kein Klo → in die Ecke
 	g.mode = 3
 	g.pee_t = PEE_DURATION
 	g.ostate = 0
 	g.pfuetze = false
-	g.tgt = TOILET_POINT if _has_toilet else PEE_CORNER + Vector3(randf_range(-1.2, 1.2), 0.0, randf_range(-1.2, 1.2))
+	g.wild = false
+	if not _has_toilet:
+		g.tgt = PEE_CORNER + Vector3(randf_range(-1.2, 1.2), 0.0, randf_range(-1.2, 1.2))
+	elif _klo_gast < 0:
+		_klo_setzen(id)
+		g.tgt = TOILET_POINT
+	else:
+		g.klo_wartet = true
+		g.warte_t = KLO_WARTEN
+		g.tgt = TOILET_POINT + Vector3(randf_range(-2.2, -1.0), 0.0, randf_range(-1.2, 1.2))
+
+## Wer ist auf dem Klo? Allen Mitspielern melden, damit die Lampe stimmt.
+func _klo_setzen(gast_id: int) -> void:
+	if _klo_gast == gast_id:
+		return
+	_klo_gast = gast_id
+	_net_klo.rpc(_klo_gast >= 0)
+
+@rpc("authority", "reliable", "call_local")
+func _net_klo(besetzt: bool) -> void:
+	var klo := get_node_or_null("KloContainer")
+	if klo and klo.has_method("set_besetzt"):
+		klo.set_besetzt(besetzt)
+
+## Klo besetzt und zu lange gewartet: irgendwo in der Nähe des Tisches ins Zelt —
+## nicht hinter die Theke. Die Putzkräfte haben dadurch wieder Arbeit.
+func _wildpinkel_punkt(g: Dictionary) -> Vector3:
+	var basis: Vector3 = g.pos
+	if int(g.seat) >= 0 and int(g.seat) < _seats.size():
+		var s: Dictionary = _seats[int(g.seat)]
+		basis = (s.pos as Vector3) + (s.away as Vector3) * 2.2
+	var p := basis + Vector3(randf_range(-1.5, 1.5), 0.0, randf_range(-1.5, 1.5))
+	return Vector3(clampf(p.x, ZELT_MIN.x, ZELT_MAX.x), 0.1, clampf(p.z, -7.5, ZELT_MAX.z))
 
 ## Beschwerden: Gäste in der Nähe von Urin meckern, manche gehen.
 func _update_complaints(delta: float) -> void:
@@ -1999,10 +2057,93 @@ func net_sleep() -> void:
 	if _active_count <= 0:
 		_fehler("MSG_SLEEP_NEED_TABLE")
 		return
-	# Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
+	# Allein (oder nur ein Spieler auf dem Server): sofort. Sonst stimmen alle ab.
+	if _players_nodes.size() <= 1:
+		_tag_starten()
+		return
+	if not _abstimmung.is_empty():
+		return   # läuft schon
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	_abstimmung = {"starter": s, "ja": {s: true}, "nein": {}, "rest": ABSTIMMUNG_ZEIT}
+	_melde("MSG_VOTE_STARTED", [_spieler_bezeichnung(s)])
+	_abstimmung_pruefen(false)
+
+## Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
+func _tag_starten() -> void:
 	net_sleep_fade.rpc()
 	_start_shift()
 	_melde("MSG_DAY_START", [_day])
+
+## Anzeigename eines Spielers in Meldungen (bis zur Lobby mit Namen: „Spieler 2").
+func _spieler_bezeichnung(peer: int) -> String:
+	var nummer := int(_spawn_index_by_peer.get(peer, 0)) + 1
+	return tr("PLAYER_N") % nummer
+
+## Ergebnis einer Abstimmung: 1 = Tag starten, -1 = abbrechen, 0 = noch offen.
+## Mehrheit aller Spieler — wer nicht abstimmt, zählt nicht als Ja.
+static func abstimmung_ergebnis(ja: int, nein: int, gesamt: int, abgelaufen: bool) -> int:
+	if ja * 2 > gesamt:
+		return 1
+	if nein * 2 >= gesamt or abgelaufen:
+		return -1
+	return 0
+
+@rpc("any_peer", "reliable", "call_local")
+func net_abstimmen(ja: bool) -> void:
+	if not multiplayer.is_server() or _abstimmung.is_empty():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var dafuer: Dictionary = _abstimmung.ja
+	var dagegen: Dictionary = _abstimmung.nein
+	dafuer.erase(s)
+	dagegen.erase(s)
+	if ja:
+		dafuer[s] = true
+	else:
+		dagegen[s] = true
+	_abstimmung_pruefen(false)
+
+## Auswerten und allen den Stand schicken. Aufgerufen bei jeder Stimme, jede Sekunde
+## und wenn ein Spieler das Spiel verlässt.
+func _abstimmung_pruefen(abgelaufen: bool) -> void:
+	if _abstimmung.is_empty():
+		return
+	# Nur Stimmen von Spielern zählen, die noch da sind
+	for liste: Dictionary in [_abstimmung.ja, _abstimmung.nein]:
+		for peer in liste.keys():
+			if not _players_nodes.has(peer):
+				liste.erase(peer)
+	var gesamt := maxi(1, _players_nodes.size())
+	var ja := (_abstimmung.ja as Dictionary).size()
+	var nein := (_abstimmung.nein as Dictionary).size()
+	var ergebnis := abstimmung_ergebnis(ja, nein, gesamt, abgelaufen)
+	var starter := _spieler_bezeichnung(int(_abstimmung.starter))
+	if ergebnis == 0:
+		# Jeder bekommt seinen eigenen Stand (hat er schon abgestimmt?)
+		var rest := ceili(float(_abstimmung.rest))
+		for peer in _players_nodes.keys():
+			var gestimmt: bool = (_abstimmung.ja as Dictionary).has(peer) or (_abstimmung.nein as Dictionary).has(peer)
+			if peer == multiplayer.get_unique_id():
+				_net_abstimmung(true, starter, ja, nein, gesamt, rest, gestimmt)
+			else:
+				_net_abstimmung.rpc_id(peer, true, starter, ja, nein, gesamt, rest, gestimmt)
+		return
+	_abstimmung = {}
+	_net_abstimmung.rpc(false, "", ja, nein, gesamt, 0, false)
+	if ergebnis == 1 and _phase == Phase.INTERMISSION:
+		_melde("MSG_VOTE_YES", [ja, gesamt])
+		_tag_starten()
+	else:
+		_melde("MSG_VOTE_NO", [ja, gesamt])
+
+@rpc("authority", "reliable", "call_local")
+func _net_abstimmung(aktiv: bool, starter: String, ja: int, nein: int, gesamt: int, rest: int, gestimmt: bool) -> void:
+	if _hud and _hud.has_method("zeige_abstimmung"):
+		_hud.zeige_abstimmung(aktiv, starter, ja, nein, gesamt, rest, gestimmt)
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
 @rpc("any_peer", "reliable", "call_local")
@@ -2285,6 +2426,14 @@ func _process(delta: float) -> void:
 		return
 	if Net.dedicated and _players_nodes.is_empty():
 		return
+	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
+	if not _abstimmung.is_empty():
+		var vorher := ceili(float(_abstimmung.rest))
+		_abstimmung.rest = float(_abstimmung.rest) - delta
+		if float(_abstimmung.rest) <= 0.0:
+			_abstimmung_pruefen(true)
+		elif ceili(float(_abstimmung.rest)) != vorher:
+			_abstimmung_pruefen(false)
 	if _phase == Phase.SHIFT:
 		_phase_time -= delta
 		_shift_process(delta)
@@ -2913,6 +3062,8 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		g.tgt = (seat.pos as Vector3) + (seat.get("away", Vector3.FORWARD) as Vector3) * 3.2
 
 func _despawn_guest(id: int) -> void:
+	if _klo_gast == id:
+		_klo_setzen(-1)
 	if _guest_sim.has(id):
 		var si: int = _guest_sim[id].seat
 		if si >= 0 and si < _seats.size():

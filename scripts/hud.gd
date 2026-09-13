@@ -26,6 +26,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _buero: Control = %Wiesenbuero
 @onready var _computer: Control = %Zeltcomputer
 @onready var _mieten: Control = %ZeltMieten
+@onready var _abstimmung: Control = %Abstimmung
 
 # Zuletzt gemeldete Werte
 var _money := 0
@@ -48,6 +49,7 @@ func _ready() -> void:
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
 	_mieten.einrichten(get_parent())
+	_abstimmung.einrichten(get_parent())
 	Einstellungen.geaendert.connect(_alles_neu)
 	Einstellungen.screenshot_gespeichert.connect(func(pfad: String) -> void:
 		melde("MSG_SCREENSHOT", [pfad], 2))
@@ -305,3 +307,13 @@ func close_rent() -> void:
 
 func is_rent_open() -> bool:
 	return _mieten.ist_offen()
+
+## Abstimmung „Nächster Tag?" (scenes/ui/abstimmung.tscn)
+func zeige_abstimmung(aktiv: bool, starter: String, ja: int, nein: int, gesamt: int, rest: int, schon_gestimmt: bool) -> void:
+	_abstimmung.zeige(aktiv, starter, ja, nein, gesamt, rest, schon_gestimmt)
+
+func is_vote_open() -> bool:
+	return _abstimmung.ist_offen()
+
+func close_vote() -> void:
+	_abstimmung.schliessen()

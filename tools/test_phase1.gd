@@ -453,6 +453,26 @@ class Lauf extends Node:
 		_check("Klo-Container in der Szene", gm.get_node_or_null("KloContainer") != null, "")
 		_check("Tanzplätze vor der Bühne frei", not gm.buehnen_tanzplaetze().is_empty(), str(gm.buehnen_tanzplaetze().size()))
 
+		print("  -- Abstimmung und Klo")
+		_check("Abstimmung: Mehrheit entscheidet", gm.abstimmung_ergebnis(2, 0, 3, false) == 1
+			and gm.abstimmung_ergebnis(1, 0, 3, false) == 0
+			and gm.abstimmung_ergebnis(1, 1, 2, false) == -1
+			and gm.abstimmung_ergebnis(1, 0, 3, true) == -1
+			and gm.abstimmung_ergebnis(3, 1, 4, false) == 1, "")
+		var klo_vorher: bool = gm._has_toilet
+		gm._has_toilet = true
+		gm._klo_gast = -1
+		var g_a := {"mode": 1, "bladder": 0.0, "seat": -1, "pos": Vector3.ZERO, "ostate": 0}
+		var g_b := {"mode": 1, "bladder": 0.0, "seat": -1, "pos": Vector3.ZERO, "ostate": 0}
+		gm._update_bladder(g_a, 9001, 0.1)
+		gm._update_bladder(g_b, 9002, 0.1)
+		_check("Klo: erster Gast drin, zweiter wartet", gm._klo_gast == 9001 and bool(g_b.get("klo_wartet", false)), "")
+		g_b.warte_t = 0.0
+		gm._update_bladder(g_b, 9002, 0.1)
+		_check("Klo besetzt zu lange: Gast geht ins Zelt", bool(g_b.get("wild", false)) and not bool(g_b.get("klo_wartet", false)), "")
+		gm._klo_setzen(-1)
+		gm._has_toilet = klo_vorher
+
 		print("  -- Zeltname")
 		_check("Zeltname wird bereinigt", gm.zeltname_pruefen("  Zum\nHirsch  ") == "ZumHirsch"
 			and gm.zeltname_pruefen("x".repeat(40)).length() == gm.ZELTNAME_MAX, "")
