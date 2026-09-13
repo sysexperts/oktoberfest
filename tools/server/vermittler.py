@@ -47,6 +47,9 @@ ABTEILUNGEN = ("kueche", "service", "sauberkeit", "lager")
 WARTE_TIMEOUT = 20
 ## Solange darf ein frisch gestartetes Spiel brauchen, bis sein Port offen ist
 START_ZEIT = 90
+## So lange darf ein Spieler nach „Los" fehlen (Verbinden, Laden), bevor das
+## Spiel ihn als gegangen meldet und sein Platz frei wird
+IM_SPIEL_GNADE = 45
 ## Räume ohne Aktivität so lange aufheben (Spielstand liegt beim Spiel)
 RAUM_ALTER = 14 * 24 * 3600
 WOERTER = ["BREZN", "MASS", "HENDL", "DIRNDL", "WIESN", "KRUG", "HAXN", "RADI",
@@ -302,8 +305,10 @@ def a_los(d):
             return {"ok": False, "fehler": fehler}
         for x in raum["spieler"].values():
             x["im_spiel"] = True
+            x["im_spiel_seit"] = jetzt()
     else:
         sp["im_spiel"] = True
+        sp["im_spiel_seit"] = jetzt()
     raum["aktiv"] = jetzt()
     speichern()
     return {"ok": True, "raum": ansicht(raum, sid)}
@@ -318,8 +323,34 @@ def a_verlassen(d):
     return {"ok": True}
 
 
+def a_spielstand(d):
+    """Das laufende Spiel meldet, wer drin ist (Warteraum-IDs). Wer das Spiel
+    verlassen hat, gibt Platz und Abteilung frei — sonst kämen Freunde nach
+    einem Absturz nicht mehr rein („voll", „Abteilung belegt")."""
+    raum = raeume.get(schluessel(d.get("code", "")))
+    if raum is None:
+        return {"ok": False, "fehler": "LOBBY_ERR_CODE"}
+    ids = {str(i) for i in d.get("ids", [])}
+    t = jetzt()
+    for sid in list(raum["spieler"].keys()):
+        sp = raum["spieler"][sid]
+        if not sp.get("im_spiel"):
+            continue
+        if sid in ids:
+            sp["gesehen"] = t
+        elif t - max(sp.get("im_spiel_seit", 0), sp.get("gesehen", 0)) > IM_SPIEL_GNADE:
+            del raum["spieler"][sid]
+    if raum["host"] not in raum["spieler"] and raum["spieler"]:
+        raum["host"] = next(iter(raum["spieler"]))
+    speichern()
+    return {"ok": True}
+
+
 AKTIONEN = {"/erstellen": a_erstellen, "/beitreten": a_beitreten, "/raum": a_raum,
-            "/setzen": a_setzen, "/los": a_los, "/verlassen": a_verlassen}
+            "/setzen": a_setzen, "/los": a_los, "/verlassen": a_verlassen,
+            "/spielstand": a_spielstand}
+## Nur das Spiel auf diesem Server darf melden, nicht Anfragen über nginx
+NUR_INTERN = {"/spielstand"}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -342,7 +373,10 @@ class Handler(BaseHTTPRequestHandler):
             self._antwort(404, {"ok": False})
 
     def do_POST(self):
-        aktion = AKTIONEN.get(self.path.rstrip("/"))
+        pfad = self.path.rstrip("/")
+        aktion = AKTIONEN.get(pfad)
+        if pfad in NUR_INTERN and self.headers.get("X-Extern"):
+            aktion = None
         if aktion is None:
             self._antwort(404, {"ok": False, "fehler": "LOBBY_ERR_SERVER"})
             return

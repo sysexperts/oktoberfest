@@ -775,6 +775,31 @@ func _leer_pruefen(delta: float) -> void:
 		_save_game()
 		get_tree().quit()
 
+## Code-Spiele melden dem Vermittler alle paar Sekunden, wer drin ist. Wer weg ist,
+## gibt dort Platz und Abteilung frei (tools/server/vermittler.py a_spielstand).
+const VERMITTLER_MELDUNG_URL := "http://127.0.0.1:8700/spielstand"
+const VERMITTLER_MELDEN_ALLE := 10.0
+var _vermittler_t := 0.0
+## Warteraum-ID je Spieler — nur auf dem Server, nicht an Clients verteilen
+var _lobby_ids := {}
+
+func _vermittler_melden(delta: float) -> void:
+	if Net.spiel_code == "":
+		return
+	_vermittler_t -= delta
+	if _vermittler_t > 0.0:
+		return
+	_vermittler_t = VERMITTLER_MELDEN_ALLE
+	var http := get_node_or_null("VermittlerMeldung") as HTTPRequest
+	if http == null or http.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		return
+	var ids: Array[String] = []
+	for peer in _lobby_ids.keys():
+		if _players_nodes.has(peer):
+			ids.append(str(_lobby_ids[peer]))
+	http.request(VERMITTLER_MELDUNG_URL, PackedStringArray(["Content-Type: application/json"]),
+		HTTPClient.METHOD_POST, JSON.stringify({"code": Net.spiel_code, "ids": ids}))
+
 func _pruefe_eigenen_spieler() -> void:
 	if not multiplayer.is_server() and not _players_nodes.has(multiplayer.get_unique_id()):
 		Net.trennen_mit_meldung("NET_NO_ANSWER")
@@ -856,6 +881,7 @@ func _on_peer_left(peer_id: int) -> void:
 	if _spawn_index_by_peer.has(peer_id):
 		_melde("NET_PLAYER_LEFT")
 	_spawn_index_by_peer.erase(peer_id)
+	_lobby_ids.erase(peer_id)
 	if _held_deko.has(peer_id):
 		_deko_abstellen(peer_id)
 	_remove_player.rpc(peer_id)
@@ -2157,12 +2183,14 @@ func _darf_personal(role: int) -> bool:
 
 ## Lobby-Wahl eines Spielers speichern und allen schicken.
 @rpc("any_peer", "reliable", "call_local")
-func net_lobby_setzen(spielername: String, farbe: int, abt: String, figur: int = -1) -> void:
+func net_lobby_setzen(spielername: String, farbe: int, abt: String, figur: int = -1, lobby_id: String = "") -> void:
 	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
 		s = 1
+	if lobby_id != "":
+		_lobby_ids[s] = lobby_id.substr(0, 32)
 	var n := zeltname_pruefen(spielername)
 	if n.length() > SPIELERNAME_MAX:
 		n = n.substr(0, SPIELERNAME_MAX).strip_edges()
@@ -2532,6 +2560,7 @@ func CustomerReward() -> int:
 func _process(delta: float) -> void:
 	if not multiplayer.is_server():
 		return
+	_vermittler_melden(delta)
 	if Net.dedicated and _players_nodes.is_empty():
 		_leer_pruefen(delta)
 		return

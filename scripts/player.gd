@@ -110,7 +110,7 @@ func _ready() -> void:
 			if not KoopDaten.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
 				# Aus dem Warteraum (Einladungscode): Name, Figur, Abteilung stehen schon fest
 				var w := KoopDaten.lobby_wahl
-				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, str(w.get("abt", "")), int(w.get("figur", 0)))
+				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, str(w.get("abt", "")), int(w.get("figur", 0)), str(w.get("id", "")))
 			elif _world.has_method("open_lobby_ui"):
 				# Direkt beigetreten (IP, offizieller Server): Lobby-Fenster im Spiel
 				_world.call_deferred("open_lobby_ui")

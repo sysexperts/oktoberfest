@@ -263,7 +263,7 @@ func _ins_spiel() -> void:
 		return
 	_verbinde = true
 	%Takt.stop()
-	KoopDaten.lobby_wahl = {"name": _name_gesendet, "figur": _figur, "abt": _abt}
+	KoopDaten.lobby_wahl = {"name": _name_gesendet, "figur": _figur, "abt": _abt, "id": _id}
 	Net.player_name = _name_gesendet
 	_anzeigen()
 	if Net.join_game(SERVER_IP, int(_raum.get("port", 0))) != OK:
