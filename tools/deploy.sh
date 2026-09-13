@@ -192,10 +192,19 @@ for i in $(seq 1 60); do
 done
 systemctl is-active oktoberfest
 journalctl -u oktoberfest --since "@$START" --no-pager | grep "DEDICATED" | tail -1
+# Laufende Code-Spiele haben den alten Stand im Speicher — speichern sich beim
+# Beenden nicht, darum nur beenden, wenn niemand drin ist, sonst Hinweis
+for e in $(systemctl list-units 'sloptoberfest-spiel-*' --no-legend --plain | awk '{print $1}'); do
+	echo "Hinweis: Code-Spiel $e läuft noch mit altem Stand (endet von selbst, wenn alle raus sind)"
+done
 FEHLER="$(journalctl -u oktoberfest --since "@$START" --no-pager | grep -cE 'SCRIPT ERROR|Parse Error' || true)"
 echo "Skriptfehler seit Neustart: $FEHLER"
 [ "$FEHLER" = 0 ]
 SERVER_EOF
+
+# Vermittler für Warteräume (tools/server/vermittler.py) nur bei Änderung neu starten
+scp_server tools/server/vermittler.py "$SERVER:/tmp/vermittler.neu.py"
+ssh_server 'cmp -s /tmp/vermittler.neu.py /opt/sloptoberfest-vermittler/vermittler.py || { install -m 755 /tmp/vermittler.neu.py /opt/sloptoberfest-vermittler/vermittler.py && systemctl restart sloptoberfest-vermittler && echo "Vermittler aktualisiert"; }; systemctl is-active sloptoberfest-vermittler'
 
 # ------------------------------------------------------------------ 8 Nachprüfen
 schritt "8/8 Über HTTPS nachprüfen"

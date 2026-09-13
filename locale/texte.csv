@@ -32,7 +32,7 @@ STATUS_CONNECT_FAILED,Verbindung fehlgeschlagen. Ist der Server erreichbar?,Conn
 STATUS_HOST_FAILED,Spiel konnte nicht gestartet werden (Fehler %d).,Could not start the game (error %d).,Oyun başlatılamadı (hata %d).
 COOP_STEAM_FRIENDS,🎮 Mit Steam-Freunden spielen,🎮 Play with Steam friends,🎮 Steam arkadaşlarıyla oyna
 COOP_STEAM_HINT,Erstellt ein Spiel nur für Freunde. Einladen im Spiel: ESC → Freunde einladen.,Creates a friends-only game. To invite: ESC → Invite friends.,Sadece arkadaşlara açık bir oyun kurar. Davet için oyunda: ESC → Arkadaş davet et.
-COOP_STEAM_OFFLINE,Steam läuft nicht — starte das Spiel über Steam, um Freunde einzuladen.,Steam is not running — start the game through Steam to invite friends.,Steam çalışmıyor — arkadaş davet etmek için oyunu Steam üzerinden başlat.
+COOP_STEAM_OFFLINE,"Steam läuft nicht — starte das Spiel über Steam, um Freunde einzuladen.",Steam is not running — start the game through Steam to invite friends.,Steam çalışmıyor — arkadaş davet etmek için oyunu Steam üzerinden başlat.
 COOP_STEAM_ONLY,Freunde über Steam einladen gibt es in der Steam-Version.,Inviting friends via Steam is available in the Steam version.,Steam üzerinden arkadaş davet etme Steam sürümünde mevcut.
 PAUSE_INVITE,Freunde einladen (Steam),Invite friends (Steam),Arkadaş davet et (Steam)
 STATUS_STEAM_LOBBY,Erstelle Steam-Lobby …,Creating Steam lobby …,Steam lobisi kuruluyor …
@@ -207,7 +207,7 @@ LOBBY_TITLE,Willkommen im Festzelt!,Welcome to the beer tent!,Bira çadırına h
 LOBBY_SUB,"Ihr führt das Zelt gemeinsam. Jeder leitet eine Abteilung, stellt dort Personal ein und packt mit an — helfen darf man überall!","You run the tent together. Everyone leads a department, hires staff for it and lends a hand — helping out anywhere is allowed!","Çadırı birlikte işletiyorsunuz. Herkes bir bölüm yönetir, oraya personel alır ve yardım eder — her yerde yardım etmek serbest!"
 LOBBY_NAME,Dein Name,Your name,Adın
 LOBBY_NAME_PLACEHOLDER,z. B. Wiesn-Sepp,e.g. Beer Baron,örn. Bira Baronu
-LOBBY_COLOR,Schalfarbe,Scarf colour,Atkı rengi
+LOBBY_COLOR,Namensfarbe,Name colour,İsim rengi
 LOBBY_DEPT,Deine Abteilung,Your department,Bölümün
 LOBBY_FREE,noch frei,still free,henüz boş
 LOBBY_LEADS,Leitung: %s,Led by: %s,Yönetici: %s
@@ -505,3 +505,46 @@ WORLD_STORAGE,"📦 LAGER %d\nHier: 🍺 %d · 🥨 %d\nGesamt: 🍺 %d · 🥨 
 ACTION_SCREENSHOT,Bildschirmfoto,Screenshot,Ekran görüntüsü
 ACTION_PING,Markieren (für Mitspieler),Ping (for teammates),İşaretle (takım arkadaşları için)
 MSG_SCREENSHOT,📸 Bildschirmfoto gespeichert: %s,📸 Screenshot saved: %s,📸 Ekran görüntüsü kaydedildi: %s
+KOOP_TITLE,Mit Freunden spielen,Play with friends,Arkadaşlarla oyna
+KOOP_SUB,Einer erstellt das Spiel und schickt den Code herum — alle anderen treten mit dem Code bei.,One of you creates the game and shares the code — everyone else joins with it.,Biri oyunu kurar ve kodu paylaşır — diğer herkes bu kodla katılır.
+KOOP_CREATE,🍺 Neues Spiel erstellen,🍺 Create a new game,🍺 Yeni oyun kur
+KOOP_OR,— oder —,— or —,— ya da —
+KOOP_CODE_PLACEHOLDER,"Code, z. B. BREZN-42","Code, e.g. BREZN-42","Kod, örn. BREZN-42"
+KOOP_JOIN,Mit Code beitreten,Join with code,Kodla katıl
+KOOP_MORE,Offizieller Server / IP,Official server / IP,Resmi sunucu / IP
+KOOP_NEED_NAME,Gib zuerst deinen Namen ein.,Enter your name first.,Önce adını gir.
+KOOP_NEED_CODE,Gib den Einladungscode ein.,Enter the invite code.,Davet kodunu gir.
+KOOP_WORKING,Einen Moment …,One moment …,Bir saniye …
+KOOP_INVITE,Einladungscode,Invite code,Davet kodu
+KOOP_INVITE_HINT,Schick diesen Code deinen Freunden.,Send this code to your friends.,Bu kodu arkadaşlarına gönder.
+KOOP_COPY,📋 Code kopieren,📋 Copy code,📋 Kodu kopyala
+KOOP_COPIED,✓ Kopiert!,✓ Copied!,✓ Kopyalandı!
+KOOP_PLAYERS,Mitspieler %d/%d,Players %d/%d,Oyuncular %d/%d
+KOOP_EMPTY_SLOT,Platz frei …,Free seat …,Boş yer …
+KOOP_HOST_TAG,👑 Gastgeber,👑 Host,👑 Ev sahibi
+KOOP_YOU,(du),(you),(sen)
+KOOP_NO_DEPT,keine Teamleitung,no team lead,ekip liderliği yok
+KOOP_IN_GAME,🍻 schon im Spiel,🍻 already in the game,🍻 zaten oyunda
+KOOP_FIGURE,Deine Figur,Your character,Karakterin
+KOOP_DEPT,Teamleiter für …,Team lead for …,Ekip lideri …
+KOOP_RULES,"Jeder kann alles machen: zapfen, kochen, putzen, Ware schleppen. Aber nur der Teamleiter einer Abteilung darf dort Personal einstellen — und ist dort etwas flotter. Hat eine Abteilung keinen Teamleiter, darf jeder einstellen.","Everyone can do everything: pour, cook, clean, haul supplies. But only a department's team lead may hire staff there — and is a bit faster at it. If a department has no team lead, anyone may hire.","Herkes her şeyi yapabilir: bira doldurmak, pişirmek, temizlemek, malzeme taşımak. Ama bir bölüme sadece ekip lideri personel alabilir — ve orada biraz daha hızlıdır. Bölümün lideri yoksa herkes personel alabilir."
+KOOP_LEADER,👑 %s leitet,👑 led by %s,👑 lider: %s
+KOOP_START,Los geht's! 🍻,Let's go! 🍻,Hadi başlayalım! 🍻
+KOOP_ENTER,Ins Spiel! 🍻,Join the game! 🍻,Oyuna gir! 🍻
+KOOP_WAIT_HOST,"Warte, bis %s das Spiel startet …",Waiting for %s to start the game …,%s oyunu başlatana kadar bekleniyor …
+KOOP_STARTING,Das Zelt wird aufgebaut … (bis zu 30 Sekunden),Setting up the tent … (up to 30 seconds),Çadır kuruluyor … (30 saniyeye kadar)
+KOOP_CONNECTING,Verbinde mit dem Spiel …,Connecting to the game …,Oyuna bağlanılıyor …
+KOOP_LEAVE,← Verlassen,← Leave,← Ayrıl
+KOOP_BACK,← Zurück,← Back,← Geri
+KOOP_FIG_0,Bohnen-Bartl,Bean Bartl,Fasulye Bartl
+KOOP_FIG_1,Wiesn-Wastl,Wiesn Wastl,Wiesn Wastl
+KOOP_FIG_2,Dirndl-Resi,Dirndl Resi,Dirndl Resi
+LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
+LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
+LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).
+LOBBY_ERR_DEPT_TAKEN,Diese Abteilung leitet schon jemand.,Someone already leads this department.,Bu bölümü zaten biri yönetiyor.
+LOBBY_ERR_SERVER_FULL,Der Server ist gerade voll — probiert es in ein paar Minuten nochmal.,The server is full right now — try again in a few minutes.,Sunucu şu an dolu — birkaç dakika sonra tekrar deneyin.
+LOBBY_ERR_NOT_HOST,Nur der Gastgeber kann das Spiel starten.,Only the host can start the game.,Oyunu sadece ev sahibi başlatabilir.
+LOBBY_ERR_START,Das Spiel konnte nicht starten. Nochmal versuchen?,The game could not start. Try again?,Oyun başlatılamadı. Tekrar denensin mi?
+LOBBY_ERR_GONE,Du warst zu lange weg und wurdest aus dem Warteraum genommen.,You were away too long and left the waiting room.,Çok uzun süre yoktun ve bekleme odasından çıkarıldın.
+LOBBY_ERR_SERVER,Der Lobby-Server antwortet nicht. Ist das Internet an?,The lobby server is not answering. Are you online?,Lobi sunucusu yanıt vermiyor. İnternet açık mı?

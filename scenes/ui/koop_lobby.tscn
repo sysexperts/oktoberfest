@@ -1,0 +1,656 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/koop_lobby.gd" id="1_lobby"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menue_hintergrund.tscn" id="2_hg"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
+[ext_resource type="PackedScene" path="res://scenes/ui/figur_vorschau.tscn" id="4_vorschau"]
+
+[sub_resource type="StyleBoxFlat" id="ZeileStil"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.08, 0.16, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="KoopLobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lobby")
+
+[node name="Kirmesplatz" parent="." instance=ExtResource("2_hg")]
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.03, 0.02, 0.06, 0.55)
+
+[node name="Takt" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="Abfrage" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+timeout = 6.0
+
+[node name="Aktion" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+timeout = 10.0
+
+[node name="Start" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Start"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+
+[node name="Rand" type="MarginContainer" parent="Start/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 26
+
+[node name="Spalte" type="VBoxContainer" parent="Start/Panel/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titel" type="Label" parent="Start/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.02, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 56
+text = "KOOP_TITLE"
+horizontal_alignment = 1
+
+[node name="Untertitel" type="Label" parent="Start/Panel/Rand/Spalte"]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.86, 0.94, 1)
+theme_override_font_sizes/font_size = 19
+text = "KOOP_SUB"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NameTitel" type="Label" parent="Start/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "LOBBY_NAME"
+
+[node name="StartName" type="LineEdit" parent="Start/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+placeholder_text = "LOBBY_NAME_PLACEHOLDER"
+max_length = 16
+
+[node name="Erstellen" type="Button" parent="Start/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "KOOP_CREATE"
+
+[node name="Oder" type="Label" parent="Start/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.68, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "KOOP_OR"
+horizontal_alignment = 1
+
+[node name="CodeZeile" type="HBoxContainer" parent="Start/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CodeEingabe" type="LineEdit" parent="Start/Panel/Rand/Spalte/CodeZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+placeholder_text = "KOOP_CODE_PLACEHOLDER"
+alignment = 1
+max_length = 12
+
+[node name="Beitreten" type="Button" parent="Start/Panel/Rand/Spalte/CodeZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "KOOP_JOIN"
+
+[node name="StartStatus" type="Label" parent="Start/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 28)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="UntenZeile" type="HBoxContainer" parent="Start/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Zurueck" type="Button" parent="Start/Panel/Rand/Spalte/UntenZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "KOOP_BACK"
+
+[node name="Mehr" type="Button" parent="Start/Panel/Rand/Spalte/UntenZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "KOOP_MORE"
+
+[node name="Warteraum" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 4
+
+[node name="Spalten" type="HBoxContainer" parent="Warteraum"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Links" type="PanelContainer" parent="Warteraum/Spalten"]
+custom_minimum_size = Vector2(390, 0)
+layout_mode = 2
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 4
+
+[node name="Spalte" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CodeTitel" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 30
+text = "KOOP_INVITE"
+horizontal_alignment = 1
+
+[node name="Code" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.95, 0.75, 1)
+theme_override_colors/font_outline_color = Color(0.35, 0.18, 0.02, 1)
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 50
+text = "BREZN-42"
+horizontal_alignment = 1
+
+[node name="CodeHinweis" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.83, 0.92, 1)
+theme_override_font_sizes/font_size = 17
+text = "KOOP_INVITE_HINT"
+horizontal_alignment = 1
+
+[node name="Kopieren" type="Button" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "KOOP_COPY"
+
+[node name="Trenner" type="HSeparator" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+layout_mode = 2
+
+[node name="SpielerTitel" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 28
+text = "KOOP_PLAYERS"
+
+[node name="Liste" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Zeile0" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "🪑"
+horizontal_alignment = 1
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Zeile1" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "🪑"
+horizontal_alignment = 1
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Zeile2" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "🪑"
+horizontal_alignment = 1
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Zeile3" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "🪑"
+horizontal_alignment = 1
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Verlassen" type="Button" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "KOOP_LEAVE"
+
+[node name="Rechts" type="PanelContainer" parent="Warteraum/Spalten"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Rechts"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 4
+
+[node name="Spalte" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameZeile" type="HBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="NameTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/NameZeile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 28
+text = "LOBBY_NAME"
+
+[node name="Name" type="LineEdit" parent="Warteraum/Spalten/Rechts/Rand/Spalte/NameZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 23
+placeholder_text = "LOBBY_NAME_PLACEHOLDER"
+max_length = 16
+
+[node name="FigurTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 28
+text = "KOOP_FIGURE"
+
+[node name="Figuren" type="HBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Figur0" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Vorschau" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur0/Inhalt" instance=ExtResource("4_vorschau")]
+custom_minimum_size = Vector2(110, 118)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="FigurName" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur0/Inhalt"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "KOOP_FIG_0"
+horizontal_alignment = 1
+
+[node name="Figur1" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Vorschau" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur1/Inhalt" instance=ExtResource("4_vorschau")]
+custom_minimum_size = Vector2(110, 118)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+figur = 1
+
+[node name="FigurName" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur1/Inhalt"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "KOOP_FIG_1"
+horizontal_alignment = 1
+
+[node name="Figur2" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 4.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Vorschau" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur2/Inhalt" instance=ExtResource("4_vorschau")]
+custom_minimum_size = Vector2(110, 118)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+figur = 2
+
+[node name="FigurName" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur2/Inhalt"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "KOOP_FIG_2"
+horizontal_alignment = 1
+
+[node name="AbtTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 28
+text = "KOOP_DEPT"
+
+[node name="Regeln" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.88, 0.95, 1)
+theme_override_font_sizes/font_size = 16
+text = "KOOP_RULES"
+autowrap_mode = 3
+
+[node name="Abteilungen" type="GridContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Kueche" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+
+[node name="Service" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+
+[node name="Sauberkeit" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+
+[node name="Lager" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+
+[node name="UntenZeile" type="HBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/separation = 14
+
+[node name="Status" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/UntenZeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+
+[node name="Warten" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/UntenZeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 2
+
+[node name="Los" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/UntenZeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(300, 62)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 34
+text = "KOOP_START"

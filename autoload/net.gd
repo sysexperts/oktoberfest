@@ -44,6 +44,14 @@ var solo := false
 var slot := 1
 ## Welche Szene der Ladebildschirm laden soll (wechsle_zu).
 var ziel_szene := ""
+## Vermittler für Warteräume mit Einladungscode (tools/server/vermittler.py)
+const LOBBY_URL := "https://survival.vapur-it.de/lobby/"
+## Dedizierter Server, vom Vermittler für einen Code gestartet: eigener Spielstand
+var spiel_code := ""
+## Wahl aus dem Warteraum {name, figur, abt} — nach dem Beitritt an den Server
+var lobby_wahl := {}
+## Warteraum → „Offizieller Server / IP": Hauptmenü öffnet gleich das Koop-Feld
+var menue_koop := false
 
 ## Szenenwechsel über den Ladebildschirm: lädt im Hintergrund, zeigt Fortschritt.
 ## Nur für Solo — beim Hosten und Beitreten gleich wechseln, sonst könnten
@@ -60,11 +68,20 @@ func _ready() -> void:
 		call_deferred("_start_dedicated")
 
 func _start_dedicated() -> void:
+	var args := OS.get_cmdline_user_args()
 	# --nur-lokal: nur 127.0.0.1 (Netztest auf dem Entwicklungsrechner, ohne Firewall-Abfrage)
-	var nur_lokal := OS.get_cmdline_user_args().has("--nur-lokal")
-	var err := host_game(DEFAULT_PORT, "127.0.0.1" if nur_lokal else "*")
+	var nur_lokal := args.has("--nur-lokal")
+	# Vom Vermittler gestartete Spiele: eigener Port und eigener Spielstand je Code
+	var port := DEFAULT_PORT
+	var i := args.find("--port")
+	if i >= 0 and i + 1 < args.size():
+		port = int(args[i + 1])
+	i = args.find("--spiel")
+	if i >= 0 and i + 1 < args.size():
+		spiel_code = args[i + 1].to_upper().replace("-", "")
+	var err := host_game(port, "127.0.0.1" if nur_lokal else "*")
 	if err == OK:
-		print("[DEDICATED] Server açık, port %d" % DEFAULT_PORT)
+		print("[DEDICATED] Server açık, port %d, Spiel %s" % [port, spiel_code if spiel_code != "" else "-"])
 	else:
 		push_error("[DEDICATED] Server açılamadı: %d" % err)
 		get_tree().quit(1)
@@ -210,6 +227,8 @@ func version_text() -> String:
 # ------------------------------------------------------------ Spielstände
 ## Pfad eines Platzes; 0 = aktueller Platz.
 func speicherstand_pfad(platz: int = 0) -> String:
+	if spiel_code != "":
+		return SAVE_DIR + "spiel_%s.json" % spiel_code
 	return SAVE_DIR + "slot_%d.json" % (platz if platz > 0 else slot)
 
 ## Kurzinfo zu einem Platz fürs Menü, ohne das Spiel zu laden. Leer = kein Stand.

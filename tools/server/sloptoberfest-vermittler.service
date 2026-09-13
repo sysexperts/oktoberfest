@@ -1,0 +1,13 @@
+[Unit]
+Description=Sloptoberfest Vermittler (Warteräume mit Einladungscode)
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/sloptoberfest-vermittler/vermittler.py
+Restart=always
+RestartSec=3
+User=root
+
+[Install]
+WantedBy=multi-user.target

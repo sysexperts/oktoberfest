@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 [ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
 [ext_resource type="PackedScene" uid="uid://dusg2jruc7wf4" path="res://assets/kirmes/Models/Ground/Terrain.fbx" id="10_segyt"]
-[ext_resource type="Script" path="res://scripts/welt_text.gd" id="99_welttext"]
 [ext_resource type="PackedScene" uid="uid://chrmnwixompew" path="res://assets/kirmes/Models/Props/Bench.fbx" id="11_i3lhy"]
 [ext_resource type="PackedScene" uid="uid://bfm6aa8cpnegy" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="12_fgnfp"]
 [ext_resource type="PackedScene" uid="uid://b6oh1keokqrjv" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="13_w4g7w"]
@@ -52,6 +51,7 @@
 [ext_resource type="PackedScene" uid="uid://q5kjud7rt268" path="res://assets/kirmes/Models/Foliage/Tree_Pear.fbx" id="49_ffvxn"]
 [ext_resource type="PackedScene" uid="uid://bxygwrtq431wm" path="res://assets/kirmes/Models/Foliage/Reeds.fbx" id="50_npmqp"]
 [ext_resource type="PackedScene" uid="uid://dsf3f5odhuxhk" path="res://assets/kirmes/Models/Foliage/Tree_Apple.fbx" id="51_haseo"]
+[ext_resource type="Script" uid="uid://dsssnidpdv2bt" path="res://scripts/welt_text.gd" id="99_welttext"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)
@@ -885,9 +885,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -50)
 
 [node name="Tree_22" parent="." unique_id=667372555 instance=ExtResource("36_87m88")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, -49)
-
-[node name="Tree_23" parent="." unique_id=1365412642 instance=ExtResource("33_tnypt")]
-transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 4.7071066, 4, -42.707108)
 
 [node name="Lamp_1" parent="." unique_id=1719667554 instance=ExtResource("16_ek6mb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, -46)

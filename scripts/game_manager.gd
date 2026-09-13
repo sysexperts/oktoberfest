@@ -760,6 +760,19 @@ func _tbl_num(n: String) -> int:
 # ================================================= oyuncular
 ## Sekunden, die ein Client nach dem Verbinden auf seinen Spieler wartet.
 const SPAWN_WARTEZEIT := 15.0
+## Vom Vermittler gestartete Spiele: so lange ohne Spieler, dann speichern und beenden.
+## Der Warteraum mit dem Code bleibt — „Los" startet das Spiel am Spielstand neu.
+const LEER_ENDE := 300.0
+var _leer_seit := 0.0
+
+func _leer_pruefen(delta: float) -> void:
+	if Net.spiel_code == "":
+		return
+	_leer_seit += delta
+	if _leer_seit >= LEER_ENDE:
+		print("[DEDICATED] Spiel %s: niemand mehr da — speichern und beenden" % Net.spiel_code)
+		_save_game()
+		get_tree().quit()
 
 func _pruefe_eigenen_spieler() -> void:
 	if not multiplayer.is_server() and not _players_nodes.has(multiplayer.get_unique_id()):
@@ -2143,7 +2156,7 @@ func _darf_personal(role: int) -> bool:
 
 ## Lobby-Wahl eines Spielers speichern und allen schicken.
 @rpc("any_peer", "reliable", "call_local")
-func net_lobby_setzen(spielername: String, farbe: int, abt: String) -> void:
+func net_lobby_setzen(spielername: String, farbe: int, abt: String, figur: int = -1) -> void:
 	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
@@ -2155,7 +2168,11 @@ func net_lobby_setzen(spielername: String, farbe: int, abt: String) -> void:
 	if not abt in ABTEILUNGEN:
 		abt = ""
 	var vorher := _abteilung_von(s)
-	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5), "abteilung": abt}
+	# Figur aus dem Warteraum; -1 = bisherige behalten (Lobby-Fenster im Spiel)
+	if figur < 0:
+		figur = int((_spieler_info.get(s, {}) as Dictionary).get("figur", 0))
+	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5), "abteilung": abt,
+		"figur": clampi(figur, 0, Figuren.ALLE.size() - 1)}
 	_net_spieler_info.rpc(_spieler_info)
 	if abt != "" and abt != vorher:
 		_melde("MSG_ABT_GEWAEHLT", [_spieler_bezeichnung(s), "ABT_" + abt.to_upper()], 2)
@@ -2167,7 +2184,7 @@ func _net_spieler_info(info: Dictionary) -> void:
 		var p = _players_nodes.get(int(peer))
 		if p and p.has_method("set_info"):
 			var d: Dictionary = info[peer]
-			p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), str(d.get("abteilung", "")))
+			p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), str(d.get("abteilung", "")), int(d.get("figur", 0)))
 	if _hud and _hud.has_method("lobby_aktualisieren"):
 		_hud.lobby_aktualisieren(info)
 
@@ -2515,7 +2532,9 @@ func _process(delta: float) -> void:
 	if not multiplayer.is_server():
 		return
 	if Net.dedicated and _players_nodes.is_empty():
+		_leer_pruefen(delta)
 		return
+	_leer_seit = 0.0
 	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
 	if not _abstimmung.is_empty():
 		var vorher := ceili(float(_abstimmung.rest))

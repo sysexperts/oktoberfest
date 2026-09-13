@@ -49,7 +49,7 @@ var _world: Node
 var _current_target: Node3D = null
 var _highlight_ring: MeshInstance3D
 var _pitch := 0.0
-var _anim: AnimationPlayer
+const Figuren := preload("res://scripts/figuren.gd")
 var _cur_anim := ""
 var _last_anim_pos: Vector3
 var _net_pos: Vector3
@@ -89,16 +89,7 @@ func _ready() -> void:
 	if not _is_local:
 		_hold_point.position = Vector3(0.3, 1.15, -0.45) # uzakta bardak elde görünür
 
-	# Animasyon (GLB'de Idle/Walk/Run)
-	var aps := _model.find_children("*", "AnimationPlayer", true, false)
-	if aps.size() > 0:
-		_anim = aps[0]
-		for n in ["Idle", "Walk", "Run", "Dance"]:
-			if _anim.has_animation(n):
-				_anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
-		if _anim.has_animation("Idle"):
-			_anim.play("Idle")
-			_cur_anim = "Idle"
+	# Animationen über die Figur (scripts/figur.gd) — jede Figur benennt sie anders
 	_last_anim_pos = global_position
 
 	# Oyuncuyu kimliğe göre renklendir (kim kim belli olsun)
@@ -114,15 +105,21 @@ func _ready() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		_make_highlight_ring()
 		_sfx_node = _world.get_node_or_null("Sfx")
-		# Mehrspieler: Lobby (Name, Farbe, Abteilung, Anleitung) beim Einstieg
-		if not Net.solo and _world.has_method("open_lobby_ui"):
-			_world.call_deferred("open_lobby_ui")
+		if not Net.solo:
+			if not Net.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
+				# Aus dem Warteraum (Einladungscode): Name, Figur, Abteilung stehen schon fest
+				var w := Net.lobby_wahl
+				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, str(w.get("abt", "")), int(w.get("figur", 0)))
+			elif _world.has_method("open_lobby_ui"):
+				# Direkt beigetreten (IP, offizieller Server): Lobby-Fenster im Spiel
+				_world.call_deferred("open_lobby_ui")
 
-## Name, Schalfarbe und Abteilung aus der Lobby (vom Server an alle).
-func set_info(spielername: String, farbe: int, abt: String) -> void:
+## Name, Farbe, Abteilung und Figur aus der Lobby (vom Server an alle).
+func set_info(spielername: String, farbe: int, abt: String, figur: int = 0) -> void:
 	abteilung = abt
 	costume = clampi(farbe, 0, COSTUME_COLORS.size() - 1)
 	_apply_costume()
+	_figur_setzen(figur)
 	if _is_local:
 		return
 	var symbol: String = ABT_SYMBOL.get(abt, "")
@@ -246,14 +243,25 @@ func _physics_process(delta: float) -> void:
 	_update_carry_visual()
 	_update_animation(delta)
 
+## Figur aus dem Warteraum einsetzen (scripts/figuren.gd), Animationen neu starten.
+func _figur_setzen(nr: int) -> void:
+	var szene: PackedScene = Figuren.ALLE[posmod(nr, Figuren.ALLE.size())]
+	var neu := Figuren.einsetzen(self, szene)
+	if neu == _model:
+		return
+	_model = neu
+	_model.visible = not _is_local
+	_cur_anim = ""
+
 func _update_animation(delta: float) -> void:
-	if _anim == null:
+	var figur := _model as Figur
+	if figur == null or figur.anim == null:
 		return
 	_emote_label.visible = emote == 1
 	if emote == 1:
-		if _cur_anim != "Dance" and _anim.has_animation("Dance"):
-			_anim.play("Dance")
-			_cur_anim = "Dance"
+		if _cur_anim != "tanzen":
+			figur.tanzen()
+			_cur_anim = "tanzen"
 		return
 	var spd: float
 	if _is_local:
@@ -261,14 +269,22 @@ func _update_animation(delta: float) -> void:
 	else:
 		spd = (global_position - _last_anim_pos).length() / maxf(delta, 0.0001)
 	_last_anim_pos = global_position
-	var want := "Idle"
+	var want := "stehen"
 	if spd > 5.5:
-		want = "Run"
+		want = "rennen"
 	elif spd > 0.4:
-		want = "Walk"
-	if want != _cur_anim and _anim.has_animation(want):
-		_anim.play(want)
+		want = "gehen"
+	if want != _cur_anim:
+		match want:
+			"rennen":
+				figur.rennen()
+			"gehen":
+				figur.gehen()
+			_:
+				figur.stehen()
 		_cur_anim = want
+	if want == "stehen":
+		figur.pose_auffrischen()
 
 @rpc("authority", "unreliable_ordered")
 func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int, em: int, cost: int, extra: PackedByteArray) -> void:

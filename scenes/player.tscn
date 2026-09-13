@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b217cd24cmc4h"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1"]
-[ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
 [ext_resource type="PackedScene" path="res://scenes/essen_teller.tscn" id="4_teller"]
 

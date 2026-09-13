@@ -5,6 +5,7 @@ extends Control
 
 const EINSTELLUNGEN_SZENE := "res://scenes/ui/einstellungen.tscn"
 const SERVER_IP := "185.248.140.225"
+const KOOP_LOBBY_SZENE := "res://scenes/ui/koop_lobby.tscn"
 const Texte := preload("res://scripts/ui/texte.gd")
 
 @onready var _haupt: Control = %Hauptspalte
@@ -32,7 +33,8 @@ func _ready() -> void:
 	_weiter.pressed.connect(func() -> void: Net.start_solo(false, Net.letzter_slot()))
 	_laden.pressed.connect(_zeige_spielstaende.bind(false))
 	_neu.pressed.connect(_zeige_spielstaende.bind(true))
-	%Koop.pressed.connect(_zeige.bind(_koop_panel))
+	# Koop: Warteraum mit Einladungscode; offizieller Server / IP im alten Koop-Feld
+	%Koop.pressed.connect(func() -> void: get_tree().change_scene_to_file(KOOP_LOBBY_SZENE))
 	_einst.pressed.connect(_on_einstellungen)
 	%Credits.pressed.connect(_zeige.bind(_credits_panel))
 	%Beenden.pressed.connect(func() -> void: get_tree().quit())
@@ -69,6 +71,10 @@ func _ready() -> void:
 		_zeige(_koop_panel)
 		_status.text = tr("STATUS_STEAM_JOINING")
 		SteamDienst.lobby_beitreten(lobby)
+	# Aus dem Warteraum: „Offizieller Server / IP"
+	if Net.menue_koop:
+		Net.menue_koop = false
+		_zeige(_koop_panel)
 	# Warum das letzte Spiel endete (Host weg, andere Version …)
 	if Net.meldung != "":
 		_zeige_meldung()
