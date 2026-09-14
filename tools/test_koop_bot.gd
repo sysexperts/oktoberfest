@@ -232,6 +232,15 @@ class Lauf extends Node:
 		_pruefe("Mehrheit Ja: Schicht beginnt", ok, "Phase %d" % gm._phase)
 		var t_schicht := Time.get_ticks_msec()
 
+		# 7b Zelt ist nach dem Aufstehen noch zu — der Chef sticht am Eingang an
+		ok = await _bis(func() -> bool: return not gm._zelt_offen, 10.0)
+		_pruefe("Zelt nach Tagesstart noch zu", ok, "")
+		if rolle == "chef":
+			await _warte(2.0)
+			gm.net_zelt_eroeffnen.rpc_id(1)
+		ok = await _bis(func() -> bool: return gm._zelt_offen, 15.0)
+		_pruefe("Zelt eröffnet (bei allen)", ok, "")
+
 		# 8 Putz fliegt raus und kommt mit dem Code zurück
 		if rolle == "putz":
 			await _warte_bis_ms(t_schicht + 20000)

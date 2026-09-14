@@ -382,6 +382,39 @@ class Lauf extends Node:
 		gm._ausgabe.clear()
 		gm._ausgabe_senden()
 
+		print("  -- Ablegen, Aufheben, Zelt eröffnen (Test 13.09.)")
+		nehmer.carry_state = 1
+		nehmer.carry_type = 2
+		nehmer.carry_fill = 0.5
+		_check("ins Leere mit Krug: trinken oder abstellen", nehmer._hint_for(null) == "HINT_HAND_KRUG", nehmer._hint_for(null))
+		nehmer._ablegen()
+		await _frames(3)
+		_check("Krug abgelegt statt gelöscht", nehmer.carry_state == 0 and gm._abgelegt.size() == 1
+			and gm._abgelegt_nodes.size() == 1, "%d abgelegt" % gm._abgelegt.size())
+		if not gm._abgelegt.is_empty():
+			var ablage: int = gm._abgelegt.keys()[0]
+			_check("Hinweis am abgelegten Krug", nehmer._hint_for(gm._abgelegt_nodes[ablage]) == "HINT_AUFHEBEN", "")
+			gm.net_aufheben(ablage)
+			await _frames(3)
+			_check("Krug mit Sorte und Füllstand wieder aufgehoben", nehmer.carry_state == 1 and nehmer.carry_type == 2
+				and is_equal_approx(nehmer.carry_fill, 0.5) and gm._abgelegt.is_empty(), "carry=%d" % nehmer.carry_state)
+		nehmer.carry_state = 0
+		nehmer.carry_fill = 0.0
+		nehmer.carry_type = 0
+		_check("Tasten Springen und Trinken vorhanden", InputMap.has_action("springen") and InputMap.has_action("trinken"), "")
+		gm._start_shift()
+		var eroeffnung: Node3D = get_tree().get_first_node_in_group("zelt_eroeffnung")
+		_check("nach Tagesstart ist das Zelt zu, Fass zum Anstechen da", not gm._zelt_offen and eroeffnung != null
+			and eroeffnung.visible and eroeffnung.is_in_group("interactable"), "")
+		gm.net_zelt_eroeffnen()
+		await _frames(2)
+		_check("Zelt eröffnet, Fass verschwindet", gm._zelt_offen and eroeffnung != null and not eroeffnung.visible, "")
+		gm._zelt_offen = false
+		gm._phase_time = gm.SHIFT_TIME * (1.0 - (10.5 - gm.DAY_START_HOUR) / (gm.DAY_END_HOUR - gm.DAY_START_HOUR))
+		gm._shift_process(0.01)
+		_check("um 10 Uhr öffnet das Zelt von selbst", gm._zelt_offen, "%.2f Uhr" % gm._clock_hour())
+		gm._phase_time = gm.SHIFT_TIME
+
 		print("  -- Tanzen auf dem Tisch")
 		gm._phase = gm.Phase.SHIFT
 		gm._phase_time = gm.SHIFT_TIME * 0.25   # etwa 18:15

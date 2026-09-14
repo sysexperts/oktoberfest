@@ -21,6 +21,8 @@ const STANDARD_TASTEN := {
 	"help": KEY_F1,
 	"screenshot": KEY_F12,
 	"ping": KEY_R,
+	"springen": KEY_SPACE,
+	"trinken": KEY_G,
 }
 
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.

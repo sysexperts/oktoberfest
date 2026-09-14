@@ -17,6 +17,8 @@ const FILL_RATE := 0.6
 const MAX_KRUEGE := 3
 ## Jeder zusätzliche Krug macht so viel langsamer
 const TRAG_BREMSE := 0.12
+## Absprunggeschwindigkeit (Schwerkraft 20 → gut 0,9 m hoch)
+const SPRUNG_TEMPO := 6.0
 ## Teamleiter-Boni in der eigenen Abteilung (Putzen: GameManager.BONUS_PUTZEN)
 const BONUS_ZAPFEN := 1.4
 const BONUS_KOCHEN := 1.6
@@ -88,7 +90,16 @@ func _ready() -> void:
 	costume = int(abs(auth)) % COSTUME_COLORS.size()  # kimliğe göre başlangıç rengi
 	_apply_costume()
 	if not _is_local:
-		_hold_point.position = Vector3(0.3, 1.15, -0.45) # uzakta bardak elde görünür
+		# Bei Mitspielern in Handhöhe (relativ zum Kopf) — vorher schwebte der Krug
+		# über dem Kopf (Test 13.09.)
+		_hold_point.position = Vector3(0.3, -0.32, -0.45)
+	# Neue Tasten auch mit älterer .exe: deren Einstellungen-Autoload kennt sie nicht
+	for aktion: String in {"springen": KEY_SPACE, "trinken": KEY_G}:
+		if not InputMap.has_action(aktion):
+			InputMap.add_action(aktion)
+			var ev := InputEventKey.new()
+			ev.physical_keycode = {"springen": KEY_SPACE, "trinken": KEY_G}[aktion]
+			InputMap.action_add_event(aktion, ev)
 
 	# Animationen über die Figur (scripts/figur.gd) — jede Figur benennt sie anders
 	_last_anim_pos = global_position
@@ -237,6 +248,7 @@ func _physics_process(delta: float) -> void:
 		_update_hint()
 		if not _tippt():
 			_handle_interaction(delta)
+		_trinken(delta)
 		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
@@ -260,6 +272,9 @@ func _update_animation(delta: float) -> void:
 	var figur := _model as Figur
 	if figur == null or figur.anim == null:
 		return
+	# Sprung: in der Luft nach vorn lehnen, bei der Landung zurück
+	var in_luft := global_position.y > 0.35
+	_model.rotation.x = lerpf(_model.rotation.x, -0.35 if in_luft else 0.0, clampf(delta * 10.0, 0.0, 1.0))
 	_emote_label.visible = emote == 1
 	if emote == 1:
 		if _cur_anim != "tanzen":
@@ -326,6 +341,13 @@ func _handle_movement(delta: float) -> void:
 	var dir := (transform.basis.x * input_dir.x) + (transform.basis.z * input_dir.y)
 	dir.y = 0
 	dir = dir.normalized() if dir.length() > 0.01 else Vector3.ZERO
+	# Rausch: die Laufrichtung zieht zur Seite
+	if promille > 0.05 and dir != Vector3.ZERO:
+		dir = dir.rotated(Vector3.UP, sin(_rausch_t * 0.8) * 0.22 * promille)
+	# Springen (Leertaste) — nur vom Boden aus
+	if not _tippt() and InputMap.has_action("springen") and Input.is_action_just_pressed("springen") and is_on_floor():
+		velocity.y = SPRUNG_TEMPO
+		_sfx("pop")
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
 	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
 	if carry_state == 3:
@@ -407,7 +429,14 @@ func _update_hint() -> void:
 ## Was E beim Ziel *jetzt* bewirkt — muss zu _handle_interaction passen.
 func _hint_for(t: Node3D) -> String:
 	if t == null:
-		return ""
+		# Nichts im Blick, aber etwas in der Hand: trinken oder abstellen
+		if carry_state == 1 and carry_fill > 0.0 and carry_type > 0:
+			return "HINT_HAND_KRUG"
+		return "HINT_HAND_ABLEGEN" if carry_state != 0 or not extra_kruege.is_empty() else ""
+	if t.has_method("ist_abgelegt"):
+		return "HINT_AUFHEBEN" if carry_state == 0 else ""
+	if t.has_method("ist_eroeffnung"):
+		return "HINT_ZELT_EROEFFNEN"
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
 	if t is Customer:
 		var g := t as Customer
@@ -472,15 +501,21 @@ func _update_highlight() -> void:
 
 func _handle_interaction(delta: float) -> void:
 	if _current_target == null:
+		# Nichts im Blick: Gegenstand vor sich ablegen (früher war er einfach weg)
 		if Input.is_action_just_pressed("interact") and (carry_state != 0 or not extra_kruege.is_empty()):
-			carry_state = 0
-			carry_fill = 0.0
-			carry_type = 0
-			carry_pkg_kind = 0
-			carry_pkg_amount = 0
-			extra_kruege.clear()
+			_ablegen()
 		return
 	if Input.is_action_just_pressed("interact"):
+		if _current_target.has_method("ist_abgelegt"):
+			# Abgelegten Krug/Teller aufheben — nur mit freien Händen
+			if carry_state == 0:
+				_world.net_aufheben.rpc_id(1, _current_target.ablage_id)
+				_sfx("pop")
+			return
+		if _current_target.has_method("ist_eroeffnung"):
+			_world.net_zelt_eroeffnen.rpc_id(1)
+			_sfx("cheer")
+			return
 		if _current_target is Customer and (_has_ready() or not extra_kruege.is_empty()):
 			var g := _current_target as Customer
 			if _has_ready() and g.can_serve(_carry_kind(), carry_type):
@@ -611,6 +646,60 @@ func _krug_weglegen() -> void:
 ## die Gäste stehen davor (größeres z), Fässer und Regal dahinter.
 func hinter_der_theke(ausgabe: Node3D) -> bool:
 	return global_position.z < ausgabe.global_position.z - 0.2
+
+## Gegenstand aus der Hand vor sich ablegen (E ins Leere). Pakete werden wieder
+## Pakete, Krüge und Teller liegen sichtbar am Boden (GameManager.net_ablegen).
+func _ablegen() -> void:
+	var ort := global_position - global_transform.basis.z * 0.9
+	if carry_state == 3:
+		_world.net_paket_ablegen.rpc_id(1, carry_pkg_kind, carry_pkg_amount, ort)
+		carry_pkg_kind = 0
+		carry_pkg_amount = 0
+	elif carry_state == 1 or carry_state == 2:
+		_world.net_ablegen.rpc_id(1, carry_state, carry_type, carry_fill, ort)
+	elif not extra_kruege.is_empty():
+		_world.net_ablegen.rpc_id(1, 1, extra_kruege.pop_back(), 1.0, ort)
+		_sfx("pop")
+		return
+	carry_state = 0
+	carry_fill = 0.0
+	carry_type = 0
+	_naechster_krug_in_hand()
+	_sfx("pop")
+
+# ------------------------------------------------------------ Trinken und Rausch
+## Bier in der Hand trinken (G halten). Wer zu viel trinkt, schwankt: Kopf wiegt,
+## die Laufrichtung zieht zur Seite. Baut sich langsam wieder ab.
+const TRINK_TEMPO := 0.7        # Krugfüllung pro Sekunde
+const PROMILLE_JE_KRUG := 0.45
+const PROMILLE_ABBAU := 0.012   # pro Sekunde
+const PROMILLE_MAX := 3.0
+var promille := 0.0
+var _rausch_t := 0.0
+var _rausch_stufe := 0
+
+func _trinken(delta: float) -> void:
+	var trinkt := not _tippt() and InputMap.has_action("trinken") and Input.is_action_pressed("trinken") \
+		and carry_state == 1 and carry_fill > 0.0 and carry_type > 0
+	if trinkt:
+		var schluck := minf(carry_fill, TRINK_TEMPO * delta)
+		carry_fill -= schluck
+		promille = minf(PROMILLE_MAX, promille + schluck * PROMILLE_JE_KRUG)
+		_sfx_loop("glug")
+		if carry_fill <= 0.001:
+			carry_fill = 0.0
+			carry_type = 0   # leerer Krug bleibt in der Hand
+	else:
+		promille = maxf(0.0, promille - PROMILLE_ABBAU * delta)
+	_rausch_t += delta
+	var stufe := 2 if promille >= 1.6 else (1 if promille >= 0.7 else 0)
+	if stufe > _rausch_stufe:
+		var hud := _world.get_node_or_null("HUD")
+		if hud and hud.has_method("melde"):
+			hud.melde("MSG_RAUSCH_STARK" if stufe == 2 else "MSG_RAUSCH", [], 0)
+	_rausch_stufe = stufe
+	# Kopf wiegt mit dem Rausch
+	_head.rotation.z = sin(_rausch_t * 1.3) * 0.05 * promille
 
 ## Server hat den Krug aus der Hand auf die Ausgabe gestellt.
 func krug_abgestellt() -> void:

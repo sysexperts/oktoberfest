@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/abgelegt.gd" id="1_abgelegt"]
+[ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="2_krug"]
+[ext_resource type="PackedScene" path="res://scenes/essen_teller.tscn" id="3_teller"]
+
+[node name="Abgelegt" type="Node3D"]
+script = ExtResource("1_abgelegt")
+
+[node name="Krug" parent="." instance=ExtResource("2_krug")]
+unique_name_in_owner = true
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 0, 0, 0)
+
+[node name="Teller" parent="." instance=ExtResource("3_teller")]
+unique_name_in_owner = true
+visible = false
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.02, 0)

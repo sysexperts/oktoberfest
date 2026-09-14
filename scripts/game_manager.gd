@@ -511,6 +511,132 @@ func _pop_erhoehen(betrag: float) -> void:
 	if _popularity < grenze:
 		_popularity = minf(grenze, _popularity + betrag)
 
+# ================================================= Ablegen und Aufheben (Test 13.09.)
+## E ins Leere mit etwas in der Hand: ablegen statt löschen. Krüge und Teller liegen
+## sichtbar am Boden (scenes/abgelegt.tscn), Pakete werden wieder zu Paketen.
+const ABGELEGT_SCENE := preload("res://scenes/abgelegt.tscn")
+const ABLAGE_MAX := 40
+const ABLAGE_REICHWEITE := 3.0
+var _abgelegt := {}          # id -> {pos, art, typ, fill}
+var _abgelegt_nodes := {}
+var _abgelegt_next := 0
+
+## Ablageort nahe beim Spieler (Server prüft, damit niemand quer durchs Zelt legt).
+func _ablageort(s: int, pos: Vector3) -> Vector3:
+	var pl = _players_nodes.get(s)
+	if pl and (pl as Node3D).global_position.distance_to(pos) > ABLAGE_REICHWEITE:
+		pos = (pl as Node3D).global_position
+	return Vector3(pos.x, 0.0, pos.z)
+
+@rpc("any_peer", "reliable", "call_local")
+func net_ablegen(art: int, typ: int, fill: float, pos: Vector3) -> void:
+	if not multiplayer.is_server() or (art != 1 and art != 2):
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _abgelegt.size() >= ABLAGE_MAX:
+		var aeltester: int = _abgelegt.keys().min()
+		_abgelegt.erase(aeltester)
+		_remove_abgelegt.rpc(aeltester)
+	var id := _abgelegt_next
+	_abgelegt_next += 1
+	var ort := _ablageort(s, pos)
+	_abgelegt[id] = {"pos": ort, "art": art, "typ": clampi(typ, 0, 4), "fill": clampf(fill, 0.0, 1.0)}
+	_add_abgelegt.rpc(id, ort, art, clampi(typ, 0, 4), clampf(fill, 0.0, 1.0))
+
+@rpc("authority", "reliable", "call_local")
+func _add_abgelegt(id: int, pos: Vector3, art: int, typ: int, fill: float) -> void:
+	if _abgelegt_nodes.has(id):
+		return
+	var n := ABGELEGT_SCENE.instantiate()
+	n.name = "Abgelegt%d" % id
+	n.ablage_id = id
+	n.position = pos
+	add_child(n)
+	n.setzen(art, typ, fill)
+	_abgelegt_nodes[id] = n
+
+@rpc("authority", "reliable", "call_local")
+func _remove_abgelegt(id: int) -> void:
+	var n = _abgelegt_nodes.get(id)
+	if n and is_instance_valid(n):
+		n.queue_free()
+	_abgelegt_nodes.erase(id)
+
+@rpc("any_peer", "reliable", "call_local")
+func net_aufheben(id: int) -> void:
+	if not multiplayer.is_server() or not _abgelegt.has(id):
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var d: Dictionary = _abgelegt[id]
+	_abgelegt.erase(id)
+	_remove_abgelegt.rpc(id)
+	if s == multiplayer.get_unique_id():
+		_net_aufgehoben(int(d.art), int(d.typ), float(d.fill))
+	else:
+		_net_aufgehoben.rpc_id(s, int(d.art), int(d.typ), float(d.fill))
+
+## Beim aufhebenden Spieler: in die Hand (Hand ist leer — sonst gleich wieder hinlegen).
+@rpc("authority", "reliable", "call_local")
+func _net_aufgehoben(art: int, typ: int, fill: float) -> void:
+	var p = _players_nodes.get(multiplayer.get_unique_id())
+	if p == null:
+		return
+	if int(p.carry_state) != 0:
+		net_ablegen.rpc_id(1, art, typ, fill, (p as Node3D).global_position)
+		return
+	p.carry_state = art
+	p.carry_type = typ
+	p.carry_fill = fill
+
+## Getragenes Warenpaket ablegen — es wird wieder ein Paket am Boden.
+@rpc("any_peer", "reliable", "call_local")
+func net_paket_ablegen(kind: int, amount: int, pos: Vector3) -> void:
+	if not multiplayer.is_server() or not _stock.has(kind) or amount <= 0:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var id := _pkg_next
+	_pkg_next += 1
+	_add_package.rpc(id, _ablageort(s, pos), kind, clampi(amount, 1, PACK_UNITS * 5))
+
+# ================================================= Zelt eröffnen (Test 13.09.)
+## Nach dem Aufstehen ist die Kirmes offen, das Festzelt noch zu. Ein Spieler sticht
+## am Eingang das Fass an (scenes/zelt_eroeffnung.tscn), erst dann kommen Gäste.
+## Macht es niemand, öffnet das Zelt um AUTO_OEFFNEN_STUNDE von selbst.
+const AUTO_OEFFNEN_STUNDE := 10.0
+var _zelt_offen := true
+
+func _eroeffnung_anzeigen() -> void:
+	var bereit := _phase == Phase.SHIFT and not _zelt_offen and _tent_stage > 0
+	for n in get_tree().get_nodes_in_group("zelt_eroeffnung"):
+		if n.has_method("bereit_setzen"):
+			n.bereit_setzen(bereit)
+
+@rpc("any_peer", "reliable", "call_local")
+func net_zelt_eroeffnen() -> void:
+	if not multiplayer.is_server() or _phase != Phase.SHIFT or _zelt_offen:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	_zelt_eroeffnen(_spieler_bezeichnung(s), false)
+
+func _zelt_eroeffnen(wer: String, von_selbst: bool) -> void:
+	_zelt_offen = true
+	# Erste Gäste bald nach der Eröffnung, nicht erst eine Minute später
+	_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN * 0.4, ERSTE_GAESTE_MAX * 0.4)
+	if von_selbst:
+		_melde("MSG_ZELT_AUTO")
+	else:
+		_melde("MSG_ZELT_OFFEN", [wer], 2)
+	_eroeffnung_anzeigen()
+	_broadcast_meta()
+
 ## Vardiyadaki oyun içi saat (7.0 = 07:00). Kapalıyken -1.
 func _clock_hour() -> float:
 	if _phase != Phase.SHIFT:
@@ -880,6 +1006,9 @@ func _client_ready(version: String) -> void:
 	for pid in _packages.keys():
 		var pk = _packages[pid]
 		_add_package.rpc_id(sender, pid, (pk as Node3D).position, int(pk.kind), int(pk.amount))
+	for aid in _abgelegt.keys():
+		var ab: Dictionary = _abgelegt[aid]
+		_add_abgelegt.rpc_id(sender, aid, ab.pos, int(ab.art), int(ab.typ), float(ab.fill))
 	_push_stock.rpc_id(sender, int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	for did in _einrichtung.keys():
 		var e: Dictionary = _einrichtung[did]
@@ -2425,6 +2554,12 @@ func _tischplatz_frei(p: Vector2, ausser: int) -> bool:
 		var d: Vector2 = (p - (sperre[0] as Vector2)).abs()
 		if d.x < (sperre[1] as Vector2).x and d.y < (sperre[1] as Vector2).y:
 			return false
+	# Aufgestellte Einrichtung am Boden (Regal, Fass …) — nicht hineinstellen
+	for e: Dictionary in _einrichtung.values():
+		var art := str(e.get("art", ""))
+		if Katalog.ARTEN.has(art) and str(Katalog.ARTEN[art].get("platz", "boden")) == "boden":
+			if p.distance_to(Vector2(float(e.x), float(e.z))) < 1.8:
+				return false
 	for i in _beertables.size():
 		if i == ausser:
 			continue
@@ -2756,8 +2891,11 @@ func _process(delta: float) -> void:
 
 func _shift_process(delta: float) -> void:
 	# Popülerliğe + saate göre misafir çağır (sabah az, akşam çok; 08:00'den önce yok)
+	# Zelt noch nicht eröffnet: keine Gäste — um 10 Uhr öffnet es von selbst
+	if not _zelt_offen and _clock_hour() >= AUTO_OEFFNEN_STUNDE:
+		_zelt_eroeffnen("", true)
 	_guest_spawn_timer -= delta
-	if _guest_spawn_timer <= 0.0:
+	if _zelt_offen and _guest_spawn_timer <= 0.0:
 		_guest_spawn_timer = GUEST_SPAWN_INTERVAL
 		var draw := 1.0
 		if _artist_tier > 0:
@@ -3093,7 +3231,12 @@ func _start_shift() -> void:
 		st.idx = 0
 		st.timer = 0.0
 		_staff_sim[sid] = st
+	# Kirmes offen, Zelt noch zu — ein Spieler eröffnet es am Eingang (net_zelt_eroeffnen)
+	_zelt_offen = _tent_stage == 0
 	_broadcast_meta()   # banner'ı net_sleep gönderir (gün başlangıcı mesajı)
+	_eroeffnung_anzeigen()
+	if not _zelt_offen:
+		_melde("MSG_ZELT_WARTET")
 
 ## Günü bitir. reason: 0 = 22:00 normal, 1 = çok şikayet, 2 = oyuncu erken kapattı.
 func _end_shift(reason := 0) -> void:
@@ -3598,6 +3741,7 @@ func _buero_state() -> Dictionary:
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,
+		"zelt_offen": _zelt_offen,
 		"ereignis": _ereignis, "saison_nr": _saison_nr,
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
@@ -3624,6 +3768,9 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	_haelt_deko = buero.get("haelt", {})
 	_haelt_tisch = buero.get("haelt_tisch", {})
+	if not multiplayer.is_server():
+		_zelt_offen = bool(buero.get("zelt_offen", true))
+	_eroeffnung_anzeigen()
 	var ereignis_neu := str(buero.get("ereignis", ""))
 	if ereignis_neu != _ereignis or multiplayer.is_server():
 		if not multiplayer.is_server():

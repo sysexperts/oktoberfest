@@ -16,11 +16,11 @@
 - [x] Lizenzen: etwas teurer, mehr Lizenzen = mehr Spielraum bei Preisen, mit Info
 
 ## Paket 2 — Spielmechanik
-- [ ] E mit Gegenstand in der Hand löscht ihn → ablegen, liegt sichtbar am Boden, aufheben (für alles)
-- [ ] Koop: Bier in der Hand trinken (Rausch bei zu viel)
-- [ ] Springen mit Animation
-- [ ] Tagesstart öffnet die Kirmes, das Zelt eröffnet man selbst am Zelt
-- [ ] Zweites Kochfeld direkt daneben (Texte lesbar)
+- [x] E mit Gegenstand in der Hand löscht ihn → ablegen, liegt sichtbar am Boden, aufheben (für alles)
+- [x] Koop: Bier in der Hand trinken ([G] halten) (Rausch bei zu viel)
+- [x] Springen mit Animation ([Leertaste])
+- [x] Tagesstart öffnet die Kirmes, das Zelt eröffnet man selbst am Zelt
+- [x] Zweites Kochfeld direkt daneben (Texte lesbar)
 - [ ] Regale drehen, versetzen, Limit, neue Regale kaufen
 
 ## Paket 3 — Optik und Übersicht (erst Vorschau)
@@ -30,7 +30,7 @@
 - [ ] NPC-Texte überlappen → nur Icons, mit Strg Details
 - [ ] Icons neben NPCs unklar (Haus …) → erklären/verständlicher
 - [ ] Gelber Ring beim Anvisieren → dünner Umriss
-- [ ] Mitspieler-Krüge schweben über dem Kopf → in die Hand; Krüge größer
+- [x] Mitspieler-Krüge schweben über dem Kopf → in die Hand; Krüge größer
 - [ ] Lichter nachts zu hell
 - [ ] UI etwas kleiner, besser an jeden Bildschirm angepasst
 
