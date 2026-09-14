@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pruegel/raufbold.gd" id="1_raufbold"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter2.tscn" id="2_figur"]
+
+[node name="Raufbold" type="Node3D"]
+script = ExtResource("1_raufbold")
+
+[node name="Kipper" type="Node3D" parent="."]
+
+[node name="Model" parent="Kipper" instance=ExtResource("2_figur")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
