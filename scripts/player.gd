@@ -73,7 +73,6 @@ var _net_yaw: float
 ## Abteilung, die dieser Spieler leitet ("" = keine) — aus der Lobby (GameManager._spieler_info)
 var abteilung := ""
 const ABT_SYMBOL := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
-@onready var _ring: MeshInstance3D = $Ring
 
 func _ready() -> void:
 	add_to_group("player")
@@ -104,14 +103,6 @@ func _ready() -> void:
 
 	# Animationen über die Figur (scripts/figur.gd) — jede Figur benennt sie anders
 	_last_anim_pos = global_position
-
-	# Oyuncuyu kimliğe göre renklendir (kim kim belli olsun)
-	var hue := fmod(absf(float(auth)) * 0.61803399, 1.0)
-	var col := Color.from_hsv(hue, 0.75, 1.0)
-	var rm := _ring.material_override as StandardMaterial3D
-	if rm:
-		rm.albedo_color = col
-		rm.emission = col
 
 	_namensschild.visible = false
 	if _is_local:
