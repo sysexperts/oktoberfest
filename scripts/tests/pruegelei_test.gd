@@ -3,8 +3,9 @@ extends Node3D
 ## Öffnen: scenes/tests/pruegelei_test.tscn im Editor, F6.
 ##
 ## Steuerung:
-##   Rechte Maustaste halten + Maus: umsehen · W/A/S/D, Q/E-frei: bewegen
-##   1: Einzelstreit · M: Massenschlägerei · R: alles zurücksetzen
+##   Rechte Maustaste halten + Maus: umsehen · W/A/S/D: bewegen
+##   1: Einzelstreit · M: Massenschlägerei (füllt auf 24 Gäste auf, ~30 s)
+##   R: alles zurücksetzen
 ##   E drücken (nahe an einem Gast): packen — E gedrückt halten lädt die Wurfkraft,
 ##   loslassen wirft ihn (mehrere Meter, prallt an Wand und Tisch ab)
 ##
@@ -12,9 +13,12 @@ extends Node3D
 ## zusammen mit --write-movie entsteht ein Video (tools/render_pruegelei.sh).
 
 const Figuren := preload("res://scripts/figuren.gd")
+const RAUFBOLD := preload("res://scenes/pruegel/raufbold.tscn")
+const MASSENSCHLAEGEREI := preload("res://scenes/pruegel/massenschlaegerei.tscn")
 const LADEZEIT := 1.1
 const WURF_MIN := Vector2(5.0, 2.5)    # waagerecht, senkrecht bei kurzem Druck
 const WURF_MAX := Vector2(16.0, 6.5)   # bei voller Ladung
+const MASSEN_GAESTE := 24
 
 @onready var _gaeste: Node3D = %Gaeste
 @onready var _kamera: Camera3D = %Kamera
@@ -22,6 +26,7 @@ const WURF_MAX := Vector2(16.0, 6.5)   # bei voller Ladung
 @onready var _ausgang: Marker3D = %Ausgang
 
 var _startlagen := {}
+var _zusatz: Array[Node3D] = []
 var _gepackt: Node3D
 var _ladung := 0.0
 var _e_gedrueckt := false
@@ -30,12 +35,12 @@ var _pitch := -0.35
 var _demo := false
 ## Im Demo-Ablauf „drückt" das Skript die E-Taste
 var _demo_e := false
+var _schlaegerei: Node3D
 
 func _ready() -> void:
 	var i := 0
 	for g in _gaeste.get_children():
-		g.figur_setzen(Figuren.ALLE[i % Figuren.ALLE.size()])
-		g.flucht_ziel = _ausgang.global_position + Vector3(randf_range(-1.5, 1.5), 0, randf_range(0.0, 2.0))
+		_gast_einrichten(g, i)
 		_startlagen[g] = g.global_transform
 		i += 1
 	_yaw = _kamera.rotation.y
@@ -45,6 +50,10 @@ func _ready() -> void:
 	if _demo:
 		%Hilfe.visible = false
 		_demo_ablauf()
+
+func _gast_einrichten(g: Node3D, i: int) -> void:
+	g.figur_setzen(Figuren.ALLE[i % Figuren.ALLE.size()])
+	g.flucht_ziel = _ausgang.global_position + Vector3(randf_range(-2.0, 2.0), 0, randf_range(0.0, 2.5))
 
 # ------------------------------------------------------------ Steuerung
 func _unhandled_input(event: InputEvent) -> void:
@@ -99,12 +108,15 @@ func _process(delta: float) -> void:
 	_kraft.visible = _gepackt != null
 	_kraft.value = _ladung * 100.0
 
+func _alle_gaeste() -> Array:
+	return _gaeste.get_children()
+
 func _versuche_packen() -> void:
 	var bester: Node3D = null
 	var beste_d := 4.5
 	var vorn := -_kamera.global_transform.basis.z
 	vorn.y = 0.0
-	for g in _gaeste.get_children():
+	for g in _alle_gaeste():
 		var zu: Vector3 = g.global_position - _kamera.global_position
 		zu.y = 0.0
 		var d := zu.length()
@@ -126,7 +138,7 @@ func _werfen() -> void:
 
 # ------------------------------------------------------------ Streit
 func einzelstreit() -> void:
-	var frei: Array = _gaeste.get_children().filter(func(g: Node3D) -> bool: return g.ist_frei())
+	var frei: Array = _alle_gaeste().filter(func(g: Node3D) -> bool: return g.ist_frei())
 	if frei.size() < 2:
 		return
 	var a: Node3D = frei.pick_random()
@@ -135,18 +147,34 @@ func einzelstreit() -> void:
 		return x.global_position.distance_to(a.global_position) < y.global_position.distance_to(a.global_position))
 	a.streit_mit(frei[0])
 
+## Füllt auf MASSEN_GAESTE auf (Gäste strömen von den Seiten herein) und startet
+## die Massenschlägerei in der Mitte.
 func massenschlaegerei() -> void:
-	var frei: Array = _gaeste.get_children().filter(func(g: Node3D) -> bool: return g.ist_frei())
-	frei.shuffle()
-	while frei.size() >= 2:
-		var a: Node3D = frei.pop_back()
-		# Nächsten Freien als Gegner — sonst rennen alle quer durchs Zelt
-		frei.sort_custom(func(x: Node3D, y: Node3D) -> bool:
-			return x.global_position.distance_to(a.global_position) < y.global_position.distance_to(a.global_position))
-		a.streit_mit(frei.pop_front())
+	if _schlaegerei and is_instance_valid(_schlaegerei) and _schlaegerei.laeuft():
+		return
+	var i := _alle_gaeste().size()
+	while _alle_gaeste().size() < MASSEN_GAESTE:
+		var g := RAUFBOLD.instantiate()
+		_gaeste.add_child(g)
+		var winkel := randf() * TAU
+		g.global_position = Vector3(cos(winkel) * randf_range(2.5, 6.5), 0.0, sin(winkel) * randf_range(2.0, 4.5))
+		g.rotation.y = randf() * TAU
+		_gast_einrichten(g, i)
+		_zusatz.append(g)
+		i += 1
+	_schlaegerei = MASSENSCHLAEGEREI.instantiate()
+	add_child(_schlaegerei)
+	_schlaegerei.starten(_alle_gaeste(), Vector3(0.0, 0.0, 0.5), MASSEN_GAESTE)
 
 func zuruecksetzen() -> void:
-	for g in _gaeste.get_children():
+	if _schlaegerei and is_instance_valid(_schlaegerei):
+		_schlaegerei.beenden()
+	for g in _zusatz:
+		if is_instance_valid(g):
+			g.queue_free()
+	_zusatz.clear()
+	for g in _startlagen.keys():
+		g.schlaegerei = null
 		g.gegner = null
 		g._setze(g.Zustand.RUHIG)
 		g.global_transform = _startlagen[g]
@@ -156,48 +184,48 @@ func zuruecksetzen() -> void:
 
 # ------------------------------------------------------------ Demo-Ablauf (Video)
 func _demo_ablauf() -> void:
-	var g := _gaeste.get_children()
+	var g := _alle_gaeste()
 	# 1 Einzelstreit aus der Nähe
 	_kamera_auf(Vector3(-1.0, 2.1, 4.8), Vector3(-2.0, 0.9, 0.0))
 	await _warte(0.8)
 	g[0].streit_mit(g[1])
-	await _warte(1.8)
+	await _warte(2.0)
 	_foto("pruegel_1_streit")
-	await _warte(1.5)
-	_foto("pruegel_2_treffer")
-	await _warte(3.5)
-	_foto("pruegel_3_ko")
-	# 2 Massenschlägerei, weiter weg
-	_kamera_auf(Vector3(0.0, 6.5, 10.0), Vector3(0.0, 0.5, 0.0))
+	await _warte(4.5)
+	_foto("pruegel_2_ko")
+	# 2 Massenschlägerei (~30 s): erst weit, dann nah dran, dann von oben
+	zuruecksetzen()
+	_kamera_auf(Vector3(0.0, 5.5, 9.5), Vector3(0.0, 0.3, 0.5))
 	await _warte(0.5)
 	massenschlaegerei()
-	await _warte(2.5)
-	_foto("pruegel_4_masse")
-	await _warte(3.0)
-	_foto("pruegel_5_masse_ko")
+	await _warte(4.0)
+	_foto("pruegel_3_masse_start")
+	await _warte(5.0)
+	_foto("pruegel_4_masse_voll")
+	_kamera_auf(Vector3(3.0, 1.9, 4.0), Vector3(0.0, 0.8, 0.5))
+	await _warte(7.0)
+	_foto("pruegel_5_masse_nah")
+	_kamera_auf(Vector3(-4.0, 9.0, 5.0), Vector3(0.0, 0.0, 0.5))
+	await _warte(7.0)
+	_foto("pruegel_6_masse_oben")
+	_kamera_auf(Vector3(0.0, 5.5, 9.5), Vector3(0.0, 0.3, 0.5))
+	await _warte(8.0)
+	_foto("pruegel_7_masse_ende")
 	# 3 Rauswurf: packen, laden, gegen die Wand werfen
-	await _warte(1.0)
-	var opfer: Node3D = null
-	for kandidat in g:
-		if kandidat.kaempft() or kandidat.ist_frei():
-			opfer = kandidat
-			break
-	if opfer:
-		var hinter := opfer.global_position + Vector3(0.0, 1.6, 2.2)
-		_kamera_auf(hinter, opfer.global_position + Vector3(0.0, 0.9, -6.0))
-		await _warte(0.3)
-		_demo_e = true
-		await _warte(0.4)
-		_foto("pruegel_6_gepackt")
-		await _warte(LADEZEIT)
-		_demo_e = false
-		await _warte(0.25)
-		_kamera_auf(hinter + Vector3(4.5, 1.5, -1.0), opfer.global_position + Vector3(0.0, 0.8, -4.0))
-		await _warte(0.25)
-		_foto("pruegel_7_flug")
-		await _warte(1.6)
-		_foto("pruegel_8_aufprall")
-		await _warte(2.5)
+	zuruecksetzen()
+	await _warte(0.5)
+	var opfer: Node3D = g[2]
+	var hinter := opfer.global_position + Vector3(0.0, 1.6, 2.2)
+	_kamera_auf(hinter, opfer.global_position + Vector3(0.0, 0.9, -6.0))
+	await _warte(0.3)
+	_demo_e = true
+	await _warte(LADEZEIT + 0.3)
+	_demo_e = false
+	await _warte(0.2)
+	_kamera_auf(hinter + Vector3(4.5, 1.5, -1.0), opfer.global_position + Vector3(0.0, 0.8, -4.0))
+	await _warte(0.3)
+	_foto("pruegel_8_flug")
+	await _warte(3.0)
 	get_tree().quit()
 
 func _kamera_auf(ort: Vector3, ziel: Vector3) -> void:

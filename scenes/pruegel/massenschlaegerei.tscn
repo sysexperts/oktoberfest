@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pruegel/massenschlaegerei.gd" id="1_masse"]
+
+[sub_resource type="Gradient" id="FlockeVerlauf"]
+offsets = PackedFloat32Array(0, 0.45, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.55, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="FlockeTextur"]
+gradient = SubResource("FlockeVerlauf")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Gradient" id="Verlauf"]
+offsets = PackedFloat32Array(0, 0.2, 1)
+colors = PackedColorArray(0.78, 0.7, 0.58, 0, 0.72, 0.64, 0.52, 0.6, 0.66, 0.6, 0.5, 0)
+
+[sub_resource type="GradientTexture1D" id="VerlaufTextur"]
+gradient = SubResource("Verlauf")
+
+[sub_resource type="Curve" id="Wachsen"]
+_data = [Vector2(0, 0.4), 0.0, 1.2, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="WachsenTextur"]
+curve = SubResource("Wachsen")
+
+[sub_resource type="ParticleProcessMaterial" id="TeppichProzess"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.2
+emission_ring_radius = 2.4
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, 1, 0)
+spread = 60.0
+initial_velocity_min = 0.3
+initial_velocity_max = 1.2
+gravity = Vector3(0, 0.15, 0)
+damping_min = 0.5
+damping_max = 1.0
+scale_min = 0.9
+scale_max = 1.8
+scale_curve = SubResource("WachsenTextur")
+color_ramp = SubResource("VerlaufTextur")
+angle_min = -180.0
+angle_max = 180.0
+
+[sub_resource type="StandardMaterial3D" id="StaubMaterial"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.85, 0.78, 0.66, 1)
+albedo_texture = SubResource("FlockeTextur")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+
+[sub_resource type="QuadMesh" id="Flocke"]
+material = SubResource("StaubMaterial")
+size = Vector2(1.1, 1.1)
+
+[node name="Massenschlaegerei" type="Node3D"]
+script = ExtResource("1_masse")
+
+[node name="Staubteppich" type="GPUParticles3D" parent="."]
+unique_name_in_owner = true
+emitting = false
+amount = 70
+lifetime = 2.2
+randomness = 0.5
+visibility_aabb = AABB(-6, -1, -6, 12, 5, 12)
+process_material = SubResource("TeppichProzess")
+draw_pass_1 = SubResource("Flocke")
+
+[node name="Tumult" type="AudioStreamPlayer3D" parent="."]
+unique_name_in_owner = true
+unit_size = 8.0
+bus = &"SFX"
