@@ -402,6 +402,46 @@ class Lauf extends Node:
 		nehmer.carry_fill = 0.0
 		nehmer.carry_type = 0
 		_check("Tasten Springen und Trinken vorhanden", InputMap.has_action("springen") and InputMap.has_action("trinken"), "")
+		# Echte Tasteneingaben — Feedback 14.09.: Springen ging im Spiel nicht, obwohl
+		# alle Prüfungen grün waren (sie drückten nie eine Taste)
+		for k in 30:
+			await get_tree().physics_frame
+		var boden_y: float = nehmer.global_position.y
+		Input.action_press("springen")
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		Input.action_release("springen")
+		var hoechste := boden_y
+		for k in 20:
+			await get_tree().physics_frame
+			hoechste = maxf(hoechste, nehmer.global_position.y)
+		_check("Leertaste: Spieler springt wirklich", hoechste > boden_y + 0.3, "%.2f → %.2f" % [boden_y, hoechste])
+		for k in 60:
+			await get_tree().physics_frame
+		nehmer.carry_state = 1
+		nehmer.carry_type = 1
+		nehmer.carry_fill = 1.0
+		nehmer.promille = 0.0
+		Input.action_press("trinken")
+		for k in 40:
+			await get_tree().physics_frame
+		Input.action_release("trinken")
+		_check("G halten: Bier wird getrunken, Rausch steigt", nehmer.carry_fill < 0.9 and nehmer.promille > 0.05,
+			"Füllung %.2f, Promille %.2f" % [nehmer.carry_fill, nehmer.promille])
+		var abgelegt_vorher: int = gm._abgelegt.size()
+		nehmer.carry_fill = 1.0
+		nehmer._current_target = null
+		Input.action_press("interact")
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		Input.action_release("interact")
+		await _frames(3)
+		_check("E mit Krug: abgelegt statt gelöscht", nehmer.carry_state == 0 and gm._abgelegt.size() == abgelegt_vorher + 1,
+			"carry=%d, abgelegt %d" % [nehmer.carry_state, gm._abgelegt.size()])
+		nehmer.carry_state = 0
+		nehmer.carry_fill = 0.0
+		nehmer.carry_type = 0
+		nehmer.promille = 0.0
 		gm._start_shift()
 		var eroeffnung: Node3D = get_tree().get_first_node_in_group("zelt_eroeffnung")
 		_check("nach Tagesstart ist das Zelt zu, Fass zum Anstechen da", not gm._zelt_offen and eroeffnung != null

@@ -10,16 +10,16 @@ metallic_specular = 0.9
 roughness = 0.08
 
 [sub_resource type="CylinderMesh" id="BierMesh"]
-top_radius = 0.047
-bottom_radius = 0.044
+top_radius = 0.058
+bottom_radius = 0.055
 height = 1.0
 radial_segments = 16
 rings = 1
 
 [sub_resource type="CylinderMesh" id="SchaumMesh"]
-top_radius = 0.046
-bottom_radius = 0.048
-height = 0.014
+top_radius = 0.057
+bottom_radius = 0.059
+height = 0.017
 radial_segments = 16
 rings = 1
 
@@ -32,13 +32,13 @@ script = ExtResource("1_krug")
 glas_material = SubResource("MatGlas")
 
 [node name="Glas" parent="." instance=ExtResource("2_glas")]
-transform = Transform3D(0.105, 0, 0, 0, 0.105, 0, 0, 0, 0.105, 0, 0.1, 0)
+transform = Transform3D(0.13, 0, 0, 0, 0.13, 0, 0, 0, 0.13, 0, 0.124, 0)
 
 [node name="Bier" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.16, 0, 0, 0, 1, -0.022, 0.094, 0)
+transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 1, -0.027, 0.117, 0)
 mesh = SubResource("BierMesh")
 
 [node name="Schaum" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022, 0.18, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.027, 0.22, 0)
 mesh = SubResource("SchaumMesh")
 material_override = SubResource("MatSchaum")

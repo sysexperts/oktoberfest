@@ -72,7 +72,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatHelles")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Bier1/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -104,7 +104,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatWeizen")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Bier2/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -136,7 +136,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatRadler")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Bier3/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -168,7 +168,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatFestbier")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Bier4/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -200,7 +200,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatEssen")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Essen1/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -229,7 +229,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatEssen")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Essen2/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -258,7 +258,7 @@ mesh = SubResource("Streifen")
 surface_material_override/0 = SubResource("MatEssen")
 
 [node name="Schild" type="Label3D" parent="Plaetze/Essen3/Aufsteller"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0.013)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.0016
 modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
@@ -270,3 +270,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.03, -0.1)
 
 [node name="T1" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.03, -0.1)
+
+[node name="Bild" parent="Plaetze/Bier1/Aufsteller" instance=ExtResource("2_krug")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
+fuellung = 1.0
+farbe = Color(0.95, 0.75, 0.2, 1)
+
+[node name="Bild" parent="Plaetze/Bier2/Aufsteller" instance=ExtResource("2_krug")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
+fuellung = 1.0
+farbe = Color(0.85, 0.5, 0.15, 1)
+
+[node name="Bild" parent="Plaetze/Bier3/Aufsteller" instance=ExtResource("2_krug")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
+fuellung = 1.0
+farbe = Color(0.85, 0.85, 0.45, 1)
+
+[node name="Bild" parent="Plaetze/Bier4/Aufsteller" instance=ExtResource("2_krug")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
+fuellung = 1.0
+farbe = Color(0.75, 0.35, 0.08, 1)
+
+[node name="Bild" parent="Plaetze/Essen1/Aufsteller" instance=ExtResource("3_teller")]
+transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)
+sorte = 1
+
+[node name="Bild" parent="Plaetze/Essen2/Aufsteller" instance=ExtResource("3_teller")]
+transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)
+sorte = 2
+
+[node name="Bild" parent="Plaetze/Essen3/Aufsteller" instance=ExtResource("3_teller")]
+transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)
+sorte = 3

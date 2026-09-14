@@ -15,9 +15,9 @@ extends Node3D
 		farbe = v
 		_anwenden()
 ## So hoch steht das Bier im vollen Krug (über dem Glasboden)
-@export var innen_hoehe := 0.16
+@export var innen_hoehe := 0.2
 ## Dicke des Glasbodens
-@export var boden := 0.014
+@export var boden := 0.017
 ## Wird auf alle Flächen des Krug-Modells gelegt
 @export var glas_material: Material
 

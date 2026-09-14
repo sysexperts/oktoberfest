@@ -13,6 +13,13 @@ func _ready() -> void:
 	visible = false
 	%Billiger.pressed.connect(_preis.bind(-1))
 	%Teurer.pressed.connect(_preis.bind(1))
+	# Essenspreis (GameManager.net_set_essenpreis)
+	%EssenBilliger.pressed.connect(func() -> void:
+		if _gm:
+			_gm.net_set_essenpreis.rpc_id(1, -1))
+	%EssenTeurer.pressed.connect(func() -> void:
+		if _gm:
+			_gm.net_set_essenpreis.rpc_id(1, 1))
 	# Ware nachbestellen geht auch während der Schicht
 	%BierEins.pressed.connect(_bestellen.bind(1, 1))
 	%BierFuenf.pressed.connect(_bestellen.bind(1, 5))
@@ -65,6 +72,11 @@ func _neu() -> void:
 	# Spielraum wächst mit den Lizenzen (GameManager.bierpreis_grenzen)
 	%Billiger.disabled = faktor <= float(_z.get("preis_min", Wirtschaft.BIERPREIS_MIN)) + 0.001
 	%Teurer.disabled = faktor >= float(_z.get("preis_max", Wirtschaft.BIERPREIS_MAX)) - 0.001
+	# Essenspreis: Spielraum wächst mit den Essenslizenzen (GameManager.essenpreis_grenzen)
+	var essen_faktor := float(_z.get("essenpreis", 1.0))
+	%EssenPreisText.text = tr("COMP_FOOD_PRICE_VALUE") % [Texte.euro(roundi(float(essen) * essen_faktor)), roundi(essen_faktor * 100.0)]
+	%EssenBilliger.disabled = essen_faktor <= float(_z.get("essen_min", 1.0)) + 0.001
+	%EssenTeurer.disabled = essen_faktor >= float(_z.get("essen_max", 1.0)) - 0.001
 	# Ware: gleiche Preise wie im Wiesenbüro (GameManager.net_order_goods)
 	if _gm:
 		%WareText.text = tr("COMP_GOODS_STOCK") % [int(_z.get("bier", 0)), int(_z.get("essen", 0)), int(_z.get("pending", 0))]

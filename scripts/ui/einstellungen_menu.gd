@@ -45,6 +45,18 @@ func _ready() -> void:
 	_qualitaet.item_selected.connect(_on_qualitaet)
 	_renderer.item_selected.connect(_on_renderer)
 	_aufloesung.value_changed.connect(_on_aufloesung)
+	# Größe der Oberfläche — eigene Datei user://ui.cfg (siehe menu_eingang.gd)
+	var ui := preload("res://scripts/menu_eingang.gd")
+	var groesse: float = ui.ui_groesse_laden()
+	%UiGroesse.set_value_no_signal(groesse)
+	%UiGroesseWert.text = "%d %%" % roundi(groesse * 100.0)
+	%UiGroesse.value_changed.connect(func(wert: float) -> void:
+		var cfg := ConfigFile.new()
+		cfg.load(ui.UI_DATEI)
+		cfg.set_value("ui", "groesse", wert)
+		cfg.save(ui.UI_DATEI)
+		get_tree().root.content_scale_size = ui.ui_basis(wert)
+		%UiGroesseWert.text = "%d %%" % roundi(wert * 100.0))
 	_maus.value_changed.connect(_on_maus)
 	_invert.toggled.connect(_on_invert)
 	for bus: String in _regler:

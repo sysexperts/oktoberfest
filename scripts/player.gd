@@ -19,6 +19,7 @@ const MAX_KRUEGE := 3
 const TRAG_BREMSE := 0.12
 ## Absprunggeschwindigkeit (Schwerkraft 20 → gut 0,9 m hoch)
 const SPRUNG_TEMPO := 6.0
+var _war_in_luft := false
 ## Teamleiter-Boni in der eigenen Abteilung (Putzen: GameManager.BONUS_PUTZEN)
 const BONUS_ZAPFEN := 1.4
 const BONUS_KOCHEN := 1.6
@@ -276,7 +277,14 @@ func _update_animation(delta: float) -> void:
 		return
 	# Sprung: in der Luft nach vorn lehnen, bei der Landung zurück
 	var in_luft := global_position.y > 0.35
-	_model.rotation.x = lerpf(_model.rotation.x, -0.35 if in_luft else 0.0, clampf(delta * 10.0, 0.0, 1.0))
+	var w := clampf(delta * 10.0, 0.0, 1.0)
+	_model.rotation.x = lerpf(_model.rotation.x, -0.35 if in_luft else 0.0, w)
+	# Sprung: in der Luft gestreckt, bei der Landung kurz gestaucht
+	var ziel_skala := Vector3(0.94, 1.1, 0.94) if in_luft else Vector3.ONE
+	if _war_in_luft and not in_luft:
+		_model.scale = Vector3(1.1, 0.85, 1.1)
+	_war_in_luft = in_luft
+	_model.scale = _model.scale.lerp(ziel_skala, w)
 	_emote_label.visible = emote == 1
 	if emote == 1:
 		if _cur_anim != "tanzen":
@@ -362,7 +370,9 @@ func _handle_movement(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, ACCEL * delta * speed)
 	if not is_on_floor():
 		velocity.y -= 20.0 * delta
-	else:
+	elif velocity.y <= 0.0:
+		# Nur beim Stehen/Landen nullen — sonst schluckte das den Absprung im
+		# selben Bild und Springen ging nie (Feedback 14.09.)
 		velocity.y = 0.0
 	move_and_slide()
 	_schritte(delta)
@@ -507,21 +517,29 @@ func _update_highlight() -> void:
 		_highlight_ring.visible = false
 	if _current_target == _umriss_ziel:
 		return
-	_umriss_setzen(_umriss_ziel, false)
+	# Das alte Ziel kann inzwischen weg sein (Gast gegangen, Krug aufgehoben)
+	if is_instance_valid(_umriss_ziel):
+		_umriss_setzen(_umriss_ziel, false)
 	_umriss_ziel = _current_target
 	_umriss_setzen(_umriss_ziel, true)
 
-func _umriss_setzen(ziel: Node3D, an: bool) -> void:
+## Ohne Typangabe: ein freigegebenes Objekt darf hier ankommen, ohne Skriptfehler.
+func _umriss_setzen(ziel, an: bool) -> void:
 	if ziel == null or not is_instance_valid(ziel):
 		return
 	for mi in ziel.find_children("*", "MeshInstance3D", true, false):
 		(mi as MeshInstance3D).material_overlay = UMRISS if an else null
 
 func _handle_interaction(delta: float) -> void:
+	# Etwas in der Hand und E bewirkt beim Ziel nichts (oder kein Ziel): ablegen.
+	# Im vollen Zelt ist fast immer irgendetwas im Blick — nur bei „nichts im Blick"
+	# abzulegen, klappte im Test praktisch nie.
+	var traegt := carry_state != 0 or not extra_kruege.is_empty()
+	if traegt and Input.is_action_just_pressed("interact") \
+			and (_current_target == null or _hint_for(_current_target) == ""):
+		_ablegen()
+		return
 	if _current_target == null:
-		# Nichts im Blick: Gegenstand vor sich ablegen (früher war er einfach weg)
-		if Input.is_action_just_pressed("interact") and (carry_state != 0 or not extra_kruege.is_empty()):
-			_ablegen()
 		return
 	if Input.is_action_just_pressed("interact"):
 		if _current_target.has_method("ist_abgelegt"):

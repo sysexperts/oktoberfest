@@ -134,6 +134,30 @@ func bierpreis_grenzen() -> Vector2:
 	var unten := maxf(Wirtschaft.BIERPREIS_MIN, PREISRAUM_BASIS.x + PREISRAUM_JE_LIZENZ.x * n)
 	var oben := minf(Wirtschaft.BIERPREIS_MAX, PREISRAUM_BASIS.y + PREISRAUM_JE_LIZENZ.y * n)
 	return Vector2(snappedf(unten, 0.1), snappedf(oben, 0.1))
+
+## Essenspreis (Faktor) — Test 13.09.: Lizenzen sollen an den Preisen schrauben
+## lassen, nicht nur beim Bier. Spielraum wächst mit den Essenslizenzen.
+const ESSEN_LIZENZEN := ["brezn", "sosis", "hendl"]
+var _essenpreis := 1.0
+
+func essenpreis_grenzen() -> Vector2:
+	var n := 0
+	for k: String in ESSEN_LIZENZEN:
+		if _lic.get(k, false):
+			n += 1
+	var unten := maxf(Wirtschaft.BIERPREIS_MIN, PREISRAUM_BASIS.x + PREISRAUM_JE_LIZENZ.x * 1.5 * n)
+	var oben := minf(Wirtschaft.BIERPREIS_MAX, PREISRAUM_BASIS.y + PREISRAUM_JE_LIZENZ.y * 1.5 * n)
+	return Vector2(snappedf(unten, 0.1), snappedf(oben, 0.1))
+
+## Zelt-Computer: Essenspreis in 10-%-Schritten (teurer bringt mehr je Portion,
+## Gäste bestellen aber etwas seltener Essen).
+@rpc("any_peer", "reliable", "call_local")
+func net_set_essenpreis(schritte: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var raum := essenpreis_grenzen()
+	_essenpreis = clampf(snappedf(_essenpreis + 0.1 * float(clampi(schritte, -5, 5)), 0.1), raum.x, raum.y)
+	_broadcast_meta()
 ## Spätlizenzen (Spaß-Plan 4.3): erst ab Zeltstufe 3 oder der 2. Wiesn, dafür teurer im Verkauf
 const LIC_SPAET := ["festbier", "hendl"]
 const BIER_FESTBIER := 4
@@ -503,7 +527,13 @@ const POP_DEKO_GRENZE_MAX := 10.0 # … höchstens so viel
 func _pop_grenze() -> float:
 	var g := POP_NATUR_MAX + float(POP_KUENSTLER_GRENZE.get(_artist_tier, 0.0))
 	g += minf(POP_DEKO_GRENZE_MAX, POP_DEKO_GRENZE * float(_einrichtung.size()))
+	# Festliche Tagesereignisse (Promi, Prosit, Freibierfass, Happy Hour, Finale)
+	# ziehen die Grenze ebenfalls hoch — Regen, Kontrolle und Bus nicht
+	if _ereignis in POP_EREIGNIS_GRENZE:
+		g += float(POP_EREIGNIS_GRENZE[_ereignis])
 	return minf(100.0, g)
+
+const POP_EREIGNIS_GRENZE := {"promi": 15.0, "prosit": 10.0, "fass": 10.0, "happy": 5.0, "finale": 20.0}
 
 ## Beliebtheit durch Bedienen erhöhen — höchstens bis zur heutigen Grenze.
 func _pop_erhoehen(betrag: float) -> void:
@@ -672,6 +702,7 @@ func _save_game() -> void:
 		"tisch_layout": TISCH_LAYOUT,
 		"lager_gekauft": _lager_gekauft,
 		"lager_lagen": _lager_lagen(),
+		"essenpreis": _essenpreis,
 		"money": Game.money,
 		"score": Game.score,
 		"day": _day,
@@ -744,6 +775,8 @@ func _load_game() -> bool:
 			_lic[k] = bool((lic as Dictionary).get(k, false))
 	var raum := bierpreis_grenzen()
 	_bierpreis = clampf(_bierpreis, raum.x, raum.y)
+	var essen_raum := essenpreis_grenzen()
+	_essenpreis = clampf(float(d.get("essenpreis", 1.0)), essen_raum.x, essen_raum.y)
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
 	# Alte Stände: Schritte ab 3 sind durch die zwei neuen Liefer-Schritte eins weiter
@@ -2291,7 +2324,11 @@ func net_buy_license(key: String) -> void:
 	_lic[key] = true
 	_melde("MSG_LIC_DONE", [LIC_KEYS[key]], 2)
 	var raum := bierpreis_grenzen()
-	_melde("MSG_LIC_PREISRAUM", [roundi(raum.x * 100.0), roundi(raum.y * 100.0)])
+	if key in ESSEN_LIZENZEN:
+		var essen_raum := essenpreis_grenzen()
+		_melde("MSG_LIC_ESSENRAUM", [roundi(essen_raum.x * 100.0), roundi(essen_raum.y * 100.0)])
+	else:
+		_melde("MSG_LIC_PREISRAUM", [roundi(raum.x * 100.0), roundi(raum.y * 100.0)])
 	_broadcast_meta()
 
 
@@ -3005,7 +3042,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 func _reward_for(okind: int, otype := 1) -> int:
 	var sorte := float(PREIS_FAKTOR_SORTE.get("%d_%d" % [okind, otype], 1.0))
 	if okind == 2:
-		return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)) * sorte)
+		return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)) * sorte * _essenpreis)
 	# Bier: Tagespreis × selbst gewählter Bierpreis
 	var happy := 0.7 if _happy_hour() else 1.0
 	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy * sorte)
@@ -3427,7 +3464,8 @@ func _end_shift(reason := 0) -> void:
 	# Dreck bleibt nach Feierabend liegen — putzen geht jetzt auch außerhalb der
 	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
 	_clear_artists()          # E5: Auftritt vorbei
-	_ausgabe.clear()          # Übriges von der Ausgabe wird weggeräumt
+	# Übriges bleibt auf der Ausgabe stehen — auch außerhalb der Schicht abgestellte
+	# Krüge verschwinden nicht mehr (Test 13.09.)
 	_ereignis = ""
 	_fass_kaputt = 0
 	_ausgabe_senden()
@@ -3663,7 +3701,10 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		g.ostate = 0
 		g.puked = false
 		g.kotzt = false
-		g.tgt = (seat.pos as Vector3) + (seat.get("away", Vector3.FORWARD) as Vector3) * 3.2
+		# Verteilt rund um den Tisch statt immer an derselben Stelle (Test 13.09.)
+		var weg: Vector3 = (seat.get("away", Vector3.FORWARD) as Vector3).rotated(Vector3.UP, randf_range(-1.1, 1.1))
+		var ziel: Vector3 = (seat.pos as Vector3) + weg * randf_range(2.2, 4.0)
+		g.tgt = Vector3(clampf(ziel.x, ZELT_MIN.x, ZELT_MAX.x), 0.1, clampf(ziel.z, -7.5, ZELT_MAX.z))
 
 func _despawn_guest(id: int) -> void:
 	if _klo_gast == id:
@@ -3909,6 +3950,7 @@ func _buero_state() -> Dictionary:
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,
+		"essenpreis": _essenpreis, "essen_min": essenpreis_grenzen().x, "essen_max": essenpreis_grenzen().y,
 		"zelt_offen": _zelt_offen,
 		"haelt_lager": _haelt_lager_stand(), "regale": _lagerregale().size(),
 		"ereignis": _ereignis, "saison_nr": _saison_nr,

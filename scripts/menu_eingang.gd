@@ -52,7 +52,7 @@ func _ready() -> void:
 	var fenster := get_tree().root
 	fenster.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	fenster.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
-	fenster.content_scale_size = Vector2i(1440, 810)
+	fenster.content_scale_size = ui_basis(ui_groesse_laden())
 	var gesperrt := OS.has_feature("editor") or OS.get_cmdline_user_args().has(NEUSTART_MARKE)
 	var args := neustart_argumente(gesperrt, RenderingServer.get_current_rendering_method(), _gewuenschter_renderer())
 	if not args.is_empty() and _neu_starten(args):
@@ -73,6 +73,20 @@ func _ready() -> void:
 			get_tree().change_scene_to_file.call_deferred(HAUPTMENUE)
 		return
 	_zeige_hinweis()
+
+## Oberflächengröße aus user://ui.cfg (Einstellungen → Grafik). Eigene Datei, weil
+## ältere .exe ihr Einstellungen-Autoload mitbringen und die Datei sonst überschreiben.
+const UI_DATEI := "user://ui.cfg"
+
+static func ui_groesse_laden() -> float:
+	var cfg := ConfigFile.new()
+	if cfg.load(UI_DATEI) != OK:
+		return 1.0
+	return clampf(float(cfg.get_value("ui", "groesse", 1.0)), 0.7, 1.3)
+
+## Größere Oberfläche = kleinere Basisauflösung (canvas_items streckt sie aufs Fenster).
+static func ui_basis(groesse: float) -> Vector2i:
+	return Vector2i(roundi(1440.0 / groesse), roundi(810.0 / groesse))
 
 ## Übersetzungstabellen aus dem aktuell geladenen Paket neu einlesen (siehe oben).
 ## Gibt die Zahl der geladenen Tabellen zurück; 0 = nichts geändert.

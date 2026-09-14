@@ -36,3 +36,14 @@
 
 ## Paket 4 — Zelt
 - [x] Zelt zu niedrig → zweite Etage auf die Wand, Dach darauf
+
+## Nachbesserung (14.09., nach Durchsicht: nicht alles war vollständig)
+- [x] Aufsteller mit Bild: kleiner Krug in Sortenfarbe bzw. Teller auf jedem Schild
+- [x] Krüge überall größer (Modell selbst), nicht nur in der Hand
+- [x] Türkisch überall „meslek" statt „bölüm" (Lobby, Regeln, Einführung, Hilfe)
+- [x] Essenspreis im Zelt-Computer einstellbar, Spielraum wächst mit Essenslizenzen
+- [x] Beliebtheitsgrenze auch durch festliche Tagesereignisse, nicht nur Künstler/Deko
+- [x] Übergeben verteilt rund um den Tisch statt immer an derselben Stelle
+- [x] Ausgabe wird auch zum Feierabend nicht mehr geleert
+- [x] Oberflächengröße als Regler in den Einstellungen (70–130 %)
+- [x] Sprung: Strecken in der Luft, Stauchen bei der Landung (Modelle haben keine Sprunganimation)
