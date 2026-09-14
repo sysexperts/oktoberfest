@@ -398,7 +398,7 @@ var _day_saettigung := 1.0
 var _night_visual := false
 var _night_t := -1.0
 ## Helligkeit der Deckenlichter bei voller Nacht
-const DECKENLICHT_ENERGIE := 0.55
+const DECKENLICHT_ENERGIE := 0.4   # Test 13.09.: nachts zu grell (vorher 0.55)
 var _regen_t := -1.0
 ## Nach 22 Uhr bis zum Schlafen: Zelt geschlossen, aber Nacht
 var _nachts_geschlossen := false
@@ -670,6 +670,8 @@ func _save_game() -> void:
 		tables.append({"x": p.x, "z": p.z, "r": (bt as Node3D).rotation.y})
 	var data := {
 		"tisch_layout": TISCH_LAYOUT,
+		"lager_gekauft": _lager_gekauft,
+		"lager_lagen": _lager_lagen(),
 		"money": Game.money,
 		"score": Game.score,
 		"day": _day,
@@ -791,6 +793,14 @@ func _load_game() -> bool:
 				(_all_tables[i] as Node3D).position = Vector3(float(ed.get("x", 0.0)), 0.0, float(ed.get("z", 0.0)))
 				(_all_tables[i] as Node3D).rotation.y = float(ed.get("r", 0.0))
 	_active_count = clampi(_active_count, 0, _all_tables.size())
+	# Gekaufte Lagerregale wieder aufstellen, dann die Lage aller Regale
+	_lager_gekauft = clampi(int(d.get("lager_gekauft", 0)), 0, LAGERREGAL_PLAETZE.size())
+	for nr in range(1, _lager_gekauft + 1):
+		var platz: Vector3 = LAGERREGAL_PLAETZE[nr - 1]
+		_add_lagerregal(nr, platz.x, platz.y, platz.z)
+	var lagen: Variant = d.get("lager_lagen", [])
+	if lagen is Array:
+		_net_lager(lagen)
 	_apply_tent()
 	return true
 
@@ -856,9 +866,11 @@ func _apply_daylight(clock: float) -> void:
 		# Lichterfest-Abend (Stilvorschau tools/render_licht.tscn): Lichterketten
 		# leuchten warm, etwas höher belichtet, kräftigere Farben. Lichtnebel nur
 		# auf Grafikstufe Hoch — der ist teuer (Glow/Farbkorrektur schaltet grafikstufe.gd).
-		env.glow_intensity = lerpf(_day_glow, 1.5, t)
-		env.glow_bloom = lerpf(_day_bloom, 0.22, t)
-		env.tonemap_exposure = lerpf(_day_exposure, 1.25, t)
+		# Test 13.09.: nachts taten die Lichter in den Augen weh — Glühen und
+		# Belichtung deutlich zurückgenommen
+		env.glow_intensity = lerpf(_day_glow, 0.9, t)
+		env.glow_bloom = lerpf(_day_bloom, 0.08, t)
+		env.tonemap_exposure = lerpf(_day_exposure, 1.05, t)
 		env.adjustment_saturation = lerpf(_day_saettigung, _day_saettigung * 1.1, t)
 		env.volumetric_fog_enabled = Einstellungen.grafik >= 2 and t > 0.02
 		env.volumetric_fog_density = 0.006 * t
@@ -1009,6 +1021,9 @@ func _client_ready(version: String) -> void:
 	for aid in _abgelegt.keys():
 		var ab: Dictionary = _abgelegt[aid]
 		_add_abgelegt.rpc_id(sender, aid, ab.pos, int(ab.art), int(ab.typ), float(ab.fill))
+	for nr in range(1, _lager_gekauft + 1):
+		var platz: Vector3 = LAGERREGAL_PLAETZE[nr - 1]
+		_add_lagerregal.rpc_id(sender, nr, platz.x, platz.y, platz.z)
 	_push_stock.rpc_id(sender, int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	for did in _einrichtung.keys():
 		var e: Dictionary = _einrichtung[did]
@@ -1704,6 +1719,18 @@ func net_store_package(kind: int, amount: int) -> void:
 		return
 	if not _stock.has(kind):
 		return
+	# Lager voll: Paket wieder vor den Spieler legen statt es verschwinden zu lassen
+	if int(_stock[kind]) + amount > lager_kapazitaet():
+		var s := multiplayer.get_remote_sender_id()
+		if s == 0:
+			s = 1
+		var pl = _players_nodes.get(s)
+		var ort: Vector3 = (pl as Node3D).global_position if pl else DROP_POINT
+		var id := _pkg_next
+		_pkg_next += 1
+		_add_package.rpc(id, _ablageort(s, ort), kind, amount)
+		_fehler("MSG_LAGER_VOLL", [lager_kapazitaet()])
+		return
 	_stock[kind] = int(_stock[kind]) + amount
 	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 	_broadcast_meta()
@@ -2055,10 +2082,17 @@ func _ausgabe_gesamt(art: int) -> int:
 			n += int(_ausgabe[schluessel])
 	return n
 
-func _ausgabe_hinzufuegen(art: int, typ: int) -> void:
+## Stellplätze je Sorte auf der Ausgabe (scenes/ausgabe.tscn): Krüge 3, Teller 2
+const AUSGABE_JE_SORTE := {1: 3, 2: 2}
+
+## Stellt ein Stück auf den Platz seiner Sorte. false, wenn der Platz voll ist.
+func _ausgabe_hinzufuegen(art: int, typ: int) -> bool:
 	var schluessel := "%d_%d" % [art, typ]
+	if int(_ausgabe.get(schluessel, 0)) >= int(AUSGABE_JE_SORTE.get(art, 3)):
+		return false
 	_ausgabe[schluessel] = int(_ausgabe.get(schluessel, 0)) + 1
 	_ausgabe_senden()
+	return true
 
 ## Nimmt ein fertiges Stück von der Ausgabe. false, wenn keins da ist.
 func _ausgabe_nehmen(art: int, typ: int) -> bool:
@@ -2120,10 +2154,13 @@ func net_put_ausgabe(typ: int) -> void:
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
 		s = 1
+	typ = clampi(typ, 1, 4)
 	if _ausgabe_gesamt(1) >= AUSGABE_PLAETZE_KRUEGE:
 		_fehler("MSG_AUSGABE_FULL", [AUSGABE_PLAETZE_KRUEGE])
 		return
-	_ausgabe_hinzufuegen(1, clampi(typ, 1, 4))
+	if not _ausgabe_hinzufuegen(1, typ):
+		_fehler("MSG_AUSGABE_SORTE_VOLL", [AUSGABE_JE_SORTE[1]])
+		return
 	if s == multiplayer.get_unique_id():
 		_net_ausgabe_abgestellt()
 	else:
@@ -2597,6 +2634,134 @@ func _tisch_freistellen(idx: int) -> bool:
 	bt.position = Vector3(p.x, 0.0, p.y)
 	return p.distance_to(wunsch) > 0.01
 
+# ================================================= Lagerregale (Test 13.09.)
+## Jedes Regal fasst Lager.KAPAZITAET je Ware. Zwei stehen von Anfang an im Zelt,
+## weitere kauft man im Wiesenbüro. Außerhalb der Schicht lassen sich alle mit E
+## aufnehmen, mit der Prost-Taste drehen und woanders abstellen.
+const LAGER_SCENE := preload("res://scenes/lager.tscn")
+const LAGERREGAL_KOSTEN := 350
+const LAGERREGAL_MAX := 4
+## Plätze für gekaufte Regale (frei von Büro, Bühne, Theke): x, z, Drehung
+const LAGERREGAL_PLAETZE := [Vector3(-11.2, 1.0, -PI / 2.0), Vector3(11.2, -6.0, PI / 2.0)]
+var _lager_gekauft := 0
+var _held_lager := {}        # peer_id -> Regal-Index (Server)
+var _haelt_lager := {}       # vom Server: Peer-ID (Text) -> Index
+
+## Alle Lagerregale in fester Reihenfolge (nach Knotenname).
+func _lagerregale() -> Array:
+	var regale := get_tree().get_nodes_in_group("lager")
+	regale.sort_custom(func(a, b): return String(a.name) < String(b.name))
+	return regale
+
+func lager_kapazitaet() -> int:
+	return maxi(1, _lagerregale().size()) * Lager.KAPAZITAET
+
+func haelt_lager(peer_id: int) -> bool:
+	return _haelt_lager.has(str(peer_id))
+
+## Für den Büro-Stand: wer trägt welches Regal (Peer-ID als Text).
+func _haelt_lager_stand() -> Dictionary:
+	var stand := {}
+	for pid in _held_lager.keys():
+		stand[str(pid)] = int(_held_lager[pid])
+	return stand
+
+@rpc("any_peer", "reliable", "call_local")
+func net_buy_lagerregal() -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	if _tent_stage == 0:
+		_fehler("MSG_NEED_TENT")
+		return
+	if _lagerregale().size() >= LAGERREGAL_MAX:
+		_fehler("WHY_MAX_REGALE", [LAGERREGAL_MAX])
+		return
+	if _kredit_sperrt() or not _reserve_ok(LAGERREGAL_KOSTEN):
+		return
+	if not _afford(LAGERREGAL_KOSTEN):
+		_fehler("MSG_NO_MONEY", ["OFFER_LAGERREGAL", _eur(LAGERREGAL_KOSTEN)])
+		return
+	Game.add_money(-LAGERREGAL_KOSTEN)
+	var platz: Vector3 = LAGERREGAL_PLAETZE[mini(_lager_gekauft, LAGERREGAL_PLAETZE.size() - 1)]
+	_lager_gekauft += 1
+	_add_lagerregal.rpc(_lager_gekauft, platz.x, platz.y, platz.z)
+	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	_melde("MSG_LAGERREGAL_GEKAUFT", [lager_kapazitaet()], 2)
+	_broadcast_meta()
+
+## Gekauftes Regal bei allen anlegen (Name LagerKauf1 … — sortiert hinter Lager, Lager2).
+@rpc("authority", "reliable", "call_local")
+func _add_lagerregal(nr: int, x: float, z: float, rot: float) -> void:
+	var name_neu := "LagerKauf%d" % nr
+	if has_node(name_neu):
+		return
+	var regal := LAGER_SCENE.instantiate()
+	regal.name = name_neu
+	regal.position = Vector3(x, 0.0, z)
+	regal.rotation.y = rot
+	add_child(regal)
+
+## Regal aufnehmen oder abstellen (außerhalb der Schicht, mit leeren Händen).
+@rpc("any_peer", "reliable", "call_local")
+func net_move_lager(index: int) -> void:
+	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var regale := _lagerregale()
+	if _held_lager.has(s):
+		var idx: int = _held_lager[s]
+		_held_lager.erase(s)
+		if idx >= 0 and idx < regale.size():
+			var r := regale[idx] as Node3D
+			r.position = Vector3(clampf(r.position.x, -WAND_X + 0.6, WAND_X - 0.6), 0.0,
+				clampf(r.position.z, WAND_HINTEN + 0.6, WAND_VORN - 0.6))
+	elif index >= 0 and index < regale.size() and not _held_lager.values().has(index) \
+			and not _held.has(s) and not _held_deko.has(s):
+		_held_lager[s] = index
+	_broadcast_meta()
+
+@rpc("any_peer", "reliable", "call_local")
+func net_rotate_lager() -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if not _held_lager.has(s):
+		return
+	var regale := _lagerregale()
+	var idx: int = _held_lager[s]
+	if idx < regale.size():
+		(regale[idx] as Node3D).rotation.y = wrapf((regale[idx] as Node3D).rotation.y + PI / 2.0, -PI, PI)
+
+## Getragene Regale vor dem Spieler mitführen (aus _update_held_tables).
+func _update_held_lager() -> void:
+	var regale := _lagerregale()
+	for peer in _held_lager.keys():
+		var idx: int = _held_lager[peer]
+		var pl = _players_nodes.get(peer)
+		if pl == null or idx < 0 or idx >= regale.size():
+			continue
+		var p: Vector3 = (pl as Node3D).global_position - (pl as Node3D).global_transform.basis.z * 2.0
+		(regale[idx] as Node3D).position = Vector3(p.x, 0.0, p.z)
+
+## Lage aller Regale für Clients und Spielstand: [[x, z, rot], …]
+func _lager_lagen() -> Array:
+	var lagen := []
+	for r in _lagerregale():
+		lagen.append([(r as Node3D).position.x, (r as Node3D).position.z, (r as Node3D).rotation.y])
+	return lagen
+
+@rpc("authority", "unreliable")
+func _net_lager(lagen: Array) -> void:
+	var regale := _lagerregale()
+	for i in mini(lagen.size(), regale.size()):
+		var l: Array = lagen[i]
+		(regale[i] as Node3D).position = Vector3(float(l[0]), 0.0, float(l[1]))
+		(regale[i] as Node3D).rotation.y = float(l[2])
+
 func _update_held_tables() -> void:
 	for peer in _held.keys():
 		var idx: int = _held[peer]
@@ -2606,6 +2771,7 @@ func _update_held_tables() -> void:
 		var fwd: Vector3 = -pl.global_transform.basis.z
 		var p: Vector3 = pl.global_position + fwd * 2.5
 		_beertables[idx].position = Vector3(p.x, 0.0, p.z)
+	_update_held_lager()
 	# Getragene Einrichtung schwebt vor dem Spieler mit
 	for peer in _held_deko.keys():
 		var did: int = _held_deko[peer]
@@ -3218,6 +3384,7 @@ func _start_shift() -> void:
 	for s in _held_deko.keys():
 		_deko_abstellen(s)
 	_held.clear()
+	_held_lager.clear()
 	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
 	_clear_messes()
 	_shift_num += 1
@@ -3668,6 +3835,7 @@ func _broadcast_sync() -> void:
 		bz.append((bt as Node3D).position.z)
 		brot.append((bt as Node3D).rotation.y)
 	_net_tables.rpc(bx, bz, brot)
+	_net_lager.rpc(_lager_lagen())
 	# Getragene Einrichtung (nur solange jemand trägt)
 	if not _held_deko.is_empty():
 		var dids := PackedInt32Array()
@@ -3742,6 +3910,7 @@ func _buero_state() -> Dictionary:
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,
 		"zelt_offen": _zelt_offen,
+		"haelt_lager": _haelt_lager_stand(), "regale": _lagerregale().size(),
 		"ereignis": _ereignis, "saison_nr": _saison_nr,
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
@@ -3768,6 +3937,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	_haelt_deko = buero.get("haelt", {})
 	_haelt_tisch = buero.get("haelt_tisch", {})
+	_haelt_lager = buero.get("haelt_lager", {})
 	if not multiplayer.is_server():
 		_zelt_offen = bool(buero.get("zelt_offen", true))
 	_eroeffnung_anzeigen()

@@ -105,6 +105,10 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="Lagerregal" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Werbung" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" instance=ExtResource("2_ang")]
 unique_name_in_owner = true
 layout_mode = 2

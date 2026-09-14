@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shader/umriss.gdshader" id="1_umriss"]
+
+[resource]
+render_priority = 1
+shader = ExtResource("1_umriss")
+shader_parameter/farbe = Color(1, 0.86, 0.35, 1)
+shader_parameter/breite = 0.018

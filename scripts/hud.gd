@@ -59,6 +59,55 @@ func _ready() -> void:
 	_alles_neu()
 	_einblenden()
 
+# ------------------------------------------------------------ Offene Bestellungen
+## Rechts unter der Aufgabe: was die Gäste gerade wollen, z. B. „🍺 8× Helles"
+## (Test 13.09.). Zählt die Bestellungen der sichtbaren Gäste, auch bei Clients.
+const BESTELL_ZEILE := preload("res://scenes/ui/bestell_zeile.tscn")
+const BESTELL_TAKT := 0.5
+const BIER_NAMEN := {1: "Helles", 2: "Weizen", 3: "Radler", 4: "Festbier"}
+const ESSEN_NAMEN := {1: "Brezn", 2: "Würstl", 3: "Hendl"}
+var _bestell_t := 0.0
+var _bestell_zeilen := {}   # "art_typ" -> Zeile
+
+func _process(delta: float) -> void:
+	_bestell_t -= delta
+	if _bestell_t > 0.0:
+		return
+	_bestell_t = BESTELL_TAKT
+	_bestellungen_neu()
+
+func _bestellungen_neu() -> void:
+	var gm := get_parent()
+	var zaehler := {}
+	if gm and "_guests" in gm:
+		for c in (gm._guests as Dictionary).values():
+			if is_instance_valid(c) and int(c.order_state) == 1:
+				var k := "%d_%d" % [int(c.order_kind), int(c.order_type)]
+				zaehler[k] = int(zaehler.get(k, 0)) + 1
+	for k: String in _bestell_zeilen.keys():
+		if not zaehler.has(k):
+			(_bestell_zeilen[k] as Node).call("weg")
+			_bestell_zeilen.erase(k)
+	var reihenfolge: Array = zaehler.keys()
+	reihenfolge.sort_custom(func(a: String, b: String) -> bool: return int(zaehler[a]) > int(zaehler[b]))
+	var liste: Node = %BestellListe
+	for i in reihenfolge.size():
+		var k: String = reihenfolge[i]
+		var teile := k.split("_")
+		var art := int(teile[0])
+		var typ := int(teile[1])
+		var zeile: Node = _bestell_zeilen.get(k)
+		if zeile == null:
+			zeile = BESTELL_ZEILE.instantiate()
+			liste.add_child(zeile)
+			_bestell_zeilen[k] = zeile
+		if art == 2:
+			zeile.setzen("🥨", Customer.FOOD_COLORS.get(typ, Color.WHITE), int(zaehler[k]), ESSEN_NAMEN.get(typ, "?"))
+		else:
+			zeile.setzen("🍺", Customer.BEER_COLORS.get(typ, Color.WHITE), int(zaehler[k]), BIER_NAMEN.get(typ, "?"))
+		liste.move_child(zeile, i)
+	%Bestellungen.visible = not zaehler.is_empty()
+
 ## Beim Spielstart aus dem Schwarz des Ladebildschirms einblenden.
 func _einblenden() -> void:
 	var fade: ColorRect = %Abblenden
@@ -77,7 +126,7 @@ func _alles_neu() -> void:
 	set_quest(_quest_step, _quest_total)
 	set_hint(_hint_key)
 	set_buero(_zustand)
-	%HilfeHinweis.text = Texte.mit_tasten("HUD_HELP_HINT")
+	%HilfeHinweis.text = Texte.mit_tasten("HUD_HELP_HINT") + "   ·   " + tr("HUD_DETAILS_HINT")
 
 # ------------------------------------------------------------ Fadenkreuz
 ## Hinweis unter dem Fadenkreuz. key: Übersetzungsschlüssel, "" = ausblenden.

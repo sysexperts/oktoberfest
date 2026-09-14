@@ -415,6 +415,49 @@ class Lauf extends Node:
 		_check("um 10 Uhr öffnet das Zelt von selbst", gm._zelt_offen, "%.2f Uhr" % gm._clock_hour())
 		gm._phase_time = gm.SHIFT_TIME
 
+		print("  -- Ausgabe je Sorte, Bestellungen, Umriss, Lagerregale, Zelt-Etage (Test 13.09.)")
+		gm._ausgabe.clear()
+		var passt := 0
+		for k in 5:
+			if gm._ausgabe_hinzufuegen(1, 2):
+				passt += 1
+		_check("Stellplatz Weizen fasst 3 Krüge", passt == 3 and int(gm._ausgabe.get("1_2", 0)) == 3, str(gm._ausgabe))
+		_check("anderer Platz bleibt frei", gm._ausgabe_hinzufuegen(1, 1), str(gm._ausgabe))
+		await _frames(2)
+		var ausgabe_neu: Node = get_tree().get_first_node_in_group("ausgabe")
+		var sichtbar := 0
+		if ausgabe_neu:
+			for c in ausgabe_neu.get_node("Plaetze/Bier2").get_children():
+				if c is Krug and c.visible:
+					sichtbar += 1
+		_check("Krüge stehen auf dem Weizen-Platz", sichtbar == 3, "%d sichtbar" % sichtbar)
+		gm._ausgabe.clear()
+		gm._ausgabe_senden()
+		var hud_knoten: Node = gm.get_node("HUD")
+		hud_knoten._bestellungen_neu()
+		_check("Bestellübersicht ohne Bestellungen versteckt", not hud_knoten.get_node("%Bestellungen").visible, "")
+		var umriss_ziel: Node3D = get_tree().get_first_node_in_group("ausgabe")
+		nehmer._umriss_setzen(umriss_ziel, true)
+		var mit_umriss := 0
+		for mi in umriss_ziel.find_children("*", "MeshInstance3D", true, false):
+			if (mi as MeshInstance3D).material_overlay != null:
+				mit_umriss += 1
+		nehmer._umriss_setzen(umriss_ziel, false)
+		_check("Umriss auf dem anvisierten Objekt", mit_umriss > 0, "%d Meshes" % mit_umriss)
+		var regale_vorher: int = gm._lagerregale().size()
+		_check("Lagerkapazität je Regal", gm.lager_kapazitaet() == regale_vorher * Lager.KAPAZITAET, str(gm.lager_kapazitaet()))
+		gm._phase = gm.Phase.INTERMISSION
+		Game.add_money(2000)
+		gm.net_buy_lagerregal()
+		await _frames(3)
+		_check("Lagerregal gekauft", gm._lagerregale().size() == regale_vorher + 1, "%d Regale" % gm._lagerregale().size())
+		gm._phase = gm.Phase.SHIFT
+		var waende_oben := 0
+		for n in gm.get_node("Tent").get_children():
+			if String(n.name).begins_with("WandOben"):
+				waende_oben += 1
+		_check("Zelt hat eine zweite Wand-Etage", waende_oben >= 40, "%d Wände oben" % waende_oben)
+
 		print("  -- Tanzen auf dem Tisch")
 		gm._phase = gm.Phase.SHIFT
 		gm._phase_time = gm.SHIFT_TIME * 0.25   # etwa 18:15

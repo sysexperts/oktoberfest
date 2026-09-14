@@ -207,6 +207,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			_world.net_rotate_einrichtung.rpc_id(1)
 		elif _world.has_method("haelt_tisch") and _world.haelt_tisch(name.to_int()):
 			_world.net_rotate_table.rpc_id(1)
+		elif _world.has_method("haelt_lager") and _world.haelt_lager(name.to_int()):
+			_world.net_rotate_lager.rpc_id(1)
 		else:
 			_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
 			_sfx("cheer")
@@ -479,7 +481,12 @@ func _hint_for(t: Node3D) -> String:
 	if t is Package:
 		return "HINT_PICKUP" if carry_state == 0 else ""
 	if t is Lager:
-		return "HINT_STORE" if carry_state == 3 else "HINT_STORAGE"
+		if carry_state == 3:
+			return "HINT_STORE"
+		if geschlossen and carry_state == 0:
+			var traegt_regal: bool = _world.has_method("haelt_lager") and _world.haelt_lager(name.to_int())
+			return "HINT_PLACE_LAGER" if traegt_regal else "HINT_MOVE_LAGER"
+		return "HINT_STORAGE"
 	if t is ZeltVermietung:
 		return "HINT_RENT_TENT"
 	if t is OfficeDesk or t is BookingKiosk:
@@ -490,14 +497,25 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_CLEAN"
 	return ""
 
+## Anvisiertes Objekt: dünner Umriss statt des gelben Bodenrings (Test 13.09.:
+## der Ring nervte). assets/shader/umriss.tres als Overlay auf alle Meshes des Ziels.
+const UMRISS := preload("res://assets/shader/umriss.tres")
+var _umriss_ziel: Node3D
+
 func _update_highlight() -> void:
-	if _highlight_ring == null or not _highlight_ring.is_inside_tree():
-		return
-	if _current_target != null:
-		_highlight_ring.visible = true
-		_highlight_ring.global_position = _current_target.global_position + Vector3(0, 0.05, 0)
-	else:
+	if _highlight_ring:
 		_highlight_ring.visible = false
+	if _current_target == _umriss_ziel:
+		return
+	_umriss_setzen(_umriss_ziel, false)
+	_umriss_ziel = _current_target
+	_umriss_setzen(_umriss_ziel, true)
+
+func _umriss_setzen(ziel: Node3D, an: bool) -> void:
+	if ziel == null or not is_instance_valid(ziel):
+		return
+	for mi in ziel.find_children("*", "MeshInstance3D", true, false):
+		(mi as MeshInstance3D).material_overlay = UMRISS if an else null
 
 func _handle_interaction(delta: float) -> void:
 	if _current_target == null:
@@ -572,8 +590,12 @@ func _handle_interaction(delta: float) -> void:
 			_world.net_pickup_package.rpc_id(1, pk.pkg_id)
 			_sfx("pop")
 		elif _current_target is Lager:
+			# Außerhalb der Schicht mit leeren Händen: Regal aufnehmen/abstellen
+			if carry_state == 0 and _world.has_method("in_intermission") and _world.in_intermission():
+				_world.net_move_lager.rpc_id(1, _world._lagerregale().find(_current_target))
+				_sfx("pop")
 			# Getragenes Paket abladen
-			if carry_state == 3:
+			elif carry_state == 3:
 				_world.net_store_package.rpc_id(1, carry_pkg_kind, carry_pkg_amount)
 				carry_state = 0
 				carry_pkg_kind = 0

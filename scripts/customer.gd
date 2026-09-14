@@ -154,24 +154,29 @@ func can_serve(kind: int, type: int) -> bool:
 func _update_bubble() -> void:
 	if _bubble == null or _vomit_active:
 		return   # kusarken 🤮 baloncuğu ezilmesin
+	# Test 13.09.: im vollen Zelt überlappten die Texte — normal nur Icons,
+	# mit gedrückter Strg-Taste Gästetyp und Bestellung als Text
+	var typ_zeile := ""
+	if typ != "" and _details:
+		typ_zeile = "\n" + TYP_SYMBOL.get(typ, "") + String(TranslationServer.translate("GAST_TYP_" + typ.to_upper()))
 	if _laune > 0:
 		_bubble.visible = true
-		_bubble.text = "😠" if _laune == 2 else "😤"
+		_bubble.text = ("😠" if _laune == 2 else "😤") + (" " + String(TranslationServer.translate("BUBBLE_ANGRY")) if _details else "") + typ_zeile
 		_bubble.modulate = Color(1, 0.45, 0.35)
 		return
 	if _tanzt:
 		_bubble.visible = true
-		_bubble.text = "🎶"
+		_bubble.text = "🎶" + typ_zeile
 		_bubble.modulate = Color(1, 0.85, 0.4)
 		return
 	if order_state == 1:
 		_bubble.visible = true
-		var praefix: String = TYP_SYMBOL.get(typ, "")
+		var praefix: String = "" if _details else TYP_SYMBOL.get(typ, "")
 		if order_kind == 2:
-			_bubble.text = praefix + "🥨 " + FOOD_NAMES.get(order_type, "")
+			_bubble.text = praefix + "🥨" + (" " + FOOD_NAMES.get(order_type, "") if _details else "") + typ_zeile
 			_bubble.modulate = FOOD_COLORS.get(order_type, Color.WHITE)
 		else:
-			_bubble.text = praefix + "🍺 " + BEER_NAMES.get(order_type, "")
+			_bubble.text = praefix + "🍺" + (" " + BEER_NAMES.get(order_type, "") if _details else "") + typ_zeile
 			_bubble.modulate = BEER_COLORS.get(order_type, Color.WHITE)
 	elif order_state == 2:
 		# Bedient und zufrieden: keine Blase — im vollen Zelt sieht man sonst nur
@@ -185,7 +190,14 @@ func _update_bubble() -> void:
 	else:
 		_bubble.visible = false
 
+## Strg gedrückt: Blasen zeigen Gästetyp und Bestellung als Text (sonst nur Icons)
+var _details := false
+
 func _process(delta: float) -> void:
+	var details := Input.is_physical_key_pressed(KEY_CTRL)
+	if details != _details:
+		_details = details
+		_update_bubble()
 	var t := clampf(delta * 10.0, 0.0, 1.0)
 	position = position.lerp(_net_pos, t)
 	rotation.y = lerp_angle(rotation.y, _net_yaw, t)

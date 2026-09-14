@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/bestell_zeile.gd" id="1_zeile"]
+
+[node name="BestellZeile" type="HBoxContainer"]
+mouse_filter = 2
+theme_override_constants/separation = 8
+script = ExtResource("1_zeile")
+
+[node name="Symbol" type="Label" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(28, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "🍺"
+horizontal_alignment = 1
+
+[node name="Anzahl" type="Label" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "8×"
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="."]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Helles"

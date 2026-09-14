@@ -21,18 +21,18 @@
 - [x] Springen mit Animation ([Leertaste])
 - [x] Tagesstart öffnet die Kirmes, das Zelt eröffnet man selbst am Zelt
 - [x] Zweites Kochfeld direkt daneben (Texte lesbar)
-- [ ] Regale drehen, versetzen, Limit, neue Regale kaufen
+- [x] Regale drehen, versetzen, Limit, neue Regale kaufen
 
 ## Paket 3 — Optik und Übersicht (erst Vorschau)
-- [ ] Vorderer Tresen: eigener Stellplatz je Biersorte/Essen mit Aufstellschild (Bild)
-- [ ] Poster/Aufsteller: welches Getränk welche Farbe
-- [ ] UI rechts: aktuelle Bestellungen (z. B. 2× Radler, 8× Helles) mit Animation
-- [ ] NPC-Texte überlappen → nur Icons, mit Strg Details
-- [ ] Icons neben NPCs unklar (Haus …) → erklären/verständlicher
-- [ ] Gelber Ring beim Anvisieren → dünner Umriss
+- [x] Vorderer Tresen: eigener Stellplatz je Biersorte/Essen mit Aufstellschild (Bild)
+- [x] Poster/Aufsteller: welches Getränk welche Farbe
+- [x] UI rechts: aktuelle Bestellungen (z. B. 2× Radler, 8× Helles) mit Animation
+- [x] NPC-Texte überlappen → nur Icons, mit Strg Details
+- [x] Icons neben NPCs unklar (Haus …) → erklären/verständlicher
+- [x] Gelber Ring beim Anvisieren → dünner Umriss
 - [x] Mitspieler-Krüge schweben über dem Kopf → in die Hand; Krüge größer
-- [ ] Lichter nachts zu hell
-- [ ] UI etwas kleiner, besser an jeden Bildschirm angepasst
+- [x] Lichter nachts zu hell
+- [x] UI etwas kleiner, besser an jeden Bildschirm angepasst
 
 ## Paket 4 — Zelt
-- [ ] Zelt zu niedrig → zweite Etage auf die Wand, Dach darauf
+- [x] Zelt zu niedrig → zweite Etage auf die Wand, Dach darauf

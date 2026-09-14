@@ -47,12 +47,12 @@ func _ready() -> void:
 			exe_generation, BENOETIGTE_GENERATION])
 		_zeige_hinweis()
 		return
-	# UI mit der Fenstergröße strecken (Basis 1280×720). Steht auch in project.godot,
+	# UI mit der Fenstergröße strecken (Basis 1440×810 — Test 13.09.: UI etwas kleiner). Steht auch in project.godot,
 	# ältere .exe kennen das aber nicht — darum hier aus dem Paket setzen.
 	var fenster := get_tree().root
 	fenster.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	fenster.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
-	fenster.content_scale_size = Vector2i(1280, 720)
+	fenster.content_scale_size = Vector2i(1440, 810)
 	var gesperrt := OS.has_feature("editor") or OS.get_cmdline_user_args().has(NEUSTART_MARKE)
 	var args := neustart_argumente(gesperrt, RenderingServer.get_current_rendering_method(), _gewuenschter_renderer())
 	if not args.is_empty() and _neu_starten(args):

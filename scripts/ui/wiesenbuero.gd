@@ -62,6 +62,7 @@ func _ready() -> void:
 	_verbinde("TischVerkaufen", func(_i: int) -> void: _rpc("net_sell_table"))
 	_verbinde("ZeltVergroessern", func(_i: int) -> void: _rpc("net_upgrade_tent"))
 	_verbinde("Toilette", func(_i: int) -> void: _rpc("net_buy_toilet"))
+	_verbinde("Lagerregal", func(_i: int) -> void: _rpc("net_buy_lagerregal"))
 	_verbinde("Werbung", func(_i: int) -> void: _rpc("net_buy_marketing"))
 	_verbinde("Deko", func(_i: int) -> void: _rpc("net_buy_deko"))
 	for key: String in LIZENZEN:
@@ -178,6 +179,16 @@ func _reiter_zelt(stufe: int, ohne_zelt: String) -> void:
 		_erledigt(z, "DONE_INSTALLED")
 	else:
 		_einzelkauf(z, "BTN_BUY", int(_gm.TOILET_COST), ohne_zelt)
+
+	# Lagerregale: mehr Platz für Ware (GameManager.net_buy_lagerregal)
+	var regale := int(_z.get("regale", 2))
+	z = _zeile("Lagerregal")
+	z.setze("🗄 " + tr("OFFER_LAGERREGAL"), tr("OFFER_LAGERREGAL_INFO") % [
+		Lager.KAPAZITAET, Lager.KAPAZITAET, regale, int(_gm.LAGERREGAL_MAX)])
+	if regale >= int(_gm.LAGERREGAL_MAX):
+		_erledigt(z, "WHY_MAX_REGALE")
+	else:
+		_einzelkauf(z, "BTN_BUY", int(_gm.LAGERREGAL_KOSTEN), ohne_zelt)
 
 	var werbung := int(_z.get("mkt", 0))
 	z = _zeile("Werbung")
