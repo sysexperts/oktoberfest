@@ -191,9 +191,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	# Prost-Geste — Taste in den Einstellungen umbelegbar (Aktion "emote")
 	if event.is_action_pressed("emote") and not event.is_echo():
-		# Wer eine Lampe/Deko trägt, dreht sie stattdessen
+		# Wer eine Lampe/Deko oder einen Tisch trägt, dreht ihn stattdessen
 		if _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int()):
 			_world.net_rotate_einrichtung.rpc_id(1)
+		elif _world.has_method("haelt_tisch") and _world.haelt_tisch(name.to_int()):
+			_world.net_rotate_table.rpc_id(1)
 		else:
 			_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
 			_sfx("cheer")
@@ -361,9 +363,13 @@ func _update_target() -> void:
 	var best_score := -1.0
 	var forward := -global_transform.basis.z
 	var origin := global_position + Vector3(0, EYE_HEIGHT * 0.5, 0)
+	# Nichts durch die Zeltwand greifen: drinnen nur Drinnenes, draußen nur Draußenes
+	var ich_drin: bool = _world.has_method("im_zelt") and _world.im_zelt(global_position)
 	for node in get_tree().get_nodes_in_group("interactable"):
 		var n3 := node as Node3D
 		if n3 == null:
+			continue
+		if _world.has_method("im_zelt") and _world.im_zelt(n3.global_position) != ich_drin:
 			continue
 		# Objekte dürfen einen eigenen Ansprechpunkt melden (z. B. Wohnwagen-Tür)
 		var ipos: Vector3 = n3.global_position
@@ -423,7 +429,10 @@ func _hint_for(t: Node3D) -> String:
 		var traegt: bool = _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int())
 		return "HINT_PLACE_DECO" if traegt else "HINT_MOVE_DECO"
 	if t is BeerTable:
-		return "HINT_MOVE_TABLE" if geschlossen else ""
+		if not geschlossen:
+			return ""
+		var traegt_tisch: bool = _world.has_method("haelt_tisch") and _world.haelt_tisch(name.to_int())
+		return "HINT_PLACE_TABLE" if traegt_tisch else "HINT_MOVE_TABLE"
 	if t is MugDispenser:
 		if carry_state == 0:
 			return "HINT_TAKE_MUG"

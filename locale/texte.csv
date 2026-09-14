@@ -225,7 +225,7 @@ ABT_SAUBERKEIT_INFO,Putzkräfte einstellen · du putzt doppelt so schnell,Hire c
 ABT_LAGER_INFO,Ware und Pakete · du trägst Pakete flotter,Supplies and parcels · you carry parcels faster,Malzeme ve paketler · paketleri daha hızlı taşırsın
 MSG_ABT_GEWAEHLT,🎽 %s leitet jetzt: %s,🎽 %s now leads: %s,🎽 %s artık yönetiyor: %s
 MSG_ABT_NUR_LEITER,Personal für %s stellt die Leitung ein (%s),Staff for %s is hired by its lead (%s),%s personelini yönetici alır (%s)
-COMP_DEPT,🎽 Abteilung wechseln,🎽 Change department,🎽 Bölüm değiştir
+COMP_DEPT,🎽 Abteilung wechseln,🎽 Change department,🎽 Meslek değiştir
 VOTE_TITLE,Feierabend?,Call it a night?,Paydos mu?
 VOTE_TEXT,%s will schlafen gehen und den nächsten Tag starten.,%s wants to go to bed and start the next day.,%s yatmak ve sonraki günü başlatmak istiyor.
 VOTE_COUNT,Ja %d · Nein %d · %d Spieler · noch %d s,Yes %d · No %d · %d players · %d s left,Evet %d · Hayır %d · %d oyuncu · %d sn kaldı
@@ -559,3 +559,6 @@ INTRO_LAGER,"📦 Lager: Pakete vom Lieferwagen ins Lager tragen — ohne Ware k
 INTRO_PUTZEN,🧹 Putzen: auf Pfützen und Dreck {interact} halten,🧹 Cleaning: hold {interact} on puddles and mess,🧹 Temizlik: birikinti ve pisliklerde {interact} basılı tut
 INTRO_DEINE,👑 deine Abteilung,👑 your department,👑 senin bölümün
 INTRO_CLOSE,[Enter] Verstanden · {help} Hilfe,[Enter] Got it · {help} Help,[Enter] Anladım · {help} Yardım
+HINT_PLACE_TABLE,{interact} Abstellen · {emote} Drehen,{interact} Put down · {emote} Rotate,{interact} Bırak · {emote} Döndür
+MSG_TABLE_VERSCHOBEN,Der Tisch passte dort nicht hin und steht jetzt auf dem nächsten freien Platz.,The table didn't fit there and now stands on the nearest free spot.,Masa oraya sığmadı ve en yakın boş yere kondu.
+MSG_LIC_PREISRAUM,"Mehr Auswahl, mehr Spielraum: Den Bierpreis kannst du jetzt zwischen %s und %s %% einstellen (Zelt-Computer).","More choice, more leeway: you can now set the beer price between %s and %s %% (tent computer).","Daha çok çeşit, daha çok esneklik: Bira fiyatını artık %s ile %s %% arasında ayarlayabilirsin (çadır bilgisayarı)."

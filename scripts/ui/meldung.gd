@@ -5,7 +5,8 @@ extends PanelContainer
 ## Randfarbe je Art: 0 Info (Gold), 1 Problem (Rot), 2 Erfolg (Grün)
 const FARBEN := [Color(1, 0.839, 0.349), Color(1, 0.42, 0.35), Color(0.55, 0.93, 0.55)]
 
-@export var dauer := 4.5
+## Sekunden sichtbar — Test 13.09.: 4,5 s waren zu kurz zum Lesen
+@export var dauer := 7.5
 
 func zeige(text: String, art: int) -> void:
 	%Text.text = text

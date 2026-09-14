@@ -62,8 +62,9 @@ func _neu() -> void:
 	var essen := Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, tag)
 	%PreisText.text = tr("COMP_PRICE_VALUE") % [Texte.euro(mass), Texte.euro(essen),
 		roundi(faktor * 100.0), roundi(Wirtschaft.preis_andrang(faktor) * 100.0)]
-	%Billiger.disabled = faktor <= Wirtschaft.BIERPREIS_MIN + 0.001
-	%Teurer.disabled = faktor >= Wirtschaft.BIERPREIS_MAX - 0.001
+	# Spielraum wächst mit den Lizenzen (GameManager.bierpreis_grenzen)
+	%Billiger.disabled = faktor <= float(_z.get("preis_min", Wirtschaft.BIERPREIS_MIN)) + 0.001
+	%Teurer.disabled = faktor >= float(_z.get("preis_max", Wirtschaft.BIERPREIS_MAX)) - 0.001
 	# Ware: gleiche Preise wie im Wiesenbüro (GameManager.net_order_goods)
 	if _gm:
 		%WareText.text = tr("COMP_GOODS_STOCK") % [int(_z.get("bier", 0)), int(_z.get("essen", 0)), int(_z.get("pending", 0))]

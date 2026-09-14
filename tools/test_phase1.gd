@@ -265,14 +265,52 @@ class Lauf extends Node:
 
 		print("  -- Bierpreis")
 		var preis0: int = gm._reward_for(1)
+		var raum0: Vector2 = gm.bierpreis_grenzen()
+		_check("ohne Lizenz Preisspielraum 80–130 %", raum0.is_equal_approx(Vector2(0.8, 1.3)), str(raum0))
 		gm.net_set_bierpreis.rpc_id(1, -5)
 		await _frames(3)
-		_check("Bierpreis auf 50 %", is_equal_approx(gm._bierpreis, 0.5), str(gm._bierpreis))
-		_check("billig: weniger je Maß, mehr Andrang", gm._reward_for(1) < preis0 and w.preis_andrang(0.5) > 1.0,
+		_check("Bierpreis bis zur unteren Grenze", is_equal_approx(gm._bierpreis, raum0.x), str(gm._bierpreis))
+		_check("billig: weniger je Maß, mehr Andrang", gm._reward_for(1) < preis0 and w.preis_andrang(raum0.x) > 1.0,
 			"%d -> %d" % [preis0, gm._reward_for(1)])
-		gm.net_set_bierpreis.rpc_id(1, 5)
+		gm.net_set_bierpreis.rpc_id(1, 2)
 		await _frames(3)
 		_check("Bierpreis zurück auf 100 %", is_equal_approx(gm._bierpreis, 1.0), str(gm._bierpreis))
+		var lic_vorher: Dictionary = gm._lic.duplicate()
+		gm._lic["weizen"] = true
+		gm._lic["radler"] = true
+		var raum2: Vector2 = gm.bierpreis_grenzen()
+		_check("Lizenzen erweitern den Preisspielraum", raum2.x < raum0.x and raum2.y > raum0.y, str(raum2))
+		gm._lic = lic_vorher
+
+		print("  -- Tische, Zeltwand, Beliebtheit (Test 13.09.)")
+		_check("drinnen/draußen erkannt", gm.im_zelt(Vector3(0, 0, 0)) and not gm.im_zelt(Vector3(0, 0, 20)), "")
+		var tische_vorher: int = gm._active_count
+		if gm._active_count < 2:
+			gm._active_count = 2
+			gm._apply_tent()
+		if gm._beertables.size() >= 2:
+			var tisch_a: Node3D = gm._beertables[0]
+			var tisch_b: Node3D = gm._beertables[1]
+			var lage_a := tisch_a.position
+			tisch_a.position = tisch_b.position
+			var verschoben: bool = gm._tisch_freistellen(0)
+			_check("Tisch auf besetztem Platz rückt auf freien Platz", verschoben
+				and tisch_a.position.distance_to(tisch_b.position) >= gm.TISCH_MINDESTABSTAND - 0.01, str(tisch_a.position))
+			tisch_a.position = Vector3(-5.0, 0.0, -13.2)   # ins Rückwandregal gestellt
+			gm._tisch_freistellen(0)
+			_check("Tisch im Regal landet auf freier Zeltfläche",
+				gm._tischplatz_frei(Vector2(tisch_a.position.x, tisch_a.position.z), 0), str(tisch_a.position))
+			tisch_a.position = lage_a
+			gm._rebuild_seats()
+		if gm._active_count != tische_vorher:
+			gm._active_count = tische_vorher
+			gm._apply_tent()
+		var pop_vorher: float = gm._popularity
+		gm._popularity = gm._pop_grenze() - 0.5
+		gm._pop_erhoehen(10.0)
+		_check("Bedienen hebt Beliebtheit nur bis zur Grenze", is_equal_approx(gm._popularity, gm._pop_grenze())
+			and gm._pop_grenze() < 100.0, "%.1f / Grenze %.1f" % [gm._popularity, gm._pop_grenze()])
+		gm._popularity = pop_vorher
 
 		print("  -- Einrichtung")
 		Game.add_money(5000)

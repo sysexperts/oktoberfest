@@ -119,7 +119,21 @@ const MARKETING_BOOST := 15.0
 const DEKO_COST := 600        # her seviye +%15 gelir
 const DEKO_BONUS := 0.15
 # E2.4 Lizenzen — başta sadece Helles satılır, gerisi Wiesenbüro'dan alınır
-const LIC_COST := {"weizen": 800, "radler": 800, "brezn": 1200, "sosis": 1200, "festbier": 4000, "hendl": 5000}
+## Test 13.09.: etwas teurer — dafür bringt jede Lizenz mehr Spielraum beim Bierpreis
+const LIC_COST := {"weizen": 1000, "radler": 1000, "brezn": 1500, "sosis": 1500, "festbier": 5000, "hendl": 6000}
+## Bierpreis-Spielraum: ohne Lizenz 80–130 %, jede Lizenz erweitert ihn
+const PREISRAUM_BASIS := Vector2(0.8, 1.3)
+const PREISRAUM_JE_LIZENZ := Vector2(-0.05, 0.12)
+
+## Wie weit sich der Bierpreis (Faktor) heute verstellen lässt.
+func bierpreis_grenzen() -> Vector2:
+	var n := 0
+	for k: String in _lic:
+		if _lic[k]:
+			n += 1
+	var unten := maxf(Wirtschaft.BIERPREIS_MIN, PREISRAUM_BASIS.x + PREISRAUM_JE_LIZENZ.x * n)
+	var oben := minf(Wirtschaft.BIERPREIS_MAX, PREISRAUM_BASIS.y + PREISRAUM_JE_LIZENZ.y * n)
+	return Vector2(snappedf(unten, 0.1), snappedf(oben, 0.1))
 ## Spätlizenzen (Spaß-Plan 4.3): erst ab Zeltstufe 3 oder der 2. Wiesn, dafür teurer im Verkauf
 const LIC_SPAET := ["festbier", "hendl"]
 const BIER_FESTBIER := 4
@@ -361,6 +375,7 @@ var _einrichtung_nodes := {}  # id -> Einrichtung-Knoten (alle Rechner)
 var _einrichtung_next := 1
 var _einrichtung_container: Node3D
 var _haelt_deko := {}         # vom Server: Peer-ID (Text) -> ID, für Hinweise beim Spieler
+var _haelt_tisch := {}        # vom Server: Peer-ID (Text) -> Tischindex, für Drehen und Hinweise
 # Misafir sim: id -> {seat:int, mode:int(0 gir,1 otur,2 çık), pos, tgt, yaw,
 #                     ostate, okind, otype, patience, cooldown, served_t}
 var _guests := {}         # id -> Customer node
@@ -477,6 +492,25 @@ func in_intermission() -> bool:
 func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
 
+## Beliebtheit: Durch gutes Bedienen allein geht es nur bis POP_NATUR_MAX. Den Rest
+## bis 100 % holt man mit gebuchten Künstlern (je Stufe mehr), Werbung und Deko —
+## sonst hätten Künstler keinen Sinn (Test 13.09.: nach kurzer Zeit 100 %).
+const POP_NATUR_MAX := 65.0
+const POP_KUENSTLER_GRENZE := {1: 10.0, 2: 20.0, 3: 35.0}
+const POP_DEKO_GRENZE := 2.0      # je Einrichtungsgegenstand …
+const POP_DEKO_GRENZE_MAX := 10.0 # … höchstens so viel
+
+func _pop_grenze() -> float:
+	var g := POP_NATUR_MAX + float(POP_KUENSTLER_GRENZE.get(_artist_tier, 0.0))
+	g += minf(POP_DEKO_GRENZE_MAX, POP_DEKO_GRENZE * float(_einrichtung.size()))
+	return minf(100.0, g)
+
+## Beliebtheit durch Bedienen erhöhen — höchstens bis zur heutigen Grenze.
+func _pop_erhoehen(betrag: float) -> void:
+	var grenze := _pop_grenze()
+	if _popularity < grenze:
+		_popularity = minf(grenze, _popularity + betrag)
+
 ## Vardiyadaki oyun içi saat (7.0 = 07:00). Kapalıyken -1.
 func _clock_hour() -> float:
 	if _phase != Phase.SHIFT:
@@ -507,7 +541,7 @@ func _save_game() -> void:
 	var tables := []
 	for bt in _all_tables:
 		var p: Vector3 = (bt as Node3D).position
-		tables.append({"x": p.x, "z": p.z})
+		tables.append({"x": p.x, "z": p.z, "r": (bt as Node3D).rotation.y})
 	var data := {
 		"tisch_layout": TISCH_LAYOUT,
 		"money": Game.money,
@@ -580,6 +614,8 @@ func _load_game() -> bool:
 	if lic is Dictionary:
 		for k in LIC_COST.keys():
 			_lic[k] = bool((lic as Dictionary).get(k, false))
+	var raum := bierpreis_grenzen()
+	_bierpreis = clampf(_bierpreis, raum.x, raum.y)
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
 	# Alte Stände: Schritte ab 3 sind durch die zwei neuen Liefer-Schritte eins weiter
@@ -594,7 +630,7 @@ func _load_game() -> bool:
 	if erreicht is Array:
 		_meilensteine = (erreicht as Array).map(func(x: Variant) -> String: return str(x))
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
-	_bierpreis = clampf(float(d.get("bierpreis", 1.0)), Wirtschaft.BIERPREIS_MIN, Wirtschaft.BIERPREIS_MAX)
+	_bierpreis = float(d.get("bierpreis", 1.0))   # Spielraum wird nach dem Laden der Lizenzen geprüft
 	_saison_nr = maxi(1, int(d.get("saison_nr", 1 + (_day - 1) / Wirtschaft.SAISON_TAGE)))
 	_schwierigkeit = clampi(int(d.get("schwierigkeit", 1)), 0, 2)
 	var gespeicherte_saison: Variant = d.get("saison", {})
@@ -627,6 +663,7 @@ func _load_game() -> bool:
 			if e is Dictionary:
 				var ed: Dictionary = e
 				(_all_tables[i] as Node3D).position = Vector3(float(ed.get("x", 0.0)), 0.0, float(ed.get("z", 0.0)))
+				(_all_tables[i] as Node3D).rotation.y = float(ed.get("r", 0.0))
 	_active_count = clampi(_active_count, 0, _all_tables.size())
 	_apply_tent()
 	return true
@@ -901,7 +938,8 @@ func net_set_bierpreis(schritte: int) -> void:
 	if not multiplayer.is_server():
 		return
 	var neu := snappedf(_bierpreis + 0.1 * float(clampi(schritte, -5, 5)), 0.1)
-	_bierpreis = clampf(neu, Wirtschaft.BIERPREIS_MIN, Wirtschaft.BIERPREIS_MAX)
+	var raum := bierpreis_grenzen()
+	_bierpreis = clampf(neu, raum.x, raum.y)
 	_broadcast_meta()
 
 func open_computer_ui() -> void:
@@ -1045,6 +1083,9 @@ func net_buy_table() -> void:
 	Game.add_money(-TABLE_COST)
 	_active_count += 1
 	_apply_tent()
+	# Steht dort schon ein verschobener Tisch: auf den nächsten freien Platz
+	if _tisch_freistellen(_active_count - 1):
+		_rebuild_seats()
 	_melde("MSG_TABLE_PLACED", [_active_count, limit], 2)
 	_broadcast_meta()
 
@@ -1154,7 +1195,8 @@ func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 	g.pfuetze = false
 	g.wild = false
 	if not _has_toilet:
-		g.tgt = PEE_CORNER + Vector3(randf_range(-1.2, 1.2), 0.0, randf_range(-1.2, 1.2))
+		# Verteilt in der Nähe des eigenen Tisches — nicht alle in dieselbe Ecke
+		g.tgt = _wildpinkel_punkt(g)
 	elif _klo_gast < 0:
 		_klo_setzen(id)
 		g.tgt = TOILET_POINT
@@ -1672,7 +1714,7 @@ func _eigenschaften_nacht() -> void:
 	for s in _staff_sim.values():
 		match str(s.get("eig", "")):
 			"charmeur":
-				_popularity = minf(100.0, _popularity + CHARMEUR_POP)
+				_pop_erhoehen(CHARMEUR_POP)
 			"schluckspecht":
 				_stock[WARE_BIER] = maxi(0, int(_stock[WARE_BIER]) - SCHLUCKSPECHT_BIER)
 
@@ -2024,7 +2066,7 @@ func _serve_by_staff(gid: int) -> void:
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
-	_popularity = minf(100.0, _popularity + POP_SERVE * _typ_pop(g))
+	_pop_erhoehen(POP_SERVE * _typ_pop(g))
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
 	var reward := int(_reward_for(int(g.okind), int(g.otype)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
 	_last_earn += reward
@@ -2082,6 +2124,8 @@ func net_buy_license(key: String) -> void:
 	Game.add_money(-cost)
 	_lic[key] = true
 	_melde("MSG_LIC_DONE", [LIC_KEYS[key]], 2)
+	var raum := bierpreis_grenzen()
+	_melde("MSG_LIC_PREISRAUM", [roundi(raum.x * 100.0), roundi(raum.y * 100.0)])
 	_broadcast_meta()
 
 
@@ -2331,9 +2375,92 @@ func net_move_table(index: int) -> void:
 	if s == 0:
 		s = 1
 	if _held.has(s):
+		var idx: int = _held[s]
 		_held.erase(s)
+		if _tisch_freistellen(idx):
+			_fehler("MSG_TABLE_VERSCHOBEN")
+		_rebuild_seats()
 	elif index >= 0 and index < _beertables.size() and not _held.values().has(index) and not _held_deko.has(s):
 		_held[s] = index
+	_broadcast_meta()
+
+## Getragenen Tisch um 45° drehen (Prost-Taste). Die Sitzplätze drehen mit.
+@rpc("any_peer", "reliable", "call_local")
+func net_rotate_table() -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if not _held.has(s):
+		return
+	var bt := _beertables[int(_held[s])] as Node3D
+	bt.rotation.y = wrapf(bt.rotation.y + PI / 4.0, -PI, PI)
+
+## Trägt dieser Spieler gerade einen Tisch? (Clients: aus dem Büro-Stand)
+func haelt_tisch(peer_id: int) -> bool:
+	return _haelt_tisch.has(str(peer_id))
+
+## Liegt der Punkt im Zelt? Für Interaktionen: nichts durch die Zeltwand greifen.
+func im_zelt(p: Vector3) -> bool:
+	return p.x > WAND_X * -1.0 and p.x < WAND_X and p.z > WAND_HINTEN and p.z < WAND_VORN
+
+## Tischplätze: mindestens so weit auseinander, frei von Theke, Bühne, Büro, Klo,
+## Lager und Eingang. Rechtecke: Mitte x/z, halbe Breite x/z (schon mit Tischgröße).
+const TISCH_MINDESTABSTAND := 2.8
+const TISCH_BEREICH_MIN := Vector2(-10.0, -7.3)
+const TISCH_BEREICH_MAX := Vector2(10.0, 9.2)
+const TISCH_SPERREN := [
+	[Vector2(10.0, 2.0), Vector2(3.2, 4.2)],    # Bühne
+	[Vector2(-8.0, 7.0), Vector2(3.6, 3.6)],    # Büroraum
+	[Vector2(10.4, 9.6), Vector2(2.6, 2.6)],    # Klo-Container
+	[Vector2(-11.2, -5.0), Vector2(2.4, 3.0)],  # Lager
+	[Vector2(0.0, 10.0), Vector2(1.8, 1.6)],    # Eingang
+]
+
+func _tischplatz_frei(p: Vector2, ausser: int) -> bool:
+	if p.x < TISCH_BEREICH_MIN.x or p.x > TISCH_BEREICH_MAX.x or p.y < TISCH_BEREICH_MIN.y or p.y > TISCH_BEREICH_MAX.y:
+		return false
+	for sperre: Array in TISCH_SPERREN:
+		var d: Vector2 = (p - (sperre[0] as Vector2)).abs()
+		if d.x < (sperre[1] as Vector2).x and d.y < (sperre[1] as Vector2).y:
+			return false
+	for i in _beertables.size():
+		if i == ausser:
+			continue
+		var q := (_beertables[i] as Node3D).position
+		if p.distance_to(Vector2(q.x, q.z)) < TISCH_MINDESTABSTAND:
+			return false
+	return true
+
+## Nächster freier Platz zum Wunschpunkt (Raster 0,5 m).
+func _freier_tischplatz(wunsch: Vector2, ausser: int) -> Vector2:
+	if _tischplatz_frei(wunsch, ausser):
+		return wunsch
+	var bester := wunsch
+	var beste_d := INF
+	var x := TISCH_BEREICH_MIN.x
+	while x <= TISCH_BEREICH_MAX.x:
+		var z := TISCH_BEREICH_MIN.y
+		while z <= TISCH_BEREICH_MAX.y:
+			var p := Vector2(x, z)
+			var d := p.distance_squared_to(wunsch)
+			if d < beste_d and _tischplatz_frei(p, ausser):
+				beste_d = d
+				bester = p
+			z += 0.5
+		x += 0.5
+	return bester
+
+## Tisch auf einen freien Platz rücken. true, wenn er verschoben werden musste.
+func _tisch_freistellen(idx: int) -> bool:
+	if idx < 0 or idx >= _beertables.size():
+		return false
+	var bt := _beertables[idx] as Node3D
+	var wunsch := Vector2(bt.position.x, bt.position.z)
+	var p := _freier_tischplatz(wunsch, idx)
+	bt.position = Vector3(p.x, 0.0, p.y)
+	return p.distance_to(wunsch) > 0.01
 
 func _update_held_tables() -> void:
 	for peer in _held.keys():
@@ -2545,7 +2672,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_quest_served_once = true
-	_popularity = minf(100.0, _popularity + POP_SERVE * _typ_pop(g))
+	_pop_erhoehen(POP_SERVE * _typ_pop(g))
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
 	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
 	var reward := int(_reward_for(int(g.okind), int(g.otype)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
@@ -2941,7 +3068,7 @@ func _start_shift() -> void:
 	_ohne_ware_s = 0.0
 	_kombo.clear()
 	_ereignis_waehlen()
-	_ausgabe.clear()
+	# Ausgabe bleibt: vor der Schicht vorgezapfte Krüge verschwinden nicht mehr
 	_ausgabe_senden()
 	_last_earn = 0
 	_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN, ERSTE_GAESTE_MAX)
@@ -2987,7 +3114,8 @@ func _end_shift(reason := 0) -> void:
 		_guest_sim[gid].aufbruch_t = randf_range(4.0, 14.0)
 		_guest_sim[gid].ostate = 0
 	_net_feierabend.rpc()
-	_clear_messes()
+	# Dreck bleibt nach Feierabend liegen — putzen geht jetzt auch außerhalb der
+	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
 	_clear_artists()          # E5: Auftritt vorbei
 	_ausgabe.clear()          # Übriges von der Ausgabe wird weggeräumt
 	_ereignis = ""
@@ -3315,7 +3443,8 @@ func _clear_messes() -> void:
 
 @rpc("any_peer", "reliable", "call_local")
 func net_clean(id: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.SHIFT:
+	# Putzen geht auch außerhalb der Schicht (Reste vom Vortag wegmachen)
+	if not multiplayer.is_server():
 		return
 	if not _messes.has(id):
 		return
@@ -3390,10 +3519,12 @@ func _broadcast_sync() -> void:
 	# Bira masası konumları (taşıma senkronu)
 	var bx := PackedFloat32Array()
 	var bz := PackedFloat32Array()
+	var brot := PackedFloat32Array()
 	for bt in _beertables:
 		bx.append((bt as Node3D).position.x)
 		bz.append((bt as Node3D).position.z)
-	_net_tables.rpc(bx, bz)
+		brot.append((bt as Node3D).rotation.y)
+	_net_tables.rpc(bx, bz, brot)
 	# Getragene Einrichtung (nur solange jemand trägt)
 	if not _held_deko.is_empty():
 		var dids := PackedInt32Array()
@@ -3409,10 +3540,12 @@ func _broadcast_sync() -> void:
 		_net_einrichtung_pos.rpc(dids, dx, dz, drot)
 
 @rpc("authority", "unreliable")
-func _net_tables(bx: PackedFloat32Array, bz: PackedFloat32Array) -> void:
+func _net_tables(bx: PackedFloat32Array, bz: PackedFloat32Array, brot: PackedFloat32Array) -> void:
 	for i in range(_beertables.size()):
 		if i < bx.size():
 			(_beertables[i] as Node3D).position = Vector3(bx[i], 0.0, bz[i])
+		if i < brot.size():
+			(_beertables[i] as Node3D).rotation.y = brot[i]
 
 @rpc("authority", "unreliable")
 func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array, ctanz: PackedByteArray) -> void:
@@ -3454,12 +3587,17 @@ func _buero_state() -> Dictionary:
 	var haelt := {}
 	for pid in _held_deko.keys():
 		haelt[str(pid)] = int(_held_deko[pid])
+	var haelt_tisch := {}
+	for pid in _held.keys():
+		haelt_tisch[str(pid)] = int(_held[pid])
+	var preis := bierpreis_grenzen()
 	return {
 		"stage": _tent_stage, "tables": _active_count, "limit": int(TENT_TABLE_LIMIT[_tent_stage]),
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
+		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,
 		"ereignis": _ereignis, "saison_nr": _saison_nr,
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
@@ -3485,6 +3623,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_zeltname_anzeigen()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
 	_haelt_deko = buero.get("haelt", {})
+	_haelt_tisch = buero.get("haelt_tisch", {})
 	var ereignis_neu := str(buero.get("ereignis", ""))
 	if ereignis_neu != _ereignis or multiplayer.is_server():
 		if not multiplayer.is_server():
