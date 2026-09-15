@@ -39,7 +39,7 @@ script = ExtResource("1_spiel")
 
 [node name="Schild" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -2.81)
-modulate = Color(1, 0.88, 0.5)
+modulate = Color(1, 0.88, 0.5, 1)
 pixel_size = 0.004
 text = "Nagelbalken"
 font_size = 96
