@@ -54,6 +54,8 @@
 [ext_resource type="PackedScene" uid="uid://bxygwrtq431wm" path="res://assets/kirmes/Models/Foliage/Reeds.fbx" id="50_npmqp"]
 [ext_resource type="PackedScene" uid="uid://dsf3f5odhuxhk" path="res://assets/kirmes/Models/Foliage/Tree_Apple.fbx" id="51_haseo"]
 [ext_resource type="PackedScene" path="res://scenes/kulisse/altstadt.tscn" id="52_altstadt"]
+[ext_resource type="Material" path="res://assets/shader/pflaster.tres" id="53_pflaster"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/strassen.tscn" id="54_strassen"]
 [ext_resource type="PackedScene" path="res://scenes/wiesenbuero.tscn" id="98_huette"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
@@ -107,6 +109,7 @@ size = Vector3(1, 5, 107)
 [node name="Kirmes" type="Node3D" unique_id=382915238]
 
 [node name="Ground" type="MeshInstance3D" parent="." unique_id=973139363]
+visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
 material_override = SubResource("MatGround")
 mesh = SubResource("GroundMesh")
@@ -115,12 +118,12 @@ mesh = SubResource("GroundMesh")
 
 [node name="PathNorth" type="MeshInstance3D" parent="Wege" unique_id=214295319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19)
-material_override = SubResource("MatPath")
+material_override = ExtResource("53_pflaster")
 mesh = SubResource("PathNS")
 
 [node name="PathSouth" type="MeshInstance3D" parent="Wege" unique_id=1409526696]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -22)
-material_override = SubResource("MatPath")
+material_override = ExtResource("53_pflaster")
 mesh = SubResource("PathNS")
 
 [node name="Lamps2" parent="Wege/PathSouth" unique_id=103946400 instance=ExtResource("13_w4g7w")]
@@ -128,17 +131,17 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -21, 0, -4)
 
 [node name="PathWest" type="MeshInstance3D" parent="Wege" unique_id=1106324086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -1.5)
-material_override = SubResource("MatPath")
+material_override = ExtResource("53_pflaster")
 mesh = SubResource("PathWE")
 
 [node name="PathEast" type="MeshInstance3D" parent="Wege" unique_id=989952742]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -1.5)
-material_override = SubResource("MatPath")
+material_override = ExtResource("53_pflaster")
 mesh = SubResource("PathWE")
 
 [node name="PathWohnwagen" type="MeshInstance3D" parent="Wege" unique_id=407753596]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, -32.80963)
-material_override = SubResource("MatPath")
+material_override = ExtResource("53_pflaster")
 mesh = SubResource("PathLane")
 
 [node name="WC" parent="Wege" unique_id=1695443048 instance=ExtResource("24_p4kn1")]
@@ -396,6 +399,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.820018, 0, 36.81225)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9337764, 0, 29.594742)
 
 [node name="Altstadt" parent="." unique_id=384504598 instance=ExtResource("52_altstadt")]
+
+[node name="Strassen" parent="." instance=ExtResource("54_strassen")]
 
 [node name="Ticket_Box_C" parent="." unique_id=2108803535 instance=ExtResource("23_87m88")]
 transform = Transform3D(-0.75, 0, 1.299038, 0, 1.5, 0, -1.299038, 0, -0.75, -31.677767, -0.115615, -12.686505)
