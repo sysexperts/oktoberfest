@@ -465,8 +465,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_ZELT_EROEFFNEN"
 	if t.has_method("ist_raufbold"):
 		return "HINT_RAUSWERFEN" if t.ist_raufbold() else ""
-	if t.has_method("ist_schiessstand"):
-		return "" if t.laeuft() or carry_state != 0 else "HINT_SCHIESSSTAND"
+	if t.has_method("ist_budenbesitzer"):
+		return "" if t.bude == null or t.bude.laeuft() or carry_state != 0 else "HINT_SCHIESSSTAND"
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
 	if t is Customer:
 		var g := t as Customer
@@ -571,11 +571,12 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_aufheben.rpc_id(1, _current_target.ablage_id)
 				_sfx("pop")
 			return
-		if _current_target.has_method("ist_schiessstand"):
-			# Schießbude: erst bezahlen (Server), dann startet das Spiel
-			if not _current_target.laeuft() and carry_state == 0:
-				_minispiel_bude = _current_target
-				_world.net_schiessen_bezahlen.rpc_id(1)
+		if _current_target.has_method("ist_budenbesitzer"):
+			# Schießbude: beim Budenbesitzer bezahlen (Server), dann startet das Spiel
+			var bude = _current_target.bude
+			if bude and not bude.laeuft() and carry_state == 0:
+				_minispiel_bude = bude
+				_world.net_schiessen_bezahlen.rpc_id(1, _world.get_path_to(bude))
 			return
 		if _current_target.has_method("ist_raufbold"):
 			# Massenschlägerei: Raufbold packen und rauswerfen

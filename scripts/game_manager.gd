@@ -1776,22 +1776,25 @@ func _net_band_zurueck() -> void:
 const SCHIESS_PREIS := 2
 ## Treffer ab … → Preis in Euro und Name (Übersetzungsschlüssel)
 const SCHIESS_GEWINNE := [[10, 20, "PREIS_TEDDY"], [7, 8, "PREIS_HERZ"], [4, 3, "PREIS_ROSE"]]
-var _schiessen_bezahlt := {}   # Peer-ID -> true, solange eine Runde läuft
+var _schiessen_bezahlt := {}   # Peer-ID -> Pfad der Bude, solange eine Runde läuft
 
+## bude: Pfad der Schießbude vom GameManager aus (für den Budenbesitzer)
 @rpc("any_peer", "reliable", "call_local")
-func net_schiessen_bezahlen() -> void:
+func net_schiessen_bezahlen(bude: NodePath = NodePath()) -> void:
 	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
 		s = 1
-	if _schiessen_bezahlt.has(s):
+	if _schiessen_bezahlt.has(s) or _schiessen_bezahlt.values().has(bude) and not bude.is_empty():
 		return
 	if not _afford(SCHIESS_PREIS):
 		_fehler("MSG_NO_MONEY", ["WORLD_SCHIESSSTAND", _eur(SCHIESS_PREIS)])
 		return
 	Game.add_money(-SCHIESS_PREIS)
-	_schiessen_bezahlt[s] = true
+	_schiessen_bezahlt[s] = bude
+	if not bude.is_empty():
+		_net_bude_besetzt.rpc(bude, true)
 	if s == multiplayer.get_unique_id():
 		_net_schiessen_los()
 	else:
@@ -1813,7 +1816,10 @@ func net_schiessen_ende(treffer: int) -> void:
 		s = 1
 	if not _schiessen_bezahlt.has(s):
 		return
+	var bude: NodePath = _schiessen_bezahlt[s]
 	_schiessen_bezahlt.erase(s)
+	if not bude.is_empty():
+		_net_bude_besetzt.rpc(bude, false)
 	treffer = clampi(treffer, 0, 10)
 	_stats.geschossen = int(_stats.get("geschossen", 0)) + 1
 	for gewinn: Array in SCHIESS_GEWINNE:
@@ -1823,6 +1829,13 @@ func net_schiessen_ende(treffer: int) -> void:
 			_schiess_meldung(s, "MSG_SCHIESS_GEWINN", [treffer, str(gewinn[2]), _eur(int(gewinn[1]))], 2)
 			return
 	_schiess_meldung(s, "MSG_SCHIESS_NIETE", [treffer], 0)
+
+## Bei allen: Budenbesitzer geht zur Kasse (an) oder zurück hinter die Theke.
+@rpc("authority", "reliable", "call_local")
+func _net_bude_besetzt(bude: NodePath, an: bool) -> void:
+	var b := get_node_or_null(bude)
+	if b and b.has_method("besetzt_setzen"):
+		b.besetzt_setzen(an)
 
 func _schiess_meldung(peer: int, key: String, args: Array, art: int) -> void:
 	if peer == multiplayer.get_unique_id():

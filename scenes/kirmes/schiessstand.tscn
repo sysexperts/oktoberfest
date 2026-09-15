@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/kirmes/schiessstand.gd" id="1_spiel"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/schiessstand_spiel.tscn" id="2_bude"]
 [ext_resource type="Theme" path="res://assets/ui/theme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://scripts/kirmes/budenbesitzer.gd" id="4_besitzer"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter2.tscn" id="5_figur"]
 
 [sub_resource type="StyleBoxFlat" id="InfoFlaeche"]
 bg_color = Color(0.08, 0.1, 0.16, 0.82)
@@ -15,10 +17,30 @@ content_margin_top = 10.0
 content_margin_right = 18.0
 content_margin_bottom = 10.0
 
+[sub_resource type="StyleBoxFlat" id="LuftGrund"]
+bg_color = Color(0.08, 0.1, 0.16, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="LuftFuellung"]
+bg_color = Color(0.55, 0.82, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [node name="Schiessstand" type="Node3D"]
 script = ExtResource("1_spiel")
 
 [node name="Bude" parent="." instance=ExtResource("2_bude")]
+
+[node name="Besitzer" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.45)
+script = ExtResource("4_besitzer")
+
+[node name="Model" parent="Besitzer" instance=ExtResource("5_figur")]
 
 [node name="Anzeige" type="CanvasLayer" parent="."]
 layer = 5
@@ -28,14 +50,54 @@ visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -420.0
+offset_left = -460.0
 offset_top = 24.0
-offset_right = 420.0
+offset_right = 460.0
 offset_bottom = 74.0
 grow_horizontal = 2
 theme = ExtResource("3_theme")
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("InfoFlaeche")
 text = "🎯"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Luft" type="ProgressBar" parent="Anzeige"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -64.0
+offset_right = 160.0
+offset_bottom = -44.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("LuftGrund")
+theme_override_styles/fill = SubResource("LuftFuellung")
+value = 100.0
+show_percentage = false
+
+[node name="LuftText" type="Label" parent="Anzeige/Luft"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -30.0
+offset_bottom = -4.0
+grow_horizontal = 2
+theme = ExtResource("3_theme")
+theme_override_font_sizes/font_size = 18
+text = "SCHIESS_LUFT"
+horizontal_alignment = 1
+
+[node name="Fadenkreuz" type="Label" parent="Anzeige"]
+offset_right = 48.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(1, 0.25, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+text = "⊕"
 horizontal_alignment = 1
 vertical_alignment = 1

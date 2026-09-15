@@ -102,13 +102,20 @@ class Lauf extends Node:
 		await _foto(Vector3(22.0, 0.0, 18.0), 45.0, 10.0, "zelt_aussen_seite")
 		await _foto(Vector3(24.0, 0.0, 22.0), -105.0, 6.0, "zelt_buero_aussen")
 		# Schießbude (Kirmes, Stand N07) von vorn und beim Schießen
-		await _foto(Vector3(-4.5, 0.0, 21.8), 180.0, 8.0, "kirmes_schiessstand")
-		var bude := gm.get_node("Kirmes/StaendeNord/N07_Schi")
+		await _foto(Vector3(-2.25, 0.0, 19.5), 180.0, 12.0, "kirmes_schiessstand")
+		await _foto(Vector3(-0.8, 0.0, 23.6), 180.0, 4.0, "kirmes_schiessstand_nah")
+		var bude := gm.get_node("Kirmes/StaendeNord/N07_Schiessbude")
+		bude.besetzt_setzen(true)
+		await get_tree().create_timer(3.0).timeout
+		await _foto(Vector3(-2.25, 0.0, 21.5), 180.0, 8.0, "kirmes_schiessstand_besitzer_kasse")
 		bude.spiel_starten(spieler)
+		bude._pitch = deg_to_rad(-3.0)
+		bude._yaw = deg_to_rad(-6.0)
 		await _frames(50)
 		get_viewport().get_texture().get_image().save_png("res://tools/kirmes_schiessstand_spiel.png")
 		print("  gespeichert: kirmes_schiessstand_spiel")
 		bude._beenden()
+		bude.besetzt_setzen(false)
 		await _foto(Vector3(20.0, 0.0, -24.0), 135.0, 10.0, "zelt_aussen_hinten")
 		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")
 		# Büroraum durch die Tür

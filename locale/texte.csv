@@ -508,7 +508,8 @@ WORLD_KEG_4,Festbier ({interact}),Festival beer ({interact}),Festival birası ({
 WORLD_KEG_5,Wasser ({interact}),Water ({interact}),Su ({interact})
 WORLD_SCHIESSSTAND,🎯 Schießbude,🎯 Shooting Gallery,🎯 Atış Standı
 HINT_SCHIESSSTAND,{interact} Schießen (2 €),{interact} Shoot (€2),{interact} Ateş et (2 €)
-SCHIESS_ANZEIGE,"🎯 Treffer: %d   ·   Schuss: %d   ·   Zeit: %d s   ·   Linksklick schießt, Esc beendet","🎯 Hits: %d   ·   Shots: %d   ·   Time: %d s   ·   Left click shoots, Esc quits","🎯 İsabet: %d   ·   Atış: %d   ·   Süre: %d sn   ·   Sol tık ateş, Esc çıkış"
+SCHIESS_ANZEIGE,"🎯 Treffer: %d   ·   Schuss: %d   ·   Zeit: %d s   ·   Maus zielt, Linksklick schießt, Esc beendet","🎯 Hits: %d   ·   Shots: %d   ·   Time: %d s   ·   Mouse aims, left click shoots, Esc quits","🎯 İsabet: %d   ·   Atış: %d   ·   Süre: %d sn   ·   Fare nişan alır, sol tık ateş, Esc çıkış"
+SCHIESS_LUFT,Leertaste halten: Luft anhalten · Glocke zählt doppelt,Hold Space: hold your breath · the bell counts double,Boşluk tuşunu basılı tut: nefesini tut · çan iki kat sayılır
 PREIS_TEDDY,Teddybär,teddy bear,oyuncak ayı
 PREIS_HERZ,Lebkuchenherz,gingerbread heart,zencefilli kurabiye kalbi
 PREIS_ROSE,Plastikrose,plastic rose,plastik gül
