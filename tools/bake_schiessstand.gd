@@ -38,6 +38,16 @@ func _init() -> void:
 	m.geweih = _mat("geweih", Color(0.86, 0.8, 0.68), 0.7)
 	m.rosa = _mat("rosa_lack", Color(0.95, 0.55, 0.7), 0.6)
 	m.vorhang = _mat("vorhang_rot", Color(0.55, 0.08, 0.1), 0.9)
+	# Kulissenhimmel: gedämpft und ohne Leuchten — der Zelthimmel strahlte zu hell
+	var kh := StandardMaterial3D.new()
+	kh.albedo_texture = load("res://assets/zelt/texturen/himmel.png")
+	kh.albedo_color = Color(0.5, 0.56, 0.72)
+	kh.uv1_triplanar = true
+	kh.uv1_world_triplanar = true
+	kh.uv1_scale = Vector3.ONE / 6.0
+	kh.roughness = 1.0
+	ResourceSaver.save(kh, MAT + "kulisse_himmel.tres")
+	m.kulisse_himmel = ResourceLoader.load(MAT + "kulisse_himmel.tres", "", ResourceLoader.CACHE_MODE_REPLACE)
 	s_gewehr = _speichern(_gewehr(), GEWEHR)
 	_speichern(_bude(), BUDE)
 	print("SCHIESSSTAND FERTIG")
@@ -215,7 +225,7 @@ func _boden_und_waende(r: Node3D, hb: float, hoehe: float) -> void:
 	_box(g, "Podest", Vector3(BREITE + 0.2, BODEN, TIEFE + 0.1), Vector3(0, BODEN / 2.0, -TIEFE / 2.0 + 0.05), m.holz_dunkel)
 	_box(g, "Dielen", Vector3(BREITE - 0.2, 0.02, TIEFE - 0.1), Vector3(0, BODEN + 0.01, -TIEFE / 2.0), m.dielen)
 	_box(g, "Sockelblende", Vector3(BREITE + 0.24, BODEN - 0.06, 0.04), Vector3(0, BODEN / 2.0, 0.1), m.rauten_fein)
-	_box(g, "Rueckwand", Vector3(BREITE, hoehe, 0.12), Vector3(0, BODEN + hoehe / 2.0, -TIEFE), m.himmel)
+	_box(g, "Rueckwand", Vector3(BREITE, hoehe, 0.12), Vector3(0, BODEN + hoehe / 2.0, -TIEFE), m.kulisse_himmel)
 	for s: float in [-1.0, 1.0]:
 		var seite := "Links" if s < 0 else "Rechts"
 		_box(g, "Wand" + seite, Vector3(0.14, hoehe, TIEFE), Vector3(s * hb, BODEN + hoehe / 2.0, -TIEFE / 2.0), m.budenwand)
@@ -241,7 +251,7 @@ func _kulisse(r: Node3D, hb: float) -> void:
 	# Wolken vor dem Himmel und Hügel
 	for i in 5:
 		var x := -2.4 + i * 1.2
-		_kugel(k, "Wolke%d" % i, 0.28, Vector3(x, BODEN + 2.95 - (i % 2) * 0.2, -TIEFE + 0.1), m.weiss, Vector3(1.8, 0.7, 0.2))
+		_kugel(k, "Wolke%d" % i, 0.28, Vector3(x, BODEN + 2.95 - (i % 2) * 0.2, -TIEFE + 0.1), m.creme, Vector3(1.8, 0.7, 0.2))
 	for i in 3:
 		_kugel(k, "Huegel%d" % i, 1.2, Vector3(-2.2 + i * 2.2, BODEN + 0.6, -TIEFE + 0.25), m.huegel if i % 2 == 0 else m.huegel_dunkel, Vector3(1.4, 0.8, 0.15))
 	# Tannen

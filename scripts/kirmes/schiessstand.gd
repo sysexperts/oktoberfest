@@ -11,6 +11,9 @@ extends Node3D
 ## Das Schießen läuft nur beim Schützen; den Besitzer sehen alle weggehen.
 
 @export var schuss := 10
+## Preis je Runde (Euro, der Server liest ihn) und Hinweis beim Budenbesitzer
+@export var preis := 2
+@export var hinweis := "HINT_SCHIESSSTAND"
 @export var zeit := 30.0
 ## Wie schnell die Figuren wandern (m/s): untere (Enten) und obere Reihe (Scheiben)
 @export var tempo_reihen := Vector2(0.8, -1.2)
@@ -19,7 +22,7 @@ extends Node3D
 ## Mausempfindlichkeit beim Zielen (wird mit der Einstellung „Maus" multipliziert)
 @export var maus_empfindlichkeit := 0.0022
 ## Atemwackeln in Grad
-@export var wackeln := 1.4
+@export var wackeln := 2.3
 ## Sekunden Luft anhalten, bis die Luft ausgeht
 @export var luft_dauer := 3.0
 ## Wackeln beim Luftanhalten (Anteil) und danach, wenn die Luft ausgegangen ist

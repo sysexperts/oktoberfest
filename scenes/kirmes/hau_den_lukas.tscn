@@ -1,0 +1,97 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/kirmes/hau_den_lukas.gd" id="1_spiel"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/lukas_stand.tscn" id="2_stand"]
+[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://scripts/kirmes/budenbesitzer.gd" id="4_besitzer"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter3.tscn" id="5_figur"]
+
+[sub_resource type="StyleBoxFlat" id="InfoFlaeche"]
+bg_color = Color(0.08, 0.1, 0.16, 0.82)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="KraftGrund"]
+bg_color = Color(0.08, 0.1, 0.16, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="KraftFuellung"]
+bg_color = Color(0.95, 0.25, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="HauDenLukas" type="Node3D"]
+script = ExtResource("1_spiel")
+
+[node name="Stand" parent="." instance=ExtResource("2_stand")]
+
+[node name="Besitzer" type="Node3D" parent="."]
+script = ExtResource("4_besitzer")
+figur_nr = 2
+
+[node name="Model" parent="Besitzer" instance=ExtResource("5_figur")]
+
+[node name="Anzeige" type="CanvasLayer" parent="."]
+layer = 5
+visible = false
+
+[node name="Info" type="Label" parent="Anzeige"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -460.0
+offset_top = 24.0
+offset_right = 460.0
+offset_bottom = 74.0
+grow_horizontal = 2
+theme = ExtResource("3_theme")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("InfoFlaeche")
+text = "🔨"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Kraft" type="ProgressBar" parent="Anzeige"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -220.0
+offset_right = -80.0
+offset_bottom = 220.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/background = SubResource("KraftGrund")
+theme_override_styles/fill = SubResource("KraftFuellung")
+fill_mode = 3
+show_percentage = false
+
+[node name="KraftText" type="Label" parent="Anzeige"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -64.0
+offset_right = 300.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_theme")
+theme_override_font_sizes/font_size = 20
+text = "LUKAS_KRAFT"
+horizontal_alignment = 1

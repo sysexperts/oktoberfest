@@ -568,6 +568,15 @@ class Lauf extends Node:
 		_check("10 Treffer: Teddy (20 €)", Game.money == geld_vor - gm.SCHIESS_PREIS + 20 and gm._schiessen_bezahlt.is_empty(), str(Game.money - geld_vor))
 		gm.net_schiessen_ende(10)
 		_check("Ohne Bezahlen kein Preis", Game.money == geld_vor - gm.SCHIESS_PREIS + 20, "")
+		var spiele := get_tree().get_nodes_in_group("kirmes_spiel")
+		_check("Dosenwerfen und Hau den Lukas stehen auf der Kirmes", spiele.size() == 4, "%d Stände" % spiele.size())
+		if not spiele.is_empty():
+			var stand: Node = spiele[0]
+			var geld_stand: int = Game.money
+			gm.net_schiessen_bezahlen(gm.get_path_to(stand))
+			_check("Kirmesspiel kostet den Preis des Stands", Game.money == geld_stand - int(stand.preis), str(Game.money - geld_stand))
+			gm.net_schiessen_ende(4)
+			_check("4 Punkte: Rose (3 €)", Game.money == geld_stand - int(stand.preis) + 3, str(Game.money - geld_stand))
 
 		print("  -- Rausch")
 		gm._rebuild_seats()

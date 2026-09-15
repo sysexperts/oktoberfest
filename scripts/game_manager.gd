@@ -1788,10 +1788,15 @@ func net_schiessen_bezahlen(bude: NodePath = NodePath()) -> void:
 		s = 1
 	if _schiessen_bezahlt.has(s) or _schiessen_bezahlt.values().has(bude) and not bude.is_empty():
 		return
-	if not _afford(SCHIESS_PREIS):
-		_fehler("MSG_NO_MONEY", ["WORLD_SCHIESSSTAND", _eur(SCHIESS_PREIS)])
+	# Preis kommt vom Stand (Schießbude, Dosenwerfen, Hau den Lukas)
+	var preis := SCHIESS_PREIS
+	var stand := get_node_or_null(bude) if not bude.is_empty() else null
+	if stand and "preis" in stand:
+		preis = int(stand.preis)
+	if not _afford(preis):
+		_fehler("MSG_NO_MONEY", ["WORLD_KIRMES_SPIEL", _eur(preis)])
 		return
-	Game.add_money(-SCHIESS_PREIS)
+	Game.add_money(-preis)
 	_schiessen_bezahlt[s] = bude
 	if not bude.is_empty():
 		_net_bude_besetzt.rpc(bude, true)
@@ -1826,9 +1831,9 @@ func net_schiessen_ende(treffer: int) -> void:
 		if treffer >= int(gewinn[0]):
 			Game.add_money(int(gewinn[1]))
 			_stats.schiess_preise = int(_stats.get("schiess_preise", 0)) + 1
-			_schiess_meldung(s, "MSG_SCHIESS_GEWINN", [treffer, str(gewinn[2]), _eur(int(gewinn[1]))], 2)
+			_schiess_meldung(s, "MSG_KIRMES_GEWINN", [treffer, str(gewinn[2]), _eur(int(gewinn[1]))], 2)
 			return
-	_schiess_meldung(s, "MSG_SCHIESS_NIETE", [treffer], 0)
+	_schiess_meldung(s, "MSG_KIRMES_NIETE", [treffer], 0)
 
 ## Bei allen: Budenbesitzer geht zur Kasse (an) oder zurück hinter die Theke.
 @rpc("authority", "reliable", "call_local")

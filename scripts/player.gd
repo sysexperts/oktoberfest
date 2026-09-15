@@ -466,7 +466,9 @@ func _hint_for(t: Node3D) -> String:
 	if t.has_method("ist_raufbold"):
 		return "HINT_RAUSWERFEN" if t.ist_raufbold() else ""
 	if t.has_method("ist_budenbesitzer"):
-		return "" if t.bude == null or t.bude.laeuft() or carry_state != 0 else "HINT_SCHIESSSTAND"
+		if t.bude == null or t.bude.laeuft() or carry_state != 0:
+			return ""
+		return str(t.bude.hinweis) if "hinweis" in t.bude else "HINT_SCHIESSSTAND"
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
 	if t is Customer:
 		var g := t as Customer

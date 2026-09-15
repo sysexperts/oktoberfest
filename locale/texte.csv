@@ -509,6 +509,15 @@ WORLD_KEG_5,Wasser ({interact}),Water ({interact}),Su ({interact})
 WORLD_SCHIESSSTAND,🎯 Schießbude,🎯 Shooting Gallery,🎯 Atış Standı
 HINT_SCHIESSSTAND,{interact} Schießen (2 €),{interact} Shoot (€2),{interact} Ateş et (2 €)
 SCHIESS_ANZEIGE,"🎯 Treffer: %d   ·   Schuss: %d   ·   Zeit: %d s   ·   Maus zielt, Linksklick schießt, Esc beendet","🎯 Hits: %d   ·   Shots: %d   ·   Time: %d s   ·   Mouse aims, left click shoots, Esc quits","🎯 İsabet: %d   ·   Atış: %d   ·   Süre: %d sn   ·   Fare nişan alır, sol tık ateş, Esc çıkış"
+WORLD_KIRMES_SPIEL,Kirmesspiel,fair game,panayır oyunu
+HINT_DOSENWURF,{interact} Dosenwerfen (2 €),{interact} Can throwing (€2),{interact} Kutu devirme (2 €)
+HINT_LUKAS,{interact} Hau den Lukas (2 €),{interact} High striker (€2),{interact} Güç ölçer (2 €)
+DOSENWURF_ANZEIGE,"🥫 Umgeworfen: %d von %d   ·   Bälle: %d   ·   Maus zielt, Maustaste halten und loslassen wirft, Esc beendet","🥫 Knocked over: %d of %d   ·   Balls: %d   ·   Mouse aims, hold and release the button to throw, Esc quits","🥫 Devrilen: %d / %d   ·   Top: %d   ·   Fare nişan alır, tuşu basılı tutup bırakınca atar, Esc çıkış"
+DOSENWURF_KRAFT,Wurfkraft,Throw power,Atış gücü
+LUKAS_ANZEIGE,"🔨 Punkte: %d von 10   ·   Schläge: %d   ·   Linksklick schlägt zu, wenn die Kraft oben ist · Esc beendet","🔨 Points: %d of 10   ·   Swings: %d   ·   Left click strikes when the power is at the top · Esc quits","🔨 Puan: %d / 10   ·   Vuruş: %d   ·   Güç en üstteyken sol tıkla vur · Esc çıkış"
+LUKAS_KRAFT,Im richtigen Moment zuschlagen — ganz oben klingelt die Glocke!,Strike at the right moment — at the very top the bell rings!,Doğru anda vur — en üstte çan çalar!
+MSG_KIRMES_GEWINN,"🎉 %d von 10 Punkten — du gewinnst: %s (%s)!","🎉 %d of 10 points — you win: %s (%s)!","🎉 10 üzerinden %d puan — kazandın: %s (%s)!"
+MSG_KIRMES_NIETE,"🎪 %d von 10 Punkten — leider eine Niete. Ab 4 Punkten gibt es einen Preis!","🎪 %d of 10 points — no prize this time. 4 points win a prize!","🎪 10 üzerinden %d puan — maalesef boş. 4 puandan itibaren ödül var!"
 SCHIESS_LUFT,Leertaste halten: Luft anhalten · Glocke zählt doppelt,Hold Space: hold your breath · the bell counts double,Boşluk tuşunu basılı tut: nefesini tut · çan iki kat sayılır
 PREIS_TEDDY,Teddybär,teddy bear,oyuncak ayı
 PREIS_HERZ,Lebkuchenherz,gingerbread heart,zencefilli kurabiye kalbi

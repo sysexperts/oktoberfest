@@ -116,6 +116,30 @@ class Lauf extends Node:
 		print("  gespeichert: kirmes_schiessstand_spiel")
 		bude._beenden()
 		bude.besetzt_setzen(false)
+		# Dosenwerfen (N03) und Hau den Lukas (S04): von außen und beim Spielen
+		await _foto(Vector3(-20.25, 0.0, 20.5), 180.0, 14.0, "kirmes_dosenwurf")
+		var dosen := gm.get_node("Kirmes/StaendeNord/N03_Dosenwurf")
+		dosen.besetzt_setzen(true)
+		await get_tree().create_timer(2.5).timeout
+		dosen.spiel_starten(spieler)
+		await _frames(20)
+		dosen._werfen(0.85)
+		await get_tree().create_timer(0.35).timeout
+		get_viewport().get_texture().get_image().save_png("res://tools/kirmes_dosenwurf_spiel.png")
+		print("  gespeichert: kirmes_dosenwurf_spiel")
+		dosen._beenden()
+		await _foto(Vector3(-14.6, 0.0, -23.2), 0.0, 20.0, "kirmes_lukas")
+		var lukas := gm.get_node("Kirmes/StaendeSued/S04_HauDenLukas")
+		lukas.besetzt_setzen(true)
+		await get_tree().create_timer(2.5).timeout
+		lukas.spiel_starten(spieler)
+		await _frames(20)
+		lukas._schlagen(0.99)
+		await get_tree().create_timer(0.75).timeout
+		get_viewport().get_texture().get_image().save_png("res://tools/kirmes_lukas_spiel.png")
+		print("  gespeichert: kirmes_lukas_spiel")
+		await get_tree().create_timer(1.5).timeout
+		lukas._beenden()
 		await _foto(Vector3(20.0, 0.0, -24.0), 135.0, 10.0, "zelt_aussen_hinten")
 		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")
 		# Büroraum durch die Tür
