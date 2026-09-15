@@ -45,6 +45,10 @@ class Lauf extends Node:
 			await _entenangeln(bude, spieler, gm)
 			get_tree().quit()
 			return
+		if art == "gluecksrad":
+			await _gluecksrad(bude, spieler, gm)
+			get_tree().quit()
+			return
 		# Raster: wie viele Kombinationen treffen?
 		var treffer := 0
 		var versuche := 0
@@ -112,6 +116,48 @@ class Lauf extends Node:
 		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_stand.png" % art)
 		print("MINISPIEL FERTIG")
 		get_tree().quit()
+
+	## Glücksrad: Automat mit perfektem Timing (klickt, wenn Winkel + Bremsweg auf der 10
+	## liegt) und einer mit zufälligem Klick — zeigt, wie viel Können und Glück ausmacht.
+	func _gluecksrad(bude: Node, spieler: Node, gm: Node) -> void:
+		var dir := OS.get_environment("SHOT_DIR")
+		var zehn: int = bude.WERTE.find(10)
+		for modus: String in ["gezielt", "zufall"]:
+			var summe := 0
+			for runde in 6:
+				bude.spiel_starten(spieler)
+				var bild := false
+				var klick_in := randf_range(0.2, 1.5)
+				while bude.laeuft():
+					if bude._zustand == bude.DREHT and bude._uebrig > 0:
+						if modus == "gezielt":
+							var stop: float = bude._winkel + bude.bremsweg
+							var abstand := angle_difference(stop, zehn * bude.FELD)
+							if absf(abstand) < 0.06:
+								bude.anhalten()
+						else:
+							klick_in -= get_process_delta_time()
+							if klick_in <= 0.0:
+								bude.anhalten()
+								klick_in = randf_range(0.2, 1.5)
+					if not bild and bude._zustand == bude.ZEIGT and modus == "gezielt" and runde == 0:
+						bild = true
+						for i in 3:
+							await get_tree().process_frame
+						get_viewport().get_texture().get_image().save_png(dir + "/spiel_gluecksrad_blick.png")
+					await get_tree().process_frame
+				summe += bude.punkte()
+			print("  %s: Schnitt %.1f Punkte" % [modus, summe / 6.0])
+		var kamera := Camera3D.new()
+		gm.add_child(kamera)
+		var stand := bude as Node3D
+		kamera.global_position = stand.global_position + stand.global_basis.z * 7.5 + Vector3(0, 2.6, 0) + stand.global_basis.x * 2.5
+		kamera.look_at(stand.global_position + Vector3(0, 1.8, -1.5))
+		kamera.current = true
+		for i in 20:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(dir + "/spiel_gluecksrad_stand.png")
+		print("MINISPIEL FERTIG")
 
 	## Entenangeln: ein einfacher Spieler-Automat. Er fährt die Spitze vor die nächste
 	## Ente (Vorhalt), senkt, wenn sie nah ist, und zieht hoch. Bild mitten im Spiel.

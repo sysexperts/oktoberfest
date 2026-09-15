@@ -627,3 +627,6 @@ RINGWURF_ANZEIGE,"⭕ Treffer: %d   ·   Ringe: %d   ·   Maus zielt, Maustaste 
 HINT_ENTEN,{interact} Entenangeln (2 €),{interact} Duck fishing (€2),{interact} Ördek avı (2 €)
 ENTEN_ANZEIGE,"🦆 Enten: %d von %d   ·   Punkte: %d   ·   Zeit: %d s   ·   Maus führt die Angel, Maustaste halten senkt den Haken, Esc beendet","🦆 Ducks: %d of %d   ·   Points: %d   ·   Time: %d s   ·   Mouse moves the rod, hold the button to lower the hook, Esc quits","🦆 Ördek: %d / %d   ·   Puan: %d   ·   Süre: %d sn   ·   Fare oltayı gezdirir, tuşu basılı tutunca kanca iner, Esc çıkış"
 ENTEN_ZEIT,"Zeit — gelb 1, blau 2, rosa 3 Punkte","Time — yellow 1, blue 2, pink 3 points","Süre — sarı 1, mavi 2, pembe 3 puan"
+HINT_GLUECKSRAD,{interact} Glücksrad (3 €),{interact} Wheel of fortune (€3),{interact} Şans çarkı (3 €)
+GLUECKSRAD_ANZEIGE,"🎡 Bestes Feld: %d   ·   Drehungen: %d   ·   Linksklick bremst — das Rad läuft noch gut eine Runde nach, Esc beendet","🎡 Best field: %d   ·   Spins: %d   ·   Left click brakes — the wheel still turns a good round, Esc quits","🎡 En iyi alan: %d   ·   Çevirme: %d   ·   Sol tık fren yapar — çark bir tur daha döner, Esc çıkış"
+GLUECKSRAD_FELD,%d!,%d!,%d!

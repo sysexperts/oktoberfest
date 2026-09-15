@@ -32,6 +32,7 @@ const SPIEL_LUKAS := preload("res://scenes/kirmes/hau_den_lukas.tscn")
 const SPIEL_SCHIESS := preload("res://scenes/kirmes/schiessstand.tscn")
 const SPIEL_RING := preload("res://scenes/kirmes/ringwurf.tscn")
 const SPIEL_ENTEN := preload("res://scenes/kirmes/entenangeln.tscn")
+const SPIEL_RAD := preload("res://scenes/kirmes/gluecksrad.tscn")
 const DEKO_ENTEN := preload("res://scenes/props/enten.tscn")
 const DEKO_DREH := preload("res://scenes/props/drehscheibe.tscn")
 const DEKO_SUESS := preload("res://scenes/props/suessigkeiten.tscn")
@@ -132,13 +133,13 @@ func _init() -> void:
 
 	# Buden und Minispiele an den Alleen (hinter der Baumreihe, zur Straße gedreht)
 	var buden := _gruppe(wurzel, "Buden")
-	var nord := [SPIEL_DOSEN, SPIEL_RING, SPIEL_SCHIESS, SPIEL_ENTEN, SPIEL_LUKAS, DEKO_DREH]
+	var nord := [SPIEL_DOSEN, SPIEL_RING, SPIEL_SCHIESS, SPIEL_ENTEN, SPIEL_LUKAS, SPIEL_RAD]
 	var i_n := 0
 	for z: float in [64.0, 71.5, 79.0]:
 		for seite: float in [-1.0, 1.0]:
 			_stand(buden, nord[i_n % nord.size()], Vector3(seite * 11.5, 0, z), Vector3(-seite, 0, 0))
 			i_n += 1
-	var sued := [SPIEL_SCHIESS, DEKO_DREH, DEKO_SUESS, SPIEL_DOSEN, SPIEL_RING, SPIEL_LUKAS]
+	var sued := [SPIEL_SCHIESS, SPIEL_RAD, DEKO_SUESS, SPIEL_DOSEN, SPIEL_RING, SPIEL_LUKAS]
 	var i_s := 0
 	for z: float in [-84.0, -91.5, -99.0]:
 		for seite: float in [-1.0, 1.0]:

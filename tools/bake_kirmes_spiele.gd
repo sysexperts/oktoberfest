@@ -8,6 +8,7 @@ extends SceneTree
 ##   scenes/kirmes/ringwurf_stand.tscn    Ringwerfen: Maßkrüge auf Stufen, Preiswand
 ##   scenes/kirmes/wurfring.tscn          Wurfring
 ##   scenes/kirmes/entenangeln_stand.tscn Entenangeln: Rundbecken mit Gummienten, Angel
+##   scenes/kirmes/gluecksrad_stand.tscn  Glücksrad: großes Rad mit 16 Feldern, Zeiger
 ## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
 ## breit, ≤ 3,6 m nach hinten).
 ##   godot --headless --path . --script tools/bake_kirmes_spiele.gd            (alles)
@@ -39,6 +40,8 @@ func _init() -> void:
 		_speichern(_ringwurf(), "res://scenes/kirmes/ringwurf_stand.tscn")
 	if soll.call("entenangeln"):
 		_speichern(_entenangeln(), "res://scenes/kirmes/entenangeln_stand.tscn")
+	if soll.call("gluecksrad"):
+		_speichern(_gluecksrad(), "res://scenes/kirmes/gluecksrad_stand.tscn")
 	print("KIRMES-SPIELE FERTIG")
 	quit()
 
@@ -550,6 +553,105 @@ func _entenangeln() -> Node3D:
 	_haengen(r, kamera, "SpielKamera")
 	_marke(r, "BesitzerMitte", Vector3(-2.1, boden, -0.2))
 	_marke(r, "BesitzerSeite", Vector3(-2.25, boden, -2.7))
+	return r
+
+# ------------------------------------------------------------------ Glücksrad
+## Feldwerte im Uhrzeigersinn ab oben — muss zu scripts/kirmes/gluecksrad.gd (WERTE) passen
+const RAD_WERTE := [1, 2, 0, 1, 5, 0, 1, 2, 10, 0, 1, 3, 0, 2, 1, 0]
+
+## Bude mit großem Rad an der Rückwand. Rad = Gruppe „Rad“ (dreht um lokal Z),
+## Feld k liegt bei Winkel k·22,5° im Uhrzeigersinn von oben.
+func _gluecksrad() -> Node3D:
+	var r := _neu("Gluecksrad")
+	var boden := 0.2
+	var breite := 5.6
+	var tiefe := 3.4
+	var hoehe := 3.5
+	var zm := -1.3
+	var radius := 1.2
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.08, 0.07, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.gold, Vector3.ZERO, 12)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.vorhang_rot)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.8, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.4, zm - 0.1), m.streifen_fein)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.streifen, Vector3(0, 90, 0))
+	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
+	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.55), Vector3(0, 1.1, 0)))
+	for i in 11:
+		var t := (i + 0.5) / 11.0
+		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
+	# Rad an der Rückwand
+	var mitte := Vector3(0, boden + 1.85, zm - tiefe / 2.0 + 0.32)
+	var halter := _gruppe(r, "Halter", mitte)
+	_box(halter, "Platte", Vector3(0.5, 0.5, 0.12), Vector3(0, 0, -0.1), m.holz_dunkel)
+	_zyl(halter, "Achse", 0.06, 0.06, 0.25, Vector3(0, 0, 0.02), m.messing, Vector3(90, 0, 0), 12)
+	var rad := _gruppe(r, "Rad", mitte + Vector3(0, 0, 0.08))
+	_zyl(rad, "Scheibe", radius + 0.05, radius + 0.05, 0.06, Vector3.ZERO, m.holz_dunkel, Vector3(90, 0, 0), 32)
+	var farben := {0: m.weiss, 1: m.ente, 2: m.huegel, 3: m.orange_lack, 5: m.rot, 10: m.gold}
+	var feld := TAU / 16.0
+	for k in 16:
+		var a := k * feld
+		var d := Vector3(sin(a), cos(a), 0)
+		var wert: int = RAD_WERTE[k]
+		_prisma(rad, "Feld%d" % k, Vector3(2.0 * radius * tan(feld / 2.0) + 0.01, radius, 0.03), d * radius * 0.5 + Vector3(0, 0, 0.045), farben[wert], Vector3(0, 0, rad_to_deg(PI - a)))
+		var l := Label3D.new()
+		l.text = str(wert)
+		l.font_size = 72
+		l.pixel_size = 0.004
+		l.outline_size = 14
+		l.modulate = Color(0.1, 0.06, 0.02) if wert != 5 and wert != 10 else Color(1, 1, 1)
+		l.outline_modulate = Color(1, 1, 1, 0.6) if wert != 5 and wert != 10 else Color(0.2, 0.05, 0.02)
+		l.position = d * radius * 0.78 + Vector3(0, 0, 0.07)
+		l.rotation.z = -a
+		_haengen(rad, l, "Zahl%d" % k)
+		var b := a + feld / 2.0
+		_zyl(rad, "Stift%d" % k, 0.02, 0.02, 0.12, Vector3(sin(b), cos(b), 0) * (radius - 0.04) + Vector3(0, 0, 0.09), m.messing, Vector3(90, 0, 0), 8)
+	_torus(rad, "Reif", radius, radius + 0.1, Vector3(0, 0, 0.04), m.gold, Vector3(90, 0, 0))
+	_kugel(rad, "Nabe", 0.14, Vector3(0, 0, 0.08), m.gold, Vector3(1, 1, 0.6))
+	for i in 24:
+		var a := TAU * i / 24.0
+		_kugel(rad, "Birne%d" % i, 0.035, Vector3(sin(a), cos(a), 0) * (radius + 0.05) + Vector3(0, 0, 0.1), m.gluehbirne, Vector3.ONE, false)
+	# Zeiger oben (dreht nicht mit)
+	var zeiger := _gruppe(r, "Zeiger", mitte + Vector3(0, radius + 0.2, 0.2))
+	_prisma(zeiger, "Spitze", Vector3(0.22, 0.32, 0.05), Vector3.ZERO, m.rot, Vector3(0, 0, 180))
+	_kugel(zeiger, "Knopf", 0.06, Vector3(0, 0.16, 0), m.gold)
+	# Theke vorn
+	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.05))
+	_box(theke, "Korpus", Vector3(breite - 0.4, 0.95, 0.4), Vector3(0, 0.475, 0), m.holz_hell)
+	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.21), m.rauten_fein)
+	_box(theke, "Rahmen", Vector3(breite - 0.9, 0.65, 0.015), Vector3(0, 0.5, 0.205), m.gold)
+	_box(theke, "Platte", Vector3(breite - 0.3, 0.06, 0.5), Vector3(0, 0.98, 0), m.gruen_samt)
+	# Preisregale an den Seiten
+	for s: float in [-1.0, 1.0]:
+		var regal := _gruppe(r, "Preise%s" % s, Vector3(s * (breite / 2.0 - 0.4), boden, zm - 0.3), Vector3(0, -90.0 * s, 0))
+		for e in 3:
+			_box(regal, "Brett%d" % e, Vector3(1.8, 0.04, 0.35), Vector3(0, 1.1 + e * 0.6, 0), m.holz_hell)
+			for i in 3:
+				if e == 2:
+					_teddy(regal, "Teddy%d_%d" % [e, i], Vector3(-0.55 + i * 0.55, 1.1 + e * 0.6 + 0.2, 0), 0.0, 0.8)
+				else:
+					_instanz(regal, SZ + "lebkuchenherz.tscn", "Herz%d_%d" % [e, i], Transform3D(Basis(), Vector3(-0.55 + i * 0.55, 1.1 + e * 0.6 + 0.3, -0.1)))
+	# Kollision, Licht, Kamera, Marken
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Podest", _boxform(Vector3(breite, 1.15, tiefe)), Transform3D(Basis(), Vector3(0, 0.575, zm)))
+	_licht(r, "Radlicht", mitte + Vector3(0, 0.4, 1.4), 2.2, 5.0)
+	_licht(r, "Frontlicht", Vector3(0, boden + 2.6, 0.9), 0.9, 5.0)
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, 1.85, 1.6)
+	kamera.rotation_degrees = Vector3(1.5, 0, 0)
+	kamera.fov = 58
+	_haengen(r, kamera, "SpielKamera")
+	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.45))
+	_marke(r, "BesitzerSeite", Vector3(-2.3, boden, -2.4))
 	return r
 
 # ------------------------------------------------------------------ Hau den Lukas
