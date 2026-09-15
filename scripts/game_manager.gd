@@ -989,6 +989,8 @@ func _daylight_factor(clock: float) -> float:
 		return 1.0
 	return smoothstep(0.0, 1.0, (clock - DUSK_START) / (DUSK_END - DUSK_START))
 
+const ALTSTADT_MAT := preload("res://assets/altstadt/altstadt.tres")
+
 ## Dämmerung stufenlos: Sonne, Himmel und Umgebungslicht wandern langsam runter.
 func _apply_daylight(clock: float) -> void:
 	var t := _daylight_factor(clock)
@@ -1036,6 +1038,8 @@ func _apply_daylight(clock: float) -> void:
 			var himmel := env.sky.sky_material as ShaderMaterial
 			himmel.set_shader_parameter("nacht", t)
 			himmel.set_shader_parameter("regen", r)
+	# Altstadt-Kulisse: nachts leuchten die Fenster
+	ALTSTADT_MAT.set_shader_parameter("nacht", t)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
 	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day) * float(GEDULD_FAKTOR[_schwierigkeit]) \

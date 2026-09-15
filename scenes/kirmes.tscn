@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/schiffschaukel.tscn" id="8_cu5q6"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 [ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
-[ext_resource type="PackedScene" uid="uid://dusg2jruc7wf4" path="res://assets/kirmes/Models/Ground/Terrain.fbx" id="10_segyt"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/altstadt.tscn" id="52_altstadt"]
 [ext_resource type="PackedScene" uid="uid://chrmnwixompew" path="res://assets/kirmes/Models/Props/Bench.fbx" id="11_i3lhy"]
 [ext_resource type="PackedScene" uid="uid://bfm6aa8cpnegy" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="12_fgnfp"]
 [ext_resource type="PackedScene" uid="uid://b6oh1keokqrjv" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="13_w4g7w"]
@@ -420,14 +420,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.820018, 0, 36.81225)
 [node name="Parking" parent="." unique_id=1798203239 instance=ExtResource("9_y5oy2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9337764, 0, 29.594742)
 
-[node name="Terrain" parent="." unique_id=694677288 instance=ExtResource("10_segyt")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.575063, -0.115615845, 11.538356)
+[node name="Altstadt" parent="." instance=ExtResource("52_altstadt")]
 
-[node name="Ticket_Box_B" parent="Terrain" unique_id=2108803535 instance=ExtResource("23_87m88")]
-transform = Transform3D(-1.5000002, 0, 2.598076, 0, 3, 0, -2.598076, 0, -1.5000002, -82.50566, 1.9073486e-06, -48.449722)
+[node name="Ticket_Box_C" parent="." unique_id=2108803535 instance=ExtResource("23_87m88")]
+transform = Transform3D(-0.75, 0, 1.299038, 0, 1.5, 0, -1.299038, 0, -0.75, -31.677767, -0.115615, -12.686505)
 
-[node name="Lamp_1" parent="Terrain" unique_id=900368200 instance=ExtResource("16_ek6mb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 1, -124)
+[node name="Lamp_1" parent="." unique_id=900368200 instance=ExtResource("16_ek6mb")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.075063, 0.384384, -50.461644)
 
 [node name="Bench" parent="." unique_id=1685317960 instance=ExtResource("11_i3lhy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.248286, 1.9073486e-06, 22.993784)

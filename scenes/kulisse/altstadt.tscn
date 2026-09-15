@@ -1,0 +1,176 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/boden.res" id="1_yh6v4"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/stadtmauer.res" id="2_4rhp0"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/frauenkirche.res" id="3_yq13f"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/rathaus.res" id="4_y5a7l"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm1.res" id="5_kg77k"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm2.res" id="6_pitcc"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm3.res" id="7_vkuo7"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm4.res" id="8_t1dyn"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm5.res" id="9_ds1bn"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm6.res" id="10_5641p"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/kirchturm7.res" id="11_telaq"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/stadttornord.res" id="12_7oxge"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/stadttorsued.res" id="13_rfywu"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/maibaum1.res" id="14_hob2k"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/maibaum2.res" id="15_elk5a"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_00.res" id="16_01yy6"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_01.res" id="17_e7fij"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_02.res" id="18_u33cd"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_03.res" id="19_emxhe"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_04.res" id="20_0hc16"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_05.res" id="21_eijpk"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_06.res" id="22_shd4g"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_07.res" id="23_32pc0"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_08.res" id="24_7fxx8"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_09.res" id="25_8ki42"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_10.res" id="26_8nsws"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_11.res" id="27_fb7ys"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_12.res" id="28_ikt7w"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_13.res" id="29_0i045"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_14.res" id="30_p1hip"]
+[ext_resource type="ArrayMesh" path="res://assets/altstadt/meshes/viertel_15.res" id="31_i35gh"]
+
+[node name="Altstadt" type="Node3D" unique_id=238961987]
+
+[node name="Boden" type="MeshInstance3D" parent="." unique_id=321119219]
+cast_shadow = 0
+mesh = ExtResource("1_yh6v4")
+
+[node name="Stadtmauer" type="MeshInstance3D" parent="." unique_id=1755737802]
+cast_shadow = 0
+mesh = ExtResource("2_4rhp0")
+
+[node name="Wahrzeichen" type="Node3D" parent="." unique_id=2124363064]
+
+[node name="Frauenkirche" type="MeshInstance3D" parent="Wahrzeichen" unique_id=1226377276]
+transform = Transform3D(0.94923544, 0, 0.31456643, 0, 1, 0, -0.31456643, 0, 0.94923544, -49.701515, 11.88, -157.9792)
+cast_shadow = 0
+mesh = ExtResource("3_yq13f")
+
+[node name="Rathaus" type="MeshInstance3D" parent="Wahrzeichen" unique_id=1967682754]
+transform = Transform3D(-0.85252446, 0, 0.5226873, 0, 1, 0, -0.5226873, 0, -0.85252446, -78.40308, 10.12, 119.87868)
+cast_shadow = 0
+mesh = ExtResource("4_y5a7l")
+
+[node name="Kirchturm1" type="MeshInstance3D" parent="Wahrzeichen" unique_id=850378191]
+transform = Transform3D(0.9004471, 0, -0.43496564, 0, 1, 0, 0.43496564, 0, 0.9004471, 57.41545, 6.16, -126.85902)
+cast_shadow = 0
+mesh = ExtResource("5_kg77k")
+
+[node name="Kirchturm2" type="MeshInstance3D" parent="Wahrzeichen" unique_id=331461343]
+transform = Transform3D(-0.65998316, 0, -0.7512804, 0, 1, 0, 0.7512804, 0, -0.65998316, 109.686935, 9.24, 88.35754)
+cast_shadow = 0
+mesh = ExtResource("6_pitcc")
+
+[node name="Kirchturm3" type="MeshInstance3D" parent="Wahrzeichen" unique_id=648272968]
+transform = Transform3D(0.17824608, 0, 0.98398596, 0, 1, 0, -0.98398596, 0, 0.17824608, -125.9502, 5.28, -30.815495)
+cast_shadow = 0
+mesh = ExtResource("7_vkuo7")
+
+[node name="Kirchturm4" type="MeshInstance3D" parent="Wahrzeichen" unique_id=981540910]
+transform = Transform3D(0.9950041, 0, -0.09983362, 0, 1, 0, 0.09983362, 0, 0.9950041, 19.56735, 20.24, -203.02081)
+cast_shadow = 0
+mesh = ExtResource("8_t1dyn")
+
+[node name="Kirchturm5" type="MeshInstance3D" parent="Wahrzeichen" unique_id=1284893852]
+transform = Transform3D(0.66627604, 0, -0.7457052, 0, 1, 0, 0.7457052, 0, 0.66627604, 137.20976, 17.6, -130.59479)
+cast_shadow = 0
+mesh = ExtResource("9_ds1bn")
+
+[node name="Kirchturm6" type="MeshInstance3D" parent="Wahrzeichen" unique_id=33589611]
+transform = Transform3D(0.77023125, 0, 0.6377647, 0, 1, 0, -0.6377647, 0, 0.77023125, -130.104, 22, -165.12718)
+cast_shadow = 0
+mesh = ExtResource("10_5641p")
+
+[node name="Kirchturm7" type="MeshInstance3D" parent="Wahrzeichen" unique_id=293937938]
+transform = Transform3D(0.029199753, 0, -0.9995736, 0, 1, 0, 0.9995736, 0, 0.029199753, 121.94798, 3.96, -11.562342)
+cast_shadow = 0
+mesh = ExtResource("11_telaq")
+
+[node name="StadttorNord" type="MeshInstance3D" parent="Wahrzeichen" unique_id=907220086]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 92)
+cast_shadow = 0
+mesh = ExtResource("12_7oxge")
+
+[node name="StadttorSued" type="MeshInstance3D" parent="Wahrzeichen" unique_id=805108705]
+transform = Transform3D(1, 0, 1.7484555e-07, 0, 1, 0, -1.7484555e-07, 0, 1, 1.22460635e-14, 0, -108)
+cast_shadow = 0
+mesh = ExtResource("13_rfywu")
+
+[node name="Maibaum1" type="MeshInstance3D" parent="Wahrzeichen" unique_id=1203255071]
+transform = Transform3D(-0.971338, 0, -0.23770273, 0, 1, 0, 0.23770273, 0, -0.971338, 21.393236, 0, 79.42042)
+cast_shadow = 0
+mesh = ExtResource("14_hob2k")
+
+[node name="Maibaum2" type="MeshInstance3D" parent="Wahrzeichen" unique_id=2036649854]
+transform = Transform3D(0.62161005, 0, -0.78332686, 0, 1, 0, 0.78332686, 0, 0.62161005, 117.49904, 10.12, -101.24149)
+cast_shadow = 0
+mesh = ExtResource("15_elk5a")
+
+[node name="Viertel" type="Node3D" parent="." unique_id=435751070]
+
+[node name="Viertel00" type="MeshInstance3D" parent="Viertel" unique_id=149147990]
+cast_shadow = 0
+mesh = ExtResource("16_01yy6")
+
+[node name="Viertel01" type="MeshInstance3D" parent="Viertel" unique_id=1154152218]
+cast_shadow = 0
+mesh = ExtResource("17_e7fij")
+
+[node name="Viertel02" type="MeshInstance3D" parent="Viertel" unique_id=1820092529]
+cast_shadow = 0
+mesh = ExtResource("18_u33cd")
+
+[node name="Viertel03" type="MeshInstance3D" parent="Viertel" unique_id=1100232506]
+cast_shadow = 0
+mesh = ExtResource("19_emxhe")
+
+[node name="Viertel04" type="MeshInstance3D" parent="Viertel" unique_id=1706538263]
+cast_shadow = 0
+mesh = ExtResource("20_0hc16")
+
+[node name="Viertel05" type="MeshInstance3D" parent="Viertel" unique_id=281207692]
+cast_shadow = 0
+mesh = ExtResource("21_eijpk")
+
+[node name="Viertel06" type="MeshInstance3D" parent="Viertel" unique_id=909867941]
+cast_shadow = 0
+mesh = ExtResource("22_shd4g")
+
+[node name="Viertel07" type="MeshInstance3D" parent="Viertel" unique_id=481728027]
+cast_shadow = 0
+mesh = ExtResource("23_32pc0")
+
+[node name="Viertel08" type="MeshInstance3D" parent="Viertel" unique_id=1433116995]
+cast_shadow = 0
+mesh = ExtResource("24_7fxx8")
+
+[node name="Viertel09" type="MeshInstance3D" parent="Viertel" unique_id=1751860046]
+cast_shadow = 0
+mesh = ExtResource("25_8ki42")
+
+[node name="Viertel10" type="MeshInstance3D" parent="Viertel" unique_id=56310258]
+cast_shadow = 0
+mesh = ExtResource("26_8nsws")
+
+[node name="Viertel11" type="MeshInstance3D" parent="Viertel" unique_id=1571838256]
+cast_shadow = 0
+mesh = ExtResource("27_fb7ys")
+
+[node name="Viertel12" type="MeshInstance3D" parent="Viertel" unique_id=1738520075]
+cast_shadow = 0
+mesh = ExtResource("28_ikt7w")
+
+[node name="Viertel13" type="MeshInstance3D" parent="Viertel" unique_id=1261358207]
+cast_shadow = 0
+mesh = ExtResource("29_0i045")
+
+[node name="Viertel14" type="MeshInstance3D" parent="Viertel" unique_id=1330309906]
+cast_shadow = 0
+mesh = ExtResource("30_p1hip")
+
+[node name="Viertel15" type="MeshInstance3D" parent="Viertel" unique_id=305863289]
+cast_shadow = 0
+mesh = ExtResource("31_i35gh")

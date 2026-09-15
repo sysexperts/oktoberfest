@@ -38,3 +38,6 @@
 
 # NOTE: icon.svg is text (kept out of LFS via the rule below).
 *.svg   text eol=lf
+
+# Gebackene Godot-Meshes
+*.res   binary
