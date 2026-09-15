@@ -5,9 +5,12 @@ extends SceneTree
 ##   scenes/kirmes/lukas_stand.tscn       „Hau den Lukas": Turm mit Glocke + Hütte
 ##   scenes/kirmes/wurfball.tscn          Ball (RigidBody) zum Dosenwerfen
 ##   scenes/kirmes/hammer.tscn            Holzhammer
-## Front (Spieler) = lokal +Z. Beide passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
+##   scenes/kirmes/ringwurf_stand.tscn    Ringwerfen: Maßkrüge auf Stufen, Preiswand
+##   scenes/kirmes/wurfring.tscn          Wurfring
+## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
 ## breit, ≤ 3,6 m nach hinten).
-##   godot --headless --path . --script tools/bake_kirmes_spiele.gd
+##   godot --headless --path . --script tools/bake_kirmes_spiele.gd            (alles)
+##   godot --headless --path . --script tools/bake_kirmes_spiele.gd -- ringwurf (nur diese)
 
 const MAT := "res://assets/zelt/materialien/"
 const SZ := "res://scenes/zelt/"
@@ -19,12 +22,20 @@ var m := {}
 func _init() -> void:
 	for n in ["holz_hell", "holz_dunkel", "streifen", "streifen_fein", "rauten", "rauten_fein", "hopfen", "blau", "weiss",
 			"rot", "gold", "metall", "gluehbirne", "messing", "stein", "dielen", "gruen_samt", "teddy", "budenwand",
-			"schwarz_lack", "creme_lack", "vorhang_rot", "ente", "orange_lack", "huegel", "rosa_lack", "schindel"]:
+			"schwarz_lack", "creme_lack", "vorhang_rot", "ente", "orange_lack", "huegel", "rosa_lack", "schindel", "glas"]:
 		m[n] = load(MAT + n + ".tres")
-	_speichern(_ball(), "res://scenes/kirmes/wurfball.tscn")
-	_speichern(_hammer(), "res://scenes/kirmes/hammer.tscn")
-	_speichern(_dosenwurf(), "res://scenes/kirmes/dosenwurf_stand.tscn")
-	_speichern(_lukas(), "res://scenes/kirmes/lukas_stand.tscn")
+	# Mit Namen hinter „--" nur diese Stände backen (Handänderungen an den anderen bleiben)
+	var nur := OS.get_cmdline_user_args()
+	var soll := func(name: String) -> bool: return nur.is_empty() or nur.has(name)
+	if soll.call("dosenwurf"):
+		_speichern(_ball(), "res://scenes/kirmes/wurfball.tscn")
+		_speichern(_dosenwurf(), "res://scenes/kirmes/dosenwurf_stand.tscn")
+	if soll.call("lukas"):
+		_speichern(_hammer(), "res://scenes/kirmes/hammer.tscn")
+		_speichern(_lukas(), "res://scenes/kirmes/lukas_stand.tscn")
+	if soll.call("ringwurf"):
+		_speichern(_wurfring(), "res://scenes/kirmes/wurfring.tscn")
+		_speichern(_ringwurf(), "res://scenes/kirmes/ringwurf_stand.tscn")
 	print("KIRMES-SPIELE FERTIG")
 	quit()
 
@@ -327,6 +338,107 @@ func _dosenwurf() -> Node3D:
 	_marke(r, "BesitzerMitte", Vector3(0, boden, radius - 0.95))
 	_marke(r, "BesitzerSeite", Vector3(-radius + 0.9, boden, -0.6))
 	_marke(r, "Wurfpunkt", Vector3(0, 1.5, radius + 0.5))
+	return r
+
+# ------------------------------------------------------------------ Ringwerfen
+func _wurfring() -> Node3D:
+	var r := _neu("Wurfring")
+	_torus(r, "Ring", 0.1, 0.135, Vector3.ZERO, m.rot)
+	return r
+
+## Maßkrug aus Grundformen, Ursprung am Boden
+func _masskrug(parent: Node3D, name: String, pos: Vector3) -> Node3D:
+	var k := _gruppe(parent, name, pos)
+	_zyl(k, "Bier", 0.075, 0.07, 0.17, Vector3(0, 0.085, 0), m.orange_lack, Vector3.ZERO, 14)
+	_zyl(k, "Boden", 0.078, 0.078, 0.025, Vector3(0, 0.0125, 0), m.glas, Vector3.ZERO, 14)
+	for i in 4:
+		_box(k, "Rippe%d" % i, Vector3(0.012, 0.15, 0.01), Vector3(sin(i * PI / 2.0) * 0.075, 0.09, cos(i * PI / 2.0) * 0.075), m.glas, Vector3(0, i * 90.0, 0))
+	_zyl(k, "Schaum", 0.074, 0.07, 0.045, Vector3(0, 0.19, 0), m.weiss, Vector3.ZERO, 14)
+	_kugel(k, "Krone", 0.06, Vector3(0, 0.215, 0), m.weiss, Vector3(1.15, 0.45, 1.15))
+	_torus(k, "Henkel", 0.045, 0.062, Vector3(0.1, 0.1, 0), m.glas, Vector3(90, 0, 0))
+	return k
+
+## Offene Bude: Theke vorn, dahinter drei Stufen mit 12 Maßkrügen, Preiswand rechts,
+## gestreiftes Dach mit Volant und Krone. Ziele = Marken „Krugziele/ZielN“ (Krugoberkante).
+func _ringwurf() -> Node3D:
+	var r := _neu("Ringwurf")
+	var boden := 0.2
+	var breite := 5.6
+	var tiefe := 3.4
+	var hoehe := 2.9
+	var zm := -1.3
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	# Pfosten, Wände, Dach
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.07, 0.06, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.creme_lack, Vector3.ZERO, 10)
+			for i in 3:
+				_torus(bau, "Ring%s%s_%d" % [sx, sz, i], 0.06, 0.095, p + Vector3(0, 0.8 + i * 0.8, 0), m.gold)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.vorhang_rot)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.75, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.375, zm - 0.15), m.rauten)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.streifen, Vector3(0, 90, 0))
+	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
+	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.1, 0)))
+	for s: float in [-1.0, 1.0]:
+		_instanz(dach, SZ + "fahne.tscn", "Fahne%s" % s, Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(s * (breite / 2.0), 0.3, tiefe / 2.0)))
+	for i in 11:
+		var t := (i + 0.5) / 11.0
+		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
+	# Theke vorn
+	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.05))
+	_box(theke, "Korpus", Vector3(breite - 0.4, 0.95, 0.4), Vector3(0, 0.475, 0), m.holz_hell)
+	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.21), m.rauten_fein)
+	_box(theke, "Rahmen", Vector3(breite - 0.9, 0.65, 0.015), Vector3(0, 0.5, 0.205), m.gold)
+	_box(theke, "Platte", Vector3(breite - 0.3, 0.06, 0.5), Vector3(0, 0.98, 0), m.gruen_samt)
+	for i in 6:
+		_torus(theke, "Vorrat%d" % i, 0.1, 0.135, Vector3(1.4 + (i % 3) * 0.06, 1.02 + i * 0.035, 0.02), [m.rot, m.blau, m.gold][i % 3])
+	# Stufen mit Maßkrügen
+	var stufen := _gruppe(r, "Stufen", Vector3(0, boden, 0))
+	var krugziele := _gruppe(r, "Krugziele")
+	var koerper_stufen := StaticBody3D.new()
+	_haengen(stufen, koerper_stufen, "Kollision")
+	var hoehen := [0.7, 1.0, 1.3]
+	var nr := 0
+	for i in 3:
+		var z := -1.3 - i * 0.55
+		var sb := 3.6 - i * 0.4
+		_box(stufen, "Stufe%d" % i, Vector3(sb, hoehen[i], 0.5), Vector3(0, hoehen[i] / 2.0, z), m.holz_dunkel)
+		_box(stufen, "Samt%d" % i, Vector3(sb + 0.02, 0.03, 0.52), Vector3(0, hoehen[i] + 0.015, z), m.gruen_samt)
+		_box(stufen, "Kante%d" % i, Vector3(sb + 0.04, 0.05, 0.02), Vector3(0, hoehen[i] - 0.03, z + 0.26), m.gold)
+		_kollision(koerper_stufen, "Stufe%d" % i, _boxform(Vector3(sb, hoehen[i], 0.5)), Transform3D(Basis(), Vector3(0, hoehen[i] / 2.0, z)))
+		var anzahl := 4 - (1 if i == 2 else 0)
+		for k in anzahl:
+			var x := (k - (anzahl - 1) / 2.0) * 0.8
+			var kp := Vector3(x, hoehen[i] + 0.03, z)
+			_masskrug(stufen, "Krug%d" % nr, kp)
+			_marke(krugziele, "Ziel%d" % nr, Vector3(x, boden + hoehen[i] + 0.25, z))
+			nr += 1
+	# Preiswand rechts innen
+	var preise := _gruppe(r, "Preise", Vector3(breite / 2.0 - 0.15, boden, zm - 0.2), Vector3(0, -90, 0))
+	_box(preise, "Lochwand", Vector3(2.2, 1.4, 0.04), Vector3(0, 1.9, 0), m.budenwand)
+	for i in 3:
+		_teddy(preise, "Teddy%d" % i, Vector3(-0.6 + i * 0.6, 2.35, 0.15), 0.0, 0.9)
+		_instanz(preise, SZ + "lebkuchenherz.tscn", "Herz%d" % i, Transform3D(Basis(), Vector3(-0.6 + i * 0.6, 1.7, 0.05)))
+	# Kollision, Licht, Kamera, Marken
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Podest", _boxform(Vector3(breite, 1.15, tiefe)), Transform3D(Basis(), Vector3(0, 0.575, zm)))
+	_licht(r, "Licht", Vector3(0, boden + 2.5, -1.4), 1.8, 6.0)
+	_licht(r, "Frontlicht", Vector3(0, boden + 2.3, 0.9), 0.9, 5.0)
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, 1.85, 1.05)
+	kamera.rotation_degrees = Vector3(-17, 0, 0)
+	kamera.fov = 60
+	_haengen(r, kamera, "SpielKamera")
+	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.55))
+	_marke(r, "BesitzerSeite", Vector3(-2.2, boden, -2.5))
 	return r
 
 # ------------------------------------------------------------------ Hau den Lukas

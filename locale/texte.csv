@@ -622,3 +622,5 @@ HINT_PLACE_LAGER,{interact} Abstellen · {emote} Drehen,{interact} Put down · {
 SET_UI_SIZE,Größe der Oberfläche,Interface size,Arayüz boyutu
 COMP_FOOD_PRICE_VALUE,"Essen: %s je Portion (%s %%)","Food: %s per portion (%s %%)","Yemek: porsiyon başı %s (%s %%)"
 MSG_LIC_ESSENRAUM,"🥨 Essenspreis jetzt zwischen %s und %s %% einstellbar (Zelt-Computer).","🥨 Food price can now be set between %s and %s %% (tent computer).","🥨 Yemek fiyatı artık %s ile %s %% arasında ayarlanabilir (çadır bilgisayarı)."
+HINT_RINGWURF,{interact} Ringwerfen (2 €),{interact} Ring toss (€2),{interact} Halka atma (2 €)
+RINGWURF_ANZEIGE,"⭕ Treffer: %d   ·   Ringe: %d   ·   Maus zielt, Maustaste halten und loslassen wirft, Esc beendet","⭕ Hits: %d   ·   Rings: %d   ·   Mouse aims, hold and release the button to throw, Esc quits","⭕ İsabet: %d   ·   Halka: %d   ·   Fare nişan alır, tuşu basılı tutup bırakınca atar, Esc çıkış"
