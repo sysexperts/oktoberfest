@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/glas.tres" id="1_t70uk"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="2_npv5n"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="3_5pacn"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="4_0wsy8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_tfy1t"]
+size = Vector3(1.16, 0.86, 0.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l0qp4"]
+size = Vector3(1.36, 0.1, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0vghf"]
+size = Vector3(0.1, 1.06, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fr3le"]
+size = Vector3(0.05, 0.86, 0.38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5o4gl"]
+size = Vector3(1.16, 0.05, 0.38)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hxyu1"]
+size = Vector3(1.46, 0.06, 0.52)
+
+[sub_resource type="PrismMesh" id="PrismMesh_efs42"]
+size = Vector3(1.5, 0.28, 0.44)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kbjn0"]
+size = Vector3(0.5, 1, 0.04)
+
+[node name="Fenster" type="Node3D" unique_id=1741617307]
+
+[node name="Glas" type="MeshInstance3D" parent="." unique_id=797886312]
+material_override = ExtResource("1_t70uk")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_tfy1t")
+
+[node name="RahmenOben" type="MeshInstance3D" parent="." unique_id=1906588993]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("BoxMesh_l0qp4")
+
+[node name="RahmenUnten" type="MeshInstance3D" parent="." unique_id=876269151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, 0)
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("BoxMesh_l0qp4")
+
+[node name="RahmenLinks" type="MeshInstance3D" parent="." unique_id=1493812425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0, 0)
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("BoxMesh_0vghf")
+
+[node name="RahmenRechts" type="MeshInstance3D" parent="." unique_id=1722762056]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.63, 0, 0)
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("BoxMesh_0vghf")
+
+[node name="SprosseSenkrecht" type="MeshInstance3D" parent="." unique_id=1975870097]
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("BoxMesh_fr3le")
+
+[node name="SprosseWaagrecht" type="MeshInstance3D" parent="." unique_id=125085438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("BoxMesh_5o4gl")
+
+[node name="Fensterbank" type="MeshInstance3D" parent="." unique_id=2097238125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
+material_override = ExtResource("3_5pacn")
+mesh = SubResource("BoxMesh_hxyu1")
+
+[node name="Giebel" type="MeshInstance3D" parent="." unique_id=96032362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67, 0)
+material_override = ExtResource("2_npv5n")
+mesh = SubResource("PrismMesh_efs42")
+
+[node name="LadenLinks" type="MeshInstance3D" parent="." unique_id=1126406495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0, 0.23)
+material_override = ExtResource("4_0wsy8")
+mesh = SubResource("BoxMesh_kbjn0")
+
+[node name="LadenRechts" type="MeshInstance3D" parent="." unique_id=1411646617]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 0, 0.23)
+material_override = ExtResource("4_0wsy8")
+mesh = SubResource("BoxMesh_kbjn0")

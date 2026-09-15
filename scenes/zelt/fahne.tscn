@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="1_4jkoq"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="2_kicep"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten_fein.tres" id="3_l0j6w"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bo1ks"]
+top_radius = 0.04
+bottom_radius = 0.04
+height = 2.4
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_ahwa4"]
+radius = 0.09
+height = 0.18
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_p13j2"]
+size = Vector3(1.3, 0.85, 0.02)
+
+[node name="Fahne" type="Node3D" unique_id=664701691]
+
+[node name="Mast" type="MeshInstance3D" parent="." unique_id=778784628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+material_override = ExtResource("1_4jkoq")
+mesh = SubResource("CylinderMesh_bo1ks")
+
+[node name="Spitze" type="MeshInstance3D" parent="." unique_id=1415621835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.46, 0)
+material_override = ExtResource("2_kicep")
+mesh = SubResource("SphereMesh_ahwa4")
+
+[node name="Tuch" type="MeshInstance3D" parent="." unique_id=70229762]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.69, 1.95, 0)
+material_override = ExtResource("3_l0j6w")
+mesh = SubResource("BoxMesh_p13j2")

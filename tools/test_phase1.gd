@@ -492,11 +492,49 @@ class Lauf extends Node:
 		await _frames(3)
 		_check("Lagerregal gekauft", gm._lagerregale().size() == regale_vorher + 1, "%d Regale" % gm._lagerregale().size())
 		gm._phase = gm.Phase.SHIFT
-		var waende_oben := 0
-		for n in gm.get_node("Tent").get_children():
-			if String(n.name).begins_with("WandOben"):
-				waende_oben += 1
-		_check("Zelt hat eine zweite Wand-Etage", waende_oben >= 40, "%d Wände oben" % waende_oben)
+		var zelt := gm.get_node("Tent")
+		_check("Zelt hat Dielenboden, Galerie und hohes Dach",
+			zelt.has_node("Boden/Dielen") and zelt.has_node("Galerie/EmporeWest") and zelt.has_node("Dach/Plane/PlaneOst"),
+			"%d Teile" % zelt.find_children("*", "Node3D", true, false).size())
+
+		print("  -- Emporen")
+		var weg_hoch: Array = gm._route(Vector3(0, 0.1, 0), Vector3(10.3, 3.7, 5.0))
+		_check("Weg auf die Empore führt über die Treppe", weg_hoch.size() == 5 and (weg_hoch[2] as Vector3).y > 3.0, str(weg_hoch.size()))
+		_check("Weg auf gleicher Ebene bleibt direkt", gm._route(Vector3(0, 0.1, 0), Vector3(3, 0.1, 3)).size() == 1, "")
+		var tisch_e: Node3D = gm._beertables[0]
+		var lage_e := tisch_e.position
+		var rot_e := tisch_e.rotation.y
+		tisch_e.position = Vector3(9.0, gm.EMPORE_Y, 4.0)
+		gm._tisch_freistellen(0)
+		_check("Tisch auf der Empore rastet längs ein", absf(tisch_e.position.x - gm.EMPORE_TISCH_X) < 0.01
+			and tisch_e.position.y > 3.0 and absf(tisch_e.rotation.y - PI / 2.0) < 0.01, str(tisch_e.position))
+		tisch_e.position = Vector3(10.3, gm.EMPORE_Y, -5.5)   # über dem Treppenloch
+		gm._tisch_freistellen(0)
+		_check("Tisch nicht über dem Treppenloch", tisch_e.position.z < -8.8 or tisch_e.position.z > -1.4, str(tisch_e.position))
+		gm._rebuild_seats()
+		var sitz_oben: Vector3 = gm._seats[0].pos
+		var laeufer := {"pos": Vector3(0, 0.1, 8.0), "tgt": sitz_oben, "yaw": 0.0, "level": 1, "role": gm.ROLE_KELLNER, "eig": "normal"}
+		var angekommen := false
+		var auf_treppe := false
+		for k in 4000:
+			if gm._staff_move(laeufer, 0.05):
+				angekommen = true
+				break
+			var lp: Vector3 = laeufer.pos
+			if lp.y > 1.0 and lp.y < 3.0 and absf(lp.x) > 10.6:
+				auf_treppe = true
+		_check("Kellner läuft über die Treppe zum Platz oben", angekommen and auf_treppe
+			and absf((laeufer.pos as Vector3).y - sitz_oben.y) < 0.2, str(laeufer.pos))
+		laeufer.tgt = Vector3(-2.0, 0.1, -8.0)
+		angekommen = false
+		for k in 4000:
+			if gm._staff_move(laeufer, 0.05):
+				angekommen = true
+				break
+		_check("… und wieder hinunter zur Theke", angekommen and (laeufer.pos as Vector3).y < 0.2, str(laeufer.pos))
+		tisch_e.position = lage_e
+		tisch_e.rotation.y = rot_e
+		gm._rebuild_seats()
 
 		print("  -- Tanzen auf dem Tisch")
 		gm._phase = gm.Phase.SHIFT

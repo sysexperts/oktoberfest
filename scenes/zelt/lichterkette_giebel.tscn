@@ -1,0 +1,189 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="1_r820y"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gluehbirne.tres" id="2_4lw80"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ipumv"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 13.6
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_ds6xv"]
+radius = 0.07
+height = 0.14
+radial_segments = 12
+rings = 6
+
+[node name="Lichterkette" type="Node3D" unique_id=1073116931]
+
+[node name="Kabel" type="MeshInstance3D" parent="." unique_id=1872537288]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("1_r820y")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_ipumv")
+
+[node name="Birnen" type="Node3D" parent="." unique_id=2111698158]
+
+[node name="Birne1" type="MeshInstance3D" parent="Birnen" unique_id=1714311294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.548148, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne2" type="MeshInstance3D" parent="Birnen" unique_id=513465503]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0444446, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne3" type="MeshInstance3D" parent="Birnen" unique_id=1099824630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.540741, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne4" type="MeshInstance3D" parent="Birnen" unique_id=650687369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.037037, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne5" type="MeshInstance3D" parent="Birnen" unique_id=4452689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5333333, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne6" type="MeshInstance3D" parent="Birnen" unique_id=319489118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0296297, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne7" type="MeshInstance3D" parent="Birnen" unique_id=1065486706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5259259, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne8" type="MeshInstance3D" parent="Birnen" unique_id=1766453603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0222223, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne9" type="MeshInstance3D" parent="Birnen" unique_id=27981301]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5185184, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne10" type="MeshInstance3D" parent="Birnen" unique_id=2007383783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0148149, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne11" type="MeshInstance3D" parent="Birnen" unique_id=1719305511]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5111111, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne12" type="MeshInstance3D" parent="Birnen" unique_id=815881527]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0074074, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne13" type="MeshInstance3D" parent="Birnen" unique_id=1039308160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5037037, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne14" type="MeshInstance3D" parent="Birnen" unique_id=1619842178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne15" type="MeshInstance3D" parent="Birnen" unique_id=2053945910]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5037037, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne16" type="MeshInstance3D" parent="Birnen" unique_id=1747201553]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0074074, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne17" type="MeshInstance3D" parent="Birnen" unique_id=394733515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5111111, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne18" type="MeshInstance3D" parent="Birnen" unique_id=994036705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0148149, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne19" type="MeshInstance3D" parent="Birnen" unique_id=1145233504]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5185184, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne20" type="MeshInstance3D" parent="Birnen" unique_id=1586697020]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0222223, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne21" type="MeshInstance3D" parent="Birnen" unique_id=1888093960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5259259, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne22" type="MeshInstance3D" parent="Birnen" unique_id=833385149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0296297, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne23" type="MeshInstance3D" parent="Birnen" unique_id=1097434749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5333333, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne24" type="MeshInstance3D" parent="Birnen" unique_id=1659153974]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.037037, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne25" type="MeshInstance3D" parent="Birnen" unique_id=2106984981]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.540741, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne26" type="MeshInstance3D" parent="Birnen" unique_id=1234982255]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0444446, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")
+
+[node name="Birne27" type="MeshInstance3D" parent="Birnen" unique_id=1594110159]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.548148, -0.08, 0)
+material_override = ExtResource("2_4lw80")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ds6xv")

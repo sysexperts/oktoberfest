@@ -1,0 +1,129 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="1_ng7dv"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="2_j2b2r"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="3_dyuvf"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_jat4u"]
+inner_radius = 0.56
+outer_radius = 0.72
+rings = 28
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jiji6"]
+top_radius = 0.7
+bottom_radius = 0.62
+height = 0.45
+radial_segments = 16
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_hi82t"]
+radius = 0.6
+height = 1.2
+radial_segments = 12
+rings = 6
+
+[sub_resource type="PrismMesh" id="PrismMesh_rwdux"]
+size = Vector3(0.34, 0.62, 0.08)
+
+[sub_resource type="SphereMesh" id="SphereMesh_06l83"]
+radius = 0.08
+height = 0.16
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_oi3ih"]
+radius = 0.17
+height = 0.34
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_s5vk0"]
+size = Vector3(0.07, 0.4, 0.07)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g4exj"]
+size = Vector3(0.26, 0.07, 0.07)
+
+[node name="Krone" type="Node3D" unique_id=1709978979]
+
+[node name="Reif" type="MeshInstance3D" parent="." unique_id=1567433515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("TorusMesh_jat4u")
+
+[node name="Band" type="MeshInstance3D" parent="." unique_id=241023212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("CylinderMesh_jiji6")
+
+[node name="Polster" type="MeshInstance3D" parent="." unique_id=1959954358]
+transform = Transform3D(1, 0, 0, 0, 0.75, 0, 0, 0, 1, 0, 0.62, 0)
+material_override = ExtResource("2_j2b2r")
+mesh = SubResource("SphereMesh_hi82t")
+
+[node name="Zacken" type="Node3D" parent="." unique_id=1357068794]
+
+[node name="Zacke1" type="MeshInstance3D" parent="Zacken" unique_id=106941519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0.66)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("PrismMesh_rwdux")
+
+[node name="Perle1" type="MeshInstance3D" parent="Zacken" unique_id=923175262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14, 0.66)
+material_override = ExtResource("3_dyuvf")
+mesh = SubResource("SphereMesh_06l83")
+
+[node name="Zacke2" type="MeshInstance3D" parent="Zacken" unique_id=1756434412]
+transform = Transform3D(0.30901697, 0, 0.95105654, 0, 1, 0, -0.95105654, 0, 0.30901697, 0.6276973, 0.78, 0.20395121)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("PrismMesh_rwdux")
+
+[node name="Perle2" type="MeshInstance3D" parent="Zacken" unique_id=2012406554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6276973, 1.14, 0.20395121)
+material_override = ExtResource("3_dyuvf")
+mesh = SubResource("SphereMesh_06l83")
+
+[node name="Zacke3" type="MeshInstance3D" parent="Zacken" unique_id=1143040804]
+transform = Transform3D(-0.80901706, 0, 0.5877852, 0, 1, 0, -0.5877852, 0, -0.80901706, 0.38793826, 0.78, -0.5339512)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("PrismMesh_rwdux")
+
+[node name="Perle3" type="MeshInstance3D" parent="Zacken" unique_id=1910366138]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38793826, 1.14, -0.5339512)
+material_override = ExtResource("3_dyuvf")
+mesh = SubResource("SphereMesh_06l83")
+
+[node name="Zacke4" type="MeshInstance3D" parent="Zacken" unique_id=773071602]
+transform = Transform3D(-0.80901694, 0, -0.58778536, 0, 1, 0, 0.58778536, 0, -0.80901694, -0.38793826, 0.78, -0.5339512)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("PrismMesh_rwdux")
+
+[node name="Perle4" type="MeshInstance3D" parent="Zacken" unique_id=68720069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38793826, 1.14, -0.5339512)
+material_override = ExtResource("3_dyuvf")
+mesh = SubResource("SphereMesh_06l83")
+
+[node name="Zacke5" type="MeshInstance3D" parent="Zacken" unique_id=923533355]
+transform = Transform3D(0.30901712, 0, -0.9510565, 0, 1, 0, 0.9510565, 0, 0.30901712, -0.6276973, 0.78, 0.20395121)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("PrismMesh_rwdux")
+
+[node name="Perle5" type="MeshInstance3D" parent="Zacken" unique_id=521537614]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6276973, 1.14, 0.20395121)
+material_override = ExtResource("3_dyuvf")
+mesh = SubResource("SphereMesh_06l83")
+
+[node name="Reichsapfel" type="MeshInstance3D" parent="." unique_id=959566477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, 0)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("SphereMesh_oi3ih")
+
+[node name="KreuzSenkrecht" type="MeshInstance3D" parent="." unique_id=852930033]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("BoxMesh_s5vk0")
+
+[node name="KreuzWaagrecht" type="MeshInstance3D" parent="." unique_id=330250632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+material_override = ExtResource("1_ng7dv")
+mesh = SubResource("BoxMesh_g4exj")

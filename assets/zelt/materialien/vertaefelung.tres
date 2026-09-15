@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/zelt/texturen/dielen.png" id="1_5ec71"]
+
+[resource]
+albedo_color = Color(0.8, 0.72, 0.68, 1)
+albedo_texture = ExtResource("1_5ec71")
+roughness = 0.8
+uv1_scale = Vector3(0.625, 0.8333333, 0.625)
+uv1_triplanar = true
+uv1_world_triplanar = true

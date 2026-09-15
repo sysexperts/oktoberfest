@@ -66,13 +66,13 @@ adjustment_saturation = 1.22
 [sub_resource type="WorldBoundaryShape3D" id="Ground"]
 
 [sub_resource type="BoxShape3D" id="WallX"]
-size = Vector3(26, 4, 0.6)
+size = Vector3(26, 8, 0.6)
 
 [sub_resource type="BoxShape3D" id="WallNGap"]
-size = Vector3(9, 4, 0.6)
+size = Vector3(9, 8, 0.6)
 
 [sub_resource type="BoxShape3D" id="WallZ"]
-size = Vector3(0.6, 4, 27)
+size = Vector3(0.6, 8, 27)
 
 [node name="Main" type="Node3D" unique_id=1593171838]
 script = ExtResource("1_gm")
@@ -93,37 +93,36 @@ shape = SubResource("Ground")
 [node name="Walls" type="Node3D" parent="." unique_id=1116608952]
 
 [node name="WallSouth" type="StaticBody3D" parent="Walls" unique_id=2046290159]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -14.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -14.3)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallSouth" unique_id=879580107]
 shape = SubResource("WallX")
 
 [node name="WallNorthW" type="StaticBody3D" parent="Walls" unique_id=326056624]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 2, 11.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 4, 11.3)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallNorthW" unique_id=1528525008]
 shape = SubResource("WallNGap")
 
 [node name="WallNorthE" type="StaticBody3D" parent="Walls" unique_id=210195957]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2, 11.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 4, 11.3)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallNorthE" unique_id=42892118]
 shape = SubResource("WallNGap")
 
 [node name="WallWest" type="StaticBody3D" parent="Walls" unique_id=259278157]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3, 2, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3, 4, -1.5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallWest" unique_id=376653699]
 shape = SubResource("WallZ")
 
 [node name="WallEast" type="StaticBody3D" parent="Walls" unique_id=359560609]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3, 2, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3, 4, -1.5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallEast" unique_id=813567233]
 shape = SubResource("WallZ")
 
 [node name="Tent" parent="." unique_id=299652560 instance=ExtResource("2_tent")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.249283e-05, -0.01563716, 0.00017309189)
 
 [node name="Schanktheke" parent="." instance=ExtResource("7_theke")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.3)

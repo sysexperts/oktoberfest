@@ -61,6 +61,87 @@ const WAND_HINTEN := -13.75
 const WAND_VORN := 10.75
 ## Beim Tragen rastet Wanddeko erst ein, wenn eine Wand so nah ist
 const WAND_FANG := 3.5
+
+## Emporen links und rechts (scenes/tent.tscn Galerie, gebaut von tools/bake_zelt.gd).
+## Gäste und Personal laufen ohne Navigation: liegt ihr Ziel auf einer anderen Ebene,
+## führt _route sie über die Treppe (vor der Treppe → Fuß → Kopf → Austritt).
+const EMPORE_Y := 3.6
+const EMPORE_KANTE := 7.8        # ab |x| liegt oben die Empore
+const EMPORE_LAUF_MAX := 10.4    # |x| für Laufziele oben — dahinter liegt das Treppenloch
+## Je Empore (Index 0 West, 1 Ost): vor der Treppe, Treppenfuß, Treppenkopf, Austritt
+const TREPPE := [
+	[Vector3(-10.3, 0.1, -0.5), Vector3(-11.35, 0.1, 0.2), Vector3(-11.35, 3.7, 6.4), Vector3(-9.2, 3.7, 7.2)],
+	[Vector3(10.3, 0.1, -10.8), Vector3(11.35, 0.1, -9.8), Vector3(11.35, 3.7, -3.7), Vector3(9.2, 3.7, -2.9)],
+]
+## Treppen am Boden (Mitte x/z, halbe Breite x/z) — dort keine Regale abstellen
+const TREPPEN_BODEN := [[Vector2(-11.35, 3.25), Vector2(1.05, 3.7)], [Vector2(11.35, -6.75), Vector2(1.05, 3.7)]]
+## Tischmitte oben: fest bei |x| = EMPORE_TISCH_X, längs gedreht; erlaubte z-Bereiche
+## je Empore (nicht über dem Treppenloch und dem Austritt)
+const EMPORE_TISCH_X := 10.3
+const EMPORE_TISCH_Z := [
+	[Vector2(-12.4, 1.1), Vector2(8.7, 9.4)],
+	[Vector2(-12.4, -8.9), Vector2(-1.3, 9.4)],
+]
+
+## 0 = Boden, 1 = Empore West, 2 = Empore Ost
+static func ebene_von(p: Vector3) -> int:
+	if p.y < 1.8:
+		return 0
+	return 1 if p.x < 0.0 else 2
+
+## Bodenhöhe einer Ebene
+static func ebene_boden(ebene: int) -> float:
+	return EMPORE_Y if ebene > 0 else 0.0
+
+## Wegpunkte zum Ziel — über die Treppe(n), wenn das Ziel auf einer anderen Ebene liegt.
+static func _route(von: Vector3, ziel: Vector3) -> Array:
+	var a := ebene_von(von)
+	var b := ebene_von(ziel)
+	var r := []
+	if a != b:
+		if a > 0:
+			var runter: Array = TREPPE[a - 1]
+			r.append_array([runter[3], runter[2], runter[1], runter[0]])
+		if b > 0:
+			var hoch: Array = TREPPE[b - 1]
+			r.append_array([hoch[0], hoch[1], hoch[2], hoch[3]])
+	r.append(ziel)
+	return r
+
+## Nächster Wegpunkt für Gast/Mitarbeiter (Dictionary mit pos und tgt). Die Route
+## wird neu berechnet, sobald sich das Ziel ändert; erreichte Zwischenpunkte fallen weg.
+static func _wegpunkt(e: Dictionary, erreicht: float) -> Vector3:
+	var ziel: Vector3 = e.tgt
+	if not e.has("r_ziel") or (e.r_ziel as Vector3).distance_squared_to(ziel) > 0.0001:
+		e.r_ziel = ziel
+		e.route = _route(e.pos, ziel)
+	var r: Array = e.route
+	var pos: Vector3 = e.pos
+	while r.size() > 1 and Vector2(pos.x - r[0].x, pos.z - r[0].z).length() <= erreicht:
+		r.pop_front()
+	return r[0]
+
+## Ist nur noch das eigentliche Ziel übrig (keine Treppe mehr dazwischen)?
+static func _nur_noch_ziel(e: Dictionary) -> bool:
+	return (e.get("route", []) as Array).size() <= 1
+
+## Punkt auf die Lauffläche seiner Ebene klemmen (Boden: vor der Theke; Empore:
+## zwischen Brüstung und Treppenloch).
+static func _auf_ebene(p: Vector3, ebene: int) -> Vector3:
+	if ebene == 0:
+		return Vector3(clampf(p.x, ZELT_MIN.x, ZELT_MAX.x), 0.1, clampf(p.z, -7.5, ZELT_MAX.z))
+	var s := -1.0 if ebene == 1 else 1.0
+	return Vector3(s * clampf(absf(p.x), EMPORE_KANTE + 0.5, EMPORE_LAUF_MAX), EMPORE_Y + 0.1,
+		clampf(p.z, ZELT_MIN.z + 0.4, ZELT_MAX.z - 0.2))
+
+## Regal/Gegenstand nicht auf einer Treppe: zur Zeltmitte hin daneben rücken.
+static func _neben_treppe(p: Vector3) -> Vector3:
+	for t: Array in TREPPEN_BODEN:
+		var c: Vector2 = t[0]
+		var h: Vector2 = t[1]
+		if absf(p.x - c.x) < h.x and absf(p.z - c.y) < h.y:
+			p.x = c.x - signf(c.x) * h.x
+	return p
 const ORDER_PATIENCE := 38.0        # sabır (servis için süre) — artırıldı
 const ORDER_COOLDOWN_MIN := 18.0    # Pause zwischen zwei Bestellungen eines Gasts
 const ORDER_COOLDOWN_MAX := 35.0    # (vorher 22–45 s; 15–30 war allein nicht zu schaffen)
@@ -556,7 +637,8 @@ func _ablageort(s: int, pos: Vector3) -> Vector3:
 	var pl = _players_nodes.get(s)
 	if pl and (pl as Node3D).global_position.distance_to(pos) > ABLAGE_REICHWEITE:
 		pos = (pl as Node3D).global_position
-	return Vector3(pos.x, 0.0, pos.z)
+	# Auf der Empore bleibt es oben liegen
+	return Vector3(pos.x, ebene_boden(ebene_von(pos)), pos.z)
 
 @rpc("any_peer", "reliable", "call_local")
 func net_ablegen(art: int, typ: int, fill: float, pos: Vector3) -> void:
@@ -697,7 +779,7 @@ func _save_game() -> void:
 	var tables := []
 	for bt in _all_tables:
 		var p: Vector3 = (bt as Node3D).position
-		tables.append({"x": p.x, "z": p.z, "r": (bt as Node3D).rotation.y})
+		tables.append({"x": p.x, "y": p.y, "z": p.z, "r": (bt as Node3D).rotation.y})
 	var data := {
 		"tisch_layout": TISCH_LAYOUT,
 		"lager_gekauft": _lager_gekauft,
@@ -823,7 +905,8 @@ func _load_game() -> bool:
 			var e: Variant = arr[i]
 			if e is Dictionary:
 				var ed: Dictionary = e
-				(_all_tables[i] as Node3D).position = Vector3(float(ed.get("x", 0.0)), 0.0, float(ed.get("z", 0.0)))
+				var ty := EMPORE_Y if float(ed.get("y", 0.0)) > 1.8 else 0.0
+				(_all_tables[i] as Node3D).position = Vector3(float(ed.get("x", 0.0)), ty, float(ed.get("z", 0.0)))
 				(_all_tables[i] as Node3D).rotation.y = float(ed.get("r", 0.0))
 	_active_count = clampi(_active_count, 0, _all_tables.size())
 	# Gekaufte Lagerregale wieder aufstellen, dann die Lage aller Regale
@@ -834,7 +917,14 @@ func _load_game() -> bool:
 	var lagen: Variant = d.get("lager_lagen", [])
 	if lagen is Array:
 		_net_lager(lagen)
+	# Spielstände von vor den Emporen: Regale nicht auf den Treppen stehen lassen
+	for r in _lagerregale():
+		(r as Node3D).position = _neben_treppe((r as Node3D).position)
 	_apply_tent()
+	# … und Tische nicht auf Treppen oder Stützen
+	for i in _beertables.size():
+		_tisch_freistellen(i)
+	_rebuild_seats()
 	return true
 
 ## Bühnenlicht nur bei offenem Zelt.
@@ -1347,7 +1437,7 @@ func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 		# Erst ankommen — Pfütze und Pinkelzeit beginnen am Ziel, nicht beim Losgehen
 		var bis_ziel: Vector3 = (g.tgt as Vector3) - (g.pos as Vector3)
 		bis_ziel.y = 0.0
-		if bis_ziel.length() > 0.3:
+		if bis_ziel.length() > 0.3 or not _nur_noch_ziel(g):
 			return
 		if (not _has_toilet or bool(g.get("wild", false))) and not bool(g.get("pfuetze", false)):
 			g.pfuetze = true
@@ -1403,7 +1493,7 @@ func _wildpinkel_punkt(g: Dictionary) -> Vector3:
 		var s: Dictionary = _seats[int(g.seat)]
 		basis = (s.pos as Vector3) + (s.away as Vector3) * 2.2
 	var p := basis + Vector3(randf_range(-1.5, 1.5), 0.0, randf_range(-1.5, 1.5))
-	return Vector3(clampf(p.x, ZELT_MIN.x, ZELT_MAX.x), 0.1, clampf(p.z, -7.5, ZELT_MAX.z))
+	return _auf_ebene(p, ebene_von(basis))
 
 ## Beschwerden: Gäste in der Nähe von Urin meckern, manche gehen.
 func _update_complaints(delta: float) -> void:
@@ -1933,12 +2023,16 @@ func _food_prep_time() -> float:
 
 ## Bewegung Richtung tgt. true = angekommen.
 func _staff_move(s: Dictionary, delta: float) -> bool:
-	var to: Vector3 = s.tgt - s.pos
+	# Über die Treppe, wenn das Ziel auf der anderen Ebene liegt
+	var wp := _wegpunkt(s, 0.45)
+	var to: Vector3 = wp - s.pos
 	to.y = 0
 	var d := to.length()
-	if d <= 0.35:
+	if d <= 0.35 and _nur_noch_ziel(s):
 		return true
-	var dir := to.normalized()
+	if d < 0.0001:
+		return false
+	var dir := to / d
 	# Tische umlaufen — aber nur solange das Ziel weit weg ist, sonst käme
 	# der Kellner nie an einem Sitzplatz an (der liegt direkt am Tisch).
 	if d > 2.6:
@@ -1950,12 +2044,18 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 	var fwd := Vector3(-sin(float(s.yaw)), 0.0, -cos(float(s.yaw)))
 	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level)) * _staff_tempo(s)
 	if fwd.dot(dir) > 0.2:
-		s.pos += fwd * minf(sp * delta, d)
+		var schritt := minf(sp * delta, d)
+		var pos: Vector3 = s.pos
+		# Höhe wandert anteilig mit — auf der Treppe ergibt das die Steigung
+		pos.y += (wp.y - pos.y) * (schritt / d)
+		s.pos = pos + fwd * schritt
 	return false
 func _avoid_tables(pos: Vector3, dir: Vector3) -> Vector3:
 	var out := dir
 	for bt in _beertables:
 		var c: Vector3 = (bt as Node3D).global_position
+		if absf(c.y - pos.y) > 1.5:
+			continue   # Tisch auf der anderen Ebene
 		var away: Vector3 = pos - c
 		away.y = 0
 		var dist := away.length()
@@ -2291,11 +2391,11 @@ func _set_staff_info(id: int, role: int, level: int) -> void:
 		n.set_info(role, level)
 
 @rpc("authority", "unreliable")
-func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sz: PackedFloat32Array, syaw: PackedFloat32Array, scarry: PackedInt32Array) -> void:
+func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sy: PackedFloat32Array, sz: PackedFloat32Array, syaw: PackedFloat32Array, scarry: PackedInt32Array) -> void:
 	for i in range(ids.size()):
 		var n = _staff.get(ids[i])
 		if n:
-			n.set_net(Vector3(sx[i], 0.1, sz[i]), syaw[i])
+			n.set_net(Vector3(sx[i], sy[i] if i < sy.size() else 0.1, sz[i]), syaw[i])
 			if i < scarry.size() and n.has_method("set_carrying"):
 				n.set_carrying(scarry[i])
 
@@ -2580,6 +2680,7 @@ func net_move_table(index: int) -> void:
 	if _held.has(s):
 		var idx: int = _held[s]
 		_held.erase(s)
+		# Oben auf der Empore rastet der Tisch längs ein — das zählt nicht als verschoben
 		if _tisch_freistellen(idx):
 			_fehler("MSG_TABLE_VERSCHOBEN")
 		_rebuild_seats()
@@ -2619,56 +2720,103 @@ const TISCH_SPERREN := [
 	[Vector2(10.4, 9.6), Vector2(2.6, 2.6)],    # Klo-Container
 	[Vector2(-11.2, -5.0), Vector2(2.4, 3.0)],  # Lager
 	[Vector2(0.0, 10.0), Vector2(1.8, 1.6)],    # Eingang
+	[Vector2(-11.35, 3.25), Vector2(2.4, 4.6)], # Treppe West
+	[Vector2(11.35, -6.75), Vector2(2.4, 4.6)], # Treppe Ost
+	[Vector2(-7.95, -6.5), Vector2(1.5, 1.05)], # Emporenstützen
+	[Vector2(-7.95, -1.5), Vector2(1.5, 1.05)],
+	[Vector2(-7.95, 3.5), Vector2(1.5, 1.05)],
+	[Vector2(7.95, -6.5), Vector2(1.5, 1.05)],
+	[Vector2(7.95, 8.5), Vector2(1.5, 1.05)],
 ]
 
-func _tischplatz_frei(p: Vector2, ausser: int) -> bool:
-	if p.x < TISCH_BEREICH_MIN.x or p.x > TISCH_BEREICH_MAX.x or p.y < TISCH_BEREICH_MIN.y or p.y > TISCH_BEREICH_MAX.y:
-		return false
-	for sperre: Array in TISCH_SPERREN:
-		var d: Vector2 = (p - (sperre[0] as Vector2)).abs()
-		if d.x < (sperre[1] as Vector2).x and d.y < (sperre[1] as Vector2).y:
+## Auf welcher Ebene steht der Tisch? (0 Boden, 1/2 Empore)
+static func tisch_ebene(bt: Node3D) -> int:
+	return ebene_von(bt.position + Vector3(0, 0.1, 0))
+
+func _tischplatz_frei(p: Vector2, ausser: int, ebene := 0) -> bool:
+	if ebene > 0:
+		# Empore: Tischmitte auf der festen Linie, nicht über Treppenloch und Austritt
+		var s := -1.0 if ebene == 1 else 1.0
+		if absf(p.x - s * EMPORE_TISCH_X) > 0.05:
 			return false
-	# Aufgestellte Einrichtung am Boden (Regal, Fass …) — nicht hineinstellen
-	for e: Dictionary in _einrichtung.values():
-		var art := str(e.get("art", ""))
-		if Katalog.ARTEN.has(art) and str(Katalog.ARTEN[art].get("platz", "boden")) == "boden":
-			if p.distance_to(Vector2(float(e.x), float(e.z))) < 1.8:
+		var im_bereich := false
+		for bereich: Vector2 in EMPORE_TISCH_Z[ebene - 1]:
+			if p.y >= bereich.x - 0.001 and p.y <= bereich.y + 0.001:
+				im_bereich = true
+		if not im_bereich:
+			return false
+	else:
+		if p.x < TISCH_BEREICH_MIN.x or p.x > TISCH_BEREICH_MAX.x or p.y < TISCH_BEREICH_MIN.y or p.y > TISCH_BEREICH_MAX.y:
+			return false
+		for sperre: Array in TISCH_SPERREN:
+			var d: Vector2 = (p - (sperre[0] as Vector2)).abs()
+			if d.x < (sperre[1] as Vector2).x and d.y < (sperre[1] as Vector2).y:
 				return false
+		# Aufgestellte Einrichtung am Boden (Regal, Fass …) — nicht hineinstellen
+		for e: Dictionary in _einrichtung.values():
+			var art := str(e.get("art", ""))
+			if Katalog.ARTEN.has(art) and str(Katalog.ARTEN[art].get("platz", "boden")) == "boden":
+				if p.distance_to(Vector2(float(e.x), float(e.z))) < 1.8:
+					return false
 	for i in _beertables.size():
-		if i == ausser:
+		if i == ausser or tisch_ebene(_beertables[i]) != ebene:
 			continue
 		var q := (_beertables[i] as Node3D).position
 		if p.distance_to(Vector2(q.x, q.z)) < TISCH_MINDESTABSTAND:
 			return false
 	return true
 
-## Nächster freier Platz zum Wunschpunkt (Raster 0,5 m).
-func _freier_tischplatz(wunsch: Vector2, ausser: int) -> Vector2:
-	if _tischplatz_frei(wunsch, ausser):
+## Nächster freier Platz zum Wunschpunkt (Raster 0,5 m). Auf der Empore nur entlang
+## der Tischlinie.
+func _freier_tischplatz(wunsch: Vector2, ausser: int, ebene := 0) -> Vector2:
+	if ebene > 0:
+		var s := -1.0 if ebene == 1 else 1.0
+		wunsch.x = s * EMPORE_TISCH_X
+	if _tischplatz_frei(wunsch, ausser, ebene):
 		return wunsch
 	var bester := wunsch
 	var beste_d := INF
-	var x := TISCH_BEREICH_MIN.x
-	while x <= TISCH_BEREICH_MAX.x:
-		var z := TISCH_BEREICH_MIN.y
-		while z <= TISCH_BEREICH_MAX.y:
-			var p := Vector2(x, z)
-			var d := p.distance_squared_to(wunsch)
-			if d < beste_d and _tischplatz_frei(p, ausser):
-				beste_d = d
-				bester = p
-			z += 0.5
-		x += 0.5
+	var kandidaten := []
+	if ebene > 0:
+		for bereich: Vector2 in EMPORE_TISCH_Z[ebene - 1]:
+			var z := bereich.x
+			while z <= bereich.y + 0.001:
+				kandidaten.append(Vector2(wunsch.x, z))
+				z += 0.5
+			kandidaten.append(Vector2(wunsch.x, bereich.y))
+	else:
+		var x := TISCH_BEREICH_MIN.x
+		while x <= TISCH_BEREICH_MAX.x:
+			var z := TISCH_BEREICH_MIN.y
+			while z <= TISCH_BEREICH_MAX.y:
+				kandidaten.append(Vector2(x, z))
+				z += 0.5
+			x += 0.5
+	for p: Vector2 in kandidaten:
+		var d := p.distance_squared_to(wunsch)
+		if d < beste_d and _tischplatz_frei(p, ausser, ebene):
+			beste_d = d
+			bester = p
 	return bester
 
 ## Tisch auf einen freien Platz rücken. true, wenn er verschoben werden musste.
+## Auf der Empore steht er längs; ist oben kein Platz mehr, kommt er nach unten.
 func _tisch_freistellen(idx: int) -> bool:
 	if idx < 0 or idx >= _beertables.size():
 		return false
 	var bt := _beertables[idx] as Node3D
+	var ebene := tisch_ebene(bt)
 	var wunsch := Vector2(bt.position.x, bt.position.z)
-	var p := _freier_tischplatz(wunsch, idx)
-	bt.position = Vector3(p.x, 0.0, p.y)
+	var p := _freier_tischplatz(wunsch, idx, ebene)
+	if ebene > 0 and not _tischplatz_frei(p, idx, ebene):
+		ebene = 0
+		p = _freier_tischplatz(wunsch, idx, 0)
+		bt.position = Vector3(p.x, 0.0, p.y)
+		return true
+	bt.position = Vector3(p.x, ebene_boden(ebene), p.y)
+	if ebene > 0:
+		bt.rotation.y = PI / 2.0
+		return absf(p.y - wunsch.y) > 0.8
 	return p.distance_to(wunsch) > 0.01
 
 # ================================================= Lagerregale (Test 13.09.)
@@ -2679,7 +2827,7 @@ const LAGER_SCENE := preload("res://scenes/lager.tscn")
 const LAGERREGAL_KOSTEN := 350
 const LAGERREGAL_MAX := 4
 ## Plätze für gekaufte Regale (frei von Büro, Bühne, Theke): x, z, Drehung
-const LAGERREGAL_PLAETZE := [Vector3(-11.2, 1.0, -PI / 2.0), Vector3(11.2, -6.0, PI / 2.0)]
+const LAGERREGAL_PLAETZE := [Vector3(-11.2, -8.0, -PI / 2.0), Vector3(-11.2, -11.4, -PI / 2.0)]
 var _lager_gekauft := 0
 var _held_lager := {}        # peer_id -> Regal-Index (Server)
 var _haelt_lager := {}       # vom Server: Peer-ID (Text) -> Index
@@ -2752,8 +2900,8 @@ func net_move_lager(index: int) -> void:
 		_held_lager.erase(s)
 		if idx >= 0 and idx < regale.size():
 			var r := regale[idx] as Node3D
-			r.position = Vector3(clampf(r.position.x, -WAND_X + 0.6, WAND_X - 0.6), 0.0,
-				clampf(r.position.z, WAND_HINTEN + 0.6, WAND_VORN - 0.6))
+			r.position = _neben_treppe(Vector3(clampf(r.position.x, -WAND_X + 0.6, WAND_X - 0.6), 0.0,
+				clampf(r.position.z, WAND_HINTEN + 0.6, WAND_VORN - 0.6)))
 	elif index >= 0 and index < regale.size() and not _held_lager.values().has(index) \
 			and not _held.has(s) and not _held_deko.has(s):
 		_held_lager[s] = index
@@ -2807,7 +2955,8 @@ func _update_held_tables() -> void:
 			continue
 		var fwd: Vector3 = -pl.global_transform.basis.z
 		var p: Vector3 = pl.global_position + fwd * 2.5
-		_beertables[idx].position = Vector3(p.x, 0.0, p.z)
+		# Wer oben auf der Empore trägt, stellt oben ab
+		_beertables[idx].position = Vector3(p.x, ebene_boden(ebene_von((pl as Node3D).global_position)), p.z)
 	_update_held_lager()
 	# Getragene Einrichtung schwebt vor dem Spieler mit
 	for peer in _held_deko.keys():
@@ -2948,6 +3097,11 @@ func _deko_abstellen(s: int) -> void:
 func _deko_platz(art: String, x: float, z: float, rot: float, frei := false) -> Dictionary:
 	x = clampf(x, ZELT_MIN.x, ZELT_MAX.x)
 	z = clampf(z, ZELT_MIN.z, ZELT_MAX.z)
+	if Katalog.platz(art) == "decke":
+		x = clampf(x, -EMPORE_KANTE + 0.5, EMPORE_KANTE - 0.5)   # nicht in die Emporen hängen
+	else:
+		var neben := _neben_treppe(Vector3(x, 0.0, z))
+		x = neben.x
 	if Katalog.platz(art) == "wand":
 		var abstand := {"west": x + WAND_X, "ost": WAND_X - x, "hinten": z - WAND_HINTEN, "vorn": WAND_VORN - z}
 		var naechste := "west"
@@ -3343,7 +3497,7 @@ func _update_tanz(delta: float) -> void:
 		g.mode = 5
 		g.tanz_t = randf_range(TANZ_DAUER_MIN, TANZ_DAUER_MAX)
 		_stats.tanzen = int(_stats.get("tanzen", 0)) + 1
-		g.tgt = Vector3(ziel.x, 0.1, ziel.z)
+		g.tgt = Vector3(ziel.x, bt.global_position.y + 0.1, ziel.z)
 		_guest_sim[id] = g
 		je_tisch[ti] = belegt + 1
 	# Vor der Bühne: auf den freien Plätzen (kein Tisch im Weg) am Boden tanzen
@@ -3592,13 +3746,20 @@ func _update_guests(delta: float) -> void:
 	for id in _guest_sim.keys().duplicate():
 		var g: Dictionary = _guest_sim[id]
 		var pos: Vector3 = g.pos
-		var to: Vector3 = g.tgt - pos
+		# Zwischenziele über die Treppe, wenn das Ziel auf der anderen Ebene liegt
+		var wp := _wegpunkt(g, 0.2)
+		var am_ziel := _nur_noch_ziel(g)
+		var to: Vector3 = wp - pos
 		to.y = 0
 		var d := to.length()
-		if d > 0.15:
-			pos += to.normalized() * minf(CUST_SPEED * delta, d)
-			g.yaw = atan2(-to.x, -to.z)
+		if d > 0.15 or not am_ziel:
+			if d > 0.0001:
+				var schritt := minf(CUST_SPEED * delta, d)
+				pos.y += (wp.y - pos.y) * (schritt / d)   # Treppe: Höhe anteilig
+				pos += to / d * schritt
+				g.yaw = atan2(-to.x, -to.z)
 		else:
+			pos.y = wp.y
 			if g.mode == 0:
 				var weg: Array = g.get("weg", [])
 				if not weg.is_empty():
@@ -3633,7 +3794,7 @@ func _update_guests(delta: float) -> void:
 		if float(g.get("verpasst_t", 0.0)) > 0.0:
 			g.verpasst_t = float(g.verpasst_t) - delta
 		# Tanzt auf dem Tisch oder vor der Bühne — erst am Ziel, danach zurück auf den Platz
-		g.tanz_da = (g.mode == 5 or g.mode == 6) and d <= 0.3
+		g.tanz_da = (g.mode == 5 or g.mode == 6) and d <= 0.3 and am_ziel
 		if g.mode == 5 or g.mode == 6:
 			g.tanz_t = float(g.get("tanz_t", 0.0)) - delta
 			if float(g.tanz_t) <= 0.0:
@@ -3704,7 +3865,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		# Verteilt rund um den Tisch statt immer an derselben Stelle (Test 13.09.)
 		var weg: Vector3 = (seat.get("away", Vector3.FORWARD) as Vector3).rotated(Vector3.UP, randf_range(-1.1, 1.1))
 		var ziel: Vector3 = (seat.pos as Vector3) + weg * randf_range(2.2, 4.0)
-		g.tgt = Vector3(clampf(ziel.x, ZELT_MIN.x, ZELT_MAX.x), 0.1, clampf(ziel.z, -7.5, ZELT_MAX.z))
+		g.tgt = _auf_ebene(ziel, ebene_von(seat.pos))
 
 func _despawn_guest(id: int) -> void:
 	if _klo_gast == id:
@@ -3758,15 +3919,19 @@ func _update_hygiene(delta: float) -> void:
 
 func _spawn_mess_near(p: Vector3) -> void:
 	var off := Vector3(randf_range(-0.8, 0.8), 0.0, randf_range(-0.8, 0.8))
-	_spawn_mess_at(Vector3(p.x + off.x, 0.02, p.z + off.z), 0)
+	_spawn_mess_at(p + off, 0)
 
-## kind: 0 = Erbrochenes, 1 = Urin
+## kind: 0 = Erbrochenes, 1 = Urin. Auf der Empore bleibt der Fleck oben (und nicht
+## über dem Treppenloch).
 func _spawn_mess_at(p: Vector3, kind: int) -> void:
 	var id := _mess_next
 	_mess_next += 1
 	_mess_clean[id] = 0.0
 	_mess_kind[id] = kind
-	_add_mess.rpc(id, Vector3(p.x, 0.02, p.z), kind)
+	var ebene := ebene_von(p)
+	if ebene > 0:
+		p.x = signf(p.x) * clampf(absf(p.x), EMPORE_KANTE + 0.3, EMPORE_LAUF_MAX)
+	_add_mess.rpc(id, Vector3(p.x, ebene_boden(ebene) + 0.02, p.z), kind)
 
 @rpc("authority", "reliable", "call_local")
 func _add_mess(id: int, pos: Vector3, kind: int = 0) -> void:
@@ -3819,6 +3984,7 @@ func _broadcast_sync() -> void:
 	# Misafirler
 	var cids := PackedInt32Array()
 	var cx := PackedFloat32Array()
+	var cy := PackedFloat32Array()
 	var cz := PackedFloat32Array()
 	var cyaw := PackedFloat32Array()
 	var cstate := PackedInt32Array()
@@ -3830,6 +3996,7 @@ func _broadcast_sync() -> void:
 		var g: Dictionary = _guest_sim[id]
 		cids.append(id)
 		cx.append(g.pos.x)
+		cy.append(g.pos.y)
 		cz.append(g.pos.z)
 		cyaw.append(g.yaw)
 		cstate.append(g.ostate)
@@ -3838,10 +4005,11 @@ func _broadcast_sync() -> void:
 		cratio.append(clampf(g.patience / _geduld_max(g), 0.0, 1.0))
 		# Bit 0 tanzt (am Ziel), Bit 1–2 Laune, Bit 3 am Boden vor der Bühne
 		ctanz.append((1 if bool(g.get("tanz_da", false)) else 0) | (_laune(g) << 1) | (8 if int(g.mode) == 6 else 0))
-	_net_guests.rpc(cids, cx, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
+	_net_guests.rpc(cids, cx, cy, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
 	# Personal
 	var sids := PackedInt32Array()
 	var sx := PackedFloat32Array()
+	var sy := PackedFloat32Array()
 	var sz := PackedFloat32Array()
 	var syaw := PackedFloat32Array()
 	var scarry := PackedInt32Array()
@@ -3849,6 +4017,7 @@ func _broadcast_sync() -> void:
 		var st: Dictionary = _staff_sim[sid]
 		sids.append(sid)
 		sx.append(st.pos.x)
+		sy.append(st.pos.y)
 		sz.append(st.pos.z)
 		syaw.append(st.yaw)
 		# Krüge in der Hand: nur beim Ausliefern
@@ -3859,7 +4028,7 @@ func _broadcast_sync() -> void:
 			carr = 1   # Koch trägt eine Portion zur Ausgabe
 		scarry.append(carr)
 	if sids.size() > 0:
-		_net_staff.rpc(sids, sx, sz, syaw, scarry)
+		_net_staff.rpc(sids, sx, sy, sz, syaw, scarry)
 	# Çevre
 	var ids := PackedInt32Array()
 	var pr := PackedFloat32Array()
@@ -3869,13 +4038,15 @@ func _broadcast_sync() -> void:
 	_net_env.rpc(Game.money, Game.score, _clock_hour(), _hygiene, _popularity, ids, pr, _night or _nachts_geschlossen)
 	# Bira masası konumları (taşıma senkronu)
 	var bx := PackedFloat32Array()
+	var by := PackedFloat32Array()
 	var bz := PackedFloat32Array()
 	var brot := PackedFloat32Array()
 	for bt in _beertables:
 		bx.append((bt as Node3D).position.x)
+		by.append((bt as Node3D).position.y)
 		bz.append((bt as Node3D).position.z)
 		brot.append((bt as Node3D).rotation.y)
-	_net_tables.rpc(bx, bz, brot)
+	_net_tables.rpc(bx, by, bz, brot)
 	_net_lager.rpc(_lager_lagen())
 	# Getragene Einrichtung (nur solange jemand trägt)
 	if not _held_deko.is_empty():
@@ -3892,19 +4063,19 @@ func _broadcast_sync() -> void:
 		_net_einrichtung_pos.rpc(dids, dx, dz, drot)
 
 @rpc("authority", "unreliable")
-func _net_tables(bx: PackedFloat32Array, bz: PackedFloat32Array, brot: PackedFloat32Array) -> void:
+func _net_tables(bx: PackedFloat32Array, by: PackedFloat32Array, bz: PackedFloat32Array, brot: PackedFloat32Array) -> void:
 	for i in range(_beertables.size()):
 		if i < bx.size():
-			(_beertables[i] as Node3D).position = Vector3(bx[i], 0.0, bz[i])
+			(_beertables[i] as Node3D).position = Vector3(bx[i], by[i] if i < by.size() else 0.0, bz[i])
 		if i < brot.size():
 			(_beertables[i] as Node3D).rotation.y = brot[i]
 
 @rpc("authority", "unreliable")
-func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array, ctanz: PackedByteArray) -> void:
+func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cy: PackedFloat32Array, cz: PackedFloat32Array, cyaw: PackedFloat32Array, cstate: PackedInt32Array, ckind: PackedInt32Array, ctype: PackedInt32Array, cratio: PackedFloat32Array, ctanz: PackedByteArray) -> void:
 	for i in range(cids.size()):
 		var c = _guests.get(cids[i])
 		if c:
-			c.set_net(Vector3(cx[i], 0.1, cz[i]), cyaw[i])
+			c.set_net(Vector3(cx[i], cy[i] if i < cy.size() else 0.1, cz[i]), cyaw[i])
 			c.set_order(cstate[i], ckind[i], ctype[i], cratio[i])
 			var bits: int = ctanz[i] if i < ctanz.size() else 0
 			c.set_tanz(bits & 1 == 1, bits & 8 == 8)

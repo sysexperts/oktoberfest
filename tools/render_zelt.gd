@@ -93,10 +93,18 @@ class Lauf extends Node:
 		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")
 		# Büroraum durch die Tür
 		await _foto(Vector3(-9.1, 0.0, 4.6), 180.0, -10.0, "zelt_buero")
+		# Halle mit beiden Emporen, Treppe, Blick von der Empore (ein Tisch steht oben)
+		await _foto(Vector3(0.0, 0.0, 9.5), 0.0, 10.0, "zelt_halle")
+		await _foto(Vector3(7.0, 0.0, -11.5), -120.0, 8.0, "zelt_treppe")
+		var oben := gm._beertables[0] as Node3D
+		oben.position = Vector3(10.3, 3.6, 3.0)
+		gm._tisch_freistellen(0)
+		gm._rebuild_seats()
+		await _foto(Vector3(9.0, 3.6, 8.5), 10.0, -12.0, "zelt_empore")
+		await _foto(Vector3(-9.2, 3.6, -12.0), -150.0, -18.0, "zelt_empore_blick")
 		# Übersicht von oben — Dach und Deckenlampen ausblenden
-		for n in gm.find_children("*", "Node3D", true, false):
-			if (n as Node3D).global_position.y > 3.0 and n.get_parent() and String(n.get_parent().name) == "Tent":
-				(n as Node3D).visible = false
+		for pfad in ["Tent/Dach", "Tent/Beleuchtung/Kranzleuchter", "Tent/Deko", "Tent/Galerie"]:
+			(gm.get_node(pfad) as Node3D).visible = false
 		spieler.global_position = Vector3(0.0, 22.0, 0.0)
 		spieler.rotation.y = 0.0
 		spieler.get_node("Head").rotation.x = deg_to_rad(-89.0)

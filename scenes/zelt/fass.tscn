@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="1_sbn60"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="2_ie3e0"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="3_6rc1t"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2dxfg"]
+top_radius = 0.36
+bottom_radius = 0.36
+height = 0.9
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nm2i6"]
+top_radius = 0.4
+bottom_radius = 0.4
+height = 0.4
+radial_segments = 16
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_0jbmm"]
+inner_radius = 0.36
+outer_radius = 0.395
+rings = 28
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_24yhq"]
+top_radius = 0.33
+bottom_radius = 0.33
+height = 0.02
+radial_segments = 16
+rings = 1
+
+[node name="Fass" type="Node3D" unique_id=928340521]
+
+[node name="Dauben" type="MeshInstance3D" parent="." unique_id=1438016489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+material_override = ExtResource("1_sbn60")
+mesh = SubResource("CylinderMesh_2dxfg")
+
+[node name="Bauch" type="MeshInstance3D" parent="." unique_id=450024235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+material_override = ExtResource("1_sbn60")
+mesh = SubResource("CylinderMesh_nm2i6")
+
+[node name="Reif_0_12" type="MeshInstance3D" parent="." unique_id=1867994572]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = ExtResource("2_ie3e0")
+mesh = SubResource("TorusMesh_0jbmm")
+
+[node name="Reif_0_78" type="MeshInstance3D" parent="." unique_id=684206946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material_override = ExtResource("2_ie3e0")
+mesh = SubResource("TorusMesh_0jbmm")
+
+[node name="Deckel" type="MeshInstance3D" parent="." unique_id=995636840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91, 0)
+material_override = ExtResource("3_6rc1t")
+mesh = SubResource("CylinderMesh_24yhq")

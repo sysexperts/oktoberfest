@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/lebkuchen.tres" id="1_gh4ox"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="2_4rjm7"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="3_eulus"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="4_cw86l"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_afkyt"]
+top_radius = 0.17
+bottom_radius = 0.17
+height = 0.05
+radial_segments = 16
+rings = 1
+
+[sub_resource type="PrismMesh" id="PrismMesh_ynqgm"]
+size = Vector3(0.58, 0.4, 0.05)
+
+[sub_resource type="TorusMesh" id="TorusMesh_aao8r"]
+inner_radius = 0.1
+outer_radius = 0.125
+rings = 28
+ring_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_cokrd"]
+size = Vector3(0.22, 0.04, 0.01)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sys81"]
+top_radius = 0.008
+bottom_radius = 0.008
+height = 0.3
+radial_segments = 8
+rings = 1
+
+[node name="Lebkuchenherz" type="Node3D" unique_id=1211811737]
+
+[node name="BogenLinks" type="MeshInstance3D" parent="." unique_id=1712242895]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.12, -0.42, 0)
+material_override = ExtResource("1_gh4ox")
+mesh = SubResource("CylinderMesh_afkyt")
+
+[node name="BogenRechts" type="MeshInstance3D" parent="." unique_id=460698729]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.12, -0.42, 0)
+material_override = ExtResource("1_gh4ox")
+mesh = SubResource("CylinderMesh_afkyt")
+
+[node name="Spitze" type="MeshInstance3D" parent="." unique_id=655803764]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, -0.66, 0)
+material_override = ExtResource("1_gh4ox")
+mesh = SubResource("PrismMesh_ynqgm")
+
+[node name="Zuckerguss" type="MeshInstance3D" parent="." unique_id=1275237418]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.52, 0.03)
+material_override = ExtResource("2_4rjm7")
+cast_shadow = 0
+mesh = SubResource("TorusMesh_aao8r")
+
+[node name="Schrift" type="MeshInstance3D" parent="." unique_id=604560533]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.52, 0.035)
+material_override = ExtResource("3_eulus")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_cokrd")
+
+[node name="Schnur" type="MeshInstance3D" parent="." unique_id=870030568]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -0.15, 0)
+material_override = ExtResource("4_cw86l")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_sys81")

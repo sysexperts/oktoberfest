@@ -396,6 +396,9 @@ func _update_target() -> void:
 			continue
 		if _world.has_method("im_zelt") and _world.im_zelt(n3.global_position) != ich_drin:
 			continue
+		# Emporen: nichts durch den Emporenboden hindurch (oben ↔ unten)
+		if ich_drin and (global_position.y > 1.8) != (n3.global_position.y > 3.3 and absf(n3.global_position.x) > 7.7):
+			continue
 		# Objekte dürfen einen eigenen Ansprechpunkt melden (z. B. Wohnwagen-Tür)
 		var ipos: Vector3 = n3.global_position
 		if n3.has_method("interact_point"):

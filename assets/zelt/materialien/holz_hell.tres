@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/zelt/texturen/holz.png" id="1_qyxsf"]
+
+[resource]
+albedo_texture = ExtResource("1_qyxsf")
+roughness = 0.75
+uv1_scale = Vector3(0.8333333, 0.8333333, 0.8333333)
+uv1_triplanar = true
+uv1_world_triplanar = true
