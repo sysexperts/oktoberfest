@@ -536,6 +536,27 @@ class Lauf extends Node:
 		tisch_e.rotation.y = rot_e
 		gm._rebuild_seats()
 
+		print("  -- Band auf der Bühne")
+		gm._artist_tier = 3
+		gm._remove_artists()
+		gm._spawn_artists()
+		await _frames(3)
+		var buehne := get_tree().get_nodes_in_group("stage")[0] as Node3D
+		var alle_drauf: bool = gm._artist_nodes.size() == 5
+		for a in gm._artist_nodes:
+			var lokal: Vector3 = buehne.to_local((a as Node3D).global_position)
+			if absf(lokal.x) > 2.7 or lokal.z > 1.5 or lokal.z < -1.8:
+				alle_drauf = false
+		_check("Band steht ganz auf der Bühne", alle_drauf, "%d Künstler" % gm._artist_nodes.size())
+		gm._net_band_flieht()
+		await _frames(3)
+		var fliehen: bool = gm._band_weg
+		for a in gm._artist_nodes:
+			if is_instance_valid(a) and not a.flieht():
+				fliehen = false
+		_check("Band flieht bei Schlägerei, Musik bleibt aus", fliehen, "")
+		gm._net_band_zurueck()
+
 		print("  -- Tanzen auf dem Tisch")
 		gm._phase = gm.Phase.SHIFT
 		gm._phase_time = gm.SHIFT_TIME * 0.25   # etwa 18:15

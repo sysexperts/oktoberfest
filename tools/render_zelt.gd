@@ -80,6 +80,15 @@ class Lauf extends Node:
 		gm._artist_tier = 3
 		gm._spawn_artists()
 		await _foto(Vector3(1.5, 0.0, 2.0), -90.0, -8.0, "zelt_buehne")
+		for nr in 4:
+			await _foto(Vector3(5.2, 0.0, 2.0), -90.0, 4.0, "zelt_band%d" % (nr + 1))
+			await _frames(40 + nr * 23)
+		gm.schlaegerei_gemeldet(Vector3.ZERO)
+		await get_tree().create_timer(5.6).timeout
+		await _foto(Vector3(5.2, 0.0, 2.0), -90.0, 4.0, "zelt_band_flucht")
+		gm._net_band_zurueck()
+		gm._artist_tier = 3
+		gm._spawn_artists()
 		# Rückwand: Regal mit Gläsern und Kochtheke
 		await _foto(Vector3(0.0, 0.0, -10.4), 0.0, -8.0, "zelt_rueckwand")
 		# Klo-Container: Lampe über der Tür frei (grün) und besetzt (rot)
@@ -90,6 +99,8 @@ class Lauf extends Node:
 		gm._klo_setzen(-1)
 		# Zeltname: von draußen auf den Eingang, drinnen über die Theke
 		await _foto(Vector3(0.0, 0.0, 22.0), 0.0, 8.0, "zelt_name_eingang")
+		await _foto(Vector3(22.0, 0.0, 18.0), 45.0, 10.0, "zelt_aussen_seite")
+		await _foto(Vector3(20.0, 0.0, -24.0), 135.0, 10.0, "zelt_aussen_hinten")
 		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")
 		# Büroraum durch die Tür
 		await _foto(Vector3(-9.1, 0.0, 4.6), 180.0, -10.0, "zelt_buero")

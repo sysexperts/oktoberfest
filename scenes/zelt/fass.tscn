@@ -31,29 +31,29 @@ height = 0.02
 radial_segments = 16
 rings = 1
 
-[node name="Fass" type="Node3D" unique_id=928340521]
+[node name="Fass" type="Node3D" unique_id=978881292]
 
-[node name="Dauben" type="MeshInstance3D" parent="." unique_id=1438016489]
+[node name="Dauben" type="MeshInstance3D" parent="." unique_id=1148190191]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 material_override = ExtResource("1_sbn60")
 mesh = SubResource("CylinderMesh_2dxfg")
 
-[node name="Bauch" type="MeshInstance3D" parent="." unique_id=450024235]
+[node name="Bauch" type="MeshInstance3D" parent="." unique_id=546354894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 material_override = ExtResource("1_sbn60")
 mesh = SubResource("CylinderMesh_nm2i6")
 
-[node name="Reif_0_12" type="MeshInstance3D" parent="." unique_id=1867994572]
+[node name="Reif_0_12" type="MeshInstance3D" parent="." unique_id=1072861171]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
 material_override = ExtResource("2_ie3e0")
 mesh = SubResource("TorusMesh_0jbmm")
 
-[node name="Reif_0_78" type="MeshInstance3D" parent="." unique_id=684206946]
+[node name="Reif_0_78" type="MeshInstance3D" parent="." unique_id=2015772654]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
 material_override = ExtResource("2_ie3e0")
 mesh = SubResource("TorusMesh_0jbmm")
 
-[node name="Deckel" type="MeshInstance3D" parent="." unique_id=995636840]
+[node name="Deckel" type="MeshInstance3D" parent="." unique_id=412046512]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91, 0)
 material_override = ExtResource("3_6rc1t")
 mesh = SubResource("CylinderMesh_24yhq")

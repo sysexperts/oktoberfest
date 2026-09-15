@@ -26,69 +26,69 @@ height = 0.2
 radial_segments = 12
 rings = 6
 
-[node name="Blumenkasten" type="Node3D" unique_id=1765752966]
+[node name="Blumenkasten" type="Node3D" unique_id=468013910]
 
-[node name="Kasten" type="MeshInstance3D" parent="." unique_id=1078504675]
+[node name="Kasten" type="MeshInstance3D" parent="." unique_id=2095615636]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0)
 material_override = ExtResource("1_up022")
 mesh = SubResource("BoxMesh_og23q")
 
-[node name="Blatt1" type="MeshInstance3D" parent="." unique_id=1080945243]
+[node name="Blatt1" type="MeshInstance3D" parent="." unique_id=2109282820]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=556290259]
+[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=103729683]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt2" type="MeshInstance3D" parent="." unique_id=882341487]
+[node name="Blatt2" type="MeshInstance3D" parent="." unique_id=194847370]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=423888395]
+[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=837769130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt3" type="MeshInstance3D" parent="." unique_id=885734344]
+[node name="Blatt3" type="MeshInstance3D" parent="." unique_id=2127521546]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=1264651359]
+[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=1558328822]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.42, 0.08)
 material_override = ExtResource("4_m0xyw")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt4" type="MeshInstance3D" parent="." unique_id=685786458]
+[node name="Blatt4" type="MeshInstance3D" parent="." unique_id=992031522]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=2057028391]
+[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=1282894198]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt5" type="MeshInstance3D" parent="." unique_id=1898896806]
+[node name="Blatt5" type="MeshInstance3D" parent="." unique_id=1657309766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=1805929497]
+[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=819343324]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Ranke1" type="MeshInstance3D" parent="." unique_id=253797572]
+[node name="Ranke1" type="MeshInstance3D" parent="." unique_id=1938415815]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.02, 0.16)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_ypb5g")
 
-[node name="Ranke2" type="MeshInstance3D" parent="." unique_id=320178164]
+[node name="Ranke2" type="MeshInstance3D" parent="." unique_id=1616027686]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.02, 0.16)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_ypb5g")

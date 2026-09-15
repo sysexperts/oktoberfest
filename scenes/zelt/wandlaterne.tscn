@@ -32,61 +32,61 @@ height = 0.14
 radial_segments = 4
 rings = 1
 
-[node name="Wandlaterne" type="Node3D" unique_id=160537273]
+[node name="Wandlaterne" type="Node3D" unique_id=788092416]
 
-[node name="Wandplatte" type="MeshInstance3D" parent="." unique_id=1027719175]
+[node name="Wandplatte" type="MeshInstance3D" parent="." unique_id=398134427]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22, 0.015)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_8yman")
 
-[node name="Arm" type="MeshInstance3D" parent="." unique_id=1167260329]
+[node name="Arm" type="MeshInstance3D" parent="." unique_id=1429042367]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0.21)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_lxuyg")
 
-[node name="Haken" type="MeshInstance3D" parent="." unique_id=2008644097]
+[node name="Haken" type="MeshInstance3D" parent="." unique_id=1847120739]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0.315, 0.38)
 material_override = ExtResource("1_wmycj")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_laixc")
 
-[node name="Glas" type="MeshInstance3D" parent="." unique_id=1428975858]
+[node name="Glas" type="MeshInstance3D" parent="." unique_id=81188898]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.38)
 material_override = ExtResource("2_7huwg")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_edaon")
 
-[node name="Strebe1" type="MeshInstance3D" parent="." unique_id=1050930979]
+[node name="Strebe1" type="MeshInstance3D" parent="." unique_id=501140854]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.1, 0.48)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_xwmyd")
 
-[node name="Strebe2" type="MeshInstance3D" parent="." unique_id=1961308532]
+[node name="Strebe2" type="MeshInstance3D" parent="." unique_id=1704531790]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.1, 0.48)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_xwmyd")
 
-[node name="Strebe3" type="MeshInstance3D" parent="." unique_id=86715709]
+[node name="Strebe3" type="MeshInstance3D" parent="." unique_id=1771592860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.1, 0.28)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_xwmyd")
 
-[node name="Strebe4" type="MeshInstance3D" parent="." unique_id=469192328]
+[node name="Strebe4" type="MeshInstance3D" parent="." unique_id=327744244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.1, 0.28)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_xwmyd")
 
-[node name="Boden" type="MeshInstance3D" parent="." unique_id=1397640344]
+[node name="Boden" type="MeshInstance3D" parent="." unique_id=423581831]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0.38)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("BoxMesh_1uu5g")
 
-[node name="Dach" type="MeshInstance3D" parent="." unique_id=1538256086]
+[node name="Dach" type="MeshInstance3D" parent="." unique_id=749144441]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0.32, 0.38)
 material_override = ExtResource("1_wmycj")
 mesh = SubResource("CylinderMesh_1shjd")
 
-[node name="Licht" type="OmniLight3D" parent="." unique_id=1489056279]
+[node name="Licht" type="OmniLight3D" parent="." unique_id=504619766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.5)
 light_color = Color(1, 0.74, 0.44, 1)
 omni_range = 5.5

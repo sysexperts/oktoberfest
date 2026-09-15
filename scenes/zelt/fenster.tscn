@@ -29,58 +29,58 @@ size = Vector3(1.5, 0.28, 0.44)
 [sub_resource type="BoxMesh" id="BoxMesh_kbjn0"]
 size = Vector3(0.5, 1, 0.04)
 
-[node name="Fenster" type="Node3D" unique_id=1741617307]
+[node name="Fenster" type="Node3D" unique_id=1122241778]
 
-[node name="Glas" type="MeshInstance3D" parent="." unique_id=797886312]
+[node name="Glas" type="MeshInstance3D" parent="." unique_id=1839040736]
 material_override = ExtResource("1_t70uk")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_tfy1t")
 
-[node name="RahmenOben" type="MeshInstance3D" parent="." unique_id=1906588993]
+[node name="RahmenOben" type="MeshInstance3D" parent="." unique_id=1939047356]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("BoxMesh_l0qp4")
 
-[node name="RahmenUnten" type="MeshInstance3D" parent="." unique_id=876269151]
+[node name="RahmenUnten" type="MeshInstance3D" parent="." unique_id=206296177]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48, 0)
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("BoxMesh_l0qp4")
 
-[node name="RahmenLinks" type="MeshInstance3D" parent="." unique_id=1493812425]
+[node name="RahmenLinks" type="MeshInstance3D" parent="." unique_id=1135585643]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.63, 0, 0)
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("BoxMesh_0vghf")
 
-[node name="RahmenRechts" type="MeshInstance3D" parent="." unique_id=1722762056]
+[node name="RahmenRechts" type="MeshInstance3D" parent="." unique_id=1054468551]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.63, 0, 0)
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("BoxMesh_0vghf")
 
-[node name="SprosseSenkrecht" type="MeshInstance3D" parent="." unique_id=1975870097]
+[node name="SprosseSenkrecht" type="MeshInstance3D" parent="." unique_id=814215850]
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("BoxMesh_fr3le")
 
-[node name="SprosseWaagrecht" type="MeshInstance3D" parent="." unique_id=125085438]
+[node name="SprosseWaagrecht" type="MeshInstance3D" parent="." unique_id=1847634371]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("BoxMesh_5o4gl")
 
-[node name="Fensterbank" type="MeshInstance3D" parent="." unique_id=2097238125]
+[node name="Fensterbank" type="MeshInstance3D" parent="." unique_id=1450924159]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
 material_override = ExtResource("3_5pacn")
 mesh = SubResource("BoxMesh_hxyu1")
 
-[node name="Giebel" type="MeshInstance3D" parent="." unique_id=96032362]
+[node name="Giebel" type="MeshInstance3D" parent="." unique_id=2104947703]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67, 0)
 material_override = ExtResource("2_npv5n")
 mesh = SubResource("PrismMesh_efs42")
 
-[node name="LadenLinks" type="MeshInstance3D" parent="." unique_id=1126406495]
+[node name="LadenLinks" type="MeshInstance3D" parent="." unique_id=352016443]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0, 0.23)
 material_override = ExtResource("4_0wsy8")
 mesh = SubResource("BoxMesh_kbjn0")
 
-[node name="LadenRechts" type="MeshInstance3D" parent="." unique_id=1411646617]
+[node name="LadenRechts" type="MeshInstance3D" parent="." unique_id=1752200960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 0, 0.23)
 material_override = ExtResource("4_0wsy8")
 mesh = SubResource("BoxMesh_kbjn0")

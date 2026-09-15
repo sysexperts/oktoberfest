@@ -1,7 +1,29 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/artist.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2_model"]
+
+[sub_resource type="CylinderMesh" id="MikroGriff"]
+top_radius = 0.022
+bottom_radius = 0.016
+height = 0.2
+radial_segments = 10
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MikroSchwarz"]
+albedo_color = Color(0.08, 0.08, 0.09, 1)
+roughness = 0.4
+
+[sub_resource type="SphereMesh" id="MikroKorb"]
+radius = 0.042
+height = 0.084
+radial_segments = 12
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="MikroSilber"]
+albedo_color = Color(0.75, 0.76, 0.78, 1)
+metallic = 0.6
+roughness = 0.35
 
 [node name="Artist" type="Node3D"]
 script = ExtResource("1_script")
@@ -16,3 +38,15 @@ font_size = 40
 outline_size = 14
 modulate = Color(1, 0.85, 0.4, 1)
 text = "🎸 Künstler"
+
+[node name="Mikrofon" type="Node3D" parent="."]
+
+[node name="Griff" type="MeshInstance3D" parent="Mikrofon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+mesh = SubResource("MikroGriff")
+surface_material_override/0 = SubResource("MikroSchwarz")
+
+[node name="Korb" type="MeshInstance3D" parent="Mikrofon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+mesh = SubResource("MikroKorb")
+surface_material_override/0 = SubResource("MikroSilber")

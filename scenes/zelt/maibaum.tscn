@@ -46,112 +46,112 @@ rings = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_rjqaq"]
 size = Vector3(0.6, 3, 0.6)
 
-[node name="Maibaum" type="Node3D" unique_id=125231114]
+[node name="Maibaum" type="Node3D" unique_id=1179549706]
 
-[node name="Sockel" type="MeshInstance3D" parent="." unique_id=1500657637]
+[node name="Sockel" type="MeshInstance3D" parent="." unique_id=1100980570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 material_override = ExtResource("1_hdjl8")
 mesh = SubResource("BoxMesh_637la")
 
-[node name="Stamm" type="MeshInstance3D" parent="." unique_id=1032984298]
+[node name="Stamm" type="MeshInstance3D" parent="." unique_id=1989675781]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 0)
 material_override = ExtResource("2_va8at")
 mesh = SubResource("CylinderMesh_hhahx")
 
-[node name="Kranz_9_0" type="MeshInstance3D" parent="." unique_id=448945690]
+[node name="Kranz_9_0" type="MeshInstance3D" parent="." unique_id=357442473]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 material_override = ExtResource("3_d0xby")
 mesh = SubResource("TorusMesh_ijts5")
 
-[node name="Kranz_12_6" type="MeshInstance3D" parent="." unique_id=705350112]
+[node name="Kranz_12_6" type="MeshInstance3D" parent="." unique_id=1484897287]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.6, 0)
 material_override = ExtResource("3_d0xby")
 mesh = SubResource("TorusMesh_ijts5")
 
-[node name="Zunftzeichen" type="Node3D" parent="." unique_id=573049532]
+[node name="Zunftzeichen" type="Node3D" parent="." unique_id=1011006154]
 
-[node name="Querholz1" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1415760544]
+[node name="Querholz1" type="MeshInstance3D" parent="Zunftzeichen" unique_id=442393769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
 material_override = ExtResource("1_hdjl8")
 mesh = SubResource("BoxMesh_wc5iw")
 
-[node name="Schild1" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1579373396]
+[node name="Schild1" type="MeshInstance3D" parent="Zunftzeichen" unique_id=889291569]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 3.6, 0)
 material_override = ExtResource("4_av5ym")
 mesh = SubResource("BoxMesh_rm1nm")
 
-[node name="Figur1" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1047919076]
+[node name="Figur1" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1187783710]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 4.16, 0)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("SphereMesh_vk8vu")
 
-[node name="Schild2" type="MeshInstance3D" parent="Zunftzeichen" unique_id=154494829]
+[node name="Schild2" type="MeshInstance3D" parent="Zunftzeichen" unique_id=249773344]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 3.6, 0)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("BoxMesh_rm1nm")
 
-[node name="Figur2" type="MeshInstance3D" parent="Zunftzeichen" unique_id=666064425]
+[node name="Figur2" type="MeshInstance3D" parent="Zunftzeichen" unique_id=223336111]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 4.16, 0)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("SphereMesh_vk8vu")
 
-[node name="Querholz2" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1770890233]
+[node name="Querholz2" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1187103067]
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 0, 5.6, 0)
 material_override = ExtResource("1_hdjl8")
 mesh = SubResource("BoxMesh_wc5iw")
 
-[node name="Schild3" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1264225699]
+[node name="Schild3" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1611345898]
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, -0.5749999, 5.2, 0.99592924)
 material_override = ExtResource("6_wobu5")
 mesh = SubResource("BoxMesh_rm1nm")
 
-[node name="Figur3" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1400585926]
+[node name="Figur3" type="MeshInstance3D" parent="Zunftzeichen" unique_id=311415669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5749999, 5.76, 0.99592924)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("SphereMesh_vk8vu")
 
-[node name="Schild4" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1436167834]
+[node name="Schild4" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1142264125]
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 0.5749999, 5.2, -0.99592924)
 material_override = ExtResource("7_igb82")
 mesh = SubResource("BoxMesh_rm1nm")
 
-[node name="Figur4" type="MeshInstance3D" parent="Zunftzeichen" unique_id=2040456076]
+[node name="Figur4" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1174989231]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5749999, 5.76, -0.99592924)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("SphereMesh_vk8vu")
 
-[node name="Querholz3" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1398471990]
+[node name="Querholz3" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1211348052]
 transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 0, 7.2, 0)
 material_override = ExtResource("1_hdjl8")
 mesh = SubResource("BoxMesh_wc5iw")
 
-[node name="Schild5" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1062663476]
+[node name="Schild5" type="MeshInstance3D" parent="Zunftzeichen" unique_id=761079078]
 transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 0.57500005, 6.8, 0.9959292)
 material_override = ExtResource("4_av5ym")
 mesh = SubResource("BoxMesh_rm1nm")
 
-[node name="Figur5" type="MeshInstance3D" parent="Zunftzeichen" unique_id=763328275]
+[node name="Figur5" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1822273082]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.57500005, 7.36, 0.9959292)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("SphereMesh_vk8vu")
 
-[node name="Schild6" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1580409380]
+[node name="Schild6" type="MeshInstance3D" parent="Zunftzeichen" unique_id=606458021]
 transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, -0.57500005, 6.8, -0.9959292)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("BoxMesh_rm1nm")
 
-[node name="Figur6" type="MeshInstance3D" parent="Zunftzeichen" unique_id=1723768608]
+[node name="Figur6" type="MeshInstance3D" parent="Zunftzeichen" unique_id=201380158]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.57500005, 7.36, -0.9959292)
 material_override = ExtResource("5_o3mfa")
 mesh = SubResource("SphereMesh_vk8vu")
 
-[node name="Tannenspitze" type="MeshInstance3D" parent="." unique_id=612022356]
+[node name="Tannenspitze" type="MeshInstance3D" parent="." unique_id=65526895]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.2, 0)
 material_override = ExtResource("3_d0xby")
 mesh = SubResource("CylinderMesh_iydta")
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=381629336]
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=191361615]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1263953539]
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=2102805514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_rjqaq")

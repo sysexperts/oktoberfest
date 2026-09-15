@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="1_uu28t"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="2_uytc0"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/hopfen.tres" id="3_je2e5"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="4_1r1so"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="5_vduo3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1mcvn"]
+size = Vector3(2, 0.4, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pqu25"]
+size = Vector3(2.06, 0.05, 0.5)
+
+[sub_resource type="SphereMesh" id="SphereMesh_gllhg"]
+radius = 0.24
+height = 0.48
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_f8mpj"]
+radius = 0.07
+height = 0.14
+radial_segments = 12
+rings = 6
+
+[node name="Pflanzkasten" type="Node3D" unique_id=304422492]
+
+[node name="Kasten" type="MeshInstance3D" parent="." unique_id=1455746589]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+material_override = ExtResource("1_uu28t")
+mesh = SubResource("BoxMesh_1mcvn")
+
+[node name="Leiste" type="MeshInstance3D" parent="." unique_id=1511956843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
+material_override = ExtResource("2_uytc0")
+mesh = SubResource("BoxMesh_pqu25")
+
+[node name="Busch1" type="MeshInstance3D" parent="." unique_id=935855498]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, -0.8, 0.55, 0)
+material_override = ExtResource("3_je2e5")
+mesh = SubResource("SphereMesh_gllhg")
+
+[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=695364917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.7, 0.14)
+material_override = ExtResource("4_1r1so")
+mesh = SubResource("SphereMesh_f8mpj")
+
+[node name="Busch2" type="MeshInstance3D" parent="." unique_id=2042398444]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, -0.4, 0.55, 0)
+material_override = ExtResource("3_je2e5")
+mesh = SubResource("SphereMesh_gllhg")
+
+[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=1732932184]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.7, 0.14)
+material_override = ExtResource("5_vduo3")
+mesh = SubResource("SphereMesh_f8mpj")
+
+[node name="Busch3" type="MeshInstance3D" parent="." unique_id=680044520]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, 0, 0.55, 0)
+material_override = ExtResource("3_je2e5")
+mesh = SubResource("SphereMesh_gllhg")
+
+[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=1740631620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.7, 0.14)
+material_override = ExtResource("4_1r1so")
+mesh = SubResource("SphereMesh_f8mpj")
+
+[node name="Busch4" type="MeshInstance3D" parent="." unique_id=1930774823]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, 0.4, 0.55, 0)
+material_override = ExtResource("3_je2e5")
+mesh = SubResource("SphereMesh_gllhg")
+
+[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=336115126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.7, 0.14)
+material_override = ExtResource("5_vduo3")
+mesh = SubResource("SphereMesh_f8mpj")
+
+[node name="Busch5" type="MeshInstance3D" parent="." unique_id=1279491036]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, 0.8, 0.55, 0)
+material_override = ExtResource("3_je2e5")
+mesh = SubResource("SphereMesh_gllhg")
+
+[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=2014401410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.7, 0.14)
+material_override = ExtResource("4_1r1so")
+mesh = SubResource("SphereMesh_f8mpj")

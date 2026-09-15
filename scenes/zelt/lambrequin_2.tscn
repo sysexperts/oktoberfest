@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="1_gowi3"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="2_hqi2o"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="3_wcyou"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5y1b0"]
+size = Vector3(2, 0.12, 0.04)
+
+[sub_resource type="PrismMesh" id="PrismMesh_ajfc1"]
+size = Vector3(0.4, 0.3, 0.03)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dagjd"]
+radius = 0.035
+height = 0.07
+radial_segments = 12
+rings = 6
+
+[node name="Lambrequin" type="Node3D" unique_id=1929368358]
+
+[node name="Leiste" type="MeshInstance3D" parent="." unique_id=1368855629]
+material_override = ExtResource("1_gowi3")
+mesh = SubResource("BoxMesh_5y1b0")
+
+[node name="Zacke1" type="MeshInstance3D" parent="." unique_id=1153968419]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -0.8, -0.21, 0)
+material_override = ExtResource("2_hqi2o")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_ajfc1")
+
+[node name="Quaste1" type="MeshInstance3D" parent="." unique_id=1053369218]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, -0.38, 0)
+material_override = ExtResource("3_wcyou")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_dagjd")
+
+[node name="Zacke2" type="MeshInstance3D" parent="." unique_id=1661351751]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -0.4, -0.21, 0)
+material_override = ExtResource("1_gowi3")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_ajfc1")
+
+[node name="Quaste2" type="MeshInstance3D" parent="." unique_id=840346354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, -0.38, 0)
+material_override = ExtResource("3_wcyou")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_dagjd")
+
+[node name="Zacke3" type="MeshInstance3D" parent="." unique_id=1863940920]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, -0.21, 0)
+material_override = ExtResource("2_hqi2o")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_ajfc1")
+
+[node name="Quaste3" type="MeshInstance3D" parent="." unique_id=1547839881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.38, 0)
+material_override = ExtResource("3_wcyou")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_dagjd")
+
+[node name="Zacke4" type="MeshInstance3D" parent="." unique_id=1120954786]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0.4, -0.21, 0)
+material_override = ExtResource("1_gowi3")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_ajfc1")
+
+[node name="Quaste4" type="MeshInstance3D" parent="." unique_id=1326673059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, -0.38, 0)
+material_override = ExtResource("3_wcyou")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_dagjd")
+
+[node name="Zacke5" type="MeshInstance3D" parent="." unique_id=169010640]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0.8, -0.21, 0)
+material_override = ExtResource("2_hqi2o")
+cast_shadow = 0
+mesh = SubResource("PrismMesh_ajfc1")
+
+[node name="Quaste5" type="MeshInstance3D" parent="." unique_id=1982539900]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, -0.38, 0)
+material_override = ExtResource("3_wcyou")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_dagjd")

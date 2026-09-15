@@ -39,6 +39,10 @@ func starten(kandidaten: Array, ort: Vector3, anzahl: int) -> void:
 		_warteschlange.append(k)
 	_laeuft = true
 	%Staubteppich.emitting = true
+	# Im Zelt: der GameManager schickt die Band nach ein paar Sekunden weg
+	var welt := get_tree().current_scene
+	if welt and welt.has_method("schlaegerei_gemeldet"):
+		welt.schlaegerei_gemeldet(ort)
 	# Die ersten vier fangen sofort an
 	for i in mini(4, _warteschlange.size()):
 		_mitmachen(_warteschlange.pop_front())

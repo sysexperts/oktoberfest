@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="1_gi0jj"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="2_r47mm"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten_fein.tres" id="3_b3tvu"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="4_lpnv5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hxwut"]
+size = Vector3(0.8, 1, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_raeot"]
+size = Vector3(0.9, 1.1, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_todhg"]
+size = Vector3(0.9, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w36cn"]
+size = Vector3(0.5, 0.03, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_36w14"]
+size = Vector3(0.45, 0.03, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_g563i"]
+size = Vector3(0.4, 0.03, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5vumo"]
+size = Vector3(0.35, 0.03, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c3hk0"]
+size = Vector3(0.05, 1.5700318, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_q6yw7"]
+size = Vector3(0.05, 1.5890248, 0.05)
+
+[node name="Speisetafel" type="Node3D" unique_id=193148796]
+
+[node name="Tafel" type="MeshInstance3D" parent="." unique_id=1691880402]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, 0, 1, 0.1)
+material_override = ExtResource("1_gi0jj")
+mesh = SubResource("BoxMesh_hxwut")
+
+[node name="Rahmen" type="MeshInstance3D" parent="." unique_id=479026211]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, 0, 1, 0.08)
+material_override = ExtResource("2_r47mm")
+mesh = SubResource("BoxMesh_raeot")
+
+[node name="Kopf" type="MeshInstance3D" parent="." unique_id=1536165845]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, 0, 1.62, 0.2)
+material_override = ExtResource("3_b3tvu")
+mesh = SubResource("BoxMesh_todhg")
+
+[node name="Zeile1" type="MeshInstance3D" parent="." unique_id=1875633333]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, -0.05, 1.3, 0.13)
+material_override = ExtResource("4_lpnv5")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_w36cn")
+
+[node name="Zeile2" type="MeshInstance3D" parent="." unique_id=828820144]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, -0.05, 1.12, 0.13)
+material_override = ExtResource("4_lpnv5")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_36w14")
+
+[node name="Zeile3" type="MeshInstance3D" parent="." unique_id=740615680]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, -0.05, 0.94, 0.13)
+material_override = ExtResource("4_lpnv5")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_g563i")
+
+[node name="Zeile4" type="MeshInstance3D" parent="." unique_id=2058932037]
+transform = Transform3D(1, 0, 0, 0, 0.9848077, 0.17364818, 0, -0.17364818, 0.9848077, -0.05, 0.76, 0.13)
+material_override = ExtResource("4_lpnv5")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_5vumo")
+
+[node name="BeinVorn" type="MeshInstance3D" parent="." unique_id=406530307]
+transform = Transform3D(1, 0, 0, 0, 0.98724115, 0.15923245, 0, -0.15923245, 0.98724115, 0, 0.775, 0.17500001)
+material_override = ExtResource("2_r47mm")
+mesh = SubResource("BoxMesh_c3hk0")
+
+[node name="BeinHinten" type="MeshInstance3D" parent="." unique_id=1142116051]
+transform = Transform3D(1, 0, 0, 0, 0.97544104, -0.22026087, 0, 0.22026087, 0.97544104, 0, 0.775, -0.175)
+material_override = ExtResource("2_r47mm")
+mesh = SubResource("BoxMesh_q6yw7")

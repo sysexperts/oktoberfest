@@ -426,8 +426,93 @@ var s_herz: PackedScene
 var s_lichterkette: PackedScene
 var s_maibaum: PackedScene
 var s_fass: PackedScene
+var s_lambrequin: PackedScene
+var s_wimpel_lang: PackedScene
+var s_biergarten: PackedScene
+var s_kisten: PackedScene
+var s_pflanzkasten: PackedScene
+var s_tafel: PackedScene
+
+func _bauteile_aussen() -> void:
+	s_lambrequin = _speichern(_bau_lambrequin(2.0), SZ + "lambrequin_2.tscn")
+	s_wimpel_lang = _speichern(_bau_wimpel(14.6), SZ + "wimpelkette_14.tscn")
+	s_biergarten = _speichern(_bau_biergarten(), SZ + "biergarten_tisch.tscn")
+	s_kisten = _speichern(_bau_kisten(), SZ + "kistenstapel.tscn")
+	s_pflanzkasten = _speichern(_bau_pflanzkasten(), SZ + "pflanzkasten.tscn")
+	s_tafel = _speichern(_bau_tafel(), SZ + "speisetafel.tscn")
+
+## Zackenvolant (Lambrequin) entlang X: blau-weiße Dreiecke unter einer Leiste
+func _bau_lambrequin(laenge: float) -> Node3D:
+	var r := _neu("Lambrequin")
+	_box(r, "Leiste", Vector3(laenge, 0.12, 0.04), Vector3(0, 0, 0), m.blau)
+	var zahl := int(laenge / 0.4)
+	for i in zahl:
+		var x := -laenge / 2.0 + (i + 0.5) * laenge / zahl
+		_prisma(r, "Zacke%d" % (i + 1), Vector3(laenge / zahl, 0.3, 0.03), Transform3D(_rot(Vector3(0, 0, 180)), Vector3(x, -0.21, 0)),
+			m.weiss if i % 2 == 0 else m.blau, false)
+		_kugel(r, "Quaste%d" % (i + 1), 0.035, Vector3(x, -0.38, 0), m.gold, false)
+	return r
+
+## Biergartentisch mit zwei Bänken und Sonnenschirm (nur Deko)
+func _bau_biergarten() -> Node3D:
+	var r := _neu("BiergartenTisch")
+	_box(r, "Platte", Vector3(2.2, 0.06, 0.7), Vector3(0, 0.78, 0), m.holz_hell)
+	for x: float in [-0.9, 0.9]:
+		_box(r, "Bock_%s" % String.num(x), Vector3(0.06, 0.75, 0.6), Vector3(x, 0.38, 0), m.holz_dunkel)
+		for z: float in [-0.65, 0.65]:
+			_box(r, "Bankbein_%s_%s" % [String.num(x), String.num(z)], Vector3(0.06, 0.45, 0.25), Vector3(x, 0.22, z), m.holz_dunkel)
+	for z: float in [-0.65, 0.65]:
+		_box(r, "Bank_%s" % String.num(z), Vector3(2.2, 0.05, 0.25), Vector3(0, 0.47, z), m.holz_hell)
+	_stange(r, "Schirmstock", Vector3(0, 0, 0), Vector3(0, 2.5, 0), 0.03, m.weiss)
+	_kegel(r, "Schirm", 1.5, 0.05, 0.55, 12, Transform3D(Basis(), Vector3(0, 2.35, 0)), m.streifen_fein)
+	_kugel(r, "Schirmknopf", 0.06, Vector3(0, 2.66, 0), m.gold)
+	for i in 3:
+		_kegel(r, "Krug%d" % (i + 1), 0.05, 0.055, 0.16, 10, Transform3D(Basis(), Vector3(-0.5 + i * 0.45, 0.89, 0.1 - i * 0.08)), m.glas)
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Form", Vector3(2.3, 0.9, 1.6), Transform3D(Basis(), Vector3(0, 0.45, 0)))
+	return r
+
+## Gestapelte Getränkekisten
+func _bau_kisten() -> Node3D:
+	var r := _neu("Kistenstapel")
+	var farben := [m.rot, m.blau, m.rot, m.blau, m.rot, m.blau]
+	var nr := 0
+	for lage in 3:
+		for spalte in 3 - lage:
+			var pos := Vector3(-0.42 + spalte * 0.42 + lage * 0.21, 0.15 + lage * 0.3, 0)
+			_box(r, "Kiste%d" % (nr + 1), Vector3(0.4, 0.3, 0.3), pos, farben[nr % farben.size()])
+			for f in 3:
+				_kegel(r, "Flasche%d_%d" % [nr + 1, f + 1], 0.03, 0.02, 0.1, 6, Transform3D(Basis(), pos + Vector3(-0.12 + f * 0.12, 0.2, 0)), m.glas)
+			nr += 1
+	return r
+
+## Pflanzkasten mit Buchs und Blumen, entlang X
+func _bau_pflanzkasten() -> Node3D:
+	var r := _neu("Pflanzkasten")
+	_box(r, "Kasten", Vector3(2.0, 0.4, 0.45), Vector3(0, 0.2, 0), m.holz_dunkel)
+	_box(r, "Leiste", Vector3(2.06, 0.05, 0.5), Vector3(0, 0.42, 0), m.blau)
+	for i in 5:
+		var x := -0.8 + i * 0.4
+		var busch := _kugel(r, "Busch%d" % (i + 1), 0.24, Vector3(x, 0.55, 0), m.hopfen)
+		busch.scale = Vector3(1, 0.8, 0.9)
+		_kugel(r, "Bluete%d" % (i + 1), 0.07, Vector3(x + 0.1, 0.7, 0.14), m.rot if i % 2 == 0 else m.weiss)
+	return r
+
+## Aufsteller-Tafel (Kreidetafel mit Rahmen, Rautenkopf) — schaut nach +Z
+func _bau_tafel() -> Node3D:
+	var r := _neu("Speisetafel")
+	_box(r, "Tafel", Vector3(0.8, 1.0, 0.04), Vector3(0, 1.0, 0.1), m.metall, Vector3(-10, 0, 0))
+	_box(r, "Rahmen", Vector3(0.9, 1.1, 0.03), Vector3(0, 1.0, 0.08), m.holz_dunkel, Vector3(-10, 0, 0))
+	_box(r, "Kopf", Vector3(0.9, 0.2, 0.05), Vector3(0, 1.62, 0.2), m.rauten_fein, Vector3(-10, 0, 0))
+	for i in 4:
+		_box(r, "Zeile%d" % (i + 1), Vector3(0.5 - i * 0.05, 0.03, 0.01), Vector3(-0.05, 1.3 - i * 0.18, 0.13), m.weiss, Vector3(-10, 0, 0), false)
+	_balken(r, "BeinVorn", Vector3(0, 0, 0.3), Vector3(0, 1.55, 0.05), 0.05, m.holz_dunkel)
+	_balken(r, "BeinHinten", Vector3(0, 0, -0.35), Vector3(0, 1.55, 0.0), 0.05, m.holz_dunkel)
+	return r
 
 func _bauteile() -> void:
+	_bauteile_aussen()
 	s_leuchter = _speichern(_bau_leuchter(), SZ + "kranzleuchter.tscn")
 	s_laterne = _speichern(_bau_laterne(), SZ + "wandlaterne.tscn")
 	s_fenster = _speichern(_bau_fenster(), SZ + "fenster.tscn")
@@ -654,7 +739,68 @@ func _zelt() -> void:
 	_beleuchtung(_gruppe(r, "Beleuchtung"))
 	_deko(_gruppe(r, "Deko"))
 	_fassade(_gruppe(r, "Fassade"))
+	_aussen(_gruppe(r, "Aussen"))
 	_speichern(r, ZELT)
+
+## Außenseiten: Lisenen und Gurtgesims, Zackenvolant an der Traufe, Vordach über dem
+## Tor, Fahnen auf dem First, Wimpel zwischen den Türmen, Pflanzkästen, Biergarten,
+## Kistenstapel hinten, Speisetafel am Eingang.
+func _aussen(g: Node3D) -> void:
+	var li := _gruppe(g, "Lisenen")
+	for s: float in [-1.0, 1.0]:
+		var seite := "West" if s < 0 else "Ost"
+		for z: float in BINDER:
+			_box(li, "Lisene%s_%s" % [seite, String.num(z)], Vector3(0.12, WAND_H - 1.2, 0.26), Vector3(s * (XI + 0.36), 1.2 + (WAND_H - 1.2) / 2.0, z), m.holz_dunkel)
+		_box(li, "Gurtgesims" + seite, Vector3(0.1, 0.22, 25.7), Vector3(s * (XI + 0.36), EMPORE_Y, -1.5), m.blau)
+		_box(li, "Traufgesims" + seite, Vector3(0.12, 0.2, 25.7), Vector3(s * (XI + 0.37), TRAUFE - 0.15, -1.5), m.holz_dunkel)
+	for x in [-10.0, -5.0, 0.0, 5.0, 10.0]:
+		_box(li, "LiseneHinten_%s" % String.num(x), Vector3(0.26, WAND_H - 1.2, 0.12), Vector3(x, 1.2 + (WAND_H - 1.2) / 2.0, ZB - 0.36), m.holz_dunkel)
+	_box(li, "GurtgesimsHinten", Vector3(24.7, 0.22, 0.1), Vector3(0, EMPORE_Y, ZB - 0.36), m.blau)
+	_box(li, "GurtgesimsVorne", Vector3(24.7, 0.22, 0.1), Vector3(0, 6.1, ZF + 0.36), m.blau)
+
+	# Zackenvolant unter der Traufe (Seiten) und an der Vorderkante des Dachs
+	var vo := _gruppe(g, "Volant")
+	var zahl := 13
+	for s: float in [-1.0, 1.0]:
+		for i in zahl:
+			var z := -14.8 + 1.0 + i * 2.1
+			_instanz(vo, s_lambrequin, "%s%d" % ["West" if s < 0 else "Ost", i + 1],
+				Transform3D(_rot(Vector3(0, 90, 0)), Vector3(s * 13.08, _dach_y(s, s * 13.0) - 0.32, z)))
+
+	# Vordach über dem Tor mit Konsolen und Volant
+	var vd := _gruppe(g, "Vordach", Vector3(0, 0, ZF + 0.3))
+	var neig := 14.0
+	_box(vd, "Plane", Vector3(7.4, 0.06, 1.6), Vector3(0, 3.1, 0.75), m.streifen, Vector3(neig, 0, 0))
+	for x in [-3.4, 0.0, 3.4]:
+		_balken(vd, "Konsole_%s" % String.num(x), Vector3(x, 2.35, 0.05), Vector3(x, 2.95, 1.4), 0.1, m.holz_dunkel)
+	for i in 4:
+		_instanz(vd, s_lambrequin, "Volant%d" % (i + 1), Transform3D(Basis().scaled(Vector3(0.925, 1, 1)), Vector3(-2.775 + i * 1.85, 2.88, 1.56)))
+
+	# Fahnen auf dem First, Wimpel zwischen den Türmen
+	for i in 3:
+		var z := -9.0 + i * 7.5
+		_instanz(g, s_fahne, "FirstFahne%d" % (i + 1), Transform3D(_rot(Vector3(0, 90 if i % 2 == 0 else -90, 0)), Vector3(0, FIRST + 0.2, z)))
+	_instanz(g, s_wimpel_lang, "TurmWimpel", Transform3D(Basis(), Vector3(0, 6.9, ZF + 1.0)))
+	# Hinterer Giebel: Wappen, Lichterketten, Volant — auch von hinten ein Festzelt
+	_instanz(g, s_wappen, "GiebelWappenHinten", Transform3D(_rot(Vector3(0, 180, 0)).scaled(Vector3.ONE * 0.8), Vector3(0, TRAUFE + 1.8, ZB - 0.4)))
+	for s: float in [-1.0, 1.0]:
+		var mx := s * 6.55
+		_instanz(g, s_lichterkette, "LichterketteHinten" + ("Links" if s < 0 else "Rechts"),
+			Transform3D(_rot(Vector3(0, 0, -s * rad_to_deg(atan(K)))), Vector3(mx, _dach_y(s, mx) - 0.1, ZB - 0.6)))
+	for i in 12:
+		_instanz(vo, s_lambrequin, "Hinten%d" % (i + 1), Transform3D(_rot(Vector3(0, 180, 0)), Vector3(-11.0 + i * 2.0, TRAUFE - 0.45, ZB - 0.45)))
+
+	# Pflanzkästen an den Seitenwänden, Kisten hinten, Biergarten, Tafel am Eingang
+	var pk := _gruppe(g, "Pflanzkaesten")
+	for s: float in [-1.0, 1.0]:
+		for i in BINDER.size() - 1:
+			var z := (float(BINDER[i]) + float(BINDER[i + 1])) / 2.0
+			_instanz(pk, s_pflanzkasten, "%s%d" % ["West" if s < 0 else "Ost", i + 1], Transform3D(_rot(Vector3(0, 90, 0)), Vector3(s * (XI + 0.65), 0, z)))
+	_instanz(g, s_kisten, "KistenHinten1", Transform3D(Basis(), Vector3(6.5, 0, ZB - 0.75)))
+	_instanz(g, s_kisten, "KistenHinten2", Transform3D(_rot(Vector3(0, 12, 0)), Vector3(7.9, 0, ZB - 0.8)))
+	_instanz(g, s_fass, "FassHinten", Transform3D(Basis(), Vector3(9.2, 0, ZB - 0.8)))
+	_instanz(g, s_biergarten, "BiergartenTisch1", Transform3D(_rot(Vector3(0, 90, 0)), Vector3(10.2, 0, ZF + 3.6)))
+	_instanz(g, s_tafel, "Speisetafel", Transform3D(_rot(Vector3(0, -15, 0)), Vector3(5.7, 0, ZF + 1.5)))
 
 func _boden(g: Node3D) -> void:
 	# Oberkante 0.07 — knapp über dem Kirmes-Gelände (Terrain y 0.056)

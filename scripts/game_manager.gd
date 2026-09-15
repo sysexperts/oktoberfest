@@ -1703,6 +1703,46 @@ func _remove_artists() -> void:
 			a.queue_free()
 	_artist_nodes.clear()
 
+## Massenschlägerei: nach so vielen Sekunden flieht die Band, danach bleibt die
+## Musik bis Schichtende aus.
+const BAND_FLUCHT_NACH := 5.0
+## true, sobald die Band vor einer Schlägerei geflohen ist (bei allen Mitspielern)
+var _band_weg := false
+var _band_flucht_geplant := false
+
+## Von scripts/pruegel/massenschlaegerei.gd beim Start aufgerufen.
+func schlaegerei_gemeldet(_ort: Vector3) -> void:
+	if not multiplayer.is_server() or _band_weg or _band_flucht_geplant:
+		return
+	_band_flucht_geplant = true
+	get_tree().create_timer(BAND_FLUCHT_NACH).timeout.connect(func() -> void:
+		_band_flucht_geplant = false
+		if not _band_weg:
+			_net_band_flieht.rpc())
+
+@rpc("authority", "reliable", "call_local")
+func _net_band_flieht() -> void:
+	_band_weg = true
+	var stages := get_tree().get_nodes_in_group("stage")
+	for a in _artist_nodes:
+		if not is_instance_valid(a) or not a.has_method("fliehen"):
+			continue
+		# Vorn von der Bühne runter, quer durchs Zelt zum Ausgang und weg
+		var weg: Array[Vector3] = []
+		if not stages.is_empty():
+			var b := stages[0] as Node3D
+			var runter: Vector3 = (a as Node3D).global_position + b.global_transform.basis.z * 2.6
+			weg.append(Vector3(runter.x, 0.1, runter.z))
+		weg.append(ENTRANCE + Vector3(randf_range(-1.0, 1.0), 0.0, -1.0))
+		weg.append(ENTRANCE + Vector3(randf_range(-3.0, 3.0), 0.0, 8.0))
+		a.fliehen(weg)
+	if _sfx_node:
+		_sfx_node.musik_ausblenden(1.5)
+
+@rpc("authority", "reliable", "call_local")
+func _net_band_zurueck() -> void:
+	_band_weg = false
+
 
 # ================================================= E4: Ware & Lieferung
 ## Wiesenbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
@@ -3581,6 +3621,7 @@ func _start_shift() -> void:
 	_shift_num += 1
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
+	_net_band_zurueck.rpc()   # neue Schicht: Band wieder da, Musik wieder an
 	_spawn_artists()          # E5: gebuchter Künstler betritt die Bühne
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
@@ -4172,7 +4213,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_hud.set_day(day)
 	_hud.set_quest(quest_step, QUEST_COUNT)
 	if _sfx_node:
-		if phase == Phase.SHIFT:
+		if phase == Phase.SHIFT and not _band_weg:
 			_sfx_node.play_music()
 		else:
 			_sfx_node.musik_ausblenden(5.0)   # Feierabend: sanft leiser statt abrupt aus

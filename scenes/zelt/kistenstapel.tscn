@@ -1,0 +1,137 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="1_v0845"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/glas.tres" id="2_6vq6g"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="3_ufusm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_gpm8j"]
+size = Vector3(0.4, 0.3, 0.3)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4o6uc"]
+top_radius = 0.02
+bottom_radius = 0.03
+height = 0.1
+radial_segments = 6
+rings = 1
+
+[node name="Kistenstapel" type="Node3D" unique_id=108870797]
+
+[node name="Kiste1" type="MeshInstance3D" parent="." unique_id=1372978729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.15, 0)
+material_override = ExtResource("1_v0845")
+mesh = SubResource("BoxMesh_gpm8j")
+
+[node name="Flasche1_1" type="MeshInstance3D" parent="." unique_id=288188606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53999996, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche1_2" type="MeshInstance3D" parent="." unique_id=1878553791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche1_3" type="MeshInstance3D" parent="." unique_id=1898019438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.29999998, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Kiste2" type="MeshInstance3D" parent="." unique_id=499365013]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+material_override = ExtResource("3_ufusm")
+mesh = SubResource("BoxMesh_gpm8j")
+
+[node name="Flasche2_1" type="MeshInstance3D" parent="." unique_id=593231851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche2_2" type="MeshInstance3D" parent="." unique_id=1560565325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche2_3" type="MeshInstance3D" parent="." unique_id=1166599143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Kiste3" type="MeshInstance3D" parent="." unique_id=1449700803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.15, 0)
+material_override = ExtResource("1_v0845")
+mesh = SubResource("BoxMesh_gpm8j")
+
+[node name="Flasche3_1" type="MeshInstance3D" parent="." unique_id=990780372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29999998, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche3_2" type="MeshInstance3D" parent="." unique_id=749948558]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche3_3" type="MeshInstance3D" parent="." unique_id=95478641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53999996, 0.35000002, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Kiste4" type="MeshInstance3D" parent="." unique_id=393995333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.21, 0.45, 0)
+material_override = ExtResource("3_ufusm")
+mesh = SubResource("BoxMesh_gpm8j")
+
+[node name="Flasche4_1" type="MeshInstance3D" parent="." unique_id=1603896547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32999998, 0.65, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche4_2" type="MeshInstance3D" parent="." unique_id=230396130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.21, 0.65, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche4_3" type="MeshInstance3D" parent="." unique_id=1998425362]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.089999996, 0.65, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Kiste5" type="MeshInstance3D" parent="." unique_id=1250416352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0.45, 0)
+material_override = ExtResource("1_v0845")
+mesh = SubResource("BoxMesh_gpm8j")
+
+[node name="Flasche5_1" type="MeshInstance3D" parent="." unique_id=187838078]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.089999996, 0.65, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche5_2" type="MeshInstance3D" parent="." unique_id=1849787861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0.65, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche5_3" type="MeshInstance3D" parent="." unique_id=1252663839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32999998, 0.65, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Kiste6" type="MeshInstance3D" parent="." unique_id=895348672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+material_override = ExtResource("3_ufusm")
+mesh = SubResource("BoxMesh_gpm8j")
+
+[node name="Flasche6_1" type="MeshInstance3D" parent="." unique_id=1836413129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.95, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche6_2" type="MeshInstance3D" parent="." unique_id=1659548612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
+
+[node name="Flasche6_3" type="MeshInstance3D" parent="." unique_id=250786200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.95, 0)
+material_override = ExtResource("2_6vq6g")
+mesh = SubResource("CylinderMesh_4o6uc")
