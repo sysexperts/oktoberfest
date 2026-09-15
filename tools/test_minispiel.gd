@@ -53,6 +53,10 @@ class Lauf extends Node:
 			await _stemmen(bude, spieler, gm)
 			get_tree().quit()
 			return
+		if art == "nagelbalken":
+			await _nagelbalken(bude, spieler, gm)
+			get_tree().quit()
+			return
 		# Raster: wie viele Kombinationen treffen?
 		var treffer := 0
 		var versuche := 0
@@ -120,6 +124,61 @@ class Lauf extends Node:
 		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_stand.png" % art)
 		print("MINISPIEL FERTIG")
 		get_tree().quit()
+
+	## Nagelbalken: Automat „gezielt“ schlägt, wenn Kraft hoch und Hammer mittig ist,
+	## „zufall“ klickt irgendwann. Die Tweens laufen echt ab (await Frames).
+	func _nagelbalken(bude: Node, spieler: Node, gm: Node) -> void:
+		var dir := OS.get_environment("SHOT_DIR")
+		bude.spiel_starten(spieler)
+		await get_tree().process_frame
+		var h: Node3D = bude._hammer
+		var kopf := h.global_transform * Vector3(0, 0.98, 0)
+		var nagel: Vector3 = bude._nagel.global_position
+		print("  HAMMER sichtbar=%s kopf_bild=%s hinter=%s nagel_bild=%s lokal=%s" % [h.is_visible_in_tree(),
+			bude._kamera.unproject_position(kopf), bude._kamera.is_position_behind(kopf),
+			bude._kamera.unproject_position(nagel), bude._kamera.to_local(kopf)])
+		bude._beenden()
+		for modus: String in ["gezielt", "ungefaehr", "zufall"]:
+			var summe := 0
+			var krumm := 0
+			for runde in 5:
+				bude.spiel_starten(spieler)
+				var klick_in := randf_range(0.2, 1.2)
+				var bild := false
+				var bild_in := 1.2
+				while bude.laeuft():
+					bild_in -= get_process_delta_time()
+					if not bild and bild_in <= 0.0 and modus == "gezielt" and runde == 0 and not bude._animation:
+						bild = true
+						get_viewport().get_texture().get_image().save_png(dir + "/spiel_nagelbalken_blick.png")
+					var los := false
+					match modus:
+						"gezielt":
+							los = bude._kraft > 0.9 and bude.genauigkeit() > 0.85
+						"ungefaehr":
+							los = bude._kraft > 0.7 and bude.genauigkeit() > 0.5
+						_:
+							klick_in -= get_process_delta_time()
+							los = klick_in <= 0.0
+							if los:
+								klick_in = randf_range(0.2, 1.2)
+					if los:
+						bude.schlagen()
+					await get_tree().process_frame
+				summe += bude.punkte()
+				if bude._krumm:
+					krumm += 1
+			print("  %s: Schnitt %.1f Punkte, %d von 5 krumm" % [modus, summe / 5.0, krumm])
+		var kamera := Camera3D.new()
+		gm.add_child(kamera)
+		var stand := bude as Node3D
+		kamera.global_position = stand.global_position + stand.global_basis.z * 7.0 + Vector3(0, 2.6, 0) + stand.global_basis.x * 2.5
+		kamera.look_at(stand.global_position + Vector3(0, 1.2, -1.0))
+		kamera.current = true
+		for i in 20:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(dir + "/spiel_nagelbalken_stand.png")
+		print("MINISPIEL FERTIG")
 
 	## Maßkrugstemmen: Automaten mit unterschiedlich guter Reaktion (Gegensteuern mit
 	## Verzögerung und Ungenauigkeit) — zeigt, wie lange man durchhält.

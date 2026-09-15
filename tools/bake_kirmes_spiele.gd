@@ -10,6 +10,7 @@ extends SceneTree
 ##   scenes/kirmes/entenangeln_stand.tscn Entenangeln: Rundbecken mit Gummienten, Angel
 ##   scenes/kirmes/gluecksrad_stand.tscn  Glücksrad: großes Rad mit 16 Feldern, Zeiger
 ##   scenes/kirmes/stemmen_stand.tscn     Maßkrugstemmen: Bühne mit Tafel, Fässer, Arm mit Krug
+##   scenes/kirmes/nagelbalken_stand.tscn Nagelbalken: Baumstamm mit Nagel, Hammer an der Kamera
 ## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
 ## breit, ≤ 3,6 m nach hinten).
 ##   godot --headless --path . --script tools/bake_kirmes_spiele.gd            (alles)
@@ -45,6 +46,8 @@ func _init() -> void:
 		_speichern(_gluecksrad(), "res://scenes/kirmes/gluecksrad_stand.tscn")
 	if soll.call("stemmen"):
 		_speichern(_stemmen(), "res://scenes/kirmes/stemmen_stand.tscn")
+	if soll.call("nagelbalken"):
+		_speichern(_nagelbalken(), "res://scenes/kirmes/nagelbalken_stand.tscn")
 	print("KIRMES-SPIELE FERTIG")
 	quit()
 
@@ -746,6 +749,93 @@ func _stemmen() -> Node3D:
 	_licht(r, "Frontlicht", Vector3(0, boden + 2.4, 0.9), 0.9, 5.0)
 	_marke(r, "BesitzerMitte", Vector3(-1.7, boden, 0.0))
 	_marke(r, "BesitzerSeite", Vector3(-1.9, boden, -2.3))
+	return r
+
+# ------------------------------------------------------------------ Nagelbalken
+## Bude mit Baumstamm vorn (Oberfläche voller alter Nägel), in der Mitte der Spielnagel
+## „Stamm/Nagel“ (Ursprung = Stammoberfläche). Kamera blickt schräg von oben auf den
+## Nagel, der Hammer hängt an der Kamera (SpielKamera/Hammer).
+func _nagelbalken() -> Node3D:
+	var r := _neu("Nagelbalken")
+	var boden := 0.2
+	var breite := 5.6
+	var tiefe := 3.4
+	var hoehe := 3.0
+	var zm := -1.3
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
+			_box(bau, "Balken%s%s" % [sx, sz], Vector3(0.18, hoehe, 0.18), p + Vector3(0, hoehe / 2.0, 0), m.holz_dunkel)
+	_box(bau, "Querbalken", Vector3(breite, 0.2, 0.2), Vector3(0, boden + hoehe - 0.1, zm + tiefe / 2.0 - 0.1), m.holz_dunkel)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.holz_hell)
+	for i in 7:
+		_box(bau, "Brett%d" % i, Vector3(0.02, hoehe, 0.09), Vector3(-breite / 2.0 + 0.4 + i * 0.8, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.1), m.holz_dunkel)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(breite + 0.4, 1.0, tiefe + 0.4), Vector3(0, 0.66, 0), m.schindel, Vector3(0, 90, 0))
+	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
+	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.2, 0)))
+	for i in 11:
+		var t := (i + 0.5) / 11.0
+		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
+	# Schild
+	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.2, zm - tiefe / 2.0 + 0.14))
+	_box(tafel, "Brett", Vector3(2.6, 0.8, 0.06), Vector3.ZERO, m.holz_dunkel)
+	_box(tafel, "Rahmen", Vector3(2.7, 0.9, 0.04), Vector3(0, 0, -0.02), m.gold)
+	var titel := Label3D.new()
+	titel.text = "WORLD_NAGEL"
+	titel.font_size = 96
+	titel.pixel_size = 0.004
+	titel.outline_size = 12
+	titel.modulate = Color(1, 0.88, 0.5)
+	titel.outline_modulate = Color(0.15, 0.06, 0.02)
+	titel.position = Vector3(0, 0, 0.05)
+	_haengen(tafel, titel, "Titel")
+	# Werkzeugwand und Holzstapel
+	for i in 3:
+		_instanz(r, "res://scenes/kirmes/hammer.tscn", "WandHammer%d" % i, Transform3D(_rot(Vector3(0, 0, 180 + (i - 1) * 12)), Vector3(-1.9 + i * 0.35, boden + 1.9, zm - tiefe / 2.0 + 0.2)))
+	for i in 6:
+		_zyl(r, "Scheit%d" % i, 0.12, 0.12, 0.9, Vector3(1.9 + (i % 3) * 0.26 - 0.26, boden + 0.12 + (i / 3) * 0.22, -2.4), m.holz_hell, Vector3(0, 0, 90), 10)
+	# Baumstamm mit altem Nagelfeld
+	var stamm := _gruppe(r, "Stamm", Vector3(0, boden, -0.9))
+	_zyl(stamm, "Rinde", 0.47, 0.5, 0.85, Vector3(0, 0.425, 0), m.holz_dunkel, Vector3.ZERO, 20)
+	_zyl(stamm, "Schnitt", 0.44, 0.44, 0.02, Vector3(0, 0.86, 0), m.holz_hell, Vector3.ZERO, 20)
+	for i in 3:
+		_torus(stamm, "Jahresring%d" % i, 0.1 + i * 0.1, 0.11 + i * 0.1, Vector3(0, 0.871, 0), m.holz_dunkel)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	for i in 22:
+		var a := rng.randf() * TAU
+		var rr := rng.randf_range(0.14, 0.4)
+		_zyl(stamm, "AlterNagel%d" % i, 0.012, 0.012, 0.008, Vector3(cos(a) * rr, 0.875, sin(a) * rr), m.metall, _rot(Vector3(rng.randf_range(-8, 8), 0, rng.randf_range(-8, 8))).get_euler() * 57.3, 8)
+	var nagel := _gruppe(stamm, "Nagel", Vector3(0, 0.87, 0))
+	_zyl(nagel, "Schaft", 0.007, 0.004, 0.2, Vector3(0, 0.02, 0), m.metall, Vector3.ZERO, 8)
+	_zyl(nagel, "Kopf", 0.02, 0.02, 0.012, Vector3(0, 0.125, 0), m.messing, Vector3.ZERO, 12)
+	var koerper_stamm := StaticBody3D.new()
+	_haengen(stamm, koerper_stamm, "Kollision")
+	var zylform := CylinderShape3D.new()
+	zylform.radius = 0.5
+	zylform.height = 0.85
+	_kollision(koerper_stamm, "Form", zylform, Transform3D(Basis(), Vector3(0, 0.425, 0)))
+	# Kollision, Licht, Kamera mit Hammer, Marken
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Rueckbereich", _boxform(Vector3(breite, 1.15, 1.6)), Transform3D(Basis(), Vector3(0, 0.575, -2.2)))
+	_licht(r, "Licht", Vector3(0, boden + 2.4, -0.9), 1.8, 5.0)
+	_licht(r, "Frontlicht", Vector3(0, boden + 2.4, 0.9), 0.9, 5.0)
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, boden + 1.6, -0.25)
+	kamera.rotation_degrees = Vector3(-52, 0, 0)
+	kamera.fov = 58
+	_haengen(r, kamera, "SpielKamera")
+	# Griff unten rechts im Bild, Kopf zeigt nach vorn über den Nagel
+	_instanz(kamera, "res://scenes/kirmes/hammer.tscn", "Hammer", Transform3D(_rot(Vector3(-72, 0, 18)).scaled(Vector3.ONE * 0.55), Vector3(0.2, -0.26, -0.3)))
+	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.3))
+	_marke(r, "BesitzerSeite", Vector3(-2.3, boden, -2.5))
 	return r
 
 # ------------------------------------------------------------------ Hau den Lukas

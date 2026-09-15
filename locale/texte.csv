@@ -634,3 +634,7 @@ HINT_STEMMEN,{interact} Maßkrugstemmen (2 €),{interact} Stein holding (€2),
 STEMMEN_ANZEIGE,"🍺 Gehalten: %.1f s   ·   Punkte: %d   ·   Maus hoch/runter hält den Krug waagrecht, Esc beendet","🍺 Held: %.1f s   ·   Points: %d   ·   Mouse up/down keeps the stein level, Esc quits","🍺 Tutulan: %.1f sn   ·   Puan: %d   ·   Fareyi yukarı/aşağı oynatıp kupayı düz tut, Esc çıkış"
 STEMMEN_LAGE,"Arm gerade halten — Mitte ist waagrecht","Keep the arm straight — centre is level","Kolu düz tut — orta düz demek"
 WORLD_STEMMEN,Maßkrugstemmen,Stein Holding,Kupa Tutma
+HINT_NAGEL,{interact} Nagelbalken (2 €),{interact} Nail driving (€2),{interact} Çivi çakma (2 €)
+NAGEL_ANZEIGE,"🔨 Nagel drin: %d %%   ·   Schläge: %d   ·   Linksklick schlägt — Kraft oben und Hammer genau über dem Nagel, Esc beendet","🔨 Nail in: %d %%   ·   Swings: %d   ·   Left click strikes — power at the top and hammer right above the nail, Esc quits","🔨 Çivi: %%%d   ·   Vuruş: %d   ·   Sol tık vurur — güç en üstte ve çekiç tam çivinin üstünde, Esc çıkış"
+NAGEL_KRAFT,"Kraft — schief und fest verbiegt den Nagel!","Power — hard and crooked bends the nail!","Güç — sert ve eğri vurursan çivi eğilir!"
+WORLD_NAGEL,Nagelbalken,Nail Driving,Çivi Çakma

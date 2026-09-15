@@ -34,6 +34,7 @@ const SPIEL_RING := preload("res://scenes/kirmes/ringwurf.tscn")
 const SPIEL_ENTEN := preload("res://scenes/kirmes/entenangeln.tscn")
 const SPIEL_RAD := preload("res://scenes/kirmes/gluecksrad.tscn")
 const SPIEL_STEMMEN := preload("res://scenes/kirmes/stemmen.tscn")
+const SPIEL_NAGEL := preload("res://scenes/kirmes/nagelbalken.tscn")
 const DEKO_ENTEN := preload("res://scenes/props/enten.tscn")
 const DEKO_DREH := preload("res://scenes/props/drehscheibe.tscn")
 const DEKO_SUESS := preload("res://scenes/props/suessigkeiten.tscn")
@@ -148,11 +149,13 @@ func _init() -> void:
 			i_s += 1
 	# Buden innen am Ring, Front zur Ringstraße
 	var ringbuden := [[60.0, SPIEL_DOSEN], [120.0, SPIEL_RING], [150.0, SPIEL_LUKAS], [210.0, SPIEL_ENTEN],
-		[240.0, SPIEL_SCHIESS], [300.0, DEKO_DREH], [330.0, SPIEL_STEMMEN]]
+		[240.0, SPIEL_SCHIESS], [300.0, SPIEL_NAGEL], [330.0, SPIEL_STEMMEN]]
 	for rb: Array in ringbuden:
 		var a := deg_to_rad(float(rb[0]))
 		var dir := Vector3(sin(a), 0, cos(a))
 		_stand(buden, rb[1], MITTE + dir * 58.5, dir)
+	# Weststraße: Stand an der Südseite, Front zur Straße
+	_stand(buden, SPIEL_NAGEL, Vector3(-50.0, 0, -17.0), Vector3(0, 0, 1))
 
 	# Biergärten auf der Wiese
 	_biergarten(wurzel, "BiergartenWest", Vector3(-50.0, 0, 6.0))
