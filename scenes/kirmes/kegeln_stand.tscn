@@ -1,0 +1,928 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="1_thhlv"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="2_oj03c"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/creme_lack.tres" id="3_8vcp2"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="4_50h3t"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/streifen.tres" id="5_628xq"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten.tres" id="6_g7ryk"]
+[ext_resource type="PackedScene" path="res://scenes/zelt/lambrequin_2.tscn" id="7_a8bol"]
+[ext_resource type="PackedScene" path="res://scenes/zelt/krone.tscn" id="8_tkm66"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gluehbirne.tres" id="9_gfgji"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/dielen.tres" id="10_ypg3r"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schwarz_lack.tres" id="11_0gbvj"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/vorhang_rot.tres" id="12_4kmdp"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="13_ufchf"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="14_swdkb"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="15_gad0m"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="16_o5pws"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_x1j8u"]
+size = Vector3(5.6, 0.2, 3.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cgq6k"]
+size = Vector3(5.7, 0.06, 0.06)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vhoe8"]
+top_radius = 0.07
+bottom_radius = 0.08
+height = 3.0
+radial_segments = 10
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_xgfca"]
+inner_radius = 0.07
+outer_radius = 0.11
+rings = 28
+ring_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_rk557"]
+size = Vector3(5.4, 3, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ptt8o"]
+size = Vector3(5.9, 0.16, 3.9)
+
+[sub_resource type="PrismMesh" id="PrismMesh_3p58s"]
+size = Vector3(6, 0.9, 4)
+
+[sub_resource type="SphereMesh" id="SphereMesh_l2rys"]
+radius = 0.04
+height = 0.08
+radial_segments = 14
+rings = 7
+
+[sub_resource type="BoxMesh" id="BoxMesh_gvucv"]
+size = Vector3(2.6, 0.7, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_foac4"]
+size = Vector3(2.7, 0.8, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_04ijq"]
+size = Vector3(1.1, 0.06, 3.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yp1xt"]
+size = Vector3(0.08, 0.16, 3.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_spxgk"]
+size = Vector3(0.09, 0.02, 3.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5pfvb"]
+size = Vector3(1.3, 0.02, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j32nh"]
+size = Vector3(1.5, 0.6, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_px3cy"]
+size = Vector3(1.1, 0.005, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tmt6v"]
+size = Vector3(1.1, 0.06, 3.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o7rdd"]
+size = Vector3(0.08, 0.4, 3.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fbv5v"]
+size = Vector3(0.08, 0.4, 3.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iw41g"]
+size = Vector3(1.3, 0.02, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7wc4p"]
+size = Vector3(1.5, 0.6, 0.12)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3rwps"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.26
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fiw5c"]
+top_radius = 0.058
+bottom_radius = 0.058
+height = 0.1
+radial_segments = 12
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_wr526"]
+inner_radius = 0.05
+outer_radius = 0.062
+rings = 28
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_q475j"]
+top_radius = 0.046
+bottom_radius = 0.046
+height = 0.01
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kt7pp"]
+height = 0.26
+radius = 0.055
+
+[sub_resource type="BoxMesh" id="BoxMesh_4j46r"]
+size = Vector3(0.5, 0.6, 0.3)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ach1q"]
+radius = 0.095
+height = 0.19
+radial_segments = 14
+rings = 7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m3lj5"]
+top_radius = 0.32
+bottom_radius = 0.32
+height = 0.78
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sm5qv"]
+top_radius = 0.35
+bottom_radius = 0.35
+height = 0.3
+radial_segments = 16
+rings = 1
+
+[sub_resource type="TorusMesh" id="TorusMesh_eij1r"]
+inner_radius = 0.32
+outer_radius = 0.36
+rings = 28
+ring_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_otfj1"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 0.02
+radial_segments = 16
+rings = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_od3he"]
+size = Vector3(2, 1.15, 3.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2q2eg"]
+size = Vector3(2, 1.15, 3.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8g4v5"]
+size = Vector3(5.6, 1.15, 0.4)
+
+[node name="Kegeln" type="Node3D" unique_id=1411398956]
+
+[node name="Podest" type="MeshInstance3D" parent="." unique_id=999413898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.3)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("BoxMesh_x1j8u")
+
+[node name="PodestKante" type="MeshInstance3D" parent="." unique_id=1677658035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.5)
+material_override = ExtResource("2_oj03c")
+mesh = SubResource("BoxMesh_cgq6k")
+
+[node name="Bau" type="Node3D" parent="." unique_id=1423908513]
+
+[node name="Pfosten-1_0-1_0" type="MeshInstance3D" parent="Bau" unique_id=1075983072]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1.7, -3)
+material_override = ExtResource("3_8vcp2")
+mesh = SubResource("CylinderMesh_vhoe8")
+
+[node name="Ring-1_0-1_0_0" type="MeshInstance3D" parent="Bau" unique_id=438370608]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1, -3)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring-1_0-1_0_1" type="MeshInstance3D" parent="Bau" unique_id=515598422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1.8000001, -3)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring-1_0-1_0_2" type="MeshInstance3D" parent="Bau" unique_id=570469318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 2.6000001, -3)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Pfosten-1_01_0" type="MeshInstance3D" parent="Bau" unique_id=1132645396]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1.7, 0.4)
+material_override = ExtResource("3_8vcp2")
+mesh = SubResource("CylinderMesh_vhoe8")
+
+[node name="Ring-1_01_0_0" type="MeshInstance3D" parent="Bau" unique_id=1134989418]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1, 0.4)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring-1_01_0_1" type="MeshInstance3D" parent="Bau" unique_id=2106835596]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1.8000001, 0.4)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring-1_01_0_2" type="MeshInstance3D" parent="Bau" unique_id=1826005073]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 2.6000001, 0.4)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Pfosten1_0-1_0" type="MeshInstance3D" parent="Bau" unique_id=1495114131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.7, -3)
+material_override = ExtResource("3_8vcp2")
+mesh = SubResource("CylinderMesh_vhoe8")
+
+[node name="Ring1_0-1_0_0" type="MeshInstance3D" parent="Bau" unique_id=1869010432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1, -3)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring1_0-1_0_1" type="MeshInstance3D" parent="Bau" unique_id=1273952971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.8000001, -3)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring1_0-1_0_2" type="MeshInstance3D" parent="Bau" unique_id=2096190194]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 2.6000001, -3)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Pfosten1_01_0" type="MeshInstance3D" parent="Bau" unique_id=443878134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.7, 0.4)
+material_override = ExtResource("3_8vcp2")
+mesh = SubResource("CylinderMesh_vhoe8")
+
+[node name="Ring1_01_0_0" type="MeshInstance3D" parent="Bau" unique_id=1402487494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1, 0.4)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring1_01_0_1" type="MeshInstance3D" parent="Bau" unique_id=2047363066]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.8000001, 0.4)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Ring1_01_0_2" type="MeshInstance3D" parent="Bau" unique_id=1137287233]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 2.6000001, 0.4)
+material_override = ExtResource("4_50h3t")
+mesh = SubResource("TorusMesh_xgfca")
+
+[node name="Rueckwand" type="MeshInstance3D" parent="Bau" unique_id=980678434]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -3.05)
+material_override = ExtResource("5_628xq")
+mesh = SubResource("BoxMesh_rk557")
+
+[node name="Dach" type="Node3D" parent="." unique_id=2070720869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -1.3)
+
+[node name="Traufe" type="MeshInstance3D" parent="Dach" unique_id=1309174276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("BoxMesh_ptt8o")
+
+[node name="Giebel" type="MeshInstance3D" parent="Dach" unique_id=2119882633]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.6, 0)
+material_override = ExtResource("6_g7ryk")
+mesh = SubResource("PrismMesh_3p58s")
+
+[node name="Volant" type="Node3D" parent="Dach" unique_id=1929368358 instance=ExtResource("7_a8bol")]
+transform = Transform3D(2.4, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 1.96)
+
+[node name="Krone" type="Node3D" parent="Dach" unique_id=383458849 instance=ExtResource("8_tkm66")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.1, 0)
+
+[node name="Birne0" type="MeshInstance3D" parent="Dach" unique_id=109906038]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5454545, -0.38471073, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne1" type="MeshInstance3D" parent="Dach" unique_id=768924850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0363636, -0.44421488, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne2" type="MeshInstance3D" parent="Dach" unique_id=186626605]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5272727, -0.49049586, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne3" type="MeshInstance3D" parent="Dach" unique_id=193487379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0181818, -0.5235537, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne4" type="MeshInstance3D" parent="Dach" unique_id=1858461913]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5090909, -0.5433884, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne5" type="MeshInstance3D" parent="Dach" unique_id=518554655]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne6" type="MeshInstance3D" parent="Dach" unique_id=1211799236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5090909, -0.5433884, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne7" type="MeshInstance3D" parent="Dach" unique_id=516039891]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0181818, -0.5235537, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne8" type="MeshInstance3D" parent="Dach" unique_id=1440296503]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5272727, -0.49049586, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne9" type="MeshInstance3D" parent="Dach" unique_id=104903994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0363636, -0.44421488, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Birne10" type="MeshInstance3D" parent="Dach" unique_id=1570322617]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5454545, -0.38471073, 1.9)
+material_override = ExtResource("9_gfgji")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_l2rys")
+
+[node name="Tafel" type="Node3D" parent="." unique_id=201250585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -2.98)
+
+[node name="Brett" type="MeshInstance3D" parent="Tafel" unique_id=2069080999]
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("BoxMesh_gvucv")
+
+[node name="Rahmen" type="MeshInstance3D" parent="Tafel" unique_id=454352357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.02)
+material_override = ExtResource("2_oj03c")
+mesh = SubResource("BoxMesh_foac4")
+
+[node name="Titel" type="Label3D" parent="Tafel" unique_id=408439483]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05)
+pixel_size = 0.004
+modulate = Color(1, 0.88, 0.5, 1)
+outline_modulate = Color(0.15, 0.06, 0.02, 1)
+text = "WORLD_KEGELN"
+font_size = 96
+
+[node name="Bahn" type="Node3D" parent="." unique_id=393564844]
+
+[node name="Belag" type="MeshInstance3D" parent="Bahn" unique_id=2025848554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, -1.25)
+material_override = ExtResource("10_ypg3r")
+mesh = SubResource("BoxMesh_04ijq")
+
+[node name="Bande-1_0" type="MeshInstance3D" parent="Bahn" unique_id=1378880162]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59, 0.34, -1.25)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("BoxMesh_yp1xt")
+
+[node name="BandeGold-1_0" type="MeshInstance3D" parent="Bahn" unique_id=615918479]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59, 0.43, -1.25)
+material_override = ExtResource("2_oj03c")
+mesh = SubResource("BoxMesh_spxgk")
+
+[node name="Bande1_0" type="MeshInstance3D" parent="Bahn" unique_id=1229630011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59, 0.34, -1.25)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("BoxMesh_yp1xt")
+
+[node name="BandeGold1_0" type="MeshInstance3D" parent="Bahn" unique_id=448658358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59, 0.43, -1.25)
+material_override = ExtResource("2_oj03c")
+mesh = SubResource("BoxMesh_spxgk")
+
+[node name="Fang" type="MeshInstance3D" parent="Bahn" unique_id=1303795622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, -3)
+material_override = ExtResource("11_0gbvj")
+mesh = SubResource("BoxMesh_5pfvb")
+
+[node name="Polster" type="MeshInstance3D" parent="Bahn" unique_id=1037206620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.2)
+material_override = ExtResource("12_4kmdp")
+mesh = SubResource("BoxMesh_j32nh")
+
+[node name="Startlinie" type="MeshInstance3D" parent="Bahn" unique_id=825773958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.263, 0.1)
+material_override = ExtResource("13_ufchf")
+mesh = SubResource("BoxMesh_px3cy")
+
+[node name="Kollision" type="StaticBody3D" parent="Bahn" unique_id=1978761158]
+
+[node name="Belag" type="CollisionShape3D" parent="Bahn/Kollision" unique_id=135297875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, -1.25)
+shape = SubResource("BoxShape3D_tmt6v")
+
+[node name="Bande-1_0" type="CollisionShape3D" parent="Bahn/Kollision" unique_id=1487024024]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.59, 0.46, -1.25)
+shape = SubResource("BoxShape3D_o7rdd")
+
+[node name="Bande1_0" type="CollisionShape3D" parent="Bahn/Kollision" unique_id=1639435783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.59, 0.46, -1.25)
+shape = SubResource("BoxShape3D_fbv5v")
+
+[node name="Fang" type="CollisionShape3D" parent="Bahn/Kollision" unique_id=484264914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, -3)
+shape = SubResource("BoxShape3D_iw41g")
+
+[node name="Polster" type="CollisionShape3D" parent="Bahn/Kollision" unique_id=1527599729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -3.2)
+shape = SubResource("BoxShape3D_7wc4p")
+
+[node name="Kegel" type="Node3D" parent="." unique_id=458333805]
+
+[node name="Kegel0" type="RigidBody3D" parent="Kegel" unique_id=249664838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, -2)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel0" unique_id=1591976335]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel0" unique_id=809127312]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel0" unique_id=1422786063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel0" unique_id=1354396663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel0" unique_id=1947848827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel0" unique_id=1766215484]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel1" type="RigidBody3D" parent="Kegel" unique_id=1823262266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.095, 0.39, -2.16)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel1" unique_id=1283425660]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel1" unique_id=1634249065]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel1" unique_id=1840868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel1" unique_id=824541988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel1" unique_id=1117354788]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel1" unique_id=570217311]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel2" type="RigidBody3D" parent="Kegel" unique_id=2001356634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, 0.39, -2.16)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel2" unique_id=1830753873]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel2" unique_id=1380761953]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel2" unique_id=530896642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel2" unique_id=1508908702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel2" unique_id=212535884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel2" unique_id=170400258]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel3" type="RigidBody3D" parent="Kegel" unique_id=239059392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19, 0.39, -2.32)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel3" unique_id=2092315289]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel3" unique_id=43900234]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel3" unique_id=750837128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel3" unique_id=1667570867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel3" unique_id=1419758370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel3" unique_id=1540284907]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel4" type="RigidBody3D" parent="Kegel" unique_id=1869864245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, -2.32)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel4" unique_id=1643115941]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel4" unique_id=616455161]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel4" unique_id=1587810074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel4" unique_id=1554414785]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel4" unique_id=375077490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("16_o5pws")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel4" unique_id=989641017]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel5" type="RigidBody3D" parent="Kegel" unique_id=1710847079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.39, -2.32)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel5" unique_id=336399648]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel5" unique_id=1711531546]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel5" unique_id=2022015846]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel5" unique_id=1843132823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel5" unique_id=1692467251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel5" unique_id=247259418]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel6" type="RigidBody3D" parent="Kegel" unique_id=1528775586]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.095, 0.39, -2.48)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel6" unique_id=365976709]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel6" unique_id=1490334525]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel6" unique_id=474587590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel6" unique_id=1808681876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel6" unique_id=141549207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel6" unique_id=1762119669]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel7" type="RigidBody3D" parent="Kegel" unique_id=1158283139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.095, 0.39, -2.48)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel7" unique_id=1321926568]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel7" unique_id=1581068337]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel7" unique_id=1383952627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel7" unique_id=780909939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel7" unique_id=180093064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel7" unique_id=1066755098]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kegel8" type="RigidBody3D" parent="Kegel" unique_id=1934200753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, -2.64)
+mass = 0.45
+sleeping = true
+
+[node name="Fass" type="MeshInstance3D" parent="Kegel/Kegel8" unique_id=359054385]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_3rwps")
+
+[node name="Bauch" type="MeshInstance3D" parent="Kegel/Kegel8" unique_id=1356872163]
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_fiw5c")
+
+[node name="Reif-0_09" type="MeshInstance3D" parent="Kegel/Kegel8" unique_id=374587792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Reif0_09" type="MeshInstance3D" parent="Kegel/Kegel8" unique_id=1824013027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_wr526")
+
+[node name="Deckel" type="MeshInstance3D" parent="Kegel/Kegel8" unique_id=1880343802]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.131, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_q475j")
+
+[node name="Form" type="CollisionShape3D" parent="Kegel/Kegel8" unique_id=1624758730]
+shape = SubResource("CylinderShape3D_kt7pp")
+
+[node name="Kugelablage" type="Node3D" parent="." unique_id=1851445200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 0.2, 0.2)
+
+[node name="Bock" type="MeshInstance3D" parent="Kugelablage" unique_id=919884480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("BoxMesh_4j46r")
+
+[node name="Kugel0" type="MeshInstance3D" parent="Kugelablage" unique_id=1758865389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.7, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("SphereMesh_ach1q")
+
+[node name="Kugel1" type="MeshInstance3D" parent="Kugelablage" unique_id=1626909368]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("SphereMesh_ach1q")
+
+[node name="Kugel2" type="MeshInstance3D" parent="Kugelablage" unique_id=835083561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.7, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("SphereMesh_ach1q")
+
+[node name="FassLinks" type="Node3D" parent="." unique_id=683463176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0.2, -2.5)
+
+[node name="Bauch" type="MeshInstance3D" parent="FassLinks" unique_id=1279931468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_m3lj5")
+
+[node name="Mitte" type="MeshInstance3D" parent="FassLinks" unique_id=432348552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_sm5qv")
+
+[node name="Reif0_08" type="MeshInstance3D" parent="FassLinks" unique_id=2093210259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_30" type="MeshInstance3D" parent="FassLinks" unique_id=505894389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_48" type="MeshInstance3D" parent="FassLinks" unique_id=18391207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_70" type="MeshInstance3D" parent="FassLinks" unique_id=1079559225]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Deckel" type="MeshInstance3D" parent="FassLinks" unique_id=473582051]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_otfj1")
+
+[node name="FassLinks2" type="Node3D" parent="." unique_id=69906794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0.2, -1.7)
+
+[node name="Bauch" type="MeshInstance3D" parent="FassLinks2" unique_id=838979356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_m3lj5")
+
+[node name="Mitte" type="MeshInstance3D" parent="FassLinks2" unique_id=1392407618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_sm5qv")
+
+[node name="Reif0_08" type="MeshInstance3D" parent="FassLinks2" unique_id=2017186994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_30" type="MeshInstance3D" parent="FassLinks2" unique_id=93321400]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_48" type="MeshInstance3D" parent="FassLinks2" unique_id=144925144]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_70" type="MeshInstance3D" parent="FassLinks2" unique_id=1708812436]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Deckel" type="MeshInstance3D" parent="FassLinks2" unique_id=1921549059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_otfj1")
+
+[node name="FassRechts" type="Node3D" parent="." unique_id=1099283559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0.2, -2.5)
+
+[node name="Bauch" type="MeshInstance3D" parent="FassRechts" unique_id=1489078719]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_m3lj5")
+
+[node name="Mitte" type="MeshInstance3D" parent="FassRechts" unique_id=1100721819]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_sm5qv")
+
+[node name="Reif0_08" type="MeshInstance3D" parent="FassRechts" unique_id=2095788272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_30" type="MeshInstance3D" parent="FassRechts" unique_id=1444741703]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_48" type="MeshInstance3D" parent="FassRechts" unique_id=1173686467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_70" type="MeshInstance3D" parent="FassRechts" unique_id=1502162090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Deckel" type="MeshInstance3D" parent="FassRechts" unique_id=132388344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_otfj1")
+
+[node name="FassRechtsOben" type="Node3D" parent="." unique_id=1144678187]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0.98, -2.5)
+
+[node name="Bauch" type="MeshInstance3D" parent="FassRechtsOben" unique_id=587454479]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_m3lj5")
+
+[node name="Mitte" type="MeshInstance3D" parent="FassRechtsOben" unique_id=1178384481]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+material_override = ExtResource("14_swdkb")
+mesh = SubResource("CylinderMesh_sm5qv")
+
+[node name="Reif0_08" type="MeshInstance3D" parent="FassRechtsOben" unique_id=1020441024]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_30" type="MeshInstance3D" parent="FassRechtsOben" unique_id=727623919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_48" type="MeshInstance3D" parent="FassRechtsOben" unique_id=30596337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Reif0_70" type="MeshInstance3D" parent="FassRechtsOben" unique_id=1047847644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+material_override = ExtResource("15_gad0m")
+mesh = SubResource("TorusMesh_eij1r")
+
+[node name="Deckel" type="MeshInstance3D" parent="FassRechtsOben" unique_id=951383985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material_override = ExtResource("1_thhlv")
+mesh = SubResource("CylinderMesh_otfj1")
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=748007814]
+
+[node name="Seite-1_0" type="CollisionShape3D" parent="Kollision" unique_id=1861157773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.575, -1.3)
+shape = SubResource("BoxShape3D_od3he")
+
+[node name="Seite1_0" type="CollisionShape3D" parent="Kollision" unique_id=1052282274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0.575, -1.3)
+shape = SubResource("BoxShape3D_2q2eg")
+
+[node name="Hinten" type="CollisionShape3D" parent="Kollision" unique_id=372178992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575, -2.9)
+shape = SubResource("BoxShape3D_8g4v5")
+
+[node name="Licht" type="OmniLight3D" parent="." unique_id=1346552580]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -2.2)
+light_color = Color(1, 0.84, 0.6, 1)
+light_energy = 2.0
+
+[node name="Frontlicht" type="OmniLight3D" parent="." unique_id=1573554635]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0.9)
+light_color = Color(1, 0.84, 0.6, 1)
+light_energy = 0.9
+
+[node name="SpielKamera" type="Camera3D" parent="." unique_id=1346884488]
+transform = Transform3D(1, 0, 0, 0, 0.97437006, 0.22495104, 0, -0.22495104, 0.97437006, 0, 1.05, 0.95)
+fov = 55.0
+
+[node name="Wurfpunkt" type="Marker3D" parent="." unique_id=328269551]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0.2)
+
+[node name="BesitzerMitte" type="Marker3D" parent="." unique_id=1742311544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.2, 0.2)
+
+[node name="BesitzerSeite" type="Marker3D" parent="." unique_id=482792912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.2, -0.9)

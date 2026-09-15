@@ -35,6 +35,7 @@ const SPIEL_ENTEN := preload("res://scenes/kirmes/entenangeln.tscn")
 const SPIEL_RAD := preload("res://scenes/kirmes/gluecksrad.tscn")
 const SPIEL_STEMMEN := preload("res://scenes/kirmes/stemmen.tscn")
 const SPIEL_NAGEL := preload("res://scenes/kirmes/nagelbalken.tscn")
+const SPIEL_KEGELN := preload("res://scenes/kirmes/kegeln.tscn")
 const DEKO_ENTEN := preload("res://scenes/props/enten.tscn")
 const DEKO_DREH := preload("res://scenes/props/drehscheibe.tscn")
 const DEKO_SUESS := preload("res://scenes/props/suessigkeiten.tscn")
@@ -130,8 +131,6 @@ func _init() -> void:
 	for x: float in [44.0, 58.0]:
 		_setzen(seiten, LATERNE, "Laterne", Vector3(x, 0, 30.0 - 4.3), 0.0, 1.0)
 		_setzen(seiten, BAEUME[2], "Baum", Vector3(x - 4.0, 0, 30.0 + 6.0), rng.randf() * TAU, 2.5)
-	_setzen(seiten, BUDEN[3], "Bude", Vector3(62.0, 0, 36.5), PI, 1.0)
-	_setzen(seiten, BUDEN[1], "Bude", Vector3(-62.0, 0, -14.5), 0.0, 1.0)
 
 	# Buden und Minispiele an den Alleen (hinter der Baumreihe, zur Straße gedreht)
 	var buden := _gruppe(wurzel, "Buden")
@@ -156,6 +155,9 @@ func _init() -> void:
 		_stand(buden, rb[1], MITTE + dir * 58.5, dir)
 	# Weststraße: Stand an der Südseite, Front zur Straße
 	_stand(buden, SPIEL_NAGEL, Vector3(-50.0, 0, -17.0), Vector3(0, 0, 1))
+	_stand(buden, SPIEL_KEGELN, Vector3(-60.0, 0, -17.5), Vector3(0, 0, 1))
+	# Oststraße hinter dem Ring: Kegelbahn an der Nordseite, Front zur Straße
+	_stand(buden, SPIEL_KEGELN, Vector3(60.0, 0, 38.0), Vector3(0, 0, -1))
 
 	# Biergärten auf der Wiese
 	_biergarten(wurzel, "BiergartenWest", Vector3(-50.0, 0, 6.0))

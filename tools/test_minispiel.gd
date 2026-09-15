@@ -57,6 +57,10 @@ class Lauf extends Node:
 			await _nagelbalken(bude, spieler, gm)
 			get_tree().quit()
 			return
+		if art == "kegeln":
+			await _kegeln(bude, spieler, gm)
+			get_tree().quit()
+			return
 		# Raster: wie viele Kombinationen treffen?
 		var treffer := 0
 		var versuche := 0
@@ -124,6 +128,46 @@ class Lauf extends Node:
 		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_stand.png" % art)
 		print("MINISPIEL FERTIG")
 		get_tree().quit()
+
+	## Kegeln: gerade mit fester Kraft, leicht schief, zufällig — echte Physik (Frames).
+	func _kegeln(bude: Node, spieler: Node, gm: Node) -> void:
+		var dir := OS.get_environment("SHOT_DIR")
+		# Stehen die Fässchen ohne Kugel still? (umkippende Kegel wären ein Aufbaufehler)
+		bude.spiel_starten(spieler)
+		for i in 90:
+			await get_tree().process_frame
+		print("  RUHE: %d umgefallen ohne Wurf" % bude.umgefallen())
+		bude._beenden()
+		for modus: String in ["gerade", "schief", "zufall"]:
+			var summe := 0
+			for runde in 3:
+				bude.spiel_starten(spieler)
+				var bild := false
+				while bude.laeuft():
+					if bude._kugel == null and bude._ende_in < 0.0 and bude._uebrig > 0:
+						match modus:
+							"gerade":
+								bude.rollen(randf_range(0.75, 0.9), deg_to_rad(randf_range(-0.8, 0.8)))
+							"schief":
+								bude.rollen(randf_range(0.6, 0.95), deg_to_rad(randf_range(-3.0, 3.0)))
+							_:
+								bude.rollen(randf(), deg_to_rad(randf_range(-9.0, 9.0)))
+					if not bild and modus == "gerade" and runde == 0 and bude._kugel != null and bude._rollt > 0.45:
+						bild = true
+						get_viewport().get_texture().get_image().save_png(dir + "/spiel_kegeln_blick.png")
+					await get_tree().process_frame
+				summe += bude.punkte()
+			print("  %s: Schnitt %.1f Punkte" % [modus, summe / 3.0])
+		var kamera := Camera3D.new()
+		gm.add_child(kamera)
+		var stand := bude as Node3D
+		kamera.global_position = stand.global_position + stand.global_basis.z * 7.0 + Vector3(0, 2.6, 0) + stand.global_basis.x * 2.5
+		kamera.look_at(stand.global_position + Vector3(0, 1.0, -1.2))
+		kamera.current = true
+		for i in 20:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(dir + "/spiel_kegeln_stand.png")
+		print("MINISPIEL FERTIG")
 
 	## Nagelbalken: Automat „gezielt“ schlägt, wenn Kraft hoch und Hammer mittig ist,
 	## „zufall“ klickt irgendwann. Die Tweens laufen echt ab (await Frames).

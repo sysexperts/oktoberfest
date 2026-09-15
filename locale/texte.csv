@@ -638,3 +638,6 @@ HINT_NAGEL,{interact} Nagelbalken (2 €),{interact} Nail driving (€2),{intera
 NAGEL_ANZEIGE,"🔨 Nagel drin: %d %%   ·   Schläge: %d   ·   Linksklick schlägt — Kraft oben und Hammer genau über dem Nagel, Esc beendet","🔨 Nail in: %d %%   ·   Swings: %d   ·   Left click strikes — power at the top and hammer right above the nail, Esc quits","🔨 Çivi: %%%d   ·   Vuruş: %d   ·   Sol tık vurur — güç en üstte ve çekiç tam çivinin üstünde, Esc çıkış"
 NAGEL_KRAFT,"Kraft — schief und fest verbiegt den Nagel!","Power — hard and crooked bends the nail!","Güç — sert ve eğri vurursan çivi eğilir!"
 WORLD_NAGEL,Nagelbalken,Nail Driving,Çivi Çakma
+HINT_KEGELN,{interact} Bierfass-Kegeln (2 €),{interact} Barrel skittles (€2),{interact} Fıçı bowling (2 €)
+KEGELN_ANZEIGE,"🎳 Umgefallen: %d von %d   ·   Würfe: %d   ·   Maus zielt, Maustaste halten und loslassen rollt, Esc beendet","🎳 Knocked down: %d of %d   ·   Rolls: %d   ·   Mouse aims, hold and release the button to roll, Esc quits","🎳 Devrilen: %d / %d   ·   Atış: %d   ·   Fare nişan alır, tuşu basılı tutup bırakınca yuvarlar, Esc çıkış"
+WORLD_KEGELN,Bierfass-Kegeln,Barrel Skittles,Fıçı Bowling
