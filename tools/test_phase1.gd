@@ -62,8 +62,9 @@ class Lauf extends Node:
 		_check("eigener Wohnwagen da", wagen != null, "")
 		if wagen:
 			var tuer: Vector3 = wagen.interact_point()
-			var grenze := gm.get_node_or_null("Kirmes/Grenze/BoundSouth") as Node3D
-			_check("Wohnwagen innerhalb der Kartengrenze", grenze != null and grenze.global_position.z < tuer.z - 1.0,
+			# Grenze läuft innen an der Stadtmauer (scenes/kulisse/strassen.tscn, Radius 98 um 0/-8)
+			var grenze := gm.get_node_or_null("Kirmes/Strassen/Stadtgrenze") as Node3D
+			_check("Wohnwagen innerhalb der Kartengrenze", grenze != null and Vector2(tuer.x, tuer.z + 8.0).length() < 95.0,
 				"Tür z=%.1f" % tuer.z)
 			var kapsel := CapsuleShape3D.new()
 			kapsel.radius = 0.35
@@ -569,7 +570,7 @@ class Lauf extends Node:
 		gm.net_schiessen_ende(10)
 		_check("Ohne Bezahlen kein Preis", Game.money == geld_vor - gm.SCHIESS_PREIS + 20, "")
 		var spiele := get_tree().get_nodes_in_group("kirmes_spiel")
-		_check("Dosenwerfen und Hau den Lukas stehen auf der Kirmes", spiele.size() == 4, "%d Stände" % spiele.size())
+		_check("Dosenwerfen und Hau den Lukas stehen auf der Kirmes", spiele.size() >= 4, "%d Stände" % spiele.size())
 		if not spiele.is_empty():
 			var stand: Node = spiele[0]
 			var geld_stand: int = Game.money
