@@ -7,7 +7,7 @@ Nachweis in diesem Ordner liegen.
 |---|---|---|---|---|---|
 | Kirmes-Pack | `assets/kirmes/**` (126 Modelle) | gekauft | Royalty-Free | fehlt | ⚠️ |
 | Spielfigur | `assets/character/character/bavarian_bean.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
-| Zelt | `assets/models/floor,wall,roof.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
+| Zelt | `scenes/tent.tscn`, `scenes/zelt/`, `assets/zelt/` | selbst erzeugt (`tools/bake_zelt.gd`, Texturen per Code) — die alten Meshy-Modelle floor/wall/roof sind seit 2026-09-15 entfernt | eigene Arbeit | — | ✅ |
 | Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Zeltmusik | `assets/audio/musik/zelt_01.mp3` | AIMusic.so | Tarif prüfen — nur bezahlt ist kommerziell | Lizenzzertifikat holen | ⚠️ |
