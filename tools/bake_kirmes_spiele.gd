@@ -9,6 +9,7 @@ extends SceneTree
 ##   scenes/kirmes/wurfring.tscn          Wurfring
 ##   scenes/kirmes/entenangeln_stand.tscn Entenangeln: Rundbecken mit Gummienten, Angel
 ##   scenes/kirmes/gluecksrad_stand.tscn  Glücksrad: großes Rad mit 16 Feldern, Zeiger
+##   scenes/kirmes/stemmen_stand.tscn     Maßkrugstemmen: Bühne mit Tafel, Fässer, Arm mit Krug
 ## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
 ## breit, ≤ 3,6 m nach hinten).
 ##   godot --headless --path . --script tools/bake_kirmes_spiele.gd            (alles)
@@ -42,6 +43,8 @@ func _init() -> void:
 		_speichern(_entenangeln(), "res://scenes/kirmes/entenangeln_stand.tscn")
 	if soll.call("gluecksrad"):
 		_speichern(_gluecksrad(), "res://scenes/kirmes/gluecksrad_stand.tscn")
+	if soll.call("stemmen"):
+		_speichern(_stemmen(), "res://scenes/kirmes/stemmen_stand.tscn")
 	print("KIRMES-SPIELE FERTIG")
 	quit()
 
@@ -652,6 +655,97 @@ func _gluecksrad() -> Node3D:
 	_haengen(r, kamera, "SpielKamera")
 	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.45))
 	_marke(r, "BesitzerSeite", Vector3(-2.3, boden, -2.4))
+	return r
+
+# ------------------------------------------------------------------ Maßkrugstemmen
+func _fass(parent: Node3D, name: String, pos: Vector3, liegend := false) -> void:
+	var f := _gruppe(parent, name, pos, Vector3(90, 0, 0) if liegend else Vector3.ZERO)
+	_zyl(f, "Bauch", 0.32, 0.32, 0.78, Vector3(0, 0.39, 0), m.holz_hell, Vector3.ZERO, 16)
+	_zyl(f, "Mitte", 0.35, 0.35, 0.3, Vector3(0, 0.39, 0), m.holz_hell, Vector3.ZERO, 16)
+	for y: float in [0.08, 0.3, 0.48, 0.7]:
+		_torus(f, "Reif%.2f" % y, 0.32, 0.36, Vector3(0, y, 0), m.metall)
+	_zyl(f, "Deckel", 0.3, 0.3, 0.02, Vector3(0, 0.78, 0), m.holz_dunkel, Vector3.ZERO, 16)
+
+## Bühne mit Tafel. Gespielt wird von der Bühne aus Richtung Straße (Kamera blickt +Z).
+## Arm mit Maßkrug hängt an der Kamera (SpielKamera/Arm, dreht um lokal X).
+func _stemmen() -> Node3D:
+	var r := _neu("Stemmen")
+	var boden := 0.2
+	var breite := 5.6
+	var tiefe := 3.4
+	var hoehe := 3.2
+	var zm := -1.3
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.09, 0.08, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.holz_dunkel, Vector3.ZERO, 10)
+			_torus(bau, "Hopfen%s%s" % [sx, sz], 0.08, 0.16, p + Vector3(0, hoehe - 0.3, 0), m.hopfen)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.rauten)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.schindel, Vector3(0, 90, 0))
+	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
+	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.1, 0)))
+	for s: float in [-1.0, 1.0]:
+		_instanz(dach, SZ + "fahne.tscn", "Fahne%s" % s, Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(s * (breite / 2.0), 0.3, tiefe / 2.0)))
+	# Hopfengirlande vorn
+	for i in 12:
+		var t := (i + 0.5) / 12.0
+		_kugel(dach, "Girlande%d" % i, 0.1, Vector3(-breite / 2.0 + t * breite, -0.3 - 0.25 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.05), m.hopfen, Vector3(1.3, 0.8, 0.8))
+	# Tafel mit Aufschrift
+	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.2, zm - tiefe / 2.0 + 0.12))
+	_box(tafel, "Brett", Vector3(3.0, 1.0, 0.06), Vector3.ZERO, m.holz_dunkel)
+	_box(tafel, "Rahmen", Vector3(3.1, 1.1, 0.04), Vector3(0, 0, -0.02), m.gold)
+	var titel := Label3D.new()
+	titel.text = "WORLD_STEMMEN"
+	titel.font_size = 96
+	titel.pixel_size = 0.004
+	titel.outline_size = 12
+	titel.modulate = Color(1, 0.88, 0.5)
+	titel.outline_modulate = Color(0.15, 0.06, 0.02)
+	titel.position = Vector3(0, 0.1, 0.05)
+	_haengen(tafel, titel, "Titel")
+	for i in 3:
+		_masskrug(tafel, "Krug%d" % i, Vector3(-0.5 + i * 0.5, -0.4, 0.12))
+	# Kleine Bühne, Fässer, Stehtisch
+	var buehne := _gruppe(r, "Buehne", Vector3(0, boden, -1.1))
+	_box(buehne, "Block", Vector3(2.4, 0.35, 1.6), Vector3(0, 0.175, 0), m.holz_hell)
+	_box(buehne, "Kante", Vector3(2.45, 0.05, 1.65), Vector3(0, 0.35, 0), m.gold)
+	_box(buehne, "Stufe", Vector3(1.0, 0.17, 0.35), Vector3(0, 0.085, 0.95), m.holz_dunkel)
+	_fass(r, "FassLinks", Vector3(-2.2, boden, -2.4))
+	_fass(r, "FassLinksOben", Vector3(-2.2, boden + 0.78, -2.4))
+	_fass(r, "FassRechts", Vector3(2.2, boden, -2.4))
+	_fass(r, "FassVorn", Vector3(2.25, boden, -0.3))
+	var tisch := _gruppe(r, "Stehtisch", Vector3(1.6, boden, -0.9))
+	_zyl(tisch, "Fuss", 0.05, 0.05, 1.05, Vector3(0, 0.525, 0), m.metall, Vector3.ZERO, 10)
+	_zyl(tisch, "Platte", 0.35, 0.35, 0.05, Vector3(0, 1.07, 0), m.holz_hell, Vector3.ZERO, 20)
+	for i in 2:
+		_masskrug(tisch, "Krug%d" % i, Vector3(-0.12 + i * 0.22, 1.1, 0.05))
+	# Kamera auf der Bühne, Blick zur Straße; Arm mit Krug
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, boden + 0.35 + 1.62, -1.1)
+	kamera.rotation_degrees = Vector3(-4, 180, 0)
+	kamera.fov = 66
+	_haengen(r, kamera, "SpielKamera")
+	var arm := _gruppe(kamera, "Arm", Vector3(0.2, -0.3, -0.05))
+	_zyl(arm, "Aermel", 0.06, 0.05, 0.7, Vector3(0, 0, -0.35), m.weiss, Vector3(90, 0, 0), 10)
+	_zyl(arm, "Stulpe", 0.058, 0.058, 0.06, Vector3(0, 0, -0.7), m.blau, Vector3(90, 0, 0), 10)
+	_kugel(arm, "Hand", 0.05, Vector3(0, 0.0, -0.77), m.creme_lack, Vector3(0.9, 1.0, 1.1))
+	var krug := _masskrug(arm, "Krug", Vector3(-0.02, -0.1, -0.84))
+	krug.scale = Vector3.ONE * 0.95
+	krug.rotation_degrees = Vector3(0, 180, 0)
+	# Kollision, Licht, Marken
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Podest", _boxform(Vector3(breite, 1.15, tiefe)), Transform3D(Basis(), Vector3(0, 0.575, zm)))
+	_licht(r, "Licht", Vector3(0, boden + 2.7, -1.0), 1.8, 6.0)
+	_licht(r, "Frontlicht", Vector3(0, boden + 2.4, 0.9), 0.9, 5.0)
+	_marke(r, "BesitzerMitte", Vector3(-1.7, boden, 0.0))
+	_marke(r, "BesitzerSeite", Vector3(-1.9, boden, -2.3))
 	return r
 
 # ------------------------------------------------------------------ Hau den Lukas

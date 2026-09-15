@@ -630,3 +630,7 @@ ENTEN_ZEIT,"Zeit — gelb 1, blau 2, rosa 3 Punkte","Time — yellow 1, blue 2, 
 HINT_GLUECKSRAD,{interact} Glücksrad (3 €),{interact} Wheel of fortune (€3),{interact} Şans çarkı (3 €)
 GLUECKSRAD_ANZEIGE,"🎡 Bestes Feld: %d   ·   Drehungen: %d   ·   Linksklick bremst — das Rad läuft noch gut eine Runde nach, Esc beendet","🎡 Best field: %d   ·   Spins: %d   ·   Left click brakes — the wheel still turns a good round, Esc quits","🎡 En iyi alan: %d   ·   Çevirme: %d   ·   Sol tık fren yapar — çark bir tur daha döner, Esc çıkış"
 GLUECKSRAD_FELD,%d!,%d!,%d!
+HINT_STEMMEN,{interact} Maßkrugstemmen (2 €),{interact} Stein holding (€2),{interact} Bira kupası tutma (2 €)
+STEMMEN_ANZEIGE,"🍺 Gehalten: %.1f s   ·   Punkte: %d   ·   Maus hoch/runter hält den Krug waagrecht, Esc beendet","🍺 Held: %.1f s   ·   Points: %d   ·   Mouse up/down keeps the stein level, Esc quits","🍺 Tutulan: %.1f sn   ·   Puan: %d   ·   Fareyi yukarı/aşağı oynatıp kupayı düz tut, Esc çıkış"
+STEMMEN_LAGE,"Arm gerade halten — Mitte ist waagrecht","Keep the arm straight — centre is level","Kolu düz tut — orta düz demek"
+WORLD_STEMMEN,Maßkrugstemmen,Stein Holding,Kupa Tutma

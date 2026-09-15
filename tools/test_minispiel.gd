@@ -49,6 +49,10 @@ class Lauf extends Node:
 			await _gluecksrad(bude, spieler, gm)
 			get_tree().quit()
 			return
+		if art == "stemmen":
+			await _stemmen(bude, spieler, gm)
+			get_tree().quit()
+			return
 		# Raster: wie viele Kombinationen treffen?
 		var treffer := 0
 		var versuche := 0
@@ -116,6 +120,46 @@ class Lauf extends Node:
 		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_stand.png" % art)
 		print("MINISPIEL FERTIG")
 		get_tree().quit()
+
+	## Maßkrugstemmen: Automaten mit unterschiedlich guter Reaktion (Gegensteuern mit
+	## Verzögerung und Ungenauigkeit) — zeigt, wie lange man durchhält.
+	func _stemmen(bude: Node, spieler: Node, gm: Node) -> void:
+		var dir := OS.get_environment("SHOT_DIR")
+		var schritt := 1.0 / 60.0
+		for stufe: Array in [["ruhig", 0.12, 0.08], ["normal", 0.3, 0.2], ["hektisch", 0.5, 0.45]]:
+			var summe := 0.0
+			var punkte := 0
+			for runde in 4:
+				bude.spiel_starten(spieler)
+				var verlauf: Array[float] = []
+				var frames := 0
+				while bude.laeuft() and frames < 60 * 70:
+					frames += 1
+					verlauf.append(bude._winkel)
+					# Spieler sieht die Lage mit Verzögerung und korrigiert ungenau
+					var verzug := int(float(stufe[1]) * 60.0)
+					var gesehen: float = verlauf[maxi(0, verlauf.size() - 1 - verzug)]
+					if frames % 3 == 0:
+						bude.heben(-gesehen * 0.18 * randf_range(1.0 - float(stufe[2]), 1.0 + float(stufe[2])) + randf_range(-0.3, 0.3))
+					bude._process(schritt)
+					if frames == 60 * 12 and runde == 0 and stufe[0] == "normal":
+						await get_tree().process_frame
+						get_viewport().get_texture().get_image().save_png(dir + "/spiel_stemmen_blick.png")
+				summe += bude._gehalten
+				punkte += bude.punkte()
+				if bude.laeuft():
+					bude._beenden()
+			print("  %s: im Schnitt %.1f s gehalten, %.1f Punkte" % [stufe[0], summe / 4.0, punkte / 4.0])
+		var kamera := Camera3D.new()
+		gm.add_child(kamera)
+		var stand := bude as Node3D
+		kamera.global_position = stand.global_position + stand.global_basis.z * 7.5 + Vector3(0, 2.6, 0) + stand.global_basis.x * 2.5
+		kamera.look_at(stand.global_position + Vector3(0, 1.6, -1.2))
+		kamera.current = true
+		for i in 20:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(dir + "/spiel_stemmen_stand.png")
+		print("MINISPIEL FERTIG")
 
 	## Glücksrad: Automat mit perfektem Timing (klickt, wenn Winkel + Bremsweg auf der 10
 	## liegt) und einer mit zufälligem Klick — zeigt, wie viel Können und Glück ausmacht.
