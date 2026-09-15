@@ -41,6 +41,10 @@ class Lauf extends Node:
 			return
 		var spieler := Attrappe.new()
 		add_child(spieler)
+		if art == "entenangeln":
+			await _entenangeln(bude, spieler, gm)
+			get_tree().quit()
+			return
 		# Raster: wie viele Kombinationen treffen?
 		var treffer := 0
 		var versuche := 0
@@ -108,3 +112,51 @@ class Lauf extends Node:
 		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_stand.png" % art)
 		print("MINISPIEL FERTIG")
 		get_tree().quit()
+
+	## Entenangeln: ein einfacher Spieler-Automat. Er fährt die Spitze vor die nächste
+	## Ente (Vorhalt), senkt, wenn sie nah ist, und zieht hoch. Bild mitten im Spiel.
+	func _entenangeln(bude: Node, spieler: Node, gm: Node) -> void:
+		var dir := OS.get_environment("SHOT_DIR")
+		for runde in 3:
+			bude.spiel_starten(spieler)
+			var bild := false
+			var schritte := 0
+			while bude.laeuft() and schritte < 60 * 40:
+				schritte += 1
+				var ziel: Node3D = null
+				var best := 99.0
+				for e: Node3D in bude._enten:
+					if bude._raus.has(e):
+						continue
+					var d := Vector2(e.position.x - bude.haken_ort.x, e.position.z - bude.haken_ort.z).length()
+					if d < best:
+						best = d
+						ziel = e
+				if ziel and bude._am_haken == null:
+					# Vorhalt: wo die Ente in 0,25 s ist
+					var a: float = bude._winkel[ziel] + (bude._t + 0.25) * bude.enten_tempo
+					var r: float = bude._radius[ziel]
+					var vorn := Vector2(sin(a) * r, cos(a) * r)
+					bude.ziel_setzen(bude._ziel.move_toward(vorn, 0.05))
+					bude.senken_setzen(best < 0.25 or bude._tiefe > 0.3 and best < 0.4)
+				else:
+					bude.senken_setzen(false)
+				await get_tree().process_frame
+				if not bild and bude._am_haken != null and runde == 0:
+					bild = true
+					get_viewport().get_texture().get_image().save_png(dir + "/spiel_entenangeln_blick.png")
+			print("  RUNDE %d: %d Enten, %d Punkte, %.1f s übrig" % [runde, bude._gefangen, bude.punkte(), bude._zeit_rest])
+			if bude.laeuft():
+				bude._beenden()
+			for i in 5:
+				await get_tree().process_frame
+		var kamera := Camera3D.new()
+		gm.add_child(kamera)
+		var stand := bude as Node3D
+		kamera.global_position = stand.global_position + stand.global_basis.z * 7.5 + Vector3(0, 3.4, 0) + stand.global_basis.x * 2.5
+		kamera.look_at(stand.global_position + Vector3(0, 1.2, -1.2))
+		kamera.current = true
+		for i in 20:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(dir + "/spiel_entenangeln_stand.png")
+		print("MINISPIEL FERTIG")

@@ -7,6 +7,7 @@ extends SceneTree
 ##   scenes/kirmes/hammer.tscn            Holzhammer
 ##   scenes/kirmes/ringwurf_stand.tscn    Ringwerfen: Maßkrüge auf Stufen, Preiswand
 ##   scenes/kirmes/wurfring.tscn          Wurfring
+##   scenes/kirmes/entenangeln_stand.tscn Entenangeln: Rundbecken mit Gummienten, Angel
 ## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
 ## breit, ≤ 3,6 m nach hinten).
 ##   godot --headless --path . --script tools/bake_kirmes_spiele.gd            (alles)
@@ -22,7 +23,7 @@ var m := {}
 func _init() -> void:
 	for n in ["holz_hell", "holz_dunkel", "streifen", "streifen_fein", "rauten", "rauten_fein", "hopfen", "blau", "weiss",
 			"rot", "gold", "metall", "gluehbirne", "messing", "stein", "dielen", "gruen_samt", "teddy", "budenwand",
-			"schwarz_lack", "creme_lack", "vorhang_rot", "ente", "orange_lack", "huegel", "rosa_lack", "schindel", "glas"]:
+			"schwarz_lack", "creme_lack", "vorhang_rot", "ente", "orange_lack", "huegel", "rosa_lack", "schindel", "glas", "wasser"]:
 		m[n] = load(MAT + n + ".tres")
 	# Mit Namen hinter „--" nur diese Stände backen (Handänderungen an den anderen bleiben)
 	var nur := OS.get_cmdline_user_args()
@@ -36,6 +37,8 @@ func _init() -> void:
 	if soll.call("ringwurf"):
 		_speichern(_wurfring(), "res://scenes/kirmes/wurfring.tscn")
 		_speichern(_ringwurf(), "res://scenes/kirmes/ringwurf_stand.tscn")
+	if soll.call("entenangeln"):
+		_speichern(_entenangeln(), "res://scenes/kirmes/entenangeln_stand.tscn")
 	print("KIRMES-SPIELE FERTIG")
 	quit()
 
@@ -439,6 +442,114 @@ func _ringwurf() -> Node3D:
 	_haengen(r, kamera, "SpielKamera")
 	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.55))
 	_marke(r, "BesitzerSeite", Vector3(-2.2, boden, -2.5))
+	return r
+
+# ------------------------------------------------------------------ Entenangeln
+## Gummiente mit Öse auf dem Kopf, Ursprung auf der Wasserlinie, Blick +Z
+func _gummiente(parent: Node3D, name: String, pos: Vector3, wert: int) -> Node3D:
+	var e := _gruppe(parent, name, pos)
+	e.set_meta("wert", wert)
+	# Farbe verrät den Wert: gelb 1, blau 2, rosa 3
+	var koerper: Material = m.rosa_lack if wert == 3 else (m.blau if wert == 2 else m.ente)
+	_kugel(e, "Bauch", 0.1, Vector3(0, 0.04, 0), koerper, Vector3(1.0, 0.8, 1.25))
+	_kugel(e, "Kopf", 0.065, Vector3(0, 0.15, 0.07), koerper)
+	_kugel(e, "Schnabel", 0.035, Vector3(0, 0.14, 0.14), m.orange_lack, Vector3(1.2, 0.5, 1.0))
+	_kugel(e, "AugeL", 0.012, Vector3(-0.035, 0.17, 0.12), m.schwarz_lack)
+	_kugel(e, "AugeR", 0.012, Vector3(0.035, 0.17, 0.12), m.schwarz_lack)
+	_kugel(e, "Schwanz", 0.04, Vector3(0, 0.08, -0.12), koerper, Vector3(0.8, 0.6, 1.0))
+	_torus(e, "Oese", 0.022, 0.034, Vector3(0, 0.235, 0.05), m.gold, Vector3(90, 0, 0))
+	return e
+
+## Offene Bude mit rundem Wasserbecken (Kanal um eine Insel), 14 Enten ziehen im Kreis.
+## Die Angel liegt im Becken-Raum (Becken/Angel): Rute vom Griff zur Spitze, Schnur, Haken.
+## Wert einer Ente = Metadaten „wert“ (1–3).
+func _entenangeln() -> Node3D:
+	var r := _neu("Entenangeln")
+	var boden := 0.2
+	var breite := 5.6
+	var tiefe := 3.8
+	var hoehe := 3.0
+	var zm := -1.3
+	var bz := -1.5            # Beckenmitte
+	var wasser := boden + 0.5
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.07, 0.06, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.blau, Vector3.ZERO, 10)
+			for i in 14:
+				_kugel(bau, "Birne%s%s_%d" % [sx, sz, i], 0.035, p + Vector3(0, 0.3 + i * 0.19, 0.08 * sz), m.gluehbirne, Vector3.ONE, false)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.rauten)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, 1.2, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + 0.6, zm - 0.1), m.budenwand)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(breite + 0.4, 1.0, tiefe + 0.4), Vector3(0, 0.66, 0), m.rauten_fein, Vector3(0, 90, 0))
+	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
+	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.2, 0)))
+	# Große Ente als Aushängeschild auf dem Dach
+	var schild := _gruppe(dach, "Schildente", Vector3(0, 1.25, tiefe / 2.0 - 0.3))
+	schild.scale = Vector3.ONE * 3.2
+	_gummiente(schild, "Ente", Vector3.ZERO, 1)
+	# Theke vorn
+	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.45))
+	_box(theke, "Korpus", Vector3(breite - 0.4, 0.95, 0.3), Vector3(0, 0.475, 0), m.holz_hell)
+	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.16), m.rauten_fein)
+	_box(theke, "Rahmen", Vector3(breite - 0.9, 0.65, 0.015), Vector3(0, 0.5, 0.155), m.gold)
+	_box(theke, "Platte", Vector3(breite - 0.3, 0.06, 0.42), Vector3(0, 0.98, 0), m.gruen_samt)
+	_marke(r, "Fangkorb", Vector3(-1.6, boden + 1.01, 0.45))
+	_zyl(theke, "Korb", 0.26, 0.22, 0.14, Vector3(-1.6, 1.08, 0), m.holz_hell, Vector3.ZERO, 16)
+	# Becken: Außenwand, Wasser, Insel mit Leuchtturm-Säule und Teddy
+	var becken := _gruppe(r, "Becken", Vector3(0, wasser, bz))
+	_zyl(becken, "Wand", 1.75, 1.75, 0.6, Vector3(0, -0.35, 0), m.holz_dunkel, Vector3.ZERO, 32)
+	_torus(becken, "Rand", 1.66, 1.8, Vector3(0, 0.1, 0), m.gold)
+	_zyl(becken, "Wasser", 1.68, 1.68, 0.02, Vector3(0, -0.02, 0), m.wasser, Vector3.ZERO, 32)
+	_zyl(becken, "Insel", 0.75, 0.8, 0.5, Vector3(0, 0.05, 0), m.creme_lack, Vector3.ZERO, 24)
+	_torus(becken, "InselRand", 0.74, 0.84, Vector3(0, 0.3, 0), m.rot)
+	_zyl(becken, "Saeule", 0.14, 0.1, 1.2, Vector3(0, 0.9, 0), m.weiss, Vector3.ZERO, 12)
+	for i in 3:
+		_torus(becken, "Streifen%d" % i, 0.1, 0.15, Vector3(0, 0.55 + i * 0.35, 0), m.rot)
+	_kugel(becken, "Lampe", 0.16, Vector3(0, 1.6, 0), m.gluehbirne)
+	_teddy(becken, "Teddy", Vector3(0.0, 0.47, -0.45), 0.0, 1.0)
+	var enten := _gruppe(becken, "Enten")
+	for i in 14:
+		var a := TAU * i / 14.0
+		var rr := 1.2 + (0.12 if i % 2 == 0 else -0.08)
+		var wert := 1 if i % 3 != 0 else (3 if i % 6 == 0 else 2)
+		var ente := _gummiente(enten, "Ente%d" % i, Vector3(sin(a) * rr, 0, cos(a) * rr), wert)
+		ente.rotation.y = a + PI / 2.0
+	# Angel (vom Spielskript bewegt): Griff an der Theke, Rute, Schnur, Haken
+	var angel := _gruppe(becken, "Angel")
+	_marke(angel, "Griff", Vector3(0.55, 0.75, 2.05))
+	var rute := _gruppe(angel, "Rute")
+	_zyl(rute, "Stab", 0.018, 0.008, 1.0, Vector3(0, 0.5, 0), m.holz_hell, Vector3.ZERO, 8)
+	_torus(rute, "Rolle", 0.02, 0.045, Vector3(0, 0.15, 0.03), m.messing, Vector3(0, 0, 90))
+	var schnur := _gruppe(angel, "Schnur")
+	_zyl(schnur, "Faden", 0.004, 0.004, 1.0, Vector3(0, 0.5, 0), m.weiss, Vector3.ZERO, 5)
+	var haken := _gruppe(angel, "Haken")
+	_kugel(haken, "Blei", 0.025, Vector3.ZERO, m.rot)
+	_torus(haken, "Bogen", 0.02, 0.03, Vector3(0, -0.05, 0.0), m.metall, Vector3(90, 0, 0))
+	# Preiswand hinten
+	var preise := _gruppe(r, "Preise", Vector3(0, boden, zm - tiefe / 2.0 + 0.12))
+	for i in 5:
+		_teddy(preise, "Teddy%d" % i, Vector3(-2.0 + i * 1.0, 2.45, 0.1), 0.0, 1.0 if i == 2 else 0.85)
+		_instanz(preise, SZ + "lebkuchenherz.tscn", "Herz%d" % i, Transform3D(Basis(), Vector3(-1.5 + i * 0.75, 1.9, 0.03)))
+	# Kollision, Licht, Kamera, Marken
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Podest", _boxform(Vector3(breite, 1.15, tiefe)), Transform3D(Basis(), Vector3(0, 0.575, zm)))
+	_licht(r, "Licht", Vector3(0, boden + 2.6, bz), 1.9, 6.0)
+	_licht(r, "Frontlicht", Vector3(0, boden + 2.4, 1.0), 0.9, 5.0)
+	var kamera := Camera3D.new()
+	kamera.position = Vector3(0, 2.75, 1.35)
+	kamera.rotation_degrees = Vector3(-47, 0, 0)
+	kamera.fov = 62
+	_haengen(r, kamera, "SpielKamera")
+	_marke(r, "BesitzerMitte", Vector3(-2.1, boden, -0.2))
+	_marke(r, "BesitzerSeite", Vector3(-2.25, boden, -2.7))
 	return r
 
 # ------------------------------------------------------------------ Hau den Lukas
