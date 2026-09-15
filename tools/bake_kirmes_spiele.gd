@@ -708,15 +708,9 @@ func _stemmen() -> Node3D:
 	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.2, zm - tiefe / 2.0 + 0.12))
 	_box(tafel, "Brett", Vector3(3.0, 1.0, 0.06), Vector3.ZERO, m.holz_dunkel)
 	_box(tafel, "Rahmen", Vector3(3.1, 1.1, 0.04), Vector3(0, 0, -0.02), m.gold)
-	var titel := Label3D.new()
-	titel.text = "WORLD_STEMMEN"
-	titel.font_size = 96
-	titel.pixel_size = 0.004
-	titel.outline_size = 12
-	titel.modulate = Color(1, 0.88, 0.5)
-	titel.outline_modulate = Color(0.15, 0.06, 0.02)
-	titel.position = Vector3(0, 0.1, 0.05)
-	_haengen(tafel, titel, "Titel")
+	# Die Aufschrift hängt in scenes/kirmes/stemmen.tscn (Label3D mit welt_text.gd,
+	# übersetzt beim Start) — hier steckt keine Sprache im gebackenen Stand
+	_marke(tafel, "TitelPunkt", Vector3(0, 0.1, 0.05))
 	for i in 3:
 		_masskrug(tafel, "Krug%d" % i, Vector3(-0.5 + i * 0.5, -0.4, 0.12))
 	# Kleine Bühne, Fässer, Stehtisch
@@ -791,15 +785,7 @@ func _nagelbalken() -> Node3D:
 	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.2, zm - tiefe / 2.0 + 0.14))
 	_box(tafel, "Brett", Vector3(2.6, 0.8, 0.06), Vector3.ZERO, m.holz_dunkel)
 	_box(tafel, "Rahmen", Vector3(2.7, 0.9, 0.04), Vector3(0, 0, -0.02), m.gold)
-	var titel := Label3D.new()
-	titel.text = "WORLD_NAGEL"
-	titel.font_size = 96
-	titel.pixel_size = 0.004
-	titel.outline_size = 12
-	titel.modulate = Color(1, 0.88, 0.5)
-	titel.outline_modulate = Color(0.15, 0.06, 0.02)
-	titel.position = Vector3(0, 0, 0.05)
-	_haengen(tafel, titel, "Titel")
+	_marke(tafel, "TitelPunkt", Vector3(0, 0, 0.05))   # Aufschrift: scenes/kirmes/nagelbalken.tscn
 	# Werkzeugwand und Holzstapel
 	for i in 3:
 		_instanz(r, "res://scenes/kirmes/hammer.tscn", "WandHammer%d" % i, Transform3D(_rot(Vector3(0, 0, 180 + (i - 1) * 12)), Vector3(-1.9 + i * 0.35, boden + 1.9, zm - tiefe / 2.0 + 0.2)))
@@ -888,15 +874,7 @@ func _kegeln() -> Node3D:
 	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.25, zm - tiefe / 2.0 + 0.12))
 	_box(tafel, "Brett", Vector3(2.6, 0.7, 0.06), Vector3.ZERO, m.holz_dunkel)
 	_box(tafel, "Rahmen", Vector3(2.7, 0.8, 0.04), Vector3(0, 0, -0.02), m.gold)
-	var titel := Label3D.new()
-	titel.text = "WORLD_KEGELN"
-	titel.font_size = 96
-	titel.pixel_size = 0.004
-	titel.outline_size = 12
-	titel.modulate = Color(1, 0.88, 0.5)
-	titel.outline_modulate = Color(0.15, 0.06, 0.02)
-	titel.position = Vector3(0, 0, 0.05)
-	_haengen(tafel, titel, "Titel")
+	_marke(tafel, "TitelPunkt", Vector3(0, 0, 0.05))   # Aufschrift: scenes/kirmes/kegeln.tscn
 	# Bahn mit Banden, Fangraum und Polsterwand
 	var bahn := _gruppe(r, "Bahn")
 	_box(bahn, "Belag", Vector3(bahn_b, 0.06, 3.3), Vector3(0, boden + 0.03, -1.25), m.dielen)

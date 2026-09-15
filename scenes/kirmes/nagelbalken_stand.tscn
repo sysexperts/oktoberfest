@@ -116,99 +116,99 @@ height = 0.85
 [sub_resource type="BoxShape3D" id="BoxShape3D_amm45"]
 size = Vector3(5.6, 1.15, 1.6)
 
-[node name="Nagelbalken" type="Node3D" unique_id=1048894404]
+[node name="Nagelbalken" type="Node3D" unique_id=1266255863]
 
-[node name="Podest" type="MeshInstance3D" parent="." unique_id=2032806715]
+[node name="Podest" type="MeshInstance3D" parent="." unique_id=161470442]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.3)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_0jepd")
 
-[node name="Dielen" type="MeshInstance3D" parent="." unique_id=757988179]
+[node name="Dielen" type="MeshInstance3D" parent="." unique_id=2094057380]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, -1.3)
 material_override = ExtResource("2_7b1bk")
 mesh = SubResource("BoxMesh_i5eb3")
 
-[node name="PodestKante" type="MeshInstance3D" parent="." unique_id=1634633681]
+[node name="PodestKante" type="MeshInstance3D" parent="." unique_id=346588163]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.4)
 material_override = ExtResource("3_o1wub")
 mesh = SubResource("BoxMesh_s6yg3")
 
-[node name="Bau" type="Node3D" parent="." unique_id=1612806651]
+[node name="Bau" type="Node3D" parent="." unique_id=712740502]
 
-[node name="Balken-1_0-1_0" type="MeshInstance3D" parent="Bau" unique_id=378759015]
+[node name="Balken-1_0-1_0" type="MeshInstance3D" parent="Bau" unique_id=1779826737]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_b0777")
 
-[node name="Balken-1_01_0" type="MeshInstance3D" parent="Bau" unique_id=438125029]
+[node name="Balken-1_01_0" type="MeshInstance3D" parent="Bau" unique_id=1918117092]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 1.7, 0.3)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_b0777")
 
-[node name="Balken1_0-1_0" type="MeshInstance3D" parent="Bau" unique_id=820110289]
+[node name="Balken1_0-1_0" type="MeshInstance3D" parent="Bau" unique_id=902634166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_b0777")
 
-[node name="Balken1_01_0" type="MeshInstance3D" parent="Bau" unique_id=1996220725]
+[node name="Balken1_01_0" type="MeshInstance3D" parent="Bau" unique_id=1598983125]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.7, 0.3)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_b0777")
 
-[node name="Querbalken" type="MeshInstance3D" parent="Bau" unique_id=174857377]
+[node name="Querbalken" type="MeshInstance3D" parent="Bau" unique_id=640584465]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0.3)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_ao3q1")
 
-[node name="Rueckwand" type="MeshInstance3D" parent="Bau" unique_id=2001860813]
+[node name="Rueckwand" type="MeshInstance3D" parent="Bau" unique_id=772822182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -2.95)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("BoxMesh_ka44e")
 
-[node name="Brett0" type="MeshInstance3D" parent="Bau" unique_id=1312096311]
+[node name="Brett0" type="MeshInstance3D" parent="Bau" unique_id=1328101035]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Brett1" type="MeshInstance3D" parent="Bau" unique_id=469913546]
+[node name="Brett1" type="MeshInstance3D" parent="Bau" unique_id=1618920438]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Brett2" type="MeshInstance3D" parent="Bau" unique_id=1778926997]
+[node name="Brett2" type="MeshInstance3D" parent="Bau" unique_id=1898939118]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Brett3" type="MeshInstance3D" parent="Bau" unique_id=334606936]
+[node name="Brett3" type="MeshInstance3D" parent="Bau" unique_id=588750205]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.440892e-16, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Brett4" type="MeshInstance3D" parent="Bau" unique_id=319160625]
+[node name="Brett4" type="MeshInstance3D" parent="Bau" unique_id=283323844]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Brett5" type="MeshInstance3D" parent="Bau" unique_id=578851813]
+[node name="Brett5" type="MeshInstance3D" parent="Bau" unique_id=16499162]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Brett6" type="MeshInstance3D" parent="Bau" unique_id=1695068964]
+[node name="Brett6" type="MeshInstance3D" parent="Bau" unique_id=1601574107]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 1.7, -2.9)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_vjrje")
 
-[node name="Dach" type="Node3D" parent="." unique_id=1894943810]
+[node name="Dach" type="Node3D" parent="." unique_id=119563255]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -1.3)
 
-[node name="Traufe" type="MeshInstance3D" parent="Dach" unique_id=90981575]
+[node name="Traufe" type="MeshInstance3D" parent="Dach" unique_id=624913348]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_ti1vt")
 
-[node name="Giebel" type="MeshInstance3D" parent="Dach" unique_id=339286108]
+[node name="Giebel" type="MeshInstance3D" parent="Dach" unique_id=285430257]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.66, 0)
 material_override = ExtResource("5_nfs0f")
 mesh = SubResource("PrismMesh_r5iwb")
@@ -219,313 +219,308 @@ transform = Transform3D(2.4, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 1.86)
 [node name="Krone" type="Node3D" parent="Dach" unique_id=383458849 instance=ExtResource("7_fdcds")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 1.2, 0)
 
-[node name="Birne0" type="MeshInstance3D" parent="Dach" unique_id=1639364600]
+[node name="Birne0" type="MeshInstance3D" parent="Dach" unique_id=1541325251]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5454545, -0.38471073, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne1" type="MeshInstance3D" parent="Dach" unique_id=91813717]
+[node name="Birne1" type="MeshInstance3D" parent="Dach" unique_id=714144356]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0363636, -0.44421488, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne2" type="MeshInstance3D" parent="Dach" unique_id=1490808232]
+[node name="Birne2" type="MeshInstance3D" parent="Dach" unique_id=1452003246]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5272727, -0.49049586, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne3" type="MeshInstance3D" parent="Dach" unique_id=399244517]
+[node name="Birne3" type="MeshInstance3D" parent="Dach" unique_id=1270365422]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0181818, -0.5235537, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne4" type="MeshInstance3D" parent="Dach" unique_id=1245369472]
+[node name="Birne4" type="MeshInstance3D" parent="Dach" unique_id=1893654282]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5090909, -0.5433884, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne5" type="MeshInstance3D" parent="Dach" unique_id=2019165824]
+[node name="Birne5" type="MeshInstance3D" parent="Dach" unique_id=510999125]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne6" type="MeshInstance3D" parent="Dach" unique_id=379732226]
+[node name="Birne6" type="MeshInstance3D" parent="Dach" unique_id=1946994517]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5090909, -0.5433884, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne7" type="MeshInstance3D" parent="Dach" unique_id=1519052516]
+[node name="Birne7" type="MeshInstance3D" parent="Dach" unique_id=1029606590]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0181818, -0.5235537, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne8" type="MeshInstance3D" parent="Dach" unique_id=761036824]
+[node name="Birne8" type="MeshInstance3D" parent="Dach" unique_id=1239979922]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5272727, -0.49049586, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne9" type="MeshInstance3D" parent="Dach" unique_id=175159825]
+[node name="Birne9" type="MeshInstance3D" parent="Dach" unique_id=326920541]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0363636, -0.44421488, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Birne10" type="MeshInstance3D" parent="Dach" unique_id=625098814]
+[node name="Birne10" type="MeshInstance3D" parent="Dach" unique_id=613310030]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5454545, -0.38471073, 1.8)
 material_override = ExtResource("8_mygms")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_adb45")
 
-[node name="Tafel" type="Node3D" parent="." unique_id=1603575859]
+[node name="Tafel" type="Node3D" parent="." unique_id=109303951]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -2.86)
 
-[node name="Brett" type="MeshInstance3D" parent="Tafel" unique_id=2046266899]
+[node name="Brett" type="MeshInstance3D" parent="Tafel" unique_id=316003318]
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("BoxMesh_udu4w")
 
-[node name="Rahmen" type="MeshInstance3D" parent="Tafel" unique_id=208254363]
+[node name="Rahmen" type="MeshInstance3D" parent="Tafel" unique_id=1144947866]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.02)
 material_override = ExtResource("3_o1wub")
 mesh = SubResource("BoxMesh_adhu2")
 
-[node name="Titel" type="Label3D" parent="Tafel" unique_id=1658062753]
+[node name="TitelPunkt" type="Marker3D" parent="Tafel" unique_id=1840330150]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.05)
-pixel_size = 0.004
-modulate = Color(1, 0.88, 0.5, 1)
-outline_modulate = Color(0.15, 0.06, 0.02, 1)
-text = "WORLD_NAGEL"
-font_size = 96
 
 [node name="WandHammer0" type="Node3D" parent="." unique_id=727913716 instance=ExtResource("9_x321u")]
 transform = Transform3D(-0.9781476, -0.20791161, 0, 0.20791161, -0.9781476, 0, 0, 0, 1, -1.9, 2.1, -2.8)
 
-[node name="WandHammer1" type="Node3D" parent="." unique_id=946421600 instance=ExtResource("9_x321u")]
+[node name="WandHammer1" type="Node3D" parent="." unique_id=2027945011 instance=ExtResource("9_x321u")]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -1.55, 2.1, -2.8)
 
-[node name="WandHammer2" type="Node3D" parent="." unique_id=1821755728 instance=ExtResource("9_x321u")]
+[node name="WandHammer2" type="Node3D" parent="." unique_id=314017831 instance=ExtResource("9_x321u")]
 transform = Transform3D(-0.97814757, 0.20791179, 0, -0.20791179, -0.97814757, 0, 0, 0, 1, -1.2, 2.1, -2.8)
 
-[node name="Scheit0" type="MeshInstance3D" parent="." unique_id=2058416073]
+[node name="Scheit0" type="MeshInstance3D" parent="." unique_id=1681005568]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.64, 0.32, -2.4)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_fmf52")
 
-[node name="Scheit1" type="MeshInstance3D" parent="." unique_id=830378046]
+[node name="Scheit1" type="MeshInstance3D" parent="." unique_id=837451855]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.9, 0.32, -2.4)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_fmf52")
 
-[node name="Scheit2" type="MeshInstance3D" parent="." unique_id=357768000]
+[node name="Scheit2" type="MeshInstance3D" parent="." unique_id=1477969012]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 2.16, 0.32, -2.4)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_fmf52")
 
-[node name="Scheit3" type="MeshInstance3D" parent="." unique_id=1804956581]
+[node name="Scheit3" type="MeshInstance3D" parent="." unique_id=1764505250]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.64, 0.54, -2.4)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_fmf52")
 
-[node name="Scheit4" type="MeshInstance3D" parent="." unique_id=618424808]
+[node name="Scheit4" type="MeshInstance3D" parent="." unique_id=1315540753]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 1.9, 0.54, -2.4)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_fmf52")
 
-[node name="Scheit5" type="MeshInstance3D" parent="." unique_id=1010879925]
+[node name="Scheit5" type="MeshInstance3D" parent="." unique_id=1504331606]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 2.16, 0.54, -2.4)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_fmf52")
 
-[node name="Stamm" type="Node3D" parent="." unique_id=520559801]
+[node name="Stamm" type="Node3D" parent="." unique_id=762796762]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.9)
 
-[node name="Rinde" type="MeshInstance3D" parent="Stamm" unique_id=1677933797]
+[node name="Rinde" type="MeshInstance3D" parent="Stamm" unique_id=72452912]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("CylinderMesh_sxahw")
 
-[node name="Schnitt" type="MeshInstance3D" parent="Stamm" unique_id=900549285]
+[node name="Schnitt" type="MeshInstance3D" parent="Stamm" unique_id=1109637935]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, 0)
 material_override = ExtResource("4_k1s1h")
 mesh = SubResource("CylinderMesh_7xbib")
 
-[node name="Jahresring0" type="MeshInstance3D" parent="Stamm" unique_id=1262017286]
+[node name="Jahresring0" type="MeshInstance3D" parent="Stamm" unique_id=328246223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.871, 0)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("TorusMesh_otfuk")
 
-[node name="Jahresring1" type="MeshInstance3D" parent="Stamm" unique_id=1449390561]
+[node name="Jahresring1" type="MeshInstance3D" parent="Stamm" unique_id=1206391288]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.871, 0)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("TorusMesh_gech7")
 
-[node name="Jahresring2" type="MeshInstance3D" parent="Stamm" unique_id=2078435727]
+[node name="Jahresring2" type="MeshInstance3D" parent="Stamm" unique_id=1674949280]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.871, 0)
 material_override = ExtResource("1_q0arv")
 mesh = SubResource("TorusMesh_ythg7")
 
-[node name="AlterNagel0" type="MeshInstance3D" parent="Stamm" unique_id=521187677]
+[node name="AlterNagel0" type="MeshInstance3D" parent="Stamm" unique_id=1198747087]
 transform = Transform3D(0.99105245, 0.13347311, 0, -0.13325472, 0.98943084, 0.057182252, 0.0076322933, -0.05667061, 0.99836373, 0.11414278, 0.875, -0.21849127)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel1" type="MeshInstance3D" parent="Stamm" unique_id=1851819294]
+[node name="AlterNagel1" type="MeshInstance3D" parent="Stamm" unique_id=1725556364]
 transform = Transform3D(0.99901605, -0.044350475, 0, 0.044160258, 0.9947313, -0.092517905, 0.004103213, 0.092426874, 0.995711, 0.21917056, 0.875, 0.14743105)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel2" type="MeshInstance3D" parent="Stamm" unique_id=888222434]
+[node name="AlterNagel2" type="MeshInstance3D" parent="Stamm" unique_id=753783196]
 transform = Transform3D(0.99842954, 0.056022413, 0, -0.05594251, 0.9970055, 0.05339037, 0.0029910572, -0.05330652, 0.9985737, 0.0568335, 0.875, -0.27612677)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel3" type="MeshInstance3D" parent="Stamm" unique_id=1790850982]
+[node name="AlterNagel3" type="MeshInstance3D" parent="Stamm" unique_id=1063059235]
 transform = Transform3D(0.9959591, 0.089808, 0, -0.089565985, 0.99327517, -0.07336526, -0.006588788, 0.073068805, 0.99730515, 0.22793007, 0.875, -0.24651249)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel4" type="MeshInstance3D" parent="Stamm" unique_id=1913288947]
+[node name="AlterNagel4" type="MeshInstance3D" parent="Stamm" unique_id=1317626238]
 transform = Transform3D(0.9920897, -0.1255312, 0, 0.12487319, 0.9868894, 0.10225444, -0.012836123, -0.10144558, 0.99475825, -0.17590232, 0.875, -0.029376086)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel5" type="MeshInstance3D" parent="Stamm" unique_id=223420291]
+[node name="AlterNagel5" type="MeshInstance3D" parent="Stamm" unique_id=1574554977]
 transform = Transform3D(0.9914834, -0.13023314, 0, 0.12999478, 0.9896687, -0.06047442, 0.007875774, 0.059959386, 0.9981697, 0.17350802, 0.875, -0.10003266)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel6" type="MeshInstance3D" parent="Stamm" unique_id=517700686]
+[node name="AlterNagel6" type="MeshInstance3D" parent="Stamm" unique_id=514404726]
 transform = Transform3D(0.9991184, 0.041981816, 0, -0.041663866, 0.9915516, 0.12283983, 0.005157039, -0.12273154, 0.9924265, -0.13260157, 0.875, 0.30256313)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel7" type="MeshInstance3D" parent="Stamm" unique_id=187818314]
+[node name="AlterNagel7" type="MeshInstance3D" parent="Stamm" unique_id=1815177127]
 transform = Transform3D(0.996601, 0.082379796, 0, -0.08216458, 0.99399734, -0.072237015, -0.0059508705, 0.07199148, 0.99738747, 0.08997766, 0.875, 0.16198997)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel8" type="MeshInstance3D" parent="Stamm" unique_id=843006415]
+[node name="AlterNagel8" type="MeshInstance3D" parent="Stamm" unique_id=598628534]
 transform = Transform3D(0.99813074, 0.061114423, 0, -0.061005343, 0.9963492, 0.059720203, 0.0036497659, -0.05960857, 0.99821514, -0.24028128, 0.875, -0.031106256)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel9" type="MeshInstance3D" parent="Stamm" unique_id=924426058]
+[node name="AlterNagel9" type="MeshInstance3D" parent="Stamm" unique_id=798990615]
 transform = Transform3D(0.99307656, 0.11746893, 0, -0.11743808, 0.99281573, 0.022919443, 0.0026923225, -0.022760762, 0.9997373, -0.01636775, 0.875, 0.32370228)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel10" type="MeshInstance3D" parent="Stamm" unique_id=1970909428]
+[node name="AlterNagel10" type="MeshInstance3D" parent="Stamm" unique_id=1925557118]
 transform = Transform3D(0.99967813, -0.025368804, 0, 0.025362028, 0.99941105, 0.023113802, -0.00058636954, -0.023106363, 0.99973285, -0.024431003, 0.875, 0.28348026)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel11" type="MeshInstance3D" parent="Stamm" unique_id=2025409940]
+[node name="AlterNagel11" type="MeshInstance3D" parent="Stamm" unique_id=2078905063]
 transform = Transform3D(0.9941296, 0.10819563, 0, -0.10760269, 0.98868155, 0.104548484, 0.011311689, -0.10393474, 0.99451977, -0.21921614, 0.875, 0.0035230457)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel12" type="MeshInstance3D" parent="Stamm" unique_id=1456962127]
+[node name="AlterNagel12" type="MeshInstance3D" parent="Stamm" unique_id=1256162242]
 transform = Transform3D(0.9944005, -0.10567701, 0, 0.1052409, 0.9902968, 0.090755925, -0.009590815, -0.090247735, 0.99587315, -0.2825316, 0.875, -0.25665897)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel13" type="MeshInstance3D" parent="Stamm" unique_id=812655708]
+[node name="AlterNagel13" type="MeshInstance3D" parent="Stamm" unique_id=1598688071]
 transform = Transform3D(0.9992127, 0.039673705, 0, -0.039386693, 0.99198407, -0.12006793, -0.00476354, 0.1199734, 0.99276567, -0.06799568, 0.875, 0.1419212)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel14" type="MeshInstance3D" parent="Stamm" unique_id=1559965391]
+[node name="AlterNagel14" type="MeshInstance3D" parent="Stamm" unique_id=782414]
 transform = Transform3D(0.9932089, 0.1163447, 0, -0.11532241, 0.9844818, -0.1322734, -0.015389309, 0.13137512, 0.99121326, 0.09567338, 0.875, -0.2214576)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel15" type="MeshInstance3D" parent="Stamm" unique_id=1303635460]
+[node name="AlterNagel15" type="MeshInstance3D" parent="Stamm" unique_id=662260242]
 transform = Transform3D(0.9981632, -0.060582004, 0, 0.060501434, 0.9968357, -0.051557105, 0.0031234329, 0.051462404, 0.99867004, 0.042982627, 0.875, 0.3245804)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel16" type="MeshInstance3D" parent="Stamm" unique_id=1543378133]
+[node name="AlterNagel16" type="MeshInstance3D" parent="Stamm" unique_id=1322563949]
 transform = Transform3D(0.9986872, -0.05122353, 0, 0.051223394, 0.9986845, -0.0023100108, 0.00011832691, 0.0023069782, 0.9999973, 0.12369529, 0.875, -0.2866939)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel17" type="MeshInstance3D" parent="Stamm" unique_id=1665875769]
+[node name="AlterNagel17" type="MeshInstance3D" parent="Stamm" unique_id=151464072]
 transform = Transform3D(0.9957613, -0.09197551, 0, 0.09195631, 0.99555343, 0.020429816, -0.0018790427, -0.02034322, 0.99979126, 0.093668, 0.875, -0.25465903)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel18" type="MeshInstance3D" parent="Stamm" unique_id=1917799201]
+[node name="AlterNagel18" type="MeshInstance3D" parent="Stamm" unique_id=2072722923]
 transform = Transform3D(0.99098176, 0.13399681, 0, -0.13356185, 0.9877649, 0.08050906, 0.010787957, -0.07978301, 0.9967539, -0.086496525, 0.875, 0.2776144)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel19" type="MeshInstance3D" parent="Stamm" unique_id=1744240655]
+[node name="AlterNagel19" type="MeshInstance3D" parent="Stamm" unique_id=106209649]
 transform = Transform3D(0.9921991, 0.124663144, 0, -0.124618195, 0.9918414, -0.02685175, -0.0033474236, 0.026642283, 0.99963945, 0.11381072, 0.875, -0.14527507)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel20" type="MeshInstance3D" parent="Stamm" unique_id=108690738]
+[node name="AlterNagel20" type="MeshInstance3D" parent="Stamm" unique_id=47913630]
 transform = Transform3D(0.9986923, 0.051124193, 0, -0.051050965, 0.99726176, -0.05350399, -0.0027353484, 0.05343402, 0.99856764, 0.14162904, 0.875, 0.35884708)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="AlterNagel21" type="MeshInstance3D" parent="Stamm" unique_id=327884426]
+[node name="AlterNagel21" type="MeshInstance3D" parent="Stamm" unique_id=884716077]
 transform = Transform3D(0.99944204, -0.03340129, 0, 0.033252835, 0.9949999, -0.09417847, 0.0031456824, 0.09412592, 0.99555534, -0.21772733, 0.875, 0.03369318)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_vmkiy")
 
-[node name="Nagel" type="Node3D" parent="Stamm" unique_id=1500277598]
+[node name="Nagel" type="Node3D" parent="Stamm" unique_id=649250971]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87, 0)
 
-[node name="Schaft" type="MeshInstance3D" parent="Stamm/Nagel" unique_id=1536754663]
+[node name="Schaft" type="MeshInstance3D" parent="Stamm/Nagel" unique_id=1557022366]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
 material_override = ExtResource("10_hejub")
 mesh = SubResource("CylinderMesh_ps0db")
 
-[node name="Kopf" type="MeshInstance3D" parent="Stamm/Nagel" unique_id=941830438]
+[node name="Kopf" type="MeshInstance3D" parent="Stamm/Nagel" unique_id=809171976]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 material_override = ExtResource("11_ywhkq")
 mesh = SubResource("CylinderMesh_bksdt")
 
-[node name="Kollision" type="StaticBody3D" parent="Stamm" unique_id=1414281229]
+[node name="Kollision" type="StaticBody3D" parent="Stamm" unique_id=535781717]
 
-[node name="Form" type="CollisionShape3D" parent="Stamm/Kollision" unique_id=39200535]
+[node name="Form" type="CollisionShape3D" parent="Stamm/Kollision" unique_id=390667265]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
 shape = SubResource("CylinderShape3D_3rqqu")
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=1755009456]
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=556425849]
 
-[node name="Rueckbereich" type="CollisionShape3D" parent="Kollision" unique_id=99453764]
+[node name="Rueckbereich" type="CollisionShape3D" parent="Kollision" unique_id=1288712990]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.575, -2.2)
 shape = SubResource("BoxShape3D_amm45")
 
-[node name="Licht" type="OmniLight3D" parent="." unique_id=1962179391]
+[node name="Licht" type="OmniLight3D" parent="." unique_id=675578306]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, -0.9)
 light_color = Color(1, 0.84, 0.6, 1)
 light_energy = 1.8
 
-[node name="Frontlicht" type="OmniLight3D" parent="." unique_id=887089923]
+[node name="Frontlicht" type="OmniLight3D" parent="." unique_id=2098511003]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0.9)
 light_color = Color(1, 0.84, 0.6, 1)
 light_energy = 0.9
 
-[node name="SpielKamera" type="Camera3D" parent="." unique_id=1396332289]
+[node name="SpielKamera" type="Camera3D" parent="." unique_id=1731154702]
 transform = Transform3D(1, 0, 0, 0, 0.6156615, 0.7880107, 0, -0.7880107, 0.6156615, 0, 1.8, -0.25)
 fov = 58.0
 
-[node name="Hammer" type="Node3D" parent="SpielKamera" unique_id=1258345147 instance=ExtResource("9_x321u")]
+[node name="Hammer" type="Node3D" parent="SpielKamera" unique_id=858394144 instance=ExtResource("9_x321u")]
 transform = Transform3D(0.5230811, -0.16995935, 0, 0.052520327, 0.16164094, 0.5230811, -0.16164096, -0.4974797, 0.16995934, 0.2, -0.26, -0.3)
 
-[node name="BesitzerMitte" type="Marker3D" parent="." unique_id=363869321]
+[node name="BesitzerMitte" type="Marker3D" parent="." unique_id=783054090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.2, -0.3)
 
-[node name="BesitzerSeite" type="Marker3D" parent="." unique_id=1771667458]
+[node name="BesitzerSeite" type="Marker3D" parent="." unique_id=1761132479]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0.2, -2.5)
