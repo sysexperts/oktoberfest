@@ -154,6 +154,10 @@ food_type = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0.83, -13.5)
 beer_type = 4
 
+[node name="Keg5Wasser" parent="Stations" instance=ExtResource("4_keg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.83, -13.5)
+beer_type = 5
+
 [node name="FoodHendl" parent="Stations" instance=ExtResource("9_food")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 1.1, -12.9)
 food_type = 3

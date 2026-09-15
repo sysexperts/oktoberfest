@@ -505,6 +505,18 @@ WORLD_KEG_1,Helles ({interact}),Helles ({interact}),Helles ({interact})
 WORLD_KEG_2,Weizen ({interact}),Wheat beer ({interact}),Buğday birası ({interact})
 WORLD_KEG_3,Radler ({interact}),Shandy ({interact}),Radler ({interact})
 WORLD_KEG_4,Festbier ({interact}),Festival beer ({interact}),Festival birası ({interact})
+WORLD_KEG_5,Wasser ({interact}),Water ({interact}),Su ({interact})
+WORLD_SCHIESSSTAND,🎯 Schießbude,🎯 Shooting Gallery,🎯 Atış Standı
+HINT_SCHIESSSTAND,{interact} Schießen (2 €),{interact} Shoot (€2),{interact} Ateş et (2 €)
+SCHIESS_ANZEIGE,"🎯 Treffer: %d   ·   Schuss: %d   ·   Zeit: %d s   ·   Linksklick schießt, Esc beendet","🎯 Hits: %d   ·   Shots: %d   ·   Time: %d s   ·   Left click shoots, Esc quits","🎯 İsabet: %d   ·   Atış: %d   ·   Süre: %d sn   ·   Sol tık ateş, Esc çıkış"
+PREIS_TEDDY,Teddybär,teddy bear,oyuncak ayı
+PREIS_HERZ,Lebkuchenherz,gingerbread heart,zencefilli kurabiye kalbi
+PREIS_ROSE,Plastikrose,plastic rose,plastik gül
+MSG_SCHIESS_GEWINN,"🎯 %d Treffer — du gewinnst: %s (%s)!","🎯 %d hits — you win: %s (%s)!","🎯 %d isabet — kazandın: %s (%s)!"
+MSG_SCHIESS_NIETE,"🎯 %d Treffer — leider eine Niete. Ab 4 Treffern gibt es einen Preis!","🎯 %d hits — no prize this time. 4 hits win a prize!","🎯 %d isabet — maalesef boş. 4 isabetten itibaren ödül var!"
+HINT_WASSER_GEBEN,{interact} Wasser geben (nüchterner),{interact} Give water (sobers up),{interact} Su ver (ayıltır)
+HINT_HEIMBRINGEN,{interact} Bierleiche heimbringen,{interact} Take the passed-out guest home,{interact} Sızan misafiri eve götür
+MSG_BIERLEICHE,"💤 Ein Gast ist eingeschlafen — Wasser bringen oder mit leeren Händen heimbringen, sonst kotzt er!","💤 A guest passed out — bring water or take them home with empty hands, or they'll throw up!","💤 Bir misafir sızdı — su getir ya da boş elle eve götür, yoksa kusacak!"
 WORLD_FOOD_3,"🍗 Hendl ({interact} halten)","🍗 Roast chicken (hold {interact})","🍗 Tavuk ({interact} basılı tut)"
 WORLD_FOOD_1,"🥨 Brezn ({interact} halten)","🥨 Pretzel (hold {interact})","🥨 Brezel ({interact} basılı tut)"
 WORLD_FOOD_2,"🌭 Würstl ({interact} halten)","🌭 Sausage (hold {interact})","🌭 Sosis ({interact} basılı tut)"

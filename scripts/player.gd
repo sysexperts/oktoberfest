@@ -26,7 +26,7 @@ const BONUS_KOCHEN := 1.6
 const BONUS_LAGER_TEMPO := 1.2
 
 # 1 Helles, 2 Weizen, 3 Radler
-const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08)}
+const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08), 5: Color(0.7, 0.88, 1.0)}
 # Yemek: 1 Pretzel, 2 Sosis
 const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2), 3: Color(0.9, 0.6, 0.25)}
 # Kostüm renkleri (C ile değiştir)
@@ -37,7 +37,8 @@ var carry_pkg_kind := 0  # taşınan paketin türü (1 Bier, 2 Zutaten); 0 = yok
 var carry_pkg_amount := 0
 var carry_state := 0     # 0 = boş el, 1 = bardak, 2 = yemek, 3 = paket
 var carry_fill := 0.0    # 0..1
-var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler
+var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler, 4 Festbier, 5 Wasser
+const WASSER := 5
 ## Weitere volle Krüge (Biersorten), zusätzlich zum Krug in der Hand
 var extra_kruege: Array[int] = []
 var emote := 0           # 0 yok, 1 Prost/dans (senkron)
@@ -158,8 +159,25 @@ func _make_highlight_ring() -> void:
 	_highlight_ring.visible = false
 	_world.add_child.call_deferred(_highlight_ring)
 
+## Laufendes Kirmes-Minispiel (Schießbude) — bekommt alle Eingaben
+var minispiel: Node = null
+var _minispiel_bude: Node = null
+
+## Vom GameManager, nachdem die Runde bezahlt ist.
+func schiessen_starten() -> void:
+	if _minispiel_bude and is_instance_valid(_minispiel_bude) and _minispiel_bude.has_method("spiel_starten"):
+		minispiel = _minispiel_bude
+		_minispiel_bude.spiel_starten(self)
+
+func minispiel_beendet() -> void:
+	minispiel = null
+	_cam.current = true
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_local:
+		return
+	if minispiel != null and is_instance_valid(minispiel):
+		minispiel.eingabe(event)
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mm := event as InputEventMouseMotion
@@ -329,6 +347,8 @@ func _apply_costume() -> void:
 ## Tippt der Spieler gerade in ein Textfeld (Zeltname)? Dann zählen W/A/S/D, E, Q …
 ## als Buchstaben, nicht als Steuerung — Input liest die Tasten sonst trotzdem.
 func _tippt() -> bool:
+	if minispiel != null and is_instance_valid(minispiel):
+		return true   # Schießbude: nicht laufen, nichts anderes anfassen
 	var hud := _world.get_node_or_null("HUD") if _world else null
 	if hud == null:
 		return false
@@ -445,9 +465,16 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_ZELT_EROEFFNEN"
 	if t.has_method("ist_raufbold"):
 		return "HINT_RAUSWERFEN" if t.ist_raufbold() else ""
+	if t.has_method("ist_schiessstand"):
+		return "" if t.laeuft() or carry_state != 0 else "HINT_SCHIESSSTAND"
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
 	if t is Customer:
 		var g := t as Customer
+		# Wasser für Angetrunkene, Bierleichen heimbringen
+		if carry_state == 1 and carry_type == WASSER and carry_fill >= 0.999:
+			return "HINT_WASSER_GEBEN" if g.rausch_stufe >= 1 else ""
+		if g.rausch_stufe == 3 and carry_state == 0 and extra_kruege.is_empty():
+			return "HINT_HEIMBRINGEN"
 		if g.order_state != 1 or not (_has_ready() or not extra_kruege.is_empty()):
 			return ""
 		var passt := (_has_ready() and g.can_serve(_carry_kind(), carry_type)) \
@@ -455,7 +482,7 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_SERVE" if passt else "HINT_WRONG_ORDER"
 	if t is Ausgabe:
 		# Von hinten mit vollem Krug: abstellen (Fässer stehen hinten am Regal)
-		if _has_full_mug() and hinter_der_theke(t):
+		if _has_full_mug() and carry_type != WASSER and hinter_der_theke(t):
 			return "HINT_AUSGABE_PUT"
 		if carry_state != 0 and not kann_weiteren_krug():
 			return ""
@@ -544,6 +571,12 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_aufheben.rpc_id(1, _current_target.ablage_id)
 				_sfx("pop")
 			return
+		if _current_target.has_method("ist_schiessstand"):
+			# Schießbude: erst bezahlen (Server), dann startet das Spiel
+			if not _current_target.laeuft() and carry_state == 0:
+				_minispiel_bude = _current_target
+				_world.net_schiessen_bezahlen.rpc_id(1)
+			return
 		if _current_target.has_method("ist_raufbold"):
 			# Massenschlägerei: Raufbold packen und rauswerfen
 			if _current_target.ist_raufbold():
@@ -553,6 +586,18 @@ func _handle_interaction(delta: float) -> void:
 		if _current_target.has_method("ist_eroeffnung"):
 			_world.net_zelt_eroeffnen.rpc_id(1)
 			_sfx("cheer")
+			return
+		if _current_target is Customer and carry_state == 1 and carry_type == WASSER and carry_fill >= 0.999:
+			if (_current_target as Customer).rausch_stufe >= 1:
+				_world.net_wasser_geben.rpc_id(1, (_current_target as Customer).cust_id)
+				carry_fill = 0.0
+				carry_type = 0
+				_sfx("glug")
+			return
+		if _current_target is Customer and (_current_target as Customer).rausch_stufe == 3 \
+				and carry_state == 0 and extra_kruege.is_empty():
+			_world.net_heimbringen.rpc_id(1, (_current_target as Customer).cust_id)
+			_sfx("pop")
 			return
 		if _current_target is Customer and (_has_ready() or not extra_kruege.is_empty()):
 			var g := _current_target as Customer
@@ -578,7 +623,7 @@ func _handle_interaction(delta: float) -> void:
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
-		elif _current_target is Ausgabe and _has_full_mug() and hinter_der_theke(_current_target):
+		elif _current_target is Ausgabe and _has_full_mug() and carry_type != WASSER and hinter_der_theke(_current_target):
 			# Von hinten (Fassseite): vollen Krug für die Kellner abstellen
 			_world.net_put_ausgabe.rpc_id(1, carry_type)
 			_sfx("pop")
@@ -726,7 +771,8 @@ func _trinken(delta: float) -> void:
 	if trinkt:
 		var schluck := minf(carry_fill, TRINK_TEMPO * delta)
 		carry_fill -= schluck
-		promille = minf(PROMILLE_MAX, promille + schluck * PROMILLE_JE_KRUG)
+		promille = maxf(0.0, promille - schluck * PROMILLE_JE_KRUG) if carry_type == WASSER \
+			else minf(PROMILLE_MAX, promille + schluck * PROMILLE_JE_KRUG)
 		_sfx_loop("glug")
 		if carry_fill <= 0.001:
 			carry_fill = 0.0

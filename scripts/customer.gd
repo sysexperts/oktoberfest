@@ -106,6 +106,24 @@ func set_tanz(an: bool, boden := false) -> void:
 func tanzt() -> bool:
 	return _tanzt
 
+## Rausch-Stufe vom Server: 0 gut gelaunt, 1 beschwipst, 2 betrunken, 3 Bierleiche
+var rausch_stufe := 0
+
+func set_rausch(s: int) -> void:
+	if s == rausch_stufe:
+		return
+	var vorher := rausch_stufe
+	rausch_stufe = s
+	# Bierleiche am Platz: Animation aus, damit die Knochenpose (zusammengesackt) greift
+	if s == 3 and _anim:
+		_anim.active = false
+	elif vorher == 3 and _skel:
+		_pose(_skel.find_bone("Spine"), Vector3.RIGHT, 0.0)
+		_pose(_skel.find_bone("Head"), Vector3.RIGHT, 0.0)
+		if _anim and (not _seated or _figur.kann_sitzen()):
+			_anim.active = true
+	_update_bubble()
+
 ## 0 normal, 1 verpasste Bestellung (😤), 2 geht genervt (😠) — vom Server.
 var _laune := 0
 
@@ -163,6 +181,11 @@ func _update_bubble() -> void:
 		_bubble.visible = true
 		_bubble.text = ("😠" if _laune == 2 else "😤") + (" " + String(TranslationServer.translate("BUBBLE_ANGRY")) if _details else "") + typ_zeile
 		_bubble.modulate = Color(1, 0.45, 0.35)
+		return
+	if rausch_stufe == 3 and order_state != 1:
+		_bubble.visible = true
+		_bubble.text = "💤" + typ_zeile
+		_bubble.modulate = Color(0.7, 0.85, 1.0)
 		return
 	if _tanzt:
 		_bubble.visible = true
@@ -229,9 +252,20 @@ func _process(delta: float) -> void:
 	if _model:
 		var target_y := _figur.sitz_hoehe if _seated else 0.0
 		_model.position.y = lerpf(_model.position.y, target_y, clampf(delta * 6.0, 0.0, 1.0))
-		_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * 0.06 if _seated else 0.0
+		var schwanken := 0.06 + 0.05 * float(rausch_stufe)
+		if _seated:
+			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * schwanken
+		elif rausch_stufe >= 2:
+			# Betrunken torkeln
+			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.006 + float(cust_id)) * 0.16
+		else:
+			_model.rotation.z = 0.0
 	# C3: kusma pozu (kutlamayı bastırır)
 	_update_vomit(delta)
+	# Bierleiche: zusammengesackt, Kopf auf dem Tisch
+	if rausch_stufe == 3 and _seated and _skel and not _vomit_active:
+		_pose(_skel.find_bone("Spine"), Vector3.RIGHT, -0.9)
+		_pose(_skel.find_bone("Head"), Vector3.RIGHT, -0.55)
 	# Otururken kutlama: kol kaldır-indir (içme/Prost) — nur ohne Sitzanimation,
 	# die bringt das Trinken selbst mit
 	if _seated and _skel and not _vomit_active and not _figur.kann_sitzen():

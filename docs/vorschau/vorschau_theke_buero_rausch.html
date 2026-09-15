@@ -1,0 +1,321 @@
+<title>Sloptoberfest Vorschau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  --grund: #f2f5f9;
+  --flaeche: #ffffff;
+  --tinte: #18202c;
+  --leise: #566273;
+  --linie: #d3dbe6;
+  --blau: #1d5cb4;
+  --blau-weich: #e2ebf8;
+  --hopfen: #3f6e2c;
+  --warn: #a8581a;
+  --kritisch: #b0302a;
+  --stufe1: #cfe0f5;
+  --stufe2: #8fb6e8;
+  --stufe3: #e7a55c;
+  --stufe4: #c9483f;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --grund: #0f131a;
+    --flaeche: #171c25;
+    --tinte: #e5e9ef;
+    --leise: #9aa6b6;
+    --linie: #2a3240;
+    --blau: #79a8f0;
+    --blau-weich: #1c2a40;
+    --hopfen: #8fbf6e;
+    --warn: #e39a55;
+    --kritisch: #ee7b72;
+    --stufe1: #2b4467;
+    --stufe2: #3f6aa6;
+    --stufe3: #b9772f;
+    --stufe4: #b2453d;
+  }
+}
+:root[data-theme="dark"] {
+  --grund: #0f131a;
+  --flaeche: #171c25;
+  --tinte: #e5e9ef;
+  --leise: #9aa6b6;
+  --linie: #2a3240;
+  --blau: #79a8f0;
+  --blau-weich: #1c2a40;
+  --hopfen: #8fbf6e;
+  --warn: #e39a55;
+  --kritisch: #ee7b72;
+  --stufe1: #2b4467;
+  --stufe2: #3f6aa6;
+  --stufe3: #b9772f;
+  --stufe4: #b2453d;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--grund);
+  color: var(--tinte);
+  font: 400 17px/1.6 "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  padding-inline: 20px;
+  padding-block: 40px 72px;
+}
+.seite { max-width: 980px; margin: 0 auto; display: grid; gap: 56px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 {
+  font: 700 clamp(40px, 7vw, 64px)/1 "UnifrakturCook", "Old English Text MT", Georgia, serif;
+  color: var(--blau);
+  letter-spacing: 0.01em;
+}
+h2 { font-size: 28px; line-height: 1.2; font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; }
+p { margin: 0; max-width: 65ch; }
+.kopf { display: grid; gap: 14px; }
+.kopf p { color: var(--leise); font-size: 19px; }
+.marke {
+  font: 500 12px/1 "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--leise);
+}
+.rauten {
+  height: 10px;
+  background:
+    linear-gradient(135deg, var(--blau) 25%, transparent 25%) 0 0 / 20px 20px,
+    linear-gradient(225deg, var(--blau) 25%, transparent 25%) 0 0 / 20px 20px,
+    linear-gradient(315deg, var(--blau) 25%, transparent 25%) 0 0 / 20px 20px,
+    linear-gradient(45deg, var(--blau) 25%, transparent 25%) 0 0 / 20px 20px;
+  opacity: 0.35;
+  border-radius: 2px;
+}
+.inhalt { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; padding: 0; list-style: none; }
+.inhalt a { color: var(--blau); text-decoration: none; font-weight: 600; }
+.inhalt a:hover, .inhalt a:focus-visible { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--blau); outline-offset: 3px; border-radius: 2px; }
+section { display: grid; gap: 22px; }
+.abschnittkopf { display: grid; gap: 8px; border-top: 1px solid var(--linie); padding-top: 28px; }
+
+/* Rauschpegel */
+.skala { display: grid; gap: 10px; }
+.balken {
+  display: grid;
+  grid-template-columns: 40fr 30fr 20fr 10fr;
+  height: 18px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.balken span:nth-child(1) { background: var(--stufe1); }
+.balken span:nth-child(2) { background: var(--stufe2); }
+.balken span:nth-child(3) { background: var(--stufe3); }
+.balken span:nth-child(4) { background: var(--stufe4); }
+.achse {
+  display: grid;
+  grid-template-columns: 40fr 30fr 20fr 10fr;
+  font: 500 12px/1 "IBM Plex Mono", ui-monospace, monospace;
+  color: var(--leise);
+  font-variant-numeric: tabular-nums;
+}
+.stufen { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.stufe {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.stufe .bereich { font: 500 13px/1 "IBM Plex Mono", ui-monospace, monospace; color: var(--leise); font-variant-numeric: tabular-nums; }
+.stufe h3 { display: flex; align-items: center; gap: 10px; }
+.punkt { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.stufe ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 16px; }
+.tabelle-huelle { overflow-x: auto; border: 1px solid var(--linie); border-radius: 8px; background: var(--flaeche); }
+table { width: 100%; border-collapse: collapse; font-size: 16px; min-width: 560px; }
+th, td { text-align: left; padding: 11px 16px; border-bottom: 1px solid var(--linie); vertical-align: top; }
+th { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--leise); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td.zahl { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.plus { color: var(--hopfen); }
+.minus { color: var(--kritisch); }
+
+/* Bilder */
+.vergleich { display: grid; grid-template-columns: 1fr 1.45fr; gap: 16px; align-items: start; }
+figure { margin: 0; display: grid; gap: 8px; }
+figure img { width: 100%; max-width: 100%; display: block; border-radius: 6px; border: 1px solid var(--linie); aspect-ratio: 16 / 9; object-fit: cover; }
+figcaption { font-size: 14px; color: var(--leise); display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.chip {
+  font: 500 11px/1 "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 7px;
+  border-radius: 3px;
+}
+.chip.alt { background: var(--linie); color: var(--leise); }
+.chip.neu { background: var(--blau-weich); color: var(--blau); }
+.merkmale { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 6px 28px; margin: 0; padding-left: 18px; }
+.zweit { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Freigabe */
+.freigabe {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-left: 4px solid var(--blau);
+  border-radius: 8px;
+  padding: 22px 24px;
+  display: grid;
+  gap: 12px;
+}
+.freigabe ol { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+.hinweis { font-size: 14px; color: var(--leise); }
+
+@media (max-width: 720px) {
+  .vergleich, .zweit { grid-template-columns: 1fr; }
+  body { font-size: 16px; }
+}
+</style>
+
+<main class="seite">
+  <header class="kopf">
+    <span class="marke">Entwurf zur Freigabe · noch nicht im Spiel</span>
+    <h1>Rausch, Theke &amp; Büro</h1>
+    <p>Drei nächste Schritte für Sloptoberfest: betrunkene Gäste als Spielelement, eine neue Schanktheke und ein neues Wiesenbüro. Die Bilder sind echte Aufnahmen aus Godot — gebaut als Vorschau-Szenen, noch nicht eingebaut.</p>
+    <div class="rauten" aria-hidden="true"></div>
+    <ul class="inhalt">
+      <li><a href="#rausch">Betrunkene Gäste</a></li>
+      <li><a href="#theke">Schanktheke</a></li>
+      <li><a href="#buero">Wiesenbüro</a></li>
+      <li><a href="#fragen">Deine Entscheidungen</a></li>
+    </ul>
+  </header>
+
+  <section id="rausch">
+    <div class="abschnittkopf">
+      <span class="marke">Spielelement</span>
+      <h2>Betrunkene Gäste</h2>
+      <p>Heute zählt das Spiel nur Getränke: ab dem vierten Bier kann ein Gast kotzen. Neu bekommt jeder Gast einen Rauschpegel von 0 bis 100. Je voller, desto lustiger — und desto mehr Arbeit.</p>
+    </div>
+
+    <div class="skala" aria-label="Rauschpegel von 0 bis 100 in vier Stufen">
+      <div class="balken" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="achse" aria-hidden="true"><span>0</span><span>40</span><span>70</span><span>90–100</span></div>
+    </div>
+
+    <div class="stufen">
+      <article class="stufe">
+        <span class="bereich">0–39</span>
+        <h3><span class="punkt" style="background: var(--stufe1)"></span>Gut gelaunt</h3>
+        <ul><li>Verhält sich wie heute</li><li>Bestellt normal nach</li></ul>
+      </article>
+      <article class="stufe">
+        <span class="bereich">40–69</span>
+        <h3><span class="punkt" style="background: var(--stufe2)"></span>Beschwipst</h3>
+        <ul><li>Schunkelt, singt, tanzt öfter auf dem Tisch</li><li>Trinkgeld +15 %</li></ul>
+      </article>
+      <article class="stufe">
+        <span class="bereich">70–89</span>
+        <h3><span class="punkt" style="background: var(--stufe3)"></span>Betrunken</h3>
+        <ul><li>Torkelt beim Laufen</li><li>Wirft jeden 5. Krug um: Pfütze, Bier weg</li><li>Geduld −20 %, Einzelstreit wahrscheinlicher</li></ul>
+      </article>
+      <article class="stufe">
+        <span class="bereich">90–100</span>
+        <h3><span class="punkt" style="background: var(--stufe4)"></span>Bierleiche</h3>
+        <ul><li>Kippt am Tisch um, schläft 💤</li><li>Bestellt nichts, blockiert den Platz</li><li>Nach 60 s: kotzt, Beliebtheit −2 %</li></ul>
+      </article>
+    </div>
+
+    <div class="tabelle-huelle">
+      <table>
+        <thead><tr><th>Was passiert</th><th>Rauschpegel</th><th>Folge</th></tr></thead>
+        <tbody>
+          <tr><td>Helles / Weizen</td><td class="zahl minus">+18 / +20</td><td>—</td></tr>
+          <tr><td>Radler</td><td class="zahl minus">+10</td><td>—</td></tr>
+          <tr><td>Festbier</td><td class="zahl minus">+26</td><td>—</td></tr>
+          <tr><td>Brezn, Würstl, Hendl</td><td class="zahl plus">−12</td><td>—</td></tr>
+          <tr><td>Zeit am Platz</td><td class="zahl plus">−2 je Minute</td><td>—</td></tr>
+          <tr><td><strong>Wasserkrug bringen</strong> (neu, gratis am Krugspender)</td><td class="zahl plus">−35</td><td>Beliebtheit <span class="zahl plus">+1 %</span></td></tr>
+          <tr><td><strong>Heimbringen</strong> — E halten bei einer Bierleiche, sie hakt sich ein und läuft dir zum Ausgang nach</td><td class="zahl">Gast geht</td><td>Trinkgeld <span class="zahl plus">5 €</span>, Platz frei</td></tr>
+          <tr><td><strong>Rauswerfen</strong> — wie bei den Raufbolden</td><td class="zahl">Gast geht</td><td>schnell, aber Beliebtheit <span class="zahl minus">−1 %</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hinweis">Im Koop: Eine Bierleiche heimbringen geht zu zweit doppelt so schnell. Die Werte sind ein erster Vorschlag und werden mit dem Spielbot (tools/sim_saison) nachgerechnet.</p>
+  </section>
+
+  <section id="theke">
+    <div class="abschnittkopf">
+      <span class="marke">Modell · ersetzt Platzhalter</span>
+      <h2>Schanktheke</h2>
+      <p>Gleiche Maße wie heute (18,4 m lang, Platte auf 1,09 m), die Ausgabe bleibt an ihrem Platz. Neu ist alles, was man sieht.</p>
+    </div>
+    <div class="vergleich">
+      <figure>
+        <img src="zelt_theke.png" alt="Heutige Schanktheke: brauner Kasten mit blauem Streifen">
+        <figcaption><span class="chip alt">Heute</span>Platzhalter-Kasten</figcaption>
+      </figure>
+      <figure>
+        <img src="vorschau_theke_front.png" alt="Neue Schanktheke von vorn: Fassfront, Rautenfries, Schankdach mit Schild">
+        <figcaption><span class="chip neu">Neu</span>Blick aus dem Zelt</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img src="vorschau_theke_schraeg.png" alt="Neue Schanktheke schräg: Messing-Fußleiste, Fässer, Gläserregal">
+      <figcaption><span class="chip neu">Neu</span>Schräg — Fässer, Messingleiste, Gläserregal unter dem Schankdach</figcaption>
+    </figure>
+    <ul class="merkmale">
+      <li>Front aus neun halben Bierfässern mit Eisenreifen</li>
+      <li>Dicke Eichenplatte, Rautenfries, Messing-Tropfleiste</li>
+      <li>Messing-Fußleiste zum Anlehnen</li>
+      <li>Schankdach mit gestreiftem Vordach und Zackenvolant</li>
+      <li>Kopfüber hängende Krüge, Hopfengirlanden, Laternen</li>
+      <li>Zeltname-Schild an Ketten über der Ausgabe</li>
+    </ul>
+  </section>
+
+  <section id="buero">
+    <div class="abschnittkopf">
+      <span class="marke">Modell · ersetzt Platzhalter</span>
+      <h2>Wiesenbüro</h2>
+      <p>Aus dem weißen Kasten wird eine Blockhütte. Grundfläche und Tür bleiben, der Schreibtisch drinnen auch.</p>
+    </div>
+    <div class="vergleich">
+      <figure>
+        <img src="vorschau_buero_alt.png" alt="Heutiges Wiesenbüro: weißer Kasten mit Schriftzug">
+        <figcaption><span class="chip alt">Heute</span>Weißer Kasten</figcaption>
+      </figure>
+      <figure>
+        <img src="vorschau_buero_front.png" alt="Neues Wiesenbüro: Blockhütte mit rotem Schindeldach, Vordach, Fahne">
+        <figcaption><span class="chip neu">Neu</span>Blockhütte „Wiesenbüro"</figcaption>
+      </figure>
+    </div>
+    <div class="zweit">
+      <figure>
+        <img src="vorschau_buero_eingang.png" alt="Eingang des neuen Wiesenbüros mit blauer Tür, Laterne und Blumenkästen">
+        <figcaption><span class="chip neu">Neu</span>Eingang</figcaption>
+      </figure>
+      <ul class="merkmale" style="grid-template-columns: 1fr; align-content: start;">
+        <li>Blockbohlen mit überstehenden Balkenköpfen</li>
+        <li>Rotes Schindeldach, Firstfahne, Zackenvolant</li>
+        <li>Blaue Tür mit Rautenfüllung, Fensterläden, Blumenkästen</li>
+        <li>Vordach mit Stufe, Laterne, Bank, Fass</li>
+        <li>Aushangtafel mit Zetteln neben der Tür</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="fragen">
+    <div class="freigabe">
+      <span class="marke">Deine Entscheidungen</span>
+      <h2>Was soll ich so bauen?</h2>
+      <ol>
+        <li><strong>Betrunkene Gäste:</strong> Stufen und Werte so übernehmen — oder soll es wilder / harmloser werden?</li>
+        <li><strong>Wasserkrug:</strong> gratis am Krugspender, oder soll Wasser Geld kosten?</li>
+        <li><strong>Personal:</strong> Soll der Kellner ab Stufe 2 selbst Wasser bringen?</li>
+        <li><strong>Schanktheke:</strong> so freigeben? Das Schankdach ist hoch (4,5 m) — passt es unter die Empore-Ebene, oder lieber niedriger?</li>
+        <li><strong>Wiesenbüro:</strong> so freigeben, oder eine andere Dachfarbe als Rot?</li>
+      </ol>
+      <p class="hinweis">Sag einfach „passt" oder was du geändert haben willst — dann baue ich es ein.</p>
+    </div>
+  </section>
+</main>

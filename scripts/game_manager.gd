@@ -155,6 +155,31 @@ const POP_MISS := 2.0
 const TRINKGELD_MIN := 2
 const TRINKGELD_MAX := 8
 const MESS_CHANCE_PER_SEC := 0.02   # Wahrscheinlichkeit pro Sekunde
+
+## Rausch der Gäste (0–100): Stufen ab 40 beschwipst, 70 betrunken, 90 Bierleiche.
+const RAUSCH_STUFEN := [40.0, 70.0, 90.0]
+const RAUSCH_JE_SORTE := {1: 18.0, 2: 20.0, 3: 10.0, 4: 26.0}
+const RAUSCH_ESSEN := 12.0
+const RAUSCH_ABBAU := 2.0 / 60.0          # je Sekunde am Platz
+const RAUSCH_WASSER := 35.0
+const RAUSCH_NACH_KOTZEN := 25.0
+const BESCHWIPST_TRINKGELD := 0.15        # +15 % Trinkgeld ab Stufe 1
+const BETRUNKEN_GEDULD := 0.8             # ab Stufe 2
+const UMWERF_CHANCE := 0.2                # ab Stufe 2 geht jeder 5. Krug zu Bruch
+const BIERLEICHE_KOTZEN := 60.0           # Sekunden, bis eine Bierleiche kotzt
+const BIERLEICHE_POP := 2.0
+const WASSER_POP := 1.0
+const HEIMBRINGEN_TRINKGELD := 5
+const WASSER_SORTE := 5                   # Krug mit Wasser (Fass am Rückwandregal)
+
+## 0 gut gelaunt, 1 beschwipst, 2 betrunken, 3 Bierleiche
+static func rausch_stufe(g: Dictionary) -> int:
+	var r := float(g.get("rausch", 0.0))
+	var s := 0
+	for grenze: float in RAUSCH_STUFEN:
+		if r >= grenze:
+			s += 1
+	return s
 const DRINKS_BEFORE_PUKE := 4       # so viele Getränke, bevor jemandem schlecht wird
 
 # Temizlik
@@ -654,8 +679,8 @@ func net_ablegen(art: int, typ: int, fill: float, pos: Vector3) -> void:
 	var id := _abgelegt_next
 	_abgelegt_next += 1
 	var ort := _ablageort(s, pos)
-	_abgelegt[id] = {"pos": ort, "art": art, "typ": clampi(typ, 0, 4), "fill": clampf(fill, 0.0, 1.0)}
-	_add_abgelegt.rpc(id, ort, art, clampi(typ, 0, 4), clampf(fill, 0.0, 1.0))
+	_abgelegt[id] = {"pos": ort, "art": art, "typ": clampi(typ, 0, WASSER_SORTE), "fill": clampf(fill, 0.0, 1.0)}
+	_add_abgelegt.rpc(id, ort, art, clampi(typ, 0, WASSER_SORTE), clampf(fill, 0.0, 1.0))
 
 @rpc("authority", "reliable", "call_local")
 func _add_abgelegt(id: int, pos: Vector3, art: int, typ: int, fill: float) -> void:
@@ -1745,6 +1770,66 @@ func _net_band_flieht() -> void:
 func _net_band_zurueck() -> void:
 	_band_weg = false
 
+# ================================================= Schießbude (Kirmes-Minispiel)
+## scripts/kirmes/schiessstand.gd: Spieler zahlt, schießt 10 Schuss, bekommt einen
+## Preis. Geld läuft über den Server; wer nicht bezahlt hat, bekommt keinen Preis.
+const SCHIESS_PREIS := 2
+## Treffer ab … → Preis in Euro und Name (Übersetzungsschlüssel)
+const SCHIESS_GEWINNE := [[10, 20, "PREIS_TEDDY"], [7, 8, "PREIS_HERZ"], [4, 3, "PREIS_ROSE"]]
+var _schiessen_bezahlt := {}   # Peer-ID -> true, solange eine Runde läuft
+
+@rpc("any_peer", "reliable", "call_local")
+func net_schiessen_bezahlen() -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _schiessen_bezahlt.has(s):
+		return
+	if not _afford(SCHIESS_PREIS):
+		_fehler("MSG_NO_MONEY", ["WORLD_SCHIESSSTAND", _eur(SCHIESS_PREIS)])
+		return
+	Game.add_money(-SCHIESS_PREIS)
+	_schiessen_bezahlt[s] = true
+	if s == multiplayer.get_unique_id():
+		_net_schiessen_los()
+	else:
+		_net_schiessen_los.rpc_id(s)
+
+## Beim Schützen: das Spiel an der Bude starten, vor der er steht.
+@rpc("authority", "reliable", "call_local")
+func _net_schiessen_los() -> void:
+	var p = _players_nodes.get(multiplayer.get_unique_id())
+	if p and p.has_method("schiessen_starten"):
+		p.schiessen_starten()
+
+@rpc("any_peer", "reliable", "call_local")
+func net_schiessen_ende(treffer: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if not _schiessen_bezahlt.has(s):
+		return
+	_schiessen_bezahlt.erase(s)
+	treffer = clampi(treffer, 0, 10)
+	_stats.geschossen = int(_stats.get("geschossen", 0)) + 1
+	for gewinn: Array in SCHIESS_GEWINNE:
+		if treffer >= int(gewinn[0]):
+			Game.add_money(int(gewinn[1]))
+			_stats.schiess_preise = int(_stats.get("schiess_preise", 0)) + 1
+			_schiess_meldung(s, "MSG_SCHIESS_GEWINN", [treffer, str(gewinn[2]), _eur(int(gewinn[1]))], 2)
+			return
+	_schiess_meldung(s, "MSG_SCHIESS_NIETE", [treffer], 0)
+
+func _schiess_meldung(peer: int, key: String, args: Array, art: int) -> void:
+	if peer == multiplayer.get_unique_id():
+		_net_banner(key, args, art)
+	else:
+		_net_banner.rpc_id(peer, key, args, art)
+
 # ================================================= Massenschlägerei (ab Tag 5)
 ## Abends kann im vollen Zelt eine Massenschlägerei ausbrechen. Der Server wählt
 ## die Beteiligten (sitzende Gäste am Boden rund um einen Tisch) und entscheidet
@@ -2679,9 +2764,10 @@ func _serve_by_staff(gid: int) -> void:
 	_served += 1
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
+	_rausch_nach_bedienung(g)
 	_quest_served_once = true
 	_pop_erhoehen(POP_SERVE * _typ_pop(g))
-	var hyg := HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
+	var hyg :=HYGIENE_MIN_ANTEIL + (1.0 - HYGIENE_MIN_ANTEIL) * (_hygiene / 100.0)
 	var reward := int(_reward_for(int(g.okind), int(g.otype)) * hyg * (1.0 + DEKO_BONUS * _upg_deko) * _typ_umsatz(g))
 	_last_earn += reward
 	Game.add_score(reward)
@@ -3478,6 +3564,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	_served += 1
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
+	_rausch_nach_bedienung(g)
 	_quest_served_once = true
 	_pop_erhoehen(POP_SERVE * _typ_pop(g))
 	var waiter_npc := _npc_roles.has(ROLE_WAITER)
@@ -3501,6 +3588,8 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 		_net_kombo.rpc_id(bediener, kombo)
 	if waiter_npc:
 		reward = int(reward * 0.5)
+	if rausch_stufe(g) >= 1:
+		tip = roundi(float(tip) * (1.0 + BESCHWIPST_TRINKGELD))   # beschwipst gibt mehr
 	_last_earn += reward + tip
 	Game.add_score(reward)
 	_add_income(reward + tip)
@@ -3615,7 +3704,100 @@ func _gast_typ_waehlen() -> String:
 
 ## Volle Geduld dieses Gasts (Grundgeduld × Typ).
 func _geduld_max(g: Dictionary) -> float:
-	return _geduld() * float(TYP_GEDULD.get(str(g.get("typ", "")), 1.0))
+	var betrunken := BETRUNKEN_GEDULD if rausch_stufe(g) >= 2 else 1.0
+	return _geduld() * float(TYP_GEDULD.get(str(g.get("typ", "")), 1.0)) * betrunken
+
+## Getränk steigt zu Kopf, Essen macht nüchterner. Betrunkene werfen manchmal den
+## Krug um: Pfütze, und sie bestellen gleich wieder.
+func _rausch_nach_bedienung(g: Dictionary) -> void:
+	var vorher := rausch_stufe(g)
+	var r := float(g.get("rausch", 0.0))
+	if int(g.okind) == 2:
+		g.rausch = maxf(0.0, r - RAUSCH_ESSEN)
+		return
+	g.rausch = minf(100.0, r + float(RAUSCH_JE_SORTE.get(int(g.otype), 18.0)))
+	if vorher >= 2 and randf() < UMWERF_CHANCE:
+		_spawn_mess_near(g.pos)
+		g.ostate = 0
+		g.cooldown = randf_range(2.0, 5.0)
+		_stats.umgeworfen = int(_stats.get("umgeworfen", 0)) + 1
+
+## Spieler bringt einem angetrunkenen Gast Wasser.
+@rpc("any_peer", "reliable", "call_local")
+func net_wasser_geben(id: int) -> void:
+	if not multiplayer.is_server() or not _guest_sim.has(id):
+		return
+	var g: Dictionary = _guest_sim[id]
+	if float(g.get("rausch", 0.0)) <= 0.0:
+		return
+	g.rausch = maxf(0.0, float(g.rausch) - RAUSCH_WASSER)
+	_pop_erhoehen(WASSER_POP)
+	_stats.wasser = int(_stats.get("wasser", 0)) + 1
+	if int(g.mode) == 8 and rausch_stufe(g) < 3:
+		g.mode = 1   # wieder wach
+		g.tgt = _platz_pos_fuer(id, int(g.seat))
+	_guest_sim[id] = g
+	_net_betrag.rpc(g.pos, 0, true)
+
+## Spieler bringt eine Bierleiche heim: sie hakt sich ein und läuft hinterher.
+@rpc("any_peer", "reliable", "call_local")
+func net_heimbringen(id: int) -> void:
+	if not multiplayer.is_server() or not _guest_sim.has(id):
+		return
+	var g: Dictionary = _guest_sim[id]
+	if int(g.mode) != 8:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	g.mode = 9
+	g.folgt = s if s != 0 else 1
+	_assigned.erase(id)
+	_guest_sim[id] = g
+
+## Bierleiche schläft, Heimgebrachte folgen dem Spieler. true = Gast ist weg.
+func _rausch_aktualisieren(g: Dictionary, id: int, delta: float) -> bool:
+	match int(g.mode):
+		1:
+			g.rausch = maxf(0.0, float(g.get("rausch", 0.0)) - RAUSCH_ABBAU * delta)
+			if rausch_stufe(g) >= 3:
+				g.mode = 8
+				g.ostate = 0
+				g.leiche_t = BIERLEICHE_KOTZEN
+				_assigned.erase(id)
+				_melde("MSG_BIERLEICHE", [], 1)
+		8:
+			g.tgt = g.pos
+			g.leiche_t = float(g.get("leiche_t", BIERLEICHE_KOTZEN)) - delta
+			if float(g.leiche_t) <= 0.0:
+				g.leiche_t = BIERLEICHE_KOTZEN
+				_net_guest_vomit.rpc(id)
+				_spawn_mess_at(g.pos as Vector3, 0)
+				_popularity = maxf(POP_MIN, _popularity - BIERLEICHE_POP)
+				_stats.gekotzt = int(_stats.get("gekotzt", 0)) + 1
+		9:
+			var pl = _players_nodes.get(int(g.get("folgt", 0)))
+			if pl == null or not is_instance_valid(pl):
+				g.mode = 2
+				g.tgt = ENTRANCE
+				return false
+			var pp: Vector3 = (pl as Node3D).global_position
+			var hinter: Vector3 = pp + (pl as Node3D).global_transform.basis.z * 1.1
+			g.tgt = Vector3(hinter.x, ebene_boden(ebene_von(pp)) + 0.1, hinter.z)
+			# Zu zweit geht es schneller
+			var helfer := false
+			for p in _players_nodes.values():
+				if p != pl and is_instance_valid(p) and ((p as Node3D).global_position - (g.pos as Vector3)).length() < 3.0:
+					helfer = true
+			g.tempo = 1.8 if helfer else 1.15
+			var pos: Vector3 = g.pos
+			if not im_zelt(pos) or (pos.z > WAND_VORN - 1.2 and absf(pos.x) < 3.2):
+				var tip := HEIMBRINGEN_TRINKGELD
+				_add_income(tip)
+				_last_earn += tip
+				_net_betrag.rpc(pos, tip, true)
+				_stats.heimgebracht = int(_stats.get("heimgebracht", 0)) + 1
+				_despawn_guest(id)
+				return true
+	return false
 
 func _typ_umsatz(g: Dictionary) -> float:
 	return 2.0 if str(g.get("typ", "")) == "vip" else 1.0
@@ -4069,6 +4251,8 @@ func _spawn_guest() -> void:
 func _update_guests(delta: float) -> void:
 	for id in _guest_sim.keys().duplicate():
 		var g: Dictionary = _guest_sim[id]
+		if _phase == Phase.SHIFT and _rausch_aktualisieren(g, id, delta):
+			continue   # heimgebracht
 		var pos: Vector3 = g.pos
 		# Zwischenziele über die Treppe, wenn das Ziel auf der anderen Ebene liegt
 		var wp := _wegpunkt(g, 0.2)
@@ -4078,7 +4262,7 @@ func _update_guests(delta: float) -> void:
 		var d := to.length()
 		if d > 0.15 or not am_ziel:
 			if d > 0.0001:
-				var schritt := minf(CUST_SPEED * delta, d)
+				var schritt := minf(CUST_SPEED * float(g.get("tempo", 1.0)) * delta, d)
 				pos.y += (wp.y - pos.y) * (schritt / d)   # Treppe: Höhe anteilig
 				pos += to / d * schritt
 				g.yaw = atan2(-to.x, -to.z)
@@ -4140,6 +4324,7 @@ func _update_guests(delta: float) -> void:
 			# Host/Solo bekommen _net_guests nicht (kein call_local) — direkt setzen
 			node.set_tanz(bool(g.tanz_da), int(g.mode) == 6)
 			node.set_laune(_laune(g))
+			node.set_rausch(rausch_stufe(g))
 
 func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 	if g.ostate == 0:
@@ -4180,7 +4365,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 	# Sarhoş: ara sıra kus + kir bırak (C3)
 	# Betrunken: erst nach ein paar Bier, dann steht der Gast auf und geht
 	# ein paar Schritte vom Tisch weg, bevor er sich übergibt.
-	if int(g.get("drinks", 0)) >= DRINKS_BEFORE_PUKE and randf() < MESS_CHANCE_PER_SEC * delta:
+	if rausch_stufe(g) >= 2 and randf() < MESS_CHANCE_PER_SEC * delta:
 		var seat: Dictionary = _seats[int(g.seat)]
 		g.mode = 4
 		g.ostate = 0
@@ -4328,7 +4513,7 @@ func _broadcast_sync() -> void:
 		ctype.append(g.otype)
 		cratio.append(clampf(g.patience / _geduld_max(g), 0.0, 1.0))
 		# Bit 0 tanzt (am Ziel), Bit 1–2 Laune, Bit 3 am Boden vor der Bühne
-		ctanz.append((1 if bool(g.get("tanz_da", false)) else 0) | (_laune(g) << 1) | (8 if int(g.mode) == 6 else 0))
+		ctanz.append((1 if bool(g.get("tanz_da", false)) else 0) | (_laune(g) << 1) | (8 if int(g.mode) == 6 else 0) | (rausch_stufe(g) << 4))
 	_net_guests.rpc(cids, cx, cy, cz, cyaw, cstate, ckind, ctype, cratio, ctanz)
 	# Personal
 	var sids := PackedInt32Array()
@@ -4404,6 +4589,7 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cy: PackedFloat
 			var bits: int = ctanz[i] if i < ctanz.size() else 0
 			c.set_tanz(bits & 1 == 1, bits & 8 == 8)
 			c.set_laune((bits >> 1) & 3)
+			c.set_rausch((bits >> 4) & 3)
 
 ## call_local: Uhrzeit, Beliebtheit und Sauberkeit braucht auch das HUD des
 ## Hosts bzw. im Solo-Spiel — ohne kam dort nie etwas an („Zelt geschlossen",
@@ -4560,6 +4746,7 @@ func _update_puke(g: Dictionary, id: int, delta: float) -> void:
 	if not bool(g.get("puked", false)) and float(g.puke_t) <= 2.6:
 		g.puked = true
 		g.drinks = 0
+		g.rausch = maxf(0.0, float(g.get("rausch", 0.0)) - RAUSCH_NACH_KOTZEN)
 		_stats.gekotzt = int(_stats.get("gekotzt", 0)) + 1
 		_spawn_mess_at(g.pos as Vector3, 0)
 	if float(g.puke_t) <= 0.0:

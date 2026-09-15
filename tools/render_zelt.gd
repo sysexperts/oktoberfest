@@ -100,6 +100,15 @@ class Lauf extends Node:
 		# Zeltname: von draußen auf den Eingang, drinnen über die Theke
 		await _foto(Vector3(0.0, 0.0, 22.0), 0.0, 8.0, "zelt_name_eingang")
 		await _foto(Vector3(22.0, 0.0, 18.0), 45.0, 10.0, "zelt_aussen_seite")
+		await _foto(Vector3(24.0, 0.0, 22.0), -105.0, 6.0, "zelt_buero_aussen")
+		# Schießbude (Kirmes, Stand N07) von vorn und beim Schießen
+		await _foto(Vector3(-4.5, 0.0, 21.8), 180.0, 8.0, "kirmes_schiessstand")
+		var bude := gm.get_node("Kirmes/StaendeNord/N07_Schi")
+		bude.spiel_starten(spieler)
+		await _frames(50)
+		get_viewport().get_texture().get_image().save_png("res://tools/kirmes_schiessstand_spiel.png")
+		print("  gespeichert: kirmes_schiessstand_spiel")
+		bude._beenden()
 		await _foto(Vector3(20.0, 0.0, -24.0), 135.0, 10.0, "zelt_aussen_hinten")
 		await _foto(Vector3(-2.0, 0.0, -1.0), 0.0, 6.0, "zelt_name_theke")
 		# Büroraum durch die Tür

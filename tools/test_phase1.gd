@@ -557,6 +557,42 @@ class Lauf extends Node:
 		_check("Band flieht bei Schlägerei, Musik bleibt aus", fliehen, "")
 		gm._net_band_zurueck()
 
+		print("  -- Schießbude")
+		var buden := get_tree().get_nodes_in_group("schiessstand")
+		_check("Schießbuden stehen auf der Kirmes", buden.size() >= 4, "%d Buden" % buden.size())
+		Game.add_money(100)
+		var geld_vor: int = Game.money
+		gm.net_schiessen_bezahlen()
+		_check("Schießen kostet 2 €", Game.money == geld_vor - gm.SCHIESS_PREIS, str(Game.money - geld_vor))
+		gm.net_schiessen_ende(10)
+		_check("10 Treffer: Teddy (20 €)", Game.money == geld_vor - gm.SCHIESS_PREIS + 20 and gm._schiessen_bezahlt.is_empty(), str(Game.money - geld_vor))
+		gm.net_schiessen_ende(10)
+		_check("Ohne Bezahlen kein Preis", Game.money == geld_vor - gm.SCHIESS_PREIS + 20, "")
+
+		print("  -- Rausch")
+		gm._rebuild_seats()
+		gm._spawn_guest()
+		var rid: int = gm._guest_sim.keys().back()
+		var rg: Dictionary = gm._guest_sim[rid]
+		rg.mode = 1
+		rg.pos = gm._seats[int(rg.seat)].pos
+		rg.tgt = rg.pos
+		rg.rausch = 0.0
+		rg.okind = 1
+		rg.otype = 4
+		gm._rausch_nach_bedienung(rg)
+		_check("Festbier steigt zu Kopf", absf(float(rg.rausch) - 26.0) < 0.01, "%.1f" % float(rg.rausch))
+		rg.rausch = 95.0
+		gm._rausch_aktualisieren(rg, rid, 0.1)
+		_check("Ab 90 wird der Gast zur Bierleiche", int(rg.mode) == 8 and gm.rausch_stufe(rg) == 3, "Modus %d" % int(rg.mode))
+		gm.net_wasser_geben(rid)
+		_check("Wasser macht nüchterner und weckt auf", int(rg.mode) == 1 and float(rg.rausch) < 70.0, "%.1f" % float(rg.rausch))
+		rg.rausch = 95.0
+		gm._rausch_aktualisieren(rg, rid, 0.1)
+		gm.net_heimbringen(rid)
+		_check("Bierleiche lässt sich heimbringen", int(rg.mode) == 9 and int(rg.get("folgt", 0)) == 1, "Modus %d" % int(rg.mode))
+		gm._despawn_guest(rid)
+
 		print("  -- Massenschlägerei")
 		gm._day = 4
 		var geplant_frueh := false

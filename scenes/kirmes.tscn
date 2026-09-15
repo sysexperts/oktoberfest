@@ -2,10 +2,11 @@
 
 [ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="1_dreh"]
 [ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="2_ente"]
-[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="3_schi"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/schiessstand.tscn" id="3_schi"]
 [ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
+[ext_resource type="PackedScene" path="res://scenes/wiesenbuero.tscn" id="98_huette"]
 [ext_resource type="PackedScene" path="res://scenes/props/schiffschaukel.tscn" id="8_cu5q6"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 [ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
@@ -287,70 +288,10 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30,
 [node name="Wiesenbuero" type="Node3D" parent="." unique_id=1735080229]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 38.128563, 0, 18.444586)
 
-[node name="WallNorth" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1117232724]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
-material_override = SubResource("MatBuero")
-mesh = SubResource("BueroWallX")
-
-[node name="WallEast" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1395494984]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 0)
-material_override = SubResource("MatBuero")
-mesh = SubResource("BueroWallZ")
-
-[node name="WallWest" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1251359958]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, 0)
-material_override = SubResource("MatBuero")
-mesh = SubResource("BueroWallZ")
-
-[node name="WallSouthW" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1142698852]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2, -4)
-material_override = SubResource("MatBuero")
-mesh = SubResource("BueroDoorWall")
-
-[node name="WallSouthE" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1088040352]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2, -4)
-material_override = SubResource("MatBuero")
-mesh = SubResource("BueroDoorWall")
-
-[node name="Roof" type="MeshInstance3D" parent="Wiesenbuero" unique_id=1487965586]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
-material_override = SubResource("MatBuero")
-mesh = SubResource("BueroRoof")
-
-[node name="Schild" type="Label3D" parent="Wiesenbuero" unique_id=1282379694]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 4.9, -4.3)
-pixel_size = 0.012
-modulate = Color(1, 0.9, 0.5, 1)
-text = "WORLD_OFFICE_SIGN"
-font_size = 64
-outline_size = 20
-script = ExtResource("99_welttext")
-schluessel = "WORLD_OFFICE_SIGN"
-
-[node name="Kollision" type="StaticBody3D" parent="Wiesenbuero" unique_id=2116068240]
-
-[node name="ColNorth" type="CollisionShape3D" parent="Wiesenbuero/Kollision" unique_id=91730340]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
-shape = SubResource("BueroColX")
-
-[node name="ColEast" type="CollisionShape3D" parent="Wiesenbuero/Kollision" unique_id=1166653638]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 0)
-shape = SubResource("BueroColZ")
-
-[node name="ColWest" type="CollisionShape3D" parent="Wiesenbuero/Kollision" unique_id=1451138393]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, 0)
-shape = SubResource("BueroColZ")
-
-[node name="ColSouthW" type="CollisionShape3D" parent="Wiesenbuero/Kollision" unique_id=1941892539]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2, -4)
-shape = SubResource("BueroColDoor")
-
-[node name="ColSouthE" type="CollisionShape3D" parent="Wiesenbuero/Kollision" unique_id=2067095644]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2, -4)
-shape = SubResource("BueroColDoor")
+[node name="Huette" parent="Wiesenbuero" instance=ExtResource("98_huette")]
 
 [node name="Schreibtisch" parent="Wiesenbuero" unique_id=577368256 instance=ExtResource("7_kiosk")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 2.5)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.15, 2.5)
 
 [node name="Wohnwagenplatz" type="Node3D" parent="." unique_id=1657274445]
 
