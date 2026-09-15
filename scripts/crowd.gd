@@ -35,6 +35,9 @@ func _build_points() -> void:
 	for z in [-18.0, -13.5, -9.0, -4.5, 0.0, 4.5, 9.0, 13.5, 18.0]:
 		_points.append(Vector3(26.5, 0.1, z))    # vor der Ostreihe
 		_points.append(Vector3(-26.5, 0.1, z))   # vor der Westreihe
+	# Ringstraße, Alleen, Biergärten, Buden draußen (scenes/kulisse/strassen.tscn, Marker3D)
+	for m in get_tree().get_nodes_in_group("besucher_punkt"):
+		_points.append((m as Node3D).global_position)
 
 ## Ein Ziel in der Nähe — so bummeln sie von Stand zu Stand statt im Kreis zu marschieren.
 func next_point(from: Vector3) -> Vector3:

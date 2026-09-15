@@ -323,37 +323,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, -10)
 
 [node name="Mauern" type="Node3D" parent="." unique_id=2046617623]
 
-[node name="MauerNord" type="StaticBody3D" parent="Mauern" unique_id=1206220130]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 31)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerNord" unique_id=1920666281]
-shape = SubResource("MauerNordCol")
-
-[node name="MauerSuedWest" type="StaticBody3D" parent="Mauern" unique_id=440453873]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2.5, -34)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerSuedWest" unique_id=1935129619]
-shape = SubResource("MauerSuedACol")
-
-[node name="MauerSuedOst" type="StaticBody3D" parent="Mauern" unique_id=1721543857]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 2.5, -34)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerSuedOst" unique_id=652364204]
-shape = SubResource("MauerSuedBCol")
-
-[node name="MauerWest" type="StaticBody3D" parent="Mauern" unique_id=510077493]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 2.5, -1.5)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerWest" unique_id=1761468085]
-shape = SubResource("MauerWestCol")
-
-[node name="MauerOstSued" type="StaticBody3D" parent="Mauern" unique_id=1432029722]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 2.5, -7)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerOstSued" unique_id=627187822]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3569336)
-shape = SubResource("MauerOstACol")
-
 [node name="MauerOstNord" type="StaticBody3D" parent="Mauern" unique_id=2104370182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 2.5, 29.5)
 
@@ -362,35 +331,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2841797)
 material_override = SubResource("MatMauer")
 mesh = SubResource("MauerOstBMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Mauern/MauerOstNord" unique_id=1790194887]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2841797)
-shape = SubResource("MauerOstBCol")
-
-[node name="Grenze" type="Node3D" parent="." unique_id=1939645769]
-
-[node name="BoundNorth" type="StaticBody3D" parent="Grenze" unique_id=1827034165]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 45)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundNorth" unique_id=1970820683]
-shape = SubResource("BoundX")
-
-[node name="BoundSouth" type="StaticBody3D" parent="Grenze" unique_id=1006130666]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -62)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundSouth" unique_id=207388301]
-shape = SubResource("BoundX")
-
-[node name="BoundWest" type="StaticBody3D" parent="Grenze" unique_id=1340713045]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 2.5, -8.5)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundWest" unique_id=913616022]
-shape = SubResource("BoundZ")
-
-[node name="BoundEast" type="StaticBody3D" parent="Grenze" unique_id=171884662]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 2.5, -8.5)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Grenze/BoundEast" unique_id=1975916934]
-shape = SubResource("BoundZ")
 
 [node name="ShipRide" parent="." unique_id=1850783362 instance=ExtResource("8_cu5q6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.820018, 0, 36.81225)
