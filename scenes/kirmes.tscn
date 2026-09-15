@@ -2,18 +2,16 @@
 
 [ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="1_dreh"]
 [ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="2_ente"]
-[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="3_schi"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/schiessstand.tscn" id="3b_bude"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/dosenwurf.tscn" id="3c_dosen"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/hau_den_lukas.tscn" id="3d_lukas"]
+[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="3_schi"]
 [ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
-[ext_resource type="PackedScene" path="res://scenes/wiesenbuero.tscn" id="98_huette"]
 [ext_resource type="PackedScene" path="res://scenes/props/schiffschaukel.tscn" id="8_cu5q6"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
 [ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
-[ext_resource type="PackedScene" path="res://scenes/kulisse/altstadt.tscn" id="52_altstadt"]
 [ext_resource type="PackedScene" uid="uid://chrmnwixompew" path="res://assets/kirmes/Models/Props/Bench.fbx" id="11_i3lhy"]
 [ext_resource type="PackedScene" uid="uid://bfm6aa8cpnegy" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="12_fgnfp"]
 [ext_resource type="PackedScene" uid="uid://b6oh1keokqrjv" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="13_w4g7w"]
@@ -55,7 +53,8 @@
 [ext_resource type="PackedScene" uid="uid://q5kjud7rt268" path="res://assets/kirmes/Models/Foliage/Tree_Pear.fbx" id="49_ffvxn"]
 [ext_resource type="PackedScene" uid="uid://bxygwrtq431wm" path="res://assets/kirmes/Models/Foliage/Reeds.fbx" id="50_npmqp"]
 [ext_resource type="PackedScene" uid="uid://dsf3f5odhuxhk" path="res://assets/kirmes/Models/Foliage/Tree_Apple.fbx" id="51_haseo"]
-[ext_resource type="Script" uid="uid://dsssnidpdv2bt" path="res://scripts/welt_text.gd" id="99_welttext"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/altstadt.tscn" id="52_altstadt"]
+[ext_resource type="PackedScene" path="res://scenes/wiesenbuero.tscn" id="98_huette"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
 albedo_color = Color(0.32, 0.38, 0.22, 1)
@@ -74,30 +73,6 @@ size = Vector3(8, 0.12, 49)
 
 [sub_resource type="BoxMesh" id="PathLane"]
 size = Vector3(4, 0.12, 14.380737)
-
-[sub_resource type="StandardMaterial3D" id="MatBuero"]
-albedo_color = Color(0.85, 0.8, 0.68, 1)
-
-[sub_resource type="BoxMesh" id="BueroWallX"]
-size = Vector3(10, 4, 0.4)
-
-[sub_resource type="BoxMesh" id="BueroWallZ"]
-size = Vector3(0.4, 4, 8)
-
-[sub_resource type="BoxMesh" id="BueroDoorWall"]
-size = Vector3(3, 4, 0.4)
-
-[sub_resource type="BoxMesh" id="BueroRoof"]
-size = Vector3(10.6, 0.4, 8.6)
-
-[sub_resource type="BoxShape3D" id="BueroColX"]
-size = Vector3(10, 4, 0.4)
-
-[sub_resource type="BoxShape3D" id="BueroColZ"]
-size = Vector3(0.4, 4, 8)
-
-[sub_resource type="BoxShape3D" id="BueroColDoor"]
-size = Vector3(3, 4, 0.4)
 
 [sub_resource type="BoxShape3D" id="MauerNordCol"]
 size = Vector3(68, 5, 0.6)
@@ -180,7 +155,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -48)
 [node name="N02_Ente" parent="StaendeNord" unique_id=298506217 instance=ExtResource("2_ente")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -27, 0, 27)
 
-[node name="N03_Dosenwurf" parent="StaendeNord" instance=ExtResource("3c_dosen")]
+[node name="N03_Dosenwurf" parent="StaendeNord" unique_id=228357802 instance=ExtResource("3c_dosen")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -20.25, 0, 27)
 
 [node name="N05_Dreh" parent="StaendeNord" unique_id=1751336916 instance=ExtResource("1_dreh")]
@@ -189,7 +164,7 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -13.5, 0, 27)
 [node name="N06_Ente" parent="StaendeNord" unique_id=1429182045 instance=ExtResource("2_ente")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -9, 0, 27)
 
-[node name="N07_Schiessbude" parent="StaendeNord" instance=ExtResource("3b_bude")]
+[node name="N07_Schiessbude" parent="StaendeNord" unique_id=91570265 instance=ExtResource("3b_bude")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.25, 0, 27)
 
 [node name="N11_Schi" parent="StaendeNord" unique_id=1580895013 instance=ExtResource("3_schi")]
@@ -218,7 +193,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, -31)
 [node name="S03_Ente" parent="StaendeSued" unique_id=1059562498 instance=ExtResource("2_ente")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0, -30)
 
-[node name="S04_HauDenLukas" parent="StaendeSued" instance=ExtResource("3d_lukas")]
+[node name="S04_HauDenLukas" parent="StaendeSued" unique_id=507788968 instance=ExtResource("3d_lukas")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.75, 0, -30.5)
 
 [node name="S06_Dreh" parent="StaendeSued" unique_id=480007990 instance=ExtResource("1_dreh")]
@@ -227,7 +202,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -30)
 [node name="S07_Ente" parent="StaendeSued" unique_id=663646667 instance=ExtResource("2_ente")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -30)
 
-[node name="S08_Schiessbude" parent="StaendeSued" instance=ExtResource("3b_bude")]
+[node name="S08_Schiessbude" parent="StaendeSued" unique_id=1626243016 instance=ExtResource("3b_bude")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.25, 0, -30)
 
 [node name="S10_Dreh" parent="StaendeSued" unique_id=1792891069 instance=ExtResource("1_dreh")]
@@ -238,7 +213,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -30)
 [node name="O01_Ente" parent="StaendeOst" unique_id=1450532000 instance=ExtResource("2_ente")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -18)
 
-[node name="O02_Schiessbude" parent="StaendeOst" instance=ExtResource("3b_bude")]
+[node name="O02_Schiessbude" parent="StaendeOst" unique_id=1254696407 instance=ExtResource("3b_bude")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -11.25)
 
 [node name="O04_Dreh" parent="StaendeOst" unique_id=60604764 instance=ExtResource("1_dreh")]
@@ -247,7 +222,7 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 
 [node name="O05_Ente" parent="StaendeOst" unique_id=567804330 instance=ExtResource("2_ente")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 0)
 
-[node name="O06_Dosenwurf" parent="StaendeOst" instance=ExtResource("3c_dosen")]
+[node name="O06_Dosenwurf" parent="StaendeOst" unique_id=973113807 instance=ExtResource("3c_dosen")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 6.75)
 
 [node name="O08_Dreh" parent="StaendeOst" unique_id=1980639239 instance=ExtResource("1_dreh")]
@@ -255,10 +230,10 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 
 
 [node name="StaendeWest" type="Node3D" parent="." unique_id=1556386683]
 
-[node name="W03_HauDenLukas" parent="StaendeWest" instance=ExtResource("3d_lukas")]
+[node name="W03_HauDenLukas" parent="StaendeWest" unique_id=628095148 instance=ExtResource("3d_lukas")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, -5.75)
 
-[node name="W05_Schiessbude" parent="StaendeWest" instance=ExtResource("3b_bude")]
+[node name="W05_Schiessbude" parent="StaendeWest" unique_id=2104904926 instance=ExtResource("3b_bude")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 2.25)
 
 [node name="W07_Dreh" parent="StaendeWest" unique_id=319897979 instance=ExtResource("1_dreh")]
@@ -267,7 +242,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30,
 [node name="Wiesenbuero" type="Node3D" parent="." unique_id=1735080229]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 38.128563, 0, 18.444586)
 
-[node name="Huette" parent="Wiesenbuero" instance=ExtResource("98_huette")]
+[node name="Huette" parent="Wiesenbuero" unique_id=482799034 instance=ExtResource("98_huette")]
 
 [node name="Schreibtisch" parent="Wiesenbuero" unique_id=577368256 instance=ExtResource("7_kiosk")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.15, 2.5)
@@ -420,13 +395,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.820018, 0, 36.81225)
 [node name="Parking" parent="." unique_id=1798203239 instance=ExtResource("9_y5oy2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9337764, 0, 29.594742)
 
-[node name="Altstadt" parent="." instance=ExtResource("52_altstadt")]
+[node name="Altstadt" parent="." unique_id=384504598 instance=ExtResource("52_altstadt")]
 
 [node name="Ticket_Box_C" parent="." unique_id=2108803535 instance=ExtResource("23_87m88")]
 transform = Transform3D(-0.75, 0, 1.299038, 0, 1.5, 0, -1.299038, 0, -0.75, -31.677767, -0.115615, -12.686505)
 
 [node name="Lamp_1" parent="." unique_id=900368200 instance=ExtResource("16_ek6mb")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.075063, 0.384384, -50.461644)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.075063, 0.384384, -50.461643)
 
 [node name="Bench" parent="." unique_id=1685317960 instance=ExtResource("11_i3lhy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.248286, 1.9073486e-06, 22.993784)
@@ -805,7 +780,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -50)
 [node name="Tree_22" parent="." unique_id=667372555 instance=ExtResource("36_87m88")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, -49)
 
-[node name="Lamp_1" parent="." unique_id=1719667554 instance=ExtResource("16_ek6mb")]
+[node name="Lamp_2" parent="." unique_id=1719667554 instance=ExtResource("16_ek6mb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, -46)
 
 [node name="Lamp_3" parent="." unique_id=1381439134 instance=ExtResource("16_ek6mb")]

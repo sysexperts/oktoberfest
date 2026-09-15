@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Shader" path="res://assets/shader/bildfilter.gdshader" id="1_filter"]
+
+[sub_resource type="ShaderMaterial" id="FilterMat"]
+shader = ExtResource("1_filter")
+shader_parameter/vignette = 0.38
+shader_parameter/koernung = 0.02
+
+[node name="Bildfilter" type="CanvasLayer"]
+layer = -10
+
+[node name="Filter" type="ColorRect" parent="."]
+material = SubResource("FilterMat")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

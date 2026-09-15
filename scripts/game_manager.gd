@@ -1004,16 +1004,17 @@ func _apply_daylight(clock: float) -> void:
 		# die bunten Kirmeslichter wirken, hell genug, dass man alles erkennt.
 		# Schatten bleiben an: früher gingen sie bei halber Dämmerung aus und die
 		# Sonne schien schlagartig durchs Zeltdach — das Zelt wurde plötzlich hell.
-		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.14, t) * (1.0 - 0.45 * r)
-		_sun.light_color = Color(1, 1, 1).lerp(Color(0.62, 0.68, 0.92), t)
+		# Look „Stil“ (tools/look_test.tscn, Variante C): warme, kräftige Sonne am Tag
+		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.096, t) * (1.0 - 0.45 * r)
+		_sun.light_color = Color(1.0, 0.9, 0.76).lerp(Color(0.62, 0.68, 0.92), t)
 	if _world_env and _world_env.environment:
 		var env := _world_env.environment
-		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.30, t) * (1.0 - 0.3 * r)
+		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.6, t) * (1.0 - 0.3 * r)
 		env.background_energy_multiplier = lerpf(_day_bg, _day_bg * 0.22, t)
 		# Nebel bleibt ein dünner Dunst — er soll das Licht der Buden einfangen,
 		# nicht die Sicht nehmen. Nachts und bei Regen dichter.
 		# (vorher ×4 nachts — mit dem Lichterfest-Look wirkte das Zelt dann milchig)
-		env.fog_density = lerpf(_day_fog, _day_fog * 1.5, t) * (1.0 + 3.0 * r)
+		env.fog_density = lerpf(_day_fog, _day_fog * 1.8, t) * (1.0 + 3.0 * r)
 		env.fog_light_color = _day_fog_color.lerp(Color(0.26, 0.23, 0.30), t)
 		# Lichterfest-Abend (Stilvorschau tools/render_licht.tscn): Lichterketten
 		# leuchten warm, etwas höher belichtet, kräftigere Farben. Lichtnebel nur
@@ -1022,7 +1023,7 @@ func _apply_daylight(clock: float) -> void:
 		# Belichtung deutlich zurückgenommen
 		env.glow_intensity = lerpf(_day_glow, 0.9, t)
 		env.glow_bloom = lerpf(_day_bloom, 0.08, t)
-		env.tonemap_exposure = lerpf(_day_exposure, 1.05, t)
+		env.tonemap_exposure = lerpf(_day_exposure, 1.36, t)
 		env.adjustment_saturation = lerpf(_day_saettigung, _day_saettigung * 1.1, t)
 		env.volumetric_fog_enabled = Einstellungen.grafik >= 2 and t > 0.02
 		env.volumetric_fog_density = 0.006 * t

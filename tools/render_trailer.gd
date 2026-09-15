@@ -115,11 +115,8 @@ class Lauf extends Node:
 		env.ssao_intensity = 1.6
 		env.ssao_radius = 1.2
 		env.ssil_enabled = true
-		env.ssil_intensity = 0.6
-		env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+		env.ssil_intensity = 0.8
 		env.adjustment_enabled = true
-		env.adjustment_contrast = 1.12
-		env.adjustment_saturation = 1.18
 		attribute = CameraAttributesPractical.new()
 		attribute.dof_blur_far_enabled = false
 		attribute.dof_blur_far_distance = 28.0

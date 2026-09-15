@@ -27,6 +27,8 @@
 [ext_resource type="PackedScene" path="res://scenes/zelt_eroeffnung.tscn" id="101_eroeffnung"]
 [ext_resource type="PackedScene" path="res://scenes/getraenke_poster.tscn" id="102_poster"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
+[ext_resource type="Texture3D" path="res://assets/shader/farb_lut.png" id="103_lut"]
+[ext_resource type="PackedScene" path="res://scenes/effekte/bildfilter.tscn" id="104_bildfilter"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -38,30 +40,35 @@ sky_material = SubResource("SkyMat")
 background_mode = 2
 sky = SubResource("Sky")
 ambient_light_source = 3
-ambient_light_energy = 0.26
-tonemap_mode = 3
-tonemap_exposure = 0.88
+ambient_light_sky_contribution = 0.7
+ambient_light_energy = 0.143
+tonemap_mode = 4
+tonemap_exposure = 0.99
 tonemap_white = 6.0
 ssao_enabled = true
 ssao_radius = 1.5
-ssao_intensity = 1.4
-ssao_power = 1.6
+ssao_intensity = 2.4
+ssao_power = 1.9
+ssao_light_affect = 0.25
+ssil_intensity = 0.8
 glow_enabled = true
 glow_normalized = true
 glow_intensity = 0.7
 glow_bloom = 0.05
 glow_blend_mode = 0
+glow_hdr_threshold = 1.1
 fog_enabled = true
-fog_light_color = Color(0.78, 0.7, 0.62, 1)
+fog_light_color = Color(0.74, 0.8, 0.9, 1)
 fog_sun_scatter = 0.2
-fog_density = 0.0008
-fog_aerial_perspective = 0.04
+fog_density = 0.0009
+fog_aerial_perspective = 0.12
 fog_sky_affect = 0.0
 fog_height = 4.0
 fog_height_density = 0.0
 adjustment_enabled = true
 adjustment_contrast = 1.06
-adjustment_saturation = 1.22
+adjustment_saturation = 1.08
+adjustment_color_correction = ExtResource("103_lut")
 
 [sub_resource type="WorldBoundaryShape3D" id="Ground"]
 
@@ -82,7 +89,8 @@ environment = SubResource("Env")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=204007968]
 transform = Transform3D(0.819152, -0.401695, 0.409576, 0, 0.713251, 0.700909, -0.573576, -0.574227, 0.585489, 0, 10, 0)
-light_energy = 0.75
+light_energy = 1.09
+light_angular_distance = 1.2
 shadow_enabled = true
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=2098207416]
@@ -408,6 +416,8 @@ script = ExtResource("10_sfx")
 
 [node name="Grafikstufe" type="Node" parent="."]
 script = ExtResource("93_grafik")
+
+[node name="Bildfilter" parent="." instance=ExtResource("104_bildfilter")]
 
 [node name="Einrichtung" type="Node3D" parent="."]
 
