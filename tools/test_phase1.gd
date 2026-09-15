@@ -557,6 +557,85 @@ class Lauf extends Node:
 		_check("Band flieht bei Schlägerei, Musik bleibt aus", fliehen, "")
 		gm._net_band_zurueck()
 
+		print("  -- Massenschlägerei")
+		gm._day = 4
+		var geplant_frueh := false
+		for k in 40:
+			gm._schlaegerei_planen()
+			if gm._schlaegerei_uhr >= 0.0:
+				geplant_frueh = true
+		_check("Vor Tag 5 keine Schlägerei", not geplant_frueh, "")
+		gm._day = 5
+		gm._massen_gehabt = false
+		var immer := true
+		for k in 20:
+			gm._schlaegerei_planen()
+			if gm._schlaegerei_uhr < 0.0 or gm._einzel_uhren.is_empty():
+				immer = false
+		_check("Ab Tag 5: erste Massenschlägerei sicher, Einzelstreits jede Schicht", immer, "")
+		gm._massen_gehabt = true
+		var massen := 0
+		for k in 400:
+			gm._schlaegerei_planen()
+			if gm._schlaegerei_uhr >= 0.0:
+				massen += 1
+		_check("Danach ist die Massenschlägerei selten", massen > 0 and massen < 80, "%d von 400" % massen)
+		gm._schlaegerei_uhr = -1.0
+		gm._einzel_uhren = []
+		gm._rebuild_seats()
+		for k in 16:
+			gm._spawn_guest()
+		for id in gm._guest_sim.keys():
+			var sg: Dictionary = gm._guest_sim[id]
+			sg.mode = 1
+			sg.pos = gm._seats[int(sg.seat)].pos
+			sg.tgt = sg.pos
+			gm._guest_sim[id] = sg
+		var streit_start: bool = gm.einzelstreit_ausloesen()
+		await _frames(3)
+		var streit: Dictionary = gm._einzelstreits[0] if streit_start else {}
+		_check("Einzelstreit: zwei Gäste prügeln sich", streit_start and gm._raufbolde.size() == 2, "")
+		if streit_start:
+			var streit_ids: Array = streit.ids
+			gm._einzelstreit_beenden(streit)
+			_check("Einzelstreit vorbei: beide gehen, Band bleibt", not gm._guest_sim.has(streit_ids[0])
+				and not gm._guest_sim.has(streit_ids[1]) and gm._raufbolde.is_empty() and not gm._band_weg, "")
+		# Genug Tische und Gäste für eine Massenschlägerei
+		gm._active_count = maxi(gm._active_count, 8)
+		gm._apply_tent()
+		for id in gm._guest_sim.keys().duplicate():
+			gm._despawn_guest(id)
+		gm._rebuild_seats()
+		for k in 30:
+			gm._spawn_guest()
+		for id in gm._guest_sim.keys():
+			var sg2: Dictionary = gm._guest_sim[id]
+			sg2.mode = 1
+			sg2.pos = gm._seats[int(sg2.seat)].pos
+			sg2.tgt = sg2.pos
+			gm._guest_sim[id] = sg2
+		gm._popularity = 60.0
+		var pop_vor_pruegel: float = gm._popularity
+		var gestartet: bool = gm.schlaegerei_ausloesen()
+		await _frames(5)
+		_check("Schlägerei bricht aus, Gäste werden Raufbolde", gestartet and gm._raufbolde.size() >= 10
+			and gm._raufbolde.size() == gm._schlaegerei_ids.size(), "%d Raufbolde" % gm._raufbolde.size())
+		if not gestartet:
+			return
+		var erster: int = gm._schlaegerei_ids[0]
+		gm.net_rauswerfen(erster)
+		await _frames(2)
+		_check("Rauswurf: Gast weg, Raufbold fliegt", not gm._guest_sim.has(erster) and gm._schlaegerei_raus == 1
+			and gm._raufbolde[erster].zustand == gm._raufbolde[erster].Zustand.FLIEGT, "")
+		var beteiligt: Array = gm._schlaegerei_ids.duplicate()
+		gm._schlaegerei_beenden()
+		var alle_weg := true
+		for id in beteiligt:
+			if gm._guest_sim.has(id):
+				alle_weg = false
+		_check("Nach der Schlägerei: Gäste gehen, Beliebtheit sinkt deutlich, Dreck", alle_weg and not gm.schlaegerei_laeuft()
+			and gm._popularity < pop_vor_pruegel - 8.0 and gm._messes.size() > 0 and gm._massen_gehabt, "Pop %.1f → %.1f" % [pop_vor_pruegel, gm._popularity])
+
 		print("  -- Tanzen auf dem Tisch")
 		gm._phase = gm.Phase.SHIFT
 		gm._phase_time = gm.SHIFT_TIME * 0.25   # etwa 18:15

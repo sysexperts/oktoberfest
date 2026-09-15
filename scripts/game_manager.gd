@@ -782,6 +782,7 @@ func _save_game() -> void:
 		tables.append({"x": p.x, "y": p.y, "z": p.z, "r": (bt as Node3D).rotation.y})
 	var data := {
 		"tisch_layout": TISCH_LAYOUT,
+		"massen_gehabt": _massen_gehabt,
 		"lager_gekauft": _lager_gekauft,
 		"lager_lagen": _lager_lagen(),
 		"essenpreis": _essenpreis,
@@ -898,6 +899,7 @@ func _load_game() -> bool:
 			if e is Dictionary:
 				_restore_staff(int((e as Dictionary).get("role", 2)), int((e as Dictionary).get("level", 1)),
 					str((e as Dictionary).get("eig", "normal")))
+	_massen_gehabt = bool(d.get("massen_gehabt", false))
 	var tp: Variant = d.get("tables", [])
 	if tp is Array and int(d.get("tisch_layout", 1)) == TISCH_LAYOUT:
 		var arr: Array = tp
@@ -1742,6 +1744,279 @@ func _net_band_flieht() -> void:
 @rpc("authority", "reliable", "call_local")
 func _net_band_zurueck() -> void:
 	_band_weg = false
+
+# ================================================= Massenschlägerei (ab Tag 5)
+## Abends kann im vollen Zelt eine Massenschlägerei ausbrechen. Der Server wählt
+## die Beteiligten (sitzende Gäste am Boden rund um einen Tisch) und entscheidet
+## die Folgen; auf jedem Rechner werden die Gäste zu Raufbolden
+## (scenes/pruegel/raufbold.tscn) im Knäuel (scenes/pruegel/massenschlaegerei.tscn).
+## Das Getümmel selbst ist nur Darstellung. Spieler werfen Raufbolde mit E raus —
+## das mildert den Beliebtheitsverlust und beendet die Schlägerei früher.
+const RAUFBOLD_SCENE := preload("res://scenes/pruegel/raufbold.tscn")
+const SCHLAEGEREI_SCENE := preload("res://scenes/pruegel/massenschlaegerei.tscn")
+const SCHLAEGEREI_AB_TAG := 5
+## Die erste Massenschlägerei kommt ab Tag 5 sicher, danach ist sie selten
+const MASSEN_CHANCE := 0.08                   # je Schicht, nachdem es eine gab
+const SCHLAEGEREI_UHR := Vector2(18.5, 21.0)  # Ausbruch irgendwann in diesem Zeitraum
+const SCHLAEGEREI_SPAETESTENS := 21.75        # zu wenig Gäste: bis dahin erneut versuchen
+const SCHLAEGEREI_MIN_GAESTE := 10            # so viele sitzende Gäste müssen da sein
+const SCHLAEGEREI_MAX := 22
+const SCHLAEGEREI_DAUER := 30.0
+const SCHLAEGEREI_POP := 20.0                 # Verlust ohne Rauswürfe — deutlich
+const SCHLAEGEREI_DRECK := 5
+## Einzelne Schlägereien (zwei Gäste) sind ab Tag 5 normal: je Schicht so viele
+const EINZEL_JE_SCHICHT := Vector2i(1, 3)
+const EINZEL_UHR := Vector2(16.5, 21.5)
+const EINZEL_DAUER := 14.0
+const EINZEL_POP := 3.0
+const RAUSWURF_POP := 0.5                     # je rausgeworfenem Raufbold
+const RAUSWURF_TEMPO := Vector2(11.0, 4.5)    # waagerecht, senkrecht
+## Gab es in diesem Spielstand schon eine Massenschlägerei? (gespeichert)
+var _massen_gehabt := false
+var _einzel_uhren: Array = []
+## Laufende Einzelstreits: [{ids: [a, b], t: Restzeit, raus: Anzahl}]
+var _einzelstreits: Array = []
+var _schlaegerei_uhr := -1.0
+var _schlaegerei_ids: Array = []
+var _schlaegerei_ort := Vector3.ZERO
+var _schlaegerei_t := 0.0
+var _schlaegerei_raus := 0
+## Gast-ID -> Raufbold (auf allen Rechnern)
+var _raufbolde := {}
+var _schlaegerei_knoten: Node3D
+
+## Beim Schichtbeginn: ob und wann heute eine Schlägerei ausbricht.
+func _schlaegerei_planen() -> void:
+	_schlaegerei_uhr = -1.0
+	_einzel_uhren = []
+	if _day < SCHLAEGEREI_AB_TAG or _tent_stage == 0:
+		return
+	if not _massen_gehabt or randf() < MASSEN_CHANCE:
+		_schlaegerei_uhr = randf_range(SCHLAEGEREI_UHR.x, SCHLAEGEREI_UHR.y)
+	for k in randi_range(EINZEL_JE_SCHICHT.x, EINZEL_JE_SCHICHT.y):
+		_einzel_uhren.append(randf_range(EINZEL_UHR.x, EINZEL_UHR.y))
+	_einzel_uhren.sort()
+
+func schlaegerei_laeuft() -> bool:
+	return not _schlaegerei_ids.is_empty()
+
+func _update_schlaegerei(delta: float) -> void:
+	var uhr := _clock_hour()
+	for streit: Dictionary in _einzelstreits.duplicate():
+		streit.t = float(streit.t) - delta
+		if float(streit.t) <= 0.0 or int(streit.raus) >= 2:
+			_einzelstreit_beenden(streit)
+	if schlaegerei_laeuft():
+		_schlaegerei_t -= delta
+		if _schlaegerei_t <= 0.0 or _schlaegerei_raus >= _schlaegerei_ids.size():
+			_schlaegerei_beenden()
+		return
+	if _schlaegerei_uhr >= 0.0 and uhr >= _schlaegerei_uhr:
+		_schlaegerei_uhr = -1.0
+		# Zu wenige Gäste: gleich noch einmal versuchen — die erste kommt sicher
+		if not schlaegerei_ausloesen() and uhr + 0.25 < SCHLAEGEREI_SPAETESTENS:
+			_schlaegerei_uhr = uhr + 0.25
+		return
+	if not _einzel_uhren.is_empty() and uhr >= float(_einzel_uhren[0]):
+		_einzel_uhren.pop_front()
+		einzelstreit_ausloesen()
+
+## Zwei Gäste am Nachbartisch geraten aneinander (Server). false ohne passende Gäste.
+func einzelstreit_ausloesen() -> bool:
+	if not multiplayer.is_server() or schlaegerei_laeuft():
+		return false
+	var sitzend := []
+	for id in _guest_sim.keys():
+		var g: Dictionary = _guest_sim[id]
+		if int(g.mode) == 1 and ebene_von(g.pos) == 0:
+			sitzend.append(id)
+	if sitzend.size() < 2:
+		return false
+	var a: int = sitzend.pick_random()
+	sitzend.erase(a)
+	var pa: Vector3 = _guest_sim[a].pos
+	sitzend.sort_custom(func(x: int, y: int) -> bool:
+		return (_guest_sim[x].pos as Vector3).distance_squared_to(pa) < (_guest_sim[y].pos as Vector3).distance_squared_to(pa))
+	var b: int = sitzend[0]
+	for id in [a, b]:
+		var g: Dictionary = _guest_sim[id]
+		g.mode = 7
+		g.ostate = 0
+		g.tgt = g.pos
+		_guest_sim[id] = g
+		_assigned.erase(id)
+	_einzelstreits.append({"ids": [a, b], "t": EINZEL_DAUER, "raus": 0})
+	_stats.einzelstreits = int(_stats.get("einzelstreits", 0)) + 1
+	_melde("MSG_EINZELSTREIT_START", [], 1)
+	_net_einzelstreit_start.rpc(a, b)
+	return true
+
+@rpc("authority", "reliable", "call_local")
+func _net_einzelstreit_start(a: int, b: int) -> void:
+	var ra := _raufbold_erzeugen(a, Vector3.ZERO)
+	var rb := _raufbold_erzeugen(b, Vector3.ZERO)
+	ra.streit_mit(rb)
+
+func _einzelstreit_beenden(streit: Dictionary) -> void:
+	_einzelstreits.erase(streit)
+	var verlust := EINZEL_POP * (1.0 - 0.5 * float(int(streit.raus)) / 2.0)
+	_popularity = maxf(POP_MIN, _popularity - verlust)
+	var ids: Array = streit.ids
+	if _guest_sim.has(ids[0]):
+		_spawn_mess_near(_guest_sim[ids[0]].pos)
+	for id in ids:
+		if _guest_sim.has(id):
+			_despawn_guest(id)
+	_net_raufbolde_weg.rpc(PackedInt32Array(ids))
+
+## Einzelstreit vorbei: die beiden hauen ab und verschwinden draußen.
+@rpc("authority", "reliable", "call_local")
+func _net_raufbolde_weg(ids: PackedInt32Array) -> void:
+	for id in ids:
+		var r = _raufbolde.get(id)
+		_raufbolde.erase(id)
+		if r == null or not is_instance_valid(r):
+			continue
+		r.remove_from_group("interactable")
+		if r.kaempft() or r.ist_frei():
+			r.gegner = null
+			r._setze(r.Zustand.FLUCHT)
+		get_tree().create_timer(12.0).timeout.connect(func() -> void:
+			if is_instance_valid(r):
+				r.queue_free())
+
+## Gast wird auf diesem Rechner zum Raufbold: Gast ausblenden, gleiche Figur prügelt.
+func _raufbold_erzeugen(id: int, ort: Vector3) -> Node3D:
+	var pos := ort
+	var c = _guests.get(id)
+	if c and is_instance_valid(c):
+		pos = (c as Node3D).global_position
+		c.visible = false
+		c.remove_from_group("interactable")
+	var r := RAUFBOLD_SCENE.instantiate()
+	_customers_container.add_child(r)
+	r.global_position = Vector3(pos.x, 0.0, pos.z)
+	r.rotation.y = randf() * TAU
+	r.figur_setzen(Figuren.fuer_gast(id))
+	r.gast_id = id
+	r.flucht_ziel = ENTRANCE + Vector3(randf_range(-3.0, 3.0), 0.0, randf_range(7.0, 11.0))
+	r.add_to_group("interactable")
+	_raufbolde[id] = r
+	return r
+
+## Startet eine Schlägerei (Server). false, wenn zu wenige Gäste sitzen.
+func schlaegerei_ausloesen() -> bool:
+	if not multiplayer.is_server() or schlaegerei_laeuft():
+		return false
+	var sitzend := []
+	for id in _guest_sim.keys():
+		var g: Dictionary = _guest_sim[id]
+		if int(g.mode) == 1 and ebene_von(g.pos) == 0:
+			sitzend.append(id)
+	if sitzend.size() < SCHLAEGEREI_MIN_GAESTE:
+		return false
+	var ort: Vector3 = _guest_sim[sitzend.pick_random()].pos
+	sitzend.sort_custom(func(a: int, b: int) -> bool:
+		return (_guest_sim[a].pos as Vector3).distance_squared_to(ort) < (_guest_sim[b].pos as Vector3).distance_squared_to(ort))
+	var ids := PackedInt32Array()
+	for id: int in sitzend.slice(0, SCHLAEGEREI_MAX):
+		var g: Dictionary = _guest_sim[id]
+		g.mode = 7   # prügelt — keine Bestellungen, bleibt stehen
+		g.ostate = 0
+		g.tgt = g.pos
+		_guest_sim[id] = g
+		_assigned.erase(id)
+		ids.append(id)
+	_schlaegerei_ids = Array(ids)
+	_schlaegerei_ort = Vector3(ort.x, 0.0, ort.z)
+	_schlaegerei_t = SCHLAEGEREI_DAUER
+	_schlaegerei_raus = 0
+	_massen_gehabt = true
+	_stats.schlaegereien = int(_stats.get("schlaegereien", 0)) + 1
+	_melde("MSG_SCHLAEGEREI_START", [], 1)
+	_net_schlaegerei_start.rpc(ids, _schlaegerei_ort)
+	return true
+
+@rpc("authority", "reliable", "call_local")
+func _net_schlaegerei_start(ids: PackedInt32Array, ort: Vector3) -> void:
+	var kandidaten := []
+	for id in ids:
+		kandidaten.append(_raufbold_erzeugen(id, ort))
+	_schlaegerei_knoten = SCHLAEGEREI_SCENE.instantiate()
+	add_child(_schlaegerei_knoten)
+	# Der Server beendet — das Knäuel selbst soll nicht vorher auseinandergehen
+	_schlaegerei_knoten.dauer = SCHLAEGEREI_DAUER + 10.0
+	_schlaegerei_knoten.starten(kandidaten, ort, kandidaten.size())
+
+## Spieler wirft einen Raufbold raus (E). Richtung: wohin der Spieler schaut.
+@rpc("any_peer", "reliable", "call_local")
+func net_rauswerfen(gast_id: int) -> void:
+	if not multiplayer.is_server() or not _guest_sim.has(gast_id):
+		return
+	var einzel: Dictionary = {}
+	for streit: Dictionary in _einzelstreits:
+		if (streit.ids as Array).has(gast_id):
+			einzel = streit
+	if einzel.is_empty() and not _schlaegerei_ids.has(gast_id):
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var vorn := Vector3(0, 0, 1)
+	var pl = _players_nodes.get(s)
+	if pl:
+		vorn = -(pl as Node3D).global_transform.basis.z
+		vorn.y = 0.0
+		vorn = vorn.normalized() if vorn.length() > 0.01 else Vector3(0, 0, 1)
+	if einzel.is_empty():
+		_schlaegerei_raus += 1
+	else:
+		einzel.raus = int(einzel.raus) + 1
+	_pop_erhoehen(RAUSWURF_POP)
+	_despawn_guest(gast_id)
+	_net_rauswurf.rpc(gast_id, vorn * RAUSWURF_TEMPO.x + Vector3.UP * RAUSWURF_TEMPO.y)
+
+@rpc("authority", "reliable", "call_local")
+func _net_rauswurf(gast_id: int, tempo: Vector3) -> void:
+	var r = _raufbolde.get(gast_id)
+	if r and is_instance_valid(r):
+		r.remove_from_group("interactable")
+		if r.packen():
+			r.get_node("Kipper").rotation = Vector3.ZERO
+			r.werfen(tempo)
+
+## Ende (Zeit um, alle rausgeworfen, Feierabend): Beliebtheit, Dreck, Gäste gehen.
+func _schlaegerei_beenden() -> void:
+	if not multiplayer.is_server() or not schlaegerei_laeuft():
+		return
+	var ids := _schlaegerei_ids.duplicate()
+	_schlaegerei_ids = []
+	var anteil := float(_schlaegerei_raus) / float(maxi(1, ids.size()))
+	var verlust := SCHLAEGEREI_POP * (1.0 - 0.5 * anteil)
+	_popularity = maxf(POP_MIN, _popularity - verlust)
+	for k in SCHLAEGEREI_DRECK:
+		_spawn_mess_near(_schlaegerei_ort + Vector3(randf_range(-2.0, 2.0), 0.1, randf_range(-2.0, 2.0)))
+	for id in ids:
+		if _guest_sim.has(id):
+			_despawn_guest(id)
+	_net_schlaegerei_ende.rpc()
+	_melde("MSG_SCHLAEGEREI_ENDE", [_schlaegerei_raus, roundi(verlust)], 1)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_schlaegerei_ende() -> void:
+	if _schlaegerei_knoten and is_instance_valid(_schlaegerei_knoten):
+		_schlaegerei_knoten.beenden()
+	_schlaegerei_knoten = null
+	for id in _raufbolde.keys():
+		var r = _raufbolde[id]
+		if r and is_instance_valid(r):
+			r.remove_from_group("interactable")
+			# Rappeln sich auf, hauen ab — draußen verschwinden sie
+			get_tree().create_timer(12.0).timeout.connect(func() -> void:
+				if is_instance_valid(r):
+					r.queue_free())
+	_raufbolde.clear()
 
 
 # ================================================= E4: Ware & Lieferung
@@ -3321,6 +3596,7 @@ func _shift_process(delta: float) -> void:
 	if int(_stock[WARE_BIER]) <= 0 and not _guest_sim.is_empty():
 		_ohne_ware_s += delta
 	_update_ereignis(delta)
+	_update_schlaegerei(delta)
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
@@ -3603,6 +3879,7 @@ func _start_shift() -> void:
 	_ohne_ware_s = 0.0
 	_kombo.clear()
 	_ereignis_waehlen()
+	_schlaegerei_planen()
 	# Ausgabe bleibt: vor der Schicht vorgezapfte Krüge verschwinden nicht mehr
 	_ausgabe_senden()
 	_last_earn = 0
@@ -3639,6 +3916,12 @@ func _start_shift() -> void:
 
 ## Günü bitir. reason: 0 = 22:00 normal, 1 = çok şikayet, 2 = oyuncu erken kapattı.
 func _end_shift(reason := 0) -> void:
+	if schlaegerei_laeuft():
+		_schlaegerei_beenden()
+	for streit: Dictionary in _einzelstreits.duplicate():
+		_einzelstreit_beenden(streit)
+	_einzel_uhren = []
+	_schlaegerei_uhr = -1.0
 	# Nur einmal pro Tag: mehrere verpasste Bestellungen im selben Moment riefen
 	# das doppelt auf — Tag +2, Miete und Löhne doppelt (Spielbot, 30 Tage).
 	if _phase != Phase.SHIFT:

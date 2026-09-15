@@ -35,6 +35,8 @@ const LIEGEN := 1.8
 const LIEGEN_KNAEUEL := 0.9
 
 var zustand := Zustand.RUHIG
+## Im Zelt: zu welchem Gast er gehört (GameManager, Rauswurf übers Netz)
+var gast_id := -1
 var gegner: Node3D
 var ausdauer := 3
 ## Wohin er nach dem K.o. oder Rauswurf flüchtet (INF = bleibt stehen)
@@ -74,6 +76,10 @@ func _pose_einbauen() -> void:
 	# Zur Laufzeit: die Figur steht erst jetzt fest, das Skelett steckt im Modell
 	_pose = KampfPose.new()
 	_figur.skelett.add_child(_pose)
+
+## Für den Spieler: lässt sich gerade rauswerfen (E)
+func ist_raufbold() -> bool:
+	return zustand != Zustand.FLIEGT and zustand != Zustand.GEPACKT and zustand != Zustand.FLUCHT
 
 func ist_frei() -> bool:
 	return zustand == Zustand.RUHIG

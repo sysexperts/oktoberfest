@@ -443,6 +443,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_AUFHEBEN" if carry_state == 0 else ""
 	if t.has_method("ist_eroeffnung"):
 		return "HINT_ZELT_EROEFFNEN"
+	if t.has_method("ist_raufbold"):
+		return "HINT_RAUSWERFEN" if t.ist_raufbold() else ""
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
 	if t is Customer:
 		var g := t as Customer
@@ -540,6 +542,12 @@ func _handle_interaction(delta: float) -> void:
 			# Abgelegten Krug/Teller aufheben — nur mit freien Händen
 			if carry_state == 0:
 				_world.net_aufheben.rpc_id(1, _current_target.ablage_id)
+				_sfx("pop")
+			return
+		if _current_target.has_method("ist_raufbold"):
+			# Massenschlägerei: Raufbold packen und rauswerfen
+			if _current_target.ist_raufbold():
+				_world.net_rauswerfen.rpc_id(1, _current_target.gast_id)
 				_sfx("pop")
 			return
 		if _current_target.has_method("ist_eroeffnung"):

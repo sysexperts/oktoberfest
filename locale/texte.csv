@@ -160,6 +160,9 @@ EREIGNIS_FASS_START,🛢 Ein Fass ist kaputt — eine Sorte gibt es heute nicht.
 EREIGNIS_PROSIT_TITEL,🎺 Prosit-Tag,🎺 Prosit day,🎺 Prosit günü
 EREIGNIS_PROSIT_START,🎺 Heute spielt die Kapelle „Ein Prosit“ — dann bestellen alle auf einmal!,🎺 Today the band plays “Ein Prosit” — then everyone orders at once!,🎺 Bugün bando “Ein Prosit” çalıyor — o an herkes aynı anda sipariş verir!
 MSG_PROSIT,🎺 Ein Prosit! Alle wollen jetzt Bier!,🎺 Ein Prosit! Everyone wants beer now!,🎺 Ein Prosit! Herkes şimdi bira istiyor!
+MSG_SCHLAEGEREI_START,"🥊 Massenschlägerei! Raufbolde mit E rauswerfen, bevor die Beliebtheit leidet!","🥊 Mass brawl! Throw brawlers out with E before popularity suffers!","🥊 Toplu kavga! Popülerlik düşmeden kavgacıları E ile dışarı at!"
+MSG_EINZELSTREIT_START,"🥊 Zwei Gäste prügeln sich — mit E rauswerfen!","🥊 Two guests are fighting — throw them out with E!","🥊 İki misafir kavga ediyor — E ile dışarı at!"
+MSG_SCHLAEGEREI_ENDE,"🥊 Schlägerei vorbei — %d rausgeworfen, Beliebtheit −%d %%","🥊 Brawl over — %d thrown out, popularity −%d %%","🥊 Kavga bitti — %d kişi dışarı atıldı, popülerlik −%%%d"
 EREIGNIS_PROMI_TITEL,📸 Promi im Zelt,📸 Celebrity in the tent,📸 Çadırda ünlü
 EREIGNIS_PROMI_START,📸 Ein Promi feiert heute im Zelt — doppeltes Trinkgeld!,📸 A celebrity is partying in the tent today — double tips!,📸 Bugün çadırda bir ünlü eğleniyor — çift bahşiş!
 HINT_TAKE_MUG,{interact} Krug nehmen,{interact} Take a mug,{interact} Kupa al
@@ -170,6 +173,7 @@ HINT_SERVE,{interact} Gast bedienen,{interact} Serve guest,{interact} Misafire s
 HINT_WRONG_ORDER,Der Gast möchte etwas anderes,The guest wants something else,Misafir başka bir şey istiyor
 HINT_COOK,{interact} halten: zubereiten,Hold {interact}: prepare,{interact} basılı tut: hazırla
 HINT_PICKUP,{interact} Paket aufnehmen,{interact} Pick up package,{interact} Paketi al
+HINT_RAUSWERFEN,{interact} Raufbold rauswerfen,{interact} Throw the brawler out,{interact} Kavgacıyı dışarı at
 HINT_STORE,{interact} Paket einlagern,{interact} Store package,{interact} Paketi depola
 HINT_STORAGE,Lager — Pakete hierher bringen,Storage — bring packages here,Depo — paketleri buraya getir
 HINT_OFFICE,{interact} Wiesenbüro öffnen,{interact} Open Fair Office,{interact} Fuar Ofisini aç

@@ -193,7 +193,10 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
       „Team-Kombo" wenn verschiedene Spieler am selben Tisch bedienen. *Ich, M*
 - [x] **5.3 Ping-System** *(v121: Taste R markiert Gast/Pfütze/Paket für alle, 5 s, Farbe je Spieler)* — Taste markiert Gast/Pfütze/Paket für Mitspieler. *Ich, S*
 - [ ] **5.4 Koop-Ereignisse** — z. B. Schlägerei am Tisch: zwei Spieler
-      gleichzeitig nötig. *Ich, M*
+      gleichzeitig nötig. *Ich, M* *(Teil erledigt 2026-09-15: ab Tag 5 jede Schicht 1–3 Einzelstreits
+      (zwei Gäste, −3 % Beliebtheit); die erste Massenschlägerei kommt ab Tag 5 sicher, danach selten
+      (8 % je Schicht), −20 % Beliebtheit; Spieler werfen Raufbolde mit E raus, das mildert den Verlust;
+      bei der Massenschlägerei flieht die Band nach 5 s, Musik aus bis Schichtende)*
 
 ## Phase 6 · Balancing & Schwierigkeit
 
