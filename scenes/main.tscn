@@ -29,6 +29,7 @@
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
 [ext_resource type="Texture3D" path="res://assets/shader/farb_lut.png" id="103_lut"]
 [ext_resource type="PackedScene" path="res://scenes/effekte/bildfilter.tscn" id="104_bildfilter"]
+[ext_resource type="PackedScene" path="res://scenes/ui/baumodus.tscn" id="105_baumodus"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -440,3 +441,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 3.3, -13.68)
 
 [node name="GetraenkePosterVorn" parent="." instance=ExtResource("102_poster")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -8.4, 2.1, -8.62)
+
+[node name="Baumodus" parent="." instance=ExtResource("105_baumodus")]

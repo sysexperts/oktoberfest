@@ -15,6 +15,8 @@ const RING_INNEN := 64.0
 const RING_AUSSEN := 70.0
 const OBEN := 0.05                      # Oberkante Pflaster
 
+## false: nur Pflaster, Besucherwege und Stadtgrenze (Rest baut man im Baumodus)
+const MIT_AUSSTATTUNG := false
 const PFLASTER := preload("res://assets/shader/pflaster.tres")
 const LATERNE := preload("res://scenes/props/laterne.tscn")
 const BANK := preload("res://assets/kirmes/Models/Props/Bench.fbx")
@@ -296,6 +298,13 @@ func _init() -> void:
 		form.transform = Transform3D(Basis(Vector3.UP, a), MITTE + Vector3(sin(a), 0, cos(a)) * r_grenze + Vector3(0, 3.0, 0))
 		_haengen(grenze, form)
 
+	# Buden, Bäume und Deko stellt man seit dem Baumodus (F8) selbst auf — die
+	# alte Aufstellung liegt als res://daten/karte_vorlage.json bei.
+	if not MIT_AUSSTATTUNG:
+		for g in ["Ausstattung", "Buden", "Marktbuden", "Lichterketten", "BiergartenWest", "BiergartenOst", "BiergartenSued"]:
+			var weg := wurzel.get_node(g)
+			wurzel.remove_child(weg)
+			weg.free()
 	var ps := PackedScene.new()
 	ps.pack(wurzel)
 	ResourceSaver.save(ps, SZENE)

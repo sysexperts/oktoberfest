@@ -1,0 +1,122 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/baumodus.gd" id="1_bau"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_mark"]
+inner_radius = 2.2
+outer_radius = 2.6
+rings = 32
+ring_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="Mat_mark"]
+shading_mode = 0
+albedo_color = Color(1, 0.8, 0.1, 1)
+no_depth_test = true
+
+[sub_resource type="StyleBoxFlat" id="Style_panel"]
+bg_color = Color(0.1, 0.08, 0.06, 0.88)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[node name="Baumodus" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_bau")
+
+[node name="Kamera" type="Camera3D" parent="."]
+fov = 60.0
+far = 1500.0
+
+[node name="Markierung" type="MeshInstance3D" parent="."]
+mesh = SubResource("TorusMesh_mark")
+surface_material_override/0 = SubResource("Mat_mark")
+
+[node name="Seite" type="PanelContainer" parent="."]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 320.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Style_panel")
+
+[node name="Spalte" type="VBoxContainer" parent="Seite"]
+layout_mode = 2
+
+[node name="Titel" type="Label" parent="Seite/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Baumodus (F8)"
+
+[node name="Gruppe" type="OptionButton" parent="Seite/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Suche" type="LineEdit" parent="Seite/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Suchen …"
+clear_button_enabled = true
+
+[node name="Liste" type="ItemList" parent="Seite/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Info" type="Label" parent="Seite/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+
+[node name="Knoepfe" type="GridContainer" parent="Seite/Spalte"]
+layout_mode = 2
+columns = 2
+
+[node name="Vorlage" type="Button" parent="Seite/Spalte/Knoepfe"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Die bisherige fertige Aufstellung laden (ersetzt die Karte)"
+text = "Vorlage laden"
+
+[node name="Leeren" type="Button" parent="Seite/Spalte/Knoepfe"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Alles leeren"
+
+[node name="Kopieren" type="Button" parent="Seite/Spalte/Knoepfe"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Karte als Text kopieren (zum Sichern oder Weitergeben)"
+text = "Kopieren"
+
+[node name="Einfuegen" type="Button" parent="Seite/Spalte/Knoepfe"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Karte aus der Zwischenablage laden (ersetzt die Karte)"
+text = "Einfügen"
+
+[node name="Schliessen" type="Button" parent="Seite/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fertig (F8)"
+
+[node name="Hinweis" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 340.0
+offset_top = -44.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6

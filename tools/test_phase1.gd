@@ -5,7 +5,7 @@ extends Node
 ## Aufruf: godot --headless --path . res://tools/test_phase1.tscn
 
 const DATEIEN := ["user://oktoberfest_save.json", "user://saves/slot_1.json", "user://saves/slot_2.json",
-	"user://saves/slot_3.json", "user://einstellungen.cfg"]
+	"user://saves/slot_3.json", "user://einstellungen.cfg", "user://karte.json"]
 
 func _ready() -> void:
 	# Der Szenenwechsel würde diesen Knoten freigeben — Testlauf an die Wurzel hängen.
@@ -558,9 +558,28 @@ class Lauf extends Node:
 		_check("Band flieht bei Schlägerei, Musik bleibt aus", fliehen, "")
 		gm._net_band_zurueck()
 
+		print("  -- Baumodus-Karte")
+		var karte = gm.get_node("Kirmes/Karte")
+		var vorher: int = karte.eintraege.size()
+		karte.net_setzen("res://scenes/kirmes/schiessstand.tscn", Vector3(-20, 0, 60), 0.0)
+		karte.net_setzen("res://scenes/kirmes/dosenwurf.tscn", Vector3(-26, 0, 60), 0.0)
+		karte.net_setzen("res://scenes/kirmes/essen/brezn.tscn", Vector3(-32, 0, 60), 0.0)
+		karte.net_setzen("res://../boese.tscn", Vector3.ZERO, 0.0)
+		await _frames(2)
+		_check("Baumodus setzt Buden (nur aus dem Spiel)", karte.eintraege.size() == vorher + 3, "%d → %d" % [vorher, karte.eintraege.size()])
+		var neueste: int = karte.eintraege.keys().max()
+		_check("Essensbude hat Verkäufer", karte.knoten(neueste).get_node_or_null("Figur") != null, "")
+		karte.net_bewegen(neueste, Vector3(-34, 0, 62), 1.0)
+		_check("Baumodus verschiebt", karte.knoten(neueste).position.is_equal_approx(Vector3(-34, 0, 62)), "")
+		karte.net_loeschen(neueste)
+		await _frames(2)
+		_check("Baumodus löscht", karte.eintraege.size() == vorher + 2 and karte.knoten(neueste) == null, "")
+		var vorlage = JSON.parse_string(karte.vorlage())
+		_check("Vorlage liegt bei", vorlage is Dictionary and (vorlage.eintraege as Array).size() > 100, "")
+
 		print("  -- Schießbude")
 		var buden := get_tree().get_nodes_in_group("schiessstand")
-		_check("Schießbuden stehen auf der Kirmes", buden.size() >= 4, "%d Buden" % buden.size())
+		_check("Schießbude steht auf der Kirmes", buden.size() >= 1, "%d Buden" % buden.size())
 		Game.add_money(100)
 		var geld_vor: int = Game.money
 		gm.net_schiessen_bezahlen()
@@ -570,7 +589,7 @@ class Lauf extends Node:
 		gm.net_schiessen_ende(10)
 		_check("Ohne Bezahlen kein Preis", Game.money == geld_vor - gm.SCHIESS_PREIS + 20, "")
 		var spiele := get_tree().get_nodes_in_group("kirmes_spiel")
-		_check("Dosenwerfen und Hau den Lukas stehen auf der Kirmes", spiele.size() >= 4, "%d Stände" % spiele.size())
+		_check("Kirmesspiel steht auf der Kirmes", spiele.size() >= 1, "%d Stände" % spiele.size())
 		if not spiele.is_empty():
 			var stand: Node = spiele[0]
 			var geld_stand: int = Game.money
