@@ -19,9 +19,9 @@ const PFLASTER := preload("res://assets/shader/pflaster.tres")
 const LATERNE := preload("res://scenes/props/laterne.tscn")
 const BANK := preload("res://assets/kirmes/Models/Props/Bench.fbx")
 const MUELL := preload("res://assets/kirmes/Models/Props/TrashBin.fbx")
-const BAEUME := [preload("res://assets/kirmes/Models/Foliage/Tree_1.fbx"),
-	preload("res://assets/kirmes/Models/Foliage/Tree_2.fbx"),
-	preload("res://assets/kirmes/Models/Foliage/Tree_4.fbx")]
+const BAEUME := [preload("res://scenes/kulisse/baum_kastanie.tscn"),
+	preload("res://scenes/kulisse/baum_linde.tscn"),
+	preload("res://scenes/kulisse/baum_ahorn.tscn")]
 const BUDEN := [preload("res://assets/kirmes/Models/Shops/HotDogs_Shop.fbx"),
 	preload("res://assets/kirmes/Models/Shops/PopCorn_Shop.fbx"),
 	preload("res://assets/kirmes/Models/Shops/Soda_Shop.fbx"),
@@ -57,10 +57,36 @@ const MARKT := {
 	"ausschank": preload("res://scenes/kirmes/essen/ausschank.tscn"),
 }
 
+## Feste Dinge aus kirmes.tscn (Fahrgeschäfte, Häuser, Parkplatz) — Mitte und Radius.
+## Damit stellt das Werkzeug weder Buden noch Deko hinein.
+const HINDERNISSE := [
+	[Vector2(43, -11), 22.0],    # Riesenrad (Gondeln ragen weit)
+	[Vector2(7.8, 36.8), 7.0],   # Schiffschaukel
+	[Vector2(-41, -27), 11.0],   # TopSpin
+	[Vector2(-41, -27), 12.0],   # Ground2
+	[Vector2(-38, 28), 8.0],     # Rockets
+	[Vector2(29, -27), 8.0],     # Karussell
+	[Vector2(23.3, -29.3), 5.0], # Gift_Shop2
+	[Vector2(5.9, 29.6), 9.0],   # Parkplatz
+	[Vector2(6.8, 26.8), 6.0],   # Park_Entrance
+	[Vector2(41.5, 18.4), 8.0],  # Wiesenbüro
+	[Vector2(22.8, 21.9), 5.0],  # Bäckerei
+	[Vector2(20.9, 37.9), 6.0],  # Café
+	[Vector2(14, 43.6), 5.0],    # Gift_Shop
+	[Vector2(-14, 41), 5.0],     # HotDogs
+	[Vector2(29.8, 21.7), 4.0],  # PopCorn
+	[Vector2(35, 25), 4.5],      # Soda
+	[Vector2(31.3, 43.2), 4.0],  # Auto
+	[Vector2(25.8, 43.3), 4.0],  # Van
+	[Vector2(-4, -50), 14.0],    # Wohnwagenplatz
+	[Vector2(3, -39), 4.0],      # WC2
+]
+
 var wurzel: Node3D
 var rng := RandomNumberGenerator.new()
 var _nr := {}
 var _haltepunkte: Array[Vector3] = []
+var _belegt_kreise: Array = []
 
 func _init() -> void:
 	rng.seed = 77
@@ -96,108 +122,134 @@ func _init() -> void:
 		b.position = Vector3(m2.x, OBEN - 0.07, m2.y)
 		_haengen(belag, b)
 
-	# Alleen zu den Toren: Bäume beidseitig, Laternen und Bänke dazwischen
-	for richtung: float in [1.0, -1.0]:
-		var name := "Nord" if richtung > 0.0 else "Sued"
-		var z0 := 46.0 if richtung > 0.0 else -62.0
-		var z1 := 90.0 if richtung > 0.0 else -104.0
-		var gruppe := _gruppe(deko, name + "allee")
-		var i := 0
-		var z := z0
-		while absf(z - z0) <= absf(z1 - z0):
-			for seite: float in [-1.0, 1.0]:
-				_setzen(gruppe, BAEUME[rng.randi() % BAEUME.size()], "Baum", Vector3(seite * 6.8, 0, z), rng.randf() * TAU, rng.randf_range(2.2, 2.7))
-				if i % 2 == 1:
-					_setzen(gruppe, BANK, "Bank", Vector3(seite * 5.4, 0, z + 4.0), (PI * 0.5) * -seite, 1.0)
-			if i % 2 == 0:
-				var seite_l := 1.0 if i % 4 == 0 else -1.0
-				_setzen(gruppe, LATERNE, "Laterne", Vector3(seite_l * 5.2, 0, z + 4.0), 0.0, 1.0)
-				_setzen(gruppe, MUELL, "Muell", Vector3(-seite_l * 5.3, 0, z + 2.2), 0.0, 2.0)
-			z += 8.0 * richtung
-			i += 1
-		# Buden am Übergang zum Ring
-		for k in 2:
-			var seite := -1.0 if k == 0 else 1.0
-			var zb := (RING_INNEN - 8.0 + MITTE.z) if richtung > 0.0 else (-RING_INNEN - 4.0 + MITTE.z)
-			_setzen(gruppe, BUDEN[(k + (0 if richtung > 0.0 else 2)) % BUDEN.size()], "Bude",
-				Vector3(seite * 10.5, 0, zb), PI * 0.5 * seite, 1.0)
-
-	# Laternen und Bäume am Ring (außen), Lücken an den Straßen
-	var ring := _gruppe(deko, "Ring")
-	var n := 24
-	for k in n:
-		var a := TAU * k / n + TAU / (n * 2.0)
-		var dir := Vector3(sin(a), 0, cos(a))
-		var p := MITTE + dir * (RING_AUSSEN + 1.2)
-		if _an_strasse(p, 6.0):
-			continue
-		if k % 2 == 0:
-			_setzen(ring, LATERNE, "Laterne", p, 0.0, 1.0)
-		else:
-			_setzen(ring, BANK, "Bank", MITTE + dir * (RING_AUSSEN + 0.9), atan2(dir.x, dir.z) + PI * 0.5, 1.0)
-		_setzen(ring, BAEUME[k % BAEUME.size()], "Baum", MITTE + dir * (RING_AUSSEN + 5.0), rng.randf() * TAU, rng.randf_range(2.4, 2.9))
-
-	# West- und Oststraße: Laternen
-	var seiten := _gruppe(deko, "Seitenstrassen")
-	for x: float in [-44.0, -58.0]:
-		_setzen(seiten, LATERNE, "Laterne", Vector3(x, 0, -8.0 + 4.3), 0.0, 1.0)
-		_setzen(seiten, BAEUME[1], "Baum", Vector3(x + 4.0, 0, -8.0 - 6.0), rng.randf() * TAU, 2.5)
-	for x: float in [44.0, 58.0]:
-		_setzen(seiten, LATERNE, "Laterne", Vector3(x, 0, 30.0 - 4.3), 0.0, 1.0)
-		_setzen(seiten, BAEUME[2], "Baum", Vector3(x - 4.0, 0, 30.0 + 6.0), rng.randf() * TAU, 2.5)
-
-	# Buden und Minispiele an den Alleen (hinter der Baumreihe, zur Straße gedreht)
+	# Biergaerten zuerst als belegt merken, damit keine Deko hineinfaellt
+	for h: Array in HINDERNISSE:
+		_belegt_kreise.append([h[0], h[1]])
+	for bg: Vector3 in [Vector3(-50, 0, 6), Vector3(53, 0, 2), Vector3(30, 0, -45)]:
+		_belegen(bg, 9.5)
+	# ---------------------------------------------------------------- Buden
+	# Erst alle Buden setzen (sie belegen Platz), danach Deko nur auf freie Flächen.
 	var buden := _gruppe(wurzel, "Buden")
-	var nord := [SPIEL_DOSEN, SPIEL_RING, SPIEL_SCHIESS, SPIEL_ENTEN, SPIEL_LUKAS, SPIEL_RAD]
-	var i_n := 0
-	for z: float in [63.0, 73.0, 83.0]:
-		for seite: float in [-1.0, 1.0]:
-			_stand(buden, nord[i_n % nord.size()], Vector3(seite * 11.5, 0, z), Vector3(-seite, 0, 0))
-			i_n += 1
-	var sued := [SPIEL_SCHIESS, SPIEL_RAD, SPIEL_STEMMEN, SPIEL_DOSEN, SPIEL_RING, SPIEL_LUKAS]
-	var i_s := 0
-	for z: float in [-82.0, -92.0, -102.0]:
-		for seite: float in [-1.0, 1.0]:
-			_stand(buden, sued[i_s % sued.size()], Vector3(seite * 11.5, 0, z), Vector3(-seite, 0, 0))
-			i_s += 1
-	# Buden innen am Ring, Front zur Ringstraße
-	var ringbuden := [[60.0, SPIEL_DOSEN], [120.0, SPIEL_RING], [150.0, SPIEL_LUKAS], [210.0, SPIEL_ENTEN],
-		[240.0, SPIEL_SCHIESS], [300.0, SPIEL_NAGEL], [330.0, SPIEL_STEMMEN]]
-	for rb: Array in ringbuden:
-		var a := deg_to_rad(float(rb[0]))
-		var dir := Vector3(sin(a), 0, cos(a))
-		_stand(buden, rb[1], MITTE + dir * 58.5, dir)
-	# Weststraße: Stand an der Südseite, Front zur Straße
+	var markt := _gruppe(wurzel, "Marktbuden")
+	var spiele := [SPIEL_DOSEN, SPIEL_RING, SPIEL_SCHIESS, SPIEL_ENTEN, SPIEL_LUKAS,
+		SPIEL_RAD, SPIEL_STEMMEN, SPIEL_NAGEL, SPIEL_KEGELN]
+	var essen := ["bratwurst", "hendl", "steckerlfisch", "brezn", "mandeln",
+		"zuckerwatte", "lebkuchen", "losbude", "hutstand", "ausschank"]
+	var nr_spiel := 0
+	var nr_essen := 0
+
+	# Zeltstraßen (Nord- und Südallee): Buden beidseitig, dicht an dicht
+	for richtung: float in [1.0, -1.0]:
+		var gruppe := _gruppe(deko, ("Nord" if richtung > 0.0 else "Sued") + "allee")
+		var z := 52.0 if richtung > 0.0 else -68.0
+		var schritt := 11.0
+		var ende := 88.0 if richtung > 0.0 else -104.0
+		while (z <= ende) if richtung > 0.0 else (z >= ende):
+			for seite: float in [-1.0, 1.0]:
+				var p := Vector3(seite * 13.5, 0, z)
+				var spiel := int(absf(z)) % 2 == 0
+				if spiel and _frei(p, 5.2):
+					_stand(buden, spiele[nr_spiel % spiele.size()], p, Vector3(-seite, 0, 0), 5.6)
+					nr_spiel += 1
+				elif not spiel and _frei(p, 4.0):
+					_stand(markt, MARKT[essen[nr_essen % essen.size()]], p, Vector3(-seite, 0, 0), 4.6)
+					nr_essen += 1
+			z += schritt * richtung
+
+	# Seitenstraßen
 	_stand(buden, SPIEL_NAGEL, Vector3(-50.0, 0, -17.0), Vector3(0, 0, 1))
 	_stand(buden, SPIEL_KEGELN, Vector3(-60.0, 0, -17.5), Vector3(0, 0, 1))
-	# Oststraße hinter dem Ring: Kegelbahn an der Nordseite, Front zur Straße
 	_stand(buden, SPIEL_KEGELN, Vector3(60.0, 0, 38.0), Vector3(0, 0, -1))
-
-	# Essens- und Marktbuden: in den Lücken der Alleen, am Ring und an den Seitenstraßen
-	var markt := _gruppe(wurzel, "Marktbuden")
-	var allee_nord := ["steckerlfisch", "hutstand", "zuckerwatte", "brezn", "mandeln", "lebkuchen"]
-	var i_m := 0
-	for z: float in [68.0, 78.0, 88.0]:
-		for seite: float in [-1.0, 1.0]:
-			_stand(markt, MARKT[allee_nord[i_m % allee_nord.size()]], Vector3(seite * 20.0, 0, z), Vector3(-seite, 0, 0))
-			i_m += 1
-	var allee_sued := ["bratwurst", "losbude", "ausschank", "hendl", "brezn", "hutstand"]
-	i_m = 0
-	for z: float in [-77.0, -87.0, -97.0]:
-		for seite: float in [-1.0, 1.0]:
-			_stand(markt, MARKT[allee_sued[i_m % allee_sued.size()]], Vector3(seite * 20.0, 0, z), Vector3(-seite, 0, 0))
-			i_m += 1
-	var ringmarkt := [[15.0, "bratwurst"], [75.0, "lebkuchen"], [105.0, "mandeln"], [165.0, "hendl"],
-		[135.0, "zuckerwatte"], [195.0, "brezn"], [45.0, "losbude"], [345.0, "steckerlfisch"]]
-	for rm: Array in ringmarkt:
-		var a := deg_to_rad(float(rm[0]))
+	_stand(markt, MARKT["ausschank"], Vector3(-50.0, 0, 1.0), Vector3(0, 0, -1), 4.0)
+	_stand(markt, MARKT["hutstand"], Vector3(-62.0, 0, 1.0), Vector3(0, 0, -1), 4.0)
+	_stand(markt, MARKT["bratwurst"], Vector3(47.0, 0, 27.0), Vector3(0, 0, 1), 4.0)
+	_stand(markt, MARKT["zuckerwatte"], Vector3(60.0, 0, 21.5), Vector3(0, 0, 1), 4.0)
+	# Ringstraße innen: Buden im Kreis, Front zur Straße
+	for k in 30:
+		var a := TAU * k / 30.0 + 0.05
 		var dir := Vector3(sin(a), 0, cos(a))
-		_stand(markt, MARKT[rm[1]], MITTE + dir * 58.5, dir)
-	# Seitenstraßen
-	_stand(markt, MARKT["ausschank"], Vector3(-50.0, 0, 1.0), Vector3(0, 0, -1))
-	_stand(markt, MARKT["hutstand"], Vector3(-62.0, 0, 1.0), Vector3(0, 0, -1))
-	_stand(markt, MARKT["bratwurst"], Vector3(43.0, 0, 22.5), Vector3(0, 0, 1))
-	_stand(markt, MARKT["zuckerwatte"], Vector3(60.0, 0, 21.5), Vector3(0, 0, 1))
+		var p := MITTE + dir * 58.0
+		if _an_strasse(p, 7.0) or not _frei(p, 5.4):
+			continue
+		if k % 3 == 0:
+			_stand(buden, spiele[nr_spiel % spiele.size()], p, dir, 5.6)
+			nr_spiel += 1
+		else:
+			_stand(markt, MARKT[essen[nr_essen % essen.size()]], p, dir, 4.6)
+			nr_essen += 1
+	# Ringstraße außen: Buden mit Front zur Straße (Rücken zur Wiese)
+	for k in 26:
+		var a := TAU * k / 26.0 + 0.14
+		var dir := Vector3(sin(a), 0, cos(a))
+		var p := MITTE + dir * 77.0
+		if _an_strasse(p, 8.0) or not _frei(p, 5.4):
+			continue
+		if k % 4 == 0:
+			_stand(buden, spiele[nr_spiel % spiele.size()], p, -dir, 5.6)
+			nr_spiel += 1
+		else:
+			_stand(markt, MARKT[essen[nr_essen % essen.size()]], p, -dir, 4.6)
+			nr_essen += 1
+
+	# ---------------------------------------------------------------- Deko
+	# Bäume, Laternen, Bänke und Mülleimer füllen die Lücken — nur wo Platz frei ist.
+	for richtung: float in [1.0, -1.0]:
+		var gruppe := _gruppe(deko, ("Nord" if richtung > 0.0 else "Sued") + "alleeDeko")
+		var z := 48.0 if richtung > 0.0 else -64.0
+		var ende := 90.0 if richtung > 0.0 else -106.0
+		var i := 0
+		while (z <= ende) if richtung > 0.0 else (z >= ende):
+			for seite: float in [-1.0, 1.0]:
+				_deko_baum(gruppe, Vector3(seite * 6.3, 0, z), 1.0)
+				if i % 2 == 0:
+					_deko_setzen(gruppe, LATERNE, "Laterne", Vector3(seite * 5.0, 0, z + 3.0), 0.0, 1.0)
+				else:
+					_deko_setzen(gruppe, BANK, "Bank", Vector3(seite * 5.2, 0, z + 3.0), (PI * 0.5) * -seite, 1.0)
+				if i % 3 == 0:
+					_deko_setzen(gruppe, MUELL, "Muell", Vector3(seite * 5.4, 0, z + 5.5), 0.0, 2.0)
+			z += 6.0 * richtung
+			i += 1
+
+	# Ring: Baumreihen innen und außen, Laternen und Bänke am Straßenrand
+	var ring := _gruppe(deko, "Ring")
+	for k in 60:
+		var a := TAU * k / 60.0
+		var dir := Vector3(sin(a), 0, cos(a))
+		if not _an_strasse(MITTE + dir * 63.0, 5.0):
+			_deko_setzen(ring, LATERNE, "Laterne", MITTE + dir * 62.8, 0.0, 1.0)
+		if k % 2 == 1:
+			_deko_baum(ring, MITTE + dir * 48.0, 1.15)
+		if k % 2 == 0:
+			_deko_baum(ring, MITTE + dir * 91.0, 1.1)
+		if k % 4 == 2:
+			_deko_setzen(ring, BANK, "Bank", MITTE + dir * 71.8, atan2(dir.x, dir.z) + PI * 0.5, 1.0)
+			_deko_setzen(ring, MUELL, "Muell", MITTE + dir * 71.8 + Vector3(1.2, 0, 0), 0.0, 2.0)
+		if k % 6 == 3:
+			_deko_baum(ring, MITTE + dir * 90.0, 1.3)
+
+	# Lichterketten über der Ringstraße — gleichmäßig im Kreis wie das Zifferblatt einer Uhr
+	var ketten := _gruppe(wurzel, "Lichterketten")
+	for k in 24:
+		var a := TAU * k / 24.0
+		var dir := Vector3(sin(a), 0, cos(a))
+		var p := MITTE + dir * 67.0
+		if _an_strasse(p, 5.0):
+			continue
+		var kette := LICHTERKETTE.instantiate() as Node3D
+		kette.name = "Kette%02d" % k
+		# lokal +X quer über die Straße (Masten außerhalb der Fahrbahn), Spannweite 14 → 8 m
+		kette.transform = Transform3D(Basis(Vector3.UP, a - PI * 0.5).scaled(Vector3(0.58, 1.0, 1.0)), p)
+		_haengen(ketten, kette)
+
+	# Wiese zwischen Platz und Ring: lockere Baumgruppen, wo nichts steht
+	var wiese := _gruppe(deko, "Wiese")
+	for k in 90:
+		var a := rng.randf() * TAU
+		var r_w := rng.randf_range(44.0, 56.0) if k % 2 == 0 else rng.randf_range(90.0, 96.0)
+		var p := MITTE + Vector3(sin(a), 0, cos(a)) * r_w
+		if absf(p.x) < 38.0 and p.z > -42.0 and p.z < 48.0:
+			continue
+		_deko_baum(wiese, p, rng.randf_range(0.9, 1.35))
 
 	# Biergärten auf der Wiese
 	_biergarten(wurzel, "BiergartenWest", Vector3(-50.0, 0, 6.0))
@@ -251,11 +303,42 @@ func _init() -> void:
 	quit()
 
 ## Stand mit Front in Richtung blick; davor ein Haltepunkt für Besucher.
-func _stand(eltern: Node, szene: PackedScene, pos: Vector3, blick: Vector3) -> void:
+func _stand(eltern: Node, szene: PackedScene, pos: Vector3, blick: Vector3, radius := 5.5) -> void:
 	var name := String(szene.resource_path.get_file().get_basename()).capitalize().replace(" ", "")
 	_setzen(eltern, szene, name, pos, atan2(blick.x, blick.z), 1.0)
 	_haltepunkte.append(pos + blick.normalized() * 4.5)
+	_belegen(pos, radius)
 
+
+## Belegte Flächen (Mitte, Radius) — Deko kommt nur dorthin, wo nichts steht
+func _belegen(p: Vector3, radius: float) -> void:
+	_belegt_kreise.append([Vector2(p.x, p.z), radius])
+
+func _frei(p: Vector3, radius: float) -> bool:
+	var q := Vector2(p.x, p.z)
+	for b: Array in _belegt_kreise:
+		if q.distance_to(b[0]) < float(b[1]) + radius:
+			return false
+	return true
+
+## Innerhalb des Festplatzes (dort steht schon alles aus kirmes.tscn)
+func _auf_dem_platz(p: Vector3) -> bool:
+	return absf(p.x) < 38.0 and p.z > -42.0 and p.z < 48.0
+
+## Deko nur setzen, wenn der Platz frei ist
+func _deko_setzen(eltern: Node, szene: PackedScene, name: String, pos: Vector3, drehung: float, groesse: float) -> void:
+	if _auf_dem_platz(pos) or not _frei(pos, 1.2):
+		return
+	_setzen(eltern, szene, name, pos, drehung, groesse)
+	_belegen(pos, 0.8)
+
+## Laubbaum aus scenes/kulisse/baum_*.tscn — Größe zuerst würfeln, dann prüfen
+func _deko_baum(eltern: Node, pos: Vector3, groesse: float) -> void:
+	var g := groesse * rng.randf_range(0.9, 1.15)
+	if _auf_dem_platz(pos) or not _frei(pos, 4.9 * g):
+		return
+	_setzen(eltern, BAEUME[rng.randi() % BAEUME.size()], "Baum", pos, rng.randf() * TAU, g)
+	_belegen(pos, 3.8 * g)
 ## Biergarten: 3×3 Tische mit Schirmen, Ausschank, zwei Lichterketten, Laternen.
 func _biergarten(eltern: Node, name: String, mitte: Vector3) -> void:
 	var g := _gruppe(eltern, name)

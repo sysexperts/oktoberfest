@@ -1,12 +1,17 @@
 extends Node
-## Prüft die Aufstellung aller Buden: misst die Grundfläche jeder Bude aus den
-## sichtbaren Meshes und meldet Überschneidungen und zu enge Nachbarn.
+## Prüft die Aufstellung: misst die Grundfläche jeder Bude und jedes anderen
+## Gegenstands auf dem Platz und meldet, was ineinandersteckt.
 ##   Godot --path . res://tools/pruef_buden.tscn
 
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
 
 class Lauf extends Node:
+	## Diese Knoten sind Boden, Wege oder Kulisse — nicht prüfen
+	const EGAL := ["Altstadt", "Wege", "Ground", "Ground2", "Grenze", "Mauern", "Terrain",
+		"Lichterketten", "Laternen", "Parking", "Strassen/Pflaster", "Strassen/Besucherwege",
+		"Strassen/Stadtgrenze"]
+
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
 		Net.start_solo(true)
@@ -19,40 +24,48 @@ class Lauf extends Node:
 		var gm := get_tree().current_scene
 		var kirmes: Node = gm.get_node("Kirmes")
 		var buden := []
+		var dinge := []
 		for n in kirmes.find_children("*", "Node3D", true, false):
 			var pfad := String(kirmes.get_path_to(n))
-			if pfad.begins_with("Altstadt"):
+			var egal := false
+			for e: String in EGAL:
+				if pfad == e or pfad.begins_with(e + "/"):
+					egal = true
+			if egal:
 				continue
-			var eltern := n.get_parent()
-			if eltern == null:
-				continue
-			var eltern_pfad := String(kirmes.get_path_to(eltern))
-			if not (eltern_pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest", "Strassen/Buden", "Strassen/Marktbuden"]):
+			var eltern_pfad := String(kirmes.get_path_to(n.get_parent())) if n.get_parent() else ""
+			var ist_bude: bool = eltern_pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest",
+				"Strassen/Buden", "Strassen/Marktbuden"]
+			var behaelter := pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest", "Strassen", "Wohnwagenplatz", "Wiesenbuero", "Kirmes"]
+			var ist_ding := not behaelter and eltern_pfad == "." or eltern_pfad.begins_with("Strassen/Ausstattung/") \
+				or eltern_pfad in ["Wohnwagenplatz", "Wiesenbuero"]
+			if not (ist_bude or ist_ding):
 				continue
 			var rechteck := _flaeche(n as Node3D)
-			if rechteck.size.x <= 0.0:
+			if rechteck.size.x <= 0.05:
 				continue
-			buden.append({"name": pfad, "r": rechteck, "pos": (n as Node3D).global_position})
-		buden.sort_custom(func(a, b): return String(a.name) < String(b.name))
-		print("BUDEN: %d" % buden.size())
-		for b in buden:
-			var r: Rect2 = b.r
-			print("  %-34s Mitte %6.1f/%6.1f  Größe %4.1f x %4.1f" % [b.name, b.pos.x, b.pos.z, r.size.x, r.size.y])
+			var eintrag := {"name": pfad, "r": rechteck}
+			if ist_bude:
+				buden.append(eintrag)
+			else:
+				dinge.append(eintrag)
+		print("BUDEN: %d, andere Gegenstände: %d" % [buden.size(), dinge.size()])
 		var schlimm := 0
 		for i in buden.size():
 			for j in range(i + 1, buden.size()):
-				var a: Rect2 = buden[i].r
-				var b: Rect2 = buden[j].r
-				var schnitt := a.intersection(b)
-				if schnitt.size.x > 0.05 and schnitt.size.y > 0.05:
-					schlimm += 1
-					print("  ÜBERLAPPUNG %s ↔ %s: %.1f x %.1f m" % [buden[i].name, buden[j].name, schnitt.size.x, schnitt.size.y])
-				else:
-					var abstand := _abstand(a, b)
-					if abstand < 0.6:
-						print("  ENG        %s ↔ %s: %.2f m" % [buden[i].name, buden[j].name, abstand])
-		print("PRUEFUNG FERTIG (%d Überlappungen)" % schlimm)
+				schlimm += _melde(buden[i], buden[j], 0.3)
+		for b in buden:
+			for d in dinge:
+				schlimm += _melde(b, d, 0.3)
+		print("PRUEFUNG FERTIG (%d Überschneidungen)" % schlimm)
 		get_tree().quit()
+
+	func _melde(a: Dictionary, b: Dictionary, mindest: float) -> int:
+		var schnitt: Rect2 = (a.r as Rect2).intersection(b.r)
+		if schnitt.size.x > mindest and schnitt.size.y > mindest:
+			print("  ÜBERSCHNEIDUNG %-30s (%5.1f/%5.1f) ↔ %-28s (%5.1f/%5.1f)  %.1f x %.1f m" % [a.name, (a.r as Rect2).get_center().x, (a.r as Rect2).get_center().y, b.name, (b.r as Rect2).get_center().x, (b.r as Rect2).get_center().y, schnitt.size.x, schnitt.size.y])
+			return 1
+		return 0
 
 	## Grundfläche (XZ) aus allen sichtbaren Meshes
 	func _flaeche(n: Node3D) -> Rect2:
@@ -70,8 +83,3 @@ class Lauf extends Node:
 		if min_p.x > 1e8:
 			return Rect2()
 		return Rect2(min_p, max_p - min_p)
-
-	func _abstand(a: Rect2, b: Rect2) -> float:
-		var dx := maxf(maxf(a.position.x - (b.position.x + b.size.x), b.position.x - (a.position.x + a.size.x)), 0.0)
-		var dz := maxf(maxf(a.position.y - (b.position.y + b.size.y), b.position.y - (a.position.y + a.size.y)), 0.0)
-		return sqrt(dx * dx + dz * dz)
