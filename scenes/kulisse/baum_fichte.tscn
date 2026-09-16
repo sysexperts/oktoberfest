@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r68he"]
+albedo_color = Color(0.32, 0.24, 0.18, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hse7o"]
+top_radius = 0.12
+bottom_radius = 0.3
+height = 9.0
+radial_segments = 8
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l7qkk"]
+albedo_color = Color(0.1, 0.26, 0.15, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_n71ox"]
+top_radius = 0.05
+bottom_radius = 2.6
+height = 2.6
+radial_segments = 9
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_urtxa"]
+albedo_color = Color(0.075, 0.195, 0.112500004, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_382cb"]
+top_radius = 0.05
+bottom_radius = 2.22
+height = 2.4
+radial_segments = 9
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ybha0"]
+top_radius = 0.05
+bottom_radius = 1.84
+height = 2.2
+radial_segments = 9
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6d0lu"]
+top_radius = 0.05
+bottom_radius = 1.46
+radial_segments = 9
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_yj0g5"]
+top_radius = 0.05
+bottom_radius = 1.08
+height = 1.8
+radial_segments = 9
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_134s6"]
+top_radius = 0.05
+bottom_radius = 0.7
+height = 1.6
+radial_segments = 9
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3kcve"]
+top_radius = 0.0
+bottom_radius = 0.35
+height = 1.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x7o43"]
+height = 3.0
+radius = 0.3
+
+[node name="BaumFichte" type="Node3D" unique_id=1379237418]
+
+[node name="Stamm" type="MeshInstance3D" parent="." unique_id=1562282131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+material_override = SubResource("StandardMaterial3D_r68he")
+mesh = SubResource("CylinderMesh_hse7o")
+
+[node name="Ebene0" type="MeshInstance3D" parent="." unique_id=1262127308]
+transform = Transform3D(-0.24437533, 0, 0.9696807, 0, 1, 0, -0.9696807, 0, -0.24437533, 0, 2.4, 0)
+material_override = SubResource("StandardMaterial3D_l7qkk")
+mesh = SubResource("CylinderMesh_n71ox")
+
+[node name="Ebene1" type="MeshInstance3D" parent="." unique_id=1660471770]
+transform = Transform3D(-0.9889248, 0, -0.14841747, 0, 1, 0, 0.14841747, 0, -0.9889248, 0, 3.76, 0)
+material_override = SubResource("StandardMaterial3D_urtxa")
+mesh = SubResource("CylinderMesh_382cb")
+
+[node name="Ebene2" type="MeshInstance3D" parent="." unique_id=1398636565]
+transform = Transform3D(-0.9971235, 0, 0.07579457, 0, 1, 0, -0.07579457, 0, -0.9971235, 0, 5.12, 0)
+material_override = SubResource("StandardMaterial3D_l7qkk")
+mesh = SubResource("CylinderMesh_ybha0")
+
+[node name="Ebene3" type="MeshInstance3D" parent="." unique_id=1582221116]
+transform = Transform3D(0.83965796, 0, 0.54311556, 0, 1, 0, -0.54311556, 0, 0.83965796, 0, 6.48, 0)
+material_override = SubResource("StandardMaterial3D_urtxa")
+mesh = SubResource("CylinderMesh_6d0lu")
+
+[node name="Ebene4" type="MeshInstance3D" parent="." unique_id=1056668078]
+transform = Transform3D(-0.76618373, 0, 0.6426216, 0, 1, 0, -0.6426216, 0, -0.76618373, 0, 7.84, 0)
+material_override = SubResource("StandardMaterial3D_l7qkk")
+mesh = SubResource("CylinderMesh_yj0g5")
+
+[node name="Ebene5" type="MeshInstance3D" parent="." unique_id=565826326]
+transform = Transform3D(0.8816642, 0, 0.47187737, 0, 1, 0, -0.47187737, 0, 0.8816642, 0, 9.2, 0)
+material_override = SubResource("StandardMaterial3D_urtxa")
+mesh = SubResource("CylinderMesh_134s6")
+
+[node name="Spitze" type="MeshInstance3D" parent="." unique_id=1626786573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.2, 0)
+material_override = SubResource("StandardMaterial3D_l7qkk")
+mesh = SubResource("CylinderMesh_3kcve")
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=1887853430]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=630780777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CylinderShape3D_x7o43")

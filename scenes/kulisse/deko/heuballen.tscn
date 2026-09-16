@@ -1,0 +1,163 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/huegel.tres" id="1_aply3"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/lebkuchen.tres" id="2_0p25l"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/orange_lack.tres" id="3_vp5nq"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/hopfen.tres" id="4_sk8hr"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="5_2pecb"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="6_jretl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6phh6"]
+size = Vector3(2.6, 2.1, 1.2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tpldx"]
+top_radius = 0.6
+bottom_radius = 0.6
+height = 1.1
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_03lax"]
+height = 1.12
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_24dgn"]
+top_radius = 0.55
+bottom_radius = 0.55
+height = 1.0
+radial_segments = 16
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_5imjy"]
+radius = 0.22
+height = 0.44
+radial_segments = 14
+rings = 7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lohhu"]
+top_radius = 0.02
+bottom_radius = 0.03
+height = 0.1
+radial_segments = 5
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_bjj1m"]
+radius = 0.19
+height = 0.38
+radial_segments = 14
+rings = 7
+
+[sub_resource type="SphereMesh" id="SphereMesh_upy3a"]
+radius = 0.16
+height = 0.32
+radial_segments = 14
+rings = 7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_h1j3c"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.6
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_x4evc"]
+top_radius = 0.008
+bottom_radius = 0.012
+height = 0.35
+radial_segments = 4
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_shugn"]
+size = Vector3(0.2, 0.03, 0.03)
+
+[node name="Heuballen" type="Node3D" unique_id=145185761]
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=679456753]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=2102575424]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+shape = SubResource("BoxShape3D_6phh6")
+
+[node name="Ballen0" type="MeshInstance3D" parent="." unique_id=2044963198]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.7, 0.6, 0)
+material_override = ExtResource("1_aply3")
+mesh = SubResource("CylinderMesh_tpldx")
+
+[node name="Stirn0" type="MeshInstance3D" parent="." unique_id=1774564362]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.7, 0.6, 0)
+material_override = ExtResource("2_0p25l")
+mesh = SubResource("CylinderMesh_03lax")
+
+[node name="Ballen1" type="MeshInstance3D" parent="." unique_id=1622010941]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.7, 0.6, 0)
+material_override = ExtResource("1_aply3")
+mesh = SubResource("CylinderMesh_tpldx")
+
+[node name="Stirn1" type="MeshInstance3D" parent="." unique_id=1992280434]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.7, 0.6, 0)
+material_override = ExtResource("2_0p25l")
+mesh = SubResource("CylinderMesh_03lax")
+
+[node name="BallenOben" type="MeshInstance3D" parent="." unique_id=1554892944]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 1.55, 0)
+material_override = ExtResource("1_aply3")
+mesh = SubResource("CylinderMesh_24dgn")
+
+[node name="Kuerbis0" type="MeshInstance3D" parent="." unique_id=348245667]
+transform = Transform3D(1.2, 0, 0, 0, 0.85, 0, 0, 0, 1.2, -0.9, 0.2, 0.85)
+material_override = ExtResource("3_vp5nq")
+mesh = SubResource("SphereMesh_5imjy")
+
+[node name="Stiel0" type="MeshInstance3D" parent="." unique_id=1214552062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.4, 0.85)
+material_override = ExtResource("4_sk8hr")
+mesh = SubResource("CylinderMesh_lohhu")
+
+[node name="Kuerbis1" type="MeshInstance3D" parent="." unique_id=414914671]
+transform = Transform3D(1.2, 0, 0, 0, 0.85, 0, 0, 0, 1.2, -0.4, 0.18, 0.85)
+material_override = ExtResource("3_vp5nq")
+mesh = SubResource("SphereMesh_bjj1m")
+
+[node name="Stiel1" type="MeshInstance3D" parent="." unique_id=949756994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.35, 0.85)
+material_override = ExtResource("4_sk8hr")
+mesh = SubResource("CylinderMesh_lohhu")
+
+[node name="Kuerbis2" type="MeshInstance3D" parent="." unique_id=136893393]
+transform = Transform3D(1.2, 0, 0, 0, 0.85, 0, 0, 0, 1.2, 0.1, 0.16, 0.85)
+material_override = ExtResource("3_vp5nq")
+mesh = SubResource("SphereMesh_upy3a")
+
+[node name="Stiel2" type="MeshInstance3D" parent="." unique_id=1812635172]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.3, 0.85)
+material_override = ExtResource("4_sk8hr")
+mesh = SubResource("CylinderMesh_lohhu")
+
+[node name="Heugabel" type="Node3D" parent="." unique_id=1373491546]
+transform = Transform3D(0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 0, 0, 1, 1.35, 0, 0.4)
+
+[node name="Stiel" type="MeshInstance3D" parent="Heugabel" unique_id=1341849392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+material_override = ExtResource("5_2pecb")
+mesh = SubResource("CylinderMesh_h1j3c")
+
+[node name="Zinke0" type="MeshInstance3D" parent="Heugabel" unique_id=1453251187]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 1.75, 0)
+material_override = ExtResource("6_jretl")
+mesh = SubResource("CylinderMesh_x4evc")
+
+[node name="Zinke1" type="MeshInstance3D" parent="Heugabel" unique_id=2031477860]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+material_override = ExtResource("6_jretl")
+mesh = SubResource("CylinderMesh_x4evc")
+
+[node name="Zinke2" type="MeshInstance3D" parent="Heugabel" unique_id=135627436]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 1.75, 0)
+material_override = ExtResource("6_jretl")
+mesh = SubResource("CylinderMesh_x4evc")
+
+[node name="Querstueck" type="MeshInstance3D" parent="Heugabel" unique_id=752088632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+material_override = ExtResource("6_jretl")
+mesh = SubResource("BoxMesh_shugn")

@@ -1,0 +1,150 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="1_dwaus"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schindel.tres" id="2_qexs7"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="3_03360"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="4_2iauy"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="5_f3sha"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="6_kkst2"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/hopfen.tres" id="7_x6mu0"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/orange_lack.tres" id="8_8r6my"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/stein.tres" id="9_qil0j"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kt0nu"]
+size = Vector3(0.3, 3.2, 0.3)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sykw5"]
+top_radius = 0.08
+bottom_radius = 0.09
+height = 3.2
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1srus"]
+top_radius = 0.0
+bottom_radius = 0.16
+height = 0.25
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_qn4ik"]
+radius = 0.05
+height = 0.1
+radial_segments = 14
+rings = 7
+
+[sub_resource type="BoxMesh" id="BoxMesh_hnim7"]
+size = Vector3(1, 0.26, 0.05)
+
+[sub_resource type="PrismMesh" id="PrismMesh_pshy0"]
+size = Vector3(0.26, 0.22, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_r2psu"]
+size = Vector3(0.85, 0.08, 0.06)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kge41"]
+top_radius = 0.35
+bottom_radius = 0.3
+height = 0.15
+radial_segments = 8
+rings = 1
+
+[node name="Wegweiser" type="Node3D" unique_id=590475687]
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=1710035023]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1750726904]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+shape = SubResource("BoxShape3D_kt0nu")
+
+[node name="Pfahl" type="MeshInstance3D" parent="." unique_id=1155571514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+material_override = ExtResource("1_dwaus")
+mesh = SubResource("CylinderMesh_sykw5")
+
+[node name="Kappe" type="MeshInstance3D" parent="." unique_id=525796061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.32, 0)
+material_override = ExtResource("2_qexs7")
+mesh = SubResource("CylinderMesh_1srus")
+
+[node name="Knauf" type="MeshInstance3D" parent="." unique_id=1475313371]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.48, 0)
+material_override = ExtResource("3_03360")
+mesh = SubResource("SphereMesh_qn4ik")
+
+[node name="Schild0" type="Node3D" parent="." unique_id=485939274]
+transform = Transform3D(0.76604444, 0, -0.6427876, 0, 1, 0, 0.6427876, 0, 0.76604444, 0, 2.7, 0)
+
+[node name="Brett" type="MeshInstance3D" parent="Schild0" unique_id=260069924]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("BoxMesh_hnim7")
+
+[node name="Pfeil" type="MeshInstance3D" parent="Schild0" unique_id=1790607994]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.18, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("PrismMesh_pshy0")
+
+[node name="Streifen" type="MeshInstance3D" parent="Schild0" unique_id=997479659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0, 0)
+material_override = ExtResource("5_f3sha")
+mesh = SubResource("BoxMesh_r2psu")
+
+[node name="Schild1" type="Node3D" parent="." unique_id=1434443218]
+transform = Transform3D(0.8910065, 0, 0.4539905, 0, 1, 0, -0.4539905, 0, 0.8910065, 0, 2.28, 0)
+
+[node name="Brett" type="MeshInstance3D" parent="Schild1" unique_id=1149576274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("BoxMesh_hnim7")
+
+[node name="Pfeil" type="MeshInstance3D" parent="Schild1" unique_id=823995056]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -1.18, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("PrismMesh_pshy0")
+
+[node name="Streifen" type="MeshInstance3D" parent="Schild1" unique_id=331245629]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
+material_override = ExtResource("6_kkst2")
+mesh = SubResource("BoxMesh_r2psu")
+
+[node name="Schild2" type="Node3D" parent="." unique_id=344528794]
+transform = Transform3D(-0.06975648, 0, 0.9975641, 0, 1, 0, -0.9975641, 0, -0.06975648, 0, 1.86, 0)
+
+[node name="Brett" type="MeshInstance3D" parent="Schild2" unique_id=2007368330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("BoxMesh_hnim7")
+
+[node name="Pfeil" type="MeshInstance3D" parent="Schild2" unique_id=1393288673]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.18, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("PrismMesh_pshy0")
+
+[node name="Streifen" type="MeshInstance3D" parent="Schild2" unique_id=1375832522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0, 0)
+material_override = ExtResource("7_x6mu0")
+mesh = SubResource("BoxMesh_r2psu")
+
+[node name="Schild3" type="Node3D" parent="." unique_id=428756510]
+transform = Transform3D(-0.9455186, 0, 0.3255681, 0, 1, 0, -0.3255681, 0, -0.9455186, 0, 1.44, 0)
+
+[node name="Brett" type="MeshInstance3D" parent="Schild3" unique_id=168989284]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("BoxMesh_hnim7")
+
+[node name="Pfeil" type="MeshInstance3D" parent="Schild3" unique_id=2058247754]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -1.18, 0, 0)
+material_override = ExtResource("4_2iauy")
+mesh = SubResource("PrismMesh_pshy0")
+
+[node name="Streifen" type="MeshInstance3D" parent="Schild3" unique_id=1041270179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0, 0)
+material_override = ExtResource("8_8r6my")
+mesh = SubResource("BoxMesh_r2psu")
+
+[node name="Sockel" type="MeshInstance3D" parent="." unique_id=1456508112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
+material_override = ExtResource("9_qil0j")
+mesh = SubResource("CylinderMesh_kge41")

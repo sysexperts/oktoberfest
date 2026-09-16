@@ -1,0 +1,156 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/stein.tres" id="1_wkh50"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="2_8geta"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten.tres" id="3_lkrsb"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten_fein.tres" id="4_bspaq"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="5_valvh"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gluehbirne.tres" id="6_ln6q2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l8oai"]
+size = Vector3(0.3, 2.5, 0.3)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wp562"]
+top_radius = 0.4
+bottom_radius = 0.35
+height = 0.12
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pljnk"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 2.9
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ja5l6"]
+top_radius = 0.08
+bottom_radius = 2.1
+height = 0.8
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_iuq1s"]
+top_radius = 2.1
+bottom_radius = 2.1
+height = 0.22
+radial_segments = 12
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_7dhu2"]
+radius = 0.08
+height = 0.16
+radial_segments = 14
+rings = 7
+
+[sub_resource type="SphereMesh" id="SphereMesh_jbqdm"]
+radius = 0.04
+height = 0.08
+radial_segments = 14
+rings = 7
+
+[node name="Sonnenschirm" type="Node3D" unique_id=606721809]
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=2143784587]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1170244393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("BoxShape3D_l8oai")
+
+[node name="Fuss" type="MeshInstance3D" parent="." unique_id=720758879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+material_override = ExtResource("1_wkh50")
+mesh = SubResource("CylinderMesh_wp562")
+
+[node name="Stange" type="MeshInstance3D" parent="." unique_id=1206176545]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+material_override = ExtResource("2_8geta")
+mesh = SubResource("CylinderMesh_pljnk")
+
+[node name="Dach" type="MeshInstance3D" parent="." unique_id=1744008734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.95, 0)
+material_override = ExtResource("3_lkrsb")
+mesh = SubResource("CylinderMesh_ja5l6")
+
+[node name="Volant" type="MeshInstance3D" parent="." unique_id=1180874345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44, 0)
+material_override = ExtResource("4_bspaq")
+mesh = SubResource("CylinderMesh_iuq1s")
+
+[node name="Spitze" type="MeshInstance3D" parent="." unique_id=2132185508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
+material_override = ExtResource("5_valvh")
+mesh = SubResource("SphereMesh_7dhu2")
+
+[node name="Birne0" type="MeshInstance3D" parent="." unique_id=1277830957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.28, 2.05)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne1" type="MeshInstance3D" parent="." unique_id=1855155626]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.025, 2.28, 1.7753521)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne2" type="MeshInstance3D" parent="." unique_id=742836118]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7753521, 2.28, 1.025)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne3" type="MeshInstance3D" parent="." unique_id=400390722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 2.28, 1.2552216e-16)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne4" type="MeshInstance3D" parent="." unique_id=1446333702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7753521, 2.28, -1.025)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne5" type="MeshInstance3D" parent="." unique_id=1555877633]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.025, 2.28, -1.7753521)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne6" type="MeshInstance3D" parent="." unique_id=1452299255]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.510443e-16, 2.28, -2.05)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne7" type="MeshInstance3D" parent="." unique_id=397331422]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.025, 2.28, -1.7753521)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne8" type="MeshInstance3D" parent="." unique_id=1356067088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7753521, 2.28, -1.025)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne9" type="MeshInstance3D" parent="." unique_id=1565948153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.05, 2.28, -3.7656644e-16)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne10" type="MeshInstance3D" parent="." unique_id=577207793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7753521, 2.28, 1.025)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
+
+[node name="Birne11" type="MeshInstance3D" parent="." unique_id=752920525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.025, 2.28, 1.7753521)
+material_override = ExtResource("6_ln6q2")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_jbqdm")
