@@ -55,6 +55,9 @@ func _init() -> void:
 		_speichern(_stemmen(), "res://scenes/kirmes/stemmen_stand.tscn")
 	if soll.call("nagelbalken"):
 		_speichern(_nagelbalken(), "res://scenes/kirmes/nagelbalken_stand.tscn")
+	if soll.call("essen"):
+		for typ: String in MARKTBUDEN:
+			_speichern(_marktbude(typ), "res://scenes/kirmes/essen/%s.tscn" % typ)
 	if soll.call("kegeln"):
 		_speichern(_kegelkugel(), "res://scenes/kirmes/kegelkugel.tscn")
 		_speichern(_kegeln(), "res://scenes/kirmes/kegeln_stand.tscn")
@@ -1087,3 +1090,177 @@ func _lukas() -> Node3D:
 	_marke(r, "BesitzerMitte", Vector3(-1.6, boden, -0.1))
 	_marke(r, "BesitzerSeite", Vector3(-2.2, boden, -2.2))
 	return r
+
+# ------------------------------------------------------------------ Markt- und Essensbuden
+## Deko-Buden ohne Spiel: typische Kirmesstände. Je Typ Farbschema und Dachform.
+## Dachformen: pult (mit Markise), giebel, rund (kleines Kegelzelt), grill (Pult mit Rauchfang)
+const MARKTBUDEN := {
+	"bratwurst": ["rot", "grill"],
+	"hendl": ["orange", "grill"],
+	"steckerlfisch": ["tuerkis", "grill"],
+	"brezn": ["gruen", "giebel"],
+	"mandeln": ["violett", "pult"],
+	"zuckerwatte": ["rot", "rund"],
+	"lebkuchen": ["rot", "giebel"],
+	"losbude": ["gruen", "pult"],
+	"hutstand": ["orange", "pult"],
+	"ausschank": ["tuerkis", "rund"],
+}
+
+func _marktbude(typ: String) -> Node3D:
+	var art: Array = MARKTBUDEN[typ]
+	var schema: String = art[0]
+	var dachform: String = art[1]
+	var streifen: Material = m["streifen_" + schema]
+	var streifen_fein: Material = m["streifen_fein_" + schema]
+	var zickzack: Material = m["zickzack_" + schema]
+	var r := _neu(typ.capitalize())
+	var boden := 0.18
+	var breite := 4.6
+	var tiefe := 2.6
+	var hoehe := 2.5
+	var zm := -0.9
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.16, 0.02, tiefe - 0.16), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.08, 0.05, 0.05), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.08), boden, zm + sz * (tiefe / 2.0 - 0.08))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.07, 0.06, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.creme_lack, Vector3.ZERO, 8)
+	_box(bau, "Rueckwand", Vector3(breite - 0.16, hoehe, 0.07), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), streifen_fein)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.07, hoehe * 0.6, tiefe - 0.3), Vector3(sx * (breite / 2.0 - 0.04), boden + hoehe * 0.3, zm - 0.05), streifen_fein)
+	var theke := _gruppe(r, "Theke", Vector3(0, boden, zm + tiefe / 2.0 - 0.3))
+	_box(theke, "Korpus", Vector3(breite - 0.3, 0.92, 0.45), Vector3(0, 0.46, 0), m.holz_hell)
+	_box(theke, "Feld", Vector3(breite - 0.8, 0.5, 0.02), Vector3(0, 0.48, 0.235), zickzack)
+	_box(theke, "Platte", Vector3(breite - 0.1, 0.06, 0.55), Vector3(0, 0.95, 0), m.gruen_samt)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	match dachform:
+		"giebel":
+			_box(dach, "Traufe", Vector3(breite + 0.3, 0.12, tiefe + 0.3), Vector3(0, 0.06, 0), m.holz_dunkel)
+			_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.85, tiefe + 0.4), Vector3(0, 0.55, 0), streifen, Vector3(0, 90, 0))
+		"rund":
+			_zyl(dach, "Traufring", breite * 0.62, breite * 0.62, 0.12, Vector3(0, 0.06, 0), m.holz_dunkel, Vector3.ZERO, 12)
+			_zyl(dach, "Kegel", breite * 0.66, 0.16, 1.2, Vector3(0, 0.7, 0), streifen, Vector3.ZERO, 12)
+			_kugel(dach, "Knauf", 0.12, Vector3(0, 1.35, 0), m.gold)
+		_:
+			_box(dach, "Pult", Vector3(breite + 0.4, 0.12, tiefe + 0.7), Vector3(0, 0.22, 0.1), streifen, Vector3(-12, 0, 0))
+			if dachform == "grill":
+				_zyl(dach, "Rauchfang", 0.14, 0.12, 1.0, Vector3(breite / 2.0 - 0.6, 0.7, -0.6), m.metall, Vector3.ZERO, 8)
+				_torus(dach, "Kappe", 0.13, 0.19, Vector3(breite / 2.0 - 0.6, 1.2, -0.6), m.schwarz_lack)
+	_box(dach, "Markise", Vector3(breite + 0.3, 0.4, 0.05), Vector3(0, -0.12, tiefe / 2.0 + 0.22), zickzack)
+	for i in 7:
+		var t := (i + 0.5) / 7.0
+		_kugel(dach, "Birne%d" % i, 0.035, Vector3(-breite / 2.0 + t * breite, -0.3, tiefe / 2.0 + 0.24), m.gluehbirne, Vector3.ONE, false)
+	_marktauslage(r, typ, boden, tiefe, zm)
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Bude", _boxform(Vector3(breite, 1.1, tiefe)), Transform3D(Basis(), Vector3(0, 0.55, zm)))
+	_licht(r, "Licht", Vector3(0, boden + 2.1, zm + 0.2), 1.2, 4.5)
+	_marke(r, "Verkaeufer", Vector3(0, boden, zm - 0.35))
+	return r
+
+## Auslage und Aufbauten je Budentyp (lokal zur Bude, y ab Podestoberkante)
+func _marktauslage(r: Node3D, typ: String, boden: float, tiefe: float, zm: float) -> void:
+	var a := _gruppe(r, "Auslage", Vector3(0, boden, zm))
+	var t_y := 0.95
+	var t_z := tiefe / 2.0 - 0.3
+	var schild_z := tiefe / 2.0 - 0.1
+	match typ:
+		"bratwurst":
+			_box(a, "Grill", Vector3(2.0, 0.22, 0.7), Vector3(-0.5, 0.85, -0.2), m.metall)
+			_box(a, "Glut", Vector3(1.85, 0.04, 0.6), Vector3(-0.5, 0.97, -0.2), m.rot)
+			for i in 9:
+				_zyl(a, "Wurst%d" % i, 0.045, 0.045, 0.26, Vector3(-1.35 + i * 0.21, 1.04, -0.2 + (i % 2) * 0.12), m.orange_lack, Vector3(90, 8.0 * i, 0), 8)
+			_zyl(a, "Senf", 0.06, 0.05, 0.22, Vector3(1.4, t_y + 0.11, t_z), m.ente, Vector3.ZERO, 8)
+			_zyl(a, "Ketchup", 0.06, 0.05, 0.22, Vector3(1.6, t_y + 0.11, t_z), m.rot, Vector3.ZERO, 8)
+			var w := _gruppe(a, "Schildwurst", Vector3(0, 2.75, schild_z), Vector3(0, 0, 20))
+			_zyl(w, "Wurst", 0.16, 0.16, 1.1, Vector3.ZERO, m.orange_lack, Vector3(0, 0, 90), 12)
+			_kugel(w, "EndeL", 0.16, Vector3(-0.55, 0, 0), m.orange_lack)
+			_kugel(w, "EndeR", 0.16, Vector3(0.55, 0, 0), m.orange_lack)
+		"hendl":
+			for reihe in 2:
+				var y := 1.05 + reihe * 0.42
+				_zyl(a, "Spiess%d" % reihe, 0.02, 0.02, 2.4, Vector3(0, y, -0.3), m.metall, Vector3(0, 0, 90), 6)
+				for i in 5:
+					_kugel(a, "Hendl%d_%d" % [reihe, i], 0.14, Vector3(-1.0 + i * 0.5, y, -0.3), m.orange_lack, Vector3(1.4, 1.0, 1.0))
+			_box(a, "Tropfblech", Vector3(2.4, 0.05, 0.5), Vector3(0, 0.85, -0.3), m.metall)
+			_kugel(a, "Schildhendl", 0.4, Vector3(0, 2.8, schild_z), m.orange_lack, Vector3(1.5, 1.0, 1.0))
+		"steckerlfisch":
+			_box(a, "Glutbett", Vector3(2.2, 0.16, 0.6), Vector3(0, 0.85, -0.25), m.schwarz_lack)
+			for i in 7:
+				var g := _gruppe(a, "Stecken%d" % i, Vector3(-1.1 + i * 0.36, 0.95, -0.25), Vector3(-35, 0, 0))
+				_zyl(g, "Stab", 0.02, 0.015, 1.1, Vector3(0, 0.55, 0), m.holz_hell, Vector3.ZERO, 6)
+				_kugel(g, "Fisch", 0.11, Vector3(0, 0.85, 0), m.creme_lack, Vector3(0.7, 0.55, 2.0))
+			_kugel(a, "Schildfisch", 0.38, Vector3(0, 2.8, schild_z), m.glas, Vector3(0.6, 0.5, 2.0))
+		"brezn":
+			_zyl(a, "Stange", 0.05, 0.05, 1.5, Vector3(-1.1, 1.6, -0.4), m.holz_dunkel, Vector3.ZERO, 8)
+			_zyl(a, "Querstange", 0.04, 0.04, 2.6, Vector3(0, 2.25, -0.4), m.holz_dunkel, Vector3(0, 0, 90), 8)
+			for i in 6:
+				_instanz(a, "res://scenes/einrichtung/riesenbrezel.tscn", "Brezn%d" % i,
+					Transform3D(Basis().scaled(Vector3.ONE * 0.32), Vector3(-1.1 + i * 0.44, 1.95, -0.4)))
+			for i in 4:
+				_instanz(a, "res://scenes/einrichtung/riesenbrezel.tscn", "Theke%d" % i,
+					Transform3D(_rot(Vector3(80, 0, 0)).scaled(Vector3.ONE * 0.22), Vector3(-0.9 + i * 0.6, t_y + 0.1, t_z)))
+			_instanz(a, "res://scenes/einrichtung/riesenbrezel.tscn", "Schild",
+				Transform3D(Basis().scaled(Vector3.ONE * 0.8), Vector3(0, 2.85, schild_z)))
+		"mandeln":
+			_zyl(a, "Kessel", 0.42, 0.36, 0.4, Vector3(-0.9, 1.1, -0.2), m.messing, Vector3.ZERO, 16)
+			_torus(a, "Kesselrand", 0.42, 0.5, Vector3(-0.9, 1.3, -0.2), m.gold)
+			_zyl(a, "Ruehrer", 0.03, 0.03, 0.8, Vector3(-0.9, 1.55, -0.2), m.holz_hell, Vector3(20, 0, 0), 6)
+			for i in 8:
+				_kugel(a, "Mandel%d" % i, 0.05, Vector3(-1.05 + (i % 4) * 0.1, 1.32, -0.3 + (i / 4) * 0.12), m.holz_dunkel)
+			for i in 5:
+				_prisma(a, "Tuete%d" % i, Vector3(0.18, 0.3, 0.12), Vector3(0.4 + i * 0.28, t_y + 0.15, t_z), m.creme_lack, Vector3(0, 0, 180))
+			_zyl(a, "Schildtuete", 0.3, 0.05, 0.7, Vector3(0, 2.85, schild_z), m.creme_lack, Vector3(180, 0, 0), 10)
+		"zuckerwatte":
+			_zyl(a, "Maschine", 0.35, 0.35, 0.4, Vector3(-0.9, 1.1, -0.2), m.metall, Vector3.ZERO, 14)
+			_zyl(a, "Trommel", 0.22, 0.22, 0.2, Vector3(-0.9, 1.4, -0.2), m.rosa_lack, Vector3.ZERO, 12)
+			for i in 6:
+				var g := _gruppe(a, "Watte%d" % i, Vector3(0.1 + i * 0.36, 0.95, t_z - 0.05))
+				_zyl(g, "Stab", 0.015, 0.015, 0.5, Vector3(0, 0.25, 0), m.weiss, Vector3.ZERO, 6)
+				_kugel(g, "Wolke", 0.17, Vector3(0, 0.6, 0), m.rosa_lack if i % 2 == 0 else m.blau, Vector3(1.0, 0.9, 1.0))
+			for i in 4:
+				_kugel(a, "Popcorn%d" % i, 0.12, Vector3(-1.6 + i * 0.22, t_y + 0.12, t_z), m.creme_lack)
+			_kugel(a, "Schildwatte", 0.42, Vector3(0, 2.8, schild_z), m.rosa_lack)
+		"lebkuchen":
+			for reihe in 3:
+				var y := 1.05 + reihe * 0.5
+				_zyl(a, "Leine%d" % reihe, 0.015, 0.015, 3.6, Vector3(0, y + 0.25, -0.5), m.holz_dunkel, Vector3(0, 0, 90), 6)
+				for i in 5:
+					_instanz(a, SZ + "lebkuchenherz.tscn", "Herz%d_%d" % [reihe, i],
+						Transform3D(Basis().scaled(Vector3.ONE * 0.9), Vector3(-1.5 + i * 0.75, y, -0.5)))
+			_instanz(a, SZ + "lebkuchenherz.tscn", "Schildherz",
+				Transform3D(Basis().scaled(Vector3.ONE * 2.2), Vector3(0, 2.9, schild_z)))
+		"losbude":
+			_zyl(a, "Trommel", 0.35, 0.35, 0.5, Vector3(-1.1, 1.25, -0.1), m.gold, Vector3(0, 0, 90), 12)
+			_zyl(a, "Kurbel", 0.03, 0.03, 0.3, Vector3(-1.45, 1.25, -0.1), m.metall, Vector3(0, 0, 90), 6)
+			_box(a, "Gestell", Vector3(0.1, 0.9, 0.1), Vector3(-1.1, 0.8, -0.1), m.holz_dunkel)
+			for reihe in 2:
+				_box(a, "Regal%d" % reihe, Vector3(2.2, 0.05, 0.3), Vector3(0.7, 1.15 + reihe * 0.55, -0.6), m.holz_hell)
+				for i in 3:
+					_teddy(a, "Teddy%d_%d" % [reihe, i], Vector3(0.0 + i * 0.7, 1.35 + reihe * 0.55, -0.6), 0.0, 0.8)
+			for i in 12:
+				_box(a, "Los%d" % i, Vector3(0.12, 0.16, 0.01), Vector3(-1.9 + (i % 6) * 0.18, 0.95 + (i / 6) * 0.2, t_z), m.creme_lack)
+			_kugel(a, "Schildstern", 0.32, Vector3(0, 2.8, schild_z), m.gold, Vector3(1.0, 1.0, 0.4))
+		"hutstand":
+			for i in 6:
+				var g := _gruppe(a, "Hut%d" % i, Vector3(-1.5 + (i % 3) * 0.9, 0.9 + (i / 3) * 0.55, -0.35))
+				_zyl(g, "Staender", 0.03, 0.03, 0.3, Vector3(0, 0.15, 0), m.metall, Vector3.ZERO, 6)
+				_zyl(g, "Kopf", 0.16, 0.15, 0.2, Vector3(0, 0.4, 0), m.huegel if i % 2 == 0 else m.holz_dunkel, Vector3.ZERO, 12)
+				_torus(g, "Krempe", 0.15, 0.28, Vector3(0, 0.32, 0), m.huegel if i % 2 == 0 else m.holz_dunkel)
+				_zyl(g, "Band", 0.162, 0.162, 0.06, Vector3(0, 0.34, 0), m.rot, Vector3.ZERO, 12)
+			for i in 5:
+				_kugel(a, "Ballon%d" % i, 0.16, Vector3(1.3 + (i % 2) * 0.3, 2.2 + i * 0.12, t_z - 0.2), [m.rot, m.blau, m.ente, m.huegel, m.rosa_lack][i])
+			_zyl(a, "Schildhut", 0.34, 0.32, 0.26, Vector3(0, 2.85, schild_z), m.huegel, Vector3.ZERO, 12)
+			_torus(a, "Schildkrempe", 0.32, 0.55, Vector3(0, 2.72, schild_z), m.huegel)
+		"ausschank":
+			for i in 3:
+				_instanz(a, SZ + "fass.tscn", "Fass%d" % i, Transform3D(_rot(Vector3(90, 0, 0)), Vector3(-1.3 + i * 0.75, 0.45, -0.55)))
+			_zyl(a, "Zapfsaeule", 0.07, 0.07, 0.5, Vector3(0.9, 1.1, -0.1), m.messing, Vector3.ZERO, 8)
+			_zyl(a, "Hahn", 0.03, 0.03, 0.25, Vector3(0.9, 1.25, 0.05), m.gold, Vector3(70, 0, 0), 6)
+			for i in 5:
+				_masskrug(a, "Krug%d" % i, Vector3(-1.4 + i * 0.5, t_y, t_z))
+			var s := _masskrug(a, "Schildkrug", Vector3(0, 2.5, schild_z))
+			s.scale = Vector3.ONE * 2.6

@@ -36,6 +36,8 @@ class Lauf extends Node:
 			"a_west": [Vector3(-20, 6, 0), Vector3(-120, 8, 0)],
 			"a_trailer": [Vector3(-40, 26, 74), Vector3(0, 2, 10)],
 			"a_hoch": [Vector3(0, 60, 90), Vector3(0, 0, -20)],
+			"a_markt": [Vector3(26.0, 4.0, 58.0), Vector3(16.0, 2.0, 76.0)],
+			"a_reihe": [Vector3(-6.0, 3.2, 19.0), Vector3(-26.0, 2.0, 27.0)],
 		}
 		for k in ansichten:
 			cam.global_position = ansichten[k][0]

@@ -43,6 +43,20 @@ const DEKO_SCHIESS := preload("res://scenes/props/schiessstand.tscn")
 const BIERTISCH := preload("res://scenes/zelt/biergarten_tisch.tscn")
 const LICHTERKETTE := preload("res://scenes/props/lichterkette.tscn")
 
+## Essens- und Marktbuden (tools/bake_kirmes_spiele.gd -- essen)
+const MARKT := {
+	"bratwurst": preload("res://scenes/kirmes/essen/bratwurst.tscn"),
+	"hendl": preload("res://scenes/kirmes/essen/hendl.tscn"),
+	"steckerlfisch": preload("res://scenes/kirmes/essen/steckerlfisch.tscn"),
+	"brezn": preload("res://scenes/kirmes/essen/brezn.tscn"),
+	"mandeln": preload("res://scenes/kirmes/essen/mandeln.tscn"),
+	"zuckerwatte": preload("res://scenes/kirmes/essen/zuckerwatte.tscn"),
+	"lebkuchen": preload("res://scenes/kirmes/essen/lebkuchen.tscn"),
+	"losbude": preload("res://scenes/kirmes/essen/losbude.tscn"),
+	"hutstand": preload("res://scenes/kirmes/essen/hutstand.tscn"),
+	"ausschank": preload("res://scenes/kirmes/essen/ausschank.tscn"),
+}
+
 var wurzel: Node3D
 var rng := RandomNumberGenerator.new()
 var _nr := {}
@@ -159,6 +173,32 @@ func _init() -> void:
 	# Oststraße hinter dem Ring: Kegelbahn an der Nordseite, Front zur Straße
 	_stand(buden, SPIEL_KEGELN, Vector3(60.0, 0, 38.0), Vector3(0, 0, -1))
 
+	# Essens- und Marktbuden: in den Lücken der Alleen, am Ring und an den Seitenstraßen
+	var markt := _gruppe(wurzel, "Marktbuden")
+	var allee_nord := ["steckerlfisch", "hutstand", "zuckerwatte", "brezn", "mandeln", "lebkuchen"]
+	var i_m := 0
+	for z: float in [68.0, 78.0, 88.0]:
+		for seite: float in [-1.0, 1.0]:
+			_stand(markt, MARKT[allee_nord[i_m % allee_nord.size()]], Vector3(seite * 20.0, 0, z), Vector3(-seite, 0, 0))
+			i_m += 1
+	var allee_sued := ["bratwurst", "losbude", "ausschank", "hendl", "brezn", "hutstand"]
+	i_m = 0
+	for z: float in [-77.0, -87.0, -97.0]:
+		for seite: float in [-1.0, 1.0]:
+			_stand(markt, MARKT[allee_sued[i_m % allee_sued.size()]], Vector3(seite * 20.0, 0, z), Vector3(-seite, 0, 0))
+			i_m += 1
+	var ringmarkt := [[15.0, "bratwurst"], [75.0, "lebkuchen"], [105.0, "mandeln"], [165.0, "hendl"],
+		[135.0, "zuckerwatte"], [195.0, "brezn"], [45.0, "losbude"], [345.0, "steckerlfisch"]]
+	for rm: Array in ringmarkt:
+		var a := deg_to_rad(float(rm[0]))
+		var dir := Vector3(sin(a), 0, cos(a))
+		_stand(markt, MARKT[rm[1]], MITTE + dir * 58.5, dir)
+	# Seitenstraßen
+	_stand(markt, MARKT["ausschank"], Vector3(-50.0, 0, 1.0), Vector3(0, 0, -1))
+	_stand(markt, MARKT["hutstand"], Vector3(-62.0, 0, 1.0), Vector3(0, 0, -1))
+	_stand(markt, MARKT["bratwurst"], Vector3(43.0, 0, 22.5), Vector3(0, 0, 1))
+	_stand(markt, MARKT["zuckerwatte"], Vector3(60.0, 0, 21.5), Vector3(0, 0, 1))
+
 	# Biergärten auf der Wiese
 	_biergarten(wurzel, "BiergartenWest", Vector3(-50.0, 0, 6.0))
 	_biergarten(wurzel, "BiergartenOst", Vector3(53.0, 0, 2.0))
@@ -225,7 +265,7 @@ func _biergarten(eltern: Node, name: String, mitte: Vector3) -> void:
 			_setzen(g, BIERTISCH, "Tisch", p, 0.0, 1.0)
 			if iz == 1:
 				_haltepunkte.append(p + Vector3(1.7, 0, 0))
-	_setzen(g, BUDEN[2], "Ausschank", mitte + Vector3(0, 0, -6.5), 0.0, 1.0)
+	_setzen(g, MARKT["ausschank"], "Ausschank", mitte + Vector3(0, 0, -6.5), 0.0, 1.0)
 	_setzen(g, LICHTERKETTE, "Lichterkette", mitte, 0.0, 1.0)
 	_setzen(g, LICHTERKETTE, "Lichterkette", mitte, PI * 0.5, 1.0)
 	for s: float in [-1.0, 1.0]:

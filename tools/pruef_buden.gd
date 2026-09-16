@@ -27,7 +27,7 @@ class Lauf extends Node:
 			if eltern == null:
 				continue
 			var eltern_pfad := String(kirmes.get_path_to(eltern))
-			if not (eltern_pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest", "Strassen/Buden"]):
+			if not (eltern_pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest", "Strassen/Buden", "Strassen/Marktbuden"]):
 				continue
 			var rechteck := _flaeche(n as Node3D)
 			if rechteck.size.x <= 0.0:

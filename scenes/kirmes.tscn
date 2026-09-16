@@ -48,6 +48,14 @@
 [ext_resource type="PackedScene" path="res://scenes/kirmes/stemmen.tscn" id="58_stemmen"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/nagelbalken.tscn" id="59_nagel"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/kegeln.tscn" id="60_kegeln"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/brezn.tscn" id="61_brezn"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/bratwurst.tscn" id="62_wurst"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/hendl.tscn" id="63_hendl"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/mandeln.tscn" id="64_mandeln"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/zuckerwatte.tscn" id="65_zucker"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/lebkuchen.tscn" id="66_lebkuchen"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/ausschank.tscn" id="67_ausschank"]
+[ext_resource type="PackedScene" path="res://scenes/kirmes/essen/losbude.tscn" id="68_losbude"]
 [ext_resource type="PackedScene" path="res://scenes/wiesenbuero.tscn" id="98_huette"]
 
 [sub_resource type="StandardMaterial3D" id="MatGround"]
@@ -129,6 +137,12 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 13.85, 0, 27)
 [node name="Bush" parent="StaendeNord" unique_id=1564125820 instance=ExtResource("27_m2aab")]
 transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, -30.660255, 0, 24.535898)
 
+[node name="N00_Brezn" parent="StaendeNord" instance=ExtResource("61_brezn")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -24, 0, 27)
+
+[node name="N11_Bratwurst" parent="StaendeNord" instance=ExtResource("62_wurst")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 24, 0, 27)
+
 [node name="StaendeSued" type="Node3D" parent="." unique_id=2067853383]
 
 [node name="S02_Nagelbalken" parent="StaendeSued" instance=ExtResource("59_nagel")]
@@ -143,6 +157,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0, -30)
 [node name="S10_Gluecksrad" parent="StaendeSued" instance=ExtResource("57_rad")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.15, 0, -30)
 
+[node name="S00_Hendl" parent="StaendeSued" instance=ExtResource("63_hendl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -30)
+
+[node name="S12_Mandeln" parent="StaendeSued" instance=ExtResource("64_mandeln")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -30)
+
 [node name="StaendeOst" type="Node3D" parent="." unique_id=1039407144]
 
 [node name="O02_Schiessbude" parent="StaendeOst" unique_id=1254696407 instance=ExtResource("3b_bude")]
@@ -154,6 +174,12 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 
 [node name="O08_Stemmen" parent="StaendeOst" instance=ExtResource("58_stemmen")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 9.85)
 
+[node name="O00_Zuckerwatte" parent="StaendeOst" instance=ExtResource("65_zucker")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -19)
+
+[node name="O10_Lebkuchen" parent="StaendeOst" instance=ExtResource("66_lebkuchen")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 19)
+
 [node name="StaendeWest" type="Node3D" parent="." unique_id=1556386683]
 
 [node name="W03_HauDenLukas" parent="StaendeWest" unique_id=628095148 instance=ExtResource("3d_lukas")]
@@ -164,6 +190,12 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30,
 
 [node name="W07_Kegeln" parent="StaendeWest" instance=ExtResource("60_kegeln")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 8.3)
+
+[node name="W00_Ausschank" parent="StaendeWest" instance=ExtResource("67_ausschank")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, -18)
+
+[node name="W10_Losbude" parent="StaendeWest" instance=ExtResource("68_losbude")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 18)
 
 [node name="Wiesenbuero" type="Node3D" parent="." unique_id=1735080229]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 38.128563, 0, 18.444586)
