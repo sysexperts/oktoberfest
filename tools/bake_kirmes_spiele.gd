@@ -257,12 +257,12 @@ func _dosenwurf() -> Node3D:
 	# Kegeldach mit Laternenturm, Krone und Fahne
 	var dach := _gruppe(r, "Dach", Vector3(0, boden + saeule_h, 0))
 	_zyl(dach, "Traufring", radius + 0.35, radius + 0.35, 0.18, Vector3(0, 0.09, 0), m.holz_dunkel, Vector3(0, 22.5, 0), 8)
-	_zyl(dach, "Kegel", radius + 0.45, 0.35, 1.9, Vector3(0, 1.1, 0), m.streifen, Vector3(0, 22.5, 0), 8)
+	_zyl(dach, "Kegel", radius + 0.45, 0.35, 1.9, Vector3(0, 1.1, 0), m.streifen_gruen, Vector3(0, 22.5, 0), 8)
 	_zyl(dach, "Laterne", 0.45, 0.45, 0.6, Vector3(0, 2.3, 0), m.creme_lack, Vector3(0, 22.5, 0), 8)
 	for k in 8:
 		var fp: Vector3 = mitte_kante.call(k, 0.42)
 		_box(dach, "LaterneFenster%d" % k, Vector3(0.2, 0.35, 0.02), Vector3(fp.x, 2.3, fp.z), m.gluehbirne, Vector3(0, k * 45.0, 0))
-	_zyl(dach, "Haube", 0.6, 0.0, 0.8, Vector3(0, 3.0, 0), m.blau, Vector3(0, 22.5, 0), 8)
+	_zyl(dach, "Haube", 0.6, 0.0, 0.8, Vector3(0, 3.0, 0), m.huegel, Vector3(0, 22.5, 0), 8)
 	_kugel(dach, "Knauf", 0.12, Vector3(0, 3.45, 0), m.gold)
 	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.45), Vector3(0, 3.5, 0)))
 	_instanz(dach, SZ + "fahne.tscn", "Fahne", Transform3D(Basis().scaled(Vector3.ONE * 0.7), Vector3(0, 4.2, 0)))
@@ -283,7 +283,7 @@ func _dosenwurf() -> Node3D:
 		var mp: Vector3 = mitte_kante.call(k, radius * cos(deg_to_rad(22.5)) - 0.15)
 		var t := _gruppe(theken, "Theke%d" % k, Vector3(mp.x, boden, mp.z), Vector3(0, k * 45.0, 0))
 		_box(t, "Korpus", Vector3(kante_breite - 0.25, 0.95, 0.35), Vector3(0, 0.475, 0), m.holz_dunkel)
-		_box(t, "Feld", Vector3(kante_breite - 0.6, 0.6, 0.02), Vector3(0, 0.5, 0.185), m.rauten_fein)
+		_box(t, "Feld", Vector3(kante_breite - 0.6, 0.6, 0.02), Vector3(0, 0.5, 0.185), m.zickzack_gruen)
 		_box(t, "Rahmen", Vector3(kante_breite - 0.5, 0.7, 0.015), Vector3(0, 0.5, 0.18), m.gold)
 		_box(t, "Platte", Vector3(kante_breite - 0.15, 0.06, 0.45), Vector3(0, 0.98, 0), m.gruen_samt)
 	var korb := _gruppe(theken, "Ballkorb", Vector3(0.7, boden + 1.01, radius * cos(deg_to_rad(22.5)) - 0.2))
@@ -1019,7 +1019,7 @@ func _lukas() -> Node3D:
 		_kugel(turm, "Stern%d" % i, 0.05, Vector3(-0.4, y, 0.02), m.gold)
 		_kugel(turm, "Stern%db" % i, 0.05, Vector3(0.4, y, 0.02), m.gold)
 	for s: float in [-1.0, 1.0]:
-		_zyl(turm, "Pfosten%s" % s, 0.06, 0.05, turm_h + 0.3, Vector3(s * 0.55, 0.5 + (turm_h + 0.3) / 2.0, 0), m.blau, Vector3.ZERO, 10)
+		_zyl(turm, "Pfosten%s" % s, 0.06, 0.05, turm_h + 0.3, Vector3(s * 0.55, 0.5 + (turm_h + 0.3) / 2.0, 0), m.orange_lack, Vector3.ZERO, 10)
 		_zyl(turm, "Schiene%s" % s, 0.015, 0.015, turm_h - 0.4, Vector3(s * 0.12, 0.55 + (turm_h - 0.4) / 2.0 + 0.2, 0.12), m.messing, Vector3.ZERO, 8)
 		for i in 14:
 			_kugel(turm, "Birne%s_%d" % [s, i], 0.04, Vector3(s * 0.62, 0.7 + i * 0.44, 0.05), m.gluehbirne, Vector3.ONE, false)
@@ -1050,11 +1050,11 @@ func _lukas() -> Node3D:
 	# Hütte mit gestreiftem Dach, Hammerständer, Preisregal
 	var huette := _gruppe(r, "Huette", Vector3(-1.55, boden, -1.5))
 	_box(huette, "Rueckwand", Vector3(2.2, 2.4, 0.1), Vector3(0, 1.2, -1.2), m.budenwand)
-	_box(huette, "WandLinks", Vector3(0.1, 2.4, 2.4), Vector3(-1.1, 1.2, 0), m.streifen_fein)
+	_box(huette, "WandLinks", Vector3(0.1, 2.4, 2.4), Vector3(-1.1, 1.2, 0), m.streifen_fein_orange)
 	_box(huette, "Theke", Vector3(1.9, 1.0, 0.45), Vector3(-0.1, 0.5, 1.0), m.holz_hell)
-	_box(huette, "ThekeFeld", Vector3(1.6, 0.6, 0.02), Vector3(-0.1, 0.5, 1.235), m.rauten_fein)
+	_box(huette, "ThekeFeld", Vector3(1.6, 0.6, 0.02), Vector3(-0.1, 0.5, 1.235), m.zickzack_orange)
 	_box(huette, "ThekePlatte", Vector3(2.0, 0.05, 0.55), Vector3(-0.1, 1.02, 1.0), m.gruen_samt)
-	_box(huette, "Dach", Vector3(2.6, 0.08, 2.9), Vector3(0, 2.6, 0.1), m.streifen, Vector3(-10, 0, 0))
+	_box(huette, "Dach", Vector3(2.6, 0.08, 2.9), Vector3(0, 2.6, 0.1), m.streifen_orange, Vector3(-10, 0, 0))
 	_instanz(huette, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(1.25, 1, 1)), Vector3(0, 2.3, 1.55)))
 	for i in 3:
 		_teddy(huette, "Teddy%d" % i, Vector3(-0.7 + i * 0.6, 1.75, -1.0), 0.0, 0.9)
@@ -1068,7 +1068,7 @@ func _lukas() -> Node3D:
 	for i in 14:
 		var t := (i + 0.5) / 14.0
 		var p := von.lerp(bis, t) - Vector3(0, 0.35 * (1.0 - pow(2.0 * t - 1.0, 2.0)), 0)
-		_prisma(wimpel, "Wimpel%d" % i, Vector3(0.22, 0.28, 0.01), p - Vector3(0, 0.14, 0), m.blau if i % 2 == 0 else m.weiss, Vector3(0, 60, 180))
+		_prisma(wimpel, "Wimpel%d" % i, Vector3(0.22, 0.28, 0.01), p - Vector3(0, 0.14, 0), m.orange_lack if i % 2 == 0 else m.weiss, Vector3(0, 60, 180))
 	_instanz(r, SZ + "wandlaterne.tscn", "Laterne", Transform3D(Basis(), Vector3(tx - 0.55, boden + 2.4, tz + 0.1)))
 	# Kollision, Licht, Kamera mit Hammer, Marken
 	var koerper := StaticBody3D.new()

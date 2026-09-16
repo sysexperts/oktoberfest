@@ -18,18 +18,18 @@ ring_segments = 8
 [sub_resource type="SphereShape3D" id="SphereShape3D_1so6o"]
 radius = 0.065
 
-[node name="Wurfball" type="RigidBody3D" unique_id=1022927299]
+[node name="Wurfball" type="RigidBody3D" unique_id=1282233076]
 mass = 0.3
 continuous_cd = true
 
-[node name="Leder" type="MeshInstance3D" parent="." unique_id=760182468]
+[node name="Leder" type="MeshInstance3D" parent="." unique_id=674416587]
 material_override = ExtResource("1_vta5l")
 mesh = SubResource("SphereMesh_vpes0")
 
-[node name="Naht" type="MeshInstance3D" parent="." unique_id=1079498494]
+[node name="Naht" type="MeshInstance3D" parent="." unique_id=292515672]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 material_override = ExtResource("2_caiy8")
 mesh = SubResource("TorusMesh_q0onh")
 
-[node name="Form" type="CollisionShape3D" parent="." unique_id=1931977213]
+[node name="Form" type="CollisionShape3D" parent="." unique_id=1584156827]
 shape = SubResource("SphereShape3D_1so6o")

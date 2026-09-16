@@ -37,39 +37,39 @@ height = 0.02
 radial_segments = 16
 rings = 1
 
-[node name="Hammer" type="Node3D" unique_id=727913716]
+[node name="Hammer" type="Node3D" unique_id=1031277267]
 
-[node name="Stiel" type="MeshInstance3D" parent="." unique_id=1097103832]
+[node name="Stiel" type="MeshInstance3D" parent="." unique_id=855386427]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.475, 0)
 material_override = ExtResource("1_pvwvf")
 mesh = SubResource("CylinderMesh_f0bpk")
 
-[node name="Griffband" type="MeshInstance3D" parent="." unique_id=1930059337]
+[node name="Griffband" type="MeshInstance3D" parent="." unique_id=1235089573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
 material_override = ExtResource("2_1ojpx")
 mesh = SubResource("BoxMesh_wc24v")
 
-[node name="Kopf" type="MeshInstance3D" parent="." unique_id=197885233]
+[node name="Kopf" type="MeshInstance3D" parent="." unique_id=1923920990]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.98, 0)
 material_override = ExtResource("3_5uahs")
 mesh = SubResource("CylinderMesh_beswp")
 
-[node name="Ring-1_0" type="MeshInstance3D" parent="." unique_id=544043853]
+[node name="Ring-1_0" type="MeshInstance3D" parent="." unique_id=1523452387]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.14, 0.98, 0)
 material_override = ExtResource("4_w6ryh")
 mesh = SubResource("CylinderMesh_c6m3n")
 
-[node name="Kappe-1_0" type="MeshInstance3D" parent="." unique_id=899965736]
+[node name="Kappe-1_0" type="MeshInstance3D" parent="." unique_id=285134042]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -0.18, 0.98, 0)
 material_override = ExtResource("5_2lktp")
 mesh = SubResource("CylinderMesh_icori")
 
-[node name="Ring1_0" type="MeshInstance3D" parent="." unique_id=743102929]
+[node name="Ring1_0" type="MeshInstance3D" parent="." unique_id=972963976]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.14, 0.98, 0)
 material_override = ExtResource("4_w6ryh")
 mesh = SubResource("CylinderMesh_c6m3n")
 
-[node name="Kappe1_0" type="MeshInstance3D" parent="." unique_id=90822123]
+[node name="Kappe1_0" type="MeshInstance3D" parent="." unique_id=67922837]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.18, 0.98, 0)
 material_override = ExtResource("5_2lktp")
 mesh = SubResource("CylinderMesh_icori")

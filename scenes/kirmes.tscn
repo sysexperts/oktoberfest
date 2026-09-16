@@ -1,33 +1,20 @@
 [gd_scene format=3 uid="uid://cdtgrn80rfxhm"]
 
-[ext_resource type="PackedScene" path="res://scenes/props/drehscheibe.tscn" id="1_dreh"]
-[ext_resource type="PackedScene" path="res://scenes/props/enten.tscn" id="2_ente"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/schiessstand.tscn" id="3b_bude"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/dosenwurf.tscn" id="3c_dosen"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/hau_den_lukas.tscn" id="3d_lukas"]
-[ext_resource type="PackedScene" path="res://scenes/props/schiessstand.tscn" id="3_schi"]
-[ext_resource type="PackedScene" path="res://scenes/props/suessigkeiten.tscn" id="4_sues"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
 [ext_resource type="PackedScene" path="res://scenes/props/schiffschaukel.tscn" id="8_cu5q6"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="8_lat"]
-[ext_resource type="PackedScene" uid="uid://ds8guiq5nt4qw" path="res://assets/kirmes/Models/Ground/Parking.fbx" id="9_y5oy2"]
 [ext_resource type="PackedScene" uid="uid://chrmnwixompew" path="res://assets/kirmes/Models/Props/Bench.fbx" id="11_i3lhy"]
 [ext_resource type="PackedScene" uid="uid://bfm6aa8cpnegy" path="res://assets/kirmes/Models/Props/CafeChair.fbx" id="12_fgnfp"]
 [ext_resource type="PackedScene" uid="uid://b6oh1keokqrjv" path="res://assets/kirmes/Models/Props/Lamps.fbx" id="13_w4g7w"]
-[ext_resource type="PackedScene" uid="uid://cs041iopbxxx2" path="res://assets/kirmes/Models/Shops/Bld_Bakery.fbx" id="14_bli7h"]
-[ext_resource type="PackedScene" uid="uid://ctkqi8tul1rgb" path="res://assets/kirmes/Models/Shops/Bld_Cafe.fbx" id="15_nlngv"]
 [ext_resource type="PackedScene" uid="uid://tb0aetry3xuo" path="res://assets/kirmes/Models/Props/Lamp_1.fbx" id="16_ek6mb"]
-[ext_resource type="PackedScene" uid="uid://dx60hfopv154q" path="res://assets/kirmes/Models/Shops/Gift_Shop.fbx" id="16_h050s"]
 [ext_resource type="PackedScene" uid="uid://bfcs0lyn82yhg" path="res://assets/kirmes/Models/Shops/HotDogs_Shop.fbx" id="17_dbcyo"]
-[ext_resource type="PackedScene" uid="uid://d3slp4i2yf4at" path="res://assets/kirmes/Models/Shops/Park_Entrance.fbx" id="19_vog6x"]
-[ext_resource type="PackedScene" uid="uid://db8cnpqaj6dra" path="res://assets/kirmes/Models/Shops/PopCorn_Shop.fbx" id="20_m2aab"]
 [ext_resource type="PackedScene" uid="uid://rg5lahnkcloj" path="res://assets/kirmes/Models/Shops/Soda_Shop.fbx" id="21_6fdsn"]
-[ext_resource type="PackedScene" uid="uid://draf6cd5oqons" path="res://assets/kirmes/Models/Shops/Ticket_Box_A.fbx" id="22_eahg2"]
 [ext_resource type="PackedScene" uid="uid://bprgimokht40o" path="res://assets/kirmes/Models/Shops/Ticket_Box_B.fbx" id="23_87m88"]
 [ext_resource type="PackedScene" uid="uid://dvi72mx42mkbl" path="res://assets/kirmes/Models/Shops/WC.fbx" id="24_p4kn1"]
-[ext_resource type="PackedScene" uid="uid://c6cewhgbdxlfp" path="res://assets/kirmes/Models/Vehicles/Car_1.fbx" id="25_swptr"]
-[ext_resource type="PackedScene" uid="uid://8ykmsjnnr3k3" path="res://assets/kirmes/Models/Vehicles/Van.fbx" id="26_tnypt"]
 [ext_resource type="PackedScene" uid="uid://cmx35pk2qsbta" path="res://assets/kirmes/Models/Foliage/Bush.fbx" id="27_m2aab"]
 [ext_resource type="PackedScene" uid="uid://b5rmxlvxaffiq" path="res://assets/kirmes/Models/Foliage/Bush_Berry.fbx" id="28_6fdsn"]
 [ext_resource type="PackedScene" uid="uid://blnyx8117uawv" path="res://assets/kirmes/Models/Foliage/C.Tree_1.fbx" id="29_eahg2"]
@@ -38,7 +25,6 @@
 [ext_resource type="PackedScene" path="res://scenes/props/topspin.tscn" id="34_qoh1t"]
 [ext_resource type="PackedScene" uid="uid://cvd5jsvnn311s" path="res://assets/kirmes/Models/Ground/Ground.fbx" id="35_n8efi"]
 [ext_resource type="PackedScene" uid="uid://1us2s8l6w6r4" path="res://assets/kirmes/Models/Foliage/Tree_1.fbx" id="36_87m88"]
-[ext_resource type="PackedScene" path="res://scenes/props/karussell.tscn" id="37_p4kn1"]
 [ext_resource type="PackedScene" path="res://scenes/props/riesenrad.tscn" id="38_swptr"]
 [ext_resource type="PackedScene" path="res://scenes/props/lichterkette.tscn" id="39_lkette"]
 [ext_resource type="PackedScene" uid="uid://ckvlxl7lmu2yu" path="res://assets/kirmes/Models/Attractions/OtherRides/Rockets.fbx" id="40_tnypt"]
@@ -64,9 +50,6 @@ albedo_color = Color(0.32, 0.38, 0.22, 1)
 [sub_resource type="BoxMesh" id="GroundMesh"]
 size = Vector3(90, 0.1, 90)
 
-[sub_resource type="StandardMaterial3D" id="MatPath"]
-albedo_color = Color(0.6, 0.54, 0.42, 1)
-
 [sub_resource type="BoxMesh" id="PathNS"]
 size = Vector3(70, 0.12, 8)
 
@@ -76,41 +59,11 @@ size = Vector3(8, 0.12, 49)
 [sub_resource type="BoxMesh" id="PathLane"]
 size = Vector3(4, 0.12, 14.380737)
 
-[sub_resource type="BoxShape3D" id="MauerNordCol"]
-size = Vector3(68, 5, 0.6)
-
-[sub_resource type="BoxShape3D" id="MauerSuedACol"]
-size = Vector3(28, 5, 0.6)
-
-[sub_resource type="BoxShape3D" id="MauerSuedBCol"]
-size = Vector3(32, 5, 0.6)
-
-[sub_resource type="BoxShape3D" id="MauerWestCol"]
-size = Vector3(0.6, 5, 65)
-
-[sub_resource type="BoxShape3D" id="MauerOstACol"]
-size = Vector3(0.6, 5, 47.286133)
-
-[sub_resource type="StandardMaterial3D" id="MatMauer"]
-albedo_color = Color(0.42, 0.32, 0.24, 1)
-
-[sub_resource type="BoxMesh" id="MauerOstBMesh"]
-size = Vector3(0.6, 5, 7.5683594)
-
-[sub_resource type="BoxShape3D" id="MauerOstBCol"]
-size = Vector3(0.6, 5, 7.5683594)
-
-[sub_resource type="BoxShape3D" id="BoundX"]
-size = Vector3(90, 5, 1)
-
-[sub_resource type="BoxShape3D" id="BoundZ"]
-size = Vector3(1, 5, 107)
-
 [node name="Kirmes" type="Node3D" unique_id=382915238]
 
 [node name="Ground" type="MeshInstance3D" parent="." unique_id=973139363]
-visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+visible = false
 material_override = SubResource("MatGround")
 mesh = SubResource("GroundMesh")
 
@@ -155,81 +108,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -48)
 
 [node name="StaendeNord" type="Node3D" parent="." unique_id=1907774825]
 
-[node name="N02_Ente" parent="StaendeNord" unique_id=298506217 instance=ExtResource("2_ente")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -27, 0, 27)
-
 [node name="N03_Dosenwurf" parent="StaendeNord" unique_id=228357802 instance=ExtResource("3c_dosen")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -20.25, 0, 27)
 
-[node name="N05_Dreh" parent="StaendeNord" unique_id=1751336916 instance=ExtResource("1_dreh")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -13.5, 0, 27)
-
-[node name="N06_Ente" parent="StaendeNord" unique_id=1429182045 instance=ExtResource("2_ente")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -9, 0, 27)
-
 [node name="N07_Schiessbude" parent="StaendeNord" unique_id=91570265 instance=ExtResource("3b_bude")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.25, 0, 27)
-
-[node name="N11_Schi" parent="StaendeNord" unique_id=1580895013 instance=ExtResource("3_schi")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 13.5, 0, 27)
-
-[node name="N12_Sues" parent="StaendeNord" unique_id=819240387 instance=ExtResource("4_sues")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 18, 0, 27)
-
-[node name="N13_Dreh" parent="StaendeNord" unique_id=578494361 instance=ExtResource("1_dreh")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 22.5, 0, 27)
-
-[node name="N14_Ente" parent="StaendeNord" unique_id=1433053362 instance=ExtResource("2_ente")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 27, 0, 27)
-
-[node name="N15_Schi" parent="StaendeNord" unique_id=1472218702 instance=ExtResource("3_schi")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 31.5, 0, 27)
 
 [node name="Bush" parent="StaendeNord" unique_id=1564125820 instance=ExtResource("27_m2aab")]
 transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, -30.660255, 0, 24.535898)
 
 [node name="StaendeSued" type="Node3D" parent="." unique_id=2067853383]
 
-[node name="S02_Dreh" parent="StaendeSued" unique_id=58684627 instance=ExtResource("1_dreh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, -31)
-
-[node name="S03_Ente" parent="StaendeSued" unique_id=1059562498 instance=ExtResource("2_ente")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, 0, -30)
-
 [node name="S04_HauDenLukas" parent="StaendeSued" unique_id=507788968 instance=ExtResource("3d_lukas")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.75, 0, -30.5)
-
-[node name="S06_Dreh" parent="StaendeSued" unique_id=480007990 instance=ExtResource("1_dreh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -30)
-
-[node name="S07_Ente" parent="StaendeSued" unique_id=663646667 instance=ExtResource("2_ente")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -30)
 
 [node name="S08_Schiessbude" parent="StaendeSued" unique_id=1626243016 instance=ExtResource("3b_bude")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.25, 0, -30)
 
-[node name="S10_Dreh" parent="StaendeSued" unique_id=1792891069 instance=ExtResource("1_dreh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -30)
-
 [node name="StaendeOst" type="Node3D" parent="." unique_id=1039407144]
-
-[node name="O01_Ente" parent="StaendeOst" unique_id=1450532000 instance=ExtResource("2_ente")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -18)
 
 [node name="O02_Schiessbude" parent="StaendeOst" unique_id=1254696407 instance=ExtResource("3b_bude")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -11.25)
 
-[node name="O04_Dreh" parent="StaendeOst" unique_id=60604764 instance=ExtResource("1_dreh")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -4.5)
-
-[node name="O05_Ente" parent="StaendeOst" unique_id=567804330 instance=ExtResource("2_ente")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 0)
-
 [node name="O06_Dosenwurf" parent="StaendeOst" unique_id=973113807 instance=ExtResource("3c_dosen")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 6.75)
-
-[node name="O08_Dreh" parent="StaendeOst" unique_id=1980639239 instance=ExtResource("1_dreh")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, 13.5)
 
 [node name="StaendeWest" type="Node3D" parent="." unique_id=1556386683]
 
@@ -238,9 +140,6 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30,
 
 [node name="W05_Schiessbude" parent="StaendeWest" unique_id=2104904926 instance=ExtResource("3b_bude")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 2.25)
-
-[node name="W07_Dreh" parent="StaendeWest" unique_id=319897979 instance=ExtResource("1_dreh")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -30, 0, 9)
 
 [node name="Wiesenbuero" type="Node3D" parent="." unique_id=1735080229]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 38.128563, 0, 18.444586)
@@ -326,21 +225,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 0, -10)
 [node name="MauerOstNord" type="StaticBody3D" parent="Mauern" unique_id=2104370182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 2.5, 29.5)
 
-[node name="Mesh" type="MeshInstance3D" parent="Mauern/MauerOstNord" unique_id=491330369]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.2841797)
-material_override = SubResource("MatMauer")
-mesh = SubResource("MauerOstBMesh")
-
-
 [node name="ShipRide" parent="." unique_id=1850783362 instance=ExtResource("8_cu5q6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.820018, 0, 36.81225)
-
-[node name="Parking" parent="." unique_id=1798203239 instance=ExtResource("9_y5oy2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9337764, 0, 29.594742)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.820019, 0, 43.81225)
 
 [node name="Altstadt" parent="." unique_id=384504598 instance=ExtResource("52_altstadt")]
 
-[node name="Strassen" parent="." instance=ExtResource("54_strassen")]
+[node name="Strassen" parent="." unique_id=125095693 instance=ExtResource("54_strassen")]
 
 [node name="Ticket_Box_C" parent="." unique_id=2108803535 instance=ExtResource("23_87m88")]
 transform = Transform3D(-0.75, 0, 1.299038, 0, 1.5, 0, -1.299038, 0, -0.75, -31.677767, -0.115615, -12.686505)
@@ -357,41 +247,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.895702, -1.9073486e-06, 15.
 [node name="Lamps" parent="." unique_id=166998723 instance=ExtResource("13_w4g7w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.6324625, 0, 10.779305)
 
-[node name="Bld_Bakery" parent="." unique_id=1322933375 instance=ExtResource("14_bli7h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.781834, 0, 21.907244)
-
-[node name="Bld_Cafe" parent="." unique_id=1135817729 instance=ExtResource("15_nlngv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.877804, 0, 37.916306)
-
-[node name="Gift_Shop" parent="." unique_id=777981838 instance=ExtResource("16_h050s")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.951471, 0.84420395, 43.64548)
-
 [node name="HotDogs_Shop" parent="." unique_id=659724584 instance=ExtResource("17_dbcyo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3355532, 0, 38.042038)
-
-[node name="Park_Entrance" parent="." unique_id=246717198 instance=ExtResource("19_vog6x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8424854, 0, 26.808226)
-
-[node name="PopCorn_Shop" parent="." unique_id=1761177705 instance=ExtResource("20_m2aab")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.756275, 1.9073486e-06, 21.689587)
+transform = Transform3D(-0.8660254, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, -0.8660254, 3.8964972, 0, 27.515759)
 
 [node name="Soda_Shop" parent="." unique_id=1490799055 instance=ExtResource("21_6fdsn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.807297, 0, 19.476688)
-
-[node name="Ticket_Box_A" parent="." unique_id=206639782 instance=ExtResource("22_eahg2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.69667, 1.9073486e-06, 24.676308)
-
-[node name="Ticket_Box_B" parent="." unique_id=597033908 instance=ExtResource("23_87m88")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.190491, 1.9073486e-06, 22.952204)
-
-[node name="WC" parent="." unique_id=1039295226 instance=ExtResource("24_p4kn1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.031954, 0, 24.070768)
-
-[node name="Car_1" parent="." unique_id=2067506652 instance=ExtResource("25_swptr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.256443, 3.623413, 43.243767)
-
-[node name="Van" parent="." unique_id=819599614 instance=ExtResource("26_tnypt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.769068, 2.1972733, 43.26566)
 
 [node name="Bush" parent="." unique_id=1754402191 instance=ExtResource("27_m2aab")]
 transform = Transform3D(0.6216786, 0, -0.64791495, 0, 1, 0, 0.6087927, 0, 0.66162896, -11.26333, 0, -29.374044)
@@ -426,14 +286,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 0, -31)
 [node name="Tree_2" parent="." unique_id=96145952 instance=ExtResource("36_87m88")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -35.94975, 0, -30.535534)
 
-[node name="Carousel" parent="." unique_id=1513189905 instance=ExtResource("37_p4kn1")]
-transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 29, 0, -27)
-
 [node name="FerrisWheel" parent="." unique_id=2060445341 instance=ExtResource("38_swptr")]
 transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 43, -2, -11)
-
-[node name="Gift_Shop2" parent="." unique_id=1641563156 instance=ExtResource("16_h050s")]
-transform = Transform3D(1.299038, 0, -0.75, 0, 1.5, 0, 0.75, 0, 1.299038, 23.299038, 0, -29.25)
 
 [node name="Lichterketten" type="Node3D" parent="." unique_id=694974745]
 
@@ -448,9 +302,6 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 19)
 
 [node name="Kette3" parent="Lichterketten" unique_id=167251226 instance=ExtResource("39_lkette")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 14, 0, 19)
-
-[node name="Kette4" parent="Lichterketten" unique_id=793617165 instance=ExtResource("39_lkette")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 28, 0, 19)
 
 [node name="Kette5" parent="Lichterketten" unique_id=665602817 instance=ExtResource("39_lkette")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -28, 0, -22)
