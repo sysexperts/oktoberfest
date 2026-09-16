@@ -14,6 +14,9 @@ const GRUPPEN := [
 		"res://scenes/kirmes/stemmen.tscn",
 		"res://scenes/kirmes/nagelbalken.tscn",
 		"res://scenes/kirmes/kegeln.tscn",
+		"res://scenes/kirmes/pfeilwurf.tscn",
+		"res://scenes/kirmes/maulwurf.tscn",
+		"res://scenes/kirmes/krugschieben.tscn",
 	]],
 	["Essen & Markt", ["res://scenes/kirmes/essen/"]],
 	["Fahrgeschäfte", [

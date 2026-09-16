@@ -641,3 +641,16 @@ WORLD_NAGEL,Nagelbalken,Nail Driving,Çivi Çakma
 HINT_KEGELN,{interact} Bierfass-Kegeln (2 €),{interact} Barrel skittles (€2),{interact} Varil bowling (2 €)
 KEGELN_ANZEIGE,"🎳 Umgefallen: %d von %d   ·   Würfe: %d   ·   Maus zielt, Maustaste halten und loslassen rollt, Esc beendet","🎳 Knocked down: %d of %d   ·   Rolls: %d   ·   Mouse aims, hold and release the button to roll, Esc quits","🎳 Devrilen: %d / %d   ·   Atış: %d   ·   Fare nişan alır, tuşu basılı tutup bırakınca yuvarlar, Esc çıkış"
 WORLD_KEGELN,Bierfass-Kegeln,Barrel Skittles,Varil Bowling
+HINT_PFEIL,{interact} Ballonstechen (2 €),{interact} Balloon darts (€2),{interact} Balon patlatma (2 €)
+PFEIL_ANZEIGE,"🎯 Geplatzt: %d   ·   Pfeile übrig: %d   ·   Punkte: %d   ·   Maus zielt, Linksklick wirft, Esc beendet","🎯 Popped: %d   ·   Darts left: %d   ·   Points: %d   ·   Mouse aims, left click throws, Esc quits","🎯 Patlayan: %d   ·   Kalan ok: %d   ·   Puan: %d   ·   Fare nişan alır, sol tık atar, Esc çıkış"
+WORLD_PFEIL,Ballonstechen,Balloon Darts,Balon Patlatma
+HINT_MAULWURF,{interact} Hau den Maulwurf (2 €),{interact} Whack-a-mole (€2),{interact} Köstebek vurma (2 €)
+MAULWURF_ANZEIGE,"🔨 Treffer: %d   ·   Zeit: %.0f s   ·   Punkte: %d   ·   Maulwurf anklicken haut zu, Esc beendet","🔨 Hits: %d   ·   Time: %.0f s   ·   Points: %d   ·   Click a mole to whack it, Esc quits","🔨 İsabet: %d   ·   Süre: %.0f sn   ·   Puan: %d   ·   Köstebeğe tıkla ve vur, Esc çıkış"
+MAULWURF_ZEIT,Restzeit,Time left,Kalan süre
+WORLD_MAULWURF,Hau den Maulwurf,Whack-a-Mole,Köstebek Vur
+HINT_KRUG,{interact} Krugschieben (2 €),{interact} Stein sliding (€2),{interact} Kupa kaydırma (2 €)
+KRUG_ANZEIGE,"🍺 Versuch %d von %d   ·   Summe: %d   ·   Punkte: %d   ·   Linksklick schiebt, Esc beendet   %s","🍺 Try %d of %d   ·   Total: %d   ·   Points: %d   ·   Left click slides, Esc quits   %s","🍺 Deneme %d / %d   ·   Toplam: %d   ·   Puan: %d   ·   Sol tık kaydırır, Esc çıkış   %s"
+KRUG_KRAFT,"Kraft — zu fest, und der Krug fällt hinten herunter!","Power — too hard and the stein falls off the end!","Güç — fazla sert itersen kupa arkadan düşer!"
+KRUG_FELD,→ %d Punkte!,→ %d points!,→ %d puan!
+KRUG_DANEBEN,→ daneben,→ missed,→ olmadı
+WORLD_KRUG,Krugschieben,Stein Sliding,Kupa Kaydırma

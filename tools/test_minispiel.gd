@@ -35,6 +35,13 @@ class Lauf extends Node:
 				anzahl += 1
 				if bude == null:
 					bude = s
+		# Nicht auf der Karte? Dann eine auf die Wiese stellen (Baumodus-Karte)
+		if bude == null and ResourceLoader.exists("res://scenes/kirmes/%s.tscn" % art):
+			var karte = gm.get_node("Kirmes/Karte")
+			karte.net_setzen("res://scenes/kirmes/%s.tscn" % art, Vector3(38, 0, -42), 0.0)
+			await get_tree().process_frame
+			bude = karte.get_child(karte.get_child_count() - 1)
+			anzahl = 1
 		print("MINISPIEL %s: %d Buden" % [art, anzahl])
 		if bude == null:
 			get_tree().quit()
@@ -55,6 +62,10 @@ class Lauf extends Node:
 			return
 		if art == "nagelbalken":
 			await _nagelbalken(bude, spieler, gm)
+			get_tree().quit()
+			return
+		if art in ["pfeilwurf", "maulwurf", "krugschieben"]:
+			await call("_" + art, bude, spieler, gm)
 			get_tree().quit()
 			return
 		if art == "kegeln":
@@ -352,4 +363,108 @@ class Lauf extends Node:
 		for i in 20:
 			await get_tree().process_frame
 		get_viewport().get_texture().get_image().save_png(dir + "/spiel_entenangeln_stand.png")
+		print("MINISPIEL FERTIG")
+
+	func _bild_stand(bude: Node, gm: Node, name: String) -> void:
+		var kamera := Camera3D.new()
+		gm.add_child(kamera)
+		var stand := bude as Node3D
+		kamera.global_position = stand.global_position + stand.global_basis.z * 7.5 + Vector3(0, 2.8, 0) + stand.global_basis.x * 2.5
+		kamera.look_at(stand.global_position + Vector3(0, 1.6, -1.2))
+		kamera.current = true
+		for i in 20:
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_%s_stand.png" % name)
+		kamera.queue_free()
+
+	## Ballonstechen: Werfer, die auf einen Ballon zielen und mit unterschiedlicher
+	## Streuung zu zufälligen Zeitpunkten werfen.
+	func _pfeilwurf(bude: Node, spieler: Node, gm: Node) -> void:
+		var schritt := 1.0 / 60.0
+		# [Name, wartet bis Fadenkreuz so nah am Ballon ist (m), Zielfehler (m)]
+		for stufe: Array in [["geduldig", 0.05, 0.03], ["normal", 0.1, 0.05], ["hastig", 9.0, 0.05]]:
+			var punkte := 0
+			for runde in 6:
+				bude.spiel_starten(spieler)
+				var frames := 0
+				while bude.laeuft() and frames < 60 * 40:
+					frames += 1
+					if bude._flug < 0.0 and bude._ende_in < 0.0:
+						var ziel: Node3D = null
+						for b in bude._ballons.get_children():
+							if not b.has_meta("geplatzt"):
+								ziel = b
+								break
+						if ziel:
+							bude._ziel = Vector2(ziel.position.x, ziel.position.y) + Vector2(randf_range(-1, 1), randf_range(-1, 1)) * float(stufe[2])
+							var abstand: float = (bude.zielpunkt() - Vector2(ziel.position.x, ziel.position.y)).length()
+							if abstand < float(stufe[1]) or frames % 60 == 0 and float(stufe[1]) > 1.0:
+								bude.werfen()
+					if frames == 60 * 5 and runde == 0 and stufe[0] == "normal":
+						await get_tree().process_frame
+						get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_pfeilwurf_blick.png")
+					bude._process(schritt)
+				punkte += bude.punkte()
+				if bude.laeuft():
+					bude._beenden()
+			print("  %s: im Schnitt %.1f Punkte" % [stufe[0], punkte / 6.0])
+		await _bild_stand(bude, gm, "pfeilwurf")
+		print("MINISPIEL FERTIG")
+
+	## Hau den Maulwurf: Spieler mit unterschiedlicher Reaktionszeit.
+	func _maulwurf(bude: Node, spieler: Node, gm: Node) -> void:
+		var schritt := 1.0 / 60.0
+		for stufe: Array in [["flink", 0.35], ["normal", 0.5], ["mensch", 0.62], ["traege", 0.75]]:
+			var punkte := 0
+			for runde in 4:
+				bude.spiel_starten(spieler)
+				var gesehen := {}
+				var frames := 0
+				while bude.laeuft() and frames < 60 * 40:
+					frames += 1
+					for i in 9:
+						if bude.ist_oben(i):
+							gesehen[i] = float(gesehen.get(i, 0.0)) + schritt
+							if gesehen[i] >= float(stufe[1]):
+								bude.hauen(i)
+						else:
+							gesehen.erase(i)
+					if frames == 60 * 8 and runde == 0 and stufe[0] == "normal":
+						await get_tree().process_frame
+						get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_maulwurf_blick.png")
+					bude._process(schritt)
+				print("    %s Runde %d: %d Treffer" % [stufe[0], runde, bude._treffer])
+				punkte += bude.punkte()
+				if bude.laeuft():
+					bude._beenden()
+			print("  %s: im Schnitt %.1f Punkte" % [stufe[0], punkte / 4.0])
+		await _bild_stand(bude, gm, "maulwurf")
+		print("MINISPIEL FERTIG")
+
+	## Krugschieben: Spieler, die mit unterschiedlicher Genauigkeit loslassen und auf
+	## das 3er- oder 2er-Feld zielen.
+	func _krugschieben(bude: Node, spieler: Node, gm: Node) -> void:
+		var schritt := 1.0 / 60.0
+		for stufe: Array in [["genau", 0.008, -2.7], ["normal", 0.03, -2.5], ["grob", 0.07, -2.35], ["vorsichtig", 0.03, -2.1]]:
+			var punkte := 0
+			for runde in 6:
+				bude.spiel_starten(spieler)
+				var frames := 0
+				var soll: float = bude.kraft_fuer(float(stufe[2])) + randf_range(-1, 1) * float(stufe[1])
+				while bude.laeuft() and frames < 60 * 60:
+					frames += 1
+					var vorher: float = bude._kraft
+					bude._process(schritt)
+					if bude._tempo < 0.0 and bude._zeigen < 0.0 and bude._ende_in < 0.0 \
+							and (vorher - soll) * (bude._kraft - soll) <= 0.0 and bude._kraft_dir > 0.0:
+						bude.schieben()
+						soll = bude.kraft_fuer(float(stufe[2])) + randf_range(-1, 1) * float(stufe[1])
+					if frames == 40 and runde == 0 and stufe[0] == "normal":
+						await get_tree().process_frame
+						get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_krugschieben_blick.png")
+				punkte += bude.punkte()
+				if bude.laeuft():
+					bude._beenden()
+			print("  %s: im Schnitt %.1f Punkte" % [stufe[0], punkte / 6.0])
+		await _bild_stand(bude, gm, "krugschieben")
 		print("MINISPIEL FERTIG")

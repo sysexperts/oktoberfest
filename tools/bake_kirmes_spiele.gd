@@ -13,6 +13,9 @@ extends SceneTree
 ##   scenes/kirmes/nagelbalken_stand.tscn Nagelbalken: Baumstamm mit Nagel, Hammer an der Kamera
 ##   scenes/kirmes/kegeln_stand.tscn      Bierfass-Kegeln: kurze Bahn, 9 Fässchen als Kegel
 ##   scenes/kirmes/kegelkugel.tscn        Holzkugel (RigidBody)
+##   scenes/kirmes/pfeilwurf_stand.tscn   Ballonstechen: Korkwand mit 12 Ballons, Pfeile
+##   scenes/kirmes/maulwurf_stand.tscn    Hau den Maulwurf: Tisch mit 9 Löchern, Spielhammer
+##   scenes/kirmes/krugschieben_stand.tscn Krugschieben: langer Schanktisch mit Punktfeldern
 ##   scenes/kirmes/essen/*.tscn           Marktbuden (Essen, Süßes, Spielwaren) mit Verkäuferplatz
 ##   scenes/kulisse/deko/*.tscn           Deko für den Baumodus (Brunnen, Festbogen, Zaun …)
 ## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
@@ -60,6 +63,12 @@ func _init() -> void:
 	if soll.call("essen"):
 		for typ: String in MARKTBUDEN:
 			_speichern(_marktbude(typ), "res://scenes/kirmes/essen/%s.tscn" % typ)
+	if soll.call("pfeilwurf"):
+		_speichern(_pfeilwurf(), "res://scenes/kirmes/pfeilwurf_stand.tscn")
+	if soll.call("maulwurf"):
+		_speichern(_maulwurf(), "res://scenes/kirmes/maulwurf_stand.tscn")
+	if soll.call("krugschieben"):
+		_speichern(_krugschieben(), "res://scenes/kirmes/krugschieben_stand.tscn")
 	if soll.call("deko"):
 		for typ: String in DEKO:
 			_speichern(_deko(typ), "res://scenes/kulisse/deko/%s.tscn" % typ)
@@ -1597,4 +1606,194 @@ func _deko(typ: String) -> Node3D:
 					var p := oben.lerp(anker + Vector3(0, 0.3, 0), t) - Vector3(0, sin(t * PI) * 0.4, 0)
 					_prisma(r, "Wimpel%d_%d" % [k, i], Vector3(0.28, 0.36, 0.01), p - Vector3(0, 0.18, 0), [m.blau, m.weiss][i % 2], Vector3(0, rad_to_deg(a) + 90.0, 180))
 			_kollision(koerper, "Form", _boxform(Vector3(0.3, 7.0, 0.3)), Transform3D(Basis(), Vector3(0, 3.5, 0)))
+	return r
+
+# ------------------------------------------------------------------ Gemeinsame Spielbude
+## Podest, Eckpfosten, Rück- und Seitenwände, Satteldach mit Markise, Lichterreihe und
+## Tafel vorn oben (Aufschrift als Label3D in der Hüllszene). Front = +Z.
+func _spielbude(r: Node3D, schema: String, breite: float, tiefe: float, hoehe: float, zm: float, boden: float) -> void:
+	var streifen: Material = m["streifen_" + schema]
+	var fein: Material = m["streifen_fein_" + schema]
+	var zickzack: Material = m["zickzack_" + schema]
+	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
+	_box(r, "Dielen", Vector3(breite - 0.16, 0.02, tiefe - 0.16), Vector3(0, boden + 0.01, zm), m.dielen)
+	_box(r, "PodestKante", Vector3(breite + 0.08, 0.05, 0.05), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	var bau := _gruppe(r, "Bau")
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.09, 0.08, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.creme_lack, Vector3.ZERO, 10)
+			_kugel(bau, "Knauf%s%s" % [sx, sz], 0.1, p + Vector3(0, hoehe + 0.05, 0), m.gold)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), fein)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.75, tiefe - 0.3), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.375, zm - 0.1), fein)
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.12, tiefe + 0.3), Vector3(0, 0.06, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(tiefe + 0.5, 1.0, breite + 0.4), Vector3(0, 0.62, 0), streifen, Vector3(0, 90, 0))
+	for sx: float in [-1.0, 1.0]:
+		_prisma(dach, "Stirn%s" % sx, Vector3(tiefe + 0.3, 0.95, 0.04), Vector3(sx * (breite / 2.0 + 0.22), 0.6, 0), zickzack, Vector3(0, 90, 0))
+	_box(dach, "Markise", Vector3(breite + 0.3, 0.45, 0.05), Vector3(0, -0.14, tiefe / 2.0 + 0.2), zickzack)
+	for i in 9:
+		var t := (i + 0.5) / 9.0
+		_kugel(dach, "Birne%d" % i, 0.035, Vector3(-breite / 2.0 + t * breite, -0.36, tiefe / 2.0 + 0.24), m.gluehbirne, Vector3.ONE, false)
+	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + hoehe + 0.55, zm + tiefe / 2.0 + 0.45))
+	_box(tafel, "Brett", Vector3(2.8, 0.6, 0.06), Vector3.ZERO, m.holz_dunkel)
+	_box(tafel, "Rahmen", Vector3(2.9, 0.7, 0.04), Vector3(0, 0, -0.02), m.gold)
+	_marke(tafel, "TitelPunkt", Vector3(0, 0, 0.05))
+	_licht(r, "Licht", Vector3(0, boden + hoehe - 0.3, zm + 0.2), 1.6, 6.0)
+
+func _spielkamera(r: Node3D, pos: Vector3, grad: Vector3, fov: float) -> Camera3D:
+	var kamera := Camera3D.new()
+	kamera.position = pos
+	kamera.rotation_degrees = grad
+	kamera.fov = fov
+	_haengen(r, kamera, "SpielKamera")
+	return kamera
+
+# ------------------------------------------------------------------ Ballonstechen
+## Pfeile auf eine Wand voller Luftballons. Spieler steht vor der Theke, blickt -Z.
+##   Ballons/Ballon0..11  Ziele (Skript blendet getroffene aus)
+##   Zielpunkt            Fadenkreuz auf der Wand (Skript bewegt es)
+##   Flugpfeil            Pfeil, der zur Wand fliegt
+func _pfeilwurf() -> Node3D:
+	var r := _neu("Pfeilwurf")
+	var boden := 0.18
+	var zm := -1.2
+	_spielbude(r, "violett", 5.4, 3.4, 2.9, zm, boden)
+	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.2))
+	_box(theke, "Korpus", Vector3(4.8, 0.95, 0.4), Vector3(0, 0.475, 0), m.holz_hell)
+	_box(theke, "Feld", Vector3(4.2, 0.5, 0.02), Vector3(0, 0.48, 0.21), m.zickzack_violett)
+	_box(theke, "Platte", Vector3(5.0, 0.06, 0.55), Vector3(0, 0.98, 0), m.gruen_samt)
+	for i in 5:
+		_zyl(theke, "Pfeil%d" % i, 0.012, 0.012, 0.32, Vector3(1.4 + i * 0.1, 1.02, 0.05), m.holz_hell, Vector3(90, 0, 0), 5)
+		_prisma(theke, "Feder%d" % i, Vector3(0.05, 0.08, 0.01), Vector3(1.4 + i * 0.1, 1.02, 0.2), [m.rot, m.ente][i % 2], Vector3(90, 0, 0))
+	# Korkwand mit Ballons
+	var wand_z := zm - 1.7 + 0.14
+	_box(r, "Korkwand", Vector3(4.2, 2.0, 0.06), Vector3(0, boden + 1.85, wand_z), m.lebkuchen)
+	_box(r, "Korkrahmen", Vector3(4.35, 2.15, 0.04), Vector3(0, boden + 1.85, wand_z - 0.02), m.gold)
+	var ballons := _gruppe(r, "Ballons")
+	var farben: Array = [m.rot, m.blau, m.ente, m.hopfen, m.rosa_lack, m.orange_lack]
+	for i in 12:
+		var x := -1.5 + (i % 4) * 1.0
+		var y := boden + 1.2 + (i / 4) * 0.65
+		var b := _gruppe(ballons, "Ballon%d" % i, Vector3(x, y, wand_z + 0.2))
+		_kugel(b, "Huelle", 0.2, Vector3.ZERO, farben[i % farben.size()], Vector3(1.0, 1.2, 0.9))
+		_zyl(b, "Knoten", 0.03, 0.01, 0.05, Vector3(0, -0.26, 0), farben[i % farben.size()], Vector3.ZERO, 6)
+	# Preise an den Seiten
+	for i in 4:
+		_teddy(r, "Teddy%d" % i, Vector3(-2.35, boden + 0.6 + (i % 2) * 0.0, zm - 0.9 + i * 0.5), 90.0, 0.8)
+	for i in 3:
+		_kugel(r, "Deko%d" % i, 0.18, Vector3(2.3, boden + 2.4 + i * 0.1, zm - 0.6 + i * 0.5), farben[i], Vector3(1.0, 1.2, 1.0))
+	# Fadenkreuz und Flugpfeil
+	var ziel := _gruppe(r, "Zielpunkt", Vector3(0, boden + 1.85, wand_z + 0.45))
+	_torus(ziel, "Ring", 0.07, 0.09, Vector3.ZERO, m.gluehbirne, Vector3(90, 0, 0))
+	_kugel(ziel, "Punkt", 0.015, Vector3.ZERO, m.gluehbirne, Vector3.ONE, false)
+	var pfeil := _gruppe(r, "Flugpfeil", Vector3(0, 1.5, 1.2))
+	_zyl(pfeil, "Schaft", 0.012, 0.012, 0.34, Vector3(0, 0, 0), m.holz_hell, Vector3(90, 0, 0), 5)
+	_zyl(pfeil, "Spitze", 0.012, 0.0, 0.08, Vector3(0, 0, -0.21), m.metall, Vector3(-90, 0, 0), 5)
+	for k in 2:
+		_prisma(pfeil, "Feder%d" % k, Vector3(0.06, 0.1, 0.01), Vector3(0, 0, 0.14), m.rot, Vector3(90, 0, k * 90.0))
+	_spielkamera(r, Vector3(0, boden + 1.62, 1.1), Vector3(-3, 0, 0), 60)
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Bude", _boxform(Vector3(5.4, 1.2, 3.4)), Transform3D(Basis(), Vector3(0, 0.6, zm)))
+	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.4))
+	_marke(r, "BesitzerSeite", Vector3(-2.0, boden, -2.2))
+	return r
+
+# ------------------------------------------------------------------ Hau den Maulwurf
+## Tisch mit 3×3 Löchern, aus denen Maulwürfe schauen. Kamera schräg von oben.
+##   Maulwuerfe/Maulwurf0..8  (lokal y = 0 versteckt, Skript hebt sie an)
+##   Hammer                   Spielhammer (Skript schwingt ihn zum Loch)
+func _maulwurf() -> Node3D:
+	var r := _neu("Maulwurf")
+	var boden := 0.18
+	var zm := -1.2
+	_spielbude(r, "orange", 5.4, 3.4, 2.9, zm, boden)
+	var tisch := _gruppe(r, "Tisch", Vector3(0, boden, -0.4))
+	var top := 0.9
+	_box(tisch, "Korpus", Vector3(2.6, top - 0.06, 1.8), Vector3(0, (top - 0.06) / 2.0, 0), m.holz_hell)
+	_box(tisch, "Front", Vector3(2.3, 0.55, 0.02), Vector3(0, 0.45, 0.91), m.zickzack_orange)
+	_box(tisch, "Rand", Vector3(2.7, 0.08, 1.9), Vector3(0, top - 0.02, 0), m.holz_dunkel)
+	_box(tisch, "Platte", Vector3(2.5, 0.02, 1.7), Vector3(0, top + 0.03, 0), m.huegel)
+	var maeuse := _gruppe(r, "Maulwuerfe")
+	for i in 9:
+		var p := Vector3(-0.8 + (i % 3) * 0.8, boden + top, -0.4 - 0.5 + (i / 3) * 0.5)
+		_zyl(r, "Loch%d" % i, 0.2, 0.2, 0.02, p + Vector3(0, 0.045, 0), m.holz_dunkel, Vector3.ZERO, 16)
+		_torus(r, "Erdwall%d" % i, 0.19, 0.26, p + Vector3(0, 0.05, 0), m.holz_dunkel)
+		var mw := _gruppe(maeuse, "Maulwurf%d" % i, p)
+		var koerper_mw := _gruppe(mw, "Koerper", Vector3(0, -0.3, 0))
+		_kugel(koerper_mw, "Leib", 0.15, Vector3(0, 0.1, 0), m.holz_dunkel, Vector3(1.0, 1.3, 1.0))
+		_kugel(koerper_mw, "Nase", 0.04, Vector3(0, 0.18, 0.14), m.rosa_lack)
+		for sx: float in [-1.0, 1.0]:
+			_kugel(koerper_mw, "Auge%s" % sx, 0.022, Vector3(sx * 0.06, 0.25, 0.115), m.weiss, Vector3.ONE, false)
+			_kugel(koerper_mw, "Pupille%s" % sx, 0.012, Vector3(sx * 0.06, 0.25, 0.135), m.schwarz_lack, Vector3.ONE, false)
+			_kugel(koerper_mw, "Pfote%s" % sx, 0.045, Vector3(sx * 0.12, 0.08, 0.1), m.rosa_lack, Vector3(1.2, 0.6, 1.0))
+		_zyl(koerper_mw, "Helm", 0.1, 0.12, 0.06, Vector3(0, 0.3, 0), m.ente, Vector3(-10, 0, 0), 12)
+	# Anzeigetafel mit Glühbirnen hinten, Preise
+	_box(r, "Punktetafel", Vector3(2.4, 1.0, 0.06), Vector3(0, boden + 2.0, zm - 1.5), m.schwarz_lack)
+	for i in 10:
+		_kugel(r, "Lampe%d" % i, 0.07, Vector3(-1.0 + i * 0.222, boden + 2.0, zm - 1.45), m.gluehbirne, Vector3.ONE, false)
+	for i in 3:
+		_teddy(r, "Teddy%d" % i, Vector3(-1.6 + i * 1.6, boden + 1.0, zm - 1.3), 0.0, 0.9)
+	# Spielhammer: Stiel + Gummikopf, hängt vor der Kamera
+	var hammer := _gruppe(r, "Hammer", Vector3(0.6, boden + 1.5, 0.3))
+	_zyl(hammer, "Stiel", 0.025, 0.025, 0.6, Vector3(0, 0.3, 0), m.holz_hell, Vector3.ZERO, 8)
+	_zyl(hammer, "Kopf", 0.09, 0.09, 0.26, Vector3(0, 0.62, 0), m.rot, Vector3(0, 0, 90), 14)
+	for sx: float in [-1.0, 1.0]:
+		_zyl(hammer, "Gummi%s" % sx, 0.095, 0.095, 0.04, Vector3(sx * 0.13, 0.62, 0), m.schwarz_lack, Vector3(0, 0, 90), 14)
+	_spielkamera(r, Vector3(0, boden + 2.2, 0.75), Vector3(-52, 0, 0), 62)
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Bude", _boxform(Vector3(5.4, 1.2, 3.4)), Transform3D(Basis(), Vector3(0, 0.6, zm)))
+	_marke(r, "BesitzerMitte", Vector3(-1.9, boden, -0.2))
+	_marke(r, "BesitzerSeite", Vector3(-2.0, boden, -2.2))
+	return r
+
+# ------------------------------------------------------------------ Krugschieben
+## Langer Schanktisch in die Bude hinein, am Ende drei Punktfelder. Spieler steht vorn.
+##   Krug        Schiebekrug (Skript bewegt ihn entlang -Z)
+##   KrugStart   Startpunkt auf dem Tisch
+##   Tischende   Kante: darüber hinaus fällt der Krug
+func _krugschieben() -> Node3D:
+	var r := _neu("Krugschieben")
+	var boden := 0.18
+	var zm := -1.3
+	var tiefe := 3.6
+	_spielbude(r, "tuerkis", 5.0, tiefe, 2.9, zm, boden)
+	var top := 1.0
+	var tisch := _gruppe(r, "Tisch", Vector3(0, boden, 0))
+	var laenge := 3.5
+	var mitte_z := 0.55 - laenge / 2.0
+	_box(tisch, "Platte", Vector3(0.9, 0.08, laenge), Vector3(0, top, mitte_z), m.holz_hell)
+	_box(tisch, "Belag", Vector3(0.8, 0.01, laenge - 0.05), Vector3(0, top + 0.045, mitte_z), m.dielen)
+	for sx: float in [-1.0, 1.0]:
+		_box(tisch, "Bande%s" % sx, Vector3(0.05, 0.06, laenge), Vector3(sx * 0.45, top + 0.07, mitte_z), m.messing)
+		for k in 4:
+			_box(tisch, "Bein%s_%d" % [sx, k], Vector3(0.08, top, 0.08), Vector3(sx * 0.38, top / 2.0, 0.4 - k * 1.05), m.holz_dunkel)
+	# Punktfelder am Ende: 1, 2, 3 (3 ganz hinten, schmal)
+	var felder := [[-1.85, 0.6, m.hopfen], [-2.375, 0.45, m.ente], [-2.75, 0.3, m.rot]]
+	for f: Array in felder:
+		_box(tisch, "Feld%.2f" % f[0], Vector3(0.8, 0.012, f[1]), Vector3(0, top + 0.052, f[0]), f[2])
+		_box(tisch, "Linie%.2f" % f[0], Vector3(0.8, 0.014, 0.02), Vector3(0, top + 0.053, f[0] + f[1] / 2.0), m.weiss)
+	_marke(r, "Tischende", Vector3(0, boden + top, 0.55 - laenge))
+	_marke(r, "KrugStart", Vector3(0, boden + top + 0.05, 0.3))
+	# Auffangkorb hinter dem Tisch
+	_zyl(r, "Korb", 0.45, 0.35, 0.5, Vector3(0, boden + 0.25, 0.55 - laenge - 0.35), m.holz_dunkel, Vector3.ZERO, 12)
+	# Fässer und Krüge als Deko
+	_fass(r, "FassL", Vector3(-1.9, boden, -2.5))
+	_fass(r, "FassR", Vector3(1.9, boden, -2.5))
+	_fass(r, "FassROben", Vector3(1.9, boden + 0.78, -2.5))
+	var regal := _gruppe(r, "Regal", Vector3(-1.9, boden + 1.3, -1.0))
+	_box(regal, "Brett", Vector3(0.4, 0.04, 1.6), Vector3.ZERO, m.holz_dunkel)
+	for i in 4:
+		_masskrug(regal, "Krug%d" % i, Vector3(0, 0.02, -0.6 + i * 0.4))
+	var krug := _masskrug(r, "Krug", Vector3(0, boden + top + 0.05, 0.3))
+	krug.rotation_degrees = Vector3(0, 90, 0)
+	_spielkamera(r, Vector3(0, boden + 1.85, 1.35), Vector3(-17, 0, 0), 58)
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Bude", _boxform(Vector3(5.0, 1.2, tiefe)), Transform3D(Basis(), Vector3(0, 0.6, zm)))
+	_marke(r, "BesitzerMitte", Vector3(-1.95, boden, -0.5))
+	_marke(r, "BesitzerSeite", Vector3(-1.95, boden, -1.7))
 	return r
