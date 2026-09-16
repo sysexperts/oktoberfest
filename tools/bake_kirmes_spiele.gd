@@ -822,7 +822,6 @@ func _nagelbalken() -> Node3D:
 	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
 	_box(dach, "Traufe", Vector3(breite + 0.4, 0.16, tiefe + 0.4), Vector3(0, 0.08, 0), m.holz_dunkel)
 	_prisma(dach, "Giebel", Vector3(breite + 0.5, 1.8, tiefe + 0.5), Vector3(0, 1.05, 0), m.schindel, Vector3(0, 90, 0))
-	_box(dach, "Firstbrett", Vector3(0.18, 0.16, tiefe + 0.6), Vector3(0, 1.95, 0), m.holz_dunkel)
 	_zyl(dach, "Rauchfang", 0.16, 0.14, 0.9, Vector3(breite / 2.0 - 0.7, 1.8, -0.6), m.stein, Vector3.ZERO, 8)
 	for i in 9:
 		var t := (i + 0.5) / 9.0
