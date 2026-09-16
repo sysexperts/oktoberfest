@@ -136,13 +136,13 @@ func _init() -> void:
 	var buden := _gruppe(wurzel, "Buden")
 	var nord := [SPIEL_DOSEN, SPIEL_RING, SPIEL_SCHIESS, SPIEL_ENTEN, SPIEL_LUKAS, SPIEL_RAD]
 	var i_n := 0
-	for z: float in [64.0, 71.5, 79.0]:
+	for z: float in [63.0, 73.0, 83.0]:
 		for seite: float in [-1.0, 1.0]:
 			_stand(buden, nord[i_n % nord.size()], Vector3(seite * 11.5, 0, z), Vector3(-seite, 0, 0))
 			i_n += 1
 	var sued := [SPIEL_SCHIESS, SPIEL_RAD, SPIEL_STEMMEN, SPIEL_DOSEN, SPIEL_RING, SPIEL_LUKAS]
 	var i_s := 0
-	for z: float in [-84.0, -91.5, -99.0]:
+	for z: float in [-82.0, -92.0, -102.0]:
 		for seite: float in [-1.0, 1.0]:
 			_stand(buden, sued[i_s % sued.size()], Vector3(seite * 11.5, 0, z), Vector3(-seite, 0, 0))
 			i_s += 1
