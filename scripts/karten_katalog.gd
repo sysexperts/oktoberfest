@@ -51,6 +51,10 @@ const GRUPPEN := [
 		"res://scenes/zelt/biergarten_tisch.tscn",
 		"res://assets/kirmes/Models/Props/",
 	]],
+	["Fahrzeuge", [
+		"res://scenes/wohnwagen_deko.tscn",
+		"res://assets/kirmes/Models/Vehicles/",
+	]],
 	["Gebäude", ["res://assets/kirmes/Models/Shops/", "res://assets/kirmes/Models/Ground/"]],
 ]
 
