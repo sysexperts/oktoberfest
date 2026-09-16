@@ -8,8 +8,8 @@ outer_radius = 0.135
 rings = 28
 ring_segments = 8
 
-[node name="Wurfring" type="Node3D" unique_id=1662613034]
+[node name="Wurfring" type="Node3D" unique_id=1169737717]
 
-[node name="Ring" type="MeshInstance3D" parent="." unique_id=1757239788]
+[node name="Ring" type="MeshInstance3D" parent="." unique_id=825657464]
 material_override = ExtResource("1_a1toh")
 mesh = SubResource("TorusMesh_1nwce")

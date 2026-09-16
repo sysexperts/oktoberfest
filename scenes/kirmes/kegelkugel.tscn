@@ -18,18 +18,18 @@ ring_segments = 8
 [sub_resource type="SphereShape3D" id="SphereShape3D_lxmyr"]
 radius = 0.095
 
-[node name="Kegelkugel" type="RigidBody3D" unique_id=1692117619]
+[node name="Kegelkugel" type="RigidBody3D" unique_id=1041843473]
 mass = 2.5
 continuous_cd = true
 
-[node name="Holz" type="MeshInstance3D" parent="." unique_id=470254453]
+[node name="Holz" type="MeshInstance3D" parent="." unique_id=1087786670]
 material_override = ExtResource("1_bphaq")
 mesh = SubResource("SphereMesh_ltut1")
 
-[node name="Band" type="MeshInstance3D" parent="." unique_id=664067027]
+[node name="Band" type="MeshInstance3D" parent="." unique_id=941182630]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 material_override = ExtResource("2_04aj6")
 mesh = SubResource("TorusMesh_uvaaq")
 
-[node name="Form" type="CollisionShape3D" parent="." unique_id=5191736]
+[node name="Form" type="CollisionShape3D" parent="." unique_id=687197809]
 shape = SubResource("SphereShape3D_lxmyr")

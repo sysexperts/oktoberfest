@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/zelt/texturen/strahlen_gruen.png" id="1_h68bh"]
+
+[resource]
+albedo_texture = ExtResource("1_h68bh")
+roughness = 0.8
+uv1_triplanar = true
+uv1_world_triplanar = true

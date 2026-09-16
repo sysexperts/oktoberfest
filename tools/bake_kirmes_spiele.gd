@@ -28,7 +28,12 @@ var m := {}
 func _init() -> void:
 	for n in ["holz_hell", "holz_dunkel", "streifen", "streifen_fein", "rauten", "rauten_fein", "hopfen", "blau", "weiss",
 			"rot", "gold", "metall", "gluehbirne", "messing", "stein", "dielen", "gruen_samt", "teddy", "budenwand",
-			"schwarz_lack", "creme_lack", "vorhang_rot", "ente", "orange_lack", "huegel", "rosa_lack", "schindel", "glas", "wasser"]:
+			"schwarz_lack", "creme_lack", "vorhang_rot", "ente", "orange_lack", "huegel", "rosa_lack", "schindel", "glas", "wasser",
+			"streifen_rot", "streifen_fein_rot", "zickzack_rot", "strahlen_rot",
+			"streifen_gruen", "streifen_fein_gruen", "zickzack_gruen", "strahlen_gruen",
+			"streifen_orange", "streifen_fein_orange", "zickzack_orange", "strahlen_orange",
+			"streifen_violett", "streifen_fein_violett", "zickzack_violett", "strahlen_violett",
+			"streifen_tuerkis", "streifen_fein_tuerkis", "zickzack_tuerkis", "strahlen_tuerkis"]:
 		m[n] = load(MAT + n + ".tres")
 	# Mit Namen hinter „--" nur diese Stände backen (Handänderungen an den anderen bleiben)
 	var nur := OS.get_cmdline_user_args()
@@ -384,34 +389,44 @@ func _ringwurf() -> Node3D:
 	var tiefe := 3.4
 	var hoehe := 2.9
 	var zm := -1.3
-	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
-	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
-	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
-	# Pfosten, Wände, Dach
+	# Sechseckiges Rundzelt in Rot-Creme mit Kegeldach
+	var radius := 3.3
+	var ecke := func(k: int, rad: float) -> Vector3:
+		var a := deg_to_rad(k * 60.0)
+		return Vector3(sin(a) * rad, 0, zm + cos(a) * rad)
+	_zyl(r, "Podest", radius + 0.15, radius + 0.15, boden, Vector3(0, boden / 2.0, zm), m.holz_dunkel, Vector3.ZERO, 6)
+	_zyl(r, "Dielen", radius + 0.05, radius + 0.05, 0.02, Vector3(0, boden + 0.01, zm), m.dielen, Vector3.ZERO, 6)
+	_zyl(r, "PodestKante", radius + 0.2, radius + 0.2, 0.08, Vector3(0, boden + 0.04, zm), m.gold, Vector3.ZERO, 6)
 	var bau := _gruppe(r, "Bau")
-	for sx: float in [-1.0, 1.0]:
-		for sz: float in [-1.0, 1.0]:
-			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
-			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.07, 0.06, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.creme_lack, Vector3.ZERO, 10)
-			for i in 3:
-				_torus(bau, "Ring%s%s_%d" % [sx, sz, i], 0.06, 0.095, p + Vector3(0, 0.8 + i * 0.8, 0), m.gold)
-	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.vorhang_rot)
-	for sx: float in [-1.0, 1.0]:
-		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.75, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.375, zm - 0.15), m.rauten)
+	for k in 6:
+		var p: Vector3 = ecke.call(k, radius - 0.15)
+		_zyl(bau, "Pfosten%d" % k, 0.09, 0.08, hoehe, Vector3(p.x, boden + hoehe / 2.0, p.z), m.creme_lack, Vector3.ZERO, 10)
+		for i in 3:
+			_torus(bau, "Ring%d_%d" % [k, i], 0.08, 0.13, Vector3(p.x, boden + 0.8 + i * 0.8, p.z), m.rot)
+	# Hintere drei Seiten: roter Vorhang, seitlich Zickzack-Schürzen
+	for k: int in [2, 3, 4]:
+		var a := k * 60.0 + 30.0
+		var mp: Vector3 = ecke.call(k, radius * cos(deg_to_rad(30.0)) - 0.05)
+		var mp2: Vector3 = ecke.call(k + 1, radius * cos(deg_to_rad(30.0)) - 0.05)
+		var mitte := (mp + mp2) * 0.5
+		_box(bau, "Wand%d" % k, Vector3(radius + 0.2, hoehe, 0.08), Vector3(mitte.x, boden + hoehe / 2.0, mitte.z), m.vorhang_rot, Vector3(0, a, 0))
 	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
-	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
-	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.streifen, Vector3(0, 90, 0))
-	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
-	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.1, 0)))
-	for s: float in [-1.0, 1.0]:
-		_instanz(dach, SZ + "fahne.tscn", "Fahne%s" % s, Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(s * (breite / 2.0), 0.3, tiefe / 2.0)))
-	for i in 11:
-		var t := (i + 0.5) / 11.0
-		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
+	_zyl(dach, "Traufring", radius + 0.45, radius + 0.45, 0.16, Vector3(0, 0.08, 0), m.holz_dunkel, Vector3.ZERO, 6)
+	_zyl(dach, "Kegel", radius + 0.55, 0.3, 1.5, Vector3(0, 0.9, 0), m.streifen_rot, Vector3.ZERO, 6)
+	_zyl(dach, "Schuerze", radius + 0.6, radius + 0.45, 0.4, Vector3(0, -0.15, 0), m.zickzack_rot, Vector3.ZERO, 6)
+	_kugel(dach, "Knauf", 0.16, Vector3(0, 1.75, 0), m.gold)
+	_instanz(dach, SZ + "fahne.tscn", "Fahne", Transform3D(Basis().scaled(Vector3.ONE * 0.8), Vector3(0, 1.9, 0)))
+	for k in 6:
+		var a: Vector3 = ecke.call(k, radius + 0.5)
+		var b: Vector3 = ecke.call(k + 1, radius + 0.5)
+		for i in 5:
+			var t := (i + 1) / 6.0
+			var p := a.lerp(b, t)
+			_kugel(dach, "Birne%d_%d" % [k, i], 0.04, Vector3(p.x, -0.32 - 0.22 * (1.0 - pow(2.0 * t - 1.0, 2.0)), p.z - zm), m.gluehbirne, Vector3.ONE, false)
 	# Theke vorn
 	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.05))
 	_box(theke, "Korpus", Vector3(breite - 0.4, 0.95, 0.4), Vector3(0, 0.475, 0), m.holz_hell)
-	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.21), m.rauten_fein)
+	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.21), m.zickzack_rot)
 	_box(theke, "Rahmen", Vector3(breite - 0.9, 0.65, 0.015), Vector3(0, 0.5, 0.205), m.gold)
 	_box(theke, "Platte", Vector3(breite - 0.3, 0.06, 0.5), Vector3(0, 0.98, 0), m.gruen_samt)
 	for i in 6:
@@ -446,7 +461,10 @@ func _ringwurf() -> Node3D:
 	# Kollision, Licht, Kamera, Marken
 	var koerper := StaticBody3D.new()
 	_haengen(r, koerper, "Kollision")
-	_kollision(koerper, "Podest", _boxform(Vector3(breite, 1.15, tiefe)), Transform3D(Basis(), Vector3(0, 0.575, zm)))
+	var rundform := CylinderShape3D.new()
+	rundform.radius = 3.3
+	rundform.height = 1.15
+	_kollision(koerper, "Podest", rundform, Transform3D(Basis(), Vector3(0, 0.575, zm)))
 	_licht(r, "Licht", Vector3(0, boden + 2.5, -1.4), 1.8, 6.0)
 	_licht(r, "Frontlicht", Vector3(0, boden + 2.3, 0.9), 0.9, 5.0)
 	var kamera := Camera3D.new()
@@ -486,36 +504,43 @@ func _entenangeln() -> Node3D:
 	var zm := -1.3
 	var bz := -1.5            # Beckenmitte
 	var wasser := boden + 0.5
-	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
-	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
-	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	# Runder Pavillon in Türkis-Creme mit geschwungenem Schirmdach
+	var radius := 2.6
+	_zyl(r, "Podest", radius + 0.15, radius + 0.15, boden, Vector3(0, boden / 2.0, zm), m.holz_dunkel, Vector3.ZERO, 20)
+	_zyl(r, "Dielen", radius + 0.05, radius + 0.05, 0.02, Vector3(0, boden + 0.01, zm), m.dielen, Vector3.ZERO, 20)
+	_torus(r, "PodestKante", radius + 0.1, radius + 0.24, Vector3(0, boden + 0.02, zm), m.gold)
 	var bau := _gruppe(r, "Bau")
-	for sx: float in [-1.0, 1.0]:
-		for sz: float in [-1.0, 1.0]:
-			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
-			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.07, 0.06, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.blau, Vector3.ZERO, 10)
-			for i in 14:
-				_kugel(bau, "Birne%s%s_%d" % [sx, sz, i], 0.035, p + Vector3(0, 0.3 + i * 0.19, 0.08 * sz), m.gluehbirne, Vector3.ONE, false)
-	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.rauten)
-	for sx: float in [-1.0, 1.0]:
-		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, 1.2, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + 0.6, zm - 0.1), m.budenwand)
+	for k in 8:
+		var a := TAU * k / 8.0 + TAU / 16.0
+		var p := Vector3(sin(a) * (radius - 0.12), boden, zm + cos(a) * (radius - 0.12))
+		_zyl(bau, "Pfosten%d" % k, 0.075, 0.065, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.creme_lack, Vector3.ZERO, 10)
+		for i in 3:
+			_torus(bau, "Ring%d_%d" % [k, i], 0.07, 0.11, p + Vector3(0, 0.75 + i * 0.75, 0), m.messing)
+	# Rückseite: türkise Bahnen zwischen den hinteren Pfosten
+	for k: int in [3, 4, 5]:
+		var a := TAU * k / 8.0
+		var mp := Vector3(sin(a) * (radius - 0.1), boden, zm + cos(a) * (radius - 0.1))
+		_box(bau, "Wand%d" % k, Vector3(2.15, hoehe, 0.07), Vector3(mp.x, boden + hoehe / 2.0, mp.z), m.streifen_fein_tuerkis, Vector3(0, rad_to_deg(a), 0))
 	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
-	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
-	_prisma(dach, "Giebel", Vector3(breite + 0.4, 1.0, tiefe + 0.4), Vector3(0, 0.66, 0), m.rauten_fein, Vector3(0, 90, 0))
-	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
-	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.2, 0)))
+	_zyl(dach, "Traufring", radius + 0.35, radius + 0.35, 0.14, Vector3(0, 0.07, 0), m.holz_dunkel, Vector3.ZERO, 20)
+	# Schirmdach aus drei Stufen — gibt die geschwungene Silhouette
+	_zyl(dach, "Schirm1", radius + 0.55, radius - 0.3, 0.5, Vector3(0, 0.35, 0), m.streifen_tuerkis, Vector3.ZERO, 20)
+	_zyl(dach, "Schirm2", radius - 0.3, radius - 1.35, 0.5, Vector3(0, 0.8, 0), m.streifen_tuerkis, Vector3.ZERO, 20)
+	_zyl(dach, "Schirm3", radius - 1.35, 0.15, 0.7, Vector3(0, 1.35, 0), m.streifen_tuerkis, Vector3.ZERO, 20)
+	_zyl(dach, "Wimpelband", radius + 0.6, radius + 0.5, 0.3, Vector3(0, -0.08, 0), m.zickzack_tuerkis, Vector3.ZERO, 20)
+	_kugel(dach, "Knauf", 0.14, Vector3(0, 1.75, 0), m.gold)
 	# Große Ente als Aushängeschild auf dem Dach
-	var schild := _gruppe(dach, "Schildente", Vector3(0, 1.25, tiefe / 2.0 - 0.3))
-	schild.scale = Vector3.ONE * 3.2
+	var schild := _gruppe(dach, "Schildente", Vector3(0, 1.95, 0))
+	schild.scale = Vector3.ONE * 2.6
 	_gummiente(schild, "Ente", Vector3.ZERO, 1)
 	# Theke vorn
 	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.45))
-	_box(theke, "Korpus", Vector3(breite - 0.4, 0.95, 0.3), Vector3(0, 0.475, 0), m.holz_hell)
-	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.16), m.rauten_fein)
-	_box(theke, "Rahmen", Vector3(breite - 0.9, 0.65, 0.015), Vector3(0, 0.5, 0.155), m.gold)
-	_box(theke, "Platte", Vector3(breite - 0.3, 0.06, 0.42), Vector3(0, 0.98, 0), m.gruen_samt)
-	_marke(r, "Fangkorb", Vector3(-1.6, boden + 1.01, 0.45))
-	_zyl(theke, "Korb", 0.26, 0.22, 0.14, Vector3(-1.6, 1.08, 0), m.holz_hell, Vector3.ZERO, 16)
+	_box(theke, "Korpus", Vector3(3.6, 0.95, 0.3), Vector3(0, 0.475, 0), m.holz_hell)
+	_box(theke, "Feld", Vector3(3.0, 0.55, 0.02), Vector3(0, 0.5, 0.16), m.zickzack_tuerkis)
+	_box(theke, "Rahmen", Vector3(3.1, 0.65, 0.015), Vector3(0, 0.5, 0.155), m.gold)
+	_box(theke, "Platte", Vector3(3.7, 0.06, 0.42), Vector3(0, 0.98, 0), m.gruen_samt)
+	_marke(r, "Fangkorb", Vector3(-1.3, boden + 1.01, 0.45))
+	_zyl(theke, "Korb", 0.26, 0.22, 0.14, Vector3(-1.3, 1.08, 0), m.holz_hell, Vector3.ZERO, 16)
 	# Becken: Außenwand, Wasser, Insel mit Leuchtturm-Säule und Teddy
 	var becken := _gruppe(r, "Becken", Vector3(0, wasser, bz))
 	_zyl(becken, "Wand", 1.75, 1.75, 0.6, Vector3(0, -0.35, 0), m.holz_dunkel, Vector3.ZERO, 32)
@@ -546,15 +571,18 @@ func _entenangeln() -> Node3D:
 	var haken := _gruppe(angel, "Haken")
 	_kugel(haken, "Blei", 0.025, Vector3.ZERO, m.rot)
 	_torus(haken, "Bogen", 0.02, 0.03, Vector3(0, -0.05, 0.0), m.metall, Vector3(90, 0, 0))
-	# Preiswand hinten
-	var preise := _gruppe(r, "Preise", Vector3(0, boden, zm - tiefe / 2.0 + 0.12))
-	for i in 5:
-		_teddy(preise, "Teddy%d" % i, Vector3(-2.0 + i * 1.0, 2.45, 0.1), 0.0, 1.0 if i == 2 else 0.85)
-		_instanz(preise, SZ + "lebkuchenherz.tscn", "Herz%d" % i, Transform3D(Basis(), Vector3(-1.5 + i * 0.75, 1.9, 0.03)))
+	# Preise an der Rückwand des Rundpavillons
+	var preise := _gruppe(r, "Preise", Vector3(0, boden, zm - radius + 0.2))
+	for i in 3:
+		_teddy(preise, "Teddy%d" % i, Vector3(-1.0 + i * 1.0, 2.35, 0.1), 0.0, 1.0 if i == 1 else 0.85)
+		_instanz(preise, SZ + "lebkuchenherz.tscn", "Herz%d" % i, Transform3D(Basis(), Vector3(-0.8 + i * 0.8, 1.8, 0.03)))
 	# Kollision, Licht, Kamera, Marken
 	var koerper := StaticBody3D.new()
 	_haengen(r, koerper, "Kollision")
-	_kollision(koerper, "Podest", _boxform(Vector3(breite, 1.15, tiefe)), Transform3D(Basis(), Vector3(0, 0.575, zm)))
+	var rundform := CylinderShape3D.new()
+	rundform.radius = radius
+	rundform.height = 1.15
+	_kollision(koerper, "Podest", rundform, Transform3D(Basis(), Vector3(0, 0.575, zm)))
 	_licht(r, "Licht", Vector3(0, boden + 2.6, bz), 1.9, 6.0)
 	_licht(r, "Frontlicht", Vector3(0, boden + 2.4, 1.0), 0.9, 5.0)
 	var kamera := Camera3D.new()
@@ -588,17 +616,27 @@ func _gluecksrad() -> Node3D:
 		for sz: float in [-1.0, 1.0]:
 			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
 			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.08, 0.07, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.gold, Vector3.ZERO, 12)
-	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.vorhang_rot)
+	# Rückwand mit Strahlenkranz hinter dem Rad, seitlich violette Bahnen
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.strahlen_violett)
 	for sx: float in [-1.0, 1.0]:
-		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.8, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.4, zm - 0.1), m.streifen_fein)
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.8, tiefe - 0.4), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.4, zm - 0.1), m.streifen_fein_violett)
+	# Schaustellerfassade: hoher Bogen über der Front, mit Goldrahmen und Lampen
+	var front := _gruppe(r, "Front", Vector3(0, boden + hoehe, zm + tiefe / 2.0))
+	var bogen := 14
+	for i in bogen:
+		var t := float(i) / (bogen - 1)
+		var x := lerpf(-breite / 2.0 - 0.2, breite / 2.0 + 0.2, t)
+		var h := 1.5 * sin(PI * t) + 0.25
+		_box(front, "Bogen%d" % i, Vector3((breite + 0.4) / bogen + 0.04, h, 0.12), Vector3(x, h / 2.0, 0), m.strahlen_violett)
+		_box(front, "BogenRahmen%d" % i, Vector3((breite + 0.4) / bogen + 0.05, 0.12, 0.16), Vector3(x, h, 0), m.gold)
+		_kugel(front, "Lampe%d" % i, 0.055, Vector3(x, h + 0.16, 0.08), m.gluehbirne, Vector3.ONE, false)
+	_instanz(front, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(0, 1.85, 0)))
+	for s: float in [-1.0, 1.0]:
+		_instanz(front, SZ + "fahne.tscn", "Fahne%s" % s, Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(s * (breite / 2.0 + 0.1), 0.4, 0)))
 	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
-	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
-	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.streifen, Vector3(0, 90, 0))
+	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.gold)
+	_box(dach, "Plane", Vector3(breite + 0.3, 0.12, tiefe + 0.3), Vector3(0, 0.2, 0), m.streifen_violett)
 	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
-	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.55), Vector3(0, 1.1, 0)))
-	for i in 11:
-		var t := (i + 0.5) / 11.0
-		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
 	# Rad an der Rückwand
 	var mitte := Vector3(0, boden + 1.85, zm - tiefe / 2.0 + 0.32)
 	var halter := _gruppe(r, "Halter", mitte)
@@ -637,7 +675,7 @@ func _gluecksrad() -> Node3D:
 	# Theke vorn
 	var theke := _gruppe(r, "Theke", Vector3(0, boden, 0.05))
 	_box(theke, "Korpus", Vector3(breite - 0.4, 0.95, 0.4), Vector3(0, 0.475, 0), m.holz_hell)
-	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.21), m.rauten_fein)
+	_box(theke, "Feld", Vector3(breite - 1.0, 0.55, 0.02), Vector3(0, 0.5, 0.21), m.zickzack_violett)
 	_box(theke, "Rahmen", Vector3(breite - 0.9, 0.65, 0.015), Vector3(0, 0.5, 0.205), m.gold)
 	_box(theke, "Platte", Vector3(breite - 0.3, 0.06, 0.5), Vector3(0, 0.98, 0), m.gruen_samt)
 	# Preisregale an den Seiten
@@ -686,26 +724,29 @@ func _stemmen() -> Node3D:
 	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
 	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
 	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	# Offene Holzpergola statt Bude: dicke Rundpfosten, Querbalken, Hopfen und
+	# ein grünes Zickzack-Band — von allen Seiten einsehbar
 	var bau := _gruppe(r, "Bau")
 	for sx: float in [-1.0, 1.0]:
 		for sz: float in [-1.0, 1.0]:
-			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
-			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.09, 0.08, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.holz_dunkel, Vector3.ZERO, 10)
-			_torus(bau, "Hopfen%s%s" % [sx, sz], 0.08, 0.16, p + Vector3(0, hoehe - 0.3, 0), m.hopfen)
-	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.rauten)
-	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
-	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
-	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.schindel, Vector3(0, 90, 0))
-	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
-	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.1, 0)))
+			var p := Vector3(sx * (breite / 2.0 - 0.15), boden, zm + sz * (tiefe / 2.0 - 0.15))
+			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.16, 0.13, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.holz_hell, Vector3.ZERO, 10)
+			_box(bau, "Stuetze%s%s" % [sx, sz], Vector3(0.12, 0.12, 0.7), p + Vector3(0, hoehe - 0.45, -sz * 0.35), m.holz_dunkel, Vector3(35.0 * sz, 0, 0))
+			_torus(bau, "Hopfen%s%s" % [sx, sz], 0.13, 0.24, p + Vector3(0, hoehe - 0.35, 0), m.hopfen)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Laengsbalken%s" % sx, Vector3(0.16, 0.24, tiefe), Vector3(sx * (breite / 2.0 - 0.15), boden + hoehe - 0.1, zm), m.holz_dunkel)
+	# Sparren quer über die Pergola, dazwischen Hopfenranken
+	for i in 9:
+		var x := -breite / 2.0 + 0.4 + i * (breite - 0.8) / 8.0
+		_box(bau, "Sparren%d" % i, Vector3(0.1, 0.16, tiefe + 0.5), Vector3(x, boden + hoehe + 0.1, zm), m.holz_hell)
+		_kugel(bau, "Ranke%d" % i, 0.13, Vector3(x, boden + hoehe - 0.05, zm + tiefe / 2.0 + 0.2), m.hopfen, Vector3(1.4, 0.9, 0.9))
+	_box(bau, "Firstbalken", Vector3(breite + 0.5, 0.2, 0.2), Vector3(0, boden + hoehe + 0.28, zm), m.holz_dunkel)
+	_box(bau, "Zierband", Vector3(breite + 0.5, 0.42, 0.06), Vector3(0, boden + hoehe - 0.35, zm + tiefe / 2.0 + 0.24), m.zickzack_gruen)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe * 0.62, 0.08), Vector3(0, boden + hoehe * 0.31, zm - tiefe / 2.0 + 0.05), m.streifen_fein_gruen)
 	for s: float in [-1.0, 1.0]:
-		_instanz(dach, SZ + "fahne.tscn", "Fahne%s" % s, Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(s * (breite / 2.0), 0.3, tiefe / 2.0)))
-	# Hopfengirlande vorn
-	for i in 12:
-		var t := (i + 0.5) / 12.0
-		_kugel(dach, "Girlande%d" % i, 0.1, Vector3(-breite / 2.0 + t * breite, -0.3 - 0.25 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.05), m.hopfen, Vector3(1.3, 0.8, 0.8))
+		_instanz(bau, SZ + "fahne.tscn", "Fahne%s" % s, Transform3D(Basis().scaled(Vector3.ONE * 0.6), Vector3(s * (breite / 2.0 - 0.15), boden + hoehe + 0.3, zm)))
 	# Tafel mit Aufschrift
-	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.2, zm - tiefe / 2.0 + 0.12))
+	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + hoehe - 0.65, zm + tiefe / 2.0 + 0.22))
 	_box(tafel, "Brett", Vector3(3.0, 1.0, 0.06), Vector3.ZERO, m.holz_dunkel)
 	_box(tafel, "Rahmen", Vector3(3.1, 1.1, 0.04), Vector3(0, 0, -0.02), m.gold)
 	# Die Aufschrift hängt in scenes/kirmes/stemmen.tscn (Label3D mit welt_text.gd,
@@ -764,23 +805,28 @@ func _nagelbalken() -> Node3D:
 	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
 	_box(r, "Dielen", Vector3(breite - 0.2, 0.02, tiefe - 0.2), Vector3(0, boden + 0.01, zm), m.dielen)
 	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	# Blockhütte: gestapelte Rundhölzer, vorn zwei Stämme als Stützen, steiles Schindeldach
 	var bau := _gruppe(r, "Bau")
+	var lagen := 9
+	for i in lagen:
+		var y := boden + 0.16 + i * 0.29
+		_zyl(bau, "Stamm%d" % i, 0.15, 0.15, breite, Vector3(0, y, zm - tiefe / 2.0 + 0.15), m.holz_hell, Vector3(0, 0, 90), 10)
+		for sx: float in [-1.0, 1.0]:
+			if i < lagen - 3:
+				_zyl(bau, "Seite%s_%d" % [sx, i], 0.15, 0.15, tiefe - 0.6, Vector3(sx * (breite / 2.0 - 0.15), y, zm - 0.3), m.holz_hell, Vector3(90, 0, 0), 10)
 	for sx: float in [-1.0, 1.0]:
-		for sz: float in [-1.0, 1.0]:
-			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
-			_box(bau, "Balken%s%s" % [sx, sz], Vector3(0.18, hoehe, 0.18), p + Vector3(0, hoehe / 2.0, 0), m.holz_dunkel)
-	_box(bau, "Querbalken", Vector3(breite, 0.2, 0.2), Vector3(0, boden + hoehe - 0.1, zm + tiefe / 2.0 - 0.1), m.holz_dunkel)
-	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.holz_hell)
-	for i in 7:
-		_box(bau, "Brett%d" % i, Vector3(0.02, hoehe, 0.09), Vector3(-breite / 2.0 + 0.4 + i * 0.8, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.1), m.holz_dunkel)
+		var p := Vector3(sx * (breite / 2.0 - 0.15), boden, zm + tiefe / 2.0 - 0.15)
+		_zyl(bau, "Pfosten%s" % sx, 0.17, 0.14, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.holz_dunkel, Vector3.ZERO, 10)
+		_box(bau, "Kopfband%s" % sx, Vector3(0.12, 0.5, 0.12), p + Vector3(0, hoehe - 0.3, -0.25), m.holz_dunkel, Vector3(35.0, 0, 0))
+	_box(bau, "Querbalken", Vector3(breite, 0.22, 0.22), Vector3(0, boden + hoehe - 0.1, zm + tiefe / 2.0 - 0.15), m.holz_dunkel)
 	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
-	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
-	_prisma(dach, "Giebel", Vector3(breite + 0.4, 1.0, tiefe + 0.4), Vector3(0, 0.66, 0), m.schindel, Vector3(0, 90, 0))
-	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
-	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.2, 0)))
-	for i in 11:
-		var t := (i + 0.5) / 11.0
-		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
+	_box(dach, "Traufe", Vector3(breite + 0.4, 0.16, tiefe + 0.4), Vector3(0, 0.08, 0), m.holz_dunkel)
+	_prisma(dach, "Giebel", Vector3(breite + 0.5, 1.8, tiefe + 0.5), Vector3(0, 1.05, 0), m.schindel, Vector3(0, 90, 0))
+	_box(dach, "Firstbrett", Vector3(0.18, 0.16, tiefe + 0.6), Vector3(0, 1.95, 0), m.holz_dunkel)
+	_zyl(dach, "Rauchfang", 0.16, 0.14, 0.9, Vector3(breite / 2.0 - 0.7, 1.8, -0.6), m.stein, Vector3.ZERO, 8)
+	for i in 9:
+		var t := (i + 0.5) / 9.0
+		_kugel(dach, "Birne%d" % i, 0.045, Vector3(-breite / 2.0 + t * breite, -0.3 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.12), m.gluehbirne, Vector3.ONE, false)
 	# Schild
 	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.2, zm - tiefe / 2.0 + 0.14))
 	_box(tafel, "Brett", Vector3(2.6, 0.8, 0.06), Vector3.ZERO, m.holz_dunkel)
@@ -855,22 +901,32 @@ func _kegeln() -> Node3D:
 	var bahn_y := boden + 0.06
 	_box(r, "Podest", Vector3(breite, boden, tiefe), Vector3(0, boden / 2.0, zm), m.holz_dunkel)
 	_box(r, "PodestKante", Vector3(breite + 0.1, 0.06, 0.06), Vector3(0, boden, zm + tiefe / 2.0), m.gold)
+	# Tonnendach-Halle in Orange-Creme: gebogene Plane auf Bügeln, offene Front
 	var bau := _gruppe(r, "Bau")
 	for sx: float in [-1.0, 1.0]:
-		for sz: float in [-1.0, 1.0]:
-			var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + sz * (tiefe / 2.0 - 0.1))
-			_zyl(bau, "Pfosten%s%s" % [sx, sz], 0.08, 0.07, hoehe, p + Vector3(0, hoehe / 2.0, 0), m.creme_lack, Vector3.ZERO, 10)
-			for i in 3:
-				_torus(bau, "Ring%s%s_%d" % [sx, sz, i], 0.07, 0.11, p + Vector3(0, 0.8 + i * 0.8, 0), m.blau)
-	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe, 0.08), Vector3(0, boden + hoehe / 2.0, zm - tiefe / 2.0 + 0.05), m.streifen)
-	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe, zm))
-	_box(dach, "Traufe", Vector3(breite + 0.3, 0.16, tiefe + 0.3), Vector3(0, 0.08, 0), m.holz_dunkel)
-	_prisma(dach, "Giebel", Vector3(breite + 0.4, 0.9, tiefe + 0.4), Vector3(0, 0.6, 0), m.rauten, Vector3(0, 90, 0))
-	_instanz(dach, SZ + "lambrequin_2.tscn", "Volant", Transform3D(Basis().scaled(Vector3(2.4, 1, 1)), Vector3(0, -0.02, tiefe / 2.0 + 0.16)))
-	_instanz(dach, SZ + "krone.tscn", "Krone", Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 1.1, 0)))
-	for i in 11:
-		var t := (i + 0.5) / 11.0
-		_kugel(dach, "Birne%d" % i, 0.04, Vector3(-breite / 2.0 + t * breite, -0.35 - 0.2 * (1.0 - pow(2.0 * t - 1.0, 2.0)), tiefe / 2.0 + 0.1), m.gluehbirne, Vector3.ONE, false)
+		var p := Vector3(sx * (breite / 2.0 - 0.1), boden, zm + tiefe / 2.0 - 0.15)
+		_zyl(bau, "Pfosten%s" % sx, 0.09, 0.08, hoehe * 0.72, p + Vector3(0, hoehe * 0.36, 0), m.creme_lack, Vector3.ZERO, 10)
+		_torus(bau, "Reif%s" % sx, 0.08, 0.13, p + Vector3(0, hoehe * 0.6, 0), m.orange_lack)
+	_box(bau, "Rueckwand", Vector3(breite - 0.2, hoehe * 0.8, 0.08), Vector3(0, boden + hoehe * 0.4, zm - tiefe / 2.0 + 0.05), m.streifen_fein_orange)
+	for sx: float in [-1.0, 1.0]:
+		_box(bau, "Seitenwand%s" % sx, Vector3(0.08, hoehe * 0.55, tiefe - 0.3), Vector3(sx * (breite / 2.0 - 0.05), boden + hoehe * 0.275, zm - 0.1), m.streifen_orange)
+	# Tonnendach: schmale Latten entlang eines Halbkreises
+	var dach := _gruppe(r, "Dach", Vector3(0, boden + hoehe * 0.72, zm))
+	var segmente := 13
+	for i in segmente:
+		var a := PI * (i + 0.5) / segmente
+		var hr := breite / 2.0 + 0.25
+		var pos := Vector3(cos(a) * hr, sin(a) * 0.95, 0)
+		_box(dach, "Latte%d" % i, Vector3(hr * PI / segmente + 0.04, 0.12, tiefe + 0.4), pos, m.streifen_orange, Vector3(0, 0, rad_to_deg(a) - 90.0))
+	for sz: float in [-1.0, 1.0]:
+		for i in segmente:
+			var a := PI * (i + 0.5) / segmente
+			_box(dach, "Bogen%s_%d" % [sz, i], Vector3((breite / 2.0 + 0.3) * PI / segmente + 0.05, 0.1, 0.1),
+				Vector3(cos(a) * (breite / 2.0 + 0.3), sin(a) * 1.0, sz * (tiefe / 2.0 + 0.2)), m.gold, Vector3(0, 0, rad_to_deg(a) - 90.0))
+	for i in 9:
+		var t := (i + 0.5) / 9.0
+		_kugel(dach, "Birne%d" % i, 0.045, Vector3(-breite / 2.0 + t * breite, 0.15 + sin(PI * t) * 0.85, tiefe / 2.0 + 0.24), m.gluehbirne, Vector3.ONE, false)
+	_instanz(dach, SZ + "fahne.tscn", "Fahne", Transform3D(Basis().scaled(Vector3.ONE * 0.7), Vector3(0, 1.05, tiefe / 2.0)))
 	var tafel := _gruppe(r, "Tafel", Vector3(0, boden + 2.25, zm - tiefe / 2.0 + 0.12))
 	_box(tafel, "Brett", Vector3(2.6, 0.7, 0.06), Vector3.ZERO, m.holz_dunkel)
 	_box(tafel, "Rahmen", Vector3(2.7, 0.8, 0.04), Vector3(0, 0, -0.02), m.gold)
