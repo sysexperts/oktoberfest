@@ -12,6 +12,8 @@ const START := "res://daten/karte.json"
 const VORLAGE := "res://daten/karte_vorlage.json"
 
 signal geaendert
+## Neues Teil steht — von: Peer, der es gesetzt hat (Baumodus merkt es sich fürs Rückgängig)
+signal gesetzt(n: int, von: int)
 
 var eintraege := {}   # Nummer -> Eintrag
 var _naechste := 1
@@ -73,12 +75,17 @@ func net_holen() -> void:
 	if multiplayer.is_server():
 		_net_alles.rpc_id(multiplayer.get_remote_sender_id(), als_text())
 
+## nummer: Wunschnummer (Rückgängig nach Löschen), b: gespeicherte Basis
 @rpc("any_peer", "reliable", "call_local")
-func net_setzen(pfad: String, pos: Vector3, r: float, s: float = 1.0) -> void:
+func net_setzen(pfad: String, pos: Vector3, r: float, s: float = 1.0, nummer: int = 0, b: Array = []) -> void:
 	if not multiplayer.is_server() or not Katalog.erlaubt(pfad):
 		return
 	var e := {"p": pfad, "x": pos.x, "y": pos.y, "z": pos.z, "r": r, "s": s}
-	_net_setzen.rpc(_naechste, e)
+	if b.size() == 9:
+		e.b = b
+	var n := nummer if nummer > 0 and not eintraege.has(nummer) else _naechste
+	var von := multiplayer.get_remote_sender_id()
+	_net_setzen.rpc(n, e, von if von != 0 else 1)
 
 @rpc("any_peer", "reliable", "call_local")
 func net_bewegen(n: int, pos: Vector3, r: float) -> void:
@@ -92,7 +99,7 @@ func net_loeschen(n: int) -> void:
 
 ## Ganze Karte ersetzen (Vorlage, Leeren, Einfügen aus der Zwischenablage)
 @rpc("any_peer", "reliable", "call_local")
-func net_ersetzen(text: String) -> void:
+func net_ersetzen(text: String, nummern_behalten := false) -> void:
 	if not multiplayer.is_server():
 		return
 	var d = JSON.parse_string(text)
@@ -100,8 +107,9 @@ func net_ersetzen(text: String) -> void:
 		return
 	var liste: Array = (d.eintraege as Array).filter(func(e) -> bool:
 		return e is Dictionary and Katalog.erlaubt(str(e.get("p", ""))))
-	for e: Dictionary in liste:
-		e.erase("n")
+	if not nummern_behalten:
+		for e: Dictionary in liste:
+			e.erase("n")
 	_net_alles.rpc(JSON.stringify({"eintraege": liste}))
 
 @rpc("authority", "reliable", "call_local")
@@ -110,9 +118,10 @@ func _net_alles(text: String) -> void:
 	_alles_setzen(d.eintraege if d is Dictionary and d.get("eintraege") is Array else [])
 
 @rpc("authority", "reliable", "call_local")
-func _net_setzen(n: int, e: Dictionary) -> void:
+func _net_setzen(n: int, e: Dictionary, von: int = 0) -> void:
 	_eintrag_setzen(n, e)
 	_merken()
+	gesetzt.emit(n, von)
 
 @rpc("authority", "reliable", "call_local")
 func _net_bewegen(n: int, pos: Vector3, r: float) -> void:

@@ -5,6 +5,8 @@ extends CanvasLayer
 ##   Katalog anklicken → Vorschau hängt an der Maus, Linksklick setzt (mehrfach)
 ##   Linksklick auf ein Teil → auswählen, gedrückt halten → verschieben
 ##   R / Q-E oder Umschalt+Mausrad: drehen · G: Raster · Entf: löschen
+##   Pfeiltasten: Auswahl fein verschieben · Strg+Z: rückgängig
+##   Umschalt+Klick: mehrere gleiche Teile hintereinander setzen
 ##   Strg+D: kopieren · Esc: abwählen / Baumodus verlassen
 ##   WASD: Kamera · Mausrad: Höhe · rechte Maustaste: umsehen
 
@@ -32,6 +34,12 @@ var _raster := true
 var _auswahl := -1
 var _zieht := false
 var _zieh_versatz := Vector3.ZERO
+var _zieh_start := {}
+## Rückgängig-Verlauf (nur eigene Schritte): {art, n, …}
+var _verlauf: Array = []
+## Vom Server erwartete neue Teile: "neu" (Klick) oder "wieder" (Rückgängig)
+var _erwartet: Array = []
+const VERLAUF_MAX := 100
 var _yaw := 0.0
 var _pitch := -0.9
 var _hoehe := 30.0
@@ -46,7 +54,9 @@ func _ready() -> void:
 	_gruppe.item_selected.connect(func(_i: int) -> void: _liste_fuellen())
 	_suche.text_changed.connect(func(_t: String) -> void: _liste_fuellen())
 	_liste.item_selected.connect(_katalog_gewaehlt)
-	%Vorlage.pressed.connect(func() -> void: _karte.net_ersetzen.rpc_id(1, Karte.vorlage()))
+	if _karte:
+		_karte.gesetzt.connect(_neu_gesetzt)
+	%Vorlage.pressed.connect(func() -> void: _alles_ersetzen(Karte.vorlage()))
 	%Leeren.pressed.connect(_leeren)
 	%Kopieren.pressed.connect(func() -> void:
 		DisplayServer.clipboard_set(_karte.als_text())
@@ -54,7 +64,7 @@ func _ready() -> void:
 	%Einfuegen.pressed.connect(func() -> void:
 		var text := DisplayServer.clipboard_get()
 		if JSON.parse_string(text) is Dictionary:
-			_karte.net_ersetzen.rpc_id(1, text)
+			_alles_ersetzen(text)
 		else:
 			_melden("Zwischenablage enthält keine Karte"))
 	%Schliessen.pressed.connect(beenden)
@@ -144,7 +154,7 @@ func _geist_setzen(pfad: String) -> void:
 		_geist.transform = t
 	_geist.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(_geist)
-	_melden(Katalog.name_von(pfad) + " — Linksklick setzt, R dreht, Esc bricht ab")
+	_melden(Katalog.name_von(pfad) + " — Linksklick setzt (Umschalt: mehrere), R dreht, Esc bricht ab")
 
 func _geist_weg() -> void:
 	if _geist:
@@ -177,8 +187,17 @@ func eingabe(event: InputEvent) -> void:
 				_melden("Raster " + ("an (0,5 m)" if _raster else "aus"))
 			KEY_DELETE, KEY_BACKSPACE:
 				if _auswahl >= 0:
+					_merke({"art": "loeschen", "e": (_karte.eintraege[_auswahl] as Dictionary).duplicate(true)})
 					_karte.net_loeschen.rpc_id(1, _auswahl)
 					_waehlen(-1)
+			KEY_Z:
+				if k.ctrl_pressed:
+					_rueckgaengig()
+			KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT:
+				if _auswahl >= 0:
+					var schritt := 0.5 if _raster else 0.1
+					var d := {KEY_UP: Vector3(0, 0, -1), KEY_DOWN: Vector3(0, 0, 1), KEY_LEFT: Vector3(-1, 0, 0), KEY_RIGHT: Vector3(1, 0, 0)}[k.physical_keycode] as Vector3
+					_verschieben(_auswahl, _karte.knoten(_auswahl).position + Basis(Vector3.UP, _yaw) * d * schritt)
 			KEY_D:
 				if k.ctrl_pressed and _auswahl >= 0:
 					var e: Dictionary = _karte.eintraege.get(_auswahl, {})
@@ -204,7 +223,8 @@ func eingabe(event: InputEvent) -> void:
 			elif _zieht:
 				_zieht = false
 				var k := _karte.knoten(_auswahl)
-				if k:
+				if k and not k.position.is_equal_approx(Vector3(_zieh_start.x, _zieh_start.y, _zieh_start.z)):
+					_merke(_zieh_start)
 					_karte.net_bewegen.rpc_id(1, _auswahl, k.position, float(_karte.eintraege[_auswahl].get("r", 0.0)))
 	var mm := event as InputEventMouseMotion
 	if mm and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
@@ -216,12 +236,19 @@ func _klick(bildschirm: Vector2) -> void:
 	if p == null:
 		return
 	if _geist:
-		_karte.net_setzen.rpc_id(1, _geist_pfad, _geist.position, _drehung)
+		var pfad := _geist_pfad
+		var pos := _geist.position
+		# Ohne Umschalt: Vorschau weg, das neue Teil wird ausgewählt (gleich nachjustieren)
+		if not Input.is_physical_key_pressed(KEY_SHIFT):
+			_geist_weg()
+		_erwartet.append("neu")
+		_karte.net_setzen.rpc_id(1, pfad, pos, _drehung)
 		return
 	var n := _karte.naechster(p, 4.0)
 	_waehlen(n)
 	if n >= 0:
 		_zieht = true
+		_zieh_start = _bewegung_merken(n)
 		_zieh_versatz = _karte.knoten(n).position - (p as Vector3)
 
 func _drehen(schritt: float) -> void:
@@ -231,6 +258,7 @@ func _drehen(schritt: float) -> void:
 		var e: Dictionary = _karte.eintraege.get(_auswahl, {})
 		var k := _karte.knoten(_auswahl)
 		if k:
+			_merke(_bewegung_merken(_auswahl))
 			_karte.net_bewegen.rpc_id(1, _auswahl, k.position, wrapf(float(e.get("r", 0.0)) + schritt, -PI, PI))
 
 func _waehlen(n: int) -> void:
@@ -238,7 +266,7 @@ func _waehlen(n: int) -> void:
 	_zieht = false
 	_markierung.visible = n >= 0
 	if n >= 0:
-		_melden(Katalog.name_von(str(_karte.eintraege[n].p)) + " — ziehen verschiebt, R dreht, Entf löscht, Strg+D kopiert")
+		_melden(Katalog.name_von(str(_karte.eintraege[n].p)) + " — ziehen oder Pfeiltasten verschieben, R dreht, Entf löscht, Strg+D kopiert, Strg+Z rückgängig")
 
 ## Mausstrahl auf den Boden (Höhe 0)
 func _boden(bildschirm: Vector2) -> Variant:
@@ -258,11 +286,11 @@ func _process(delta: float) -> void:
 	var tippt := get_viewport().gui_get_focus_owner() is LineEdit
 	var v := Vector2.ZERO
 	if not tippt:
-		if Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP): v.y -= 1
-		if Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN): v.y += 1
-		if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT): v.x -= 1
+		if Input.is_physical_key_pressed(KEY_W) or (_auswahl < 0 and Input.is_physical_key_pressed(KEY_UP)): v.y -= 1
+		if Input.is_physical_key_pressed(KEY_S) or (_auswahl < 0 and Input.is_physical_key_pressed(KEY_DOWN)): v.y += 1
+		if Input.is_physical_key_pressed(KEY_A) or (_auswahl < 0 and Input.is_physical_key_pressed(KEY_LEFT)): v.x -= 1
 		if Input.is_physical_key_pressed(KEY_D) and not Input.is_physical_key_pressed(KEY_CTRL): v.x += 1
-		if Input.is_physical_key_pressed(KEY_RIGHT): v.x += 1
+		if _auswahl < 0 and Input.is_physical_key_pressed(KEY_RIGHT): v.x += 1
 	var tempo := (18.0 + _hoehe) * (2.5 if Input.is_physical_key_pressed(KEY_SHIFT) else 1.0)
 	var bewegung := Basis(Vector3.UP, _yaw) * Vector3(v.x, 0, v.y).normalized() * tempo * delta
 	var pos := _kamera.global_position + bewegung
@@ -297,7 +325,7 @@ func _kamera_setzen() -> void:
 
 func _leeren() -> void:
 	if %Leeren.text == "Wirklich leeren?":
-		_karte.net_ersetzen.rpc_id(1, "{\"eintraege\": []}")
+		_alles_ersetzen("{\"eintraege\": []}")
 		%Leeren.text = "Alles leeren"
 	else:
 		%Leeren.text = "Wirklich leeren?"
@@ -305,3 +333,53 @@ func _leeren() -> void:
 
 func _melden(text: String) -> void:
 	%Hinweis.text = text if text != "" else "Katalog links anklicken, dann auf den Boden klicken · F8 beendet"
+
+# ------------------------------------------------------------------ Rückgängig
+func _merke(schritt: Dictionary) -> void:
+	_verlauf.append(schritt)
+	if _verlauf.size() > VERLAUF_MAX:
+		_verlauf.pop_front()
+
+func _bewegung_merken(n: int) -> Dictionary:
+	var e: Dictionary = _karte.eintraege.get(n, {})
+	return {"art": "bewegen", "n": n, "x": float(e.get("x", 0.0)), "y": float(e.get("y", 0.0)),
+		"z": float(e.get("z", 0.0)), "r": float(e.get("r", 0.0))}
+
+func _verschieben(n: int, ziel: Vector3) -> void:
+	_merke(_bewegung_merken(n))
+	_karte.net_bewegen.rpc_id(1, n, ziel, float(_karte.eintraege[n].get("r", 0.0)))
+
+func _alles_ersetzen(text: String) -> void:
+	_merke({"art": "alles", "text": _karte.als_text()})
+	_waehlen(-1)
+	_karte.net_ersetzen.rpc_id(1, text)
+
+func _neu_gesetzt(n: int, von: int) -> void:
+	if von != multiplayer.get_unique_id() or _erwartet.is_empty():
+		return
+	if _erwartet.pop_front() == "neu":
+		_merke({"art": "setzen", "n": n})
+		if _geist == null and aktiv:
+			_waehlen(n)
+
+func _rueckgaengig() -> void:
+	if _verlauf.is_empty():
+		_melden("Nichts mehr rückgängig zu machen")
+		return
+	var s: Dictionary = _verlauf.pop_back()
+	match str(s.art):
+		"setzen":
+			if _auswahl == int(s.n):
+				_waehlen(-1)
+			_karte.net_loeschen.rpc_id(1, int(s.n))
+		"bewegen":
+			_karte.net_bewegen.rpc_id(1, int(s.n), Vector3(s.x, s.y, s.z), float(s.r))
+		"loeschen":
+			var e: Dictionary = s.e
+			_erwartet.append("wieder")
+			_karte.net_setzen.rpc_id(1, str(e.p), Vector3(float(e.x), float(e.y), float(e.z)), float(e.get("r", 0.0)),
+				float(e.get("s", 1.0)), int(e.get("n", 0)), e.get("b", []))
+		"alles":
+			_waehlen(-1)
+			_karte.net_ersetzen.rpc_id(1, str(s.text), true)
+	_melden("Rückgängig (%d übrig)" % _verlauf.size())
