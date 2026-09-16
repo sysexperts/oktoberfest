@@ -109,7 +109,15 @@ func _init() -> void:
 		["Suedallee", Vector2(0, -84.0), 48.0, 9.0, false],
 		["Weststrasse", Vector2(-53.0, -8.0), 26.0, 7.0, true],
 		["Oststrasse", Vector2(54.0, 30.0), 32.0, 7.0, true],
+		# Verbindungen von den Platzwegen (kirmes.tscn/Wege) zu Alleen und Ring
+		["VerbindungNord", Vector2(0, 33.5), 22.0, 8.0, false],
+		["VerbindungSued", Vector2(14.0, -45.0), 38.0, 6.0, false],
+		["VerbindungSuedQuer", Vector2(9.5, -62.0), 13.0, 6.0, true],
+		["VerbindungWest", Vector2(-33.0, -8.0), 16.0, 7.0, true],
+		["VerbindungOst", Vector2(29.0, 30.0), 20.0, 7.0, true],
+		["VerbindungOstZelt", Vector2(22.0, 26.5), 9.0, 8.0, false],
 	]
+	var stufe := 0
 	for s: Array in strassen:
 		var m2: Vector2 = s[1]
 		var laenge: float = s[2]
@@ -121,7 +129,9 @@ func _init() -> void:
 		var b := MeshInstance3D.new()
 		b.name = s[0]
 		b.mesh = box
-		b.position = Vector3(m2.x, OBEN - 0.07, m2.y)
+		# jede Platte minimal tiefer, damit Überlappungen nicht flimmern
+		b.position = Vector3(m2.x, OBEN - 0.07 - 0.004 * stufe, m2.y)
+		stufe += 1
 		_haengen(belag, b)
 
 	# Biergaerten zuerst als belegt merken, damit keine Deko hineinfaellt
