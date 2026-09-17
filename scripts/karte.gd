@@ -7,6 +7,17 @@ extends Node3D
 
 const Katalog := preload("res://scripts/karten_katalog.gd")
 const Figuren := preload("res://scripts/figuren.gd")
+## Wohnwagen sind Pflicht: ohne einen kann niemand schlafen und der Tag endet nie.
+## Fehlt auf der Karte einer, kommen diese Plätze dazu (Reihe südlich vom Zelt).
+const WOHNWAGEN := "res://scenes/caravan.tscn"
+const PFLICHT_PLAETZE := [
+	{"p": WOHNWAGEN, "x": -2.5, "y": 0.0, "z": -48.0, "r": 0.0},
+	{"p": WOHNWAGEN, "x": -9.0, "y": 0.0, "z": -47.5, "r": 0.14},
+	{"p": WOHNWAGEN, "x": 4.0, "y": 0.0, "z": -48.5, "r": -0.105},
+	{"p": WOHNWAGEN, "x": -15.5, "y": 0.0, "z": -48.0, "r": 0.087},
+	{"p": WOHNWAGEN, "x": -22.0, "y": 0.0, "z": -47.0, "r": -0.175},
+]
+
 const SPEICHER := "user://karte.json"
 const START := "res://daten/karte.json"
 const VORLAGE := "res://daten/karte_vorlage.json"
@@ -24,7 +35,7 @@ func _ready() -> void:
 		var daten := _lesen(SPEICHER)
 		if daten.is_empty():
 			daten = _lesen(START)
-		_alles_setzen(daten)
+		_alles_setzen(_mit_wohnwagen(daten))
 	else:
 		net_holen.rpc_id(1)
 
@@ -115,7 +126,7 @@ func net_ersetzen(text: String, nummern_behalten := false) -> void:
 @rpc("authority", "reliable", "call_local")
 func _net_alles(text: String) -> void:
 	var d = JSON.parse_string(text)
-	_alles_setzen(d.eintraege if d is Dictionary and d.get("eintraege") is Array else [])
+	_alles_setzen(_mit_wohnwagen(d.eintraege if d is Dictionary and d.get("eintraege") is Array else []))
 
 @rpc("authority", "reliable", "call_local")
 func _net_setzen(n: int, e: Dictionary, von: int = 0) -> void:
@@ -156,6 +167,13 @@ func _merken() -> void:
 	if multiplayer.is_server():
 		_speichern_in = 1.0
 	geaendert.emit()
+
+## Karte ohne Wohnwagen? Dann die Pflichtplätze anhängen (auch bei alten Karten).
+static func _mit_wohnwagen(liste: Array) -> Array:
+	for e in liste:
+		if e is Dictionary and str(e.get("p", "")) == WOHNWAGEN:
+			return liste
+	return liste + PFLICHT_PLAETZE.duplicate(true)
 
 func _alles_setzen(liste: Array) -> void:
 	for c in get_children():

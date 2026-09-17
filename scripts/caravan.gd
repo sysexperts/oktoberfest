@@ -7,6 +7,12 @@ extends Node3D
 @export var is_mine := true
 
 func _ready() -> void:
+	# Mehrere Wohnwagenplätze: nur einer ist der eigene (später wählt man ihn beim Start).
+	if is_mine:
+		for n in get_tree().get_nodes_in_group("interactable"):
+			if n != self and n is Caravan:
+				is_mine = false
+				break
 	if is_mine:
 		add_to_group("interactable")
 	var label := get_node_or_null("Label") as Label3D

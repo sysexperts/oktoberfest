@@ -62,6 +62,7 @@ const GRUPPEN := [
 		"res://assets/kirmes/Models/Props/",
 	]],
 	["Fahrzeuge", [
+		"res://scenes/caravan.tscn",
 		"res://scenes/kulisse/wohnwagen_blau.tscn",
 		"res://scenes/kulisse/wohnwagen_rot.tscn",
 		"res://scenes/kulisse/wohnwagen_gruen.tscn",
@@ -85,7 +86,17 @@ static func alle() -> Array:
 		aus.append([g[0], pfade])
 	return aus
 
+## Eigene Namen, wo der Dateiname nichts sagt
+const NAMEN := {
+	"res://scenes/caravan.tscn": "Wohnwagenplatz (mietbar)",
+	"res://scenes/kulisse/wohnwagen_blau.tscn": "Wohnwagen blau (Deko)",
+	"res://scenes/kulisse/wohnwagen_rot.tscn": "Wohnwagen rot (Deko)",
+	"res://scenes/kulisse/wohnwagen_gruen.tscn": "Wohnwagen gruen (Deko)",
+}
+
 static func name_von(pfad: String) -> String:
+	if NAMEN.has(pfad):
+		return NAMEN[pfad]
 	return pfad.get_file().get_basename().replace("_", " ").capitalize()
 
 ## Nur Szenen/Modelle aus dem Spiel dürfen gesetzt werden
