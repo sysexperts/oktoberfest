@@ -56,6 +56,8 @@ var _highlight_ring: MeshInstance3D
 var _pitch := 0.0
 const Figuren := preload("res://scripts/figuren.gd")
 var _cur_anim := ""
+## Einleitung: bis wann eine Geste läuft, die die Laufanimation nicht überschreiben darf
+var _geste_bis := 0.0
 var _last_anim_pos: Vector3
 var _net_pos: Vector3
 var _net_yaw: float
@@ -284,6 +286,11 @@ func _update_animation(delta: float) -> void:
 	var figur := _model as Figur
 	if figur == null or figur.anim == null:
 		return
+	# Geste aus der Einleitung ausspielen lassen
+	if Time.get_ticks_msec() / 1000.0 < _geste_bis:
+		return
+	if _cur_anim == "geste":
+		_cur_anim = ""
 	# Sprung: in der Luft nach vorn lehnen, bei der Landung zurück
 	var in_luft := global_position.y > 0.35
 	var w := clampf(delta * 10.0, 0.0, 1.0)
@@ -846,3 +853,22 @@ func _update_carry_visual() -> void:
 		var s := lerpf(0.5, 1.0, clampf(carry_fill, 0.0, 1.0))
 		_carry_teller.scale = Vector3(s, s, s)
 		_carry_teller.sorte = clampi(carry_type, 1, 3)
+
+# ---------------------------------------------------------------- Einleitung
+## In der Einleitung (scripts/ui/kino.gd) sieht man sich selbst von außen —
+## sonst ist die eigene Figur ausgeblendet (Ich-Perspektive).
+func kino_zeigen(an: bool) -> void:
+	if _model:
+		_model.visible = an or not _is_local
+
+## Passend zum Dialog gestikulieren: eine Steh-Extraanimation, sonst kurz jubeln.
+func geste(jubel := false) -> void:
+	var figur := _model as Figur
+	if figur == null or figur.anim == null:
+		return
+	if jubel:
+		figur.tanzen(1.0)
+	elif not figur.extra():
+		figur.tanzen(0.8)
+	_cur_anim = "geste"
+	_geste_bis = Time.get_ticks_msec() / 1000.0 + 2.6

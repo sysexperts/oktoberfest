@@ -657,6 +657,7 @@ WORLD_KRUG,Krugschieben,Stein Sliding,Kupa Kaydırma
 QUEST_0_TITLE,Folge dem Wiesnchef,Follow the fair manager,Fuar müdürünü takip et
 QUEST_0_TEXT,"Der Wiesnchef geht zum Festzelt (Süden, der Allee entlang). Folge ihm bis zum Eingang — dort erklärt er alles.","The fair manager is heading to the beer tent (south, along the avenue). Follow him to the entrance — he will explain everything there.","Fuar müdürü bira çadırına gidiyor (güneyde, bulvar boyunca). Girişe kadar takip et — her şeyi orada anlatacak."
 INTRO_UEBERSPRINGEN,Esc überspringt,Esc skips,Esc atlar
+INTRO_WEITER,Linksklick weiter · Esc überspringt,Left click for next · Esc skips,Devam için sol tık · Esc atlar
 INTRO_NAME_CHEF_DU,Wiesnchef,Fair manager,Fuar müdürü
 INTRO_NAME_CHEF_IHR,Wiesnchef,Fair manager,Fuar müdürü
 INTRO_NAME_SPIELER_DU,Du,You,Sen

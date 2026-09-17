@@ -22,7 +22,7 @@ class Lauf extends Node:
 		var chef = gm.get_node_or_null("Kirmes/Wiesnchef")
 		print("Kino aktiv: ", kino != null and kino.aktiv, "   Chef: ", chef != null)
 		var dir := OS.get_environment("SHOT_DIR")
-		var marken := [2.0, 16.0, 26.0, 48.0, 58.0]
+		var marken := [3.0, 8.0, 13.0, 20.0, 31.0]
 		var t := 0.0
 		var nr := 0
 		while nr < marken.size():

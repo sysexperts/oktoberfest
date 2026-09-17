@@ -13,7 +13,7 @@ const TEMPO := 1.55
 @export var figur_nr := 2
 ## Strecke vom Tor über die Nordallee zum Zelteingang
 @export var weg: Array[Vector3] = [
-	Vector3(0.5, 0, 74.0),
+	Vector3(0.5, 0, 70.0),
 	Vector3(0.0, 0, 58.0),
 	Vector3(0.0, 0, 40.0),
 	Vector3(0.0, 0, 26.0),
@@ -64,3 +64,13 @@ func _process(delta: float) -> void:
 		return
 	global_position += zu.normalized() * minf(TEMPO * delta, zu.length())
 	rotation.y = atan2(zu.x, zu.z)
+
+## Beim Reden gestikulieren (Einleitung): eine Steh-Extraanimation, danach wieder stehen.
+func geste() -> void:
+	if _punkt >= 0 or _figur == null:
+		return
+	if not _figur.extra():
+		return
+	get_tree().create_timer(2.6).timeout.connect(func() -> void:
+		if _punkt < 0 and is_instance_valid(_figur):
+			_figur.stehen())

@@ -10,31 +10,32 @@ extends CanvasLayer
 ## Die Texte liegen in locale/texte.csv doppelt: INTRO_<n>_DU für Solo und
 ## INTRO_<n>_IHR für Koop. Welche Fassung gilt, entscheidet die Spielerzahl.
 
-## Ein Schritt: Dauer, Kamera von → nach, Blickziel ("chef", "spieler" oder Punkt),
-## Sprecher (Schlüssel) und Textschlüssel (ohne _DU/_IHR).
+## Ein Schritt: Dauer (Höchstzeit, Linksklick geht früher weiter), Kamera von → nach,
+## Blickziel ("chef", "spieler" oder Punkt), Sprecher und Textschlüssel (ohne _DU/_IHR).
+## geste: wer dazu gestikuliert ("spieler", "jubel" = Spieler jubelt, "chef").
 const SCHRITTE := [
-	{"dauer": 5.0, "von": Vector3(0, 5.2, 105), "nach": Vector3(0, 2.6, 94), "blick": Vector3(0, 1.7, 88),
+	{"dauer": 5.0, "von": Vector3(0, 5.2, 101), "nach": Vector3(0, 2.6, 92), "blick": Vector3(0, 1.7, 84.5),
 		"sprecher": "INTRO_NAME_FREUND", "text": "INTRO_1"},
-	{"dauer": 4.5, "von": Vector3(5.5, 2.1, 93.5), "nach": Vector3(4.0, 1.9, 91.5), "blick": "spieler",
-		"sprecher": "INTRO_NAME_SPIELER", "text": "INTRO_2"},
-	{"dauer": 6.0, "von": Vector3(6.0, 2.0, 85.0), "nach": Vector3(4.8, 1.8, 83.8), "blick": "chef",
-		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_3"},
-	{"dauer": 5.5, "von": Vector3(-3.8, 1.9, 84.5), "nach": Vector3(-3.0, 1.8, 83.5), "blick": "chef",
-		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_4"},
-	{"dauer": 4.5, "von": Vector3(-4.5, 2.0, 84.0), "nach": Vector3(-3.8, 1.9, 85.2), "blick": "spieler",
-		"sprecher": "INTRO_NAME_SPIELER", "text": "INTRO_5"},
-	{"dauer": 4.5, "von": Vector3(-4.8, 1.8, 83.0), "nach": Vector3(-4.0, 1.75, 82.2), "blick": "chef",
-		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_6"},
-	{"dauer": 6.5, "von": Vector3(4.2, 2.0, 84.5), "nach": Vector3(3.2, 1.9, 85.6), "blick": "spieler",
-		"sprecher": "INTRO_NAME_SPIELER", "text": "INTRO_7"},
-	{"dauer": 6.5, "von": Vector3(5.0, 1.9, 84.2), "nach": Vector3(4.0, 1.8, 83.2), "blick": "chef",
-		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_8"},
-	{"dauer": 4.0, "von": Vector3(3.5, 2.6, 83.0), "nach": Vector3(0.0, 9.0, 90.0), "blick": "chef",
+	{"dauer": 4.5, "von": Vector3(4.2, 1.9, 80.5), "nach": Vector3(3.4, 1.8, 81.8), "blick": "spieler",
+		"sprecher": "INTRO_NAME_SPIELER", "text": "INTRO_2", "geste": "jubel"},
+	{"dauer": 6.0, "von": Vector3(4.0, 1.9, 81.5), "nach": Vector3(3.2, 1.8, 80.0), "blick": "chef",
+		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_3", "geste": "chef"},
+	{"dauer": 5.5, "von": Vector3(-3.8, 1.9, 81.5), "nach": Vector3(-3.0, 1.8, 80.0), "blick": "chef",
+		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_4", "geste": "chef"},
+	{"dauer": 4.5, "von": Vector3(-3.6, 1.9, 80.5), "nach": Vector3(-3.0, 1.8, 81.6), "blick": "spieler",
+		"sprecher": "INTRO_NAME_SPIELER", "text": "INTRO_5", "geste": "spieler"},
+	{"dauer": 4.5, "von": Vector3(-3.6, 1.8, 80.5), "nach": Vector3(-3.0, 1.75, 79.2), "blick": "chef",
+		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_6", "geste": "chef"},
+	{"dauer": 6.5, "von": Vector3(2.8, 1.9, 80.5), "nach": Vector3(2.0, 1.85, 81.6), "blick": "spieler",
+		"sprecher": "INTRO_NAME_SPIELER", "text": "INTRO_7", "geste": "spieler"},
+	{"dauer": 6.5, "von": Vector3(-2.6, 1.8, 80.2), "nach": Vector3(-2.0, 1.75, 79.0), "blick": "chef",
+		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_8", "geste": "chef"},
+	{"dauer": 4.5, "von": Vector3(2.5, 2.4, 80.0), "nach": Vector3(0.0, 8.0, 86.0), "blick": "chef",
 		"sprecher": "INTRO_NAME_CHEF", "text": "INTRO_9", "chef_geht": true},
 ]
 
 ## Wo die Spieler während der Einleitung stehen (Reihenfolge = Spielerliste)
-const PLAETZE := [Vector3(-1.8, 0.1, 88.0), Vector3(1.8, 0.1, 88.0), Vector3(-4.0, 0.1, 89.0), Vector3(4.0, 0.1, 89.0)]
+const PLAETZE := [Vector3(-1.8, 0.1, 84.0), Vector3(1.8, 0.1, 84.0), Vector3(-4.0, 0.1, 85.0), Vector3(4.0, 0.1, 85.0)]
 
 @onready var _kamera: Camera3D = $Kamera
 @onready var _balken_oben: ColorRect = %BalkenOben
@@ -89,6 +90,8 @@ func starten(mehrere: bool) -> void:
 	# Spielerkamera schaut bei Drehung 0 nach -Z, also nach Süden in die Kirmes
 	(_spieler as Node3D).rotation.y = 0.0
 	_spieler.minispiel = self
+	if _spieler.has_method("kino_zeigen"):
+		_spieler.kino_zeigen(true)   # eigene Figur zeigen — sonst sieht man sich nicht
 	if _chef and _chef.has_method("warten"):
 		_chef.warten()
 	# HUD und Zielpfeil gehören nicht in eine Zwischensequenz
@@ -104,12 +107,17 @@ func starten(mehrere: bool) -> void:
 	_weiter()
 
 func eingabe(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("ui_cancel"):
 		var welt := get_parent()
 		if welt.has_method("net_kino_ueberspringen"):
 			welt.net_kino_ueberspringen.rpc_id(1)
 		else:
 			beenden()
+		return
+	# Linksklick oder Enter: nächste Zeile
+	var mb := event as InputEventMouseButton
+	if (mb and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT) or event.is_action_pressed("ui_accept"):
+		_weiter()
 
 func _weiter() -> void:
 	_schritt += 1
@@ -120,7 +128,14 @@ func _weiter() -> void:
 	var s: Dictionary = SCHRITTE[_schritt]
 	_sprecher.text = _wort(str(s.sprecher))
 	_text.text = _wort(str(s.text))
-	_hinweis.text = String(TranslationServer.translate("INTRO_UEBERSPRINGEN"))
+	_hinweis.text = String(TranslationServer.translate("INTRO_WEITER"))
+	match str(s.get("geste", "")):
+		"chef":
+			if _chef and _chef.has_method("geste"):
+				_chef.geste()
+		"spieler", "jubel":
+			if _spieler and _spieler.has_method("geste"):
+				_spieler.geste(str(s.get("geste", "")) == "jubel")
 	if s.get("chef_geht", false) and _chef and _chef.has_method("losgehen"):
 		_chef.losgehen()
 
@@ -154,7 +169,7 @@ func _blickpunkt(blick) -> Vector3:
 	if str(blick) == "chef" and _chef and is_instance_valid(_chef):
 		return _chef.global_position + Vector3(0, 1.5, 0)
 	if _spieler and is_instance_valid(_spieler):
-		return _spieler.global_position + Vector3(0, 1.5, 0)
+		return _spieler.global_position + Vector3(0, 1.25, 0)
 	return Vector3(0, 1.5, 84)
 
 func beenden() -> void:
@@ -170,5 +185,7 @@ func beenden() -> void:
 	if _chef and _chef.has_method("losgehen"):
 		_chef.losgehen()
 	if _spieler and is_instance_valid(_spieler):
+		if _spieler.has_method("kino_zeigen"):
+			_spieler.kino_zeigen(false)
 		_spieler.minispiel_beendet()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
