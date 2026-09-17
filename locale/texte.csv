@@ -371,30 +371,30 @@ MSG_EVENING,"🌙 19:00 — das Zelt wird voll, die Gäste werden ungeduldig","�
 MSG_DAY_END,🌙 Feierabend! Netto %s · Bilanz im Wiesenbüro · schlafen startet den nächsten Tag,🌙 Closing time! Net %s · report in the Fair Office · sleep to start the next day,🌙 Mesai bitti! Net %s · bilanço Fuar Ofisinde · uyumak sonraki günü başlatır
 POPUP_RESERVE,"📦 Zuerst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %s für ein Paket Bier — sonst kannst du nichts verkaufen.\n\nWiesenbüro → Ware","📦 Buy supplies first!\n\nYou have no beer in storage and no delivery on the way.\nKeep at least %s for a package of beer — otherwise you can't sell anything.\n\nFair Office → Supplies","📦 Önce malzeme al!\n\nDepoda bira yok ve yolda teslimat yok.\nBir paket bira için en az %s ayır — yoksa hiçbir şey satamazsın.\n\nFuar Ofisi → Malzeme"
 POPUP_NO_TENT,"🎪 Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst eins: Wiesenbüro → Zelt (%s)","🎪 You don't have a tent yet!\n\nWithout a tent you can't store supplies.\nRent one first: Fair Office → Tent (%s)","🎪 Henüz çadırın yok!\n\nÇadır olmadan malzeme depolayamazsın.\nÖnce bir tane kirala: Fuar Ofisi → Çadır (%s)"
-QUEST_0_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
-QUEST_0_TEXT,"Geh zum Festzelt: Am Eingang auf der Nordseite steht das rote Schild „Zu vermieten“. Dort mit {interact} mieten und dem Zelt einen Namen geben — 500 €, die ersten 5 Tage ohne Miete.","Go to the beer tent: the red ‘For rent’ sign stands at the entrance on the north side. Rent it there with {interact} and give your tent a name — €500, no rent for the first 5 days.","Bira çadırına git: Kuzey taraftaki girişte kırmızı “Kiralık” tabelası var. Orada {interact} ile kirala ve çadırına bir ad ver — 500 €, ilk 5 gün kira yok."
-QUEST_1_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
-QUEST_1_TEXT,Wiesenbüro (im Osten) → Zelt → Tisch aufstellen (200 € pro Tisch).,Fair Office (in the east) → Tent → Place table (€200 each).,Fuar Ofisi (doğuda) → Çadır → Masa koy (masa başı 200 €).
-QUEST_2_TITLE,Bestelle Bier,Order beer,Bira sipariş et
-QUEST_2_TEXT,"Ohne Bier kann niemand bedient werden. Im Wiesenbüro → Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office → Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.","Bira olmadan kimseye servis yapılamaz. Fuar Ofisi → Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al."
-QUEST_3_TITLE,Warte auf den Lieferwagen,Wait for the delivery van,Teslimat aracını bekle
-QUEST_3_TEXT,"Deine Bestellung ist unterwegs. In etwa 30 Sekunden fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about 30 seconds the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık 30 saniye içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
-QUEST_4_TITLE,Pakete ins Regal räumen,Stock the shelf,Paketleri rafa diz
-QUEST_4_TEXT,"Nimm jedes Paket mit {interact}, trag es ins Zelt zum Lagerregal und räume es dort mit {interact} ein. Erst eingeräumtes Bier kann gezapft werden.","Pick up each package with {interact}, carry it into the tent to the storage shelf and stock it there with {interact}. Only stocked beer can be poured.","Her paketi {interact} ile al, çadırdaki depo rafına taşı ve orada {interact} ile yerleştir. Sadece rafa konan bira doldurulabilir."
-QUEST_5_TITLE,Schlafe im Wohnwagen,Sleep in your caravan,Karavanında uyu
-QUEST_5_TEXT,"Dein Wohnwagen steht in der Gasse im Süden. Schlafen startet den Tag um 07:00, die ersten Gäste kommen nach ein bis zwei Minuten durchs Haupttor.","Your caravan is in the lane to the south. Sleeping starts the day at 7:00; the first guests come through the main gate after a minute or two.","Karavanın güneydeki sokakta. Uyumak günü 07:00'de başlatır, ilk misafirler bir iki dakika sonra ana kapıdan gelir."
-QUEST_6_TITLE,Bediene einen Gast,Serve a guest,Bir misafire servis yap
-QUEST_6_TEXT,"Krug nehmen, am Fass {interact} gedrückt halten, dann zum Gast und {interact}.","Grab a mug, hold {interact} at a keg, then go to a guest and press {interact}.","Bir kupa al, fıçıda {interact} tuşunu basılı tut, sonra misafire gidip {interact} bas."
-QUEST_7_TITLE,Halte bis 22:00 durch,Keep going until 22:00,22:00'ye kadar dayan
-QUEST_7_TEXT,Danach kommt die Tagesbilanz.,Then you get the daily report.,Ardından günlük bilanço gelir.
-QUEST_8_TITLE,Stelle einen Kellner ein,Hire a waiter,Bir garson işe al
-QUEST_8_TEXT,Wiesenbüro → Personal. Er bedient die Gäste für dich.,Fair Office → Staff. They serve guests for you.,Fuar Ofisi → Personel. Misafirlere senin yerine servis yapar.
-QUEST_9_TITLE,Kaufe eine Lizenz,Buy a license,Bir lisans satın al
-QUEST_9_TEXT,Wiesenbüro → Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office → Licenses. More choice means more sales.,Fuar Ofisi → Lisanslar. Daha fazla çeşit daha fazla satış demek.
-QUEST_10_TITLE,Baue eine Toilette ein,Install a toilet,Tuvalet kur
-QUEST_10_TEXT,Wiesenbüro → Zelt (1.000 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office → Tent (€1,000). Otherwise guests pee in the corner.",Fuar Ofisi → Çadır (1.000 €). Yoksa misafirler köşeye işer.
-QUEST_11_TITLE,Buche einen Künstler,Book an act,Bir sanatçı ayarla
-QUEST_11_TEXT,Wiesenbüro → Künstler. Musik lockt mehr Gäste an.,Fair Office → Acts. Music draws more guests.,Fuar Ofisi → Sanatçılar. Müzik daha çok misafir çeker.
+QUEST_1_TITLE,Miete dein Festzelt,Rent your beer tent,Bira çadırını kirala
+QUEST_1_TEXT,"Geh zum Festzelt: Am Eingang auf der Nordseite steht das rote Schild „Zu vermieten“. Dort mit {interact} mieten und dem Zelt einen Namen geben — 500 €, die ersten 5 Tage ohne Miete.","Go to the beer tent: the red ‘For rent’ sign stands at the entrance on the north side. Rent it there with {interact} and give your tent a name — €500, no rent for the first 5 days.","Bira çadırına git: Kuzey taraftaki girişte kırmızı “Kiralık” tabelası var. Orada {interact} ile kirala ve çadırına bir ad ver — 500 €, ilk 5 gün kira yok."
+QUEST_2_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
+QUEST_2_TEXT,Wiesenbüro (im Osten) → Zelt → Tisch aufstellen (200 € pro Tisch).,Fair Office (in the east) → Tent → Place table (€200 each).,Fuar Ofisi (doğuda) → Çadır → Masa koy (masa başı 200 €).
+QUEST_3_TITLE,Bestelle Bier,Order beer,Bira sipariş et
+QUEST_3_TEXT,"Ohne Bier kann niemand bedient werden. Im Wiesenbüro → Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office → Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.","Bira olmadan kimseye servis yapılamaz. Fuar Ofisi → Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al."
+QUEST_4_TITLE,Warte auf den Lieferwagen,Wait for the delivery van,Teslimat aracını bekle
+QUEST_4_TEXT,"Deine Bestellung ist unterwegs. In etwa 30 Sekunden fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about 30 seconds the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık 30 saniye içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
+QUEST_5_TITLE,Pakete ins Regal räumen,Stock the shelf,Paketleri rafa diz
+QUEST_5_TEXT,"Nimm jedes Paket mit {interact}, trag es ins Zelt zum Lagerregal und räume es dort mit {interact} ein. Erst eingeräumtes Bier kann gezapft werden.","Pick up each package with {interact}, carry it into the tent to the storage shelf and stock it there with {interact}. Only stocked beer can be poured.","Her paketi {interact} ile al, çadırdaki depo rafına taşı ve orada {interact} ile yerleştir. Sadece rafa konan bira doldurulabilir."
+QUEST_6_TITLE,Schlafe im Wohnwagen,Sleep in your caravan,Karavanında uyu
+QUEST_6_TEXT,"Dein Wohnwagen steht in der Gasse im Süden. Schlafen startet den Tag um 07:00, die ersten Gäste kommen nach ein bis zwei Minuten durchs Haupttor.","Your caravan is in the lane to the south. Sleeping starts the day at 7:00; the first guests come through the main gate after a minute or two.","Karavanın güneydeki sokakta. Uyumak günü 07:00'de başlatır, ilk misafirler bir iki dakika sonra ana kapıdan gelir."
+QUEST_7_TITLE,Bediene einen Gast,Serve a guest,Bir misafire servis yap
+QUEST_7_TEXT,"Krug nehmen, am Fass {interact} gedrückt halten, dann zum Gast und {interact}.","Grab a mug, hold {interact} at a keg, then go to a guest and press {interact}.","Bir kupa al, fıçıda {interact} tuşunu basılı tut, sonra misafire gidip {interact} bas."
+QUEST_8_TITLE,Halte bis 22:00 durch,Keep going until 22:00,22:00'ye kadar dayan
+QUEST_8_TEXT,Danach kommt die Tagesbilanz.,Then you get the daily report.,Ardından günlük bilanço gelir.
+QUEST_9_TITLE,Stelle einen Kellner ein,Hire a waiter,Bir garson işe al
+QUEST_9_TEXT,Wiesenbüro → Personal. Er bedient die Gäste für dich.,Fair Office → Staff. They serve guests for you.,Fuar Ofisi → Personel. Misafirlere senin yerine servis yapar.
+QUEST_10_TITLE,Kaufe eine Lizenz,Buy a license,Bir lisans satın al
+QUEST_10_TEXT,Wiesenbüro → Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office → Licenses. More choice means more sales.,Fuar Ofisi → Lisanslar. Daha fazla çeşit daha fazla satış demek.
+QUEST_11_TITLE,Baue eine Toilette ein,Install a toilet,Tuvalet kur
+QUEST_11_TEXT,Wiesenbüro → Zelt (1.000 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office → Tent (€1,000). Otherwise guests pee in the corner.",Fuar Ofisi → Çadır (1.000 €). Yoksa misafirler köşeye işer.
+QUEST_12_TITLE,Buche einen Künstler,Book an act,Bir sanatçı ayarla
+QUEST_12_TEXT,Wiesenbüro → Künstler. Musik lockt mehr Gäste an.,Fair Office → Acts. Music draws more guests.,Fuar Ofisi → Sanatçılar. Müzik daha çok misafir çeker.
 HELP_TITLE,Hilfe,Help,Yardım
 HELP_CONTROLS,Steuerung,Controls,Kontroller
 HELP_MOUSE,Maus,Mouse,Fare
@@ -654,3 +654,30 @@ KRUG_KRAFT,"Kraft — zu fest, und der Krug fällt hinten herunter!","Power — 
 KRUG_FELD,→ %d Punkte!,→ %d points!,→ %d puan!
 KRUG_DANEBEN,→ daneben,→ missed,→ olmadı
 WORLD_KRUG,Krugschieben,Stein Sliding,Kupa Kaydırma
+QUEST_0_TITLE,Folge dem Wiesnchef,Follow the fair manager,Fuar müdürünü takip et
+QUEST_0_TEXT,"Der Wiesnchef geht zum Festzelt (Süden, der Allee entlang). Folge ihm bis zum Eingang — dort erklärt er alles.","The fair manager is heading to the beer tent (south, along the avenue). Follow him to the entrance — he will explain everything there.","Fuar müdürü bira çadırına gidiyor (güneyde, bulvar boyunca). Girişe kadar takip et — her şeyi orada anlatacak."
+INTRO_UEBERSPRINGEN,Esc überspringt,Esc skips,Esc atlar
+INTRO_NAME_CHEF_DU,Wiesnchef,Fair manager,Fuar müdürü
+INTRO_NAME_CHEF_IHR,Wiesnchef,Fair manager,Fuar müdürü
+INTRO_NAME_SPIELER_DU,Du,You,Sen
+INTRO_NAME_SPIELER_IHR,Ihr,You,Siz
+INTRO_NAME_FREUND_DU,Am Kirmestor,At the fair gate,Fuar kapısında
+INTRO_NAME_FREUND_IHR,Deine Freunde,Your friends,Arkadaşların
+INTRO_1_DU,"Schau an — das Sloptoberfest wird wirklich wieder aufgebaut!","Look at that — they really are putting up the Sloptoberfest again!","Baksana — Sloptoberfest gerçekten yeniden kuruluyor!"
+INTRO_1_IHR,"Schaut mal — das Sloptoberfest wird wirklich wieder aufgebaut!","Look at that — they really are putting up the Sloptoberfest again!","Bakın — Sloptoberfest gerçekten yeniden kuruluyor!"
+INTRO_2_DU,"Zwei Wochen Blasmusik, Hendl und Maß. Ich bin dabei.","Two weeks of brass music, roast chicken and beer. I am in.","İki hafta bando, tavuk ve bira. Ben varım."
+INTRO_2_IHR,"Zwei Wochen Blasmusik, Hendl und Maß. Wir sind dabei.","Two weeks of brass music, roast chicken and beer. We are in.","İki hafta bando, tavuk ve bira. Biz varız."
+INTRO_3_DU,"Schön wär's. Der Zeltbetreiber hat mich betrogen und ist mit der Kasse weg. Jetzt steht das größte Festzelt ohne Betreiber da.","I wish. The tent operator cheated me and ran off with the cash. Now the biggest beer tent has no operator.","Keşke. Çadır işletmecisi beni dolandırdı ve kasayla kaçtı. Şimdi en büyük çadırın işletmecisi yok."
+INTRO_3_IHR,"Schön wär's. Der Zeltbetreiber hat mich betrogen und ist mit der Kasse weg. Jetzt steht das größte Festzelt ohne Betreiber da.","I wish. The tent operator cheated me and ran off with the cash. Now the biggest beer tent has no operator.","Keşke. Çadır işletmecisi beni dolandırdı ve kasayla kaçtı. Şimdi en büyük çadırın işletmecisi yok."
+INTRO_4_DU,"Und ohne Festzelt kommt kein Mensch auf die Wiesn. Dann kann ich die ganze Kirmes zumachen.","And without a beer tent nobody comes to the fair. Then I can shut the whole thing down.","Çadır olmazsa kimse fuara gelmez. O zaman her şeyi kapatırım."
+INTRO_4_IHR,"Und ohne Festzelt kommt kein Mensch auf die Wiesn. Dann kann ich die ganze Kirmes zumachen.","And without a beer tent nobody comes to the fair. Then I can shut the whole thing down.","Çadır olmazsa kimse fuara gelmez. O zaman her şeyi kapatırım."
+INTRO_5_DU,"Moment — ich kann das Zelt doch betreiben.","Hold on — I could run that tent.","Dur biraz — o çadırı ben işletebilirim."
+INTRO_5_IHR,"Moment — wir können das Zelt doch betreiben.","Hold on — we could run that tent.","Dur biraz — o çadırı biz işletebiliriz."
+INTRO_6_DU,"Ein Festzelt betreiben. Als ob das so einfach wäre.","Running a beer tent. As if that were so easy.","Bira çadırı işletmek. Sanki çok kolay."
+INTRO_6_IHR,"Ein Festzelt betreiben. Als ob das so einfach wäre.","Running a beer tent. As if that were so easy.","Bira çadırı işletmek. Sanki çok kolay."
+INTRO_7_DU,"Klar ist das einfach. Ich hab mal gekellnert — einen Sommer, im Biergarten meiner Tante, elf Tische. Praktisch dasselbe, nur mit mehr Blaskapelle.","Sure it is. I waited tables once — one summer, in my aunt's beer garden, eleven tables. Basically the same thing, just with more brass band.","Tabii ki kolay. Bir yaz garsonluk yaptım — halamın bira bahçesinde, on bir masa. Neredeyse aynı şey, sadece bandosu daha çok."
+INTRO_7_IHR,"Klar ist das einfach. Wir haben mal gekellnert — einen Sommer, im Biergarten seiner Tante, elf Tische. Praktisch dasselbe, nur mit mehr Blaskapelle.","Sure it is. We waited tables once — one summer, in his aunt's beer garden, eleven tables. Basically the same thing, just with more brass band.","Tabii ki kolay. Bir yaz garsonluk yaptık — halasının bira bahçesinde, on bir masa. Neredeyse aynı şey, sadece bandosu daha çok."
+INTRO_8_DU,"Elf Tische. Wunderbar. Aber eine andere Wahl habe ich ohnehin nicht.","Eleven tables. Wonderful. But I have no other choice anyway.","On bir masa. Harika. Ama başka seçeneğim de yok."
+INTRO_8_IHR,"Elf Tische. Wunderbar. Aber eine andere Wahl habe ich ohnehin nicht.","Eleven tables. Wonderful. But I have no other choice anyway.","On bir masa. Harika. Ama başka seçeneğim de yok."
+INTRO_9_DU,"Komm mit zum Zelt, ich zeig dir alles. Danach entscheidest du, ob du noch willst.","Come along to the tent, I will show you everything. Then you decide whether you still want it.","Çadıra gel, her şeyi göstereyim. Sonra hâlâ isteyip istemediğine karar verirsin."
+INTRO_9_IHR,"Kommt mit zum Zelt, ich zeig euch alles. Danach entscheidet ihr, ob ihr noch wollt.","Come along to the tent, I will show you everything. Then you decide whether you still want it.","Çadıra gelin, her şeyi göstereyim. Sonra hâlâ isteyip istemediğinize karar verirsiniz."

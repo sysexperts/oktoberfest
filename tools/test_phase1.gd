@@ -180,7 +180,7 @@ class Lauf extends Node:
 
 		print("  -- Geführtes Tutorial (2.3)")
 		gm._check_quest()
-		_check("Schritt 1 (Tische) nach Zelt + 1 Tisch", gm._quest_step == 1, "Schritt=%d" % gm._quest_step)
+		_check("Schritt 2 (Tische) nach Zelt + 1 Tisch", gm._quest_step == 2, "Schritt=%d" % gm._quest_step)
 		var marker := gm.get_node_or_null("Zielmarker")
 		_check("Zielmarker in der Szene", marker != null, "")
 		if marker:

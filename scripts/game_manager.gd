@@ -1,4 +1,5 @@
 extends Node3D
+const Kino := preload("res://scripts/ui/kino.gd")
 const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## GameManager. Faz: MOLA <-> VARDİYA. Misafirler popülerliğe göre gelir,
 ## bira masalarındaki koltuklara oturur, TÜM vardiya boyunca kalır ve
@@ -481,6 +482,9 @@ var _complaints := 0
 var _left_guests := 0
 # Tutorial-Fortschritt
 var _quest_step := 0
+## Einleitung gelaufen und dem Wiesnchef zum Zelt gefolgt (Schritt 0)
+var _folge_geschafft := false
+var _kino_gestartet := false
 var _quest_served_once := false
 var _ever_artist := false
 var _quest_timer := 0.0
@@ -590,6 +594,7 @@ func _ready() -> void:
 	_hud.set_day(_day)
 	_sichere_wohnwagen()
 
+	var neues_spiel := Net.neues_spiel
 	if multiplayer.is_server():
 		if Net.neues_spiel:
 			_loesche_speicherstand()
@@ -610,6 +615,10 @@ func _ready() -> void:
 			_add_player(1, 0)
 		_broadcast_meta()
 		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+		# Neuer Spielstand: Einleitung am Kirmestor zeigen (scripts/ui/kino.gd)
+		if neues_spiel and not Net.dedicated and not _kino_gestartet and not Kino.werkzeuglauf():
+			_kino_gestartet = true
+			net_kino_start.rpc(multiplayer.get_peers().size() > 0)
 	else:
 		_client_ready.rpc_id(1, KoopDaten.version())
 		# Antwortet der Server nicht (etwa ein älterer Stand, der die Nachricht
@@ -828,6 +837,7 @@ func _save_game() -> void:
 		"stock_essen": int(_stock[WARE_ESSEN]),
 		"toilet": _has_toilet,
 		"quest": _quest_step,
+		"folge": _folge_geschafft,
 		"quest_version": QUEST_VERSION,
 		"ever_artist": _ever_artist,
 		"stats": _stats,
@@ -887,9 +897,16 @@ func _load_game() -> bool:
 	_essenpreis = clampf(float(d.get("essenpreis", 1.0)), essen_raum.x, essen_raum.y)
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
+	_folge_geschafft = bool(d.get("folge", false))
 	# Alte Stände: Schritte ab 3 sind durch die zwei neuen Liefer-Schritte eins weiter
-	if int(d.get("quest_version", 1)) < QUEST_VERSION and _quest_step >= 3:
+	var quest_alt := int(d.get("quest_version", 1))
+	if quest_alt < 2 and _quest_step >= 3:
 		_quest_step += 1
+	# Version 3: Schritt 0 (dem Wiesnchef folgen) kam vorn dazu — der ist in alten
+	# Spielständen längst gelaufen, also rücken alle Schritte eins weiter.
+	if quest_alt < 3:
+		_quest_step += 1
+		_folge_geschafft = true
 	_ever_artist = bool(d.get("ever_artist", false))
 	var gespeicherte_stats: Variant = d.get("stats", {})
 	if gespeicherte_stats is Dictionary:
@@ -1604,27 +1621,30 @@ func _reserve_ok(cost: int) -> bool:
 # ---- Tutorial ----
 ## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
 ## übersetzt wird beim Spieler — gesendet wird nur die Schrittnummer.
-const QUEST_COUNT := 12
+const QUEST_COUNT := 13
+## Seit Version 3 führt Schritt 0 hinter dem Wiesnchef zum Zelt (Einleitung).
 ## Seit Version 2 gibt es die Schritte „auf den Lieferwagen warten" und „Pakete
 ## ins Regal räumen" — ältere Spielstände ab Schritt 3 rücken eins weiter.
-const QUEST_VERSION := 2
+const QUEST_VERSION := 3
 
 func _quest_done(step: int) -> bool:
 	match step:
-		0: return _tent_stage > 0
-		1: return _active_count >= 2
-		2: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
+		# Dem Wiesnchef zum Zelteingang gefolgt (oder das Zelt schon gemietet)
+		0: return _folge_geschafft or _tent_stage > 0
+		1: return _tent_stage > 0
+		2: return _active_count >= 2
+		3: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
 		# Lieferwagen ist da: Pakete liegen vor dem Zelt (oder schon eingeräumt)
-		3: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
+		4: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
 		# alle Pakete eingeräumt
-		4: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
-		5: return _shift_num >= 1
-		6: return _served >= 1 or _quest_served_once
-		7: return _shift_num >= 1 and _phase == Phase.INTERMISSION
-		8: return _has_staff(ROLE_KELLNER)
-		9: return _lic.values().has(true)
-		10: return _has_toilet
-		11: return _ever_artist
+		5: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
+		6: return _shift_num >= 1
+		7: return _served >= 1 or _quest_served_once
+		8: return _shift_num >= 1 and _phase == Phase.INTERMISSION
+		9: return _has_staff(ROLE_KELLNER)
+		10: return _lic.values().has(true)
+		11: return _has_toilet
+		12: return _ever_artist
 	return false
 
 func _has_staff(role: int) -> bool:
@@ -1671,6 +1691,7 @@ func net_skip_tutorial() -> void:
 	if not multiplayer.is_server():
 		return
 	_quest_step = QUEST_COUNT
+	_folge_geschafft = true
 	_broadcast_meta()
 
 # ================================================= E5: Künstler
@@ -3638,6 +3659,7 @@ func _process(delta: float) -> void:
 		_leer_pruefen(delta)
 		return
 	_leer_seit = 0.0
+	_folge_pruefen()
 	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
 	if not _abstimmung.is_empty():
 		var vorher := ceili(float(_abstimmung.rest))
@@ -4839,3 +4861,40 @@ func _add_income(amount: int) -> void:
 		Game.add_money(amount - interest)
 	else:
 		Game.add_money(amount)
+
+# ================================================= Einleitung (Story)
+## Einleitung bei allen starten. mehrere: Koop — dann redet der Dialog in „ihr".
+@rpc("authority", "reliable", "call_local")
+func net_kino_start(mehrere: bool) -> void:
+	var kino := get_node_or_null("Kino")
+	if kino and kino.has_method("starten"):
+		kino.starten(mehrere)
+
+## Esc in der Einleitung: der Server beendet sie für alle.
+@rpc("any_peer", "reliable", "call_local")
+func net_kino_ueberspringen() -> void:
+	if not multiplayer.is_server():
+		return
+	_net_kino_ende.rpc()
+
+@rpc("authority", "reliable", "call_local")
+func _net_kino_ende() -> void:
+	var kino := get_node_or_null("Kino")
+	if kino and kino.has_method("beenden"):
+		kino.beenden()
+
+## Mission 1: dem Wiesnchef zum Zelteingang folgen. Erfüllt, sobald ein Spieler
+## am Eingang steht (Mietschild). Läuft nur auf dem Server.
+func _folge_pruefen() -> void:
+	if _folge_geschafft or _quest_step > 0:
+		return
+	var schild := get_node_or_null("ZeltVermietung") as Node3D
+	if schild == null:
+		_folge_geschafft = true
+		return
+	for p: Node in _players_nodes.values():
+		if is_instance_valid(p) and (p as Node3D).global_position.distance_to(schild.global_position) < 9.0:
+			_folge_geschafft = true
+			if _check_quest():
+				_broadcast_meta()
+			return

@@ -42,24 +42,30 @@ func ziel_suchen() -> Node3D:
 	var geschlossen: bool = gm.in_intermission()
 	match int(gm._quest_step):
 		0:
+			# Erste Mission: dem Wiesnchef nach — er läuft zum Zelteingang vor
+			var chef := get_tree().get_first_node_in_group("wiesnchef") as Node3D
+			if chef:
+				return chef
+			return _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
+		1:
 			# Das Schild am Zelteingang — ist es weg (gemietet), bleibt das Wiesenbüro
 			var schild := _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
 			if schild:
 				return schild
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
-		1, 2, 8, 9, 10, 11:
+		2, 3, 9, 10, 11, 12:
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
-		3:
+		4:
 			# Lieferwagen unterwegs — schon zeigen, wohin die Pakete später gehören
 			return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-		4:
+		5:
 			if sp.carry_state == 3:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
 			var paket := _naechstes(sp, func(n: Node) -> bool: return n is Package)
 			return paket if paket else _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-		5:
-			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
 		6:
+			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
+		7:
 			if geschlossen:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Caravan)
 			return _ziel_bedienen(sp)

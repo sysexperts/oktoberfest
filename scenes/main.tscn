@@ -30,6 +30,7 @@
 [ext_resource type="Texture3D" path="res://assets/shader/farb_lut.png" id="103_lut"]
 [ext_resource type="PackedScene" path="res://scenes/effekte/bildfilter.tscn" id="104_bildfilter"]
 [ext_resource type="PackedScene" path="res://scenes/ui/baumodus.tscn" id="105_baumodus"]
+[ext_resource type="PackedScene" path="res://scenes/ui/kino.tscn" id="106_kino"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -443,3 +444,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 3.3, -13.68)
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -8.4, 2.1, -8.62)
 
 [node name="Baumodus" parent="." instance=ExtResource("105_baumodus")]
+
+[node name="Kino" parent="." instance=ExtResource("106_kino")]
