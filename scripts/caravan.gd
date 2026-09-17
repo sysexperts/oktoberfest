@@ -16,4 +16,7 @@ func _ready() -> void:
 ## Ansprechpunkt an der Tür statt in der Wagenmitte — sonst muss man
 ## praktisch im Wohnwagen stehen, um schlafen zu können.
 func interact_point() -> Vector3:
+	var tuer := get_node_or_null("Modell/TuerPunkt") as Node3D
+	if tuer:
+		return tuer.global_position + Vector3(0, 1.0, 0)
 	return global_position + global_transform.basis.z * 1.1

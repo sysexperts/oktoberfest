@@ -62,7 +62,9 @@ const GRUPPEN := [
 		"res://assets/kirmes/Models/Props/",
 	]],
 	["Fahrzeuge", [
-		"res://scenes/wohnwagen_deko.tscn",
+		"res://scenes/kulisse/wohnwagen_blau.tscn",
+		"res://scenes/kulisse/wohnwagen_rot.tscn",
+		"res://scenes/kulisse/wohnwagen_gruen.tscn",
 		"res://assets/kirmes/Models/Vehicles/",
 	]],
 	["Gebäude", ["res://assets/kirmes/Models/Shops/", "res://assets/kirmes/Models/Ground/"]],

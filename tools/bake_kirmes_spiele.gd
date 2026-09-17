@@ -18,6 +18,7 @@ extends SceneTree
 ##   scenes/kirmes/krugschieben_stand.tscn Krugschieben: langer Schanktisch mit Punktfeldern
 ##   scenes/kirmes/essen/*.tscn           Marktbuden (Essen, Süßes, Spielwaren) mit Verkäuferplatz
 ##   scenes/kulisse/deko/*.tscn           Deko für den Baumodus (Brunnen, Festbogen, Zaun …)
+##   scenes/kulisse/wohnwagen_*.tscn      detaillierter Wohnwagen (blau, rot, grün), ohne Zugfahrzeug
 ## Front (Spieler) = lokal +Z. Alle passen auf einen Doppelplatz der Kirmes (≤ 6,4 m
 ## breit, ≤ 3,6 m nach hinten).
 ##   godot --headless --path . --script tools/bake_kirmes_spiele.gd            (alles)
@@ -69,6 +70,12 @@ func _init() -> void:
 		_speichern(_maulwurf(), "res://scenes/kirmes/maulwurf_stand.tscn")
 	if soll.call("krugschieben"):
 		_speichern(_krugschieben(), "res://scenes/kirmes/krugschieben_stand.tscn")
+	if soll.call("wohnwagen"):
+		var gruen := StandardMaterial3D.new()
+		gruen.albedo_color = Color(0.16, 0.45, 0.24)
+		gruen.roughness = 0.35
+		for farbe: Array in [["blau", m.blau], ["rot", m.rot], ["gruen", gruen]]:
+			_speichern(_wohnwagen(farbe[1]), "res://scenes/kulisse/wohnwagen_%s.tscn" % farbe[0])
 	if soll.call("deko"):
 		for typ: String in DEKO:
 			_speichern(_deko(typ), "res://scenes/kulisse/deko/%s.tscn" % typ)
@@ -1796,4 +1803,179 @@ func _krugschieben() -> Node3D:
 	_kollision(koerper, "Bude", _boxform(Vector3(5.0, 1.2, tiefe)), Transform3D(Basis(), Vector3(0, 0.6, zm)))
 	_marke(r, "BesitzerMitte", Vector3(-1.95, boden, -0.5))
 	_marke(r, "BesitzerSeite", Vector3(-1.95, boden, -1.7))
+	return r
+
+# ------------------------------------------------------------------ Wohnwagen
+## Klassischer Wohnwagen (ohne Zugfahrzeug): Aufbau mit runden Dachkanten, Zierstreifen,
+## Fenster mit Rahmen und Vorhängen, Tür mit Trittstufe, Einachser mit Kotflügeln,
+## Deichsel mit Gaskasten und Stützrad, Dachluke, Markisenrolle, Rückleuchten.
+## Länge entlang X (Deichsel +X), Tür auf +Z — wie scenes/caravan.tscn.
+##   Marken: Tuer (Ansprechpunkt), Schild (über dem Dach)
+func _wohnwagen(farbe: Material) -> Node3D:
+	var r := _neu("Wohnwagen")
+	var laenge := 3.8
+	var breite := 2.0
+	var y0 := 0.45                # Unterkante Aufbau
+	var hoehe := 1.85             # Aufbau-Höhe
+	var rund := 0.38              # Radius der Dachkanten vorn/hinten
+	var hx := laenge / 2.0
+	var hz := breite / 2.0
+	var oben := y0 + hoehe
+	# Getönte Scheibe, halb durchsichtig: dahinter dunkler Innenraum und Vorhänge
+	var scheibe := StandardMaterial3D.new()
+	scheibe.albedo_color = Color(0.2, 0.26, 0.32, 0.55)
+	scheibe.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	scheibe.metallic = 0.4
+	scheibe.roughness = 0.08
+	var innen := StandardMaterial3D.new()
+	innen.albedo_color = Color(0.06, 0.05, 0.05)
+	var aufbau := _gruppe(r, "Aufbau")
+	# Grundkörper + Dach mit runden Kanten vorn und hinten
+	_box(aufbau, "Koerper", Vector3(laenge, hoehe - rund, breite), Vector3(0, y0 + (hoehe - rund) / 2.0, 0), m.creme_lack)
+	_box(aufbau, "Dach", Vector3(laenge - 2.0 * rund, rund, breite), Vector3(0, oben - rund / 2.0, 0), m.creme_lack)
+	for sx: float in [-1.0, 1.0]:
+		_zyl(aufbau, "Kante%s" % sx, rund, rund, breite, Vector3(sx * (hx - rund), oben - rund, 0), m.creme_lack, Vector3(90, 0, 0), 16)
+	# Dachhaut etwas dunkler, Regenrinne
+	_box(aufbau, "Dachhaut", Vector3(laenge - 2.0 * rund, 0.02, breite - 0.1), Vector3(0, oben + 0.01, 0), m.weiss)
+	for sz: float in [-1.0, 1.0]:
+		_box(aufbau, "Rinne%s" % sz, Vector3(laenge - 0.5, 0.04, 0.04), Vector3(0, oben - 0.08, sz * (hz + 0.02)), m.metall)
+	# Schürze unten, Zierstreifen in Wagenfarbe
+	_box(aufbau, "Schuerze", Vector3(laenge + 0.02, 0.12, breite + 0.02), Vector3(0, y0 + 0.06, 0), m.schwarz_lack)
+	_box(aufbau, "Streifen", Vector3(laenge + 0.03, 0.34, breite + 0.03), Vector3(0, y0 + 0.36, 0), farbe)
+	_box(aufbau, "Linie", Vector3(laenge + 0.03, 0.04, breite + 0.03), Vector3(0, y0 + 0.6, 0), m.orange_lack)
+	_box(aufbau, "LinieOben", Vector3(laenge + 0.025, 0.03, breite + 0.025), Vector3(0, oben - rund - 0.08, 0), farbe)
+	# Fenster: [Seite z (+1/-1 oder 0 = Stirn), Mitte x/z entlang, Breite, Höhe, Unterkante]
+	var fenster := [
+		[1.0, 1.05, 1.1, 0.62, y0 + 0.9],
+		[1.0, -1.45, 0.55, 0.5, y0 + 1.0],
+		[-1.0, 0.9, 1.3, 0.62, y0 + 0.9],
+		[-1.0, -1.05, 0.9, 0.62, y0 + 0.9],
+	]
+	var fg := _gruppe(r, "Fenster")
+	for i in fenster.size():
+		var f: Array = fenster[i]
+		var sz: float = f[0]
+		var mitte := Vector3(f[1], float(f[4]) + float(f[3]) / 2.0, sz * hz)
+		_box(fg, "Rahmen%d" % i, Vector3(float(f[2]) + 0.1, float(f[3]) + 0.1, 0.03), mitte + Vector3(0, 0, sz * 0.012), m.schwarz_lack)
+		_box(fg, "Innen%d" % i, Vector3(f[2], f[3], 0.02), mitte + Vector3(0, 0, sz * 0.02), innen)
+		_box(fg, "Glas%d" % i, Vector3(f[2], f[3], 0.01), mitte + Vector3(0, 0, sz * 0.042), scheibe)
+		# Vorhänge seitlich zugezogen, dahinter
+		for s: float in [-1.0, 1.0]:
+			_box(fg, "Vorhang%d_%s" % [i, s], Vector3(float(f[2]) * 0.22, float(f[3]) - 0.04, 0.01), mitte + Vector3(s * float(f[2]) * 0.38, 0, sz * 0.033), m.vorhang_rot)
+		_box(fg, "Querstrebe%d" % i, Vector3(f[2], 0.03, 0.02), mitte + Vector3(0, 0, sz * 0.045), m.schwarz_lack)
+		# Ausstellfenster-Scharnierleiste oben
+		_box(fg, "Scharnier%d" % i, Vector3(float(f[2]) + 0.1, 0.04, 0.05), mitte + Vector3(0, float(f[3]) / 2.0 + 0.07, sz * 0.02), m.metall)
+	# Panoramafenster vorn (schräg in der Rundung) und Heckfenster
+	for sx: float in [-1.0, 1.0]:
+		var stirn := Vector3(sx * hx, y0 + 1.25, 0)
+		_box(fg, "StirnRahmen%s" % sx, Vector3(0.03, 0.55, 1.45), stirn + Vector3(sx * 0.012, 0, 0), m.schwarz_lack)
+		_box(fg, "StirnInnen%s" % sx, Vector3(0.02, 0.45, 1.35), stirn + Vector3(sx * 0.02, 0, 0), innen)
+		_box(fg, "StirnGlas%s" % sx, Vector3(0.01, 0.45, 1.35), stirn + Vector3(sx * 0.042, 0, 0), scheibe)
+		for s: float in [-1.0, 1.0]:
+			_box(fg, "StirnVorhang%s_%s" % [sx, s], Vector3(0.01, 0.41, 0.3), stirn + Vector3(sx * 0.033, 0, s * 0.5), m.vorhang_rot)
+	# Tür auf +Z mit kleinem Fenster, Griff und Trittstufe
+	var tuer_x := -0.55
+	var tuer := _gruppe(r, "Tuer", Vector3(tuer_x, y0, hz + 0.015))
+	_box(tuer, "Blatt", Vector3(0.62, 1.62, 0.03), Vector3(0, 0.86, 0), m.creme_lack)
+	_box(tuer, "Fuge", Vector3(0.66, 1.66, 0.02), Vector3(0, 0.86, -0.006), m.schwarz_lack)
+	_box(tuer, "TuerStreifen", Vector3(0.62, 0.34, 0.035), Vector3(0, 0.36, 0), farbe)
+	_box(tuer, "TuerGlas", Vector3(0.36, 0.42, 0.04), Vector3(0, 1.3, 0), scheibe)
+	_box(tuer, "TuerGlasRahmen", Vector3(0.42, 0.48, 0.035), Vector3(0, 1.3, -0.002), m.schwarz_lack)
+	_zyl(tuer, "Griff", 0.018, 0.018, 0.16, Vector3(0.22, 0.95, 0.04), m.messing, Vector3(0, 0, 0), 8)
+	_zyl(tuer, "Schloss", 0.025, 0.025, 0.02, Vector3(0.22, 0.85, 0.03), m.messing, Vector3(90, 0, 0), 8)
+	_box(tuer, "Trittstufe", Vector3(0.6, 0.05, 0.32), Vector3(0, -0.2, 0.2), m.metall)
+	for s: float in [-1.0, 1.0]:
+		_box(tuer, "Stufenhalter%s" % s, Vector3(0.03, 0.2, 0.03), Vector3(s * 0.27, -0.1, 0.12), m.metall)
+	_zyl(tuer, "Lampe", 0.06, 0.06, 0.05, Vector3(0.45, 1.75, 0.03), m.laternenglas, Vector3(90, 0, 0), 10)
+	_marke(r, "TuerPunkt", Vector3(tuer_x, 0, hz + 0.9))
+	# Fahrwerk: Rahmen, Achse, Räder mit Felgen, Kotflügel
+	var fw := _gruppe(r, "Fahrwerk")
+	for sz: float in [-1.0, 1.0]:
+		_box(fw, "Laengstraeger%s" % sz, Vector3(laenge - 0.2, 0.12, 0.08), Vector3(0, y0 - 0.08, sz * 0.7), m.schwarz_lack)
+	_zyl(fw, "Achse", 0.05, 0.05, breite, Vector3(-0.2, 0.33, 0), m.schwarz_lack, Vector3(90, 0, 0), 8)
+	for sz: float in [-1.0, 1.0]:
+		var rad := _gruppe(fw, "Rad%s" % sz, Vector3(-0.2, 0.33, sz * (hz - 0.05)))
+		_zyl(rad, "Reifen", 0.33, 0.33, 0.2, Vector3.ZERO, m.schwarz_lack, Vector3(90, 0, 0), 20)
+		_zyl(rad, "Felge", 0.2, 0.2, 0.21, Vector3.ZERO, m.metall, Vector3(90, 0, 0), 16)
+		_zyl(rad, "Nabe", 0.07, 0.07, 0.23, Vector3.ZERO, m.creme_lack, Vector3(90, 0, 0), 10)
+		for k in 5:
+			var a := TAU * k / 5.0
+			_zyl(rad, "Mutter%d" % k, 0.015, 0.015, 0.235, Vector3(cos(a) * 0.12, sin(a) * 0.12, 0), m.messing, Vector3(90, 0, 0), 6)
+		# Radlauf: Blende rund ums Rad, oben ein schmaler Kotflügel am Aufbau
+		_torus(fw, "Radlauf%s" % sz, 0.36, 0.41, Vector3(-0.2, 0.33, sz * (hz + 0.02)), m.schwarz_lack, Vector3(90, 0, 0))
+		_box(fw, "Kotfluegel%s" % sz, Vector3(0.86, 0.035, 0.12), Vector3(-0.2, 0.76, sz * (hz + 0.06)), farbe)
+	# Kurbelstützen an den Ecken
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			var p := Vector3(sx * (hx - 0.3), 0, sz * (hz - 0.25))
+			_box(fw, "Stuetze%s%s" % [sx, sz], Vector3(0.06, y0 - 0.05, 0.06), p + Vector3(0, (y0 - 0.05) / 2.0 + 0.05, 0), m.metall, Vector3(sx * 12.0, 0, 0))
+			_box(fw, "Teller%s%s" % [sx, sz], Vector3(0.16, 0.03, 0.16), p + Vector3(0, 0.015, 0), m.schwarz_lack)
+	# Deichsel (A-Rahmen) mit Kupplung, Stützrad und Gaskasten
+	var dg := _gruppe(r, "Deichsel", Vector3(hx, 0, 0))
+	for sz: float in [-1.0, 1.0]:
+		var von := Vector3(-0.1, y0 - 0.06, sz * 0.7)
+		var bis := Vector3(1.25, 0.46, 0)
+		var achse := bis - von
+		var holm: MeshInstance3D = _box(dg, "Holm%s" % sz, Vector3(0.08, 0.1, 1.0), Vector3.ZERO, m.schwarz_lack)
+		holm.transform = Transform3D(Basis.looking_at(achse.normalized(), Vector3.UP).scaled(Vector3(1, 1, achse.length())), (von + bis) * 0.5)
+	_box(dg, "Kupplung", Vector3(0.4, 0.12, 0.14), Vector3(1.3, 0.46, 0), m.schwarz_lack)
+	_zyl(dg, "Kugelkopf", 0.07, 0.07, 0.1, Vector3(1.52, 0.44, 0), m.metall, Vector3.ZERO, 10)
+	_zyl(dg, "Stuetzrohr", 0.035, 0.035, 0.75, Vector3(1.0, 0.4, 0.18), m.metall, Vector3.ZERO, 8)
+	_zyl(dg, "Kurbel", 0.012, 0.012, 0.2, Vector3(1.0, 0.82, 0.25), m.metall, Vector3(90, 0, 0), 5)
+	_zyl(dg, "Stuetzrad", 0.09, 0.09, 0.06, Vector3(1.0, 0.09, 0.18), m.schwarz_lack, Vector3(90, 0, 0), 12)
+	_box(dg, "Gaskasten", Vector3(0.42, 0.38, 0.78), Vector3(0.32, y0 + 0.13, 0), m.creme_lack)
+	_prisma(dg, "Gasdeckel", Vector3(0.82, 0.12, 0.48), Vector3(0.32, y0 + 0.38, 0), farbe, Vector3(0, 90, 0))
+	_zyl(dg, "Flasche", 0.12, 0.12, 0.45, Vector3(0.55, y0 + 0.12, -0.5), m.rot, Vector3.ZERO, 12)
+	_kugel(dg, "FlascheKopf", 0.12, Vector3(0.55, y0 + 0.34, -0.5), m.rot, Vector3(1.0, 0.5, 1.0))
+	_zyl(dg, "Ventil", 0.04, 0.04, 0.08, Vector3(0.55, y0 + 0.42, -0.5), m.metall, Vector3.ZERO, 8)
+	_box(dg, "Bremshebel", Vector3(0.04, 0.26, 0.04), Vector3(1.1, 0.62, -0.12), m.rot, Vector3(0, 0, -30))
+	# Heck: Rückleuchten, Kennzeichen, Stoßfänger
+	var heck := _gruppe(r, "Heck", Vector3(-hx - 0.015, 0, 0))
+	for sz: float in [-1.0, 1.0]:
+		_box(heck, "Leuchte%s" % sz, Vector3(0.04, 0.3, 0.16), Vector3(0, y0 + 0.4, sz * (hz - 0.14)), m.rot)
+		_box(heck, "Blinker%s" % sz, Vector3(0.045, 0.1, 0.16), Vector3(0, y0 + 0.62, sz * (hz - 0.14)), m.orange_lack)
+	_box(heck, "Kennzeichen", Vector3(0.03, 0.14, 0.52), Vector3(0, y0 + 0.3, 0), m.weiss)
+	_box(heck, "KennzeichenRand", Vector3(0.025, 0.16, 0.55), Vector3(0.005, y0 + 0.3, 0), m.schwarz_lack)
+	_box(heck, "EuroFeld", Vector3(0.035, 0.12, 0.06), Vector3(0, y0 + 0.3, 0.22), m.blau)
+	_box(heck, "Stossfaenger", Vector3(0.12, 0.08, breite), Vector3(-0.04, y0 - 0.02, 0), m.schwarz_lack)
+	_box(heck, "Leiter", Vector3(0.05, 1.5, 0.04), Vector3(-0.03, y0 + 1.2, -0.55), m.metall)
+	for k in 6:
+		_box(heck, "Sprosse%d" % k, Vector3(0.05, 0.03, 0.3), Vector3(-0.03, y0 + 0.55 + k * 0.26, -0.7), m.metall)
+	_box(heck, "Leiter2", Vector3(0.05, 1.5, 0.04), Vector3(-0.03, y0 + 1.2, -0.85), m.metall)
+	# Dach: Dachluke, Lüfter, Antenne; Markisenleiste mit eingerollter Markise auf +Z
+	var dach := _gruppe(r, "Dachaufbau", Vector3(0, oben + 0.02, 0))
+	_box(dach, "LukeRahmen", Vector3(0.62, 0.08, 0.62), Vector3(0.6, 0.04, 0), m.weiss)
+	_box(dach, "LukeGlas", Vector3(0.52, 0.1, 0.52), Vector3(0.6, 0.08, 0), innen, Vector3(0, 0, 6))
+	_zyl(dach, "Luefter", 0.14, 0.18, 0.12, Vector3(-0.9, 0.06, 0.3), m.weiss, Vector3.ZERO, 12)
+	_zyl(dach, "LuefterKappe", 0.2, 0.2, 0.03, Vector3(-0.9, 0.14, 0.3), m.metall, Vector3.ZERO, 12)
+	_zyl(dach, "Mast", 0.02, 0.02, 0.5, Vector3(-1.3, 0.25, -0.5), m.metall, Vector3.ZERO, 6)
+	for k in 4:
+		_box(dach, "Antenne%d" % k, Vector3(0.02, 0.02, 0.4 - k * 0.07), Vector3(-1.3 + (k - 1.5) * 0.08, 0.45, -0.5), m.metall)
+	_box(r, "Markisenleiste", Vector3(laenge - 0.6, 0.05, 0.05), Vector3(0, oben - 0.2, hz + 0.04), m.metall)
+	var markise := _gruppe(r, "Markise", Vector3(0, oben - 0.3, hz + 0.1))
+	_zyl(markise, "Rolle", 0.08, 0.08, laenge - 0.7, Vector3.ZERO, farbe, Vector3(0, 0, 90), 14)
+	for k in 7:
+		_zyl(markise, "Band%d" % k, 0.083, 0.083, 0.12, Vector3(-1.4 + k * 0.47, 0, 0), m.weiss, Vector3(0, 0, 90), 14)
+	for sx: float in [-1.0, 1.0]:
+		_zyl(markise, "Kappe%s" % sx, 0.09, 0.09, 0.04, Vector3(sx * (laenge - 0.7) / 2.0, 0, 0), m.metall, Vector3(0, 0, 90), 14)
+	# Außenleuchten, Steckdose, Wasserklappe
+	for sx: float in [-1.0, 1.0]:
+		for sz: float in [-1.0, 1.0]:
+			_box(r, "Begrenzung%s%s" % [sx, sz], Vector3(0.08, 0.05, 0.02), Vector3(sx * (hx - 0.2), y0 + 0.75, sz * (hz + 0.02)), m.orange_lack if sx > 0 else m.rot)
+	_box(r, "Wasserklappe", Vector3(0.2, 0.2, 0.02), Vector3(-1.1, y0 + 0.55, -hz - 0.02), m.weiss)
+	_zyl(r, "Einfuell", 0.04, 0.04, 0.03, Vector3(-1.1, y0 + 0.55, -hz - 0.03), m.blau, Vector3(90, 0, 0), 10)
+	_box(r, "Klappe", Vector3(0.45, 0.35, 0.02), Vector3(1.2, y0 + 0.25, -hz - 0.02), m.weiss)
+	# Blumenkasten unter dem großen Fenster
+	var kasten := _gruppe(r, "Blumenkasten", Vector3(1.05, y0 + 0.82, hz + 0.1))
+	_box(kasten, "Kasten", Vector3(0.9, 0.14, 0.14), Vector3.ZERO, m.holz_hell)
+	for k in 7:
+		_kugel(kasten, "Gruen%d" % k, 0.07, Vector3(-0.36 + k * 0.12, 0.1, 0), m.hopfen, Vector3(1.0, 0.8, 1.0))
+		_kugel(kasten, "Bluete%d" % k, 0.04, Vector3(-0.36 + k * 0.12, 0.17, 0.02), [m.rot, m.ente, m.rosa_lack][k % 3], Vector3.ONE, false)
+	# Licht an der Tür, Kollision, Marken
+	_licht(r, "Tuerlicht", Vector3(tuer_x + 0.45, y0 + 1.75, hz + 0.3), 0.6, 4.0)
+	var koerper := StaticBody3D.new()
+	_haengen(r, koerper, "Kollision")
+	_kollision(koerper, "Aufbau", _boxform(Vector3(laenge, oben, breite)), Transform3D(Basis(), Vector3(0, oben / 2.0, 0)))
+	_kollision(koerper, "Deichsel", _boxform(Vector3(1.6, 1.0, 1.1)), Transform3D(Basis(), Vector3(hx + 0.75, 0.5, 0)))
+	_marke(r, "Schild", Vector3(0, oben + 0.6, 0))
 	return r

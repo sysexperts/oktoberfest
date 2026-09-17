@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://cdtgrn80rfxhm"]
 
 [ext_resource type="Script" path="res://scripts/karte.gd" id="70_karte"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/wohnwagen_rot.tscn" id="71_wwrot"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/wohnwagen_gruen.tscn" id="72_wwgruen"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/wohnwagen_blau.tscn" id="73_wwblau"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1carav1" path="res://scenes/caravan.tscn" id="6_carav"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
 [ext_resource type="PackedScene" path="res://scenes/kulisse/altstadt.tscn" id="52_altstadt"]
@@ -69,23 +72,19 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.15, 2.5)
 [node name="Wohnwagenplatz" type="Node3D" parent="." unique_id=1657274445]
 
 [node name="MeinWohnwagen" parent="Wohnwagenplatz" unique_id=1306995023 instance=ExtResource("6_carav")]
-transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -3.8038478, 0, -52.124355)
+transform = Transform3D(1.000000, 0, 0.000000, 0, 1, 0, -0.000000, 0, 1.000000, -2.5, 0, -48)
 
-[node name="Nachbar1" parent="Wohnwagenplatz" unique_id=1159562924 instance=ExtResource("6_carav")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -44)
-is_mine = false
+[node name="Nachbar1" parent="Wohnwagenplatz" unique_id=1159562924 instance=ExtResource("71_wwrot")]
+transform = Transform3D(0.990268, 0, 0.139173, 0, 1, 0, -0.139173, 0, 0.990268, -9, 0, -47.5)
 
-[node name="Nachbar2" parent="Wohnwagenplatz" unique_id=1766415079 instance=ExtResource("6_carav")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -53)
-is_mine = false
+[node name="Nachbar2" parent="Wohnwagenplatz" unique_id=1766415079 instance=ExtResource("72_wwgruen")]
+transform = Transform3D(0.994522, 0, -0.104528, 0, 1, 0, 0.104528, 0, 0.994522, 4, 0, -48.5)
 
-[node name="Nachbar3" parent="Wohnwagenplatz" unique_id=1327080960 instance=ExtResource("6_carav")]
-transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -7.2928934, 0, -48.707108)
-is_mine = false
+[node name="Nachbar3" parent="Wohnwagenplatz" unique_id=1327080960 instance=ExtResource("73_wwblau")]
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, -15.5, 0, -48)
 
-[node name="Nachbar5" parent="Wohnwagenplatz" unique_id=1173035396 instance=ExtResource("6_carav")]
-transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, 7.464102, 0, -45)
-is_mine = false
+[node name="Nachbar5" parent="Wohnwagenplatz" unique_id=1173035396 instance=ExtResource("71_wwrot")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -22, 0, -47)
 
 [node name="Mauern" type="Node3D" parent="." unique_id=2046617623]
 
