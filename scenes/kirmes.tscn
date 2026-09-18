@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/rundgang_station.gd" id="76_station"]
 [ext_resource type="PackedScene" path="res://scenes/huber_zelt.tscn" id="77_huber"]
 [ext_resource type="Script" path="res://scripts/npc_huber.gd" id="78_huber_npc"]
+[ext_resource type="PackedScene" path="res://scenes/wettschleppen/wettschleppen.tscn" id="79_wettschleppen"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/aktenschrank.tscn" id="80_aktenschrank"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/ordnerregal.tscn" id="81_ordnerregal"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/buerostuhl.tscn" id="82_buerostuhl"]
@@ -304,3 +305,5 @@ font_size = 64
 outline_size = 16
 
 [node name="Model" parent="Huber" instance=ExtResource("75_figur")]
+
+[node name="Wettschleppen" parent="." instance=ExtResource("79_wettschleppen")]

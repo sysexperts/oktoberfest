@@ -47,7 +47,7 @@ func wette_offen() -> bool:
 func _process(_delta: float) -> void:
 	if _ausruf:
 		var tag := int(_zustand().get("day", 0))
-		_ausruf.visible = wette_offen() or (_gehoert_tag != tag and tag > 0 and _welt().has_method("tutorial_active") and not _welt().tutorial_active())
+		_ausruf.visible = wette_offen() or bool(_zustand().get("duell_offen", false)) or (_gehoert_tag != tag and tag > 0 and _welt().has_method("tutorial_active") and not _welt().tutorial_active())
 
 func ansprechen() -> void:
 	var dialog := get_tree().get_first_node_in_group("dialog")
@@ -79,6 +79,21 @@ func ansprechen() -> void:
 	else:
 		zeilen.append(_t("HUBER_FINALE_1" + a))
 		zeilen.append(_t("HUBER_FINALE_2" + a))
+	var duell := get_tree().get_first_node_in_group("wettschleppen")
+	if duell and duell.aktiv:
+		return
+	# Letzter Wiesn-Tag: Duell um Sepps Ehre anbieten
+	if bool(z.get("duell_offen", false)):
+		zeilen = [_t("HUBER_DUELL_1" + a), _t("HUBER_DUELL_2" + a), _t("HUBER_DUELL_FRAGE" + a)]
+		var duell_wahl: Array[String] = [_t("HUBER_DUELL_JA" + a), _t("HUBER_DUELL_NEIN" + a)]
+		dialog.zeigen(wer, zeilen, func(i: int) -> void:
+			if i == 0 and welt.has_method("net_duell_start"):
+				welt.net_duell_start.rpc_id(1)
+			else:
+				dialog.zeigen(wer, [_t("HUBER_DUELL_SPAETER" + a)] as Array[String], Callable()), duell_wahl)
+		return
+	if bool(z.get("duell_gewonnen", false)):
+		zeilen = [_t("HUBER_NACH_SIEG" + a)]
 	var wette: Dictionary = z.get("huber_wette", {})
 	if wette.is_empty() or bool(wette.get("angenommen", false)):
 		if not wette.is_empty():
@@ -98,3 +113,12 @@ const Texte := preload("res://scripts/ui/texte.gd")
 
 func _t(k: String) -> String:
 	return String(TranslationServer.translate(k))
+
+## Beim Wettschleppen (scripts/wettschleppen.gd): rennen bzw. wieder stehen
+func rennen(an: bool) -> void:
+	if _figur == null:
+		return
+	if an:
+		_figur.rennen(1.3)
+	else:
+		_figur.stehen()

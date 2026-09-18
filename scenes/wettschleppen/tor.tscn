@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="1_blau"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten.tres" id="2_rauten"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
+
+[sub_resource type="CylinderMesh" id="Pfosten"]
+top_radius = 0.07
+bottom_radius = 0.09
+height = 2.5
+radial_segments = 12
+
+[sub_resource type="SphereMesh" id="Knauf"]
+radius = 0.12
+height = 0.24
+radial_segments = 12
+rings = 6
+
+[sub_resource type="StandardMaterial3D" id="Gold"]
+albedo_color = Color(0.9, 0.7, 0.25, 1)
+metallic = 0.8
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="Banner"]
+size = Vector3(2.9, 0.5, 0.04)
+
+[sub_resource type="CylinderMesh" id="Fuss"]
+top_radius = 0.18
+bottom_radius = 0.24
+height = 0.12
+radial_segments = 12
+
+[node name="Tor" type="Node3D"]
+
+[node name="PfostenL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1.25, 0)
+mesh = SubResource("Pfosten")
+material_override = ExtResource("2_rauten")
+
+[node name="PfostenR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 1.25, 0)
+mesh = SubResource("Pfosten")
+material_override = ExtResource("2_rauten")
+
+[node name="FussL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0.06, 0)
+mesh = SubResource("Fuss")
+material_override = ExtResource("1_blau")
+
+[node name="FussR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.06, 0)
+mesh = SubResource("Fuss")
+material_override = ExtResource("1_blau")
+
+[node name="KnaufL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 2.55, 0)
+mesh = SubResource("Knauf")
+material_override = SubResource("Gold")
+
+[node name="KnaufR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 2.55, 0)
+mesh = SubResource("Knauf")
+material_override = SubResource("Gold")
+
+[node name="Banner" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+mesh = SubResource("Banner")
+material_override = ExtResource("1_blau")
+
+[node name="Nummer" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0.03)
+pixel_size = 0.004
+modulate = Color(1, 0.95, 0.8, 1)
+outline_modulate = Color(0.05, 0.1, 0.3, 1)
+text = "1"
+font = ExtResource("3_fraktur")
+font_size = 96
+outline_size = 12
+
+[node name="NummerHinten" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 2.2, -0.03)
+pixel_size = 0.004
+modulate = Color(1, 0.95, 0.8, 1)
+outline_modulate = Color(0.05, 0.1, 0.3, 1)
+text = "1"
+font = ExtResource("3_fraktur")
+font_size = 96
+outline_size = 12

@@ -389,6 +389,7 @@ func _handle_movement(delta: float) -> void:
 		_sfx("pop")
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
 	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
+	speed *= tempo_faktor   # z. B. 10 Maß beim Wettschleppen (scripts/wettschleppen.gd)
 	if carry_state == 3:
 		speed *= _bonus("lager", BONUS_LAGER_TEMPO)   # Lager-Teamleiter trägt Pakete flotter
 	if dir != Vector3.ZERO:
@@ -935,6 +936,8 @@ func _besen_zeigen() -> void:
 ## Vom Lieferwagen erwischt (scripts/lieferwagen.gd, nur beim eigenen Spieler):
 ## fliegt im Bogen, die Kamera kippt, kurz keine Steuerung.
 var _geschleudert_bis := 0.0
+## Laufgeschwindigkeit von außen gedrosselt (Wettschleppen)
+var tempo_faktor := 1.0
 
 func wird_geschleudert() -> bool:
 	return Time.get_ticks_msec() / 1000.0 < _geschleudert_bis

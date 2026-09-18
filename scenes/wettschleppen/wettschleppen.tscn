@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/wettschleppen.gd" id="1_skript"]
+[ext_resource type="PackedScene" path="res://scenes/wettschleppen/tor.tscn" id="2_tor"]
+[ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
+[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="4_theme"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="5_fraktur"]
+
+[node name="Wettschleppen" type="Node3D"]
+visible = false
+script = ExtResource("1_skript")
+
+[node name="Tore" type="Node3D" parent="."]
+
+[node name="Start" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -2.5)
+
+[node name="T1" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, -3)
+
+[node name="T2" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.5, 0, -2)
+
+[node name="T3" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5, 0, 8.5)
+
+[node name="T4" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, 9)
+
+[node name="T5" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0, 8.5)
+
+[node name="T6" parent="Tore" instance=ExtResource("2_tor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, 3)
+
+[node name="Kruege" type="Node3D" parent="."]
+visible = false
+
+[node name="K0" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.36, 0, 0)
+
+[node name="K1" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.18, 0, 0)
+
+[node name="K2" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+
+[node name="K3" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.18, 0, 0)
+
+[node name="K4" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.36, 0, 0)
+
+[node name="K5" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.36, 0, -0.17)
+
+[node name="K6" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.18, 0, -0.17)
+
+[node name="K7" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, -0.17)
+
+[node name="K8" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.18, 0, -0.17)
+
+[node name="K9" parent="Kruege" instance=ExtResource("3_krug")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.36, 0, -0.17)
+
+[node name="Anzeige" type="CanvasLayer" parent="."]
+layer = 20
+visible = false
+
+[node name="Kasten" type="PanelContainer" parent="Anzeige"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 16.0
+offset_right = 260.0
+offset_bottom = 150.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("4_theme")
+
+[node name="Rand" type="MarginContainer" parent="Anzeige/Kasten"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
+
+[node name="Spalte" type="VBoxContainer" parent="Anzeige/Kasten/Rand"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Titel" type="Label" parent="Anzeige/Kasten/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_fonts/font = ExtResource("5_fraktur")
+theme_override_font_sizes/font_size = 28
+text = "DUELL_TITEL"
+horizontal_alignment = 1
+
+[node name="Zeile" type="HBoxContainer" parent="Anzeige/Kasten/Rand/Spalte"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+theme_override_constants/separation = 28
+
+[node name="Mass" type="Label" parent="Anzeige/Kasten/Rand/Spalte/Zeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "🍺 10"
+
+[node name="Zeit" type="Label" parent="Anzeige/Kasten/Rand/Spalte/Zeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "0,0 s"
+
+[node name="Huber" type="Label" parent="Anzeige/Kasten/Rand/Spalte/Zeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Huber: Tor 1"
+
+[node name="Schwapp" type="ProgressBar" parent="Anzeige/Kasten/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+max_value = 1.0
+step = 0.01
+show_percentage = false
+
+[node name="Hinweis" type="Label" parent="Anzeige/Kasten/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.78, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "DUELL_HINWEIS"
+horizontal_alignment = 1
+autowrap_mode = 3

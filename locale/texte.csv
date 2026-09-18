@@ -850,3 +850,56 @@ MSG_SABOTAGE_STINK,😠 Stinkbombe im Zelt! Putzen — die Gäste rümpfen schon
 WORLD_LECK,🍺 Leck! ({interact} halten),🍺 Leak! (hold {interact}),🍺 Sızıntı! ({interact} basılı tut)
 HUD_HUBER_WETTE,🎲 Wette mit Huber: %s (Einsatz %s),🎲 Bet with Huber: %s (stake %s),🎲 Huber ile bahis: %s (bahis %s)
 HUD_HUBER_ANGEBOT,🎲 Huber bietet eine Wette an — sprich ihn an,🎲 Huber is offering a bet — talk to him,🎲 Huber bahis teklif ediyor — onunla konuş
+DUELL_TITEL,Maß-Wettschleppen,Stein-Carrying Race,Kupa Taşıma Yarışı
+DUELL_START_ZIEL,Start · Ziel,Start · Finish,Başlangıç · Bitiş
+DUELL_LOS,Los!,Go!,Başla!
+DUELL_HUBER_TOR,Huber: Tor %d,Huber: gate %d,Huber: kapı %d
+DUELL_HUBER_FERTIG,Huber: %.1f s,Huber: %.1f s,Huber: %.1f sn
+DUELL_HINWEIS,"Durch alle %d Tore und zurück ins Ziel. Nicht rennen, nicht scharf lenken — sonst schwappt's über (+2,5 s je Maß).","Through all %d gates and back to the finish. Don't run, don't turn sharply — or it spills (+2.5 s per stein).","%d kapının hepsinden geçip bitişe dön. Koşma, sert dönme — yoksa taşar (kupa başına +2,5 sn)."
+MSG_DUELL_ERGEBNIS,"🍺 Wettschleppen: %.1f s (%d verschüttet) — Huber %.1f s","🍺 Stein race: %.1f s (%d spilled) — Huber %.1f s","🍺 Kupa yarışı: %.1f sn (%d döküldü) — Huber %.1f sn"
+HUBER_DUELL_1_DU,"Heut ist der letzte Wiesn-Tag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
+HUBER_DUELL_1_IHR,"Heut ist der letzte Wiesn-Tag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
+HUBER_DUELL_2_DU,"Zehn Maß, einmal durch alle Tore und zurück. Wer schneller ist und weniger verschüttet, gewinnt. Verlierst du, gibst du zu, dass der Sepp ein Stümper war.","Ten steins, once through all the gates and back. Whoever is faster and spills less wins. If you lose, you admit Sepp was a bungler.","On kupa, bütün kapılardan geçip geri. Kim daha hızlı olur ve daha az dökerse kazanır. Kaybedersen Sepp'in beceriksiz olduğunu kabul edersin."
+HUBER_DUELL_2_IHR,"Zehn Maß, einmal durch alle Tore und zurück. Wer schneller ist und weniger verschüttet, gewinnt. Verliert ihr, gebt ihr zu, dass der Sepp ein Stümper war.","Ten steins, once through all the gates and back. Whoever is faster and spills less wins. If you lose, you admit Sepp was a bungler.","On kupa, bütün kapılardan geçip geri. Kim daha hızlı olur ve daha az dökerse kazanır. Kaybederseniz Sepp'in beceriksiz olduğunu kabul edersiniz."
+HUBER_DUELL_FRAGE_DU,Also — traust du dich? Jetzt gleich?,So — dare you? Right now?,Peki — cesaretin var mı? Hemen şimdi?
+HUBER_DUELL_FRAGE_IHR,Also — traut ihr euch? Jetzt gleich?,So — dare you? Right now?,Peki — cesaretiniz var mı? Hemen şimdi?
+HUBER_DUELL_JA_DU,Für Sepps Ehre!,For Sepp's honour!,Sepp'in onuru için!
+HUBER_DUELL_JA_IHR,Für Sepps Ehre!,For Sepp's honour!,Sepp'in onuru için!
+HUBER_DUELL_NEIN_DU,Gleich — ich muss mich noch warm machen,In a bit — I need to warm up,Birazdan — ısınmam lazım
+HUBER_DUELL_NEIN_IHR,Gleich — wir müssen uns noch warm machen,In a bit — we need to warm up,Birazdan — ısınmamız lazım
+HUBER_DUELL_SPAETER_DU,"Hehe, weiche Knie? Ich wart hier. Aber nicht ewig.","Hehe, weak knees? I'll wait here. But not forever.","Hehe, dizlerin mi titriyor? Burada bekliyorum. Ama sonsuza kadar değil."
+HUBER_DUELL_SPAETER_IHR,"Hehe, weiche Knie? Ich wart hier. Aber nicht ewig.","Hehe, weak knees? I'll wait here. But not forever.","Hehe, dizleriniz mi titriyor? Burada bekliyorum. Ama sonsuza kadar değil."
+HUBER_BESIEGT_1_DU,"Das … das gibt's doch nicht. Geschlagen. Von Sepps Patenkind.","That … that can't be. Beaten. By Sepp's godchild.","Bu … bu olamaz. Yenildim. Sepp'in vaftiz çocuğuna."
+HUBER_BESIEGT_1_IHR,"Das … das gibt's doch nicht. Geschlagen. Von Sepps Erben.","That … that can't be. Beaten. By Sepp's heirs.","Bu … bu olamaz. Yenildim. Sepp'in varislerine."
+HUBER_BESIEGT_2_DU,"Also gut. Ich sag's laut: Der Sepp war ein guter Wirt. Der beste. Zufrieden?","All right. I'll say it out loud: Sepp was a good landlord. The best. Happy?","Peki. Yüksek sesle söylüyorum: Sepp iyi bir hancıydı. En iyisi. Memnun musun?"
+HUBER_BESIEGT_2_IHR,"Also gut. Ich sag's laut: Der Sepp war ein guter Wirt. Der beste. Zufrieden?","All right. I'll say it out loud: Sepp was a good landlord. The best. Happy?","Peki. Yüksek sesle söylüyorum: Sepp iyi bir hancıydı. En iyisi. Memnun musunuz?"
+HUBER_SIEGT_1_DU,"Hahaha! Zu langsam, zu nass. Na los, sag's: Der Sepp war ein Stümper!","Hahaha! Too slow, too wet. Go on, say it: Sepp was a bungler!","Hahaha! Çok yavaş, çok ıslak. Hadi söyle: Sepp beceriksizdi!"
+HUBER_SIEGT_1_IHR,"Hahaha! Zu langsam, zu nass. Na los, sagt's: Der Sepp war ein Stümper!","Hahaha! Too slow, too wet. Go on, say it: Sepp was a bungler!","Hahaha! Çok yavaş, çok ıslak. Hadi söyleyin: Sepp beceriksizdi!"
+HUBER_SIEGT_2_DU,"… Revanche? Meinetwegen. Heute bin ich großzügig. Sprich mich einfach nochmal an.","… A rematch? Fine by me. I'm feeling generous today. Just talk to me again.","… Rövanş mı? Olur. Bugün cömert günümdeyim. Benimle tekrar konuş yeter."
+HUBER_SIEGT_2_IHR,"… Revanche? Meinetwegen. Heute bin ich großzügig. Sprecht mich einfach nochmal an.","… A rematch? Fine by me. I'm feeling generous today. Just talk to me again.","… Rövanş mı? Olur. Bugün cömert günümdeyim. Benimle tekrar konuşun yeter."
+HUBER_NACH_SIEG_DU,"Jaja, schon gut. Nächstes Jahr krieg ich dich. Prost.","Yeah, yeah, fine. Next year I'll get you. Cheers.","Tamam tamam. Seneye seni yakalayacağım. Şerefe."
+HUBER_NACH_SIEG_IHR,"Jaja, schon gut. Nächstes Jahr krieg ich euch. Prost.","Yeah, yeah, fine. Next year I'll get you. Cheers.","Tamam tamam. Seneye sizi yakalayacağım. Şerefe."
+BRIEF_ENDE_TITEL,Ein letzter Brief von Onkel Sepp,One last letter from Uncle Sepp,Sepp Amca'dan son bir mektup
+BRIEF_SCHLIESSEN,Linksklick: schließen,Left click: close,Sol tık: kapat
+BRIEF_ENDE_1_DU,"Der Wiesnchef hat mir versprochen, dir das hier erst zu geben, wenn du den Huber geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu sana ancak Huber'i yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
+BRIEF_ENDE_1_IHR,"Der Wiesnchef hat mir versprochen, euch das hier erst zu geben, wenn ihr den Huber geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu size ancak Huber'i yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
+BRIEF_ENDE_2_DU,"Das Zelt gehört jetzt wirklich dir. Mach's besser als ich, und vergiss nie: Eine kalte Maß und ein freundliches Wort — mehr braucht's nicht.
+
+Prost, mein Patenkind.
+Dein Onkel Sepp","The tent is truly yours now. Do better than I did, and never forget: a cold stein and a kind word — that is all it takes.
+
+Cheers, my godchild.
+Your Uncle Sepp","Çadır artık gerçekten senin. Benden daha iyisini yap ve asla unutma: soğuk bir kupa ve güzel bir söz — başka bir şey gerekmez.
+
+Şerefe, vaftiz çocuğum.
+Sepp Amcan"
+BRIEF_ENDE_2_IHR,"Das Zelt gehört jetzt wirklich euch. Macht's besser als ich, und vergesst nie: Eine kalte Maß und ein freundliches Wort — mehr braucht's nicht.
+
+Prost, ihr Lieben.
+Euer Onkel Sepp","The tent is truly yours now. Do better than I did, and never forget: a cold stein and a kind word — that is all it takes.
+
+Cheers, my dears.
+Your Uncle Sepp","Çadır artık gerçekten sizin. Benden daha iyisini yapın ve asla unutmayın: soğuk bir kupa ve güzel bir söz — başka bir şey gerekmez.
+
+Şerefe, sevgililerim.
+Sepp Amcanız"

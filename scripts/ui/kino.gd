@@ -11,6 +11,8 @@ extends CanvasLayer
 ## Texte in locale/texte.csv: BRIEF_<n>_DU für Solo, BRIEF_<n>_IHR für Koop.
 
 const SEITEN := 3
+var _seiten := SEITEN
+var _praefix := "BRIEF"
 
 ## Wo die Spieler am Tor stehen (Reihenfolge = Spielerliste)
 const PLAETZE := [Vector3(-1.8, 0.1, 84.0), Vector3(1.8, 0.1, 84.0), Vector3(-4.0, 0.1, 85.0), Vector3(4.0, 0.1, 85.0)]
@@ -47,6 +49,8 @@ func starten(mehrere: bool) -> void:
 		return
 	var welt := get_parent()
 	_mehrere = mehrere
+	_praefix = "BRIEF"
+	_seiten = SEITEN
 	_spieler = welt._players_nodes.get(multiplayer.get_unique_id()) if "_players_nodes" in welt else null
 	if _spieler == null:
 		return
@@ -76,12 +80,12 @@ func eingabe(event: InputEvent) -> void:
 
 func _weiter() -> void:
 	_seite += 1
-	if _seite >= SEITEN:
+	if _seite >= _seiten:
 		beenden()
 		return
 	_t = 0.0
-	_text.text = _wort("BRIEF_%d" % (_seite + 1))
-	_hinweis.text = String(TranslationServer.translate("BRIEF_WEITER" if _seite < SEITEN - 1 else "BRIEF_ENDE"))
+	_text.text = _wort(_praefix + "_%d" % (_seite + 1))
+	_hinweis.text = String(TranslationServer.translate("BRIEF_WEITER" if _seite < _seiten - 1 else ("BRIEF_ENDE" if _praefix == "BRIEF" else "BRIEF_SCHLIESSEN")))
 
 ## Text in der passenden Anrede (Solo „du", Koop „ihr")
 func _wort(key: String) -> String:
@@ -109,3 +113,23 @@ func beenden() -> void:
 	tw.tween_interval(0.7)
 	tw.tween_property(_schwarz, "color:a", 0.0, 1.6).set_trans(Tween.TRANS_SINE)
 	tw.tween_callback(func() -> void: visible = false)
+
+## Weiterer Brief mitten im Spiel (z. B. Sepps letzter Brief nach dem Sieg
+## über Huber): ohne ans Tor zu stellen, Seiten <praefix>_<n>_DU/_IHR.
+func brief_zeigen(mehrere: bool, praefix: String, seiten: int, titel: String) -> void:
+	var welt := get_parent()
+	_spieler = welt._players_nodes.get(multiplayer.get_unique_id()) if "_players_nodes" in welt else null
+	if aktiv or _spieler == null:
+		return
+	_mehrere = mehrere
+	_praefix = praefix
+	_seiten = seiten
+	aktiv = true
+	visible = true
+	_schwarz.color.a = 0.75
+	_brief.modulate.a = 1.0
+	_spieler.minispiel = self
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_titel.text = String(TranslationServer.translate(titel))
+	_seite = -1
+	_weiter()

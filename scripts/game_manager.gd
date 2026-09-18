@@ -860,6 +860,7 @@ func _save_game() -> void:
 		"bank": _bank_bezahlt,
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
+		"duell_saison": _duell_saison,
 		"tagesziel": _tagesziel,
 		"bierpreis": _bierpreis,
 		"einrichtung": _einrichtung.values(),
@@ -943,6 +944,7 @@ func _load_game() -> bool:
 	var wette_gespeichert: Variant = d.get("huber_wette", {})
 	_huber_wette = wette_gespeichert if wette_gespeichert is Dictionary else {}
 	_letzte_sabotage = int(d.get("sabotage_tag", 0))
+	_duell_saison = int(d.get("duell_saison", 0))
 	var ziel_gespeichert: Variant = d.get("tagesziel", {})
 	_tagesziel = ziel_gespeichert if ziel_gespeichert is Dictionary else {}
 	_bierpreis = float(d.get("bierpreis", 1.0))   # Spielraum wird nach dem Laden der Lizenzen geprüft
@@ -4816,6 +4818,8 @@ func _buero_state() -> Dictionary:
 		"bank_naechste": bank_naechste(), "bank_rest": bank_rest(),
 		"muell": _muell_stapel,
 		"huber_wette": _huber_wette,
+		"duell_offen": duell_moeglich(),
+		"duell_gewonnen": _duell_saison == _saison_nr,
 		"tagesziel": _tagesziel,
 		"zelt_name": _zelt_name,
 	}
@@ -5320,3 +5324,83 @@ func _sabotieren() -> void:
 			_spawn_mess_at(Vector3(randf_range(-8.0, 8.0), 0.0, randf_range(-5.0, 10.0)), 0)
 		_hygiene = maxf(0.0, _hygiene - 25.0)
 		_melde("MSG_SABOTAGE_STINK", [], 1)
+
+# ================================================= Finale: Maß-Wettschleppen
+## Am letzten Wiesn-Tag fordert Huber zum Duell um Sepps Ehre (scripts/wettschleppen.gd).
+## Starten über das Gespräch mit Huber; Hubers Zeit legt der Server fest (je
+## Schwierigkeit), das Ergebnis meldet der Herausforderer. Gewonnen: Sepps Ehre
+## gerettet, viel Beliebtheit, Brief zum Abschluss. Verloren: Huber triumphiert,
+## Beliebtheit sinkt, am selben Tag darf man es nochmal versuchen.
+## Hubers Zeit = Streckenlänge / Gehtempo mit 10 Maß × Faktor je Schwierigkeit:
+## Gemütlich reicht ruhiges Gehen, Normal braucht geschickte kurze Sprints (Balken
+## im Blick), Wiesn-Wahnsinn fast durchgehend — dann schwappt auch mal was über.
+const DUELL_GEHTEMPO := 3.4
+const DUELL_FAKTOR := [1.05, 0.8, 0.7]   # Gemütlich · Normal · Wiesn-Wahnsinn
+const DUELL_POP_SIEG := 15.0
+const DUELL_POP_NIEDERLAGE := 5.0
+var _duell := {}
+## Saison, in der Sepps Ehre gerettet wurde (0 = noch nie)
+var _duell_saison := 0
+
+func duell_moeglich() -> bool:
+	return ist_finale() and _duell.is_empty() and _duell_saison != _saison_nr and _tent_stage > 0
+
+@rpc("any_peer", "reliable", "call_local")
+func net_duell_start() -> void:
+	if not multiplayer.is_server() or not duell_moeglich():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var w := get_tree().get_first_node_in_group("wettschleppen")
+	var laenge: float = w.strecken_laenge() if w else 55.0
+	var zeit := laenge / DUELL_GEHTEMPO * float(DUELL_FAKTOR[_schwierigkeit]) * randf_range(0.97, 1.03)
+	_duell = {"peer": s, "huber": zeit}
+	_net_duell_start.rpc(s, zeit)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_duell_start(peer: int, huber_zeit: float) -> void:
+	var w := get_tree().get_first_node_in_group("wettschleppen")
+	if w:
+		w.starten(peer, huber_zeit)
+
+@rpc("any_peer", "reliable", "call_local")
+func net_duell_ende(zeit: float, verschuettet: int) -> void:
+	if not multiplayer.is_server() or _duell.is_empty():
+		return
+	var gesamt := zeit + float(verschuettet) * 2.5
+	var huber_zeit := float(_duell.huber)
+	var gewonnen := verschuettet < 10 and gesamt < huber_zeit
+	if gewonnen:
+		_duell_saison = _saison_nr
+		_popularity = minf(100.0, _popularity + DUELL_POP_SIEG)
+		_stats.duell_siege = int(_stats.get("duell_siege", 0)) + 1
+	else:
+		_popularity = maxf(POP_MIN, _popularity - DUELL_POP_NIEDERLAGE)
+	_duell = {}
+	_net_duell_ergebnis.rpc(gewonnen, gesamt, huber_zeit, verschuettet)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_duell_ergebnis(gewonnen: bool, gesamt: float, huber_zeit: float, verschuettet: int) -> void:
+	var w := get_tree().get_first_node_in_group("wettschleppen")
+	if w:
+		w.beenden()
+	var mehrere := multiplayer.get_peers().size() > 0
+	var a := "_IHR" if mehrere else "_DU"
+	_hud.melde_text(tr("MSG_DUELL_ERGEBNIS") % [gesamt, verschuettet, huber_zeit], 2 if gewonnen else 1)
+	var dialog := get_tree().get_first_node_in_group("dialog")
+	var zeilen: Array[String] = []
+	for k in (["HUBER_BESIEGT_1", "HUBER_BESIEGT_2"] if gewonnen else ["HUBER_SIEGT_1", "HUBER_SIEGT_2"]):
+		zeilen.append(tr(k + a))
+	if dialog == null:
+		return
+	# Nach dem Sieg: Sepps letzter Brief (scripts/ui/kino.gd)
+	var danach := Callable()
+	if gewonnen:
+		danach = func() -> void:
+			var kino := get_node_or_null("Kino")
+			if kino and kino.has_method("brief_zeigen"):
+				kino.brief_zeigen(mehrere, "BRIEF_ENDE", 2, "BRIEF_ENDE_TITEL")
+	dialog.zeigen(tr("HUBER_NAME"), zeilen, danach)
