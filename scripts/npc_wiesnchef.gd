@@ -1,68 +1,110 @@
 extends Node3D
-## Der Wiesnchef: wartet in seinem Wiesenbüro (Onkel Sepps Brief schickt die
-## Spieler dorthin, scripts/ui/kino.gd). Ansprechen mit E öffnet das Gespräch
-## unten im Bild (scripts/ui/dialog.gd). Danach läuft er schweigend zum
-## Zelteingang voraus — das ist die erste Mission — und erklärt dort, wenn man
-## ihn wieder anspricht, den Rest.
+## Der Wiesnchef führt durchs Tutorial. Am Anfang wartet er vor dem Wiesenbüro
+## (Onkel Sepps Brief schickt die Spieler hin, scripts/ui/kino.gd). Ansprechen
+## mit E öffnet das Gespräch unten im Bild (scripts/ui/dialog.gd).
 ##
-## Das Gespräch sieht nur, wer redet. Das Loslaufen geht über
-## game_manager.net_chef_los an alle, damit er überall denselben Weg läuft.
-## Die Figur steckt als Kind „Model" in der Szene (siehe scripts/figur.gd).
+## Rundgang: Stationen (scripts/rundgang_station.gd) unter „Rundgang" in
+## kirmes.tscn. Erreicht das Tutorial den Schritt einer Station, läuft er
+## schweigend dorthin und hat dann Neues zu erzählen („!" über dem Kopf, der
+## Zielpfeil zeigt auf ihn). Unterwegs redet er nicht.
+##
+## Alles läuft bei jedem Spieler lokal nach dem Tutorialschritt, den der Server
+## an alle schickt — so steht er überall an derselben Stelle. Nur das erste
+## Loslaufen am Büro geht über game_manager.net_chef_los an alle.
 
 const Figuren := preload("res://scripts/figuren.gd")
-const TEMPO := 1.55
+const TEMPO := 1.7
 
 ## Welche Figur (Index in Figuren.ALLE)
 @export var figur_nr := 2
-## Strecke vom Büro zum Zelteingang
-@export var weg: Array[Vector3] = []
-## Texte (locale/texte.csv, <Schlüssel>_DU / _IHR): im Büro, am Zelt, danach
-@export var zeilen_buero: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3"]
-@export var zeilen_zelt: Array[String] = ["CHEF_4", "CHEF_5", "CHEF_6", "CHEF_7"]
+@export var rundgang: NodePath = ^"../Rundgang"
+## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
+@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
 
+@onready var _ausruf: Label3D = get_node_or_null("Ausruf")
+
 var _figur: Figur
-var _punkt := -1
-var _zelt_erzaehlt := false
-var _blick := 0.0
+var _weg: Array[Vector3] = []
+var _punkt := 0
+var _end_blick := 0.0
+## Station, an der er steht oder zu der er läuft; null = Startplatz am Büro
+var _station: RundgangStation = null
+var _gehoert := {}
+var _letzter_schritt := -1
+var _alter := 0.0
 
 func _ready() -> void:
 	add_to_group("wiesnchef")
 	add_to_group("interactable")
 	_figur = Figuren.einsetzen(self, Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
 	_figur.stehen()
-	_blick = rotation.y
 
 func ist_wiesnchef() -> bool:
 	return true
 
-## Unterwegs redet er nicht
+func unterwegs() -> bool:
+	return _punkt < _weg.size()
+
 func ansprechbar() -> bool:
 	return not unterwegs()
 
-func unterwegs() -> bool:
-	return _punkt >= 0 and _punkt < weg.size()
+## Hat er etwas zu erzählen, das man noch nicht gehört hat?
+func hat_neues() -> bool:
+	if unterwegs():
+		return false
+	if _station == null:
+		return _schritt() == 0
+	return not _gehoert.has(_station) and not _station.zeilen.is_empty()
 
 func interact_point() -> Vector3:
 	return global_position
+
+func _welt() -> Node:
+	return get_tree().current_scene
+
+func _schritt() -> int:
+	var w := _welt()
+	return int(w._quest_step) if w and "_quest_step" in w else 0
+
+func _stationen() -> Array[RundgangStation]:
+	var s: Array[RundgangStation] = []
+	var r := get_node_or_null(rundgang)
+	if r:
+		for c in r.get_children():
+			if c is RundgangStation:
+				s.append(c)
+	s.sort_custom(func(a: RundgangStation, b: RundgangStation) -> bool: return a.schritt < b.schritt)
+	return s
+
+## Die Station für einen Tutorialschritt: die letzte mit schritt <= s
+func _station_fuer(s: int) -> RundgangStation:
+	var beste: RundgangStation = null
+	for st in _stationen():
+		if st.schritt <= s:
+			beste = st
+	return beste
 
 func ansprechen() -> void:
 	var dialog := get_tree().get_first_node_in_group("dialog")
 	if dialog == null or not ansprechbar():
 		return
-	var welt := get_tree().current_scene
+	var welt := _welt()
 	var zeilen: Array[String] = zeilen_spaeter
 	var danach := Callable()
-	if _punkt < 0 and not _zelt_erzaehlt:
-		zeilen = zeilen_buero
+	if _station == null and _schritt() == 0:
+		zeilen = zeilen_start
 		danach = func() -> void:
 			if welt and welt.has_method("net_chef_los"):
 				welt.net_chef_los.rpc()
 			else:
 				losgehen()
-	elif angekommen() and not _zelt_erzaehlt:
-		zeilen = zeilen_zelt
-		_zelt_erzaehlt = true
+	elif _station and not _station.zeilen.is_empty() and not _gehoert.has(_station):
+		zeilen = _station.zeilen
+		_gehoert[_station] = true
+	elif _station and not _station.zeilen.is_empty():
+		# schon gehört: die letzte Zeile als Erinnerung
+		zeilen = [_station.zeilen[-1]]
 	var mehrere := multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0
 	var texte: Array[String] = []
 	for k in zeilen:
@@ -75,29 +117,58 @@ func ansprechen() -> void:
 	geste()
 	dialog.zeigen(String(TranslationServer.translate("WIESNCHEF_NAME")), texte, danach)
 
-## Zum Zelteingang vorlaufen
+## Nach dem ersten Gespräch: zur ersten Station (Zelteingang) vorlaufen
 func losgehen() -> void:
-	if _punkt >= 0 or weg.is_empty():
+	if _station == null:
+		_gehe_zu(_station_fuer(1), false)
+
+func _gehe_zu(st: RundgangStation, sofort: bool) -> void:
+	if st == null or st == _station:
 		return
+	_station = st
+	var marker := st.wegpunkte()
+	if marker.is_empty():
+		return
+	_end_blick = marker[-1].global_rotation.y
+	if sofort or st.springen:
+		global_position = marker[-1].global_position
+		rotation.y = _end_blick
+		_weg.clear()
+		_punkt = 0
+		_figur.stehen()
+		return
+	_weg.clear()
+	for m in marker:
+		_weg.append(m.global_position)
 	_punkt = 0
 	_figur.gehen()
 
-## true, sobald er am Zelt angekommen ist
+## true, sobald er an der ersten Station (Zelt) steht
 func angekommen() -> bool:
-	return _punkt >= weg.size()
+	return _station != null and not unterwegs()
 
 func _process(delta: float) -> void:
+	_alter += delta
+	var s := _schritt()
+	if s != _letzter_schritt:
+		# Gleich nach dem Laden (oder Beitritt) direkt hinstellen, sonst hinlaufen
+		var st := _station_fuer(s)
+		if st:
+			_gehe_zu(st, _alter < 4.0)
+		_letzter_schritt = s
+	if _ausruf:
+		_ausruf.visible = hat_neues()
 	if not unterwegs():
 		return
-	var ziel: Vector3 = weg[_punkt]
+	var ziel: Vector3 = _weg[_punkt]
 	var zu := ziel - global_position
 	zu.y = 0.0
 	if zu.length() < 0.25:
+		global_position.y = ziel.y
 		_punkt += 1
-		if _punkt >= weg.size():
+		if not unterwegs():
 			_figur.stehen()
-			# am Eingang den nachkommenden Spielern zuwenden
-			rotation.y = atan2(-zu.x, -zu.z) if zu.length() > 0.01 else rotation.y + PI
+			rotation.y = _end_blick
 		return
 	global_position += zu.normalized() * minf(TEMPO * delta, zu.length())
 	rotation.y = atan2(zu.x, zu.z)

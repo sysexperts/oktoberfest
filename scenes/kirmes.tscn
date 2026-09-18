@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/karte.gd" id="70_karte"]
 [ext_resource type="Script" path="res://scripts/npc_wiesnchef.gd" id="74_chef"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="75_figur"]
+[ext_resource type="Script" path="res://scripts/rundgang_station.gd" id="76_station"]
 [ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
 [ext_resource type="PackedScene" path="res://scenes/kulisse/altstadt.tscn" id="52_altstadt"]
 [ext_resource type="Material" path="res://assets/shader/pflaster.tres" id="53_pflaster"]
@@ -84,6 +85,120 @@ script = ExtResource("70_karte")
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 37.3, 0, 20.3)
 script = ExtResource("74_chef")
 figur_nr = 1
-weg = Array[Vector3]([Vector3(34, 0, 17.3), Vector3(20, 0, 17), Vector3(8, 0, 16.8), Vector3(3.6, 0, 15.6)])
+
+[node name="Ausruf" type="Label3D" parent="Wiesnchef"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+visible = false
+billboard = 1
+fixed_size = true
+pixel_size = 0.0012
+modulate = Color(1, 0.82, 0.2, 1)
+outline_modulate = Color(0.25, 0.12, 0, 1)
+text = "!"
+font_size = 64
+outline_size = 16
+
+[node name="Rundgang" type="Node3D" parent="."]
+
+[node name="1_Zelteingang" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+zeilen = Array[String](["CHEF_4", "CHEF_5", "CHEF_6", "CHEF_7"])
+
+[node name="W1" type="Marker3D" parent="Rundgang/1_Zelteingang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 17.3)
+
+[node name="W2" type="Marker3D" parent="Rundgang/1_Zelteingang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 17)
+
+[node name="W3" type="Marker3D" parent="Rundgang/1_Zelteingang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 16.8)
+
+[node name="Ziel" type="Marker3D" parent="Rundgang/1_Zelteingang"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.2, 0, 15.2)
+
+[node name="2_Buero" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+schritt = 2
+zeilen = Array[String](["CHEF_BUERO_1", "CHEF_BUERO_2", "CHEF_BUERO_3"])
+
+[node name="W1" type="Marker3D" parent="Rundgang/2_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 16.8)
+
+[node name="W2" type="Marker3D" parent="Rundgang/2_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 17)
+
+[node name="W3" type="Marker3D" parent="Rundgang/2_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 17.3)
+
+[node name="Ziel" type="Marker3D" parent="Rundgang/2_Buero"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 37.3, 0, 20.3)
+
+[node name="4_Lager" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+schritt = 4
+zeilen = Array[String](["CHEF_LAGER_1", "CHEF_LAGER_2"])
+
+[node name="W1" type="Marker3D" parent="Rundgang/4_Lager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 17.3)
+
+[node name="W2" type="Marker3D" parent="Rundgang/4_Lager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 17)
+
+[node name="W3" type="Marker3D" parent="Rundgang/4_Lager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, 16.5)
+
+[node name="W4" type="Marker3D" parent="Rundgang/4_Lager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, 8)
+
+[node name="W5" type="Marker3D" parent="Rundgang/4_Lager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -4)
+
+[node name="Ziel" type="Marker3D" parent="Rundgang/4_Lager"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -8.5, 0, -4)
+
+[node name="6_Schlafen" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+schritt = 6
+zeilen = Array[String](["CHEF_SCHLAF_1", "CHEF_SCHLAF_2"])
+
+[node name="7_Theke" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+schritt = 7
+zeilen = Array[String](["CHEF_ZAPF_1", "CHEF_ZAPF_2", "CHEF_ZAPF_3", "CHEF_ZAPF_4"])
+
+[node name="W1" type="Marker3D" parent="Rundgang/7_Theke"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -5)
+
+[node name="Ziel" type="Marker3D" parent="Rundgang/7_Theke"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -7)
+
+[node name="9_Buero" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+schritt = 9
+zeilen = Array[String](["CHEF_BUERO2_1", "CHEF_BUERO2_2", "CHEF_BUERO2_3", "CHEF_BUERO2_4", "CHEF_BUERO2_5"])
+
+[node name="W1" type="Marker3D" parent="Rundgang/9_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, 8)
+
+[node name="W2" type="Marker3D" parent="Rundgang/9_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, 16.5)
+
+[node name="W3" type="Marker3D" parent="Rundgang/9_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 17)
+
+[node name="W4" type="Marker3D" parent="Rundgang/9_Buero"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0, 17.3)
+
+[node name="Ziel" type="Marker3D" parent="Rundgang/9_Buero"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 37.3, 0, 20.3)
+
+[node name="13_Fertig" type="Node3D" parent="Rundgang"]
+script = ExtResource("76_station")
+schritt = 13
+zeilen = Array[String](["CHEF_ENDE_1", "CHEF_ENDE_2"])
+springen = true
+
+[node name="Ziel" type="Marker3D" parent="Rundgang/13_Fertig"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 37.3, 0, 20.3)
 
 [node name="Model" parent="Wiesnchef" instance=ExtResource("75_figur")]
