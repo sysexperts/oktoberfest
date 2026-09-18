@@ -1,6 +1,6 @@
 extends Node
-## Einleitung prüfen: neues Solospiel starten, Bilder aus der Kamerafahrt,
-## danach schauen, ob der Wiesnchef zum Zelt läuft. → SHOT_DIR/kino_*.png
+## Einleitung prüfen: neues Solospiel starten, Bild vom Brief (jede Seite),
+## danach Sprechblasen des Wiesnchefs und ob er zum Zelt läuft. → SHOT_DIR/kino_*.png
 
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -20,20 +20,27 @@ class Lauf extends Node:
 			await get_tree().process_frame
 		var kino = gm.get_node_or_null("Kino")
 		var chef = gm.get_node_or_null("Kirmes/Wiesnchef")
-		print("Kino aktiv: ", kino != null and kino.aktiv, "   Chef: ", chef != null)
+		print("Brief offen: ", kino != null and kino.aktiv, "   Chef: ", chef != null)
 		var dir := OS.get_environment("SHOT_DIR")
-		var marken := [3.0, 8.0, 13.0, 20.0, 31.0]
+		for seite in 3:
+			await _warten(0.8)
+			_bild(dir + "/kino_brief_%d.png" % seite)
+			kino._weiter()
+		print("Brief zu: ", not kino.aktiv)
 		var t := 0.0
-		var nr := 0
-		while nr < marken.size():
+		for nr in 4:
+			await _warten(6.0)
+			_bild(dir + "/kino_chef_%d.png" % nr)
+			print("  Blase: ", chef.get_node("Sprechblase").text.left(50))
+		await _warten(40.0)
+		print("Chef bei z=%.1f (Ziel 15.6), angekommen: %s, Blase: %s" % [(chef as Node3D).global_position.z, chef.angekommen(), chef.get_node("Sprechblase").text.left(40)])
+		get_tree().quit()
+
+	func _warten(s: float) -> void:
+		var t := 0.0
+		while t < s:
 			await get_tree().process_frame
 			t += get_process_delta_time()
-			if t >= float(marken[nr]):
-				get_viewport().get_texture().get_image().save_png(dir + "/kino_%d.png" % nr)
-				if kino:
-					print("  bei %.0f s: Schritt %d, aktiv %s" % [t, kino._schritt, kino.aktiv])
-				nr += 1
-		# Chef unterwegs?
-		print("Chef bei z=%.1f (Start 80, Ziel 15.6), angekommen: %s" % [(chef as Node3D).global_position.z, chef.angekommen()])
-		print("Quest-Schritt: ", gm._quest_step, "  Aufgabe: ", TranslationServer.translate("QUEST_0_TITLE"))
-		get_tree().quit()
+
+	func _bild(pfad: String) -> void:
+		get_viewport().get_texture().get_image().save_png(pfad)

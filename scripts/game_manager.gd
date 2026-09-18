@@ -4863,25 +4863,12 @@ func _add_income(amount: int) -> void:
 		Game.add_money(amount)
 
 # ================================================= Einleitung (Story)
-## Einleitung bei allen starten. mehrere: Koop — dann redet der Dialog in „ihr".
+## Einleitung (Brief von Onkel Sepp) bei allen starten. mehrere: Koop — Anrede „ihr".
 @rpc("authority", "reliable", "call_local")
 func net_kino_start(mehrere: bool) -> void:
 	var kino := get_node_or_null("Kino")
 	if kino and kino.has_method("starten"):
 		kino.starten(mehrere)
-
-## Esc in der Einleitung: der Server beendet sie für alle.
-@rpc("any_peer", "reliable", "call_local")
-func net_kino_ueberspringen() -> void:
-	if not multiplayer.is_server():
-		return
-	_net_kino_ende.rpc()
-
-@rpc("authority", "reliable", "call_local")
-func _net_kino_ende() -> void:
-	var kino := get_node_or_null("Kino")
-	if kino and kino.has_method("beenden"):
-		kino.beenden()
 
 ## Mission 1: dem Wiesnchef zum Zelteingang folgen. Erfüllt, sobald ein Spieler
 ## am Eingang steht (Mietschild). Läuft nur auf dem Server.

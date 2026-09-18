@@ -656,29 +656,56 @@ KRUG_DANEBEN,→ daneben,→ missed,→ olmadı
 WORLD_KRUG,Krugschieben,Stein Sliding,Kupa Kaydırma
 QUEST_0_TITLE,Folge dem Wiesnchef,Follow the fair manager,Fuar müdürünü takip et
 QUEST_0_TEXT,"Der Wiesnchef geht zum Festzelt (Süden, der Allee entlang). Folge ihm bis zum Eingang — dort erklärt er alles.","The fair manager is heading to the beer tent (south, along the avenue). Follow him to the entrance — he will explain everything there.","Fuar müdürü bira çadırına gidiyor (güneyde, bulvar boyunca). Girişe kadar takip et — her şeyi orada anlatacak."
-INTRO_UEBERSPRINGEN,Esc überspringt,Esc skips,Esc atlar
-INTRO_WEITER,Linksklick weiter · Esc überspringt,Left click for next · Esc skips,Devam için sol tık · Esc atlar
-INTRO_NAME_CHEF_DU,Wiesnchef,Fair manager,Fuar müdürü
-INTRO_NAME_CHEF_IHR,Wiesnchef,Fair manager,Fuar müdürü
-INTRO_NAME_SPIELER_DU,Du,You,Sen
-INTRO_NAME_SPIELER_IHR,Ihr,You,Siz
-INTRO_NAME_FREUND_DU,Am Kirmestor,At the fair gate,Fuar kapısında
-INTRO_NAME_FREUND_IHR,Deine Freunde,Your friends,Arkadaşların
-INTRO_1_DU,"Schau an — das Sloptoberfest wird wirklich wieder aufgebaut!","Look at that — they really are putting up the Sloptoberfest again!","Baksana — Sloptoberfest gerçekten yeniden kuruluyor!"
-INTRO_1_IHR,"Schaut mal — das Sloptoberfest wird wirklich wieder aufgebaut!","Look at that — they really are putting up the Sloptoberfest again!","Bakın — Sloptoberfest gerçekten yeniden kuruluyor!"
-INTRO_2_DU,"Zwei Wochen Blasmusik, Hendl und Maß. Ich bin dabei.","Two weeks of brass music, roast chicken and beer. I am in.","İki hafta bando, tavuk ve bira. Ben varım."
-INTRO_2_IHR,"Zwei Wochen Blasmusik, Hendl und Maß. Wir sind dabei.","Two weeks of brass music, roast chicken and beer. We are in.","İki hafta bando, tavuk ve bira. Biz varız."
-INTRO_3_DU,"Schön wär's. Der Zeltbetreiber hat mich betrogen und ist mit der Kasse weg. Jetzt steht das größte Festzelt ohne Betreiber da.","I wish. The tent operator cheated me and ran off with the cash. Now the biggest beer tent has no operator.","Keşke. Çadır işletmecisi beni dolandırdı ve kasayla kaçtı. Şimdi en büyük çadırın işletmecisi yok."
-INTRO_3_IHR,"Schön wär's. Der Zeltbetreiber hat mich betrogen und ist mit der Kasse weg. Jetzt steht das größte Festzelt ohne Betreiber da.","I wish. The tent operator cheated me and ran off with the cash. Now the biggest beer tent has no operator.","Keşke. Çadır işletmecisi beni dolandırdı ve kasayla kaçtı. Şimdi en büyük çadırın işletmecisi yok."
-INTRO_4_DU,"Und ohne Festzelt kommt kein Mensch auf die Wiesn. Dann kann ich die ganze Kirmes zumachen.","And without a beer tent nobody comes to the fair. Then I can shut the whole thing down.","Çadır olmazsa kimse fuara gelmez. O zaman her şeyi kapatırım."
-INTRO_4_IHR,"Und ohne Festzelt kommt kein Mensch auf die Wiesn. Dann kann ich die ganze Kirmes zumachen.","And without a beer tent nobody comes to the fair. Then I can shut the whole thing down.","Çadır olmazsa kimse fuara gelmez. O zaman her şeyi kapatırım."
-INTRO_5_DU,"Moment — ich kann das Zelt doch betreiben.","Hold on — I could run that tent.","Dur biraz — o çadırı ben işletebilirim."
-INTRO_5_IHR,"Moment — wir können das Zelt doch betreiben.","Hold on — we could run that tent.","Dur biraz — o çadırı biz işletebiliriz."
-INTRO_6_DU,"Ein Festzelt betreiben. Als ob das so einfach wäre.","Running a beer tent. As if that were so easy.","Bira çadırı işletmek. Sanki çok kolay."
-INTRO_6_IHR,"Ein Festzelt betreiben. Als ob das so einfach wäre.","Running a beer tent. As if that were so easy.","Bira çadırı işletmek. Sanki çok kolay."
-INTRO_7_DU,"Klar ist das einfach. Ich hab mal gekellnert — einen Sommer, im Biergarten meiner Tante, elf Tische. Praktisch dasselbe, nur mit mehr Blaskapelle.","Sure it is. I waited tables once — one summer, in my aunt's beer garden, eleven tables. Basically the same thing, just with more brass band.","Tabii ki kolay. Bir yaz garsonluk yaptım — halamın bira bahçesinde, on bir masa. Neredeyse aynı şey, sadece bandosu daha çok."
-INTRO_7_IHR,"Klar ist das einfach. Wir haben mal gekellnert — einen Sommer, im Biergarten seiner Tante, elf Tische. Praktisch dasselbe, nur mit mehr Blaskapelle.","Sure it is. We waited tables once — one summer, in his aunt's beer garden, eleven tables. Basically the same thing, just with more brass band.","Tabii ki kolay. Bir yaz garsonluk yaptık — halasının bira bahçesinde, on bir masa. Neredeyse aynı şey, sadece bandosu daha çok."
-INTRO_8_DU,"Elf Tische. Wunderbar. Aber eine andere Wahl habe ich ohnehin nicht.","Eleven tables. Wonderful. But I have no other choice anyway.","On bir masa. Harika. Ama başka seçeneğim de yok."
-INTRO_8_IHR,"Elf Tische. Wunderbar. Aber eine andere Wahl habe ich ohnehin nicht.","Eleven tables. Wonderful. But I have no other choice anyway.","On bir masa. Harika. Ama başka seçeneğim de yok."
-INTRO_9_DU,"Komm mit zum Zelt, ich zeig dir alles. Danach entscheidest du, ob du noch willst.","Come along to the tent, I will show you everything. Then you decide whether you still want it.","Çadıra gel, her şeyi göstereyim. Sonra hâlâ isteyip istemediğine karar verirsin."
-INTRO_9_IHR,"Kommt mit zum Zelt, ich zeig euch alles. Danach entscheidet ihr, ob ihr noch wollt.","Come along to the tent, I will show you everything. Then you decide whether you still want it.","Çadıra gelin, her şeyi göstereyim. Sonra hâlâ isteyip istemediğinize karar verirsiniz."
+BRIEF_TITEL,Letzter Wille von Onkel Sepp,Uncle Sepp's Last Will,Sepp Amca'nın Vasiyeti
+BRIEF_WEITER,Linksklick weiter · Esc schließt,Left click for next · Esc closes,Devam için sol tık · Esc kapatır
+BRIEF_ENDE,Linksklick: auf zum Kirmestor!,Left click: off to the fair gate!,Sol tık: fuar kapısına!
+BRIEF_1_DU,"Mein liebes Patenkind,
+
+wenn du diesen Brief liest, hat mich die letzte Maß erwischt. Vierzig Jahre hab ich auf dem Sloptoberfest ausgeschenkt — und jetzt vermache ich dir mein Festzelt.","My dear godchild,
+
+if you are reading this, the last beer got me. Forty years I poured at the Sloptoberfest — and now I leave my beer tent to you.","Sevgili vaftiz çocuğum,
+
+bu mektubu okuyorsan son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi festival çadırımı sana bırakıyorum."
+BRIEF_1_IHR,"Mein liebes Patenkind — und ihr Spinner, die es sicher mitbringt,
+
+wenn ihr diesen Brief lest, hat mich die letzte Maß erwischt. Vierzig Jahre hab ich auf dem Sloptoberfest ausgeschenkt — und jetzt vermache ich euch mein Festzelt.","My dear godchild — and whatever lunatics you are bringing along,
+
+if you are reading this, the last beer got me. Forty years I poured at the Sloptoberfest — and now I leave my beer tent to you all.","Sevgili vaftiz çocuğum — ve yanında getirdiğin o deliler,
+
+bu mektubu okuyorsanız son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi festival çadırımı size bırakıyorum."
+BRIEF_2_DU,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Huber vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Huber from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Huber pes etmeni bekliyor. Ona bu iyiliği yapma."
+BRIEF_2_IHR,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Huber vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Huber from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Huber pes etmenizi bekliyor. Ona bu iyiliği yapmayın."
+BRIEF_3_DU,"Geh zum Wiesnchef am Kirmestor, der zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+
+Prost und pfiat di,
+dein Onkel Sepp","Go see the fair manager at the gate, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
+
+Cheers and farewell,
+your Uncle Sepp","Fuar kapısındaki fuar müdürüne git, sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
+
+Şerefe ve hoşça kal,
+Sepp Amcan"
+BRIEF_3_IHR,"Geht zum Wiesnchef am Kirmestor, der zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+
+Prost und pfiat eich,
+euer Onkel Sepp","Go see the fair manager at the gate, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
+
+Cheers and farewell,
+your Uncle Sepp","Fuar kapısındaki fuar müdürüne gidin, size her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
+
+Şerefe ve hoşça kalın,
+Sepp Amcanız"
+CHEF_1_DU,"Du bist also Sepps Erbe? Mein Beileid — für den Sepp und ein bisschen auch für dich.","So you are Sepp's heir? My condolences — for Sepp, and a little for you too.","Demek Sepp'in varisi sensin? Başın sağ olsun — Sepp için, biraz da senin için."
+CHEF_1_IHR,"Ihr seid also Sepps Erben? Mein Beileid — für den Sepp und ein bisschen auch für euch.","So you are Sepp's heirs? My condolences — for Sepp, and a little for you too.","Demek Sepp'in varisleri sizsiniz? Başınız sağ olsun — Sepp için, biraz da sizin için."
+CHEF_2_DU,"Ohne sein Festzelt kommt kein Mensch aufs Sloptoberfest. Dann kann ich die ganze Kirmes zumachen.","Without his tent nobody comes to the Sloptoberfest. Then I can shut the whole fair down.","Onun çadırı olmadan kimse Sloptoberfest'e gelmez. O zaman bütün fuarı kapatırım."
+CHEF_2_IHR,"Ohne sein Festzelt kommt kein Mensch aufs Sloptoberfest. Dann kann ich die ganze Kirmes zumachen.","Without his tent nobody comes to the Sloptoberfest. Then I can shut the whole fair down.","Onun çadırı olmadan kimse Sloptoberfest'e gelmez. O zaman bütün fuarı kapatırım."
+CHEF_3_DU,Komm mit — ich zeig dir das Zelt!,Come along — I will show you the tent!,Gel — sana çadırı göstereyim!
+CHEF_3_IHR,Kommt mit — ich zeig euch das Zelt!,Come along — I will show you the tent!,Gelin — size çadırı göstereyim!
+CHEF_4_DU,"Der Sepp hat hier vierzig Jahre ausgeschenkt. Die Leute haben ihn geliebt.","Sepp poured beer here for forty years. People loved him.","Sepp burada kırk yıl bira doldurdu. İnsanlar onu severdi."
+CHEF_4_IHR,"Der Sepp hat hier vierzig Jahre ausgeschenkt. Die Leute haben ihn geliebt.","Sepp poured beer here for forty years. People loved him.","Sepp burada kırk yıl bira doldurdu. İnsanlar onu severdi."
+CHEF_5_DU,"Nur mit dem Rechnen hatte er's nicht so. Die Bank wartet nicht ewig.","He was just not great with numbers. The bank will not wait forever.","Sadece hesapla arası pek iyi değildi. Banka sonsuza kadar beklemez."
+CHEF_5_IHR,"Nur mit dem Rechnen hatte er's nicht so. Die Bank wartet nicht ewig.","He was just not great with numbers. The bank will not wait forever.","Sadece hesapla arası pek iyi değildi. Banka sonsuza kadar beklemez."
+CHEF_6_DU,"Und der Huber vom Nachbarzelt reibt sich schon die Hände …","And Huber from the tent next door is already rubbing his hands …","Yan çadırdaki Huber de şimdiden ellerini ovuşturuyor …"
+CHEF_6_IHR,"Und der Huber vom Nachbarzelt reibt sich schon die Hände …","And Huber from the tent next door is already rubbing his hands …","Yan çadırdaki Huber de şimdiden ellerini ovuşturuyor …"
+CHEF_7_DU,"Da wär's! Unterschreib am Schild — und dann zeig mal, was in dir steckt.","Here it is! Sign at the board — then show us what you have got.","İşte burası! Tabelada imzala — sonra neler yapabildiğini göster."
+CHEF_7_IHR,"Da wär's! Unterschreibt am Schild — und dann zeigt mal, was in euch steckt.","Here it is! Sign at the board — then show us what you have got.","İşte burası! Tabelada imzalayın — sonra neler yapabildiğinizi gösterin."

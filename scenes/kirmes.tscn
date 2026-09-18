@@ -85,4 +85,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 76)
 script = ExtResource("74_chef")
 figur_nr = 1
 
+[node name="Sprechblase" type="Label3D" parent="Wiesnchef"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+visible = false
+billboard = 1
+no_depth_test = true
+fixed_size = true
+pixel_size = 0.0009
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.16, 0.09, 0.03, 1)
+font_size = 34
+outline_size = 12
+offset = Vector2(0, 150)
+vertical_alignment = 2
+autowrap_mode = 3
+width = 520.0
+
 [node name="Model" parent="Wiesnchef" instance=ExtResource("75_figur")]
