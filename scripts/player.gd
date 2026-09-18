@@ -268,7 +268,7 @@ func _physics_process(delta: float) -> void:
 			_handle_interaction(delta)
 		_trinken(delta)
 		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
-		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_type, emote, costume, PackedByteArray(extra_kruege))
+		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
@@ -341,7 +341,11 @@ func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int
 	_net_yaw = yaw
 	carry_state = cstate
 	carry_fill = cfill
-	carry_type = ctype
+	# Beim Paket steht in ctype die Paketsorte (Müllsack = 3 sieht man dann als Sack)
+	if cstate == 3:
+		carry_pkg_kind = ctype
+	else:
+		carry_type = ctype
 	extra_kruege.clear()
 	for sorte in extra:
 		extra_kruege.append(int(sorte))
@@ -370,6 +374,8 @@ func _tippt() -> bool:
 		or (hud.has_method("is_lobby_open") and hud.is_lobby_open())
 
 func _handle_movement(delta: float) -> void:
+	if _geschleudert():
+		return
 	var input_dir := Vector2.ZERO if _tippt() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var dir := (transform.basis.x * input_dir.x) + (transform.basis.z * input_dir.y)
 	dir.y = 0
@@ -918,3 +924,34 @@ func _besen_zeigen() -> void:
 		var s := sin(t * 9.0)
 		_besen.position = Vector3(0.3 + s * 0.18, 0.02, -1.0)
 		_besen.rotation.y = s * 0.35
+
+# ------------------------------------------------------------ Umgefahren
+## Vom Lieferwagen erwischt (scripts/lieferwagen.gd, nur beim eigenen Spieler):
+## fliegt im Bogen, die Kamera kippt, kurz keine Steuerung.
+var _geschleudert_bis := 0.0
+
+func wird_geschleudert() -> bool:
+	return Time.get_ticks_msec() / 1000.0 < _geschleudert_bis
+
+func geschleudert(tempo: Vector3) -> void:
+	if not _is_local or wird_geschleudert():
+		return
+	velocity = tempo
+	_geschleudert_bis = Time.get_ticks_msec() / 1000.0 + 1.4
+	_sfx("pop")
+
+## Während des Flugs: nur Schwerkraft und Bremsen am Boden, Kamera schwankt
+func _geschleudert() -> bool:
+	if not wird_geschleudert():
+		if _head and absf(_head.rotation.z) > 0.001:
+			_head.rotation.z = lerpf(_head.rotation.z, 0.0, 0.2)
+		return false
+	var dt := get_physics_process_delta_time()
+	velocity.y -= 20.0 * dt
+	if is_on_floor() and velocity.y <= 0.0:
+		velocity.x = move_toward(velocity.x, 0.0, 14.0 * dt)
+		velocity.z = move_toward(velocity.z, 0.0, 14.0 * dt)
+	var rest := _geschleudert_bis - Time.get_ticks_msec() / 1000.0
+	_head.rotation.z = sin(rest * 9.0) * 0.35 * clampf(rest, 0.0, 1.0)
+	move_and_slide()
+	return true

@@ -39,9 +39,19 @@ func _process(delta: float) -> void:
 				_staub(to_global(Vector3(seite, 0.0, -1.9)), 0.25)
 		_umfahren()
 
-## Kirmesbesucher im Weg werden weggeschleudert (Visitor.geschleudert)
+## Kirmesbesucher und der eigene Spieler werden weggeschleudert (Visitor/Player.geschleudert)
 func _umfahren() -> void:
 	var vorn := global_transform.basis.z
+	for sp in get_tree().get_nodes_in_group("player"):
+		if not sp.get("_is_local") or not sp.has_method("geschleudert") or sp.wird_geschleudert():
+			continue
+		var q: Vector3 = to_local((sp as Node3D).global_position)
+		if absf(q.x) > HALB.x + 0.3 or absf(q.z) > HALB.y or absf(q.y) > 1.5:
+			continue
+		var wucht_s := clampf(_tempo.length(), 3.0, 10.0)
+		var seite_s := global_transform.basis.x * signf(q.x if absf(q.x) > 0.05 else 1.0)
+		sp.geschleudert(vorn * wucht_s * 0.8 + seite_s * wucht_s * 0.7 + Vector3.UP * (5.0 + wucht_s * 0.3))
+		_staub((sp as Node3D).global_position, 0.8, "aufprall")
 	for b in get_tree().get_nodes_in_group("visitor"):
 		var p: Vector3 = to_local((b as Node3D).global_position)
 		if absf(p.x) > HALB.x or absf(p.z) > HALB.y or absf(p.y) > 1.5:

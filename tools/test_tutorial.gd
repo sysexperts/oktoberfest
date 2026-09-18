@@ -39,7 +39,7 @@ class Lauf extends Node:
 		sp.look_at(chef.global_position + Vector3(0, 0.1, 0), Vector3.UP)
 		await _warten(0.5)
 		chef.ansprechen()
-		for i in 3:
+		for i in 4:
 			await _warten(0.4)
 			dialog._weiter()
 		await _warten(1.0)
@@ -54,7 +54,7 @@ class Lauf extends Node:
 		await _warten(1.0)
 		_check("Nein: bleibt im Büro", gm._quest_step == 0 and not chef.unterwegs(), "")
 		chef.ansprechen()
-		for i in 3:
+		for i in 4:
 			await _warten(0.4)
 			dialog._weiter()
 		await _warten(0.5)

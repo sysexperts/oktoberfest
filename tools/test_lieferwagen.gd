@@ -28,7 +28,7 @@ class Lauf extends Node:
 		for o in gm._pending:
 			o.t = 0.1
 		var sp: Node3D = gm._players_nodes.get(1)
-		sp.global_position = Vector3(6, 0.1, 30)
+		sp.global_position = Vector3(-1.8, 0.1, 40)   # Spieler steht im Weg
 		var crowd := gm.get_node_or_null("Crowd")
 		if crowd:
 			crowd.set_density(0.4)
@@ -54,6 +54,7 @@ class Lauf extends Node:
 		var bilder := {1.5: "anfahrt", 5.0: "allee", 8.5: "halt", 10.0: "abladen", 12.5: "wenden", 15.0: "abfahrt"}
 		var t := 0.0
 		var geflogen := 0
+		var spieler_flog := false
 		while t < 16.0:
 			await get_tree().process_frame
 			t += get_process_delta_time()
@@ -61,6 +62,8 @@ class Lauf extends Node:
 			if van:
 				cam.global_position = van.global_position + Vector3(9, 5, 6)
 				cam.look_at(van.global_position + Vector3(0, 1, 0), Vector3.UP)
+			if sp.wird_geschleudert():
+				spieler_flog = true
 			for v in get_tree().get_nodes_in_group("visitor"):
 				if v.fliegt():
 					geflogen += 1
@@ -73,6 +76,7 @@ class Lauf extends Node:
 		for p in gm._packages.values():
 			pakete += 1
 		print("Pakete abgelegt: ", pakete, "  Besucher-Flugbilder: ", geflogen)
+		print("Spieler umgefahren: ", spieler_flog)
 		get_tree().quit()
 
 	func _warten(s: float) -> void:

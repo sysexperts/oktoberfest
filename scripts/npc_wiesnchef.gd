@@ -21,7 +21,7 @@ const TEMPO := 1.7
 @export var figur_nr := 2
 @export var rundgang: NodePath = ^"../Rundgang"
 ## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
-@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_FRAGE"]
+@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
 
 @onready var _ausruf: Label3D = get_node_or_null("Ausruf")
