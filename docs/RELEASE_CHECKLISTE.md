@@ -1,6 +1,6 @@
 # Release-Checkliste
 
-Stand: 18.09.2026 (v186). ⚠️ = Pflicht vor der Veröffentlichung.
+Stand: 18.09.2026 (v188). ⚠️ = Pflicht vor der Veröffentlichung.
 **Du** = Nutzer liefert/erledigt · **Ich** = Code.
 
 Reihenfolge-Tipp: Maßkrug + Essen und Ton zuerst → Figuren + Map → parallel
@@ -146,13 +146,14 @@ Fertig:
 - Leistung: Sichtweite für Kartenteile (scripts/sichtweite.gd)
 
 Noch offen (Code):
-- [ ] Stammgäste mit Namen und Wünschen über mehrere Tage
-- [ ] Koop: Chaos-Ereignisse für alle, abendliche Auszeichnungen (bester Kellner …)
-- [ ] Saboteur im Zelt erwischen (Huber-Konzept)
+- [x] Stammgäste mit Namen und Wünschen über mehrere Tage *(v188)*
+- [ ] Koop: Chaos-Ereignisse für alle *(abendliche Auszeichnungen fertig, v187)*
+- [x] Saboteur im Zelt erwischen (Huber-Konzept) *(v187)*
 - [ ] Eigene Figur für Huber (braucht ein Modell) — bis dahin Bean, etwas größer
 - [ ] Buden-Meshes zusammenfassen (Leistung, nach der Sichtweite der nächste große Schritt)
 - [ ] Koop-Test aller neuen Systeme (Rundgang, Putzen, Duell, Personal)
 
 Werkzeuge zum Prüfen: tools/test_tutorial, test_rundgang, test_tagesziel, test_huber,
 test_duell, test_lieferwagen, test_zeitung, test_kalender, test_moebel, test_personal,
+test_saboteur, test_stamm,
 perf_messen, sim_saison.
