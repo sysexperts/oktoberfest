@@ -482,6 +482,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_AUFHEBEN" if carry_state == 0 else ""
 	if t.has_method("ist_eroeffnung"):
 		return "HINT_ZELT_EROEFFNEN"
+	if t.has_method("ist_saboteur"):
+		return "HINT_SABOTEUR" if t.ist_saboteur() else ""
 	if t.has_method("ist_huber"):
 		return "HINT_HUBER"
 	if t.has_method("ist_wiesnchef"):
@@ -620,6 +622,11 @@ func _handle_interaction(delta: float) -> void:
 		if _current_target.has_method("ist_eroeffnung"):
 			_world.net_zelt_eroeffnen.rpc_id(1)
 			_sfx("cheer")
+			return
+		if _current_target.has_method("ist_saboteur"):
+			if _current_target.ist_saboteur():
+				_world.net_saboteur_fangen.rpc_id(1)
+				_sfx("cheer")
 			return
 		if _current_target.has_method("ist_huber"):
 			_current_target.ansprechen()

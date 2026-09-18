@@ -985,3 +985,10 @@ MSG_PERSONAL_ZUFRIEDEN,😊 %s ist zufrieden und bleibt.,😊 %s is happy and st
 MSG_PERSONAL_ENTLASSEN,%s wurde entlassen.,%s has been dismissed.,%s işten çıkarıldı.
 CHEF_ENDE_3_DU,"Ein Tipp noch: Im Wiesn-Kalender (Taste K) siehst du, was dich erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
 CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Wiesn-Kalender (Taste K) seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
+MSG_EHRE_BEDIENT,🏅 Bester Kellner heute: %s (%d Gäste bedient),🏅 Best waiter today: %s (%d guests served),🏅 Bugünün en iyi garsonu: %s (%d misafir)
+MSG_EHRE_GEZAPFT,🏅 Schnellster Zapfer heute: %s (%d Maß gezapft),🏅 Fastest tapster today: %s (%d steins poured),🏅 Bugünün en hızlı fıçıcısı: %s (%d kupa)
+MSG_EHRE_GEPUTZT,🏅 Putzteufel des Tages: %s (%d Flecken weg),🏅 Cleaning champion of the day: %s (%d messes gone),🏅 Günün temizlik şampiyonu: %s (%d leke)
+ZEITUNG_M_EHRE,Auszeichnung: %s,Award: %s,Ödül: %s
+MSG_SABOTEUR_DA,👀 Da schleicht jemand Fremdes ins Zelt … ob das einer vom Huber ist?,👀 A stranger is sneaking into the tent … one of Huber's men?,👀 Çadıra bir yabancı sızıyor … Huber'in adamı mı?
+MSG_SABOTEUR_ERWISCHT,👮 Saboteur erwischt! Huber ist blamiert — die Gäste spendieren %s,👮 Saboteur caught! Huber is embarrassed — the guests chip in %s,👮 Sabotajcı yakalandı! Huber rezil oldu — misafirler %s bahşiş veriyor
+HINT_SABOTEUR,{interact} Erwischt! Saboteur rauswerfen,{interact} Gotcha! Throw the saboteur out,{interact} Yakaladım! Sabotajcıyı dışarı at

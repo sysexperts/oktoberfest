@@ -2860,6 +2860,7 @@ func net_put_ausgabe(typ: int) -> void:
 	if s == 0:
 		s = 1
 	typ = clampi(typ, 1, 4)
+	_leistung(s, "gezapft")
 	if _ausgabe_gesamt(1) >= AUSGABE_PLAETZE_KRUEGE:
 		_fehler("MSG_AUSGABE_FULL", [AUSGABE_PLAETZE_KRUEGE])
 		return
@@ -3747,6 +3748,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	var bediener := multiplayer.get_remote_sender_id()
 	if bediener == 0:
 		bediener = 1
+	_leistung(bediener, "bedient")
 	var jetzt := Time.get_ticks_msec()
 	var k: Dictionary = _kombo.get(bediener, {"n": 0, "t": 0})
 	var kombo := int(k.n) + 1 if jetzt - int(k.t) <= KOMBO_FENSTER_MS else 1
@@ -3804,6 +3806,7 @@ func _process(delta: float) -> void:
 		_phase_time -= delta
 		_shift_process(delta)
 		_huber_schicht(delta)
+		_saboteur_schicht(delta)
 		if _phase_time <= 0.0:
 			_end_shift(0)   # 22:00 — normal kapanış
 	elif not _guest_sim.is_empty():
@@ -4267,6 +4270,7 @@ func _start_shift() -> void:
 	_bank_mahnen()
 	_muell_stapel = 0   # Müllabfuhr war da
 	_personal_morgen()
+	_tag_leistung.clear()
 	_huber_morgen()
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
@@ -4349,6 +4353,7 @@ func _end_shift(reason := 0) -> void:
 		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
 		"urin": _urin_count, "complaints": _complaints, "left": _left_guests,
 		"loan": _kredit_heute,
+		"ehren": _auszeichnungen(),
 		# für die Tipps in der Bilanz (Texte.tipps)
 		"toilet": _has_toilet, "kellner": _has_staff(ROLE_KELLNER), "zapfer": _has_staff(ROLE_ZAPFER),
 		"reinigung": _has_staff(ROLE_REINIGUNG), "ohne_ware": roundi(_ohne_ware_s), "pop": roundi(_popularity),
@@ -4382,6 +4387,11 @@ func _end_shift(reason := 0) -> void:
 	_stats.days += 1
 	_tagesziel_auswerten()
 	_huber_abrechnen()
+	if not _saboteur.is_empty():
+		_saboteur = {}
+		_net_saboteur_weg.rpc()
+	for e: Array in _auszeichnungen():
+		_melde("MSG_EHRE_" + str(e[0]).to_upper(), [str(e[1]), int(e[2])], 2)
 	_bank_abbuchen()
 	_pruefe_pleite()   # nach Miete und Löhnen — erst dann steht fest, ob es reicht
 	_broadcast_meta()
@@ -4691,6 +4701,7 @@ func net_clean(id: int) -> void:
 			_last_earn += tip
 			_clean_tips += tip
 			_stats.cleaned += 1
+			_leistung(putzer, "geputzt")
 			_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
 		if art_dreck >= Mess.DRECK and art_dreck < Mess.DECKE:
 			_muellsack_hinlegen((_messes[id] as Node3D).global_position)
@@ -5335,7 +5346,7 @@ func _huber_schicht(delta: float) -> void:
 	if _sabotage_t > 0.0:
 		_sabotage_t -= delta
 		if _sabotage_t <= 0.0:
-			_sabotieren()
+			_saboteur_losschicken()
 	var leck := false
 	for k in _mess_kind.values():
 		if int(k) >= Mess.SABOTAGE:
@@ -5575,3 +5586,94 @@ func _remove_staff(id: int) -> void:
 	if n and is_instance_valid(n):
 		n.queue_free()
 	_staff.erase(id)
+
+# ================================================= Koop: Auszeichnungen am Abend
+## Wer hat heute am meisten bedient, gezapft, geputzt? Nur im Koop, abends als
+## Meldung und im Wiesn-Kurier (Bilanz "ehren").
+var _tag_leistung := {}   # Peer -> {"bedient": n, "gezapft": n, "geputzt": n}
+
+func _leistung(peer: int, art: String) -> void:
+	if not _tag_leistung.has(peer):
+		_tag_leistung[peer] = {"bedient": 0, "gezapft": 0, "geputzt": 0}
+	_tag_leistung[peer][art] = int(_tag_leistung[peer][art]) + 1
+
+## [[Art, Name, Anzahl], …] — die Besten des Tages (nur mit mehreren Spielern)
+func _auszeichnungen() -> Array:
+	var ehren := []
+	if _tag_leistung.size() < 2 and multiplayer.get_peers().is_empty():
+		return ehren
+	for art in ["bedient", "gezapft", "geputzt"]:
+		var bester := -1
+		var n := 0
+		for peer: int in _tag_leistung:
+			var w := int(_tag_leistung[peer][art])
+			if w > n:
+				n = w
+				bester = peer
+		if bester >= 0:
+			var info: Dictionary = _spieler_info.get(bester, {})
+			ehren.append([art, str(info.get("name", "Spieler %d" % bester)), n])
+	return ehren
+
+# ================================================= Hubers Saboteur
+## Statt sofort zu sabotieren, schickt Huber jemanden ins Zelt (scripts/saboteur.gd).
+## Kommt er ans Ziel, passiert die Sabotage; wird er vorher erwischt, gibt es
+## Geld und Beliebtheit.
+const SABOTEUR_SZENE := preload("res://scenes/saboteur.tscn")
+const Saboteur := preload("res://scripts/saboteur.gd")
+const SABOTEUR_WEG_FASS := [Vector3(0, 0, 13), Vector3(-6, 0, 6), Vector3(-10, 0, 0), Vector3(-10, 0, -11.3), Vector3(-4, 0, -12.4)]
+const SABOTEUR_WEG_STINK := [Vector3(0, 0, 13), Vector3(-6, 0, 6), Vector3(-2, 0, 1)]
+const SABOTEUR_LOHN := 200
+const SABOTEUR_POP := 4.0
+var _saboteur := {}          # {"art": "fass"/"stink", "rest": Sekunden bis zum Ziel}
+var _saboteur_knoten: Node3D = null
+
+func _saboteur_losschicken() -> void:
+	var art := "fass" if randf() < 0.5 else "stink"
+	var weg: Array = SABOTEUR_WEG_FASS if art == "fass" else SABOTEUR_WEG_STINK
+	_saboteur = {"art": art, "rest": Saboteur.dauer(weg)}
+	_net_saboteur_start.rpc(weg)
+	_melde("MSG_SABOTEUR_DA", [], 1)
+
+@rpc("authority", "reliable", "call_local")
+func _net_saboteur_start(weg: Array) -> void:
+	if _saboteur_knoten and is_instance_valid(_saboteur_knoten):
+		_saboteur_knoten.queue_free()
+	_saboteur_knoten = SABOTEUR_SZENE.instantiate()
+	add_child(_saboteur_knoten)
+	_saboteur_knoten.starten(weg)
+
+## Server, jede Schicht-Sekunde: kommt er an, passiert die Sabotage
+func _saboteur_schicht(delta: float) -> void:
+	if _saboteur.is_empty():
+		return
+	_saboteur.rest = float(_saboteur.rest) - delta
+	if float(_saboteur.rest) > 0.0:
+		return
+	var art := str(_saboteur.art)
+	_saboteur = {}
+	if art == "fass":
+		var fass := _fass_platz(1)
+		_spawn_mess_at(Vector3(fass.x + randf_range(-0.4, 0.4), 0.0, fass.z + 0.8), Mess.SABOTAGE)
+		_melde("MSG_SABOTAGE_FASS", [], 1)
+	else:
+		for i in 4:
+			_spawn_mess_at(Vector3(randf_range(-8.0, 8.0), 0.0, randf_range(-5.0, 10.0)), 0)
+		_hygiene = maxf(0.0, _hygiene - 25.0)
+		_melde("MSG_SABOTAGE_STINK", [], 1)
+	_net_saboteur_weg.rpc()
+
+@rpc("any_peer", "reliable", "call_local")
+func net_saboteur_fangen() -> void:
+	if not multiplayer.is_server() or _saboteur.is_empty():
+		return
+	_saboteur = {}
+	_add_income(SABOTEUR_LOHN)
+	_pop_erhoehen(SABOTEUR_POP)
+	_melde("MSG_SABOTEUR_ERWISCHT", [_eur(SABOTEUR_LOHN)], 2)
+	_net_saboteur_weg.rpc()
+
+@rpc("authority", "reliable", "call_local")
+func _net_saboteur_weg() -> void:
+	if _saboteur_knoten and is_instance_valid(_saboteur_knoten):
+		_saboteur_knoten.fliehen()

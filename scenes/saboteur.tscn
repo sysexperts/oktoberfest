@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/saboteur.gd" id="1_skript"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2_figur"]
+
+[node name="Saboteur" type="Node3D"]
+script = ExtResource("1_skript")
+
+[node name="Model" parent="." instance=ExtResource("2_figur")]
