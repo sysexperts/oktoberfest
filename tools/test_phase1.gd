@@ -145,6 +145,7 @@ class Lauf extends Node:
 		_check("Toilette: gesperrt mit Grund", klo.knopf_node(0).disabled and klo.grund_text() != "", klo.grund_text())
 		var kellner: Node = buero.get_node("%Kellner")
 		_check("Kellner aufstufen: gesperrt, niemand da", kellner.knopf_node(1).disabled, kellner.grund_text())
+		buero.tutorial_schritt(3)   # nach dem Putzen: Tische
 		_check("Tutorial hebt Tisch hervor", tisch.ist_hervorgehoben() and not mieten.ist_hervorgehoben(), "")
 		var bier: Node = buero.get_node("%Bier")
 		var lieferungen: int = gm._pending.size()
