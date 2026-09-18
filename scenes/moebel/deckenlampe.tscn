@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/moebel/deckenlampe.tres" id="1_mesh"]
+
+[node name="Deckenlampe" type="Node3D"]
+
+[node name="Modell" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+
+[node name="Licht" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
+light_color = Color(1, 0.86, 0.62, 1)
+light_energy = 2.2
+omni_range = 7.5

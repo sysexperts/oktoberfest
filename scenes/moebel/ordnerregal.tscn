@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/moebel/ordnerregal.tres" id="1_mesh"]
+
+[sub_resource type="BoxShape3D" id="Form"]
+size = Vector3(1.24, 1.9, 0.36)
+
+[node name="Ordnerregal" type="Node3D"]
+
+[node name="Modell" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+shape = SubResource("Form")

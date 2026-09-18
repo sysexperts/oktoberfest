@@ -194,3 +194,8 @@ func _hueft_spur(name: String) -> NodePath:
 		if a.track_get_type(t) == Animation.TYPE_POSITION_3D and String(a.track_get_path(t)).ends_with(":Hips"):
 			return a.track_get_path(t)
 	return NodePath()
+
+## Verkäufer in den Essensbuden (scripts/karte.gd, Gruppe „nachtruhe"): nach
+## Feierabend heim, morgens wieder da.
+func nachtruhe(an: bool) -> void:
+	visible = not an

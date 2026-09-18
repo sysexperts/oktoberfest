@@ -36,6 +36,7 @@ var _rest := Transform3D()
 var _t := 0.0
 
 func _ready() -> void:
+	add_to_group("nachtruhe")
 	_geraeusch()
 	_teil = get_node_or_null(teil) as Node3D
 	if _teil == null:
@@ -107,3 +108,10 @@ func _process(delta: float) -> void:
 	# Gondeln gegenrechnen, damit sie waagerecht hängen bleiben.
 	for g in _gondeln:
 		g.basis = Basis(a, -winkel)
+
+## Nach Feierabend stillstehen (GameManager._apply_daylight), morgens weiter
+func nachtruhe(an: bool) -> void:
+	set_process(not an and _teil != null)
+	for c in get_children():
+		if c is AudioStreamPlayer3D:
+			(c as AudioStreamPlayer3D).stream_paused = an

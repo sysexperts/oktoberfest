@@ -5,6 +5,12 @@ extends Node3D
 ## (Tutorial „Putze das Zelt") — 2 + Nummer des Modells unter „Dreck".
 
 const DRECK := 2
+## Ab hier: Abdeckplanen über Möbeln (abziehen statt fegen). Größe je Art.
+const DECKE := 10
+const DECKEN_GROESSE := {
+	10: Vector3(9.0, 1.15, 1.9), 11: Vector3(9.0, 1.15, 1.9), 12: Vector3(5.6, 1.1, 1.4),
+	13: Vector3(4.5, 1.05, 8.2), 14: Vector3(1.0, 1.9, 5.6),
+}
 
 var mess_id := -1
 var kind := 0
@@ -12,6 +18,7 @@ var kind := 0
 @onready var _disc: MeshInstance3D = $Disc
 @onready var _dreck: Node3D = $Dreck
 @onready var _label: Label3D = $Label
+@onready var _plane: MeshInstance3D = $Plane
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -23,11 +30,20 @@ func set_kind(k: int) -> void:
 	if is_inside_tree():
 		_apply_kind()
 
+func ist_plane() -> bool:
+	return kind >= DECKE
+
 func ist_dreck() -> bool:
 	return kind >= DRECK
 
 func _apply_kind() -> void:
 	if _disc == null:
+		return
+	if ist_plane():
+		_disc.visible = false
+		_label.visible = false
+		_plane.visible = true
+		_plane.scale = DECKEN_GROESSE.get(kind, Vector3.ONE)
 		return
 	if ist_dreck():
 		_disc.visible = false
@@ -51,6 +67,13 @@ func _apply_kind() -> void:
 
 ## Temizlik ilerlemesi (0=temiz değil .. 1=temiz) -> görsel küçülür/solar.
 func apply_progress(p: float) -> void:
+	if ist_plane():
+		# Plane wird weggezogen: sackt zusammen und rutscht zur Seite
+		var g: Vector3 = DECKEN_GROESSE.get(kind, Vector3.ONE)
+		var q := clampf(p, 0.0, 1.0)
+		_plane.scale = Vector3(g.x, g.y * (1.0 - 0.7 * q), g.z)
+		_plane.position.x = g.x * 0.25 * q
+		return
 	if ist_dreck():
 		var d := lerpf(1.5, 0.4, clampf(p, 0.0, 1.0))
 		_dreck.scale = Vector3(d, d, d)

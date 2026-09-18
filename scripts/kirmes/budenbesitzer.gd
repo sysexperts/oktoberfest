@@ -17,6 +17,7 @@ var _besetzt := false
 
 func _ready() -> void:
 	add_to_group("interactable")
+	add_to_group("nachtruhe")
 	_figur = Figuren.einsetzen(self, Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
 	_figur.stehen()
 	bude = get_parent()
@@ -49,3 +50,16 @@ func _process(delta: float) -> void:
 		return
 	position += zu.normalized() * minf(TEMPO * delta, zu.length())
 	rotation.y = atan2(zu.x, zu.z)
+
+## Nach Feierabend geht der Budenbesitzer heim: weg, Bude zu (Ziele stehen still).
+## Morgens (nach dem Schlafen) ist er wieder da. GameManager._apply_daylight.
+func nachtruhe(an: bool) -> void:
+	if an and bude and bude.has_method("laeuft") and bude.laeuft():
+		return   # wer gerade spielt, darf fertig spielen
+	visible = not an
+	if an:
+		remove_from_group("interactable")
+	else:
+		add_to_group("interactable")
+	if bude:
+		bude.set_process(not an)

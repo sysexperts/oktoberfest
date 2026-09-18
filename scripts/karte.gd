@@ -204,6 +204,7 @@ func _eintrag_setzen(n: int, e: Dictionary) -> void:
 	if platz:
 		var figur := Figuren.ALLE[posmod(n * 7, Figuren.ALLE.size())].instantiate() as Node3D
 		figur.name = "Figur"
+		figur.add_to_group("nachtruhe")
 		figur.transform = platz.transform
 		k.add_child(figur)
 	add_child(k)

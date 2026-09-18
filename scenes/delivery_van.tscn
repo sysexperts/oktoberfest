@@ -1,70 +1,55 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3]
 
-[sub_resource type="BoxMesh" id="BodyMesh"]
-size = Vector3(2.2, 1.6, 4.4)
-
-[sub_resource type="StandardMaterial3D" id="MatBody"]
-albedo_color = Color(0.85, 0.75, 0.2, 1)
-
-[sub_resource type="BoxMesh" id="CabMesh"]
-size = Vector3(2.1, 1.1, 1.6)
-
-[sub_resource type="StandardMaterial3D" id="MatCab"]
-albedo_color = Color(0.3, 0.35, 0.45, 1)
-
-[sub_resource type="CylinderMesh" id="WheelMesh"]
-top_radius = 0.4
-bottom_radius = 0.4
-height = 0.25
-
-[sub_resource type="StandardMaterial3D" id="MatWheel"]
-albedo_color = Color(0.1, 0.1, 0.12, 1)
-
-[sub_resource type="StandardMaterial3D" id="MatSign"]
-albedo_color = Color(0.95, 0.95, 0.9, 1)
+[ext_resource type="Script" path="res://scripts/lieferwagen.gd" id="1_skript"]
+[ext_resource type="ArrayMesh" path="res://assets/fahrzeuge/lieferwagen.tres" id="2_wagen"]
+[ext_resource type="ArrayMesh" path="res://assets/fahrzeuge/rad.tres" id="3_rad"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
 
 [node name="DeliveryVan" type="Node3D"]
+script = ExtResource("1_skript")
 
-[node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -0.4)
-mesh = SubResource("BodyMesh")
-material_override = SubResource("MatBody")
+[node name="Karosserie" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_wagen")
 
-[node name="Cab" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 2.4)
-mesh = SubResource("CabMesh")
-material_override = SubResource("MatCab")
+[node name="Raeder" type="Node3D" parent="."]
 
-[node name="WheelFL" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -1.1, 0.4, 1.6)
-mesh = SubResource("WheelMesh")
-material_override = SubResource("MatWheel")
+[node name="VL" type="MeshInstance3D" parent="Raeder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.42, 1.75)
+mesh = ExtResource("3_rad")
 
-[node name="WheelFR" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 1.1, 0.4, 1.6)
-mesh = SubResource("WheelMesh")
-material_override = SubResource("MatWheel")
+[node name="VR" type="MeshInstance3D" parent="Raeder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.42, 1.75)
+mesh = ExtResource("3_rad")
 
-[node name="WheelBL" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -1.1, 0.4, -1.6)
-mesh = SubResource("WheelMesh")
-material_override = SubResource("MatWheel")
+[node name="HL" type="MeshInstance3D" parent="Raeder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.42, -1.6)
+mesh = ExtResource("3_rad")
 
-[node name="WheelBR" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 1.1, 0.4, -1.6)
-mesh = SubResource("WheelMesh")
-material_override = SubResource("MatWheel")
+[node name="HR" type="MeshInstance3D" parent="Raeder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.42, -1.6)
+mesh = ExtResource("3_rad")
 
-[node name="Aufschrift" type="Label3D" parent="."]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -1.12, 1.3, -0.4)
-pixel_size = 0.008
-font_size = 44
-outline_size = 12
-modulate = Color(0.2, 0.2, 0.2, 1)
-text = "GETRÄNKE
-LIEFERUNG"
+[node name="SchriftLinks" type="Label3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.07, 1.75, -1.05)
+pixel_size = 0.006
+double_sided = false
+modulate = Color(0.13, 0.3, 0.68, 1)
+text = "Wiesn-Brauerei"
+font = ExtResource("4_fraktur")
+font_size = 72
 
-[node name="Dach" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.12, 0, 0, 0, 1, 0, 1.95, -0.4)
-mesh = SubResource("BodyMesh")
-material_override = SubResource("MatSign")
+[node name="SchriftRechts" type="Label3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.07, 1.75, -1.05)
+pixel_size = 0.006
+double_sided = false
+modulate = Color(0.13, 0.3, 0.68, 1)
+text = "Wiesn-Brauerei"
+font = ExtResource("4_fraktur")
+font_size = 72
+
+[node name="Scheinwerfer" type="SpotLight3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.98, 0.2, 0, 0.2, -0.98, 0, 1.05, 2.7)
+light_color = Color(1, 0.95, 0.8, 1)
+light_energy = 2.0
+spot_range = 18.0
+spot_angle = 35.0

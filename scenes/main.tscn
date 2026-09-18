@@ -32,6 +32,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/baumodus.tscn" id="105_baumodus"]
 [ext_resource type="PackedScene" path="res://scenes/ui/kino.tscn" id="106_kino"]
 [ext_resource type="PackedScene" path="res://scenes/ui/dialog.tscn" id="107_dialog"]
+[ext_resource type="PackedScene" path="res://scenes/muellplatz.tscn" id="108_muellplatz"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -144,14 +145,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.01, -13.5)
 
 [node name="Keg1" parent="Stations" unique_id=1742639817 instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 0.83, -13.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0.83, -13.5)
 
 [node name="Keg2" parent="Stations" unique_id=26855945 instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.83, -13.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0, 0.83, -13.5)
 beer_type = 2
 
 [node name="Keg3" parent="Stations" unique_id=1082634527 instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0.83, -13.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.6, 0.83, -13.5)
 beer_type = 3
 
 [node name="FoodPretzel" parent="Stations" unique_id=581788161 instance=ExtResource("9_food")]
@@ -166,7 +167,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0.83, -13.5)
 beer_type = 4
 
 [node name="Keg5Wasser" parent="Stations" instance=ExtResource("4_keg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.83, -13.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.83, -13.5)
 beer_type = 5
 
 [node name="FoodHendl" parent="Stations" instance=ExtResource("9_food")]
@@ -449,3 +450,6 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -8.4, 2.1, -8.62)
 [node name="Kino" parent="." instance=ExtResource("106_kino")]
 
 [node name="Dialog" parent="." instance=ExtResource("107_dialog")]
+
+[node name="Muellplatz" parent="." instance=ExtResource("108_muellplatz")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 16.3)

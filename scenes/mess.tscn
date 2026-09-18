@@ -7,6 +7,7 @@
 [ext_resource type="ArrayMesh" path="res://assets/dreck/papier.tres" id="5_papier"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/stroh.tres" id="6_stroh"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/staub.tres" id="7_staub"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/plane.tres" id="8_plane"]
 
 [sub_resource type="CylinderMesh" id="Disc"]
 top_radius = 0.5
@@ -59,3 +60,7 @@ mesh = ExtResource("6_stroh")
 [node name="Staub" type="MeshInstance3D" parent="Dreck"]
 visible = false
 mesh = ExtResource("7_staub")
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+visible = false
+mesh = ExtResource("8_plane")

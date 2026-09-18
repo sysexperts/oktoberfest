@@ -185,6 +185,10 @@ const DRINKS_BEFORE_PUKE := 4       # so viele Getränke, bevor jemandem schlech
 
 # Temizlik
 const CLEAN_PER_CALL := 0.05
+## Anteil von CLEAN_PER_CALL beim Dreck im verlassenen Zelt (Tutorial)
+const DRECK_TEMPO := 0.1
+## Paketsorte für Müllsäcke (Package.kind)
+const MUELL := 3
 const CLEAN_TIP_MIN := 6      # Trinkgeld fürs Saubermachen
 const CLEAN_TIP_MAX := 12
 const HYGIENE_DRAIN := 0.4   # je Fleck pro Sekunde (1.2 hielt die Sauberkeit dauerhaft bei 0)
@@ -320,11 +324,16 @@ const WARE_ESSEN := 2
 const PACK_UNITS := 10                    # Einheiten pro Paket
 const PACK_COST := {1: 40, 2: 50}         # Preis pro Paket (10 Einheiten)
 const DELIVERY_DELAY := 30.0              # Lieferzeit nach Bestellung (Sekunden, vorher 60)
-const VAN_START := Vector3(-42.0, 0.0, 19.0)
-const VAN_DROP := Vector3(2.0, 0.0, 19.0)
-const VAN_END := Vector3(42.0, 0.0, 19.0)
+## Lieferwagen: kommt die Allee vom Kirmestor herunter, hält vor dem Zelt, wirft
+## die Ware links ab (DROP_POINT), wendet vor dem Eingang und fährt die Allee
+## wieder hoch. Wegpunkte in Weltkoordinaten.
+const VAN_REIN := [Vector3(-1.8, 0.0, 88.0), Vector3(-1.8, 0.0, 30.0), Vector3(-1.8, 0.0, 20.0)]
+const VAN_RAUS := [Vector3(-1.2, 0.0, 17.9), Vector3(0.9, 0.0, 16.9), Vector3(3.0, 0.0, 17.6),
+	Vector3(3.6, 0.0, 20.5), Vector3(3.6, 0.0, 30.0), Vector3(3.6, 0.0, 88.0)]
+## Langsamer auf den letzten Metern vor dem Halt und beim Wenden
+const VAN_LANGSAM := 3.5
 const VAN_SPEED := 9.0
-const DROP_POINT := Vector3(0.0, 0.0, 15.5)   # wo die Pakete landen
+const DROP_POINT := Vector3(-4.2, 0.0, 19.6)   # wo die Pakete landen (links neben dem Wagen)
 
 # ---- E5: Bühne & Künstler ----
 const ARTIST_SCENE := preload("res://scenes/artist.tscn")
@@ -469,6 +478,8 @@ var _van_node: Node3D = null
 var _van_state := 0             # 0 aus, 1 anfahrt, 2 abladen, 3 abfahrt
 var _van_pos := Vector3.ZERO
 var _van_timer := 0.0
+var _van_weg: Array = []        # restliche Wegpunkte
+var _van_yaw := PI
 var _van_cargo := []            # [{kind, packs}] die abgeladen werden
 # E5: gebuchter Künstler (gilt für die nächste Schicht, danach verbraucht)
 var _artist_tier := 0
@@ -536,6 +547,7 @@ const DECKENLICHT_ENERGIE := 0.4   # Test 13.09.: nachts zu grell (vorher 0.55)
 var _regen_t := -1.0
 ## Nach 22 Uhr bis zum Schlafen: Zelt geschlossen, aber Nacht
 var _nachts_geschlossen := false
+var _nachtruhe := false
 var _regen_voll := false   # Regen: flüchten heute viele ins Zelt?
 
 var _hygiene := 100.0
@@ -741,7 +753,7 @@ func _net_aufgehoben(art: int, typ: int, fill: float) -> void:
 ## Getragenes Warenpaket ablegen — es wird wieder ein Paket am Boden.
 @rpc("any_peer", "reliable", "call_local")
 func net_paket_ablegen(kind: int, amount: int, pos: Vector3) -> void:
-	if not multiplayer.is_server() or not _stock.has(kind) or amount <= 0:
+	if not multiplayer.is_server() or (not _stock.has(kind) and kind != MUELL) or amount <= 0:
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
@@ -1022,6 +1034,11 @@ const ALTSTADT_MAT := preload("res://assets/altstadt/altstadt.tres")
 ## Dämmerung stufenlos: Sonne, Himmel und Umgebungslicht wandern langsam runter.
 func _apply_daylight(clock: float) -> void:
 	var t := _daylight_factor(clock)
+	# Feierabend: Fahrgeschäfte stehen still, das Standpersonal geht heim (Gruppe „nachtruhe")
+	var ruhe := clock < 0.0 and _nachts_geschlossen
+	if ruhe != _nachtruhe:
+		_nachtruhe = ruhe
+		get_tree().call_group("nachtruhe", "nachtruhe", ruhe)
 	var r := 1.0 if _ereignis == "regen" else 0.0
 	if absf(t - _night_t) < 0.01 and absf(r - _regen_t) < 0.01:
 		return
@@ -1648,7 +1665,7 @@ func _quest_done(step: int) -> bool:
 		0: return _folge_geschafft or _tent_stage > 0
 		1: return _tent_stage > 0
 		# Der Dreck im übernommenen Zelt ist weggefegt
-		2: return _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen
+		2: return _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen()
 		3: return _active_count >= 2
 		4: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
 		# Lieferwagen ist da: Pakete liegen vor dem Zelt (oder schon eingeräumt)
@@ -1678,10 +1695,18 @@ const DRECK_PLAETZE := [
 	Vector3(-7, 0, 8), Vector3(-2.5, 0, 7), Vector3(2, 0, 9), Vector3(6.5, 0, 7.5), Vector3(0, 0, 12),
 ]
 
-## Beim Übernehmen im Tutorial: das verlassene Zelt ist verdreckt
+## Abdeckplanen über den Möbeln (Mess.DECKE + Art → Größe in mess.gd)
+const DECKEN_PLAETZE := {
+	10: Vector3(-4.7, 0, -9.15), 11: Vector3(4.7, 0, -9.15), 12: Vector3(6.4, 0, -13.3),
+	13: Vector3(9.95, 0, 2.0), 14: Vector3(-11.2, 0, -3.5),
+}
+
+## Beim Übernehmen im Tutorial: das verlassene Zelt ist verdreckt und zugedeckt
 var _dreck_nachlegen := false
 
 func _dreck_verteilen() -> void:
+	for k: int in DECKEN_PLAETZE:
+		_spawn_mess_at(DECKEN_PLAETZE[k], k)
 	for i in DRECK_PLAETZE.size():
 		var p: Vector3 = DRECK_PLAETZE[i] + Vector3(randf_range(-0.6, 0.6), 0, randf_range(-0.6, 0.6))
 		_spawn_mess_at(p, Mess.DRECK + i % 5)
@@ -2222,37 +2247,54 @@ func _update_delivery(delta: float) -> void:
 				if float(_pending[j].t) <= 0.0:
 					_van_cargo.append({"kind": int(_pending[j].kind), "packs": int(_pending[j].packs)})
 					_pending.remove_at(j)
-			_van_pos = VAN_START
+			_van_pos = VAN_REIN[0]
+			_van_weg = VAN_REIN.slice(1)
+			_van_yaw = PI   # nach Süden, die Allee herunter
 			_van_state = 1
-			_van_show.rpc(true, VAN_START)
+			_van_show.rpc(true, _van_pos, _van_yaw)
 			break
 	if _van_state == 0:
 		return
 	match _van_state:
 		1:
-			var to: Vector3 = VAN_DROP - _van_pos
-			var d := to.length()
-			if d <= 0.4:
+			if _van_fahren(delta):
 				_van_state = 2
-				_van_timer = 1.2
+				_van_timer = 1.6
 				_drop_cargo()
+				_van_abladen.rpc()
 				_van_honk.rpc()
-			else:
-				_van_pos += to.normalized() * minf(VAN_SPEED * delta, d)
 		2:
 			_van_timer -= delta
 			if _van_timer <= 0.0:
 				_van_state = 3
+				_van_weg = VAN_RAUS.duplicate()
 		3:
-			var to2: Vector3 = VAN_END - _van_pos
-			var d2 := to2.length()
-			if d2 <= 0.5:
+			if _van_fahren(delta):
 				_van_state = 0
-				_van_show.rpc(false, VAN_END)
-			else:
-				_van_pos += to2.normalized() * minf(VAN_SPEED * delta, d2)
+				_van_show.rpc(false, _van_pos, _van_yaw)
 	if _van_state != 0:
-		_van_move.rpc(_van_pos)
+		_van_move.rpc(_van_pos, _van_yaw)
+
+## Einen Schritt die Wegpunkte entlang. true = letzter Punkt erreicht.
+## Vor dem Halt (Anfahrt) und beim Wenden fährt er langsam.
+func _van_fahren(delta: float) -> bool:
+	if _van_weg.is_empty():
+		return true
+	var ziel: Vector3 = _van_weg[0]
+	var zu := ziel - _van_pos
+	var d := zu.length()
+	if d <= 0.3:
+		_van_weg.pop_front()
+		return _van_weg.is_empty()
+	var tempo := VAN_SPEED
+	var bis_halt := d if _van_weg.size() == 1 else 99.0
+	if _van_state == 1 and bis_halt < 12.0:
+		tempo = lerpf(VAN_LANGSAM, VAN_SPEED, bis_halt / 12.0)
+	if _van_state == 3 and _van_weg.size() > 2:
+		tempo = VAN_LANGSAM
+	_van_pos += zu / d * minf(tempo * delta, d)
+	_van_yaw = lerp_angle(_van_yaw, atan2(zu.x, zu.z), clampf(delta * 3.5, 0.0, 1.0))
+	return false
 
 func _drop_cargo() -> void:
 	var n := 0
@@ -2267,24 +2309,29 @@ func _drop_cargo() -> void:
 	_melde("MSG_GOODS_DELIVERED", [n])
 
 @rpc("authority", "reliable", "call_local")
-func _van_show(on: bool, pos: Vector3) -> void:
+func _van_show(on: bool, pos: Vector3, yaw: float = PI) -> void:
 	if on:
 		if _van_node == null:
 			_van_node = VAN_SCENE.instantiate()
 			add_child(_van_node)
 		_van_node.position = pos
-		_van_node.rotation.y = PI * 0.5   # Wagen zeigt nach +Z, fährt aber nach +X
+		_van_node.rotation.y = yaw
 	else:
 		if _van_node and is_instance_valid(_van_node):
 			_van_node.queue_free()
 		_van_node = null
 
-@rpc("authority", "unreliable")
-func _van_move(pos: Vector3) -> void:
+@rpc("authority", "unreliable", "call_local")
+func _van_move(pos: Vector3, yaw: float = PI) -> void:
 	if _van_node and is_instance_valid(_van_node):
 		_van_node.position = pos
-		_van_node.rotation.y = PI * 0.5   # Wagen zeigt nach +Z, fährt aber nach +X
+		_van_node.rotation.y = yaw
 
+## Staubwolke beim Abladen (bei allen)
+@rpc("authority", "reliable", "call_local")
+func _van_abladen() -> void:
+	if _van_node and is_instance_valid(_van_node) and _van_node.has_method("abladen"):
+		_van_node.abladen()
 @rpc("authority", "reliable", "call_local")
 func _van_honk() -> void:
 	if _sfx_node:
@@ -2594,6 +2641,7 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 				# 45 s und alle Bestellungen verfielen (Spielbot, Zelt 3).
 				var t := 0.0
 				var mit_essen := false
+				var sorte := 0
 				for gid in s.orders:
 					if _guest_sim.has(gid):
 						var art := int(_guest_sim[gid].okind)
@@ -2604,9 +2652,17 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 							mit_essen = true
 						else:
 							t += DRINK_PREP   # ohne Zapfer zapft der Kellner selbst
+							if sorte == 0:
+								sorte = int(_guest_sim[gid].otype)
 				if mit_essen:
 					t += _food_prep_time()
 				s.timer = t
+				# Selbst zapfen: sichtbar nach hinten ans Fass gehen, dort warten
+				s.state = 4 if sorte > 0 else 2
+				if sorte > 0:
+					s.tgt = _fass_platz(sorte)
+		4:
+			if _staff_move(s, delta):
 				s.state = 2
 		2:
 			s.timer -= delta
@@ -4167,6 +4223,7 @@ func _start_shift() -> void:
 	_clear_messes()
 	_shift_num += 1
 	_bank_mahnen()
+	_muell_stapel = 0   # Müllabfuhr war da
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
@@ -4570,6 +4627,9 @@ func net_clean(id: int) -> void:
 	if putzer == 0:
 		putzer = 1
 	var putz_faktor := BONUS_PUTZEN if _abteilung_von(putzer) == "sauberkeit" else 1.0
+	# Dreck fegen und Planen abziehen dauern ein paar Sekunden (≈ 3 s)
+	if int(_mess_kind.get(id, 0)) >= Mess.DRECK:
+		putz_faktor *= DRECK_TEMPO
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
 		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt
@@ -4579,6 +4639,9 @@ func net_clean(id: int) -> void:
 		_clean_tips += tip
 		_stats.cleaned += 1
 		_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
+		var art_dreck := int(_mess_kind.get(id, 0))
+		if art_dreck >= Mess.DRECK and art_dreck < Mess.DECKE:
+			_muellsack_hinlegen((_messes[id] as Node3D).global_position)
 		_remove_mess.rpc(id)
 
 # ================================================= senkron
@@ -4732,6 +4795,7 @@ func _buero_state() -> Dictionary:
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 		"kredit": _kredit_rest,
 		"bank_naechste": bank_naechste(), "bank_rest": bank_rest(),
+		"muell": _muell_stapel,
 		"tagesziel": _tagesziel,
 		"zelt_name": _zelt_name,
 	}
@@ -4753,6 +4817,8 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_klo_anzeigen()
 	_zeltname_anzeigen()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
+	_theke_anzeigen(buero.get("lic", {}))
+	_muellplatz_zeigen(int(buero.get("muell", 0)))
 	_haelt_deko = buero.get("haelt", {})
 	_haelt_tisch = buero.get("haelt_tisch", {})
 	_haelt_lager = buero.get("haelt_lager", {})
@@ -5067,3 +5133,73 @@ func chef_tageszeilen(mehrere: bool, z: Dictionary) -> Array[String]:
 func net_ziel_neu(ziel: Dictionary) -> void:
 	if _hud:
 		_hud.melde_text(tr("MSG_ZIEL_NEU") % Texte.tagesziel_text(ziel), 0)
+
+# ================================================= Theke nach Lizenzen
+## Fässer, Essensstationen und Ausgabeplätze erscheinen erst mit der Lizenz.
+## Am Anfang: Helles neben den leeren Krügen (und Wasser für Betrunkene).
+## Läuft bei allen (net_meta), Lizenzen aus dem Büro-Zustand.
+const LIZENZ_FUER_BIER := {2: "weizen", 3: "radler", 4: "festbier"}
+const LIZENZ_FUER_ESSEN := {1: "brezn", 2: "sosis", 3: "hendl"}
+
+func _theke_anzeigen(lic: Dictionary) -> void:
+	var stationen := get_node_or_null("Stations")
+	if stationen:
+		for s in stationen.get_children():
+			var frei := true
+			if s is KegStation and LIZENZ_FUER_BIER.has(int(s.beer_type)):
+				frei = bool(lic.get(LIZENZ_FUER_BIER[int(s.beer_type)], false))
+			elif "food_type" in s:
+				frei = bool(lic.get(LIZENZ_FUER_ESSEN.get(int(s.food_type), ""), false))
+			(s as Node3D).visible = frei
+	for a in get_tree().get_nodes_in_group("ausgabe"):
+		var plaetze := a.get_node_or_null("Plaetze")
+		if plaetze == null:
+			continue
+		for p in plaetze.get_children():
+			var art := int(p.get_meta("art", 1))
+			var typ := int(p.get_meta("typ", 1))
+			var frei := true
+			if art == 1 and LIZENZ_FUER_BIER.has(typ):
+				frei = bool(lic.get(LIZENZ_FUER_BIER[typ], false))
+			elif art != 1:
+				frei = bool(lic.get(LIZENZ_FUER_ESSEN.get(typ, ""), false))
+			(p as Node3D).visible = frei
+
+## Wo ein Kellner steht, wenn er selbst zapft: hinter dem Fass der Sorte
+func _fass_platz(sorte: int) -> Vector3:
+	var st := get_node_or_null("Stations")
+	if st:
+		for k in st.get_children():
+			if k is KegStation and int(k.beer_type) == sorte:
+				return Vector3((k as Node3D).global_position.x, 0.1, ZAPFER_POINT.z)
+	return ZAPFER_POINT
+
+# ================================================= Müllsäcke (Zelt putzen)
+## Jeder weggefegte Dreckhaufen wird ein Müllsack (Package, Sorte MUELL). Die
+## Säcke gehören zum Müllplatz vor dem Zelt (scenes/muellplatz.tscn); morgens
+## holt die Müllabfuhr sie ab. Der Putzschritt ist erst fertig, wenn alle
+## Säcke draußen stehen.
+var _muell_erzeugt := 0
+var _muell_entsorgt := 0
+var _muell_stapel := 0
+
+func _muellsack_hinlegen(pos: Vector3) -> void:
+	var id := _pkg_next
+	_pkg_next += 1
+	_muell_erzeugt += 1
+	_add_package.rpc(id, pos, MUELL, 1)
+
+@rpc("any_peer", "reliable", "call_local")
+func net_muell_abgeben() -> void:
+	if not multiplayer.is_server():
+		return
+	_muell_entsorgt += 1
+	_muell_stapel += 1
+	_broadcast_meta()
+
+func _muell_offen() -> bool:
+	return _muell_entsorgt < _muell_erzeugt
+
+func _muellplatz_zeigen(n: int) -> void:
+	for m in get_tree().get_nodes_in_group("muellplatz"):
+		m.anzahl_setzen(n)

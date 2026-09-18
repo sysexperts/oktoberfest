@@ -70,6 +70,7 @@ var _net_yaw: float
 ## Kiste, wenn ein Paket getragen wird
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
 @onready var _carry_teller: EssenTeller = $Head/HoldPoint/CarryTeller
+@onready var _carry_sack: Node3D = get_node_or_null("Head/HoldPoint/CarrySack")
 @onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _emote_label: Label3D = $Emote
 @onready var _namensschild: Label3D = $Namensschild
@@ -423,7 +424,7 @@ func _update_target() -> void:
 	var ich_drin: bool = _world.has_method("im_zelt") and _world.im_zelt(global_position)
 	for node in get_tree().get_nodes_in_group("interactable"):
 		var n3 := node as Node3D
-		if n3 == null:
+		if n3 == null or not n3.is_visible_in_tree():
 			continue
 		if _world.has_method("im_zelt") and _world.im_zelt(n3.global_position) != ich_drin:
 			continue
@@ -528,7 +529,11 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_COMPUTER"
 	if t is Package:
 		return "HINT_PICKUP" if carry_state == 0 else ""
+	if t is Muellplatz:
+		return "HINT_MUELL_ABSTELLEN" if carry_state == 3 and carry_pkg_kind == 3 else ""
 	if t is Lager:
+		if carry_state == 3 and carry_pkg_kind == 3:
+			return "HINT_MUELL_NICHT_LAGER"
 		if carry_state == 3:
 			return "HINT_STORE"
 		if geschlossen and carry_state == 0:
@@ -541,6 +546,10 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_OFFICE" if geschlossen else "HINT_OFFICE_SHIFT"
 	if t is Caravan:
 		return "HINT_SLEEP" if geschlossen else "HINT_SLEEP_SHIFT"
+	if t is Mess and t.ist_plane():
+		return "HINT_PLANE"
+	if t is Mess and t.ist_dreck():
+		return "HINT_FEGEN"
 	if t is Mess:
 		return "HINT_CLEAN"
 	return ""
@@ -679,6 +688,8 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_move_lager.rpc_id(1, _world._lagerregale().find(_current_target))
 				_sfx("pop")
 			# Getragenes Paket abladen
+			elif carry_state == 3 and carry_pkg_kind == 3:
+				pass   # Müll gehört vor die Tür, nicht ins Lager
 			elif carry_state == 3:
 				_world.net_store_package.rpc_id(1, carry_pkg_kind, carry_pkg_amount)
 				carry_state = 0
@@ -686,6 +697,13 @@ func _handle_interaction(delta: float) -> void:
 				carry_pkg_amount = 0
 				carry_fill = 0.0
 				_sfx("ding")
+		elif _current_target is Muellplatz and carry_state == 3 and carry_pkg_kind == 3:
+			_world.net_muell_abgeben.rpc_id(1)
+			carry_state = 0
+			carry_pkg_kind = 0
+			carry_pkg_amount = 0
+			carry_fill = 0.0
+			_sfx("ding")
 		elif _current_target is ZeltVermietung:
 			# Mietdialog: Preis sehen, Zeltnamen eingeben, bestätigen
 			if _world.has_method("open_rent_ui"):
@@ -847,6 +865,12 @@ func _update_carry_visual() -> void:
 	if has_mug:
 		_carry_glass.fuellung = carry_fill
 		_carry_glass.farbe = BEER_COLORS.get(carry_type, BEER_COLORS[0])
+	if _carry_sack:
+		_carry_sack.visible = carry_state == 3 and carry_pkg_kind == 3
+	if carry_state == 3 and carry_pkg_kind == 3:
+		_carry_teller.visible = false
+		_carry_food.visible = false
+		return
 	# Paket wird als große Kiste in der Hand gezeigt
 	if carry_state == 3:
 		_carry_teller.visible = false

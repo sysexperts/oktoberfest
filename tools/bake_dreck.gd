@@ -19,6 +19,8 @@ func _init() -> void:
 	_stroh()
 	_staub()
 	_besen()
+	_plane()
+	_muellsack()
 	print("Dreck gebacken.")
 	quit()
 
@@ -240,3 +242,51 @@ func _besen() -> void:
 			var b := Basis.from_euler(Vector3(_rng.randf_range(-0.08, 0.08), 0, _rng.randf_range(-0.08, 0.08)))
 			_add("borsten", _zyl(0.005, 0.006, 0.055, 5), Transform3D(b, p))
 	_speichern("besen")
+
+## Staubige Abdeckplane über einem Möbelstück. Einheitsgröße 1 × 1 × 1 (Boden
+## bei y = 0) — die Szene skaliert sie auf das Möbel. Oben leicht durchhängend,
+## rundum Falten, unten ausgestellter Saum, Staubflecken obenauf.
+func _plane() -> void:
+	_neu()
+	_rng.seed = 77
+	_mat("plane", Color(0.72, 0.68, 0.58), 0.95)
+	_mat("plane_dunkel", Color(0.6, 0.56, 0.47), 0.95)
+	_mat("staub", Color(0.5, 0.46, 0.4), 1.0)
+	# Oberseite: leicht gewölbt
+	_add("plane", _box(Vector3(1.04, 0.03, 1.04)), _at_y(0.985))
+	_add("plane", _kugel(0.5, 16, 6), Transform3D(Basis().scaled(Vector3(1.0, 0.05, 1.0)), Vector3(0, 0.985, 0)))
+	# Seiten mit Falten: je Seite eine Wand plus Faltenstreifen
+	for seite in 4:
+		var w := seite * PI / 2.0
+		var b := Basis(Vector3.UP, w)
+		var raus := b * Vector3(0, 0, 0.52)
+		_add("plane", _box(Vector3(1.04, 0.98, 0.02)), Transform3D(b, raus + Vector3(0, 0.49, 0)))
+		for i in 7:
+			var x := -0.45 + i * 0.15 + _rng.randf_range(-0.03, 0.03)
+			var tief := _rng.randf_range(0.015, 0.035)
+			var falte := _zyl(tief, tief * 1.8, 0.95, 6)
+			_add("plane_dunkel" if i % 2 else "plane", falte, Transform3D(b, raus + b * Vector3(x, 0.0, 0.0) + Vector3(0, 0.475, 0)))
+		# Saum: unten leicht ausgestellt
+		_add("plane", _box(Vector3(1.1, 0.06, 0.05)), Transform3D(b.rotated(b * Vector3.RIGHT, 0.25), raus * 1.03 + Vector3(0, 0.03, 0)))
+	# Staubflecken
+	for i in 9:
+		_add("staub", _kugel(_rng.randf_range(0.06, 0.12), 8, 4), Transform3D(Basis().scaled(Vector3(1, 0.08, 1)), Vector3(_rng.randf_range(-0.4, 0.4), 1.005, _rng.randf_range(-0.4, 0.4))))
+	_speichern("plane")
+
+func _at_y(y: float) -> Transform3D:
+	return Transform3D(Basis(), Vector3(0, y, 0))
+
+## Voller schwarzer Müllsack mit Knoten
+func _muellsack() -> void:
+	_neu()
+	_rng.seed = 88
+	_mat("sack", Color(0.08, 0.08, 0.09), 0.55)
+	_mat("sack_glanz", Color(0.13, 0.13, 0.15), 0.4)
+	_add("sack", _kugel(0.3, 16, 10), Transform3D(Basis().scaled(Vector3(1.0, 1.15, 0.9)), Vector3(0, 0.33, 0)))
+	for i in 6:
+		var w := i * TAU / 6.0 + _rng.randf_range(-0.2, 0.2)
+		_add("sack_glanz", _kugel(0.12, 10, 6), Transform3D(Basis().scaled(Vector3(1, 1.4, 0.6)), Vector3(sin(w) * 0.22, 0.3 + _rng.randf_range(-0.08, 0.1), cos(w) * 0.2)))
+	# Hals und Knoten
+	_add("sack", _zyl(0.04, 0.09, 0.14, 12), _at_y(0.72))
+	_add("sack", _kugel(0.06, 10, 6), _at_y(0.8))
+	_speichern("muellsack")

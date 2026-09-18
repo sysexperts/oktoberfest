@@ -86,6 +86,10 @@ class Lauf extends Node:
 		sp.look_at(Vector3(0, 0.0, 2), Vector3.UP)
 		await _warten(1.0)
 		_bild(dir + "/tut_dreck.png")
+		sp.global_position = Vector3(-1, 0.1, -3)
+		sp.look_at(Vector3(-3, 0.5, -10), Vector3.UP)
+		await _warten(0.6)
+		_bild(dir + "/tut_planen.png")
 		# nah an einem Haufen, mit Besen
 		var ms: Array = gm._messes.values()
 		for i in 5:
@@ -98,12 +102,23 @@ class Lauf extends Node:
 			_bild(dir + "/tut_haufen_%d.png" % i)
 		# alles wegfegen
 		for id in gm._messes.keys().duplicate():
-			for k in 60:
+			for k in 400:
 				if not gm._messes.has(id):
 					break
 				gm.net_clean(id)
 			await _warten(0.05)
 		await _warten(1.0)
+		_check("Noch Säcke offen: Schritt bleibt 2", gm._quest_step == 2, "Schritt %d, Säcke %d" % [gm._quest_step, gm._muell_erzeugt])
+		# Säcke zum Müllplatz tragen
+		for id in gm._packages.keys().duplicate():
+			if gm._packages[id].kind == 3:
+				gm.net_pickup_package(id)
+				gm.net_muell_abgeben()
+		await _warten(1.0)
+		sp.global_position = Vector3(-3, 0.1, 19.5)
+		sp.look_at(Vector3(-5, 0.3, 16.3), Vector3.UP)
+		await _warten(0.6)
+		_bild(dir + "/tut_muellplatz.png")
 		_check("Sauber: Schritt 3, er geht ins Büro", gm._quest_step == 3 and chef.unterwegs(), "Schritt %d" % gm._quest_step)
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit()

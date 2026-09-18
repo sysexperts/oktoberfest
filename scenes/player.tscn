@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
 [ext_resource type="PackedScene" path="res://scenes/essen_teller.tscn" id="4_teller"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/besen.tres" id="5_besen"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/muellsack.tres" id="6_sack"]
 
 [sub_resource type="CapsuleShape3D" id="Cap"]
 radius = 0.35
@@ -78,3 +79,8 @@ visible = false
 visible = false
 mesh = SubResource("Food")
 material_override = SubResource("MatFood")
+
+[node name="CarrySack" type="MeshInstance3D" parent="Head/HoldPoint"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, -0.45, -0.1)
+visible = false
+mesh = ExtResource("6_sack")

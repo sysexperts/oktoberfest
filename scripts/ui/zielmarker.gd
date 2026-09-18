@@ -58,8 +58,13 @@ func ziel_suchen() -> Node3D:
 				return schild
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
 		2:
-			# Zelt putzen: der nächste Dreckhaufen
-			return _naechstes(sp, func(n: Node) -> bool: return n is Mess and n.ist_dreck())
+			# Zelt putzen: Sack in der Hand → Müllplatz, sonst Plane/Dreck, dann liegende Säcke
+			if sp.carry_state == 3 and sp.carry_pkg_kind == 3:
+				return _naechstes(sp, func(n: Node) -> bool: return n is Muellplatz)
+			var dreck := _naechstes(sp, func(n: Node) -> bool: return n is Mess and n.ist_dreck())
+			if dreck:
+				return dreck
+			return _naechstes(sp, func(n: Node) -> bool: return n is Package and n.kind == 3)
 		3, 4, 10, 11, 12, 13:
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
 		5:

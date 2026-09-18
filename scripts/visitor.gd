@@ -81,6 +81,9 @@ func _go_extra() -> void:
 		_go_stand()
 
 func _process(delta: float) -> void:
+	if _flug_t >= 0.0:
+		_fliegen(delta)
+		return
 	_update_lod(delta)
 	if _crowd == null:
 		return
@@ -156,3 +159,52 @@ func _setup_idle_motion() -> void:
 	_idle_motion = IdleMotion.new()
 	_idle_motion.name = "IdleMotion"
 	_figur.skelett.add_child(_idle_motion)
+
+# ------------------------------------------------------------ Umgefahren
+## Vom Lieferwagen erwischt (scripts/lieferwagen.gd): fliegt im Bogen und dreht
+## sich, bleibt kurz liegen, rappelt sich auf und bummelt weiter.
+const SCHWERKRAFT := 20.0
+var _flug := Vector3.ZERO
+var _flug_t := -1.0
+var _dreh := Vector3.ZERO
+var _liegt := 0.0
+
+func fliegt() -> bool:
+	return _flug_t >= 0.0
+
+func geschleudert(tempo: Vector3) -> void:
+	_flug = tempo
+	_flug_t = 0.0
+	_liegt = 0.0
+	_dreh = Vector3(randf_range(6.0, 10.0), randf_range(-3.0, 3.0), randf_range(-5.0, 5.0))
+	_figur.rennen(1.6)
+
+func _fliegen(delta: float) -> void:
+	_flug_t += delta
+	if _liegt > 0.0:
+		_liegt -= delta
+		if _liegt <= 0.0:
+			# aufstehen und weiter
+			_model.rotation = Vector3(0, deg_to_rad(model_yaw_offset), 0)
+			_model.position.y = _base_y
+			position.y = 0.0
+			_flug_t = -1.0
+			_state = ""
+			_pause = 0.0
+			_go_walk()
+		return
+	_flug.y -= SCHWERKRAFT * delta
+	position += _flug * delta
+	_model.rotation += _dreh * delta
+	if position.y <= 0.0 and _flug.y < 0.0:
+		position.y = 0.0
+		var tempo := Vector2(_flug.x, _flug.z).length()
+		if tempo > 4.0:
+			# einmal aufhüpfen
+			_flug = Vector3(_flug.x * 0.4, absf(_flug.y) * 0.3, _flug.z * 0.4)
+			return
+		# liegen bleiben (flach auf dem Rücken)
+		_model.rotation = Vector3(-PI / 2, _model.rotation.y, 0)
+		_model.position.y = _base_y + 0.2
+		_figur.stehen()
+		_liegt = 2.5
