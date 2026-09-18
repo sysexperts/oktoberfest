@@ -1,11 +1,17 @@
 class_name Mess
 extends Node3D
-## Yerdeki kir (kusmuk). Oyuncu E ile temizler. Host otoriter; id ile senkron.
+## Yerdeki kir. Oyuncu E ile temizler. Host otoriter; id ile senkron.
+## kind: 0 = Erbrochenes, 1 = Urin (E6), ab 2 = Dreck im verlassenen Zelt
+## (Tutorial „Putze das Zelt") — 2 + Nummer des Modells unter „Dreck".
+
+const DRECK := 2
 
 var mess_id := -1
-var kind := 0    # 0 = Erbrochenes, 1 = Urin (E6)
+var kind := 0
 
 @onready var _disc: MeshInstance3D = $Disc
+@onready var _dreck: Node3D = $Dreck
+@onready var _label: Label3D = $Label
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -17,8 +23,22 @@ func set_kind(k: int) -> void:
 	if is_inside_tree():
 		_apply_kind()
 
+func ist_dreck() -> bool:
+	return kind >= DRECK
+
 func _apply_kind() -> void:
 	if _disc == null:
+		return
+	if ist_dreck():
+		_disc.visible = false
+		_dreck.visible = true
+		var modelle := _dreck.get_children()
+		for i in modelle.size():
+			(modelle[i] as Node3D).visible = i == (kind - DRECK) % modelle.size()
+		_dreck.rotation.y = float(mess_id) * 2.4
+		_dreck.scale = Vector3.ONE * 1.5   # Höhe (0,045 über dem Boden) steht in mess.tscn
+		# Kein Schild über jedem Haufen — der Hinweis am Fadenkreuz reicht
+		_label.visible = false
 		return
 	var m := _disc.material_override as StandardMaterial3D
 	if m == null:
@@ -31,6 +51,10 @@ func _apply_kind() -> void:
 
 ## Temizlik ilerlemesi (0=temiz değil .. 1=temiz) -> görsel küçülür/solar.
 func apply_progress(p: float) -> void:
+	if ist_dreck():
+		var d := lerpf(1.5, 0.4, clampf(p, 0.0, 1.0))
+		_dreck.scale = Vector3(d, d, d)
+		return
 	if _disc == null:
 		return
 	var s := lerpf(1.0, 0.25, clampf(p, 0.0, 1.0))

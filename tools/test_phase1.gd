@@ -180,12 +180,12 @@ class Lauf extends Node:
 
 		print("  -- Geführtes Tutorial (2.3)")
 		gm._check_quest()
-		_check("Schritt 2 (Tische) nach Zelt + 1 Tisch", gm._quest_step == 2, "Schritt=%d" % gm._quest_step)
+		_check("Schritt 2 (Zelt putzen) nach dem Mieten", gm._quest_step == 2, "Schritt=%d" % gm._quest_step)
 		var marker := gm.get_node_or_null("Zielmarker")
 		_check("Zielmarker in der Szene", marker != null, "")
 		if marker:
 			var ziel: Node = marker.ziel_suchen()
-			_check("Marker zeigt aufs Wiesenbüro (oder den Wiesnchef dort)", ziel is OfficeDesk or (ziel != null and ziel.has_method("ist_wiesnchef")), str(ziel))
+			_check("Marker zeigt auf Wiesnchef oder Dreck", ziel is Mess or (ziel != null and ziel.has_method("ist_wiesnchef")), str(ziel))
 		# Der Haken für "Zelt mieten" darf noch sichtbar sein — Überspringen darf
 		# nur keinen neuen auslösen.
 		var haken_vorher: int = hud._erledigt_token

@@ -3,10 +3,13 @@ extends Node3D
 ## Zelts (scenes/tent.tscn) in Rot. Die Farben tauscht `tausch` beim Start:
 ## Material unseres Zelts → Material für Huber. Im Editor ergänzbar.
 
+const Sichtweite := preload("res://scripts/sichtweite.gd")
+
 @export var tausch: Dictionary[Material, Material] = {}
 
 func _ready() -> void:
 	add_to_group("huber_zelt")
+	Sichtweite.anwenden(self)
 	for m in find_children("*", "MeshInstance3D", true, false):
 		var mi := m as MeshInstance3D
 		if mi.material_override and tausch.has(mi.material_override):

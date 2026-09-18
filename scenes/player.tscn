@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
 [ext_resource type="PackedScene" path="res://scenes/essen_teller.tscn" id="4_teller"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/besen.tres" id="5_besen"]
 
 [sub_resource type="CapsuleShape3D" id="Cap"]
 radius = 0.35
@@ -42,6 +43,11 @@ modulate = Color(1, 0.95, 0.8, 1)
 outline_modulate = Color(0.1, 0.06, 0.02, 1)
 font_size = 44
 outline_size = 14
+
+[node name="Besen" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.02, -1)
+visible = false
+mesh = ExtResource("5_besen")
 
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)

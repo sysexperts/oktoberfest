@@ -22,8 +22,8 @@ class Lauf extends Node:
 		var sp: Node3D = gm._players_nodes.get(1)
 		var dir := OS.get_environment("SHOT_DIR")
 		print("Start: neues ", chef.hat_neues(), " bei ", chef.global_position)
-		chef.losgehen()
-		for s in [1, 2, 4, 6, 7, 9, 13]:
+
+		for s in [1, 2, 3, 5, 7, 8, 10, 14]:
 			gm._quest_step = s
 			var t := 0.0
 			await _warten(0.2)

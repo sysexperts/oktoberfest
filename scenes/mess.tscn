@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/mess.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/laub.tres" id="3_laub"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/scherben.tres" id="4_scherben"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/papier.tres" id="5_papier"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/stroh.tres" id="6_stroh"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/staub.tres" id="7_staub"]
 
 [sub_resource type="CylinderMesh" id="Disc"]
 top_radius = 0.5
@@ -30,3 +35,27 @@ modulate = Color(0.7, 0.9, 0.3, 1)
 text = "WORLD_MESS"
 script = ExtResource("2_wt")
 schluessel = "WORLD_MESS"
+
+[node name="Dreck" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
+visible = false
+
+[node name="Laub" type="MeshInstance3D" parent="Dreck"]
+visible = false
+mesh = ExtResource("3_laub")
+
+[node name="Scherben" type="MeshInstance3D" parent="Dreck"]
+visible = false
+mesh = ExtResource("4_scherben")
+
+[node name="Papier" type="MeshInstance3D" parent="Dreck"]
+visible = false
+mesh = ExtResource("5_papier")
+
+[node name="Stroh" type="MeshInstance3D" parent="Dreck"]
+visible = false
+mesh = ExtResource("6_stroh")
+
+[node name="Staub" type="MeshInstance3D" parent="Dreck"]
+visible = false
+mesh = ExtResource("7_staub")

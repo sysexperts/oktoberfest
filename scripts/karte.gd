@@ -5,6 +5,7 @@ extends Node3D
 ## Ohne gespeicherte Karte startet der Server mit res://daten/karte.json.
 ## Einträge: {p: Szenenpfad, x, y, z, r: Drehung (rad), s: Größe, sx: Breite}
 
+const Sichtweite := preload("res://scripts/sichtweite.gd")
 const Katalog := preload("res://scripts/karten_katalog.gd")
 const Figuren := preload("res://scripts/figuren.gd")
 ## Wohnwagen sind Pflicht: ohne einen kann niemand schlafen und der Tag endet nie.
@@ -206,6 +207,7 @@ func _eintrag_setzen(n: int, e: Dictionary) -> void:
 		figur.transform = platz.transform
 		k.add_child(figur)
 	add_child(k)
+	Sichtweite.anwenden(k)
 	if figur_von(k):
 		figur_von(k).stehen()
 

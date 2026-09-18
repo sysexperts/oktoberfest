@@ -57,19 +57,22 @@ func ziel_suchen() -> Node3D:
 			if schild:
 				return schild
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
-		2, 3, 9, 10, 11, 12:
+		2:
+			# Zelt putzen: der nächste Dreckhaufen
+			return _naechstes(sp, func(n: Node) -> bool: return n is Mess and n.ist_dreck())
+		3, 4, 10, 11, 12, 13:
 			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
-		4:
+		5:
 			# Lieferwagen unterwegs — schon zeigen, wohin die Pakete später gehören
 			return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-		5:
+		6:
 			if sp.carry_state == 3:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
 			var paket := _naechstes(sp, func(n: Node) -> bool: return n is Package)
 			return paket if paket else _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-		6:
-			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
 		7:
+			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
+		8:
 			if geschlossen:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Caravan)
 			return _ziel_bedienen(sp)

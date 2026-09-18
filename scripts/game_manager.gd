@@ -900,13 +900,18 @@ func _load_game() -> bool:
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
 	_folge_geschafft = bool(d.get("folge", false))
+	_dreck_nachlegen = true   # Flecken werden nicht gespeichert — im Putzschritt neu auslegen
 	# Alte Stände: Schritte ab 3 sind durch die zwei neuen Liefer-Schritte eins weiter
 	var quest_alt := int(d.get("quest_version", 1))
 	if quest_alt < 2 and _quest_step >= 3:
 		_quest_step += 1
 	# Version 3: Schritt 0 (dem Wiesnchef folgen) kam vorn dazu — der ist in alten
 	# Spielständen längst gelaufen, also rücken alle Schritte eins weiter.
+	if quest_alt < 4 and quest_alt >= 3 and _quest_step >= 2:
+		_quest_step += 1
 	if quest_alt < 3:
+		if _quest_step >= 1:
+			_quest_step += 1   # Putzschritt (Version 4)
 		_quest_step += 1
 		_folge_geschafft = true
 	_ever_artist = bool(d.get("ever_artist", false))
@@ -1187,7 +1192,7 @@ func _client_ready(version: String) -> void:
 	# Namen, Farben und Abteilungen der anderen (Lobby)
 	_net_spieler_info.rpc_id(sender, _spieler_info)
 	for mid in _messes.keys():
-		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position)
+		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position, int(_mess_kind.get(mid, 0)))
 	for gid in _guest_sim.keys():
 		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos, str(_guest_sim[gid].get("typ", "")))
 	for sid in _staff_sim.keys():
@@ -1347,6 +1352,8 @@ func net_book_tent(zelt_name := "") -> void:
 	_zelt_name = zeltname_pruefen(zelt_name)
 	_apply_tent()
 	_melde("MSG_TENT_RENTED", [_zelt_name if _zelt_name != "" else "TENT_NAME_DEFAULT"], 2)
+	if tutorial_active() and _quest_step <= 2:
+		_dreck_verteilen()
 	_broadcast_meta()
 
 ## Mietdialog öffnen (vom Schild und aus dem Wiesenbüro)
@@ -1627,31 +1634,57 @@ func _reserve_ok(cost: int) -> bool:
 # ---- Tutorial ----
 ## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
 ## übersetzt wird beim Spieler — gesendet wird nur die Schrittnummer.
-const QUEST_COUNT := 13
-## Seit Version 3 führt Schritt 0 hinter dem Wiesnchef zum Zelt (Einleitung).
+const QUEST_COUNT := 14
+## Seit Version 4 gibt es Schritt 2 „Putze das Zelt" — ältere Stände ab Schritt 2
+## rücken eins weiter.
+## Seit Version 3 führt Schritt 0 über das Gespräch mit dem Wiesnchef (Einleitung).
 ## Seit Version 2 gibt es die Schritte „auf den Lieferwagen warten" und „Pakete
 ## ins Regal räumen" — ältere Spielstände ab Schritt 3 rücken eins weiter.
-const QUEST_VERSION := 3
+const QUEST_VERSION := 4
 
 func _quest_done(step: int) -> bool:
 	match step:
-		# Dem Wiesnchef zum Zelteingang gefolgt (oder das Zelt schon gemietet)
+		# Dem Wiesnchef „Ja" gesagt (oder das Zelt schon gemietet)
 		0: return _folge_geschafft or _tent_stage > 0
 		1: return _tent_stage > 0
-		2: return _active_count >= 2
-		3: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
+		# Der Dreck im übernommenen Zelt ist weggefegt
+		2: return _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen
+		3: return _active_count >= 2
+		4: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
 		# Lieferwagen ist da: Pakete liegen vor dem Zelt (oder schon eingeräumt)
-		4: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
+		5: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
 		# alle Pakete eingeräumt
-		5: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
-		6: return _shift_num >= 1
-		7: return _served >= 1 or _quest_served_once
-		8: return _shift_num >= 1 and _phase == Phase.INTERMISSION
-		9: return _has_staff(ROLE_KELLNER)
-		10: return _lic.values().has(true)
-		11: return _has_toilet
-		12: return _ever_artist
+		6: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
+		7: return _shift_num >= 1
+		8: return _served >= 1 or _quest_served_once
+		9: return _shift_num >= 1 and _phase == Phase.INTERMISSION
+		10: return _has_staff(ROLE_KELLNER)
+		11: return _lic.values().has(true)
+		12: return _has_toilet
+		13: return _ever_artist
 	return false
+
+## Liegt noch Dreck aus dem verlassenen Zelt herum? (Mess.DRECK)
+func _dreck_uebrig() -> bool:
+	for k in _mess_kind.values():
+		if int(k) >= Mess.DRECK:
+			return true
+	return false
+
+## Wo im übernommenen Zelt Dreck liegt (Boden, freie Fläche vor der Theke)
+const DRECK_PLAETZE := [
+	Vector3(-8, 0, -4), Vector3(-4.5, 0, -2.5), Vector3(0, 0, -3.5), Vector3(4.5, 0, -2), Vector3(8, 0, -4.5),
+	Vector3(-9, 0, 2), Vector3(-5, 0, 3.5), Vector3(-1, 0, 1.5), Vector3(3, 0, 3), Vector3(7.5, 0, 1.5),
+	Vector3(-7, 0, 8), Vector3(-2.5, 0, 7), Vector3(2, 0, 9), Vector3(6.5, 0, 7.5), Vector3(0, 0, 12),
+]
+
+## Beim Übernehmen im Tutorial: das verlassene Zelt ist verdreckt
+var _dreck_nachlegen := false
+
+func _dreck_verteilen() -> void:
+	for i in DRECK_PLAETZE.size():
+		var p: Vector3 = DRECK_PLAETZE[i] + Vector3(randf_range(-0.6, 0.6), 0, randf_range(-0.6, 0.6))
+		_spawn_mess_at(p, Mess.DRECK + i % 5)
 
 func _has_staff(role: int) -> bool:
 	for s in _staff_sim.values():
@@ -3665,8 +3698,11 @@ func _process(delta: float) -> void:
 		_leer_pruefen(delta)
 		return
 	_leer_seit = 0.0
-	_folge_pruefen()
 	_ziel_senden(delta)
+	if _dreck_nachlegen and _messes_container:
+		_dreck_nachlegen = false
+		if _quest_step == 2 and _tent_stage > 0 and not _dreck_uebrig():
+			_dreck_verteilen()
 	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
 	if not _abstimmung.is_empty():
 		var vorher := ceili(float(_abstimmung.rest))
@@ -4517,6 +4553,7 @@ func _remove_mess(id: int) -> void:
 			m.queue_free()
 		_messes.erase(id)
 	_mess_clean.erase(id)
+	_mess_kind.erase(id)
 
 func _clear_messes() -> void:
 	for mid in _messes.keys().duplicate():
@@ -4884,28 +4921,14 @@ func net_kino_start(mehrere: bool) -> void:
 	if kino and kino.has_method("starten"):
 		kino.starten(mehrere)
 
-## Mission 1: dem Wiesnchef zum Zelteingang folgen. Erfüllt, sobald ein Spieler
-## am Eingang steht (Mietschild). Läuft nur auf dem Server.
-func _folge_pruefen() -> void:
-	if _folge_geschafft or _quest_step > 0:
-		return
-	var schild := get_node_or_null("ZeltVermietung") as Node3D
-	if schild == null:
-		_folge_geschafft = true
-		return
-	for p: Node in _players_nodes.values():
-		if is_instance_valid(p) and (p as Node3D).global_position.distance_to(schild.global_position) < 9.0:
-			_folge_geschafft = true
-			if _check_quest():
-				_broadcast_meta()
-			return
-
-## Wiesnchef: nach dem Gespräch im Büro bei allen zum Zelt loslaufen
+## Wiesnchef im Büro: Ein Spieler hat „Ja, ich übernehm das Zelt" gesagt —
+## Schritt 0 ist erledigt, der Rundgang schickt ihn zum Zelt (bei allen).
 @rpc("any_peer", "reliable", "call_local")
-func net_chef_los() -> void:
-	var chef := get_tree().get_first_node_in_group("wiesnchef")
-	if chef and chef.has_method("losgehen"):
-		chef.losgehen()
+func net_chef_zusage() -> void:
+	if not multiplayer.is_server() or _folge_geschafft:
+		return
+	_folge_geschafft = true
+	_broadcast_meta()
 
 # ================================================= Tagesziele + Sepps Schulden
 ## Wie viele Bankraten (Wirtschaft.BANK_RATEN) schon bezahlt sind

@@ -10,17 +10,18 @@ extends Node3D
 ## er jeden Tag das Tagesziel und wie es um Sepps Schulden steht.
 ##
 ## Alles läuft bei jedem Spieler lokal nach dem Tutorialschritt, den der Server
-## an alle schickt — so steht er überall an derselben Stelle. Nur das erste
-## Loslaufen am Büro geht über game_manager.net_chef_los an alle.
+## an alle schickt — so steht er überall an derselben Stelle. Nur das „Ja" im
+## ersten Gespräch geht über game_manager.net_chef_zusage an den Server.
 
 const Figuren := preload("res://scripts/figuren.gd")
+const Texte := preload("res://scripts/ui/texte.gd")
 const TEMPO := 1.7
 
 ## Welche Figur (Index in Figuren.ALLE)
 @export var figur_nr := 2
 @export var rundgang: NodePath = ^"../Rundgang"
 ## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
-@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3"]
+@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_FRAGE"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
 
 @onready var _ausruf: Label3D = get_node_or_null("Ausruf")
@@ -93,22 +94,25 @@ func ansprechen() -> void:
 	if dialog == null or not ansprechbar():
 		return
 	var welt := _welt()
-	var zeilen: Array[String] = zeilen_spaeter
-	var danach := Callable()
+	var mehrere := multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0
+	var a := "_IHR" if mehrere else "_DU"
+	# zum Sprecher drehen und gestikulieren
+	var sp := welt._players_nodes.get(multiplayer.get_unique_id()) as Node3D if welt and "_players_nodes" in welt else null
+	if sp:
+		var zu := sp.global_position - global_position
+		rotation.y = atan2(zu.x, zu.z)
+	geste()
+	var wer := String(TranslationServer.translate("WIESNCHEF_NAME"))
 	if _station == null and _schritt() == 0:
-		zeilen = zeilen_start
-		danach = func() -> void:
-			if welt and welt.has_method("net_chef_los"):
-				welt.net_chef_los.rpc()
-			else:
-				losgehen()
-	elif _station and not _station.zeilen.is_empty() and not _gehoert.has(_station):
+		_frage_stellen(dialog, welt, wer, a)
+		return
+	var zeilen: Array[String] = zeilen_spaeter
+	if _station and not _station.zeilen.is_empty() and not _gehoert.has(_station):
 		zeilen = _station.zeilen
 		_gehoert[_station] = true
 	elif _station and not _station.zeilen.is_empty() and not _tagesbericht_da():
 		# schon gehört: die letzte Zeile als Erinnerung
 		zeilen = [_station.zeilen[-1]]
-	var mehrere := multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0
 	var texte: Array[String] = []
 	if zeilen == zeilen_spaeter and _tagesbericht_da():
 		# Nach dem Tutorial: heutiges Ziel und Sepps Schulden
@@ -116,16 +120,35 @@ func ansprechen() -> void:
 		_gehoert_tag = _tag()
 	else:
 		for k in zeilen:
-			texte.append(String(TranslationServer.translate(k + ("_IHR" if mehrere else "_DU"))))
-	# zum Sprecher drehen und gestikulieren
-	var sp := welt._players_nodes.get(multiplayer.get_unique_id()) as Node3D if welt and "_players_nodes" in welt else null
-	if sp:
-		var zu := sp.global_position - global_position
-		rotation.y = atan2(zu.x, zu.z)
-	geste()
-	dialog.zeigen(String(TranslationServer.translate("WIESNCHEF_NAME")), texte, danach)
+			texte.append(String(TranslationServer.translate(k + a)))
+	dialog.zeigen(wer, texte, Callable())
 
-## Nach dem ersten Gespräch: zur ersten Station (Zelteingang) vorlaufen
+## Erstes Gespräch im Büro: Lage erklären (Dreck, Schulden) und fragen, ob man
+## Sepps Zelt übernimmt. Ja → net_chef_zusage (Schritt 0 erledigt, er geht vor),
+## Nein → er ist traurig, man kann jederzeit wiederkommen.
+func _frage_stellen(dialog: Node, welt: Node, wer: String, a: String) -> void:
+	var schulden := 0
+	if welt and "_hud" in welt and welt._hud:
+		schulden = int(welt._hud._zustand.get("bank_rest", 0))
+	var texte: Array[String] = []
+	for k in zeilen_start:
+		var t := String(TranslationServer.translate(k + a))
+		texte.append(t % Texte.euro(schulden) if t.contains("%s") else t)
+	var wahl: Array[String] = [String(TranslationServer.translate("CHEF_WAHL_JA" + a)),
+		String(TranslationServer.translate("CHEF_WAHL_NEIN" + a))]
+	dialog.zeigen(wer, texte, func(i: int) -> void:
+		var antwort: Array[String] = []
+		if i == 0:
+			antwort.append(String(TranslationServer.translate("CHEF_JA" + a)))
+			if welt and welt.has_method("net_chef_zusage"):
+				welt.net_chef_zusage.rpc_id(1)
+		else:
+			antwort.append(String(TranslationServer.translate("CHEF_NEIN_1" + a)))
+			antwort.append(String(TranslationServer.translate("CHEF_NEIN_2" + a)))
+		geste()
+		dialog.zeigen(wer, antwort, Callable()), wahl)
+
+## Zur ersten Station (Zelteingang) vorlaufen — läuft sonst über den Tutorialschritt
 func losgehen() -> void:
 	if _station == null:
 		_gehe_zu(_station_fuer(1), false)

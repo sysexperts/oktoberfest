@@ -73,6 +73,9 @@ var _net_yaw: float
 @onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _emote_label: Label3D = $Emote
 @onready var _namensschild: Label3D = $Namensschild
+## Besen beim Fegen (nur solange man putzt, schwingt hin und her)
+@onready var _besen: Node3D = get_node_or_null("Besen")
+var _fegt_bis := 0.0
 ## Abteilung, die dieser Spieler leitet ("" = keine) — aus der Lobby (GameManager._spieler_info)
 var abteilung := ""
 const ABT_SYMBOL := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
@@ -270,6 +273,7 @@ func _physics_process(delta: float) -> void:
 		global_position = global_position.lerp(_net_pos, t)
 		rotation.y = lerp_angle(rotation.y, _net_yaw, t)
 	_update_carry_visual()
+	_besen_zeigen()
 	_update_animation(delta)
 
 ## Figur aus dem Warteraum einsetzen (scripts/figuren.gd), Animationen neu starten.
@@ -726,6 +730,7 @@ func _handle_interaction(delta: float) -> void:
 	if Input.is_action_pressed("interact") and _current_target is Mess:
 		if _world.has_method("net_clean"):
 			_world.net_clean.rpc_id(1, (_current_target as Mess).mess_id)
+			_fegt_bis = Time.get_ticks_msec() / 1000.0 + 0.2
 			_sfx_loop("scrub")
 
 func _has_full_mug() -> bool:
@@ -877,3 +882,15 @@ func geste(jubel := false) -> void:
 		figur.tanzen(0.8)
 	_cur_anim = "geste"
 	_geste_bis = Time.get_ticks_msec() / 1000.0 + 2.6
+
+## Besen: sichtbar, solange man putzt; kehrt vor den Füßen hin und her
+func _besen_zeigen() -> void:
+	if _besen == null:
+		return
+	var t := Time.get_ticks_msec() / 1000.0
+	var an := _is_local and t < _fegt_bis
+	_besen.visible = an
+	if an:
+		var s := sin(t * 9.0)
+		_besen.position = Vector3(0.3 + s * 0.18, 0.02, -1.0)
+		_besen.rotation.y = s * 0.35

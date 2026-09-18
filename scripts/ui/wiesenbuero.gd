@@ -37,8 +37,8 @@ const WARE := {1: ["Bier", "🍺", "GOODS_BEER"], 2: ["Zutaten", "🥨", "GOODS_
 const PAKETE := [1, 5, 10]
 ## Tutorialschritt -> [Reiter, Zeile]; Schritte wie in GameManager._quest_done.
 const TUTORIAL_ZIEL := {
-	1: [0, "ZeltMieten"], 2: [0, "TischStellen"], 3: [4, "Bier"],
-	9: [2, "Kellner"], 10: [1, "LizenzWeizen"], 11: [0, "Toilette"], 12: [3, "Strassenmusiker"],
+	1: [0, "ZeltMieten"], 3: [0, "TischStellen"], 4: [4, "Bier"],
+	10: [2, "Kellner"], 11: [1, "LizenzWeizen"], 12: [0, "Toilette"], 13: [3, "Strassenmusiker"],
 }
 
 @onready var _reiter: TabContainer = %Reiter
