@@ -192,7 +192,7 @@ class Lauf extends Node:
 		gm.net_skip_tutorial.rpc_id(1)
 		await _frames(5)
 		_check("Überspringen beendet Tutorial", not gm.tutorial_active(), "Schritt=%d" % gm._quest_step)
-		_check("Aufgabe ausgeblendet", not hud.get_node("%Aufgabe").visible, "")
+		_check("Tutorialkarte weg (Karte zeigt Tagesziel/Schulden)", not hud.get_node("%Aufgabe").visible or not hud.get_node("%AufgabeSkip").visible, "")
 		_check("kein Erledigt-Haken fürs Überspringen", hud._erledigt_token == haken_vorher,
 			"%d -> %d" % [haken_vorher, hud._erledigt_token])
 		if marker:
