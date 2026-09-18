@@ -215,6 +215,7 @@ func _reiter_lizenzen() -> void:
 			_einzelkauf(z, "BTN_BUY", int(_gm.LIC_COST[key]), "" if frei or not spaet else tr("WHY_LIC_LATE"))
 
 func _reiter_personal() -> void:
+	_team_liste()
 	var stufen := {1: [], 2: [], 3: [], 4: []}
 	var eigen := {1: [], 2: [], 3: [], 4: []}
 	for e: Array in _z.get("staff", []):
@@ -255,6 +256,38 @@ func _reiter_personal() -> void:
 			grund_aufstufen = _kauf_grund(kosten)
 			z.knopf(1, tr("BTN_UPGRADE") % Texte.euro(kosten), grund_aufstufen != "")
 		z.grund(grund_einstellen if grund_einstellen != "" else grund_aufstufen)
+
+## Teamliste: jeder Mitarbeiter mit Name, Eigenschaft, Lohn und Anliegen.
+## Einträge aus GameManager._buero_state "staff": [Rolle, Stufe, Eigenschaft, Name,
+## seit, Anliegen, ID, Lohn, unzufrieden, Energie]. Eine Zeile je Mitarbeiter
+## (scenes/ui/angebot.tscn), Knöpfe: Lohn erhöhen / halten, Entlassen.
+const ANGEBOT := preload("res://scenes/ui/angebot.tscn")
+
+func _team_liste() -> void:
+	var team := %Team
+	for c in team.get_children():
+		c.queue_free()
+	var liste: Array = _z.get("staff", [])
+	%TeamTitel.text = tr("TEAM_TITEL") % liste.size()
+	for e: Array in liste:
+		if e.size() < 10:
+			continue
+		var rolle := int(e[0])
+		var sid := int(e[6])
+		var anliegen := str(e[5])
+		var z := ANGEBOT.instantiate()
+		team.add_child(z)
+		var d: Array = PERSONAL.get(rolle, ["", "", "", ""])
+		var info := tr("TEAM_INFO") % [tr("EIG_" + str(e[2]).to_upper()), int(e[1]), int(e[4]), Texte.euro(int(e[7]))]
+		if bool(e[8]):
+			info += "  ·  " + tr("TEAM_UNZUFRIEDEN")
+		z.setze("%s %s — %s" % [d[1], str(e[3]), tr(d[2])], info)
+		if anliegen != "":
+			z.knopf(0, tr("TEAM_HALTEN" if anliegen == "huber" else "TEAM_LOHN"))
+			z.grund(tr("TEAM_ANLIEGEN_" + anliegen.to_upper()))
+		z.knopf(1, tr("TEAM_ENTLASSEN"))
+		z.gedrueckt.connect(func(i: int) -> void:
+			_rpc("net_personal_lohn" if i == 0 else "net_personal_entlassen", [sid]))
 
 func _reiter_kuenstler() -> void:
 	var gebucht := int(_z.get("artist", 0))

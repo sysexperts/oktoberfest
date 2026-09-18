@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
+[ext_resource type="ArrayMesh" path="res://assets/moebel/aktenschrank.tres" id="2_m"]
+
+[node name="Aktenschrank" type="Node3D"]
+script = ExtResource("1_e")
+
+[node name="Modell" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = ExtResource("2_m")

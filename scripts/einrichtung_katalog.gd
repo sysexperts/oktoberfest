@@ -30,6 +30,18 @@ const ARTEN := {
 	"riesenbrezel": {"szene": preload("res://scenes/einrichtung/riesenbrezel.tscn"), "preis": 200, "symbol": "🥨", "zeile": "EinrRiesenbrezel", "platz": "wand", "hoehe": 2.2},
 	"banner": {"szene": preload("res://scenes/einrichtung/banner.tscn"), "preis": 180, "symbol": "🚩", "zeile": "EinrBanner", "platz": "wand", "hoehe": 2.0},
 	"wimpel": {"szene": preload("res://scenes/einrichtung/wimpel.tscn"), "preis": 90, "symbol": "🎏", "zeile": "EinrWimpel", "platz": "wand", "hoehe": 2.6},
+	# Büromöbel (fürs Zeltbüro, gebacken mit tools/bake_moebel.gd)
+	"aktenschrank": {"szene": preload("res://scenes/einrichtung/aktenschrank.tscn"), "preis": 160, "symbol": "🗃", "zeile": "EinrAktenschrank", "platz": "boden", "hoehe": 0.0},
+	"ordnerregal": {"szene": preload("res://scenes/einrichtung/ordnerregal.tscn"), "preis": 190, "symbol": "📚", "zeile": "EinrOrdnerregal", "platz": "boden", "hoehe": 0.0},
+	"buerostuhl": {"szene": preload("res://scenes/einrichtung/buerostuhl.tscn"), "preis": 80, "symbol": "🪑", "zeile": "EinrBuerostuhl", "platz": "boden", "hoehe": 0.0},
+	"topfpflanze": {"szene": preload("res://scenes/einrichtung/topfpflanze.tscn"), "preis": 70, "symbol": "🪴", "zeile": "EinrTopfpflanze", "platz": "boden", "hoehe": 0.0},
+	"wanduhr": {"szene": preload("res://scenes/einrichtung/wanduhr.tscn"), "preis": 110, "symbol": "🕰", "zeile": "EinrWanduhr", "platz": "wand", "hoehe": 2.0},
+	"plakat": {"szene": preload("res://scenes/einrichtung/plakat.tscn"), "preis": 90, "symbol": "🖼", "zeile": "EinrPlakat", "platz": "wand", "hoehe": 1.8},
+	"bueroleuchte": {"szene": preload("res://scenes/einrichtung/bueroleuchte.tscn"), "preis": 240, "symbol": "💡", "zeile": "EinrBueroleuchte", "platz": "decke", "hoehe": 3.6},
+	"teppich": {"szene": preload("res://scenes/einrichtung/teppich.tscn"), "preis": 130, "symbol": "🟥", "zeile": "EinrTeppich", "platz": "boden", "hoehe": 0.0},
+	"wartebank": {"szene": preload("res://scenes/einrichtung/wartebank.tscn"), "preis": 120, "symbol": "🪵", "zeile": "EinrWartebank", "platz": "boden", "hoehe": 0.0},
+	"garderobe": {"szene": preload("res://scenes/einrichtung/garderobe.tscn"), "preis": 100, "symbol": "🧥", "zeile": "EinrGarderobe", "platz": "boden", "hoehe": 0.0},
+	"kaffeeecke": {"szene": preload("res://scenes/einrichtung/kaffeeecke.tscn"), "preis": 210, "symbol": "☕", "zeile": "EinrKaffeeecke", "platz": "boden", "hoehe": 0.0},
 }
 
 static func name_key(art: String) -> String:

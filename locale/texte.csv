@@ -946,3 +946,40 @@ EREIGNIS_FAMILIE_TITEL,👨‍👩‍👧 Familientag,👨‍👩‍👧 Family 
 EREIGNIS_FAMILIE_START,"👨‍👩‍👧 Familientag! Mehr Essen, weniger Bier — und die Gäste warten geduldiger.","👨‍👩‍👧 Family day! More food, less beer — and guests wait more patiently.","👨‍👩‍👧 Aile günü! Daha çok yemek, daha az bira — ve misafirler daha sabırlı."
 EREIGNIS_ITALIENER_TITEL,🇮🇹 Italiener-Wochenende,🇮🇹 Italian weekend,🇮🇹 İtalyan hafta sonu
 EREIGNIS_ITALIENER_START,"🇮🇹 Italiener-Wochenende! Busweise Touristen — das Zelt wird rappelvoll.","🇮🇹 Italian weekend! Busloads of tourists — the tent will be packed.","🇮🇹 İtalyan hafta sonu! Otobüs dolusu turist — çadır tıklım tıklım olacak."
+DECO_AKTENSCHRANK,Aktenschrank,Filing cabinet,Dosya dolabı
+DECO_AKTENSCHRANK_INFO,Holzschrank mit vier Schubladen — fürs Zeltbüro.,Wooden cabinet with four drawers — for the tent office.,Dört çekmeceli ahşap dolap — çadır ofisi için.
+DECO_ORDNERREGAL,Ordnerregal,Folder shelf,Klasör rafı
+DECO_ORDNERREGAL_INFO,Regal voller bunter Ordner — Ordnung muss sein.,Shelf full of colourful folders — order is everything.,Renkli klasörlerle dolu raf — düzen şart.
+DECO_BUEROSTUHL,Bürostuhl,Office chair,Ofis sandalyesi
+DECO_BUEROSTUHL_INFO,Gepolsterter Drehstuhl mit Armlehnen.,Padded swivel chair with armrests.,Kolçaklı döner sandalye.
+DECO_TOPFPFLANZE,Gummibaum,Rubber plant,Kauçuk ağacı
+DECO_TOPFPFLANZE_INFO,Grün im Terrakottatopf.,Greenery in a terracotta pot.,Toprak saksıda yeşillik.
+DECO_WANDUHR,Wanduhr,Wall clock,Duvar saati
+DECO_WANDUHR_INFO,Pendeluhr aus dunklem Holz — rastet an der Wand ein.,Dark wood pendulum clock — snaps to the wall.,Koyu ahşap sarkaçlı saat — duvara oturur.
+DECO_PLAKAT,Wiesn-Plakat,Fair poster,Fuar posteri
+DECO_PLAKAT_INFO,Gerahmtes Plakat mit Zelt und Riesenrad.,Framed poster with tent and Ferris wheel.,Çadır ve dönme dolaplı çerçeveli poster.
+DECO_BUEROLEUCHTE,Kranzleuchte,Ring chandelier,Halka avize
+DECO_BUEROLEUCHTE_INFO,Holzkranz mit vier Glaskugeln — hängt unter dem Dach.,Wooden ring with four glass globes — hangs from the roof.,Dört cam küreli ahşap halka — çatıdan asılır.
+DECO_TEPPICH,Teppich,Rug,Halı
+DECO_TEPPICH_INFO,Roter Teppich mit Rautenmuster.,Red rug with diamond pattern.,Baklava desenli kırmızı halı.
+DECO_WARTEBANK,Holzbank,Wooden bench,Ahşap bank
+DECO_WARTEBANK_INFO,Bank mit Lehne zum Verschnaufen.,Bench with backrest for a breather.,Soluklanmak için arkalıklı bank.
+DECO_GARDEROBE,Garderobe,Coat stand,Portmanto
+DECO_GARDEROBE_INFO,Mit Hut und Janker — wie beim Wiesnchef.,With hat and jacket — just like the fair manager's.,Şapka ve ceketle — fuar müdürününki gibi.
+DECO_KAFFEEECKE,Kaffeeecke,Coffee corner,Kahve köşesi
+DECO_KAFFEEECKE_INFO,Anrichte mit Kaffeemaschine und Tassen.,Sideboard with coffee machine and cups.,Kahve makinesi ve fincanlarla büfe.
+TEAM_TITEL,Dein Team (%d),Your team (%d),Ekibin (%d)
+TEAM_INFO,%s · Stufe %d · seit Tag %d · %s pro Tag,%s · level %d · since day %d · %s per day,%s · seviye %d · %d. günden beri · günlük %s
+TEAM_UNZUFRIEDEN,😠 unzufrieden (arbeitet langsamer),😠 unhappy (works slower),😠 memnun değil (daha yavaş çalışıyor)
+TEAM_LOHN,Lohn erhöhen,Raise wage,Maaşı artır
+TEAM_HALTEN,Halten (mehr Lohn),Keep (higher wage),Tut (daha fazla maaş)
+TEAM_ENTLASSEN,Entlassen,Dismiss,İşten çıkar
+TEAM_ANLIEGEN_LOHN,"Möchte mehr Lohn (+15 %). Ignoriert: erst unzufrieden, dann Kündigung.","Wants a raise (+15 %). Ignored: first unhappy, then quits.","Zam istiyor (+%15). Görmezden gelinirse: önce memnuniyetsiz, sonra istifa."
+TEAM_ANLIEGEN_HUBER,"Huber will abwerben! Nur mit mehr Lohn (+20 %) bleibt er — sonst ist er morgen weg.","Huber wants to poach them! They only stay for a higher wage (+20 %) — otherwise gone tomorrow.","Huber ayartmak istiyor! Sadece daha yüksek maaşla (+%20) kalır — yoksa yarın gider."
+MSG_PERSONAL_LOHNWUNSCH,💬 %s möchte mehr Lohn (+%s pro Tag) — Wiesenbüro · Personal,💬 %s wants a raise (+%s per day) — fair office · staff,💬 %s zam istiyor (günlük +%s) — fuar ofisi · personel
+MSG_PERSONAL_UNZUFRIEDEN,😠 %s ist unzufrieden und arbeitet langsamer. Morgen kündigt sie/er!,😠 %s is unhappy and works slower. Will quit tomorrow!,😠 %s memnun değil ve daha yavaş çalışıyor. Yarın istifa edecek!
+MSG_PERSONAL_KUENDIGT,👋 %s hat gekündigt.,👋 %s has quit.,👋 %s istifa etti.
+MSG_PERSONAL_HUBER,😠 Huber will %s abwerben! Halten kostet +%s pro Tag — Wiesenbüro · Personal,😠 Huber wants to poach %s! Keeping them costs +%s per day — fair office · staff,😠 Huber %s'yi ayartmak istiyor! Tutmak günlük +%s — fuar ofisi · personel
+MSG_PERSONAL_ABGEWORBEN,😠 %s (%s) ist zu Huber gewechselt.,😠 %s (%s) has switched to Huber.,😠 %s (%s) Huber'e geçti.
+MSG_PERSONAL_ZUFRIEDEN,😊 %s ist zufrieden und bleibt.,😊 %s is happy and stays.,😊 %s memnun ve kalıyor.
+MSG_PERSONAL_ENTLASSEN,%s wurde entlassen.,%s has been dismissed.,%s işten çıkarıldı.

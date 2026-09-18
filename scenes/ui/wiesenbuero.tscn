@@ -193,6 +193,18 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="TeamTitel" type="Label" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "TEAM_TITEL"
+
+[node name="Team" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
 [node name="Kuenstler" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter"]
 visible = false
 layout_mode = 2
@@ -367,6 +379,50 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="EinrWimpel" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrAktenschrank" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrOrdnerregal" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBuerostuhl" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrTopfpflanze" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrWanduhr" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrPlakat" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBueroleuchte" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrTeppich" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrWartebank" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrGarderobe" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrKaffeeecke" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" instance=ExtResource("2_ang")]
 unique_name_in_owner = true
 layout_mode = 2
 

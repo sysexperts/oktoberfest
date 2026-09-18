@@ -976,7 +976,7 @@ func _load_game() -> bool:
 		for e in (st as Array):
 			if e is Dictionary:
 				_restore_staff(int((e as Dictionary).get("role", 2)), int((e as Dictionary).get("level", 1)),
-					str((e as Dictionary).get("eig", "normal")))
+					str((e as Dictionary).get("eig", "normal")), e as Dictionary)
 	_massen_gehabt = bool(d.get("massen_gehabt", false))
 	var tp: Variant = d.get("tables", [])
 	if tp is Array and int(d.get("tisch_layout", 1)) == TISCH_LAYOUT:
@@ -2462,7 +2462,8 @@ func net_hire_staff(role: int) -> void:
 	var eig: String = EIGENSCHAFTEN.keys().pick_random()
 	_staff_sim[id] = {
 		"role": role, "level": 1, "pos": start, "tgt": start, "yaw": 0.0,
-		"state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig
+		"state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig,
+		"name": _personal_name(), "seit": _day, "lohn": 1.0, "anliegen": "", "energie": 1.0
 	}
 	_add_staff.rpc(id, start, role, 1)
 	_melde("MSG_STAFF_HIRED", [STAFF_KEYS[role], "EIG_" + eig.to_upper(), _eur(_staff_wage(role, 1, eig))], 2)
@@ -2507,11 +2508,13 @@ func net_upgrade_staff(role: int) -> void:
 func _staff_save_list() -> Array:
 	var out := []
 	for s in _staff_sim.values():
-		out.append({"role": int(s.role), "level": int(s.level), "eig": str(s.get("eig", "normal"))})
+		out.append({"role": int(s.role), "level": int(s.level), "eig": str(s.get("eig", "normal")),
+			"name": str(s.get("name", "")), "seit": int(s.get("seit", 1)), "lohn": float(s.get("lohn", 1.0)),
+			"anliegen": str(s.get("anliegen", "")), "unzufrieden": bool(s.get("unzufrieden", false))})
 	return out
 
 ## Beim Laden: Mitarbeiter ohne Kosten wiederherstellen.
-func _restore_staff(role: int, level: int, eig := "normal") -> void:
+func _restore_staff(role: int, level: int, eig := "normal", mehr: Dictionary = {}) -> void:
 	if not STAFF_HIRE_COST.has(role):
 		return
 	if not EIGENSCHAFTEN.has(eig):
@@ -2521,7 +2524,10 @@ func _restore_staff(role: int, level: int, eig := "normal") -> void:
 	var start: Vector3 = _staff_start(role)
 	_staff_sim[id] = {
 		"role": role, "level": clampi(level, 1, STAFF_MAX_LEVEL), "pos": start, "tgt": start,
-		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig
+		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig,
+		"name": str(mehr.get("name", _personal_name())), "seit": int(mehr.get("seit", _day)),
+		"lohn": float(mehr.get("lohn", 1.0)), "anliegen": str(mehr.get("anliegen", "")), "energie": 1.0,
+		"unzufrieden": bool(mehr.get("unzufrieden", false)),
 	}
 	_add_staff.rpc(id, start, role, clampi(level, 1, STAFF_MAX_LEVEL))
 
@@ -2532,11 +2538,16 @@ func _staff_wage(role: int, level: int, eig := "normal") -> int:
 func _total_wages() -> int:
 	var w := 0
 	for s in _staff_sim.values():
-		w += _staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))
+		w += roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * float(s.get("lohn", 1.0)))
 	return w
 
 func _staff_tempo(s: Dictionary) -> float:
-	return float(EIGENSCHAFTEN.get(str(s.get("eig", "normal")), EIGENSCHAFTEN.normal).tempo)
+	var t := float(EIGENSCHAFTEN.get(str(s.get("eig", "normal")), EIGENSCHAFTEN.normal).tempo)
+	# Müdigkeit zum Abend hin, Unzufriedene arbeiten langsamer
+	t *= 0.75 + 0.25 * float(s.get("energie", 1.0))
+	if bool(s.get("unzufrieden", false)):
+		t *= 0.85
+	return t
 
 ## Nachts: Charmeure heben die Beliebtheit, Schluckspechte leeren Fässer.
 func _eigenschaften_nacht() -> void:
@@ -2628,6 +2639,8 @@ func _update_staff(delta: float) -> void:
 			_:
 				s.tgt = KITCHEN_POINT
 				_staff_move(s, delta)
+		if _phase == Phase.SHIFT:
+			s.energie = maxf(0.3, float(s.get("energie", 1.0)) - MUEDE_JE_SEKUNDE * delta)
 		_staff_sim[sid] = s
 		var node = _staff.get(sid)
 		if node:
@@ -4253,6 +4266,7 @@ func _start_shift() -> void:
 	_shift_num += 1
 	_bank_mahnen()
 	_muell_stapel = 0   # Müllabfuhr war da
+	_personal_morgen()
 	_huber_morgen()
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
@@ -4809,8 +4823,12 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 ## als Text: übersetzt wird beim Spieler (scripts/ui/texte.gd, wiesenbuero.gd).
 func _buero_state() -> Dictionary:
 	var staff := []
-	for s in _staff_sim.values():
-		staff.append([int(s.role), int(s.level), str(s.get("eig", "normal"))])
+	for sid: int in _staff_sim:
+		var s: Dictionary = _staff_sim[sid]
+		staff.append([int(s.role), int(s.level), str(s.get("eig", "normal")), str(s.get("name", "")),
+			int(s.get("seit", 1)), str(s.get("anliegen", "")), sid,
+			roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * float(s.get("lohn", 1.0))),
+			bool(s.get("unzufrieden", false)), float(s.get("energie", 1.0))])
 	var haelt := {}
 	for pid in _held_deko.keys():
 		haelt[str(pid)] = int(_held_deko[pid])
@@ -5455,3 +5473,105 @@ func plan_fuer(tag: int) -> String:
 func _kalender_plan() -> Array:
 	_plan_pruefen()
 	return _plan
+
+# ================================================= Personal mit Charakter
+## Jeder Mitarbeiter hat einen Namen, arbeitet seit Tag X, wird zum Abend hin
+## müde (langsamer) und hat ab und zu ein Anliegen:
+##   "lohn"  — will mehr Lohn; einmal ignoriert → unzufrieden (langsamer),
+##             zweimal → kündigt
+##   "huber" — Huber will ihn abwerben (Tage 5–10); nicht gehalten → morgen weg
+## Lohn erhöhen und entlassen im Wiesenbüro (Reiter Personal, Teamliste).
+const PERSONAL_NAMEN := ["Resi", "Vroni", "Wastl", "Kathi", "Toni", "Burgi", "Maxl", "Loisl", "Gretl",
+	"Hias", "Vevi", "Schorsch", "Franzi", "Rosi", "Bene", "Zenzi", "Girgl", "Leni", "Korbi", "Moni"]
+const LOHN_WUNSCH_AB := 4        # so viele Tage im Dienst, bevor jemand mehr will
+const LOHN_WUNSCH_CHANCE := 0.25
+const LOHN_PLUS := 0.15          # +15 % beim Erhöhen
+const HALTEN_PLUS := 0.2         # +20 %, um ihn vor Huber zu halten
+const ABWERBEN_CHANCE := 0.2
+const MUEDE_JE_SEKUNDE := 0.0015 # volle Schicht (300 s) → Energie ≈ 0,55
+
+func _personal_name() -> String:
+	var vergeben := []
+	for s in _staff_sim.values():
+		vergeben.append(str(s.get("name", "")))
+	var frei := PERSONAL_NAMEN.filter(func(n: String) -> bool: return not vergeben.has(n))
+	return str(frei.pick_random()) if not frei.is_empty() else str(PERSONAL_NAMEN.pick_random())
+
+## Morgens: ausgeschlafen, offene Anliegen werden ernst, neue kommen dazu
+func _personal_morgen() -> void:
+	var weg := []
+	for sid: int in _staff_sim:
+		var s: Dictionary = _staff_sim[sid]
+		s.energie = 1.0
+		match str(s.get("anliegen", "")):
+			"huber":
+				weg.append(sid)
+				_melde("MSG_PERSONAL_ABGEWORBEN", [str(s.get("name", "")), STAFF_KEYS[int(s.role)]], 1)
+				continue
+			"lohn":
+				if bool(s.get("unzufrieden", false)):
+					weg.append(sid)
+					_melde("MSG_PERSONAL_KUENDIGT", [str(s.get("name", ""))], 1)
+					continue
+				s.unzufrieden = true
+				_melde("MSG_PERSONAL_UNZUFRIEDEN", [str(s.get("name", ""))], 1)
+				continue
+		if tutorial_active():
+			continue
+		if _day - int(s.get("seit", _day)) >= LOHN_WUNSCH_AB and randf() < LOHN_WUNSCH_CHANCE:
+			s.anliegen = "lohn"
+			s.seit_wunsch = _day
+			_melde("MSG_PERSONAL_LOHNWUNSCH", [str(s.get("name", "")), _eur(_lohn_plus(sid, LOHN_PLUS))], 0)
+	for sid in weg:
+		_personal_weg(sid)
+	# Huber wirbt ab (Akt 2) — höchstens einen am Tag
+	var tag := Wirtschaft.saison_tag(_day)
+	if not tutorial_active() and tag >= 5 and tag <= 10 and randf() < ABWERBEN_CHANCE:
+		var kandidaten := _staff_sim.keys().filter(func(k: int) -> bool: return str(_staff_sim[k].get("anliegen", "")) == "")
+		if not kandidaten.is_empty():
+			var sid: int = kandidaten.pick_random()
+			_staff_sim[sid].anliegen = "huber"
+			_melde("MSG_PERSONAL_HUBER", [str(_staff_sim[sid].get("name", "")), _eur(_lohn_plus(sid, HALTEN_PLUS))], 1)
+
+## Mehrkosten pro Tag, wenn der Lohn um anteil steigt
+func _lohn_plus(sid: int, anteil: float) -> int:
+	var s: Dictionary = _staff_sim[sid]
+	return roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * float(s.get("lohn", 1.0)) * anteil)
+
+## Wiesenbüro: Anliegen erfüllen (Lohn erhöhen bzw. vor Huber halten)
+@rpc("any_peer", "reliable", "call_local")
+func net_personal_lohn(sid: int) -> void:
+	if not multiplayer.is_server() or not _staff_sim.has(sid):
+		return
+	var s: Dictionary = _staff_sim[sid]
+	var anliegen := str(s.get("anliegen", ""))
+	if anliegen == "":
+		return
+	s.lohn = float(s.get("lohn", 1.0)) * (1.0 + (HALTEN_PLUS if anliegen == "huber" else LOHN_PLUS))
+	s.anliegen = ""
+	s.unzufrieden = false
+	_melde("MSG_PERSONAL_ZUFRIEDEN", [str(s.get("name", ""))], 2)
+	_broadcast_meta()
+
+## Wiesenbüro: entlassen
+@rpc("any_peer", "reliable", "call_local")
+func net_personal_entlassen(sid: int) -> void:
+	if not multiplayer.is_server() or not _staff_sim.has(sid) or _phase != Phase.INTERMISSION:
+		return
+	_melde("MSG_PERSONAL_ENTLASSEN", [str(_staff_sim[sid].get("name", ""))], 0)
+	_personal_weg(sid)
+	_broadcast_meta()
+
+func _personal_weg(sid: int) -> void:
+	for gid in _assigned.keys().duplicate():
+		if int(_assigned[gid]) == sid:
+			_assigned.erase(gid)
+	_staff_sim.erase(sid)
+	_remove_staff.rpc(sid)
+
+@rpc("authority", "reliable", "call_local")
+func _remove_staff(id: int) -> void:
+	var n = _staff.get(id)
+	if n and is_instance_valid(n):
+		n.queue_free()
+	_staff.erase(id)
