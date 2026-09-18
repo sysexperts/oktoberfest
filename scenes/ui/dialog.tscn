@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/kino.gd" id="1_kino"]
+[ext_resource type="Script" path="res://scripts/ui/dialog.gd" id="1_dialog"]
 [ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
 [ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="3_bogen"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
@@ -9,33 +9,23 @@
 atlas = ExtResource("3_bogen")
 region = Rect2(664, 516, 484, 320)
 
-[node name="Kino" type="CanvasLayer"]
-layer = 30
-script = ExtResource("1_kino")
+[node name="Dialog" type="CanvasLayer"]
+layer = 25
+script = ExtResource("1_dialog")
 
-[node name="Abdunkeln" type="ColorRect" parent="."]
+[node name="Kasten" type="NinePatchRect" parent="."]
 unique_name_in_owner = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
-
-[node name="Brief" type="NinePatchRect" parent="."]
-unique_name_in_owner = true
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -420.0
-offset_top = -310.0
-offset_right = 420.0
-offset_bottom = 310.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -250.0
+offset_right = 500.0
+offset_bottom = -24.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 mouse_filter = 2
 texture = SubResource("Pergament")
 patch_margin_left = 60
@@ -43,45 +33,44 @@ patch_margin_top = 60
 patch_margin_right = 60
 patch_margin_bottom = 60
 
-[node name="Rand" type="MarginContainer" parent="Brief"]
+[node name="Rand" type="MarginContainer" parent="Kasten"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 90
-theme_override_constants/margin_top = 125
-theme_override_constants/margin_right = 90
-theme_override_constants/margin_bottom = 60
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 62
+theme_override_constants/margin_right = 70
+theme_override_constants/margin_bottom = 34
 
-[node name="Spalte" type="VBoxContainer" parent="Brief/Rand"]
+[node name="Spalte" type="VBoxContainer" parent="Kasten/Rand"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 4
 
-[node name="Titel" type="Label" parent="Brief/Rand/Spalte"]
+[node name="Sprecher" type="Label" parent="Kasten/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="Brief/Rand/Spalte"]
+[node name="Text" type="Label" parent="Kasten/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 23
 theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
 autowrap_mode = 3
 vertical_alignment = 1
 
-[node name="Hinweis" type="Label" parent="Brief/Rand/Spalte"]
+[node name="Hinweis" type="Label" parent="Kasten/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 theme_override_colors/font_color = Color(0.42, 0.3, 0.18, 1)
 horizontal_alignment = 2

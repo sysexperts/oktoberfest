@@ -1,8 +1,8 @@
 extends CanvasLayer
 ## Einleitung: Brief von Onkel Sepp („Ich vermache dir mein Festzelt …") auf
-## Pergament, danach übernimmt der Wiesnchef am Kirmestor mit Sprechblasen
-## (scripts/npc_wiesnchef.gd) und läuft zum Zelt voraus — das ist die erste
-## Mission. Aufbau: scenes/ui/kino.tscn.
+## schwarzem Grund, danach Überblende auf die Kirmes. Der Brief schickt die
+## Spieler zum Wiesnchef in sein Wiesenbüro (scripts/npc_wiesnchef.gd), dort
+## beginnt die erste Mission. Aufbau: scenes/ui/kino.tscn.
 ##
 ## Läuft einmal beim ersten Start eines neuen Spielstands. Der Server startet sie
 ## (game_manager.net_kino_start), danach blättert jeder Spieler selbst — Esc
@@ -16,6 +16,7 @@ const SEITEN := 3
 const PLAETZE := [Vector3(-1.8, 0.1, 84.0), Vector3(1.8, 0.1, 84.0), Vector3(-4.0, 0.1, 85.0), Vector3(4.0, 0.1, 85.0)]
 
 @onready var _brief: Control = %Brief
+@onready var _schwarz: ColorRect = %Abdunkeln
 @onready var _titel: Label = %Titel
 @onready var _text: Label = %Text
 @onready var _hinweis: Label = %Hinweis
@@ -51,7 +52,9 @@ func starten(mehrere: bool) -> void:
 		return
 	aktiv = true
 	visible = true
-	# Alle ans Kirmestor stellen, Blick nach Süden zum Wiesnchef
+	_schwarz.color.a = 1.0
+	_brief.modulate.a = 1.0
+	# Alle ans Kirmestor stellen (Ankunft), Blick nach Süden in die Kirmes
 	var ids: Array = (welt._players_nodes as Dictionary).keys()
 	ids.sort()
 	var platz: int = maxi(0, ids.find(multiplayer.get_unique_id()))
@@ -97,10 +100,12 @@ func beenden() -> void:
 	if not aktiv:
 		return
 	aktiv = false
-	visible = false
-	var chef := get_tree().get_first_node_in_group("wiesnchef")
-	if chef and chef.has_method("reden"):
-		chef.reden(_mehrere)
 	if _spieler and is_instance_valid(_spieler):
 		_spieler.minispiel_beendet()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	# Übergang: Brief ausblenden, kurz schwarz, dann wird es auf der Kirmes hell
+	var tw := create_tween()
+	tw.tween_property(_brief, "modulate:a", 0.0, 0.6)
+	tw.tween_interval(0.7)
+	tw.tween_property(_schwarz, "color:a", 0.0, 1.6).set_trans(Tween.TRANS_SINE)
+	tw.tween_callback(func() -> void: visible = false)

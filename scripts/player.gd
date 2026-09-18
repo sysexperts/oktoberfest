@@ -450,7 +450,7 @@ var _hint_key := "-"
 
 func _update_hint() -> void:
 	var key := ""
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and minispiel == null:
 		key = _hint_for(_current_target)
 	if key == _hint_key:
 		return
@@ -470,6 +470,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_AUFHEBEN" if carry_state == 0 else ""
 	if t.has_method("ist_eroeffnung"):
 		return "HINT_ZELT_EROEFFNEN"
+	if t.has_method("ist_wiesnchef"):
+		return "HINT_WIESNCHEF" if t.ansprechbar() else ""
 	if t.has_method("ist_raufbold"):
 		return "HINT_RAUSWERFEN" if t.ist_raufbold() else ""
 	if t.has_method("ist_budenbesitzer"):
@@ -596,6 +598,9 @@ func _handle_interaction(delta: float) -> void:
 		if _current_target.has_method("ist_eroeffnung"):
 			_world.net_zelt_eroeffnen.rpc_id(1)
 			_sfx("cheer")
+			return
+		if _current_target.has_method("ist_wiesnchef"):
+			_current_target.ansprechen()
 			return
 		if _current_target is Customer and carry_state == 1 and carry_type == WASSER and carry_fill >= 0.999:
 			if (_current_target as Customer).rausch_stufe >= 1:

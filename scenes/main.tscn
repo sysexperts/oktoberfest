@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://scenes/effekte/bildfilter.tscn" id="104_bildfilter"]
 [ext_resource type="PackedScene" path="res://scenes/ui/baumodus.tscn" id="105_baumodus"]
 [ext_resource type="PackedScene" path="res://scenes/ui/kino.tscn" id="106_kino"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialog.tscn" id="107_dialog"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -446,3 +447,5 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -8.4, 2.1, -8.62)
 [node name="Baumodus" parent="." instance=ExtResource("105_baumodus")]
 
 [node name="Kino" parent="." instance=ExtResource("106_kino")]
+
+[node name="Dialog" parent="." instance=ExtResource("107_dialog")]

@@ -1,65 +1,83 @@
 extends Node3D
-## Der Wiesnchef: steht am Kirmestor. Nach dem Brief von Onkel Sepp
-## (scripts/ui/kino.gd) redet er in Sprechblasen über seinem Kopf und läuft zum
-## Zelteingang voraus — das ist die erste Mission. Die Spieler können sich dabei
-## frei bewegen. Läuft bei jedem Spieler lokal dieselbe Strecke, deshalb braucht
-## es kein Netz.
+## Der Wiesnchef: wartet in seinem Wiesenbüro (Onkel Sepps Brief schickt die
+## Spieler dorthin, scripts/ui/kino.gd). Ansprechen mit E öffnet das Gespräch
+## unten im Bild (scripts/ui/dialog.gd). Danach läuft er schweigend zum
+## Zelteingang voraus — das ist die erste Mission — und erklärt dort, wenn man
+## ihn wieder anspricht, den Rest.
 ##
-## Die Figur steckt als Kind „Model" in der Szene (siehe scripts/figur.gd),
-## die Sprechblase als Label3D „Sprechblase".
+## Das Gespräch sieht nur, wer redet. Das Loslaufen geht über
+## game_manager.net_chef_los an alle, damit er überall denselben Weg läuft.
+## Die Figur steckt als Kind „Model" in der Szene (siehe scripts/figur.gd).
 
 const Figuren := preload("res://scripts/figuren.gd")
 const TEMPO := 1.55
-## Wie lange eine Zeile stehen bleibt (Sekunden)
-const ZEILE_DAUER := 5.0
 
 ## Welche Figur (Index in Figuren.ALLE)
 @export var figur_nr := 2
-## Strecke vom Tor über die Nordallee zum Zelteingang
-@export var weg: Array[Vector3] = [
-	Vector3(0.5, 0, 70.0),
-	Vector3(0.0, 0, 58.0),
-	Vector3(0.0, 0, 40.0),
-	Vector3(0.0, 0, 26.0),
-	Vector3(2.5, 0, 18.5),
-	Vector3(3.6, 0, 15.6),
-]
-## Was er am Tor sagt (danach geht er los), unterwegs und am Zelt.
-## Texte: locale/texte.csv, <Schlüssel>_DU / _IHR.
-@export var zeilen_tor: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3"]
-@export var zeilen_weg: Array[String] = ["CHEF_4", "CHEF_5", "CHEF_6"]
-@export var zeile_ziel := "CHEF_7"
-
-@onready var _blase: Label3D = get_node_or_null("Sprechblase")
+## Strecke vom Büro zum Zelteingang
+@export var weg: Array[Vector3] = []
+## Texte (locale/texte.csv, <Schlüssel>_DU / _IHR): im Büro, am Zelt, danach
+@export var zeilen_buero: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3"]
+@export var zeilen_zelt: Array[String] = ["CHEF_4", "CHEF_5", "CHEF_6", "CHEF_7"]
+@export var zeilen_spaeter: Array[String] = ["CHEF_8"]
 
 var _figur: Figur
 var _punkt := -1
-var _mehrere := false
-## Warteschlange der noch zu sagenden Zeilen, "" = losgehen
-var _rede: Array[String] = []
-var _rede_t := 0.0
-var _ziel_gesagt := true
+var _zelt_erzaehlt := false
+var _blick := 0.0
 
 func _ready() -> void:
 	add_to_group("wiesnchef")
+	add_to_group("interactable")
 	_figur = Figuren.einsetzen(self, Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
 	_figur.stehen()
-	rotation.y = 0.0
+	_blick = rotation.y
 
-## Nach dem Brief: am Tor reden, dann vorauslaufen und unterwegs weiterreden.
-func reden(mehrere: bool) -> void:
-	_mehrere = mehrere
-	_rede.clear()
-	_rede.append_array(zeilen_tor)
-	_rede.append("")
-	_rede.append_array(zeilen_weg)
-	_ziel_gesagt = false
-	_rede_t = 0.0
-	_naechste_zeile()
+func ist_wiesnchef() -> bool:
+	return true
 
-## Direkt zum Zelt laufen (ohne Gerede)
+## Unterwegs redet er nicht
+func ansprechbar() -> bool:
+	return not unterwegs()
+
+func unterwegs() -> bool:
+	return _punkt >= 0 and _punkt < weg.size()
+
+func interact_point() -> Vector3:
+	return global_position
+
+func ansprechen() -> void:
+	var dialog := get_tree().get_first_node_in_group("dialog")
+	if dialog == null or not ansprechbar():
+		return
+	var welt := get_tree().current_scene
+	var zeilen: Array[String] = zeilen_spaeter
+	var danach := Callable()
+	if _punkt < 0 and not _zelt_erzaehlt:
+		zeilen = zeilen_buero
+		danach = func() -> void:
+			if welt and welt.has_method("net_chef_los"):
+				welt.net_chef_los.rpc()
+			else:
+				losgehen()
+	elif angekommen() and not _zelt_erzaehlt:
+		zeilen = zeilen_zelt
+		_zelt_erzaehlt = true
+	var mehrere := multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0
+	var texte: Array[String] = []
+	for k in zeilen:
+		texte.append(String(TranslationServer.translate(k + ("_IHR" if mehrere else "_DU"))))
+	# zum Sprecher drehen und gestikulieren
+	var sp := welt._players_nodes.get(multiplayer.get_unique_id()) as Node3D if welt and "_players_nodes" in welt else null
+	if sp:
+		var zu := sp.global_position - global_position
+		rotation.y = atan2(zu.x, zu.z)
+	geste()
+	dialog.zeigen(String(TranslationServer.translate("WIESNCHEF_NAME")), texte, danach)
+
+## Zum Zelteingang vorlaufen
 func losgehen() -> void:
-	if _punkt >= 0:
+	if _punkt >= 0 or weg.is_empty():
 		return
 	_punkt = 0
 	_figur.gehen()
@@ -68,36 +86,8 @@ func losgehen() -> void:
 func angekommen() -> bool:
 	return _punkt >= weg.size()
 
-func _naechste_zeile() -> void:
-	while not _rede.is_empty() and _rede[0] == "":
-		_rede.pop_front()
-		losgehen()
-	if _rede.is_empty():
-		_sagen("")
-		return
-	_sagen(_rede.pop_front())
-	if _punkt < 0:
-		geste()
-
-func _sagen(key: String) -> void:
-	_rede_t = 0.0
-	if _blase == null:
-		return
-	_blase.visible = key != ""
-	if key != "":
-		_blase.text = String(TranslationServer.translate(key + ("_IHR" if _mehrere else "_DU")))
-
 func _process(delta: float) -> void:
-	if _blase and _blase.visible:
-		_rede_t += delta
-		if _rede_t >= ZEILE_DAUER:
-			_naechste_zeile()
-	if not _ziel_gesagt and angekommen():
-		_ziel_gesagt = true
-		_rede.clear()
-		_sagen(zeile_ziel)
-		_rede_t = -4.0   # letzte Zeile länger stehen lassen
-	if _punkt < 0 or _punkt >= weg.size():
+	if not unterwegs():
 		return
 	var ziel: Vector3 = weg[_punkt]
 	var zu := ziel - global_position
@@ -106,18 +96,18 @@ func _process(delta: float) -> void:
 		_punkt += 1
 		if _punkt >= weg.size():
 			_figur.stehen()
-			# am Eingang den nachkommenden Spielern zuwenden (Norden)
-			rotation.y = 0.0
+			# am Eingang den nachkommenden Spielern zuwenden
+			rotation.y = atan2(-zu.x, -zu.z) if zu.length() > 0.01 else rotation.y + PI
 		return
 	global_position += zu.normalized() * minf(TEMPO * delta, zu.length())
 	rotation.y = atan2(zu.x, zu.z)
 
 ## Beim Reden gestikulieren: eine Steh-Extraanimation, danach wieder stehen.
 func geste() -> void:
-	if _punkt >= 0 or _figur == null:
+	if unterwegs() or _figur == null:
 		return
 	if not _figur.extra():
 		return
 	get_tree().create_timer(2.6).timeout.connect(func() -> void:
-		if _punkt < 0 and is_instance_valid(_figur):
+		if not unterwegs() and is_instance_valid(_figur):
 			_figur.stehen())

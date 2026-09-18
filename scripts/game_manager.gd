@@ -4885,3 +4885,10 @@ func _folge_pruefen() -> void:
 			if _check_quest():
 				_broadcast_meta()
 			return
+
+## Wiesnchef: nach dem Gespräch im Büro bei allen zum Zelt loslaufen
+@rpc("any_peer", "reliable", "call_local")
+func net_chef_los() -> void:
+	var chef := get_tree().get_first_node_in_group("wiesnchef")
+	if chef and chef.has_method("losgehen"):
+		chef.losgehen()
