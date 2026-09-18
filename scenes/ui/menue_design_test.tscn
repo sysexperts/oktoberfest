@@ -1,0 +1,164 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/menue_hintergrund.tscn" id="hg"]
+[ext_resource type="Theme" path="res://assets/ui/wiesn/wiesn_theme.tres" id="thema"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/logo_schild.svg" id="logo"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/knopf_eck.svg" id="eck"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_krug.svg" id="s_krug"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_diskette.svg" id="s_disk"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_zahnrad.svg" id="s_zahn"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_leute.svg" id="s_leute"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_tuer.svg" id="s_tuer"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="fraktur"]
+
+[sub_resource type="Gradient" id="VignetteVerlauf"]
+offsets = PackedFloat32Array(0.45, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.05, 0.02, 0, 0.75)
+
+[sub_resource type="GradientTexture2D" id="Vignette"]
+gradient = SubResource("VignetteVerlauf")
+fill = 1
+fill_from = Vector2(0.5, 0.45)
+fill_to = Vector2(1.05, 1.05)
+
+[node name="MenueDesign" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("thema")
+
+[node name="Kirmesplatz" parent="." instance=ExtResource("hg")]
+
+[node name="Vignette" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("Vignette")
+expand_mode = 1
+
+[node name="Logo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -420.0
+offset_top = 14.0
+offset_right = 420.0
+offset_bottom = 271.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("logo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Titel" type="Label" parent="Logo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 22.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.97, 0.92, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.05, 0.02, 1)
+theme_override_colors/font_shadow_color = Color(0.1, 0.22, 0.5, 0.9)
+theme_override_constants/outline_size = 18
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 5
+theme_override_fonts/font = ExtResource("fraktur")
+theme_override_font_sizes/font_size = 104
+text = "Sloptoberfest"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 292.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NeuesSpiel" type="Button" parent="Mitte/Spalte"]
+custom_minimum_size = Vector2(480, 78)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"BlauKnopf"
+text = "Neues Spiel"
+icon = ExtResource("s_krug")
+
+[node name="Laden" type="Button" parent="Mitte/Spalte"]
+custom_minimum_size = Vector2(430, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HolzKnopf"
+text = "Spiel laden"
+icon = ExtResource("s_disk")
+
+[node name="Einstellungen" type="Button" parent="Mitte/Spalte"]
+custom_minimum_size = Vector2(430, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HolzKnopf"
+text = "Einstellungen"
+icon = ExtResource("s_zahn")
+
+[node name="Credits" type="Button" parent="Mitte/Spalte"]
+custom_minimum_size = Vector2(430, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HolzKnopf"
+text = "Credits"
+icon = ExtResource("s_leute")
+
+[node name="Beenden" type="Button" parent="Mitte/Spalte"]
+custom_minimum_size = Vector2(430, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HolzKnopf"
+text = "Beenden"
+icon = ExtResource("s_tuer")
+
+[node name="Zahnrad" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_top = 20.0
+offset_right = -24.0
+offset_bottom = 92.0
+grow_horizontal = 0
+texture_normal = ExtResource("eck")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Symbol" type="TextureRect" parent="Zahnrad"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 12.0
+offset_right = -14.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("s_zahn")
+expand_mode = 1
+stretch_mode = 5

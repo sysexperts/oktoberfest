@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g transform="translate(24,24)">
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(0)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(45)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(90)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(135)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(180)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(225)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(270)"/>
+  <rect x="-5" y="-21" width="10" height="10" rx="2" fill="#f3e6c4" stroke="#2a170b" stroke-width="3" transform="rotate(315)"/>
+  <circle r="14" fill="#f3e6c4" stroke="#2a170b" stroke-width="3"/><circle r="5.5" fill="#6b3f20" stroke="#2a170b" stroke-width="3"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(0)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(45)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(90)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(135)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(180)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(225)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(270)"/>
+  <rect x="-3.5" y="-17" width="7" height="6" fill="#f3e6c4" transform="rotate(315)"/>
+</g></svg>

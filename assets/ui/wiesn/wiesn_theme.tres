@@ -1,0 +1,97 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/knopf_holz.svg" id="h"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/knopf_holz_hover.svg" id="hh"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/knopf_holz_gedrueckt.svg" id="hg"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/knopf_blau.svg" id="b"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/knopf_blau_hover.svg" id="bh"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="f"]
+
+[sub_resource type="StyleBoxTexture" id="Holz"]
+texture = ExtResource("h")
+texture_margin_left = 64.0
+texture_margin_top = 28.0
+texture_margin_right = 64.0
+texture_margin_bottom = 30.0
+content_margin_left = 72.0
+content_margin_top = 8.0
+content_margin_right = 60.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxTexture" id="HolzHover"]
+texture = ExtResource("hh")
+texture_margin_left = 64.0
+texture_margin_top = 28.0
+texture_margin_right = 64.0
+texture_margin_bottom = 30.0
+content_margin_left = 72.0
+content_margin_top = 8.0
+content_margin_right = 60.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxTexture" id="HolzGedrueckt"]
+texture = ExtResource("hg")
+texture_margin_left = 64.0
+texture_margin_top = 28.0
+texture_margin_right = 64.0
+texture_margin_bottom = 30.0
+content_margin_left = 72.0
+content_margin_top = 10.0
+content_margin_right = 60.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxTexture" id="Blau"]
+texture = ExtResource("b")
+texture_margin_left = 40.0
+texture_margin_top = 28.0
+texture_margin_right = 40.0
+texture_margin_bottom = 30.0
+content_margin_left = 56.0
+content_margin_top = 8.0
+content_margin_right = 50.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxTexture" id="BlauHover"]
+texture = ExtResource("bh")
+texture_margin_left = 40.0
+texture_margin_top = 28.0
+texture_margin_right = 40.0
+texture_margin_bottom = 30.0
+content_margin_left = 56.0
+content_margin_top = 8.0
+content_margin_right = 50.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxEmpty" id="Leer"]
+
+[resource]
+BlauKnopf/base_type = &"Button"
+BlauKnopf/colors/font_color = Color(1, 0.97, 0.88, 1)
+BlauKnopf/colors/font_focus_color = Color(1, 1, 0.92, 1)
+BlauKnopf/colors/font_hover_color = Color(1, 1, 0.92, 1)
+BlauKnopf/colors/font_outline_color = Color(0.05, 0.12, 0.3, 1)
+BlauKnopf/colors/font_pressed_color = Color(0.92, 0.9, 0.8, 1)
+BlauKnopf/constants/h_separation = 18
+BlauKnopf/constants/icon_max_width = 44
+BlauKnopf/constants/outline_size = 7
+BlauKnopf/font_sizes/font_size = 34
+BlauKnopf/fonts/font = ExtResource("f")
+BlauKnopf/styles/focus = SubResource("Leer")
+BlauKnopf/styles/hover = SubResource("BlauHover")
+BlauKnopf/styles/normal = SubResource("Blau")
+BlauKnopf/styles/pressed = SubResource("Blau")
+HolzKnopf/base_type = &"Button"
+HolzKnopf/colors/font_color = Color(0.96, 0.9, 0.76, 1)
+HolzKnopf/colors/font_focus_color = Color(1, 0.96, 0.84, 1)
+HolzKnopf/colors/font_hover_color = Color(1, 0.96, 0.84, 1)
+HolzKnopf/colors/font_outline_color = Color(0.14, 0.07, 0.03, 1)
+HolzKnopf/colors/font_pressed_color = Color(0.9, 0.82, 0.66, 1)
+HolzKnopf/constants/h_separation = 18
+HolzKnopf/constants/icon_max_width = 36
+HolzKnopf/constants/outline_size = 6
+HolzKnopf/font_sizes/font_size = 30
+HolzKnopf/fonts/font = ExtResource("f")
+HolzKnopf/styles/focus = SubResource("Leer")
+HolzKnopf/styles/hover = SubResource("HolzHover")
+HolzKnopf/styles/normal = SubResource("Holz")
+HolzKnopf/styles/pressed = SubResource("HolzGedrueckt")

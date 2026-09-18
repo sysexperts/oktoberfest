@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72">
+ <defs><linearGradient id="holz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5530"/><stop offset="1" stop-color="#5c3519"/></linearGradient>
+ <linearGradient id="messing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe3a0"/><stop offset="1" stop-color="#a8741e"/></linearGradient></defs>
+ <rect x="4" y="8" width="64" height="62" rx="12" fill="#000" opacity="0.35"/>
+ <rect x="3" y="3" width="66" height="64" rx="12" fill="#24130a"/>
+ <rect x="7" y="7" width="58" height="56" rx="9" fill="url(#holz)"/>
+ <rect x="12" y="10" width="48" height="3" rx="1.5" fill="#f3c48a" opacity="0.45"/>
+ <g fill="url(#messing)" stroke="#4a2e08"><circle cx="14" cy="14" r="3"/><circle cx="58" cy="14" r="3"/><circle cx="14" cy="56" r="3"/><circle cx="58" cy="56" r="3"/></g>
+</svg>
