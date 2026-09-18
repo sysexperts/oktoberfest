@@ -185,7 +185,7 @@ class Lauf extends Node:
 		_check("Zielmarker in der Szene", marker != null, "")
 		if marker:
 			var ziel: Node = marker.ziel_suchen()
-			_check("Marker zeigt aufs Wiesenbüro", ziel is OfficeDesk, str(ziel))
+			_check("Marker zeigt aufs Wiesenbüro (oder den Wiesnchef dort)", ziel is OfficeDesk or (ziel != null and ziel.has_method("ist_wiesnchef")), str(ziel))
 		# Der Haken für "Zelt mieten" darf noch sichtbar sein — Überspringen darf
 		# nur keinen neuen auslösen.
 		var haken_vorher: int = hud._erledigt_token
