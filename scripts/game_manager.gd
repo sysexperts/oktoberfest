@@ -5512,8 +5512,8 @@ func _kalender_plan() -> Array:
 ##             zweimal → kündigt
 ##   "huber" — Huber will ihn abwerben (Tage 5–10); nicht gehalten → morgen weg
 ## Lohn erhöhen und entlassen im Wiesenbüro (Reiter Personal, Teamliste).
-const PERSONAL_NAMEN := ["Resi", "Vroni", "Wastl", "Kathi", "Toni", "Burgi", "Maxl", "Loisl", "Gretl",
-	"Hias", "Vevi", "Schorsch", "Franzi", "Rosi", "Bene", "Zenzi", "Girgl", "Leni", "Korbi", "Moni"]
+const PERSONAL_NAMEN := ["Anna", "Thomas", "Julia", "Stefan", "Sabine", "Michael", "Laura", "Markus", "Katrin",
+	"Andreas", "Lisa", "Florian", "Claudia", "Tobias", "Sandra", "Daniel", "Nina", "Martin", "Petra", "Jonas"]
 const LOHN_WUNSCH_AB := 4        # so viele Tage im Dienst, bevor jemand mehr will
 const LOHN_WUNSCH_CHANCE := 0.25
 const LOHN_PLUS := 0.15          # +15 % beim Erhöhen
