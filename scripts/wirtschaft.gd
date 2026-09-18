@@ -78,3 +78,12 @@ static func geduld(basis: float, tag: int) -> float:
 ## Beliebtheitsverlust in der Nacht nach diesem Tag.
 static func beliebtheit_verlust(tag: int) -> float:
 	return BELIEBTHEIT_JE_NACHT if tag > SCHONFRIST_TAGE else 0.0
+
+## Onkel Sepps Schulden bei der Bank: [Tag, Betrag] — am Abend des Tages
+## automatisch abgebucht. Reicht das Geld nicht, greift der Rettungskredit.
+const BANK_RATEN := [[4, 1500], [8, 3000], [12, 5000]]
+
+## Tagesziele (nach dem Tutorial): Belohnung = LOHN_BASIS + LOHN_JE_TAG × Tag
+const ZIEL_LOHN_BASIS := 100
+const ZIEL_LOHN_JE_TAG := 40
+const ZIEL_BELIEBTHEIT := 3.0

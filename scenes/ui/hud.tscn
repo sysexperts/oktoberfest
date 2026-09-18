@@ -220,6 +220,7 @@ text = "Geh zum Wiesenbüro und miete ein Zelt."
 autowrap_mode = 3
 
 [node name="AufgabeSkip" type="Label" parent="Rechts/Aufgabe/Spalte"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.55, 0.53, 0.66, 1)
 theme_override_font_sizes/font_size = 13

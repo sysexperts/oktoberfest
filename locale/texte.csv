@@ -751,3 +751,27 @@ CHEF_ENDE_1_DU,"Mehr kann ich dir nicht beibringen. Ab jetzt ist das dein Zelt."
 CHEF_ENDE_1_IHR,"Mehr kann ich euch nicht beibringen. Ab jetzt ist das euer Zelt.","I cannot teach you any more. From now on it is your tent.","Size öğretebileceğim başka bir şey yok. Artık bu sizin çadırınız."
 CHEF_ENDE_2_DU,"Wenn du was brauchst: Du findest mich hier im Büro. Pfiat di!","If you need anything: you will find me here at the office. Bye!","Bir şeye ihtiyacın olursa: beni burada ofiste bulursun. Hoşça kal!"
 CHEF_ENDE_2_IHR,"Wenn ihr was braucht: Ihr findet mich hier im Büro. Pfiat eich!","If you need anything: you will find me here at the office. Bye!","Bir şeye ihtiyacınız olursa: beni burada ofiste bulursunuz. Hoşça kalın!"
+ZIEL_BEDIENEN,Bediene %d Gäste,Serve %d guests,%d misafire servis yap
+ZIEL_UMSATZ,Mach %s Umsatz,Make %s in sales,%s ciro yap
+ZIEL_SAUBER,Keine einzige Pfütze im Zelt,Not a single puddle in the tent,Çadırda tek bir birikinti bile olmasın
+ZIEL_VERPASST,Höchstens %d Bestellungen verpassen,Miss at most %d orders,En fazla %d siparişi kaçır
+ZIEL_BESCHWERDEN,Keine einzige Beschwerde,Not a single complaint,Tek bir şikayet bile olmasın
+MSG_ZIEL_NEU,🎯 Tagesziel: %s,🎯 Daily goal: %s,🎯 Günlük hedef: %s
+MSG_ZIEL_GESCHAFFT,🎯 Tagesziel geschafft! Der Wiesnchef legt %s drauf,🎯 Daily goal reached! The fair manager adds %s,🎯 Günlük hedef tamam! Fuar müdürü %s ekliyor
+MSG_ZIEL_VERFEHLT,🎯 Tagesziel verfehlt — morgen neues Glück,🎯 Daily goal missed — better luck tomorrow,🎯 Günlük hedef kaçtı — yarın yeni şans
+MSG_BANK_MORGEN,🏦 Morgen Abend bucht die Bank %s für Sepps Schulden ab,🏦 Tomorrow evening the bank collects %s for Sepp's debts,🏦 Yarın akşam banka Sepp'in borçları için %s çekecek
+MSG_BANK_BEZAHLT,🏦 Rate von %s bezahlt — noch %s Schulden,🏦 Instalment of %s paid — %s debt left,🏦 %s taksit ödendi — %s borç kaldı
+POPUP_BANK_HEUTE,"🏦 Post von der Bank\n\nHeute Abend wird die nächste Rate für Onkel Sepps Schulden fällig: %s.\n\nInsgesamt stehen noch %s offen. Reicht das Geld nicht, springt die Brauerei ein — teuer.","🏦 Mail from the bank\n\nThis evening the next instalment of Uncle Sepp's debt is due: %s.\n\n%s is still owed in total. If the money is not there, the brewery steps in — at a price.","🏦 Bankadan mektup\n\nBu akşam Sepp Amca'nın borcunun bir sonraki taksiti ödenecek: %s.\n\nToplamda hâlâ %s borç var. Para yetmezse bira fabrikası devreye girer — pahalıya."
+POPUP_BANK_FREI,"🏦 Schuldenfrei!\n\nDie letzte Rate von %s ist bezahlt. Onkel Sepps Zelt gehört jetzt ganz dir — ohne einen Cent Schulden.\n\nDer Sepp hätte eine Runde ausgegeben. Prost!","🏦 Debt free!\n\nThe last instalment of %s is paid. Uncle Sepp's tent is now fully yours — without a cent of debt.\n\nSepp would have bought a round. Cheers!","🏦 Borç bitti!\n\nSon taksit olan %s ödendi. Sepp Amca'nın çadırı artık tamamen senin — tek kuruş borç yok.\n\nSepp olsa herkese bir tur ısmarlardı. Şerefe!"
+HUD_TAGESZIEL,Tagesziel · Tag %d,Daily goal · Day %d,Günlük hedef · Gün %d
+HUD_ZIEL_MORGEN,Neues Ziel morgen früh,New goal tomorrow morning,Yeni hedef yarın sabah
+HUD_ZIEL_LOHN,Belohnung: %s,Reward: %s,Ödül: %s
+HUD_BANK,🏦 Sepps Schulden: %s fällig an Tag %d (gesamt %s),🏦 Sepp's debt: %s due on day %d (total %s),🏦 Sepp'in borcu: %s — Gün %d (toplam %s)
+CHEF_ZIEL_DU,"Mein Ziel für dich heute: %s. Schaffst du's, leg ich %s drauf.","My goal for you today: %s. Manage it and I will add %s.","Bugün senin için hedefim: %s. Başarırsan %s eklerim."
+CHEF_ZIEL_IHR,"Mein Ziel für euch heute: %s. Schafft ihr's, leg ich %s drauf.","My goal for you today: %s. Manage it and I will add %s.","Bugün sizin için hedefim: %s. Başarırsanız %s eklerim."
+CHEF_ZIEL_KEINS_DU,"Sobald morgen früh das Zelt aufgeht, hab ich ein neues Ziel für dich.","As soon as the tent opens tomorrow morning, I will have a new goal for you.","Yarın sabah çadır açılır açılmaz senin için yeni bir hedefim olacak."
+CHEF_ZIEL_KEINS_IHR,"Sobald morgen früh das Zelt aufgeht, hab ich ein neues Ziel für euch.","As soon as the tent opens tomorrow morning, I will have a new goal for you.","Yarın sabah çadır açılır açılmaz sizin için yeni bir hedefim olacak."
+CHEF_BANK_DU,"Und denk an Sepps Schulden: %s bucht die Bank am Abend von Tag %d ab. Insgesamt noch %s.","And remember Sepp's debts: the bank collects %s on the evening of day %d. %s left in total.","Sepp'in borçlarını da unutma: banka %s tutarını %d. günün akşamı çekecek. Toplam %s kaldı."
+CHEF_BANK_IHR,"Und denkt an Sepps Schulden: %s bucht die Bank am Abend von Tag %d ab. Insgesamt noch %s.","And remember Sepp's debts: the bank collects %s on the evening of day %d. %s left in total.","Sepp'in borçlarını da unutmayın: banka %s tutarını %d. günün akşamı çekecek. Toplam %s kaldı."
+CHEF_BANK_FREI_DU,"Schuldenfrei — der Sepp wäre stolz auf dich!","Debt free — Sepp would be proud of you!","Borçsuzsun — Sepp seninle gurur duyardı!"
+CHEF_BANK_FREI_IHR,"Schuldenfrei — der Sepp wäre stolz auf euch!","Debt free — Sepp would be proud of you!","Borçsuzsunuz — Sepp sizinle gurur duyardı!"

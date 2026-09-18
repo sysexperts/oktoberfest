@@ -127,3 +127,12 @@ static func mit_tasten(schluessel: String) -> String:
 		if t.contains(platzhalter):
 			t = t.replace(platzhalter, "[%s]" % Einstellungen.tasten_name(aktion))
 	return t
+
+## Tagesziel als Satz, z. B. „Bediene 43 Gäste" (GameManager._tagesziel_waehlen)
+static func tagesziel_text(ziel: Dictionary) -> String:
+	var typ := str(ziel.get("typ", ""))
+	var z := int(ziel.get("ziel", 0))
+	var t := _t("ZIEL_" + typ.to_upper())
+	if typ == "umsatz":
+		return t % euro(z)
+	return t % z if t.contains("%d") else t

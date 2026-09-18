@@ -6,7 +6,8 @@ extends Node3D
 ## Rundgang: Stationen (scripts/rundgang_station.gd) unter „Rundgang" in
 ## kirmes.tscn. Erreicht das Tutorial den Schritt einer Station, läuft er
 ## schweigend dorthin und hat dann Neues zu erzählen („!" über dem Kopf, der
-## Zielpfeil zeigt auf ihn). Unterwegs redet er nicht.
+## Zielpfeil zeigt auf ihn). Unterwegs redet er nicht. Nach dem Tutorial erzählt
+## er jeden Tag das Tagesziel und wie es um Sepps Schulden steht.
 ##
 ## Alles läuft bei jedem Spieler lokal nach dem Tutorialschritt, den der Server
 ## an alle schickt — so steht er überall an derselben Stelle. Nur das erste
@@ -55,7 +56,9 @@ func hat_neues() -> bool:
 		return false
 	if _station == null:
 		return _schritt() == 0
-	return not _gehoert.has(_station) and not _station.zeilen.is_empty()
+	if not _gehoert.has(_station) and not _station.zeilen.is_empty():
+		return true
+	return _tagesbericht_da() and _gehoert_tag != _tag()
 
 func interact_point() -> Vector3:
 	return global_position
@@ -102,13 +105,18 @@ func ansprechen() -> void:
 	elif _station and not _station.zeilen.is_empty() and not _gehoert.has(_station):
 		zeilen = _station.zeilen
 		_gehoert[_station] = true
-	elif _station and not _station.zeilen.is_empty():
+	elif _station and not _station.zeilen.is_empty() and not _tagesbericht_da():
 		# schon gehört: die letzte Zeile als Erinnerung
 		zeilen = [_station.zeilen[-1]]
 	var mehrere := multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0
 	var texte: Array[String] = []
-	for k in zeilen:
-		texte.append(String(TranslationServer.translate(k + ("_IHR" if mehrere else "_DU"))))
+	if zeilen == zeilen_spaeter and _tagesbericht_da():
+		# Nach dem Tutorial: heutiges Ziel und Sepps Schulden
+		texte = welt.chef_tageszeilen(mehrere, welt._hud._zustand)
+		_gehoert_tag = _tag()
+	else:
+		for k in zeilen:
+			texte.append(String(TranslationServer.translate(k + ("_IHR" if mehrere else "_DU"))))
 	# zum Sprecher drehen und gestikulieren
 	var sp := welt._players_nodes.get(multiplayer.get_unique_id()) as Node3D if welt and "_players_nodes" in welt else null
 	if sp:
@@ -182,3 +190,15 @@ func geste() -> void:
 	get_tree().create_timer(2.6).timeout.connect(func() -> void:
 		if not unterwegs() and is_instance_valid(_figur):
 			_figur.stehen())
+
+## Nach dem Tutorial erzählt er jeden Tag das Tagesziel (GameManager.chef_tageszeilen)
+var _gehoert_tag := -1
+
+func _tag() -> int:
+	var w := _welt()
+	return int(w._day) if w and "_day" in w else 0
+
+func _tagesbericht_da() -> bool:
+	var w := _welt()
+	return w != null and w.has_method("chef_tageszeilen") and _schritt() >= int(w.QUEST_COUNT) \
+		and "_hud" in w and w._hud != null

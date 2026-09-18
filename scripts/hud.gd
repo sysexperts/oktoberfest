@@ -212,6 +212,7 @@ func set_buero(z: Dictionary) -> void:
 	_zustand = z
 	_buero.setze_zustand(z)
 	_computer.setze_zustand(z)
+	_ziel_anzeigen()
 	# Heutiges Tagesereignis in der Leiste
 	var ereignis := str(z.get("ereignis", ""))
 	%Ereignis.visible = ereignis != ""
@@ -268,8 +269,11 @@ func set_quest(step: int, total: int) -> void:
 		_aufgabe_erledigt(vorher)
 	_buero.tutorial_schritt(step)
 	_aufgabe.visible = step >= 0 and step < total
+	if step >= total:
+		_ziel_anzeigen()
 	if not _aufgabe.visible:
 		return
+	%AufgabeSkip.visible = true
 	%AufgabeNummer.text = tr("HUD_TASK") % [step + 1, total]
 	%AufgabeTitel.text = tr("QUEST_%d_TITLE" % step)
 	%AufgabeText.text = Texte.mit_tasten("QUEST_%d_TEXT" % step)
@@ -384,3 +388,50 @@ func lobby_aktualisieren(info: Dictionary) -> void:
 
 func close_vote() -> void:
 	_abstimmung.schliessen()
+
+# ------------------------------------------------------------ Tagesziel
+## Nach dem Tutorial zeigt die Aufgabenkarte das Tagesziel und Sepps Schulden
+## (GameManager._tagesziel, bank_naechste). Der Stand kommt laufend per net_ziel_stand.
+var _ziel_stand := -1
+
+func set_ziel_stand(stand: int) -> void:
+	_ziel_stand = stand
+	_ziel_anzeigen()
+
+func _ziel_anzeigen() -> void:
+	if _quest_total <= 0 or _quest_step < _quest_total:
+		return
+	var ziel: Dictionary = _zustand.get("tagesziel", {})
+	var bank: Array = _zustand.get("bank_naechste", [])
+	_aufgabe.visible = not ziel.is_empty() or not bank.is_empty()
+	if not _aufgabe.visible:
+		return
+	%AufgabeSkip.visible = false
+	%AufgabeNummer.text = tr("HUD_TAGESZIEL") % int(_zustand.get("day", 1))
+	if ziel.is_empty():
+		%AufgabeTitel.text = tr("HUD_ZIEL_MORGEN")
+	else:
+		var titel := Texte.tagesziel_text(ziel)
+		var z := int(ziel.get("ziel", 0))
+		if _ziel_stand >= 0:
+			match str(ziel.get("typ", "")):
+				"bedienen": titel += "  (%d/%d)" % [_ziel_stand, z]
+				"umsatz": titel += "  (%s)" % Texte.euro(_ziel_stand)
+				_: titel += "  (%d)" % _ziel_stand
+		%AufgabeTitel.text = titel
+	var zeilen: Array[String] = []
+	if not ziel.is_empty():
+		zeilen.append(tr("HUD_ZIEL_LOHN") % Texte.euro(int(ziel.get("lohn", 0))))
+	if not bank.is_empty():
+		zeilen.append(tr("HUD_BANK") % [Texte.euro(int(bank[1])), int(bank[0]), Texte.euro(int(_zustand.get("bank_rest", 0)))])
+	%AufgabeText.text = "\n".join(zeilen)
+
+## Fertiger Text als Meldung (schon übersetzt)
+func melde_text(text: String, art := 0) -> void:
+	var m := MELDUNG.instantiate()
+	_meldungen.add_child(m)
+	m.zeige(text, art)
+	while _meldungen.get_child_count() > MAX_MELDUNGEN:
+		var alt := _meldungen.get_child(0)
+		_meldungen.remove_child(alt)
+		alt.queue_free()

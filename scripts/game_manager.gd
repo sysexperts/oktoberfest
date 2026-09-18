@@ -844,6 +844,8 @@ func _save_game() -> void:
 		"meilensteine": _meilensteine,
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
+		"bank": _bank_bezahlt,
+		"tagesziel": _tagesziel,
 		"bierpreis": _bierpreis,
 		"einrichtung": _einrichtung.values(),
 		"saison": _saison,
@@ -916,6 +918,10 @@ func _load_game() -> bool:
 	if erreicht is Array:
 		_meilensteine = (erreicht as Array).map(func(x: Variant) -> String: return str(x))
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
+	# Sepps Schulden: ältere Spielstände (vor Version 175) haben keine — dort gilt alles als bezahlt
+	_bank_bezahlt = clampi(int(d.get("bank", Wirtschaft.BANK_RATEN.size())), 0, Wirtschaft.BANK_RATEN.size())
+	var ziel_gespeichert: Variant = d.get("tagesziel", {})
+	_tagesziel = ziel_gespeichert if ziel_gespeichert is Dictionary else {}
 	_bierpreis = float(d.get("bierpreis", 1.0))   # Spielraum wird nach dem Laden der Lizenzen geprüft
 	_saison_nr = maxi(1, int(d.get("saison_nr", 1 + (_day - 1) / Wirtschaft.SAISON_TAGE)))
 	_schwierigkeit = clampi(int(d.get("schwierigkeit", 1)), 0, 2)
@@ -3660,6 +3666,7 @@ func _process(delta: float) -> void:
 		return
 	_leer_seit = 0.0
 	_folge_pruefen()
+	_ziel_senden(delta)
 	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
 	if not _abstimmung.is_empty():
 		var vorher := ceili(float(_abstimmung.rest))
@@ -4123,6 +4130,8 @@ func _start_shift() -> void:
 	_rebuild_seats()   # taşınmış masalara göre koltukları güncelle
 	_clear_messes()
 	_shift_num += 1
+	_bank_mahnen()
+	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
 	_net_band_zurueck.rpc()   # neue Schicht: Band wieder da, Musik wieder an
@@ -4234,6 +4243,8 @@ func _end_shift(reason := 0) -> void:
 	_left_guests = 0
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
 	_stats.days += 1
+	_tagesziel_auswerten()
+	_bank_abbuchen()
 	_pruefe_pleite()   # nach Miete und Löhnen — erst dann steht fest, ob es reicht
 	_broadcast_meta()
 
@@ -4683,6 +4694,8 @@ func _buero_state() -> Dictionary:
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
 		"kredit": _kredit_rest,
+		"bank_naechste": bank_naechste(), "bank_rest": bank_rest(),
+		"tagesziel": _tagesziel,
 		"zelt_name": _zelt_name,
 	}
 
@@ -4892,3 +4905,135 @@ func net_chef_los() -> void:
 	var chef := get_tree().get_first_node_in_group("wiesnchef")
 	if chef and chef.has_method("losgehen"):
 		chef.losgehen()
+
+# ================================================= Tagesziele + Sepps Schulden
+## Wie viele Bankraten (Wirtschaft.BANK_RATEN) schon bezahlt sind
+var _bank_bezahlt := 0
+## Heutiges Ziel: {typ, ziel, lohn}; leer = keins (Tutorial läuft noch)
+var _tagesziel := {}
+var _ziel_gesendet := -1
+var _ziel_takt := 0.0
+
+## Nächste offene Rate [Tag, Betrag] oder []
+func bank_naechste() -> Array:
+	if _bank_bezahlt >= Wirtschaft.BANK_RATEN.size():
+		return []
+	return Wirtschaft.BANK_RATEN[_bank_bezahlt]
+
+func bank_rest() -> int:
+	var r := 0
+	for i in range(_bank_bezahlt, Wirtschaft.BANK_RATEN.size()):
+		r += int(Wirtschaft.BANK_RATEN[i][1])
+	return r
+
+## Morgens bei Schichtbeginn ein Ziel auslosen (erst nach dem Tutorial)
+func _tagesziel_waehlen() -> void:
+	_tagesziel = {}
+	if tutorial_active():
+		return
+	var d := _day
+	var arten := [
+		{"typ": "bedienen", "ziel": 15 + 7 * d},
+		{"typ": "umsatz", "ziel": (500 + 180 * d) / 50 * 50},
+		{"typ": "sauber", "ziel": 0},
+		{"typ": "verpasst", "ziel": 3},
+		{"typ": "beschwerden", "ziel": 0},
+	]
+	_tagesziel = arten.pick_random()
+	_tagesziel["lohn"] = Wirtschaft.ZIEL_LOHN_BASIS + Wirtschaft.ZIEL_LOHN_JE_TAG * d
+	_ziel_gesendet = -1
+	net_ziel_neu.rpc(_tagesziel)
+
+## Aktueller Stand des Ziels (Zähler, den die Anzeige zeigt)
+func _ziel_stand() -> int:
+	match str(_tagesziel.get("typ", "")):
+		"bedienen": return _served
+		"umsatz": return _last_earn
+		"sauber": return _urin_count
+		"verpasst": return _missed
+		"beschwerden": return _complaints
+	return 0
+
+func _ziel_erreicht() -> bool:
+	var s := _ziel_stand()
+	var z := int(_tagesziel.get("ziel", 0))
+	match str(_tagesziel.get("typ", "")):
+		"bedienen", "umsatz": return s >= z
+		# „nicht mehr als": nur wenn auch wirklich Betrieb war
+		"sauber", "verpasst", "beschwerden": return s <= z and _served >= 10
+	return false
+
+## Abends: Belohnung auszahlen
+func _tagesziel_auswerten() -> void:
+	if _tagesziel.is_empty():
+		return
+	if _ziel_erreicht():
+		var lohn := int(_tagesziel.get("lohn", 0))
+		Game.add_money(lohn)
+		_popularity = minf(100.0, _popularity + Wirtschaft.ZIEL_BELIEBTHEIT)
+		_melde("MSG_ZIEL_GESCHAFFT", [_eur(lohn)], 2)
+	else:
+		_melde("MSG_ZIEL_VERFEHLT", [], 1)
+	_tagesziel = {}
+
+## Abends nach Miete und Löhnen: fällige Rate abbuchen
+func _bank_abbuchen() -> void:
+	var r := bank_naechste()
+	if r.is_empty() or _day < int(r[0]) or _saison_nr > 1:
+		return
+	Game.add_money(-int(r[1]))
+	_bank_bezahlt += 1
+	if _bank_bezahlt >= Wirtschaft.BANK_RATEN.size():
+		net_popup.rpc("POPUP_BANK_FREI", [_eur(int(r[1]))])
+	else:
+		_melde("MSG_BANK_BEZAHLT", [_eur(int(r[1])), _eur(bank_rest())], 0)
+
+## Neuer Tag: an eine Rate heute oder morgen erinnern
+func _bank_mahnen() -> void:
+	var r := bank_naechste()
+	if r.is_empty() or _saison_nr > 1:
+		return
+	var tage := int(r[0]) - _day
+	if tage == 0:
+		net_popup.rpc("POPUP_BANK_HEUTE", [_eur(int(r[1])), _eur(bank_rest())])
+	elif tage == 1:
+		_melde("MSG_BANK_MORGEN", [_eur(int(r[1]))], 1)
+
+## Stand an alle, sobald er sich ändert (höchstens zweimal pro Sekunde)
+func _ziel_senden(delta: float) -> void:
+	_ziel_takt -= delta
+	if _ziel_takt > 0.0:
+		return
+	_ziel_takt = 0.5
+	var s := _ziel_stand() if not _tagesziel.is_empty() else -1
+	if s != _ziel_gesendet:
+		_ziel_gesendet = s
+		net_ziel_stand.rpc(s)
+
+@rpc("authority", "unreliable_ordered", "call_local")
+func net_ziel_stand(stand: int) -> void:
+	if _hud and _hud.has_method("set_ziel_stand"):
+		_hud.set_ziel_stand(stand)
+
+## Was der Wiesnchef nach dem Tutorial erzählt: heutiges Ziel und die Schulden.
+## Fertig übersetzte Zeilen; mehrere = Anrede „ihr".
+func chef_tageszeilen(mehrere: bool, z: Dictionary) -> Array[String]:
+	var a := "_IHR" if mehrere else "_DU"
+	var zeilen: Array[String] = []
+	var ziel: Dictionary = z.get("tagesziel", {})
+	if ziel.is_empty():
+		zeilen.append(tr("CHEF_ZIEL_KEINS" + a))
+	else:
+		zeilen.append(tr("CHEF_ZIEL" + a) % [Texte.tagesziel_text(ziel), Texte.euro(int(ziel.get("lohn", 0)))])
+	var r: Array = z.get("bank_naechste", [])
+	if r.is_empty():
+		zeilen.append(tr("CHEF_BANK_FREI" + a))
+	else:
+		zeilen.append(tr("CHEF_BANK" + a) % [Texte.euro(int(r[1])), int(r[0]), Texte.euro(int(z.get("bank_rest", 0)))])
+	return zeilen
+
+## Neues Tagesziel: Meldung bei allen (Text in der eigenen Sprache)
+@rpc("authority", "reliable", "call_local")
+func net_ziel_neu(ziel: Dictionary) -> void:
+	if _hud:
+		_hud.melde_text(tr("MSG_ZIEL_NEU") % Texte.tagesziel_text(ziel), 0)
