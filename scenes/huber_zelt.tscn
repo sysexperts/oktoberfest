@@ -11,6 +11,8 @@
 [ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten.tres" id="9_hrauten"]
 [ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten_fein.tres" id="10_hrauten_fein"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="11_fraktur"]
+[ext_resource type="PackedScene" path="res://scenes/zelt/biergarten_tisch.tscn" id="12_tisch"]
+[ext_resource type="PackedScene" path="res://scenes/zelt/fass.tscn" id="13_fass"]
 
 [node name="HuberZelt" type="Node3D"]
 script = ExtResource("1_huber")
@@ -34,3 +36,41 @@ text = "Huber-Zelt"
 font = ExtResource("11_fraktur")
 font_size = 96
 outline_size = 24
+
+[node name="Innen" type="Node3D" parent="."]
+
+[node name="Tisch0" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4, 0, -5)
+
+[node name="Tisch1" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4, 0, -1)
+
+[node name="Tisch2" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4, 0, 3)
+
+[node name="Tisch3" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, -5)
+
+[node name="Tisch4" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, -1)
+
+[node name="Tisch5" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 3)
+
+[node name="Tisch6" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4, 0, -5)
+
+[node name="Tisch7" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4, 0, -1)
+
+[node name="Tisch8" parent="Innen" instance=ExtResource("12_tisch")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4, 0, 3)
+
+[node name="Fass9" parent="Innen" instance=ExtResource("13_fass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 0, -7.5)
+
+[node name="Fass10" parent="Innen" instance=ExtResource("13_fass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, 0, -7.6)
+
+[node name="Fass11" parent="Innen" instance=ExtResource("13_fass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, -7.5)

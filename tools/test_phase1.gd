@@ -1089,7 +1089,10 @@ class Lauf extends Node:
 
 	## Der Ladebildschirm braucht unterschiedlich lange — warten, bis das Spiel da ist.
 	func _warte_auf_spiel() -> void:
-		for i in 3000:
+		# Nach echter Zeit, nicht nach Bildern: headless laufen 3000 Bilder in ~3 s durch,
+		# das Laden dauert mit allen Modellen länger (Deploy-Test fiel sporadisch aus)
+		var bis := Time.get_ticks_msec() + 45000
+		while Time.get_ticks_msec() < bis:
 			var s := get_tree().current_scene
 			if s != null and s.has_method("net_book_tent") and s.is_node_ready():
 				break

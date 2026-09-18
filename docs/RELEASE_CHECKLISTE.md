@@ -1,6 +1,6 @@
 # Release-Checkliste
 
-Stand: 12.09.2026 (v130). ⚠️ = Pflicht vor der Veröffentlichung.
+Stand: 18.09.2026 (v186). ⚠️ = Pflicht vor der Veröffentlichung.
 **Du** = Nutzer liefert/erledigt · **Ich** = Code.
 
 Reihenfolge-Tipp: Maßkrug + Essen und Ton zuerst → Figuren + Map → parallel
@@ -22,15 +22,15 @@ Aktuell Platzhalter aus Grundformen (Box/Zylinder).
 - [x] Bühne (Podest, Rückwand, Traverse) + Lautsprecher, Instrumente *(v128: buehne.glb)*
 - [ ] Lager-Regal mit Bierkästen und Zutatenkisten
 - [x] Computer am Schreibtisch *(v129: schreibtisch.glb im Büroraum)*
-- [ ] Stehlampe (Einrichtung)
-- [ ] Pfütze und Erbrochenes (Bodenflecken)
+- [x] Stehlampe (Einrichtung) *(v185: dazu 11 Büromöbel, gebacken mit tools/bake_moebel.gd)*
+- [ ] Pfütze und Erbrochenes (Bodenflecken) *(Dreck fürs Tutorial fertig: Laub, Scherben, Papier, Stroh, Staub, Planen, Müllsack)*
 - [ ] Zeltteile in `scenes/tent.tscn` (12 Platzhalter-Meshes)
 
 ### Draußen
-- [ ] ⚠️ Wohnwagen (eigener + Nachbarn)
-- [ ] ⚠️ Lieferwagen
+- [x] ⚠️ Wohnwagen (eigener + Nachbarn) *(v168)*
+- [x] ⚠️ Lieferwagen *(v179: tools/bake_lieferwagen.gd, fährt die Allee, wendet, schleudert NPCs)*
 - [ ] Paket/Lieferkiste
-- [ ] Wiesenbüro: Schreibtisch, Buchungskiosk, am besten kleines Bürogebäude
+- [x] Wiesenbüro: Schreibtisch, Buchungskiosk, am besten kleines Bürogebäude *(v179: eingerichtet, hell)*
 - [ ] „Zelt zu vermieten"-Schild
 - [ ] Marktstand-Markise, Laterne, Lichterkette
 - [ ] Riesenrad als echtes Modell (heute ~100 Einzelteile)
@@ -129,3 +129,30 @@ Heute: 1 Musikstück, sonst Piepstöne.
 - [ ] Rangliste (nach App-ID)
 - [ ] Neue Modelle, Figuren, Sounds einbauen, sobald geliefert
 - [ ] Letzter Balancing-Lauf mit dem Bot nach allen Änderungen
+
+## 9. Stand Story und Inhalt (v186)
+
+Fertig:
+- Einleitung: Brief von Onkel Sepp, Überblende, Wiesnchef mit Ja/Nein-Frage, Huber erwähnt
+- Tutorial als Rundgang des Wiesnchefs (14 Schritte): Zelt übernehmen, Planen abziehen, fegen,
+  Müllsäcke vor die Tür, Büro, Lager, Schlafen, Zapfen, Personal …
+- Tagesziele, Sepps Bankschulden (nach Schwierigkeit), Rettungskredit mit Huber-Reaktion
+- Huber: NPC mit drei Akten, Wetten ab Tag 3, Sabotage ab Tag 5 (Fass-Leck, Stinkbombe),
+  wirbt Personal ab, Finale „Maß-Wettschleppen" um Sepps Ehre, Abschlussbrief
+- Wiesn-Kalender (K) mit Sondertagen: Anstich, Trachtenumzug, Familientag, Italiener-Wochenende
+- Wiesn-Kurier nach Feierabend
+- Personal mit Namen, Müdigkeit, Lohnwünschen, Kündigung, Teamliste
+- Theke wächst mit den Lizenzen, Standpersonal geht nachts heim, Fahrgeschäfte stehen still
+- Leistung: Sichtweite für Kartenteile (scripts/sichtweite.gd)
+
+Noch offen (Code):
+- [ ] Stammgäste mit Namen und Wünschen über mehrere Tage
+- [ ] Koop: Chaos-Ereignisse für alle, abendliche Auszeichnungen (bester Kellner …)
+- [ ] Saboteur im Zelt erwischen (Huber-Konzept)
+- [ ] Eigene Figur für Huber (braucht ein Modell) — bis dahin Bean, etwas größer
+- [ ] Buden-Meshes zusammenfassen (Leistung, nach der Sichtweite der nächste große Schritt)
+- [ ] Koop-Test aller neuen Systeme (Rundgang, Putzen, Duell, Personal)
+
+Werkzeuge zum Prüfen: tools/test_tutorial, test_rundgang, test_tagesziel, test_huber,
+test_duell, test_lieferwagen, test_zeitung, test_kalender, test_moebel, test_personal,
+perf_messen, sim_saison.
