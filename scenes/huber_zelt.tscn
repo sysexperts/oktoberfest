@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/huber_zelt.gd" id="1_huber"]
+[ext_resource type="PackedScene" path="res://scenes/tent.tscn" id="2_tent"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="3_blau"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/streifen.tres" id="4_streifen"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten.tres" id="5_rauten"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten_fein.tres" id="6_rauten_fein"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_rot.tres" id="7_rot"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_streifen.tres" id="8_hstreifen"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten.tres" id="9_hrauten"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten_fein.tres" id="10_hrauten_fein"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="11_fraktur"]
+
+[node name="HuberZelt" type="Node3D"]
+script = ExtResource("1_huber")
+tausch = Dictionary[Material, Material]({
+ExtResource("3_blau"): ExtResource("7_rot"),
+ExtResource("4_streifen"): ExtResource("8_hstreifen"),
+ExtResource("5_rauten"): ExtResource("9_hrauten"),
+ExtResource("6_rauten_fein"): ExtResource("10_hrauten_fein")
+})
+
+[node name="Zelt" parent="." instance=ExtResource("2_tent")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+
+[node name="Name" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 7.35)
+double_sided = false
+pixel_size = 0.02
+modulate = Color(1, 0.9, 0.55, 1)
+outline_modulate = Color(0.3, 0.05, 0.02, 1)
+text = "Huber-Zelt"
+font = ExtResource("11_fraktur")
+font_size = 96
+outline_size = 24
