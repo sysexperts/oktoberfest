@@ -490,7 +490,7 @@ material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_e35uo")
 
 [node name="TorPfostenWest" type="MeshInstance3D" parent="Waende/Pfosten" unique_id=298855924]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 1.65, 11.15)
+transform = Transform3D(1.15, 0, 0, 0, 1, 0, 0, 0, 1, -3.14, 1.65, 11.15)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_4n3nb")
 
@@ -540,7 +540,7 @@ material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_e35uo")
 
 [node name="TorPfostenOst" type="MeshInstance3D" parent="Waende/Pfosten" unique_id=348890506]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.15, 1.65, 11.15)
+transform = Transform3D(1.15, 0, 0, 0, 1, 0, 0, 0, 1, 3.14, 1.65, 11.15)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_4n3nb")
 

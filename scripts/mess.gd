@@ -82,11 +82,14 @@ func _apply_kind() -> void:
 ## Temizlik ilerlemesi (0=temiz değil .. 1=temiz) -> görsel küçülür/solar.
 func apply_progress(p: float) -> void:
 	if ist_plane():
-		# Plane wird weggezogen: sackt zusammen und rutscht zur Seite
+		# Plane wird nach vorn heruntergezogen: sie rutscht vom Möbel, die
+		# Vorderkante sackt ab, hinten hebt sie sich leicht — wie ein Tuch, an
+		# dem jemand zieht. Wegnehmen: entfernen().
 		var g: Vector3 = DECKEN_GROESSE.get(kind, Vector3.ONE)
 		var q := clampf(p, 0.0, 1.0)
-		_plane.scale = Vector3(g.x, g.y * (1.0 - 0.7 * q), g.z)
-		_plane.position.x = g.x * 0.25 * q
+		_plane.position = Vector3(0.0, 0.0, g.z * 0.45 * q)
+		_plane.rotation.x = 0.18 * q
+		_plane.scale = Vector3(g.x * (1.0 + 0.03 * q), g.y * (1.0 - 0.35 * q), g.z * (1.0 - 0.15 * q))
 		return
 	if ist_dreck():
 		var d := lerpf(1.5, 0.4, clampf(p, 0.0, 1.0))
@@ -99,3 +102,21 @@ func apply_progress(p: float) -> void:
 	var m := _disc.material_override as StandardMaterial3D
 	if m:
 		m.albedo_color.a = lerpf(0.95, 0.3, clampf(p, 0.0, 1.0))
+
+## Weggeräumt (GameManager._remove_mess): die Plane fällt vorn als Stoffhaufen
+## zu Boden und verschwindet dann; alles andere sofort weg.
+func entfernen() -> void:
+	remove_from_group("interactable")
+	remove_from_group("mess")
+	if not ist_plane():
+		queue_free()
+		return
+	var g: Vector3 = DECKEN_GROESSE.get(kind, Vector3.ONE)
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(_plane, "scale", Vector3(g.x * 0.8, 0.12, g.z * 0.35), 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tw.tween_property(_plane, "position", Vector3(0.0, 0.0, g.z * 0.75), 0.35)
+	tw.tween_property(_plane, "rotation:x", 0.0, 0.35)
+	tw.chain().tween_interval(0.6)
+	tw.chain().tween_property(_plane, "scale", Vector3(g.x * 0.3, 0.02, g.z * 0.15), 0.4)
+	tw.chain().tween_callback(queue_free)

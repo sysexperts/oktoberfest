@@ -90,13 +90,27 @@ class Lauf extends Node:
 		sp.look_at(Vector3(-3, 0.5, -10), Vector3.UP)
 		await _warten(0.6)
 		_bild(dir + "/tut_planen.png")
+		for id in gm._messes.keys():
+			if gm._mess_kind.get(id, 0) == 10:
+				for k in 110:
+					gm.net_clean(id)
+		await _warten(0.4)
+		_bild(dir + "/tut_plane_halb.png")
+		var geld_plane: int = Game.money
+		for id in gm._messes.keys():
+			if gm._mess_kind.get(id, 0) == 10:
+				for k in 200:
+					gm.net_clean(id)
+		await _warten(0.2)
+		_bild(dir + "/tut_plane_faellt.png")
+		_check("Plane bringt kein Geld", Game.money == geld_plane, "%d → %d" % [geld_plane, Game.money])
 		# nah an einem Haufen, mit Besen
 		var ms: Array = gm._messes.values()
 		for i in 5:
 			var m: Node3D = ms[i]
 			sp.global_position = m.global_position + Vector3(0, 0.1, 1.6)
 			sp.look_at(m.global_position + Vector3(0, 0.1, 0), Vector3.UP)
-			sp._fegt_bis = Time.get_ticks_msec() / 1000.0 + 5.0
+			sp._fegt_bis = Time.get_ticks_msec() / 1000.0 + 0.1
 			sp._head.rotation.x = -0.75
 			await _warten(0.6)
 			_bild(dir + "/tut_haufen_%d.png" % i)
@@ -116,7 +130,8 @@ class Lauf extends Node:
 				gm.net_muell_abgeben()
 		await _warten(1.0)
 		sp.global_position = Vector3(-3, 0.1, 19.5)
-		sp.look_at(Vector3(-5, 0.3, 16.3), Vector3.UP)
+		sp.global_position = Vector3(-3.3, 0.1, 18.3)
+		sp.look_at(Vector3(-5, 0.4, 16.3), Vector3.UP)
 		await _warten(0.6)
 		_bild(dir + "/tut_muellplatz.png")
 		_check("Sauber: Schritt 3, er geht ins Büro", gm._quest_step == 3 and chef.unterwegs(), "Schritt %d" % gm._quest_step)

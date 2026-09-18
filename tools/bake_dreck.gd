@@ -276,17 +276,57 @@ func _plane() -> void:
 func _at_y(y: float) -> Transform3D:
 	return Transform3D(Basis(), Vector3(0, y, 0))
 
-## Voller schwarzer Müllsack mit Knoten
+## Voller Müllsack aus dunkelgrauem Kunststoff als Drehkörper: flacher Boden,
+## praller Bauch mit leichten Beulen vom Inhalt, nach oben Falten, die zum
+## zusammengerafften Hals laufen; rotes Zugband mit Schleife, zwei kurze Zipfel.
 func _muellsack() -> void:
 	_neu()
-	_rng.seed = 88
-	_mat("sack", Color(0.08, 0.08, 0.09), 0.55)
-	_mat("sack_glanz", Color(0.13, 0.13, 0.15), 0.4)
-	_add("sack", _kugel(0.3, 16, 10), Transform3D(Basis().scaled(Vector3(1.0, 1.15, 0.9)), Vector3(0, 0.33, 0)))
-	for i in 6:
-		var w := i * TAU / 6.0 + _rng.randf_range(-0.2, 0.2)
-		_add("sack_glanz", _kugel(0.12, 10, 6), Transform3D(Basis().scaled(Vector3(1, 1.4, 0.6)), Vector3(sin(w) * 0.22, 0.3 + _rng.randf_range(-0.08, 0.1), cos(w) * 0.2)))
-	# Hals und Knoten
-	_add("sack", _zyl(0.04, 0.09, 0.14, 12), _at_y(0.72))
-	_add("sack", _kugel(0.06, 10, 6), _at_y(0.8))
+	_mat("sack", Color(0.12, 0.13, 0.16), 0.32, 0.05)
+	_mat("band", Color(0.78, 0.1, 0.08), 0.5)
+	(_mats["sack"] as StandardMaterial3D).clearcoat_enabled = true
+	(_mats["sack"] as StandardMaterial3D).clearcoat = 0.5
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	_teile["sack"] = st
+	# Profil: [Höhe, Radius]
+	var profil := [[0.0, 0.0], [0.0, 0.22], [0.03, 0.27], [0.12, 0.305], [0.25, 0.315], [0.38, 0.3],
+		[0.5, 0.26], [0.6, 0.2], [0.68, 0.13], [0.74, 0.07], [0.78, 0.045], [0.84, 0.04], [0.86, 0.0]]
+	var seg := 40
+	var punkte := []
+	for i in profil.size():
+		var y: float = profil[i][0]
+		var r0: float = profil[i][1]
+		var ring := []
+		for j in seg + 1:
+			var w := float(j) / seg * TAU
+			var r := r0
+			if r0 > 0.0:
+				# Falten: werden zum Hals hin tiefer
+				var falte := clampf((y - 0.35) / 0.4, 0.0, 1.0)
+				r *= 1.0 + 0.09 * falte * sin(w * 9.0 + y * 6.0)
+				# Beulen vom Inhalt (Karton, Flasche) im Bauch
+				var bauch := clampf(1.0 - absf(y - 0.28) / 0.25, 0.0, 1.0)
+				r *= 1.0 + bauch * (0.07 * sin(w * 2.0 + 0.7) + 0.05 * sin(w * 3.0 + 2.1) + 0.03 * sin(w * 5.0))
+			ring.append(Vector3(sin(w) * r, y + (0.015 * sin(w * 3.0) if y > 0.05 and y < 0.7 else 0.0), cos(w) * r))
+		punkte.append(ring)
+	for i in punkte.size() - 1:
+		for j in seg:
+			var a: Vector3 = punkte[i][j]
+			var b: Vector3 = punkte[i][j + 1]
+			var c: Vector3 = punkte[i + 1][j]
+			var d: Vector3 = punkte[i + 1][j + 1]
+			for v in [a, c, b, b, c, d]:
+				st.add_vertex(v)
+	# Zugband: Wicklung um den Hals, Schleife, Zipfel
+	_add("band", _zyl(0.05, 0.05, 0.03, 16), _at_y(0.79))
+	var schlaufe := TorusMesh.new()
+	schlaufe.inner_radius = 0.022
+	schlaufe.outer_radius = 0.034
+	schlaufe.rings = 16
+	schlaufe.ring_segments = 6
+	for s in [-1.0, 1.0]:
+		_add("band", schlaufe, Transform3D(Basis(Vector3.RIGHT, PI / 2).rotated(Vector3.BACK, s * 0.5), Vector3(s * 0.05, 0.81, 0.03)))
 	_speichern("muellsack")
+
+func _at(x: float, y: float, z: float) -> Transform3D:
+	return Transform3D(Basis(), Vector3(x, y, z))

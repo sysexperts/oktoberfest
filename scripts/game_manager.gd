@@ -324,16 +324,17 @@ const WARE_ESSEN := 2
 const PACK_UNITS := 10                    # Einheiten pro Paket
 const PACK_COST := {1: 40, 2: 50}         # Preis pro Paket (10 Einheiten)
 const DELIVERY_DELAY := 30.0              # Lieferzeit nach Bestellung (Sekunden, vorher 60)
-## Lieferwagen: kommt die Allee vom Kirmestor herunter, hält vor dem Zelt, wirft
-## die Ware links ab (DROP_POINT), wendet vor dem Eingang und fährt die Allee
-## wieder hoch. Wegpunkte in Weltkoordinaten.
-const VAN_REIN := [Vector3(-1.8, 0.0, 88.0), Vector3(-1.8, 0.0, 30.0), Vector3(-1.8, 0.0, 20.0)]
-const VAN_RAUS := [Vector3(-1.2, 0.0, 17.9), Vector3(0.9, 0.0, 16.9), Vector3(3.0, 0.0, 17.6),
-	Vector3(3.6, 0.0, 20.5), Vector3(3.6, 0.0, 30.0), Vector3(3.6, 0.0, 88.0)]
+## Lieferwagen: kommt mittig die Allee vom Kirmestor herunter (nur ~4 m zwischen
+## den Buden, Mitte x = -0.5), hält vor dem Eingangsbogen, wirft die Ware vor
+## sich ab (DROP_POINT), setzt rückwärts bis zur freien Fläche bei z ≈ 58 zurück,
+## wendet dort und fährt vorwärts wieder hoch. Wegpunkt = [Ort, rückwärts?].
+const VAN_REIN := [[Vector3(-0.5, 0.0, 88.0), false], [Vector3(-0.5, 0.0, 30.0), false], [Vector3(-0.5, 0.0, 24.5), false]]
+const VAN_RAUS := [[Vector3(-0.5, 0.0, 52.0), true], [Vector3(-3.5, 0.0, 58.5), true],
+	[Vector3(-0.5, 0.0, 64.0), false], [Vector3(-0.5, 0.0, 88.0), false]]
 ## Langsamer auf den letzten Metern vor dem Halt und beim Wenden
 const VAN_LANGSAM := 3.5
 const VAN_SPEED := 9.0
-const DROP_POINT := Vector3(-4.2, 0.0, 19.6)   # wo die Pakete landen (links neben dem Wagen)
+const DROP_POINT := Vector3(-0.5, 0.0, 21.4)   # wo die Pakete landen (vor dem Wagen, am Bogen)
 
 # ---- E5: Bühne & Künstler ----
 const ARTIST_SCENE := preload("res://scenes/artist.tscn")
@@ -2252,7 +2253,7 @@ func _update_delivery(delta: float) -> void:
 				if float(_pending[j].t) <= 0.0:
 					_van_cargo.append({"kind": int(_pending[j].kind), "packs": int(_pending[j].packs)})
 					_pending.remove_at(j)
-			_van_pos = VAN_REIN[0]
+			_van_pos = VAN_REIN[0][0]
 			_van_weg = VAN_REIN.slice(1)
 			_van_yaw = PI   # nach Süden, die Allee herunter
 			_van_state = 1
@@ -2281,11 +2282,13 @@ func _update_delivery(delta: float) -> void:
 		_van_move.rpc(_van_pos, _van_yaw)
 
 ## Einen Schritt die Wegpunkte entlang. true = letzter Punkt erreicht.
-## Vor dem Halt (Anfahrt) und beim Wenden fährt er langsam.
+## Vor dem Halt und beim Rangieren (rückwärts) fährt er langsam; rückwärts
+## schaut die Schnauze entgegen der Fahrtrichtung.
 func _van_fahren(delta: float) -> bool:
 	if _van_weg.is_empty():
 		return true
-	var ziel: Vector3 = _van_weg[0]
+	var ziel: Vector3 = _van_weg[0][0]
+	var rueck: bool = _van_weg[0][1]
 	var zu := ziel - _van_pos
 	var d := zu.length()
 	if d <= 0.3:
@@ -2295,10 +2298,13 @@ func _van_fahren(delta: float) -> bool:
 	var bis_halt := d if _van_weg.size() == 1 else 99.0
 	if _van_state == 1 and bis_halt < 12.0:
 		tempo = lerpf(VAN_LANGSAM, VAN_SPEED, bis_halt / 12.0)
-	if _van_state == 3 and _van_weg.size() > 2:
-		tempo = VAN_LANGSAM
+	if rueck:
+		tempo = VAN_LANGSAM * 1.4
+	elif _van_state == 3 and _van_weg.size() > 1:
+		tempo = VAN_LANGSAM * 1.6
 	_van_pos += zu / d * minf(tempo * delta, d)
-	_van_yaw = lerp_angle(_van_yaw, atan2(zu.x, zu.z), clampf(delta * 3.5, 0.0, 1.0))
+	var blick := atan2(-zu.x, -zu.z) if rueck else atan2(zu.x, zu.z)
+	_van_yaw = lerp_angle(_van_yaw, blick, clampf(delta * 3.0, 0.0, 1.0))
 	return false
 
 func _drop_cargo() -> void:
@@ -2307,7 +2313,7 @@ func _drop_cargo() -> void:
 		for p in int(c.packs):
 			var id := _pkg_next
 			_pkg_next += 1
-			var off := Vector3(randf_range(-2.5, 2.5), 0.0, randf_range(-1.5, 1.5))
+			var off := Vector3(randf_range(-1.4, 1.4), 0.0, randf_range(-0.7, 0.7))
 			_add_package.rpc(id, DROP_POINT + off, int(c.kind), PACK_UNITS)
 			n += 1
 	_van_cargo = []
@@ -4615,7 +4621,10 @@ func _remove_mess(id: int) -> void:
 	if _messes.has(id):
 		var m: Node = _messes[id]
 		if is_instance_valid(m):
-			m.queue_free()
+			if m.has_method("entfernen"):
+				m.entfernen()   # Plane fällt erst zusammen
+			else:
+				m.queue_free()
 		_messes.erase(id)
 	_mess_clean.erase(id)
 	_mess_kind.erase(id)
@@ -4640,14 +4649,16 @@ func net_clean(id: int) -> void:
 		putz_faktor *= DRECK_TEMPO
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
-		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt
-		var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
-		_add_income(tip)
-		_last_earn += tip
-		_clean_tips += tip
-		_stats.cleaned += 1
-		_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
 		var art_dreck := int(_mess_kind.get(id, 0))
+		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt.
+		# Planen abziehen ist kein Putzen: dafür gibt es nichts.
+		if art_dreck < Mess.DECKE or art_dreck >= Mess.SABOTAGE:
+			var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+			_add_income(tip)
+			_last_earn += tip
+			_clean_tips += tip
+			_stats.cleaned += 1
+			_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
 		if art_dreck >= Mess.DRECK and art_dreck < Mess.DECKE:
 			_muellsack_hinlegen((_messes[id] as Node3D).global_position)
 		_remove_mess.rpc(id)

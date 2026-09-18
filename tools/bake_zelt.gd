@@ -841,7 +841,8 @@ func _waende(g: Node3D) -> void:
 			_box(pf, "Pfosten%s_%s" % [seite, String.num(z)], Vector3(0.3, h, 0.3), Vector3(s * (XI - 0.15), h / 2, z), m.holz_dunkel)
 		_box(pf, "Raehm" + seite, Vector3(0.24, 0.3, 25.0), Vector3(s * (XI - 0.12), TRAUFE - 0.2, -1.5), m.holz_dunkel)
 		_box(pf, "PfostenVorne" + seite, Vector3(0.3, h, 0.12), Vector3(s * 7.5, h / 2, ZF - 0.06), m.holz_dunkel)
-		_box(pf, "TorPfosten" + seite, Vector3(0.3, 3.3, 0.5), Vector3(s * 3.15, 1.65, ZF + 0.15), m.holz_dunkel)
+		# 0,345 breit: die Innenkante steht 3 cm vor dem Wandende (sonst flackert es am Tor)
+		_box(pf, "TorPfosten" + seite, Vector3(0.345, 3.3, 0.5), Vector3(s * 3.14, 1.65, ZF + 0.15), m.holz_dunkel)
 	for x in [-10.0, -2.5, 2.5, 10.0]:
 		_box(pf, "PfostenHinten_%s" % String.num(x), Vector3(0.3, h, 0.12), Vector3(x, h / 2, ZB + 0.06), m.holz_dunkel)
 	_box(pf, "RaehmHinten", Vector3(24.0, 0.3, 0.24), Vector3(0, TRAUFE - 0.2, ZB + 0.12), m.holz_dunkel)

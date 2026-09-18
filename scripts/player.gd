@@ -759,7 +759,8 @@ func _handle_interaction(delta: float) -> void:
 	if Input.is_action_pressed("interact") and _current_target is Mess:
 		if _world.has_method("net_clean"):
 			_world.net_clean.rpc_id(1, (_current_target as Mess).mess_id)
-			_fegt_bis = Time.get_ticks_msec() / 1000.0 + 0.2
+			if not (_current_target as Mess).ist_plane():
+				_fegt_bis = Time.get_ticks_msec() / 1000.0 + 0.2
 			_sfx_loop("scrub")
 
 func _has_full_mug() -> bool:

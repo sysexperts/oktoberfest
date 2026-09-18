@@ -41,7 +41,8 @@ func _process(delta: float) -> void:
 
 ## Kirmesbesucher und der eigene Spieler werden weggeschleudert (Visitor/Player.geschleudert)
 func _umfahren() -> void:
-	var vorn := global_transform.basis.z
+	# Stoßrichtung = Fahrtrichtung (auch rückwärts)
+	var vorn := _tempo.normalized() if _tempo.length() > 0.5 else global_transform.basis.z
 	for sp in get_tree().get_nodes_in_group("player"):
 		if not sp.get("_is_local") or not sp.has_method("geschleudert") or sp.wird_geschleudert():
 			continue
@@ -63,10 +64,10 @@ func _umfahren() -> void:
 		b.geschleudert(vorn * wucht * 0.9 + seite * wucht * 0.6 + Vector3.UP * (4.0 + wucht * 0.35))
 		_staub((b as Node3D).global_position, 0.8, "aufprall")
 
-## Beim Abladen: Staubwolke an der linken Seite (dort landen die Pakete)
+## Beim Abladen: Staubwolke vor dem Wagen (dort landen die Pakete)
 func abladen() -> void:
 	for i in 3:
-		_staub(to_global(Vector3(-1.6 - i * 0.6, 0.0, -1.0 + i * 0.8)), 1.2, "" if i else "aufprall")
+		_staub(to_global(Vector3(-0.9 + i * 0.9, 0.0, 3.4)), 1.2, "" if i else "aufprall")
 
 func _staub(ort: Vector3, staerke: float, ton := "") -> void:
 	var s := STAUB.instantiate()
