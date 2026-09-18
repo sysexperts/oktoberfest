@@ -857,6 +857,8 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
+		"huber_wette": _huber_wette,
+		"sabotage_tag": _letzte_sabotage,
 		"tagesziel": _tagesziel,
 		"bierpreis": _bierpreis,
 		"einrichtung": _einrichtung.values(),
@@ -937,6 +939,9 @@ func _load_game() -> bool:
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
 	# Sepps Schulden: ältere Spielstände (vor Version 175) haben keine — dort gilt alles als bezahlt
 	_bank_bezahlt = clampi(int(d.get("bank", Wirtschaft.BANK_RATEN.size())), 0, Wirtschaft.BANK_RATEN.size())
+	var wette_gespeichert: Variant = d.get("huber_wette", {})
+	_huber_wette = wette_gespeichert if wette_gespeichert is Dictionary else {}
+	_letzte_sabotage = int(d.get("sabotage_tag", 0))
 	var ziel_gespeichert: Variant = d.get("tagesziel", {})
 	_tagesziel = ziel_gespeichert if ziel_gespeichert is Dictionary else {}
 	_bierpreis = float(d.get("bierpreis", 1.0))   # Spielraum wird nach dem Laden der Lizenzen geprüft
@@ -1684,7 +1689,7 @@ func _quest_done(step: int) -> bool:
 ## Liegt noch Dreck aus dem verlassenen Zelt herum? (Mess.DRECK)
 func _dreck_uebrig() -> bool:
 	for k in _mess_kind.values():
-		if int(k) >= Mess.DRECK:
+		if int(k) >= Mess.DRECK and int(k) < Mess.SABOTAGE:
 			return true
 	return false
 
@@ -3770,6 +3775,7 @@ func _process(delta: float) -> void:
 	if _phase == Phase.SHIFT:
 		_phase_time -= delta
 		_shift_process(delta)
+		_huber_schicht(delta)
 		if _phase_time <= 0.0:
 			_end_shift(0)   # 22:00 — normal kapanış
 	elif not _guest_sim.is_empty():
@@ -4224,6 +4230,7 @@ func _start_shift() -> void:
 	_shift_num += 1
 	_bank_mahnen()
 	_muell_stapel = 0   # Müllabfuhr war da
+	_huber_morgen()
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
@@ -4337,6 +4344,7 @@ func _end_shift(reason := 0) -> void:
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
 	_stats.days += 1
 	_tagesziel_auswerten()
+	_huber_abrechnen()
 	_bank_abbuchen()
 	_pruefe_pleite()   # nach Miete und Löhnen — erst dann steht fest, ob es reicht
 	_broadcast_meta()
@@ -4796,6 +4804,7 @@ func _buero_state() -> Dictionary:
 		"kredit": _kredit_rest,
 		"bank_naechste": bank_naechste(), "bank_rest": bank_rest(),
 		"muell": _muell_stapel,
+		"huber_wette": _huber_wette,
 		"tagesziel": _tagesziel,
 		"zelt_name": _zelt_name,
 	}
@@ -5203,3 +5212,100 @@ func _muell_offen() -> bool:
 func _muellplatz_zeigen(n: int) -> void:
 	for m in get_tree().get_nodes_in_group("muellplatz"):
 		m.anzahl_setzen(n)
+
+# ================================================= Huber: Wetten und Sabotage
+## Huber (scripts/npc_huber.gd) bietet ab Tag 3 jeden dritten Tag morgens eine
+## Wette an (Annehmen im Gespräch), abends wird abgerechnet. Ab Tag 5 sabotiert
+## er ab und zu während der Schicht: ein auslaufendes Fass (Bierlache, kostet
+## Bier bis sie weggeputzt ist) oder eine Stinkbombe (Flecken, Sauberkeit sinkt).
+const HUBER_WETTE_AB := 3
+const SABOTAGE_AB := 5
+const SABOTAGE_ABSTAND := 3
+const LECK_TAKT := 2.5
+var _huber_wette := {}
+var _sabotage_t := -1.0
+var _letzte_sabotage := 0
+var _leck_t := 0.0
+
+func _huber_morgen() -> void:
+	_huber_wette = {}
+	_sabotage_t = -1.0
+	if tutorial_active():
+		return
+	var d := _day
+	if d >= HUBER_WETTE_AB and d % 3 == 0:
+		var arten := [
+			{"typ": "mass", "ziel": int(ceil(float(15 + 7 * d) * 1.1))},
+			{"typ": "sauber", "ziel": 0},
+			{"typ": "beschwerde", "ziel": 0},
+		]
+		_huber_wette = arten.pick_random()
+		_huber_wette["einsatz"] = 150 + 50 * d
+		_huber_wette["angenommen"] = false
+		_melde("MSG_HUBER_WETTE", [], 0)
+	if d >= SABOTAGE_AB and d - _letzte_sabotage >= SABOTAGE_ABSTAND and randf() < 0.6:
+		_letzte_sabotage = d
+		_sabotage_t = randf_range(60.0, 180.0)
+
+## Spieler nimmt Hubers Wette an (true) oder lehnt ab
+@rpc("any_peer", "reliable", "call_local")
+func net_huber_wette(annehmen: bool) -> void:
+	if not multiplayer.is_server() or _huber_wette.is_empty() or bool(_huber_wette.get("angenommen", false)):
+		return
+	if annehmen:
+		_huber_wette["angenommen"] = true
+		_melde("MSG_HUBER_WETTE_AN", [_eur(int(_huber_wette.einsatz))], 0)
+	else:
+		_huber_wette = {}
+	_broadcast_meta()
+
+## Abends: Wette abrechnen
+func _huber_abrechnen() -> void:
+	if _huber_wette.is_empty():
+		return
+	if bool(_huber_wette.get("angenommen", false)):
+		var einsatz := int(_huber_wette.einsatz)
+		var gewonnen := false
+		match str(_huber_wette.typ):
+			"mass": gewonnen = _served >= int(_huber_wette.ziel)
+			"sauber": gewonnen = _urin_count == 0 and _served >= 10
+			"beschwerde": gewonnen = _complaints == 0 and _served >= 10
+		if gewonnen:
+			Game.add_money(einsatz)
+			_popularity = minf(100.0, _popularity + 2.0)
+			_melde("MSG_HUBER_WETTE_GEWONNEN", [_eur(einsatz)], 2)
+		else:
+			Game.add_money(-einsatz)
+			_melde("MSG_HUBER_WETTE_VERLOREN", [_eur(einsatz)], 1)
+	_huber_wette = {}
+
+## Während der Schicht: Sabotage auslösen und das Leck Bier kosten lassen
+func _huber_schicht(delta: float) -> void:
+	if _sabotage_t > 0.0:
+		_sabotage_t -= delta
+		if _sabotage_t <= 0.0:
+			_sabotieren()
+	var leck := false
+	for k in _mess_kind.values():
+		if int(k) >= Mess.SABOTAGE:
+			leck = true
+			break
+	if not leck:
+		return
+	_leck_t += delta
+	if _leck_t >= LECK_TAKT:
+		_leck_t = 0.0
+		if int(_stock[WARE_BIER]) > 0:
+			_stock[WARE_BIER] = int(_stock[WARE_BIER]) - 1
+			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+
+func _sabotieren() -> void:
+	if randf() < 0.5:
+		var fass := _fass_platz(1)
+		_spawn_mess_at(Vector3(fass.x + randf_range(-0.4, 0.4), 0.0, fass.z + 0.8), Mess.SABOTAGE)
+		_melde("MSG_SABOTAGE_FASS", [], 1)
+	else:
+		for i in 4:
+			_spawn_mess_at(Vector3(randf_range(-8.0, 8.0), 0.0, randf_range(-5.0, 10.0)), 0)
+		_hygiene = maxf(0.0, _hygiene - 25.0)
+		_melde("MSG_SABOTAGE_STINK", [], 1)

@@ -7,6 +7,8 @@ extends Node3D
 const DRECK := 2
 ## Ab hier: Abdeckplanen über Möbeln (abziehen statt fegen). Größe je Art.
 const DECKE := 10
+## Ab hier: Sabotage von Huber — auslaufendes Fass (Bierlache, kostet Bier bis sie weg ist)
+const SABOTAGE := 20
 const DECKEN_GROESSE := {
 	10: Vector3(9.0, 1.15, 1.9), 11: Vector3(9.0, 1.15, 1.9), 12: Vector3(5.6, 1.1, 1.4),
 	13: Vector3(4.5, 1.05, 8.2), 14: Vector3(1.0, 1.9, 5.6),
@@ -30,14 +32,26 @@ func set_kind(k: int) -> void:
 	if is_inside_tree():
 		_apply_kind()
 
+func ist_sabotage() -> bool:
+	return kind >= SABOTAGE
+
 func ist_plane() -> bool:
-	return kind >= DECKE
+	return kind >= DECKE and kind < SABOTAGE
 
 func ist_dreck() -> bool:
-	return kind >= DRECK
+	return kind >= DRECK and kind < SABOTAGE
 
 func _apply_kind() -> void:
 	if _disc == null:
+		return
+	if ist_sabotage():
+		var bier := (_disc.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
+		bier.albedo_color = Color(0.85, 0.58, 0.12, 0.92)
+		_disc.material_override = bier
+		_disc.scale = Vector3(1.9, 1.0, 1.9)
+		_label.set("schluessel", "WORLD_LECK")
+		if _label.has_method("aktualisieren"):
+			_label.aktualisieren()
 		return
 	if ist_plane():
 		_disc.visible = false

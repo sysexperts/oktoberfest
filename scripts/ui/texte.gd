@@ -136,3 +136,9 @@ static func tagesziel_text(ziel: Dictionary) -> String:
 	if typ == "umsatz":
 		return t % euro(z)
 	return t % z if t.contains("%d") else t
+
+## Hubers Wette als Satz, z. B. „Ich bediene heute 60 Gäste — ihr mehr?"
+static func huber_wette_text(w: Dictionary) -> String:
+	var typ := str(w.get("typ", ""))
+	var t := _t("HUBER_WETTE_" + typ.to_upper())
+	return t % int(w.get("ziel", 0)) if t.contains("%d") else t

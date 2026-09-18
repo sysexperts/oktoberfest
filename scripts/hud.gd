@@ -404,7 +404,7 @@ func _ziel_anzeigen() -> void:
 		return
 	var ziel: Dictionary = _zustand.get("tagesziel", {})
 	var bank: Array = _zustand.get("bank_naechste", [])
-	_aufgabe.visible = not ziel.is_empty() or not bank.is_empty()
+	_aufgabe.visible = not ziel.is_empty() or not bank.is_empty() or not (_zustand.get("huber_wette", {}) as Dictionary).is_empty()
 	if not _aufgabe.visible:
 		return
 	%AufgabeSkip.visible = false
@@ -425,6 +425,12 @@ func _ziel_anzeigen() -> void:
 		zeilen.append(tr("HUD_ZIEL_LOHN") % Texte.euro(int(ziel.get("lohn", 0))))
 	if not bank.is_empty():
 		zeilen.append(tr("HUD_BANK") % [Texte.euro(int(bank[1])), int(bank[0]), Texte.euro(int(_zustand.get("bank_rest", 0)))])
+	var wette: Dictionary = _zustand.get("huber_wette", {})
+	if not wette.is_empty():
+		if bool(wette.get("angenommen", false)):
+			zeilen.append(tr("HUD_HUBER_WETTE") % [Texte.huber_wette_text(wette), Texte.euro(int(wette.get("einsatz", 0)))])
+		else:
+			zeilen.append(tr("HUD_HUBER_ANGEBOT"))
 	%AufgabeText.text = "\n".join(zeilen)
 
 ## Fertiger Text als Meldung (schon übersetzt)
