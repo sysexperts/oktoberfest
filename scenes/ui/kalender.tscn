@@ -1,0 +1,664 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/kalender.gd" id="1_skript"]
+[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="3_bogen"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
+
+[sub_resource type="AtlasTexture" id="Pergament"]
+atlas = ExtResource("3_bogen")
+region = Rect2(664, 516, 484, 320)
+
+[sub_resource type="StyleBoxFlat" id="Zelle"]
+bg_color = Color(0.98, 0.93, 0.8, 0.55)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.3, 0.15, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+
+[node name="Kalender" type="CanvasLayer"]
+layer = 27
+visible = false
+script = ExtResource("1_skript")
+zelle_normal = SubResource("Zelle")
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Blatt" type="NinePatchRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -300.0
+offset_right = 560.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("Pergament")
+patch_margin_left = 60
+patch_margin_top = 60
+patch_margin_right = 60
+patch_margin_bottom = 60
+
+[node name="Rand" type="MarginContainer" parent="Blatt"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 70
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 70
+theme_override_constants/margin_bottom = 45
+
+[node name="Spalte" type="VBoxContainer" parent="Blatt/Rand"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Titel" type="Label" parent="Blatt/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 38
+text = "KALENDER_TITEL"
+horizontal_alignment = 1
+
+[node name="Tage" type="GridContainer" parent="Blatt/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 8
+
+[node name="Tag1" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag1"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "1"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag2" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "2"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag3" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag3"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "3"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag4" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag4"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "4"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag5" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag5"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "5"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag6" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag6"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "6"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag7" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag7"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "7"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag8" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag8"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "8"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag9" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag9"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "9"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag10" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag10"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "10"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag11" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag11"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "11"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag12" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag12"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "12"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag13" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag13"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "13"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag14" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag14"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "14"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag15" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag15"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "15"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Tag16" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
+custom_minimum_size = Vector2(112, 150)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Zelle")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag16"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 24
+text = "16"
+
+[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
+
+[node name="Legende" type="Label" parent="Blatt/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.35, 0.24, 0.12, 1)
+theme_override_font_sizes/font_size = 14
+text = "KALENDER_LEGENDE"
+horizontal_alignment = 1
+autowrap_mode = 3

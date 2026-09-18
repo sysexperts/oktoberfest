@@ -398,7 +398,7 @@ HELP_CONTROLS,Steuerung,Controls,Kontroller
 HELP_MOUSE,Maus,Mouse,Fare
 HELP_CLOSE,Schließen {help},Close {help},Kapat {help}
 ACTION_LOOK,Umsehen,Look around,Etrafa bak
-HUD_HELP_HINT,{help} Hilfe,{help} Help,{help} Yardım
+HUD_HELP_HINT,{help} Hilfe   ·   {kalender} Kalender,{help} Help   ·   {kalender} Calendar,{help} Yardım   ·   {kalender} Takvim
 PAUSE_HELP,Hilfe und Steuerung,Help and controls,Yardım ve kontroller
 HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
 HELP_FLOW,"1. Wiesenbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Hinten Krug nehmen, am Fass zapfen, vorne auf die Ausgabe stellen — dort holen Kellner ab und bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug at the back, pour at a keg, put it on the pass up front — waiters pick up there and serve. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Arkada kupa al, fıçıda doldur, öndeki servis yerine koy — garsonlar oradan alıp servis yapar. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
@@ -903,3 +903,46 @@ Your Uncle Sepp","Çadır artık gerçekten sizin. Benden daha iyisini yapın ve
 
 Şerefe, sevgililerim.
 Sepp Amcanız"
+ZEITUNG_NAME,Wiesn-Kurier,Fair Courier,Fuar Postası
+ZEITUNG_AUSGABE,Abendausgabe · Tag %d · 20 Pfennig,Evening edition · Day %d · 20 pence,Akşam baskısı · Gün %d · 20 kuruş
+ZEITUNG_SCHLIESSEN,Klick / E: Zeitung weglegen,Click / E: put the paper away,Tık / E: gazeteyi bırak
+ZEITUNG_ZAHLEN,"Heute: %d Gäste bedient · %s Umsatz · Beliebtheit %d %%","Today: %d guests served · %s in sales · popularity %d %%","Bugün: %d misafire servis · %s ciro · popülerlik %%%d"
+ZEITUNG_LEER,Gähnende Leere im Zelt „%s“,Deathly quiet at „%s“,%s'da derin sessizlik
+ZEITUNG_LEER_UNTER,Kein einziger Gast bedient — die Blaskapelle spielte für die Tauben.,Not a single guest served — the brass band played for the pigeons.,Tek bir misafire bile servis yapılmadı — bando güvercinlere çaldı.
+ZEITUNG_BESCHWERDEN,Beschwerdeflut im Zelt „%s“!,Flood of complaints at „%s“!,%s'da şikayet yağmuru!
+ZEITUNG_BESCHWERDEN_UNTER,"%d Gäste beschwerten sich — der Wiesnchef runzelt die Stirn.","%d guests complained — the fair manager is frowning.","%d misafir şikayet etti — fuar müdürü kaşlarını çattı."
+ZEITUNG_PFUETZEN,Pfützen-Alarm im Zelt „%s“,Puddle alert at „%s“,%s'da birikinti alarmı
+ZEITUNG_PFUETZEN_UNTER,"%d Pfützen in einer Schicht. Leser fragen: Gibt es dort überhaupt ein Klo?","%d puddles in one shift. Readers ask: is there even a toilet?","Bir vardiyada %d birikinti. Okurlar soruyor: orada tuvalet var mı?"
+ZEITUNG_GEGANGEN,%d Gäste gehen durstig heim,%d guests go home thirsty,%d misafir susuz eve gitti
+ZEITUNG_GEGANGEN_UNTER,"Lange Wartezeiten im Zelt „%s“ — die Geduld der Wiesnbesucher ist endlich.","Long waits at „%s“ — fairgoers' patience has limits.","%s'da uzun bekleme — ziyaretçilerin sabrı sınırlı."
+ZEITUNG_VERLUST,Rote Zahlen im Zelt „%s“,In the red at „%s“,%s zararda
+ZEITUNG_VERLUST_UNTER,Der Tag hat mehr gekostet als eingebracht. Huber lacht sich ins Fäustchen.,The day cost more than it brought in. Huber is laughing up his sleeve.,Gün getirdiğinden fazlasına mal oldu. Huber bıyık altından gülüyor.
+ZEITUNG_REKORD,Rekord! %d Gäste an einem Tag,Record! %d guests in one day,Rekor! Bir günde %d misafir
+ZEITUNG_REKORD_UNTER,"Im Zelt „%s“ fließt das Bier wie zu Sepps besten Zeiten.","At „%s“ the beer flows like in Sepp's best days.","%s'da bira Sepp'in en iyi günlerindeki gibi akıyor."
+ZEITUNG_BELIEBT,„%s“ — bald das beliebteste Zelt der Wiesn?,%s — soon the most popular tent of the fair?,%s — yakında fuarın en sevilen çadırı mı?
+ZEITUNG_BELIEBT_UNTER,Besucher schwärmen von kalter Maß und freundlicher Bedienung.,Visitors rave about cold beer and friendly service.,Ziyaretçiler soğuk bira ve güler yüzlü servise hayran.
+ZEITUNG_SOLIDE,Solider Tag im Zelt „%s“: %d Gäste bedient,A solid day at „%s“: %d guests served,%s'da sağlam bir gün: %d misafire servis
+ZEITUNG_SOLIDE_UNTER,"Keine Katastrophe, kein Rekord — die Wiesn läuft.","No disaster, no record — the fair rolls on.","Felaket yok, rekor yok — fuar devam ediyor."
+ZEITUNG_M_KREDIT,Brauerei bestätigt: Sepps Erben stehen in der Kreide.,Brewery confirms: Sepp's heirs are in debt.,Bira fabrikası doğruladı: Sepp'in varisleri borçlu.
+ZEITUNG_M_BANK,Bank erinnert: Rate fällig am Abend von Tag %d (%s).,Bank reminds: instalment due on the evening of day %d (%s).,Banka hatırlatıyor: taksit %d. günün akşamı (%s).
+ZEITUNG_M_KLO,Leserbrief: „Warum hat das Festzelt kein Klo?“,Letter to the editor: “Why doesn't the tent have a toilet?”,Okur mektubu: “Çadırda neden tuvalet yok?”
+ZEITUNG_M_KELLNER,Gäste klagen über lange Wartezeiten — fehlt es an Kellnern?,Guests complain about long waits — not enough waiters?,Misafirler uzun beklemeden şikayetçi — garson mu eksik?
+ZEITUNG_M_HUBER_1,Huber-Zelt kündigt „die kälteste Maß der Wiesn“ an.,Huber's tent promises “the coldest stein of the fair”.,Huber'in çadırı “fuarın en soğuk birası” sözü veriyor.
+ZEITUNG_M_HUBER_2,Alois Huber im Interview: „Sepps Zelt? Das hält keine Woche.“,Alois Huber in an interview: “Sepp's tent? Won't last a week.”,Alois Huber röportajda: “Sepp'in çadırı mı? Bir hafta dayanmaz.”
+ZEITUNG_M_HUBER_3,Gerücht: Huber soll nachts um fremde Zelte schleichen.,Rumour: Huber is said to sneak around other tents at night.,Söylenti: Huber'in geceleri başka çadırların etrafında dolaştığı söyleniyor.
+ZEITUNG_M_HUBER_4,Huber verlost Freibier — aber nur für Stammgäste.,Huber raffles free beer — regulars only.,Huber bedava bira çekilişi yapıyor — sadece müdavimlere.
+ACTION_KALENDER,Kalender,Calendar,Takvim
+KALENDER_TITEL,Wiesn-Kalender · Saison %d,Fair calendar · season %d,Fuar takvimi · sezon %d
+KALENDER_LEGENDE,"Heute ist hervorgehoben. 🏦 Bankrate am Abend · 🎲 Huber bietet eine Wette an · ⚔ Duell um Sepps Ehre · K oder Esc schließt","Today is highlighted. 🏦 bank instalment in the evening · 🎲 Huber offers a bet · ⚔ duel for Sepp's honour · K or Esc closes","Bugün vurgulandı. 🏦 akşam banka taksiti · 🎲 Huber bahis teklif ediyor · ⚔ Sepp'in onuru için düello · K veya Esc kapatır"
+KALENDER_ERSTER,Erster Wiesn-Tag,First day of the fair,Fuarın ilk günü
+KALENDER_BANK,🏦 %s,🏦 %s,🏦 %s
+KALENDER_WETTE,🎲 Huber-Wette,🎲 Huber bet,🎲 Huber bahsi
+KALENDER_DUELL,⚔ Duell mit Huber,⚔ Duel with Huber,⚔ Huber ile düello
+EREIGNIS_ANSTICH_TITEL,🍺 Anstich — O'zapft is!,🍺 Tapping — O'zapft is!,🍺 Fıçı açılışı — O'zapft is!
+EREIGNIS_ANSTICH_START,"🍺 Anstich! Der erste Wiesn-Tag lockt viele Neugierige ins Zelt.","🍺 Tapping day! The first day of the fair draws plenty of curious visitors.","🍺 Fıçı açılışı! Fuarın ilk günü çok sayıda meraklı çekiyor."
+EREIGNIS_TRACHT_TITEL,👗 Trachtenumzug,👗 Costume parade,👗 Geleneksel kıyafet alayı
+EREIGNIS_TRACHT_START,"👗 Trachtenumzug! Viele Trachtler kommen ins Zelt — und die trinken nur Helles.","👗 Costume parade! Lots of people in traditional dress come in — and they only drink Helles.","👗 Geleneksel kıyafet alayı! Çok sayıda kişi geliyor — ve sadece Helles içiyorlar."
+EREIGNIS_FAMILIE_TITEL,👨‍👩‍👧 Familientag,👨‍👩‍👧 Family day,👨‍👩‍👧 Aile günü
+EREIGNIS_FAMILIE_START,"👨‍👩‍👧 Familientag! Mehr Essen, weniger Bier — und die Gäste warten geduldiger.","👨‍👩‍👧 Family day! More food, less beer — and guests wait more patiently.","👨‍👩‍👧 Aile günü! Daha çok yemek, daha az bira — ve misafirler daha sabırlı."
+EREIGNIS_ITALIENER_TITEL,🇮🇹 Italiener-Wochenende,🇮🇹 Italian weekend,🇮🇹 İtalyan hafta sonu
+EREIGNIS_ITALIENER_START,"🇮🇹 Italiener-Wochenende! Busweise Touristen — das Zelt wird rappelvoll.","🇮🇹 Italian weekend! Busloads of tourists — the tent will be packed.","🇮🇹 İtalyan hafta sonu! Otobüs dolusu turist — çadır tıklım tıklım olacak."

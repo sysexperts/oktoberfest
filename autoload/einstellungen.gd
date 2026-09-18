@@ -23,6 +23,7 @@ const STANDARD_TASTEN := {
 	"ping": KEY_R,
 	"springen": KEY_SPACE,
 	"trinken": KEY_G,
+	"kalender": KEY_K,
 }
 
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.

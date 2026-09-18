@@ -255,6 +255,10 @@ func zeige_kombo(n: int) -> void:
 func set_report(b: Dictionary) -> void:
 	_buero.setze_bilanz(b)
 	_computer.setze_bilanz(b)
+	# Nach Feierabend: der Wiesn-Kurier (scenes/ui/zeitung.tscn), kurz nach der Bilanz
+	var zeitung := get_parent().get_node_or_null("Zeitung")
+	if zeitung and b.has("day") and not b.has("geladen"):
+		get_tree().create_timer(3.0).timeout.connect(func() -> void: zeitung.zeigen(b, _zustand))
 
 # ------------------------------------------------------------ Aufgabe
 ## step: aktueller Tutorialschritt, total: Anzahl. step >= total = fertig.

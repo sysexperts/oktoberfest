@@ -661,7 +661,7 @@ func _pop_grenze() -> float:
 		g += float(POP_EREIGNIS_GRENZE[_ereignis])
 	return minf(100.0, g)
 
-const POP_EREIGNIS_GRENZE := {"promi": 15.0, "prosit": 10.0, "fass": 10.0, "happy": 5.0, "finale": 20.0}
+const POP_EREIGNIS_GRENZE := {"promi": 15.0, "prosit": 10.0, "fass": 10.0, "happy": 5.0, "finale": 20.0, "anstich": 5.0, "italiener": 5.0}
 
 ## Beliebtheit durch Bedienen erhöhen — höchstens bis zur heutigen Grenze.
 func _pop_erhoehen(betrag: float) -> void:
@@ -861,6 +861,8 @@ func _save_game() -> void:
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
+		"plan": _plan,
+		"plan_saison": _plan_saison,
 		"tagesziel": _tagesziel,
 		"bierpreis": _bierpreis,
 		"einrichtung": _einrichtung.values(),
@@ -945,6 +947,9 @@ func _load_game() -> bool:
 	_huber_wette = wette_gespeichert if wette_gespeichert is Dictionary else {}
 	_letzte_sabotage = int(d.get("sabotage_tag", 0))
 	_duell_saison = int(d.get("duell_saison", 0))
+	var plan_gespeichert: Variant = d.get("plan", [])
+	_plan = plan_gespeichert if plan_gespeichert is Array else []
+	_plan_saison = int(d.get("plan_saison", 0))
 	var ziel_gespeichert: Variant = d.get("tagesziel", {})
 	_tagesziel = ziel_gespeichert if ziel_gespeichert is Dictionary else {}
 	_bierpreis = float(d.get("bierpreis", 1.0))   # Spielraum wird nach dem Laden der Lizenzen geprüft
@@ -1098,6 +1103,8 @@ func _apply_daylight(clock: float) -> void:
 func _geduld() -> float:
 	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day) * float(GEDULD_FAKTOR[_schwierigkeit]) \
 		* maxf(0.7, 1.0 - SAISON_GEDULD * float(_saison_nr - 1))
+	if _ereignis == "familie":
+		g *= 1.2   # Familien warten geduldiger
 	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
@@ -3850,6 +3857,11 @@ func _shift_process(delta: float) -> void:
 
 ## Gästetyp nach Gewicht (GAST_TYPEN).
 func _gast_typ_waehlen() -> String:
+	# Sondertage laut Kalender
+	if _ereignis == "tracht" and randf() < 0.55:
+		return "tracht"
+	if _ereignis == "italiener" and randf() < 0.45:
+		return "tourist"
 	var summe := 0
 	for w in GAST_TYPEN.values():
 		summe += int(w)
@@ -4013,12 +4025,11 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 		_artist_tier = 3
 		_melde("EREIGNIS_FINALE_START", [], 2)
 		return
-	if erzwingen == "" and (_day < EREIGNIS_AB_TAG or randf() > EREIGNIS_CHANCE):
+	# Laut Kalender (Plan für die Saison)
+	var geplant := plan_fuer(_day) if erzwingen == "" else erzwingen
+	if geplant == "" or (geplant == "fass" and _drinks_avail().size() < 2):
 		return
-	var auswahl: Array = EREIGNISSE.duplicate()
-	if _drinks_avail().size() < 2:
-		auswahl.erase("fass")   # nur Helles — dann gibt es nichts, was ausfallen kann
-	_ereignis = erzwingen if erzwingen != "" else str(auswahl.pick_random())
+	_ereignis = geplant
 	if _ereignis == "fass":
 		var sorten := _drinks_avail()
 		sorten.erase(1)   # Helles bleibt immer
@@ -4035,6 +4046,10 @@ func _happy_hour() -> bool:
 	return _ereignis == "happy" and uhr >= HAPPY_VON and uhr < HAPPY_BIS
 
 func _ereignis_andrang() -> float:
+	match _ereignis:
+		"anstich", "tracht": return 1.3
+		"familie": return 1.1
+		"italiener": return 1.35
 	if _ereignis == "bus":
 		return 1.5
 	if _ereignis == "finale":
@@ -4500,6 +4515,8 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			var typ := str(g.get("typ", ""))
 			# Ohne Essenslizenz nur Getränke; Touristen essen gern, Trachtler trinken nur Helles
 			var essen_chance := 0.7 if typ == "tourist" else 0.4
+			if _ereignis == "familie":
+				essen_chance = 0.75   # Familientag: mehr Essen, weniger Bier
 			if foods.is_empty() or randf() >= essen_chance:
 				g.okind = 1
 				g.otype = 1 if typ == "tracht" else _drinks_avail().pick_random()
@@ -4819,6 +4836,7 @@ func _buero_state() -> Dictionary:
 		"muell": _muell_stapel,
 		"huber_wette": _huber_wette,
 		"duell_offen": duell_moeglich(),
+		"plan": _kalender_plan(),
 		"duell_gewonnen": _duell_saison == _saison_nr,
 		"tagesziel": _tagesziel,
 		"zelt_name": _zelt_name,
@@ -5404,3 +5422,36 @@ func _net_duell_ergebnis(gewonnen: bool, gesamt: float, huber_zeit: float, versc
 			if kino and kino.has_method("brief_zeigen"):
 				kino.brief_zeigen(mehrere, "BRIEF_ENDE", 2, "BRIEF_ENDE_TITEL")
 	dialog.zeigen(tr("HUBER_NAME"), zeilen, danach)
+
+# ================================================= Wiesn-Kalender
+## Die Tagesereignisse einer Saison stehen im Voraus fest (Kalender, Taste K,
+## scenes/ui/kalender.tscn): feste Sondertage plus zufällige Ereignisse ab Tag 3.
+## Geplant zu Saisonbeginn, gespeichert und an alle geschickt (Büro-Zustand „plan").
+const SONDERTAGE := {1: "anstich", 5: "tracht", 8: "familie", 10: "italiener", 11: "italiener", 16: "finale"}
+var _plan: Array = []
+
+## Plan für die laufende Saison anlegen, falls noch keiner da ist
+func _plan_pruefen() -> void:
+	if _plan.size() == Wirtschaft.SAISON_TAGE and int(_plan_saison) == _saison_nr:
+		return
+	_plan = []
+	_plan_saison = _saison_nr
+	for tag in range(1, Wirtschaft.SAISON_TAGE + 1):
+		if SONDERTAGE.has(tag):
+			_plan.append(SONDERTAGE[tag])
+		elif tag >= EREIGNIS_AB_TAG and randf() <= EREIGNIS_CHANCE:
+			_plan.append(str(EREIGNISSE.pick_random()))
+		else:
+			_plan.append("")
+
+var _plan_saison := 0
+
+## Ereignis laut Plan für einen Spieltag ("" = keins)
+func plan_fuer(tag: int) -> String:
+	_plan_pruefen()
+	var i := Wirtschaft.saison_tag(tag) - 1
+	return str(_plan[i]) if i >= 0 and i < _plan.size() else ""
+
+func _kalender_plan() -> Array:
+	_plan_pruefen()
+	return _plan
