@@ -271,6 +271,7 @@ func set_quest(step: int, total: int) -> void:
 	_aufgabe.visible = step >= 0 and step < total
 	if step >= total:
 		_ziel_anzeigen()
+		return
 	if not _aufgabe.visible:
 		return
 	%AufgabeSkip.visible = true
