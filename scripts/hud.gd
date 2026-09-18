@@ -257,7 +257,8 @@ func set_report(b: Dictionary) -> void:
 	_computer.setze_bilanz(b)
 	# Nach Feierabend: der Wiesn-Kurier (scenes/ui/zeitung.tscn), kurz nach der Bilanz
 	var zeitung := get_parent().get_node_or_null("Zeitung")
-	if zeitung and b.has("day") and not b.has("geladen"):
+	var im_test := OS.get_cmdline_args().any(func(a: String) -> bool: return a.begins_with("res://tools/") and not a.contains("zeitung"))
+	if zeitung and b.has("day") and not im_test:
 		get_tree().create_timer(3.0).timeout.connect(func() -> void: zeitung.zeigen(b, _zustand))
 
 # ------------------------------------------------------------ Aufgabe
