@@ -863,6 +863,7 @@ func _save_game() -> void:
 		"duell_saison": _duell_saison,
 		"plan": _plan,
 		"plan_saison": _plan_saison,
+		"stamm": _stamm,
 		"tagesziel": _tagesziel,
 		"bierpreis": _bierpreis,
 		"einrichtung": _einrichtung.values(),
@@ -950,6 +951,8 @@ func _load_game() -> bool:
 	var plan_gespeichert: Variant = d.get("plan", [])
 	_plan = plan_gespeichert if plan_gespeichert is Array else []
 	_plan_saison = int(d.get("plan_saison", 0))
+	var stamm_gespeichert: Variant = d.get("stamm", {})
+	_stamm = stamm_gespeichert if stamm_gespeichert is Dictionary else {}
 	var ziel_gespeichert: Variant = d.get("tagesziel", {})
 	_tagesziel = ziel_gespeichert if ziel_gespeichert is Dictionary else {}
 	_bierpreis = float(d.get("bierpreis", 1.0))   # Spielraum wird nach dem Laden der Lizenzen geprüft
@@ -1226,7 +1229,10 @@ func _client_ready(version: String) -> void:
 	for mid in _messes.keys():
 		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position, int(_mess_kind.get(mid, 0)))
 	for gid in _guest_sim.keys():
-		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos, str(_guest_sim[gid].get("typ", "")))
+		var gt := str(_guest_sim[gid].get("typ", ""))
+		if _guest_sim[gid].has("stamm"):
+			gt = "stamm|" + str(_guest_sim[gid].stamm)
+		_add_guest.rpc_id(sender, gid, _guest_sim[gid].pos, gt)
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
 		_add_staff.rpc_id(sender, sid, st.pos, int(st.role), int(st.level))
@@ -2932,6 +2938,7 @@ func _serve_by_staff(gid: int) -> void:
 		return
 	_consume_stock(int(g.okind))
 	g.ostate = 2
+	_stamm_bedient(g)
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
 	_served += 1
@@ -3749,6 +3756,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	if bediener == 0:
 		bediener = 1
 	_leistung(bediener, "bedient")
+	_stamm_bedient(g)
 	var jetzt := Time.get_ticks_msec()
 	var k: Dictionary = _kombo.get(bediener, {"n": 0, "t": 0})
 	var kombo := int(k.n) + 1 if jetzt - int(k.t) <= KOMBO_FENSTER_MS else 1
@@ -4271,6 +4279,7 @@ func _start_shift() -> void:
 	_muell_stapel = 0   # Müllabfuhr war da
 	_personal_morgen()
 	_tag_leistung.clear()
+	_stamm_heute = ""
 	_huber_morgen()
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
@@ -4450,6 +4459,15 @@ func _spawn_guest() -> void:
 		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
 		"drinks": 0, "puke_t": 0.0, "puked": false
 	}
+	# Benannter Stammgast (Opa Alois, Vroni …) — einer pro Tag, nach dem Tutorial
+	var stamm := _stammgast_waehlen()
+	if stamm != "":
+		_guest_sim[id].typ = "stamm"
+		_guest_sim[id].stamm = stamm
+		_guest_sim[id].patience = _geduld() * float(TYP_GEDULD.stamm)
+		_add_guest.rpc(id, start, "stamm|" + stamm)
+		_melde("MSG_STAMM_" + stamm.to_upper() + "_DA", [], 0)
+		return
 	_add_guest.rpc(id, start, typ)
 
 func _update_guests(delta: float) -> void:
@@ -4547,6 +4565,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			else:
 				g.okind = 2
 				g.otype = foods.pick_random()
+			_stamm_wunsch(g)
 			g.patience = _geduld_max(g)
 	elif g.ostate == 1:
 		g.patience -= delta * (PATIENCE_NIGHT_MULT if _night else 1.0)
@@ -4554,6 +4573,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 			g.ostate = 0
 			g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)
 			_missed += 1
+			_stamm_verpasst(g)
 			Game.add_score(-MISS_PENALTY)
 			g.verpasst_t = 3.0   # kurz 😤 über dem Kopf
 			var abzug := minf(POP_MISS * _typ_pop(g), maxf(0.0, POP_MISS_TAG_MAX - _pop_verlust_heute))
@@ -5677,3 +5697,81 @@ func net_saboteur_fangen() -> void:
 func _net_saboteur_weg() -> void:
 	if _saboteur_knoten and is_instance_valid(_saboteur_knoten):
 		_saboteur_knoten.fliehen()
+
+# ================================================= Stammgäste mit Namen
+## Sechs Stammgäste kommen nach dem Tutorial immer wieder (höchstens einer am Tag).
+## Jeder hat einen Wunsch (Alois: Helles, Franz: Hendl, Giulia: Radler …). Dreimal
+## zufrieden bedient → Belohnung auf seine Art, verpasst → zählt zurück.
+## Stand im Spielstand ("stamm"), Anzeige im Wiesn-Kurier und über dem Kopf.
+const STAMMGAESTE := ["alois", "vroni", "kathi", "franz", "giulia", "wiggerl"]
+const STAMM_ZIEL := 3
+const STAMM_CHANCE := 0.03   # je neuem Gast, bis heute einer da war
+var _stamm := {}             # key -> {"gut": n, "belohnt": bool}
+var _stamm_heute := ""
+
+func _stammgast_waehlen() -> String:
+	if tutorial_active() or _stamm_heute != "" or randf() > STAMM_CHANCE:
+		return ""
+	var offen := STAMMGAESTE.filter(func(k: String) -> bool: return not bool(_stamm.get(k, {}).get("belohnt", false)))
+	if offen.is_empty():
+		offen = STAMMGAESTE.duplicate()
+	_stamm_heute = str(offen.pick_random())
+	return _stamm_heute
+
+func _stamm_wunsch(g: Dictionary) -> void:
+	match str(g.get("stamm", "")):
+		"alois", "wiggerl":
+			g.okind = 1
+			g.otype = 1
+		"giulia":
+			g.okind = 1
+			g.otype = 3 if _drinks_avail().has(3) else 1
+		"franz":
+			var essen := _foods_avail()
+			if not essen.is_empty():
+				g.okind = 2
+				g.otype = 3 if essen.has(3) else essen.pick_random()
+
+func _stamm_bedient(g: Dictionary) -> void:
+	var k := str(g.get("stamm", ""))
+	if k == "":
+		return
+	var s: Dictionary = _stamm.get(k, {"gut": 0, "belohnt": false})
+	if bool(s.belohnt):
+		return
+	s.gut = int(s.gut) + 1
+	_stamm[k] = s
+	if int(s.gut) >= STAMM_ZIEL:
+		s.belohnt = true
+		_stamm_belohnung(k)
+	else:
+		_melde("MSG_STAMM_ZUFRIEDEN", ["STAMM_NAME_" + k.to_upper(), int(s.gut), STAMM_ZIEL], 2)
+
+func _stamm_verpasst(g: Dictionary) -> void:
+	var k := str(g.get("stamm", ""))
+	if k == "" or bool(_stamm.get(k, {}).get("belohnt", false)):
+		return
+	var s: Dictionary = _stamm.get(k, {"gut": 0, "belohnt": false})
+	s.gut = maxi(0, int(s.gut) - 1)
+	_stamm[k] = s
+	_melde("MSG_STAMM_VERAERGERT", ["STAMM_NAME_" + k.to_upper()], 1)
+
+## Belohnung je Stammgast
+func _stamm_belohnung(k: String) -> void:
+	match k:
+		"alois":
+			_pop_erhoehen(6.0)
+		"vroni":
+			_pop_erhoehen(4.0)
+			_add_income(250)
+		"kathi":
+			_pop_erhoehen(10.0)
+		"franz":
+			_stock[WARE_ESSEN] = int(_stock[WARE_ESSEN]) + 20
+			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+		"giulia":
+			_add_income(400)
+		"wiggerl":
+			_add_income(300)
+			_pop_erhoehen(3.0)
+	_melde("MSG_STAMM_BELOHNUNG_" + k.to_upper(), [], 2)

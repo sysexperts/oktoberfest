@@ -992,3 +992,23 @@ ZEITUNG_M_EHRE,Auszeichnung: %s,Award: %s,Ödül: %s
 MSG_SABOTEUR_DA,👀 Da schleicht jemand Fremdes ins Zelt … ob das einer vom Huber ist?,👀 A stranger is sneaking into the tent … one of Huber's men?,👀 Çadıra bir yabancı sızıyor … Huber'in adamı mı?
 MSG_SABOTEUR_ERWISCHT,👮 Saboteur erwischt! Huber ist blamiert — die Gäste spendieren %s,👮 Saboteur caught! Huber is embarrassed — the guests chip in %s,👮 Sabotajcı yakalandı! Huber rezil oldu — misafirler %s bahşiş veriyor
 HINT_SABOTEUR,{interact} Erwischt! Saboteur rauswerfen,{interact} Gotcha! Throw the saboteur out,{interact} Yakaladım! Sabotajcıyı dışarı at
+STAMM_NAME_ALOIS,Opa Alois,Grandpa Alois,Alois Dede
+STAMM_NAME_VRONI,Vroni vom Trachtenverein,Vroni from the costume club,Kıyafet kulübünden Vroni
+STAMM_NAME_KATHI,Kathi (Influencerin),Kathi (influencer),Kathi (fenomen)
+STAMM_NAME_FRANZ,Franz der Metzger,Franz the butcher,Kasap Franz
+STAMM_NAME_GIULIA,Giulia aus Verona,Giulia from Verona,Veronalı Giulia
+STAMM_NAME_WIGGERL,"Wiggerl, Sepps alter Spezl","Wiggerl, Sepp's old pal","Wiggerl, Sepp'in eski kankası"
+MSG_STAMM_ALOIS_DA,👴 Opa Alois ist da — wie jedes Jahr will er sein Helles. Schnell sein!,👴 Grandpa Alois is here — like every year he wants his Helles. Be quick!,👴 Alois Dede geldi — her yıl olduğu gibi Helles'ini istiyor. Çabuk ol!
+MSG_STAMM_VRONI_DA,👗 Vroni vom Trachtenverein schaut vorbei — sie entscheidet, wo der Verein feiert.,👗 Vroni from the costume club drops by — she decides where the club celebrates.,👗 Kıyafet kulübünden Vroni uğradı — kulübün nerede kutlayacağına o karar veriyor.
+MSG_STAMM_KATHI_DA,📱 Influencerin Kathi ist im Zelt! Wenn's ihr gefällt, postet sie euch.,📱 Influencer Kathi is in the tent! If she likes it she'll post about you.,📱 Fenomen Kathi çadırda! Beğenirse sizi paylaşacak.
+MSG_STAMM_FRANZ_DA,🔪 Franz der Metzger ist da — er testet, ob euer Essen was taugt.,🔪 Franz the butcher is here — he'll test whether your food is any good.,🔪 Kasap Franz geldi — yemeğinizin iyi olup olmadığını test edecek.
+MSG_STAMM_GIULIA_DA,🇮🇹 Giulia aus Verona ist wieder da — sie liebt Radler.,🇮🇹 Giulia from Verona is back — she loves Radler.,🇮🇹 Veronalı Giulia yine geldi — Radler'e bayılıyor.
+MSG_STAMM_WIGGERL_DA,"🍺 Wiggerl, Sepps alter Spezl, sitzt am Stammtisch. Er kannte Sepp 40 Jahre.","🍺 Wiggerl, Sepp's old pal, is at the regulars' table. He knew Sepp for 40 years.","🍺 Sepp'in eski kankası Wiggerl müdavim masasında. Sepp'i 40 yıl tanıdı."
+MSG_STAMM_ZUFRIEDEN,⭐ %s ist zufrieden (%d/%d),⭐ %s is happy (%d/%d),⭐ %s memnun (%d/%d)
+MSG_STAMM_VERAERGERT,⭐ %s musste zu lange warten — und ist verärgert.,⭐ %s had to wait too long — and is annoyed.,⭐ %s çok uzun bekledi — ve kızgın.
+MSG_STAMM_BELOHNUNG_ALOIS,👴 Opa Alois erzählt überall von eurem Zelt — die Alten kommen jetzt alle (+Beliebtheit).,👴 Grandpa Alois tells everyone about your tent — the old folks all come now (+popularity).,👴 Alois Dede çadırınızı herkese anlatıyor — yaşlılar artık hep geliyor (+popülerlik).
+MSG_STAMM_BELOHNUNG_VRONI,👗 Der Trachtenverein feiert ab jetzt bei euch! Vroni zahlt die Vereinskasse ein (+250 € und Beliebtheit).,👗 The costume club celebrates with you from now on! Vroni pays in the club funds (+250 € and popularity).,👗 Kıyafet kulübü artık sizde kutluyor! Vroni kulüp kasasını ödüyor (+250 € ve popülerlik).
+MSG_STAMM_BELOHNUNG_KATHI,📱 Kathis Video geht viral: „Das beste Zelt der Wiesn!“ (+viel Beliebtheit),📱 Kathi's video goes viral: “Best tent at the fair!” (+lots of popularity),📱 Kathi'nin videosu viral oldu: “Fuarın en iyi çadırı!” (+çok popülerlik)
+MSG_STAMM_BELOHNUNG_FRANZ,🔪 Franz ist überzeugt und liefert euch 20 Portionen Zutaten gratis.,🔪 Franz is convinced and delivers 20 portions of ingredients for free.,🔪 Franz ikna oldu ve size 20 porsiyon malzemeyi bedava getiriyor.
+MSG_STAMM_BELOHNUNG_GIULIA,🇮🇹 Giulia bringt eine ganze Reisegruppe mit — Trinkgeld 400 €!,🇮🇹 Giulia brings a whole tour group — 400 € in tips!,🇮🇹 Giulia bütün bir tur grubunu getiriyor — 400 € bahşiş!
+MSG_STAMM_BELOHNUNG_WIGGERL,"🍺 Wiggerl: „Der Sepp wär stolz auf euch.“ Er legt 300 € auf den Tresen — „die hat er mir mal geliehen.“","🍺 Wiggerl: “Sepp would be proud of you.” He puts 300 € on the bar — “he lent me that once.”","🍺 Wiggerl: “Sepp sizinle gurur duyardı.” Tezgaha 300 € bırakıyor — “bunu bir zamanlar bana ödünç vermişti.”"

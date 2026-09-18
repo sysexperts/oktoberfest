@@ -11,6 +11,8 @@ const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: C
 const FOOD_NAMES := {1: "Brezn", 2: "Würstl", 3: "Hendl"}
 ## Gästetyp vom Server ("" normal, stamm, tourist, tracht, vip) — Symbol in der Blase
 var typ := ""
+## Name eines Stammgasts ("alois", "vroni" …) — steht immer über dem Kopf
+var stamm := ""
 const TYP_SYMBOL := {"stamm": "🏠 ", "tourist": "🎒 ", "tracht": "🪶 ", "vip": "⭐ "}
 const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2), 3: Color(0.9, 0.6, 0.25)}
 
@@ -44,6 +46,10 @@ var _tanz_hoehe := TISCH_HOEHE
 @onready var _bubble: Label3D = $Bubble
 
 func _ready() -> void:
+	# Benannter Stammgast vom Server: "stamm|alois" (GameManager, Stammgäste)
+	if typ.contains("|"):
+		stamm = typ.get_slice("|", 1)
+		typ = typ.get_slice("|", 0)
 	add_to_group("customer")
 	add_to_group("interactable")
 	_net_pos = position
@@ -175,7 +181,9 @@ func _update_bubble() -> void:
 	# Test 13.09.: im vollen Zelt überlappten die Texte — normal nur Icons,
 	# mit gedrückter Strg-Taste Gästetyp und Bestellung als Text
 	var typ_zeile := ""
-	if typ != "" and _details:
+	if stamm != "":
+		typ_zeile = "\n⭐ " + String(TranslationServer.translate("STAMM_NAME_" + stamm.to_upper()))
+	elif typ != "" and _details:
 		typ_zeile = "\n" + TYP_SYMBOL.get(typ, "") + String(TranslationServer.translate("GAST_TYP_" + typ.to_upper()))
 	if _laune > 0:
 		_bubble.visible = true
