@@ -142,6 +142,13 @@ class Lauf extends Node:
 			gm.net_hire_staff(2)
 			if _anzahl(2) == vorher_k:
 				break
+		# Ab Stufe 2 die günstigen Lizenzen (Weizen, Brezn) — ein Mensch kauft sie auch
+		if gm._tent_stage >= 2:
+			for lic: String in ["weizen", "brezn"]:
+				if not gm._lic[lic] and Game.money > int(gm.LIC_COST[lic]) + RESERVE:
+					gm.net_buy_license(lic)
+			if not gm._foods_avail().is_empty() and _anzahl(1) == 0 and Game.money > 600 + RESERVE:
+				gm.net_hire_staff(1)
 		# Zeltausbau vor Lizenzen — sonst frisst das Geld den Ausbau immer wieder
 		if gm._active_count >= limit and gm.TENT_UPGRADE_COST.has(gm._tent_stage + 1):
 			if Game.money > int(gm.TENT_UPGRADE_COST[gm._tent_stage + 1]) + RESERVE:

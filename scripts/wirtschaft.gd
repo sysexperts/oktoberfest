@@ -82,6 +82,8 @@ static func beliebtheit_verlust(tag: int) -> float:
 ## Onkel Sepps Schulden bei der Bank: [Tag, Betrag] — am Abend des Tages
 ## automatisch abgebucht. Reicht das Geld nicht, greift der Rettungskredit.
 const BANK_RATEN := [[4, 1500], [8, 3000], [12, 5000]]
+## Raten je Schwierigkeit (Gemütlich, Normal, Wiesn-Wahnsinn)
+const BANK_FAKTOR := [0.6, 1.0, 1.3]
 
 ## Tagesziele (nach dem Tutorial): Belohnung = LOHN_BASIS + LOHN_JE_TAG × Tag
 const ZIEL_LOHN_BASIS := 100

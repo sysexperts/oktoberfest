@@ -4837,6 +4837,7 @@ func _pruefe_pleite() -> void:
 	Game.add_money(fehlbetrag)
 	_kredit_rest += roundi(float(fehlbetrag) * (1.0 + Wirtschaft.KREDIT_AUFSCHLAG))
 	net_popup.rpc("POPUP_LOAN", [_eur(-fehlbetrag), _eur(_kredit_rest), roundi(Wirtschaft.KREDIT_ANTEIL * 100.0)])
+	_melde("MSG_PLEITE_HUBER", [], 1)
 	_broadcast_meta()
 
 ## Ausbauten sind gesperrt, solange der Rettungskredit läuft. true = gesperrt.
@@ -4915,15 +4916,19 @@ var _ziel_gesendet := -1
 var _ziel_takt := 0.0
 
 ## Nächste offene Rate [Tag, Betrag] oder []
+## Betrag einer Rate nach Schwierigkeit, auf 100 € gerundet
+func _bank_betrag(i: int) -> int:
+	return roundi(float(Wirtschaft.BANK_RATEN[i][1]) * float(Wirtschaft.BANK_FAKTOR[_schwierigkeit]) / 100.0) * 100
+
 func bank_naechste() -> Array:
 	if _bank_bezahlt >= Wirtschaft.BANK_RATEN.size():
 		return []
-	return Wirtschaft.BANK_RATEN[_bank_bezahlt]
+	return [int(Wirtschaft.BANK_RATEN[_bank_bezahlt][0]), _bank_betrag(_bank_bezahlt)]
 
 func bank_rest() -> int:
 	var r := 0
 	for i in range(_bank_bezahlt, Wirtschaft.BANK_RATEN.size()):
-		r += int(Wirtschaft.BANK_RATEN[i][1])
+		r += _bank_betrag(i)
 	return r
 
 ## Morgens bei Schichtbeginn ein Ziel auslosen (erst nach dem Tutorial)
@@ -5030,6 +5035,8 @@ func chef_tageszeilen(mehrere: bool, z: Dictionary) -> Array[String]:
 		zeilen.append(tr("CHEF_BANK_FREI" + a))
 	else:
 		zeilen.append(tr("CHEF_BANK" + a) % [Texte.euro(int(r[1])), int(r[0]), Texte.euro(int(z.get("bank_rest", 0)))])
+	if int(z.get("kredit", 0)) > 0:
+		zeilen.append(tr("CHEF_KREDIT" + a) % Texte.euro(int(z.get("kredit", 0))))
 	return zeilen
 
 ## Neues Tagesziel: Meldung bei allen (Text in der eigenen Sprache)
