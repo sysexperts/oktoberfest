@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://co5wqunmdxted"]
 
-[ext_resource type="Script" path="res://scripts/ui/zelt_mieten.gd" id="1_mieten"]
+[ext_resource type="Script" uid="uid://fatuuem0kvhn" path="res://scripts/ui/zelt_mieten.gd" id="1_mieten"]
 
-[node name="ZeltMieten" type="Control"]
+[node name="ZeltMieten" type="Control" unique_id=2139784819]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mieten")
 
-[node name="Abdunkeln" type="ColorRect" parent="."]
+[node name="Abdunkeln" type="ColorRect" parent="." unique_id=683802449]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.45)
 
-[node name="Mitte" type="CenterContainer" parent="."]
+[node name="Mitte" type="CenterContainer" parent="." unique_id=1791558229]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,22 +29,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Mitte"]
+[node name="Panel" type="PanelContainer" parent="Mitte" unique_id=475436259]
 custom_minimum_size = Vector2(540, 0)
 layout_mode = 2
 
-[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel" unique_id=262372103]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte" unique_id=2049809486]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_font_sizes/font_size = 28
 text = "RENT_DIALOG_TITLE"
 horizontal_alignment = 1
 
-[node name="Info" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte" unique_id=2087767319]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(500, 0)
@@ -53,15 +53,15 @@ theme_override_font_sizes/font_size = 17
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Trenner" type="HSeparator" parent="Mitte/Panel/Spalte"]
+[node name="Trenner" type="HSeparator" parent="Mitte/Panel/Spalte" unique_id=1887593048]
 layout_mode = 2
 
-[node name="NameTitel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="NameTitel" type="Label" parent="Mitte/Panel/Spalte" unique_id=869043074]
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "RENT_DIALOG_NAME"
 
-[node name="Name" type="LineEdit" parent="Mitte/Panel/Spalte"]
+[node name="Name" type="LineEdit" parent="Mitte/Panel/Spalte" unique_id=1510069442]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
@@ -69,18 +69,18 @@ theme_override_font_sizes/font_size = 22
 max_length = 24
 clear_button_enabled = true
 
-[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=1918731456]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Abbrechen" type="Button" parent="Mitte/Panel/Spalte/Knoepfe"]
+[node name="Abbrechen" type="Button" parent="Mitte/Panel/Spalte/Knoepfe" unique_id=1077574204]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "RENT_DIALOG_CANCEL"
 
-[node name="Mieten" type="Button" parent="Mitte/Panel/Spalte/Knoepfe"]
+[node name="Mieten" type="Button" parent="Mitte/Panel/Spalte/Knoepfe" unique_id=1676919307]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 44)

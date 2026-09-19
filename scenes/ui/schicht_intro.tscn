@@ -1,9 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://vmllfkhnxuie"]
 
-[ext_resource type="Script" path="res://scripts/ui/schicht_intro.gd" id="1_intro"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
+[ext_resource type="Script" uid="uid://cyrawmhjknasy" path="res://scripts/ui/schicht_intro.gd" id="1_intro"]
+[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
 
-[node name="SchichtIntro" type="Control"]
+[node name="SchichtIntro" type="Control" unique_id=1020033424]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -14,11 +14,11 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_intro")
 
-[node name="Zeit" type="Timer" parent="."]
+[node name="Zeit" type="Timer" parent="." unique_id=904963497]
 unique_name_in_owner = true
 one_shot = true
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=765594508]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -30,7 +30,7 @@ offset_bottom = 420.0
 grow_horizontal = 0
 mouse_filter = 2
 
-[node name="Rand" type="MarginContainer" parent="Panel"]
+[node name="Rand" type="MarginContainer" parent="Panel" unique_id=265350795]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 16
@@ -38,12 +38,12 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 10
 
-[node name="Spalte" type="VBoxContainer" parent="Panel/Rand"]
+[node name="Spalte" type="VBoxContainer" parent="Panel/Rand" unique_id=430611076]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 7
 
-[node name="Titel" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Titel" type="Label" parent="Panel/Rand/Spalte" unique_id=574013889]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_outline_color = Color(0.15, 0.08, 0.02, 1)
@@ -53,7 +53,7 @@ theme_override_font_sizes/font_size = 22
 text = "INTRO_TITLE"
 autowrap_mode = 3
 
-[node name="Unterzeile" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Unterzeile" type="Label" parent="Panel/Rand/Spalte" unique_id=1076327167]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.78, 0.9, 1)
@@ -61,7 +61,7 @@ theme_override_font_sizes/font_size = 13
 text = "INTRO_SUB"
 autowrap_mode = 3
 
-[node name="Zapfen" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Zapfen" type="Label" parent="Panel/Rand/Spalte" unique_id=759472660]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(320, 0)
@@ -69,7 +69,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
-[node name="Servieren" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Servieren" type="Label" parent="Panel/Rand/Spalte" unique_id=733439013]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(320, 0)
@@ -77,7 +77,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
-[node name="Kueche" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Kueche" type="Label" parent="Panel/Rand/Spalte" unique_id=795404961]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(320, 0)
@@ -85,7 +85,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
-[node name="Lager" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Lager" type="Label" parent="Panel/Rand/Spalte" unique_id=755568826]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(320, 0)
@@ -93,7 +93,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
-[node name="Putzen" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Putzen" type="Label" parent="Panel/Rand/Spalte" unique_id=183981343]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(320, 0)
@@ -101,7 +101,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
-[node name="Schliessen" type="Label" parent="Panel/Rand/Spalte"]
+[node name="Schliessen" type="Label" parent="Panel/Rand/Spalte" unique_id=985101089]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2

@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://htava2tet720"]
 
-[ext_resource type="Script" path="res://scripts/ui/zeltcomputer.gd" id="1_comp"]
+[ext_resource type="Script" uid="uid://c467s05xxmt8g" path="res://scripts/ui/zeltcomputer.gd" id="1_comp"]
 
-[node name="Zeltcomputer" type="Control"]
+[node name="Zeltcomputer" type="Control" unique_id=277958337]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_comp")
 
-[node name="Abdunkeln" type="ColorRect" parent="."]
+[node name="Abdunkeln" type="ColorRect" parent="." unique_id=2069574415]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.45)
 
-[node name="Mitte" type="CenterContainer" parent="."]
+[node name="Mitte" type="CenterContainer" parent="." unique_id=1045030210]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,22 +29,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Mitte"]
+[node name="Panel" type="PanelContainer" parent="Mitte" unique_id=934877982]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 
-[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel" unique_id=1902396814]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte" unique_id=252856361]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_font_sizes/font_size = 28
 text = "COMP_TITLE"
 horizontal_alignment = 1
 
-[node name="Status" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Status" type="Label" parent="Mitte/Panel/Spalte" unique_id=1054846398]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -52,15 +52,15 @@ theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
 theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="Trenner1" type="HSeparator" parent="Mitte/Panel/Spalte"]
+[node name="Trenner1" type="HSeparator" parent="Mitte/Panel/Spalte" unique_id=1263679361]
 layout_mode = 2
 
-[node name="PreisTitel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="PreisTitel" type="Label" parent="Mitte/Panel/Spalte" unique_id=370111955]
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "COMP_PRICE"
 
-[node name="PreisInfo" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="PreisInfo" type="Label" parent="Mitte/Panel/Spalte" unique_id=2133786180]
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
@@ -68,17 +68,17 @@ theme_override_font_sizes/font_size = 14
 text = "COMP_PRICE_INFO"
 autowrap_mode = 3
 
-[node name="Preis" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+[node name="Preis" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=1547623213]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Billiger" type="Button" parent="Mitte/Panel/Spalte/Preis"]
+[node name="Billiger" type="Button" parent="Mitte/Panel/Spalte/Preis" unique_id=1059629029]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
 text = "BTN_CHEAPER"
 
-[node name="PreisText" type="Label" parent="Mitte/Panel/Spalte/Preis"]
+[node name="PreisText" type="Label" parent="Mitte/Panel/Spalte/Preis" unique_id=1261650371]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -86,23 +86,23 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 17
 horizontal_alignment = 1
 
-[node name="Teurer" type="Button" parent="Mitte/Panel/Spalte/Preis"]
+[node name="Teurer" type="Button" parent="Mitte/Panel/Spalte/Preis" unique_id=846078204]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
 text = "BTN_PRICIER"
 
-[node name="EssenPreis" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+[node name="EssenPreis" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=1813198652]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="EssenBilliger" type="Button" parent="Mitte/Panel/Spalte/EssenPreis"]
+[node name="EssenBilliger" type="Button" parent="Mitte/Panel/Spalte/EssenPreis" unique_id=967573204]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
 text = "BTN_CHEAPER"
 
-[node name="EssenPreisText" type="Label" parent="Mitte/Panel/Spalte/EssenPreis"]
+[node name="EssenPreisText" type="Label" parent="Mitte/Panel/Spalte/EssenPreis" unique_id=1697079101]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -110,70 +110,70 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 17
 horizontal_alignment = 1
 
-[node name="EssenTeurer" type="Button" parent="Mitte/Panel/Spalte/EssenPreis"]
+[node name="EssenTeurer" type="Button" parent="Mitte/Panel/Spalte/EssenPreis" unique_id=1965003335]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(90, 42)
 layout_mode = 2
 text = "BTN_PRICIER"
 
-[node name="WareTitel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="WareTitel" type="Label" parent="Mitte/Panel/Spalte" unique_id=1480673122]
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "COMP_GOODS"
 
-[node name="WareText" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="WareText" type="Label" parent="Mitte/Panel/Spalte" unique_id=667098788]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
 theme_override_font_sizes/font_size = 14
 
-[node name="Ware" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+[node name="Ware" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=685205540]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BierEins" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+[node name="BierEins" type="Button" parent="Mitte/Panel/Spalte/Ware" unique_id=1773403071]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BierFuenf" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+[node name="BierFuenf" type="Button" parent="Mitte/Panel/Spalte/Ware" unique_id=1069211525]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EssenEins" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+[node name="EssenEins" type="Button" parent="Mitte/Panel/Spalte/Ware" unique_id=1237159854]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EssenFuenf" type="Button" parent="Mitte/Panel/Spalte/Ware"]
+[node name="EssenFuenf" type="Button" parent="Mitte/Panel/Spalte/Ware" unique_id=430145141]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Trenner2" type="HSeparator" parent="Mitte/Panel/Spalte"]
+[node name="Trenner2" type="HSeparator" parent="Mitte/Panel/Spalte" unique_id=492699418]
 layout_mode = 2
 
-[node name="BilanzTitel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="BilanzTitel" type="Label" parent="Mitte/Panel/Spalte" unique_id=1577592914]
 layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "OFFICE_TAB_REPORT"
 
-[node name="BilanzRollen" type="ScrollContainer" parent="Mitte/Panel/Spalte"]
+[node name="BilanzRollen" type="ScrollContainer" parent="Mitte/Panel/Spalte" unique_id=1805916881]
 custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="BilanzText" type="Label" parent="Mitte/Panel/Spalte/BilanzRollen"]
+[node name="BilanzText" type="Label" parent="Mitte/Panel/Spalte/BilanzRollen" unique_id=1074744851]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(540, 0)
@@ -182,19 +182,19 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 15
 autowrap_mode = 3
 
-[node name="ZeltSchliessen" type="Button" parent="Mitte/Panel/Spalte"]
+[node name="ZeltSchliessen" type="Button" parent="Mitte/Panel/Spalte" unique_id=997282566]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "COMP_CLOSE_TENT"
 
-[node name="Abteilung" type="Button" parent="Mitte/Panel/Spalte"]
+[node name="Abteilung" type="Button" parent="Mitte/Panel/Spalte" unique_id=666361956]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "COMP_DEPT"
 
-[node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte"]
+[node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte" unique_id=224918469]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2

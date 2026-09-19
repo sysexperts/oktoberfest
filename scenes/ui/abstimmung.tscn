@@ -1,9 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://meh36qw0bhm5"]
 
-[ext_resource type="Script" path="res://scripts/ui/abstimmung.gd" id="1_abst"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
+[ext_resource type="Script" uid="uid://dhonhjts5hdvu" path="res://scripts/ui/abstimmung.gd" id="1_abst"]
+[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
 
-[node name="Abstimmung" type="Control"]
+[node name="Abstimmung" type="Control" unique_id=1012507426]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -14,7 +14,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_abst")
 
-[node name="Mitte" type="CenterContainer" parent="."]
+[node name="Mitte" type="CenterContainer" parent="." unique_id=1041410023]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -23,15 +23,15 @@ offset_bottom = 330.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="Mitte"]
+[node name="Panel" type="PanelContainer" parent="Mitte" unique_id=356036000]
 custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
 
-[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel" unique_id=1481448994]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte" unique_id=743355267]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_outline_color = Color(0.15, 0.08, 0.02, 1)
@@ -41,7 +41,7 @@ theme_override_font_sizes/font_size = 38
 text = "VOTE_TITLE"
 horizontal_alignment = 1
 
-[node name="Text" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Text" type="Label" parent="Mitte/Panel/Spalte" unique_id=659743306]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(440, 0)
@@ -50,13 +50,13 @@ theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Balken" type="ProgressBar" parent="Mitte/Panel/Spalte"]
+[node name="Balken" type="ProgressBar" parent="Mitte/Panel/Spalte" unique_id=1417503265]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 show_percentage = false
 
-[node name="Stand" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Stand" type="Label" parent="Mitte/Panel/Spalte" unique_id=1579098469]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -64,11 +64,11 @@ theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
 theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=1499116955]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Nein" type="Button" parent="Mitte/Panel/Spalte/Knoepfe"]
+[node name="Nein" type="Button" parent="Mitte/Panel/Spalte/Knoepfe" unique_id=419447703]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
@@ -76,7 +76,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "VOTE_NO"
 
-[node name="Ja" type="Button" parent="Mitte/Panel/Spalte/Knoepfe"]
+[node name="Ja" type="Button" parent="Mitte/Panel/Spalte/Knoepfe" unique_id=2035658776]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
@@ -84,7 +84,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 text = "VOTE_YES"
 
-[node name="Warten" type="Label" parent="Mitte/Panel/Spalte"]
+[node name="Warten" type="Label" parent="Mitte/Panel/Spalte" unique_id=599794428]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
