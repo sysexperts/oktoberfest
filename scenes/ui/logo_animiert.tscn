@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://c8logoanim01"]
+
+[ext_resource type="Script" uid="uid://wmw11fx2knca" path="res://scripts/ui/logo_animiert.gd" id="0_logo"]
+[ext_resource type="Texture2D" uid="uid://22jnthxs25qg" path="res://assets/ui/logo/brett.png" id="1_brett"]
+[ext_resource type="Texture2D" uid="uid://d0pqnphttw3nw" path="res://assets/ui/logo/fahne_links.png" id="2_fahnel"]
+[ext_resource type="Texture2D" uid="uid://ds8y11e07fodf" path="res://assets/ui/logo/fahne_rechts.png" id="3_fahner"]
+[ext_resource type="Texture2D" uid="uid://cebslvpuejhmx" path="res://assets/ui/logo/aehre_links.png" id="4_aehrel"]
+[ext_resource type="Texture2D" uid="uid://g4w2bbbyyi43" path="res://assets/ui/logo/aehre_rechts.png" id="5_aehrer"]
+[ext_resource type="Texture2D" uid="uid://c3mbgls2cgxp1" path="res://assets/ui/logo/schriftzug.png" id="6_schrift"]
+[ext_resource type="Texture2D" uid="uid://cchl3rk55w4wo" path="res://assets/ui/logo/brezel.png" id="7_brezel"]
+
+[node name="Logo" type="Control" unique_id=415694793]
+custom_minimum_size = Vector2(1774, 887)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1774.0
+offset_bottom = 887.0
+mouse_filter = 1
+script = ExtResource("0_logo")
+
+[node name="Brett" type="TextureRect" parent="." unique_id=620136841]
+layout_mode = 0
+offset_left = 221.0
+offset_top = 338.0
+offset_right = 1541.0
+offset_bottom = 686.0
+mouse_filter = 2
+texture = ExtResource("1_brett")
+
+[node name="FahneLinks" type="TextureRect" parent="." unique_id=1558362513]
+layout_mode = 0
+offset_left = 185.0
+offset_top = 354.0
+offset_right = 431.0
+offset_bottom = 745.0
+mouse_filter = 2
+texture = ExtResource("2_fahnel")
+
+[node name="FahneRechts" type="TextureRect" parent="." unique_id=1782205074]
+layout_mode = 0
+offset_left = 1389.0
+offset_top = 365.0
+offset_right = 1634.0
+offset_bottom = 755.0
+mouse_filter = 2
+texture = ExtResource("3_fahner")
+
+[node name="AehreLinks" type="TextureRect" parent="." unique_id=519556983]
+layout_mode = 0
+offset_left = 273.0
+offset_top = 582.0
+offset_right = 747.0
+offset_bottom = 769.0
+mouse_filter = 2
+texture = ExtResource("4_aehrel")
+
+[node name="AehreRechts" type="TextureRect" parent="." unique_id=1209147555]
+layout_mode = 0
+offset_left = 1032.0
+offset_top = 595.0
+offset_right = 1505.0
+offset_bottom = 782.0
+mouse_filter = 2
+texture = ExtResource("5_aehrer")
+
+[node name="Schriftzug" type="TextureRect" parent="." unique_id=1745959985]
+layout_mode = 0
+offset_left = 278.0
+offset_top = 329.0
+offset_right = 1481.0
+offset_bottom = 666.0
+mouse_filter = 2
+texture = ExtResource("6_schrift")
+
+[node name="Brezel" type="TextureRect" parent="." unique_id=1782795963]
+layout_mode = 0
+offset_left = 718.0
+offset_top = 543.0
+offset_right = 1044.0
+offset_bottom = 791.0
+mouse_filter = 2
+texture = ExtResource("7_brezel")
