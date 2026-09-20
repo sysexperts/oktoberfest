@@ -20,6 +20,9 @@ const RAND := Color(0.58, 0.42, 0.24, 0.55)
 const RAND_LEISE := Color(0.58, 0.42, 0.24, 0.28)
 const GOLD := Color(1, 0.839, 0.349)
 const GOLD_HELL := Color(1, 0.906, 0.604)
+## Knopffläche: das satte Gold der linken Schimmerkante, über die ganze Breite
+const GOLD_FLAECHE := Color(0.53, 0.44, 0.2, 0.88)
+const GOLD_FLAECHE_HELL := Color(0.66, 0.55, 0.25, 0.94)
 const TEXT := Color(0.96, 0.93, 0.89)
 const TEXT_LEISE := Color(0.72, 0.67, 0.61)
 const TEXT_AUS := Color(0.48, 0.44, 0.4)
@@ -214,14 +217,16 @@ func _feld(t: Theme, typ: String, radius: int, rand_x: float, rand_y: float) -> 
 	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), GOLD, 2, radius, rand_x, rand_y))
 	t.set_stylebox("disabled", typ, _kasten(Color(TIEF.r, TIEF.g, TIEF.b, 0.45), RAND_LEISE, 1, radius, rand_x, rand_y))
 
-## Goldschimmer, der nach rechts ausläuft, goldene Schrift, kein Rand — die
-## Optik der aktiven Kategorie in den Einstellungen, als Knopf.
+## Durchgehend golden, goldene Schrift, kein Rand. GOLD_FLAECHE ist die Farbe,
+## die der auslaufende Schimmer an seiner linken, kräftigsten Stelle hat — sie
+## gilt jetzt über die ganze Breite, ohne Verlauf. Deshalb reicht hier eine
+## einfache Fläche, ein Verlaufsbild braucht es dafür nicht.
 func _schimmer_knopf(t: Theme, typ: String, rand_x: float, rand_y: float) -> void:
-	t.set_stylebox("normal", typ, _verlauf("verlauf_knopf_schimmer", rand_x, rand_y))
-	t.set_stylebox("hover", typ, _verlauf("verlauf_kategorie_aktiv", rand_x, rand_y))
-	t.set_stylebox("pressed", typ, _verlauf("verlauf_knopf_gold", rand_x, rand_y))
-	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), Color(GOLD.r, GOLD.g, GOLD.b, 0.7), 2, 16, rand_x, rand_y))
-	t.set_stylebox("disabled", typ, _kasten(Color(0.16, 0.12, 0.08, 0.4), Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
+	t.set_stylebox("normal", typ, _kasten(GOLD_FLAECHE, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
+	t.set_stylebox("hover", typ, _kasten(GOLD_FLAECHE_HELL, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
+	t.set_stylebox("pressed", typ, _kasten(GOLD, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
+	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), Color(GOLD.r, GOLD.g, GOLD.b, 0.8), 2, 16, rand_x, rand_y))
+	t.set_stylebox("disabled", typ, _kasten(Color(GOLD_FLAECHE.r, GOLD_FLAECHE.g, GOLD_FLAECHE.b, 0.35), Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
 
 ## Knöpfe mit senkrechtem Verlauf (oben heller) statt flacher Fläche — das gibt
 ## ihnen Tiefe. Gold kommt bei Hover und Fokus dazu.
