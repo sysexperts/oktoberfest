@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="64" viewBox="0 0 240 64">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffd659" stop-opacity="0.40"/>
+      <stop offset="0.5" stop-color="#ffb347" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffd659" stop-opacity="0.04"/>
+    </linearGradient>
+  </defs>
+  <!-- dunkle Basis, damit der Knopf auch vor hellem Hintergrund traegt -->
+  <rect x="0" y="0" width="240" height="64" rx="16" fill="#241a11" fill-opacity="0.80"/>
+  <rect x="0" y="0" width="240" height="64" rx="16" fill="url(#gold)"/>
+</svg>
