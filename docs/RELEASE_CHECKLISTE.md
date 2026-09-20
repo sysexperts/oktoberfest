@@ -186,3 +186,45 @@ Kontaktbogen aller Symbole: `Godot.exe --path . res://tools/symbol_blatt.tscn`
 
 Bewusst nicht angefasst: Sprechblasen über den Gästen und Schilder in der Welt — dort
 sind die bunten Emoji auf Entfernung besser lesbar als dünne Striche.
+
+## 11. Updates: zwei Pakete statt eines (v205)
+
+Bis v204 ging bei jedem Deploy ein einziges `game.pck` mit **815 MB** raus — hoch,
+zur Kontrolle in Schritt 8 wieder runter, und dann zu jedem Spieler. Eine geänderte
+Textzeile kostete 815 MB. Seit v205 sind es zwei Pakete:
+
+| Paket | Inhalt | Größe | wie oft |
+|---|---|---|---|
+| `inhalt.pck` | voller Export (Modelle, Figuren, godotsteam) | ~815 MB | nur wenn sich `assets/models`, `assets/character` oder `addons` ändern — in v183–v204 kein einziges Mal |
+| `spiel.pck` | alles außer diesen drei Ordnern | ~61 MB | jeder Deploy |
+
+`scripts/boot.gd` lädt beide, **inhalt zuerst, spiel zuletzt** — das zuletzt geladene
+Paket gewinnt bei Dateien, die in beiden stecken. `version.json` führt drei Zahlen:
+
+```json
+{"version": 205, "spiel": 212, "inhalt": 205}
+```
+
+`spiel` und `inhalt` sind für aktuelle .exe. `version` bleibt für immer auf 205
+eingefroren — alte .exe (Programm-Generation ≤ 3) kennen nur diesen Schlüssel und
+`game.pck`. Beides bleibt unberührt auf dem Server liegen, damit sie nicht bei jedem
+Deploy 815 MB ziehen; `scripts/menu_eingang.gd` zeigt ihnen den Hinweis zum
+Neu-Herunterladen (Generation 4).
+
+Ob `inhalt.pck` neu muss, entscheidet `deploy.sh` an den Blob-Hashes der großen Ordner
+aus dem Git-Index (`git ls-files -s`), verglichen mit `inhalt.quelle` auf dem Server —
+deterministisch, anders als der Export selbst.
+
+**Nach Änderungen an der Aufteilung immer prüfen**, ob die Pakete zusammen noch ein
+lauffähiges Spiel ergeben — das fängt kaputte `uid://`-Verweise und fehlende Modelle ab:
+
+```
+Godot.exe --headless --path . --export-pack "Windows Desktop" build/probe_inhalt.pck
+  (mit exclude_filter="" — beide Probepakete brauchen tools/)
+Godot.exe --headless --main-pack build/probe_inhalt.pck res://tools/paket_test.tscn -- <absoluter Pfad zu probe_spiel.pck>
+```
+
+Im normalen Deploy läuft das nicht mit, weil die Release-Pakete `tools/` nicht enthalten.
+
+Einmaliger Übergang (v205): `bash tools/deploy.sh --altpaket --mit-zip` — frischt
+`game.pck` ein letztes Mal auf und stellt die neue ZIP online. Danach nie wieder nötig.

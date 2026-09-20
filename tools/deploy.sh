@@ -9,16 +9,20 @@
 # Ablauf:
 #   1 Git sauber, gepusht, Version neuer als live, LFS-Dateien wirklich geladen
 #   2 Test-Paket MIT tools/ exportieren, test_phase1 daraus muss bestehen
-#   3 Release-Paket exportieren
+#   3 Release-Pakete exportieren (spiel.pck immer, inhalt.pck nur bei Bedarf)
 #   4 Serverquellen per Prüfsumme abgleichen — nur Abweichendes wird übertragen
 #   5 Server: überschriebene Dateien sichern, entpacken, zweimal importieren
-#   6 Paket als game.pck.neu hochladen, Prüfsumme vergleichen
+#   6 Pakete als *.pck.neu hochladen, Prüfsumme vergleichen
 #   7 erst dann tauschen, dann version.json, Dienst neu starten, Journal prüfen
 #   8 über HTTPS nachprüfen, Git-Tag deploy-v<Version>
 #
 # Warum: Beim Handdeploy fehlten einmal vier Stand-Modelle zwei Tage auf dem
 # Server, ein andermal war version.json durch Anführungszeichen zerschossen.
 # Bash statt PowerShell, weil PowerShell 5.1 Anführungszeichen an ssh verfälscht.
+#
+# Ob die beiden Pakete zusammen noch ein lauffähiges Spiel ergeben, prüft
+# tools/paket_test (siehe docs/RELEASE_CHECKLISTE.md Abschnitt 11) — hier läuft
+# das nicht mit, weil die Release-Pakete tools/ nicht enthalten.
 
 set -euo pipefail
 
@@ -30,11 +34,23 @@ GODOT_SERVER="/opt/godot/Godot_v4.7.2-stable_linux.x86_64"
 URL="https://survival.vapur-it.de"
 GODOT="${GODOT:-/c/Users/vase/OneDrive - Intelego GmbH/Desktop/Godot.exe}"
 PRESET="Windows Desktop"
+# Aufteilung der Spieldaten (ab v205, siehe scripts/boot.gd): Bis v204 ging bei
+# jedem Deploy ein einziges game.pck mit 815 MB raus — hoch, zur Kontrolle wieder
+# runter, und zu jedem Spieler. Jetzt gibt es zwei Pakete:
+#   inhalt.pck  voller Export (~815 MB), nur wenn sich die großen Ordner ändern
+#   spiel.pck   alles außer denen (~61 MB), bei jedem Deploy
+GROSS="assets/models/*,assets/character/*,addons/*"
+# Auf dieser Version bleiben alte .exe (Programm-Generation <= 3) stehen: sie
+# kennen nur game.pck und den Schlüssel "version" in version.json. Beides bleibt
+# eingefroren liegen, damit sie nicht jedes Mal 815 MB ziehen; menu_eingang.gd
+# zeigt ihnen den Hinweis zum Neu-Herunterladen.
+UEBERGANG=205
 # Was der Server nicht braucht (Werkzeuge, Doku, Build-Ausgaben)
 NICHT_AUF_DEN_SERVER='^(docs|tools|build)/|^\.git'
 
 PROBE=0
 MIT_ZIP=0
+ALTPAKET=0
 for arg in "$@"; do
 	case "$arg" in
 		--probe) PROBE=1 ;;
@@ -42,6 +58,10 @@ for arg in "$@"; do
 		# application/config/programm_generation gestiegen ist (alte .exe zeigen dann
 		# einen Hinweis zum Neu-Herunterladen und brauchen eine aktuelle ZIP).
 		--mit-zip) MIT_ZIP=1 ;;
+		# Zusätzlich das alte game.pck auf den Stand von inhalt.pck bringen. Nur
+		# einmal beim Übergang nötig, damit alte .exe den Hinweis zum
+		# Neu-Herunterladen überhaupt zu sehen bekommen.
+		--altpaket) ALTPAKET=1 ;;
 		*) echo "Unbekannte Option: $arg"; exit 2 ;;
 	esac
 done
@@ -64,8 +84,15 @@ git fetch -q origin
 COMMIT="$(git rev-parse --short HEAD)"
 VERSION="$(sed -nE 's/^config\/version="([0-9]+)"/\1/p' project.godot)"
 [ -n "$VERSION" ] || abbruch "Keine application/config/version in project.godot."
-LIVE="$(curl -fsS "$URL/version.json" | tr -cd '0-9')"
-echo "Commit $COMMIT · Version lokal $VERSION · live $LIVE"
+# version.json führt drei Zahlen: "spiel" und "inhalt" für aktuelle .exe,
+# "version" eingefroren für alte. Fehlt "spiel", ist noch der Stand vor der
+# Aufteilung online — dann zählt "version".
+VJSON="$(curl -fsS "$URL/version.json")"
+feld() { echo "$VJSON" | sed -nE "s/.*\"$1\"[: ]*([0-9]+).*/\1/p"; }
+LIVE="$(feld spiel)"; [ -n "$LIVE" ] || LIVE="$(feld version)"
+LIVE_INHALT="$(feld inhalt)"; [ -n "$LIVE_INHALT" ] || LIVE_INHALT=0
+echo "Commit $COMMIT · Version lokal $VERSION · live spiel $LIVE · live inhalt $LIVE_INHALT"
+[ -n "$LIVE" ] || abbruch "version.json vom Server nicht lesbar — Deploy abgebrochen."
 # In git lfs ls-files steht "-" statt "*", wenn nur der Zeiger ausgecheckt ist
 if git lfs ls-files | grep -q ' - '; then
 	abbruch "LFS-Dateien nur als Zeiger vorhanden — git lfs pull."
@@ -120,13 +147,42 @@ if ! grep -q "ERGEBNIS: BESTANDEN" build/deploy_test.log; then
 fi
 grep -E "ERGEBNIS" build/deploy_test.log
 
-# ------------------------------------------------------------------ 3 Release-Paket
-schritt "3/8 Release-Paket exportieren"
-rm -f build/game.pck
-"$GODOT" --headless --path . --export-pack "$PRESET" build/game.pck > build/deploy_export.log 2>&1 || true
-[ -s build/game.pck ] || abbruch "Release-Paket nicht exportiert (build/deploy_export.log)."
-SHA="$(sha256sum build/game.pck | cut -c1-64)"
-echo "game.pck $(stat -c %s build/game.pck) Bytes · sha256 $SHA"
+# ------------------------------------------------------------------ 3 Release-Pakete
+schritt "3/8 Release-Pakete exportieren"
+# Braucht inhalt.pck überhaupt einen neuen Stand? Maßgeblich sind die Blob-Hashes
+# der großen Ordner aus dem Git-Index — deterministisch, anders als der Export
+# selbst. Der Server merkt sich den zuletzt ausgelieferten Wert in inhalt.quelle.
+INHALT_QUELLE="$(git ls-files -s assets/models assets/character addons | sha1sum | cut -c1-40)"
+INHALT_SERVER="$(ssh_server "cat '$WEB/inhalt.quelle' 2>/dev/null" || true)"
+if [ "$INHALT_QUELLE" = "$INHALT_SERVER" ] && [ "$LIVE_INHALT" -gt 0 ]; then
+	INHALT_NEU=0
+	INHALT_VERSION="$LIVE_INHALT"
+	echo "inhalt.pck unverändert (v$INHALT_VERSION) — wird nicht neu gebaut"
+else
+	INHALT_NEU=1
+	INHALT_VERSION="$VERSION"
+	echo "inhalt.pck muss neu (Quelle $INHALT_QUELLE, Server ${INHALT_SERVER:-keine})"
+fi
+
+# spiel.pck: alles außer den großen Ordnern. Wird über inhalt.pck gelegt und
+# gewinnt bei Dateien, die in beiden stecken (scripts/boot.gd lädt in der
+# Reihenfolge inhalt, spiel).
+rm -f build/spiel.pck
+sed -i "s#exclude_filter=\"tools/\*\"#exclude_filter=\"tools/*,$GROSS\"#" export_presets.cfg
+"$GODOT" --headless --path . --export-pack "$PRESET" build/spiel.pck > build/deploy_export.log 2>&1 || true
+cp build/export_presets.cfg.bak export_presets.cfg
+grep -q 'exclude_filter="tools/\*"' export_presets.cfg || abbruch "Preset nicht wiederhergestellt."
+[ -s build/spiel.pck ] || abbruch "spiel.pck nicht exportiert (build/deploy_export.log)."
+SHA="$(sha256sum build/spiel.pck | cut -c1-64)"
+echo "spiel.pck $(stat -c %s build/spiel.pck) Bytes · sha256 $SHA"
+
+if [ "$INHALT_NEU" = 1 ] || [ "$ALTPAKET" = 1 ]; then
+	rm -f build/inhalt.pck
+	"$GODOT" --headless --path . --export-pack "$PRESET" build/inhalt.pck > build/deploy_export_inhalt.log 2>&1 || true
+	[ -s build/inhalt.pck ] || abbruch "inhalt.pck nicht exportiert (build/deploy_export_inhalt.log)."
+	SHA_INHALT="$(sha256sum build/inhalt.pck | cut -c1-64)"
+	echo "inhalt.pck $(stat -c %s build/inhalt.pck) Bytes · sha256 $SHA_INHALT"
+fi
 
 # ------------------------------------------------------------------ 4 Abgleich
 schritt "4/8 Serverquellen abgleichen"
@@ -165,23 +221,46 @@ echo "Skriptfehler im Import: $FEHLER"
 SERVER_EOF
 
 # ------------------------------------------------------------------ 6 Paket hochladen
-schritt "6/8 Spieler-Paket hochladen und prüfen"
-printf '{"version": %s}' "$VERSION" > build/version.json
-scp_server build/game.pck "$SERVER:$WEB/game.pck.neu"
+schritt "6/8 Spieler-Pakete hochladen und prüfen"
+printf '{"version": %s, "spiel": %s, "inhalt": %s}' "$UEBERGANG" "$VERSION" "$INHALT_VERSION" > build/version.json
+scp_server build/spiel.pck "$SERVER:$WEB/spiel.pck.neu"
 scp_server build/version.json "$SERVER:$WEB/version.json.neu"
-SHA_SERVER="$(ssh_server "sha256sum '$WEB/game.pck.neu' | cut -c1-64")"
-[ "$SHA" = "$SHA_SERVER" ] || abbruch "Prüfsumme auf dem Server weicht ab — nichts getauscht."
-echo "Prüfsumme stimmt"
+SHA_SERVER="$(ssh_server "sha256sum '$WEB/spiel.pck.neu' | cut -c1-64")"
+[ "$SHA" = "$SHA_SERVER" ] || abbruch "Prüfsumme von spiel.pck weicht ab — nichts getauscht."
+echo "spiel.pck: Prüfsumme stimmt"
+if [ "$INHALT_NEU" = 1 ] || [ "$ALTPAKET" = 1 ]; then
+	scp_server build/inhalt.pck "$SERVER:$WEB/inhalt.pck.neu"
+	SHA_INHALT_SERVER="$(ssh_server "sha256sum '$WEB/inhalt.pck.neu' | cut -c1-64")"
+	[ "$SHA_INHALT" = "$SHA_INHALT_SERVER" ] || abbruch "Prüfsumme von inhalt.pck weicht ab — nichts getauscht."
+	echo "inhalt.pck: Prüfsumme stimmt"
+fi
 
 # ------------------------------------------------------------------ 7 Tauschen und neu starten
 schritt "7/8 Tauschen, version.json, Server neu starten"
-ssh_server bash -s -- "$WEB" <<'SERVER_EOF'
+ssh_server bash -s -- "$WEB" "$INHALT_NEU" "$ALTPAKET" "$INHALT_QUELLE" <<'SERVER_EOF'
 set -euo pipefail
-WEB="$1"
+WEB="$1"; INHALT_NEU="$2"; ALTPAKET="$3"; INHALT_QUELLE="$4"
 cd "$WEB"
-chown www-data:www-data game.pck.neu version.json.neu
-# Reihenfolge: erst das Paket, dann die Version — sonst laden Spieler eine halbe Datei
-mv game.pck.neu game.pck
+chown www-data:www-data spiel.pck.neu version.json.neu
+# Reihenfolge: erst die Pakete, dann die Version — sonst lädt ein Spieler eine
+# halbe Datei und merkt sich trotzdem die neue Nummer
+if [ -f inhalt.pck.neu ]; then
+	chown www-data:www-data inhalt.pck.neu
+	mv inhalt.pck.neu inhalt.pck
+fi
+mv spiel.pck.neu spiel.pck
+if [ "$INHALT_NEU" = 1 ]; then
+	echo -n "$INHALT_QUELLE" > inhalt.quelle
+fi
+# Einmal beim Übergang: das alte Einzelpaket auf denselben Stand bringen, damit
+# alte .exe es noch einmal ziehen und dann den Hinweis zum Neu-Herunterladen
+# zeigen. Danach bleibt game.pck unberührt liegen.
+if [ "$ALTPAKET" = 1 ]; then
+	cp inhalt.pck game.pck.neu
+	chown www-data:www-data game.pck.neu
+	mv game.pck.neu game.pck
+	echo "game.pck für alte .exe aufgefrischt"
+fi
 mv version.json.neu version.json
 cat version.json; echo
 START="$(date +%s)"
@@ -208,11 +287,21 @@ ssh_server 'cmp -s /tmp/vermittler.neu.py /opt/sloptoberfest-vermittler/vermittl
 
 # ------------------------------------------------------------------ 8 Nachprüfen
 schritt "8/8 Über HTTPS nachprüfen"
-LIVE_NEU="$(curl -fsS "$URL/version.json" | tr -cd '0-9')"
-SHA_HTTPS="$(curl -fsS "$URL/game.pck" | sha256sum | cut -c1-64)"
-echo "version.json: $LIVE_NEU · game.pck: $SHA_HTTPS"
-[ "$LIVE_NEU" = "$VERSION" ] || abbruch "version.json über HTTPS ist $LIVE_NEU statt $VERSION."
-[ "$SHA_HTTPS" = "$SHA" ] || abbruch "game.pck über HTTPS weicht ab."
+VJSON_NEU="$(curl -fsS "$URL/version.json")"
+feld_neu() { echo "$VJSON_NEU" | sed -nE "s/.*\"$1\"[: ]*([0-9]+).*/\1/p"; }
+[ "$(feld_neu spiel)" = "$VERSION" ] || abbruch "version.json über HTTPS meldet spiel $(feld_neu spiel) statt $VERSION."
+[ "$(feld_neu inhalt)" = "$INHALT_VERSION" ] || abbruch "version.json über HTTPS meldet inhalt $(feld_neu inhalt) statt $INHALT_VERSION."
+# spiel.pck ganz nachrechnen — bei rund 60 MB ist das in Sekunden erledigt.
+SHA_HTTPS="$(curl -fsS "$URL/spiel.pck" | sha256sum | cut -c1-64)"
+[ "$SHA_HTTPS" = "$SHA" ] || abbruch "spiel.pck über HTTPS weicht ab."
+# inhalt.pck nur auf Länge prüfen: die Prüfsumme stand schon auf dem Server fest,
+# und die Datei noch einmal zu ziehen wären 815 MB für nichts.
+LAENGE="$(curl -fsSI "$URL/inhalt.pck" | sed -nE 's/^[Cc]ontent-[Ll]ength: *([0-9]+).*/\1/p' | tr -d '\r')"
+[ -n "$LAENGE" ] && [ "$LAENGE" -gt 0 ] || abbruch "inhalt.pck ist über HTTPS nicht erreichbar."
+if [ "$INHALT_NEU" = 1 ] || [ "$ALTPAKET" = 1 ]; then
+	[ "$LAENGE" = "$(stat -c %s build/inhalt.pck)" ] || abbruch "inhalt.pck über HTTPS hat $LAENGE Bytes statt $(stat -c %s build/inhalt.pck)."
+fi
+echo "version.json: spiel $VERSION · inhalt $INHALT_VERSION · spiel.pck $SHA_HTTPS · inhalt.pck $LAENGE Bytes"
 
 # ------------------------------------------------------------------ Download-ZIP
 if [ "$MIT_ZIP" = 1 ]; then

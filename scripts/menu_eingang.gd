@@ -37,7 +37,7 @@ const RENDERER := ["forward_plus", "gl_compatibility"]
 ## Wird beim Neustart mitgegeben — verhindert eine Endlosschleife.
 const NEUSTART_MARKE := "--neu-gestartet"
 ## Welche Programm-Generation dieses Paket mindestens braucht.
-const BENOETIGTE_GENERATION := 3
+const BENOETIGTE_GENERATION := 4
 
 func _ready() -> void:
 	# Alte .exe kennen die Einstellung nicht — sie sind Generation 1
