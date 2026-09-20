@@ -44,22 +44,14 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 corner_detail = 12
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ietuj"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ietuj"]
 content_margin_left = 30.0
 content_margin_top = 12.0
 content_margin_right = 30.0
 content_margin_bottom = 12.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.839, 0.349, 0.8)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-corner_detail = 12
+texture = ExtResource("1_grv1c")
+texture_margin_left = 24.0
+texture_margin_right = 24.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5sh76"]
 content_margin_left = 30.0
@@ -76,33 +68,21 @@ content_margin_top = 12.0
 content_margin_right = 30.0
 content_margin_bottom = 12.0
 bg_color = Color(0, 0, 0, 0.58)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.28)
+border_color = Color(0, 0, 0, 0)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 corner_detail = 12
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o110l"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o110l"]
 content_margin_left = 30.0
 content_margin_top = 12.0
 content_margin_right = 30.0
 content_margin_bottom = 12.0
-bg_color = Color(0, 0, 0, 0.8)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.839, 0.349, 0.85)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-corner_detail = 12
+texture = ExtResource("3_2axro")
+texture_margin_left = 24.0
+texture_margin_right = 24.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0du13"]
 
@@ -916,10 +896,10 @@ Button/constants/shadow_offset_y = 2
 Button/constants/shadow_outline_size = 2
 Button/font_sizes/font_size = 20
 Button/styles/disabled = SubResource("StyleBoxFlat_2axro")
-Button/styles/focus = SubResource("StyleBoxFlat_ietuj")
+Button/styles/focus = SubResource("StyleBoxTexture_ietuj")
 Button/styles/hover = SubResource("StyleBoxTexture_5sh76")
 Button/styles/normal = SubResource("StyleBoxFlat_jdbtt")
-Button/styles/pressed = SubResource("StyleBoxFlat_o110l")
+Button/styles/pressed = SubResource("StyleBoxTexture_o110l")
 CheckBox/colors/font_color = Color(0.96, 0.93, 0.89, 1)
 CheckBox/colors/font_hover_color = Color(1, 0.98, 0.9, 1)
 CheckBox/icons/checked = ExtResource("4_ietuj")

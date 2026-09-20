@@ -224,11 +224,14 @@ func _feld(t: Theme, typ: String, radius: int, rand_x: float, rand_y: float) -> 
 ## Hauch Gold über dem Schwarz und goldene Schrift. Gold bleibt damit Akzent
 ## statt Grundfarbe — auf allen Knöpfen gleichzeitig nähme es der Seite jede
 ## Hierarchie.
+## Keine Rahmen in irgendeinem Zustand — der goldene Verlauf trägt die Rückmeldung
+## allein. Der Fokus sieht aus wie Hover, damit auch die Tastaturauswahl ohne
+## Rahmen erkennbar bleibt.
 func _schimmer_knopf(t: Theme, typ: String, rand_x: float, rand_y: float) -> void:
-	t.set_stylebox("normal", typ, _kasten(SCHWARZ, RAND_LEISE, 1, 16, rand_x, rand_y))
+	t.set_stylebox("normal", typ, _kasten(SCHWARZ, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
 	t.set_stylebox("hover", typ, _verlauf("verlauf_knopf_hover", rand_x, rand_y))
-	t.set_stylebox("pressed", typ, _kasten(Color(0, 0, 0, 0.8), Color(GOLD.r, GOLD.g, GOLD.b, 0.85), 2, 16, rand_x, rand_y))
-	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), Color(GOLD.r, GOLD.g, GOLD.b, 0.8), 2, 16, rand_x, rand_y))
+	t.set_stylebox("pressed", typ, _verlauf("verlauf_knopf_gedrueckt", rand_x, rand_y))
+	t.set_stylebox("focus", typ, _verlauf("verlauf_knopf_hover", rand_x, rand_y))
 	t.set_stylebox("disabled", typ, _kasten(Color(0, 0, 0, 0.3), Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
 
 ## Knöpfe mit senkrechtem Verlauf (oben heller) statt flacher Fläche — das gibt
