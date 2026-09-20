@@ -14,6 +14,9 @@ extends Control
 
 ## Selbst in den Eltern-Control einpassen (im Menü an, für freie Platzierung aus)
 @export var einpassen := true
+## Auftritt abspielen. Aus für kurz sichtbare Stellen wie den Ladebildschirm —
+## dort steht das Logo sofort fertig da und wiegt sich nur.
+@export var mit_auftritt := true
 
 @onready var _schrift: TextureRect = $Schriftzug
 @onready var _brett: TextureRect = $Brett
@@ -45,7 +48,10 @@ func _ready() -> void:
 		if eltern != null:
 			eltern.resized.connect(_einpassen)
 		_einpassen()
-	auftritt()
+	if mit_auftritt:
+		auftritt()
+	else:
+		_bereit = true
 
 ## Bounding-Box aller Teile in lokalen Koordinaten (Ruhelage, ohne Animation)
 func _inhalt() -> Rect2:
