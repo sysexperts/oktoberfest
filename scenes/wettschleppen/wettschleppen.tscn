@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/wettschleppen.gd" id="1_skript"]
 [ext_resource type="PackedScene" path="res://scenes/wettschleppen/tor.tscn" id="2_tor"]
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
-[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="4_theme"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="4_theme"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="5_fraktur"]
 
 [node name="Wettschleppen" type="Node3D"]
@@ -140,7 +140,7 @@ show_percentage = false
 [node name="Hinweis" type="Label" parent="Anzeige/Kasten/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.78, 0.9, 1)
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
 theme_override_font_sizes/font_size = 14
 text = "DUELL_HINWEIS"
 horizontal_alignment = 1

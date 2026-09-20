@@ -10,7 +10,7 @@ content_margin_left = 10.0
 content_margin_top = 4.0
 content_margin_right = 10.0
 content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.08, 0.16, 0.85)
+bg_color = Color(0.1, 0.078, 0.062, 0.85)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -85,7 +85,7 @@ horizontal_alignment = 1
 [node name="Untertitel" type="Label" parent="Start/Panel/Rand/Spalte"]
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.88, 0.86, 0.94, 1)
+theme_override_colors/font_color = Color(0.88, 0.84, 0.78, 1)
 theme_override_font_sizes/font_size = 19
 text = "KOOP_SUB"
 horizontal_alignment = 1
@@ -113,7 +113,7 @@ text = "KOOP_CREATE"
 
 [node name="Oder" type="Label" parent="Start/Panel/Rand/Spalte"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.68, 0.8, 1)
+theme_override_colors/font_color = Color(0.7, 0.65, 0.59, 1)
 theme_override_font_sizes/font_size = 18
 text = "KOOP_OR"
 horizontal_alignment = 1
@@ -221,7 +221,7 @@ horizontal_alignment = 1
 
 [node name="CodeHinweis" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.83, 0.92, 1)
+theme_override_colors/font_color = Color(0.85, 0.81, 0.74, 1)
 theme_override_font_sizes/font_size = 17
 text = "KOOP_INVITE_HINT"
 horizontal_alignment = 1
@@ -288,7 +288,7 @@ text_overrun_behavior = 3
 [node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile/Text"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
 theme_override_font_sizes/font_size = 15
 text_overrun_behavior = 3
 
@@ -330,7 +330,7 @@ text_overrun_behavior = 3
 [node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile/Text"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
 theme_override_font_sizes/font_size = 15
 text_overrun_behavior = 3
 
@@ -372,7 +372,7 @@ text_overrun_behavior = 3
 [node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile/Text"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
 theme_override_font_sizes/font_size = 15
 text_overrun_behavior = 3
 
@@ -414,7 +414,7 @@ text_overrun_behavior = 3
 [node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile/Text"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.78, 0.88, 1)
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
 theme_override_font_sizes/font_size = 15
 text_overrun_behavior = 3
 
@@ -577,7 +577,7 @@ text = "KOOP_DEPT"
 [node name="Regeln" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.88, 0.95, 1)
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 1)
 theme_override_font_sizes/font_size = 16
 text = "KOOP_RULES"
 autowrap_mode = 3

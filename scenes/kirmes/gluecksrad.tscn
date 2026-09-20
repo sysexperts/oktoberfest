@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/kirmes/gluecksrad.gd" id="1_spiel"]
 [ext_resource type="PackedScene" path="res://scenes/kirmes/gluecksrad_stand.tscn" id="2_stand"]
-[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="3_theme"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="3_theme"]
 [ext_resource type="Script" path="res://scripts/kirmes/budenbesitzer.gd" id="4_besitzer"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="5_figur"]
 
 [sub_resource type="StyleBoxFlat" id="InfoFlaeche"]
-bg_color = Color(0.08, 0.1, 0.16, 0.82)
+bg_color = Color(0.05, 0.04, 0.032, 0.82)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8

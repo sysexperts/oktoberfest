@@ -56,7 +56,7 @@ autowrap_mode = 3
 [node name="Unterzeile" type="Label" parent="Panel/Rand/Spalte" unique_id=1076327167]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.78, 0.9, 1)
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
 theme_override_font_sizes/font_size = 13
 text = "INTRO_SUB"
 autowrap_mode = 3
@@ -105,7 +105,7 @@ autowrap_mode = 3
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.68, 0.8, 1)
+theme_override_colors/font_color = Color(0.7, 0.65, 0.59, 1)
 theme_override_font_sizes/font_size = 14
 horizontal_alignment = 2
 autowrap_mode = 3

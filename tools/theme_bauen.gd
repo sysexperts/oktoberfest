@@ -141,7 +141,24 @@ func _init() -> void:
 	t.set_stylebox("grabber_highlight", "VScrollBar", _kasten(GOLD, Color(0, 0, 0, 0), 0, 6, 0.0, 0.0))
 	t.set_stylebox("grabber_pressed", "VScrollBar", _kasten(GOLD_HELL, Color(0, 0, 0, 0), 0, 6, 0.0, 0.0))
 
+	# ---------------------------------------------------------------- Fenster
+	# Dialoge und Tooltips: ohne diese Einträge fielen sie auf Godots
+	# Standardoptik zurück, sobald das Theme projektweit gilt.
+	t.set_stylebox("panel", "AcceptDialog", _kasten(TAFEL, RAND, 1, 20, 26.0, 22.0))
+	t.set_stylebox("embedded_border", "Window", _kasten(TAFEL, RAND, 1, 20, 26.0, 22.0))
+	t.set_color("title_color", "Window", GOLD)
+	t.set_stylebox("panel", "TooltipPanel", _kasten(Color(0.06, 0.045, 0.033, 0.96), RAND, 1, 10, 12.0, 8.0))
+	t.set_color("font_color", "TooltipLabel", TEXT)
+
+	# ---------------------------------------------------------------- Rollbalken waagerecht
+	t.set_stylebox("scroll", "HScrollBar", _kasten(TIEF, Color(0, 0, 0, 0), 0, 6, 0.0, 0.0))
+	t.set_stylebox("grabber", "HScrollBar", _kasten(RAND, Color(0, 0, 0, 0), 0, 6, 0.0, 0.0))
+	t.set_stylebox("grabber_highlight", "HScrollBar", _kasten(GOLD, Color(0, 0, 0, 0), 0, 6, 0.0, 0.0))
+	t.set_stylebox("grabber_pressed", "HScrollBar", _kasten(GOLD_HELL, Color(0, 0, 0, 0), 0, 6, 0.0, 0.0))
+
 	# ---------------------------------------------------------------- Schrift
+	t.set_stylebox("separator", "VSeparator", _linie())
+	t.set_constant("separation", "VSeparator", 12)
 	t.set_color("font_color", "Label", TEXT)
 	t.set_color("font_shadow_color", "Label", Color(0, 0, 0, 0.8))
 	t.set_constant("shadow_offset_x", "Label", 1)

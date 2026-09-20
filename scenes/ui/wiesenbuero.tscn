@@ -60,7 +60,7 @@ text = "💶 1.200 €"
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 text = "Kleines Zelt · Tische 2/4"
 
@@ -134,7 +134,7 @@ theme_override_constants/separation = 8
 
 [node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=1809999134]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 text = "OFFER_LICENSE_INFO"
 
@@ -222,7 +222,7 @@ theme_override_constants/separation = 8
 
 [node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Kuenstler/Rand/Liste" unique_id=1926491153]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 text = "ACT_TAB_INFO"
 
@@ -255,7 +255,7 @@ theme_override_constants/separation = 8
 
 [node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" unique_id=738518188]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 text = "GOODS_TAB_INFO"
 autowrap_mode = 3
@@ -321,7 +321,7 @@ theme_override_constants/separation = 8
 
 [node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=775358590]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 1)
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 text = "DECO_TAB_INFO"
 autowrap_mode = 3
