@@ -13,8 +13,11 @@ const USER_PCK := "user://game.pck"
 const USER_TMP := "user://game.pck.tmp"
 const VER_FILE := "user://version.txt"
 
+const UPDATER_UI := "res://scenes/ui/updater.tscn"
+
 var _http: HTTPRequest
 var _label: Label
+var _ui: Control
 
 func _ready() -> void:
 	# Dedicated server modunda updater'a girme — Net autoload host'u başlatır.
@@ -32,6 +35,13 @@ func _ready() -> void:
 	_check_version()
 
 func _build_ui() -> void:
+	# Richtige Oberfläche mit Logo und Fortschritt; sie liegt in derselben .exe
+	# wie dieses Skript. Falls sie doch fehlt, bleibt der schlichte Text übrig —
+	# ein Updater ohne Anzeige wäre schlimmer als ein hässlicher.
+	if ResourceLoader.exists(UPDATER_UI):
+		_ui = load(UPDATER_UI).instantiate()
+		add_child(_ui)
+		return
 	var bg := ColorRect.new()
 	bg.color = Color(0.055, 0.075, 0.125)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -44,8 +54,16 @@ func _build_ui() -> void:
 	add_child(_label)
 
 func _status(t: String) -> void:
-	if _label:
+	if _ui:
+		_ui.status(t)
+	elif _label:
 		_label.text = "🍺 " + tr("GAME_TITLE") + "\n\n" + t
+
+## Während des Paketdownloads den echten Fortschritt anzeigen — es sind mehrere
+## hundert Megabyte, ohne Anzeige wirkt das Fenster eingefroren.
+func _process(_delta: float) -> void:
+	if _ui != null and _http != null and _http.download_file != "":
+		_ui.fortschritt(_http.get_downloaded_bytes(), _http.get_body_size())
 
 func _local_version() -> int:
 	if FileAccess.file_exists(VER_FILE):
@@ -79,6 +97,8 @@ func _on_version(result: int, code: int, _headers: PackedStringArray, body: Pack
 
 func _download(server_v: int) -> void:
 	_status(tr("STATUS_UPDATE_LOAD") % server_v)
+	if _ui:
+		_ui.fortschritt_an()
 	_http.download_file = USER_TMP
 	_http.request_completed.connect(_on_download.bind(server_v), CONNECT_ONE_SHOT)
 	if _http.request(PCK_URL) != OK:
@@ -87,6 +107,8 @@ func _download(server_v: int) -> void:
 
 func _on_download(result: int, code: int, _headers: PackedStringArray, _body: PackedByteArray, server_v: int) -> void:
 	_http.download_file = ""
+	if _ui:
+		_ui.fortschritt_aus()
 	if result == HTTPRequest.RESULT_SUCCESS and code == 200:
 		var da := DirAccess.open("user://")
 		if da:
