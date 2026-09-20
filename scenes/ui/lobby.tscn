@@ -1,7 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/lobby.gd" id="1_lobby"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
 
 [node name="Lobby" type="Control"]
 visible = false
@@ -43,7 +42,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
 theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.02, 1)
 theme_override_constants/outline_size = 10
-theme_override_fonts/font = ExtResource("2_fraktur")
 theme_override_font_sizes/font_size = 38
 text = "LOBBY_TITLE"
 horizontal_alignment = 1
@@ -184,7 +182,6 @@ mouse_filter = 2
 [node name="AbteilungTitel" type="Label" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("2_fraktur")
 theme_override_font_sizes/font_size = 24
 text = "LOBBY_DEPT"
 
@@ -236,7 +233,6 @@ layout_mode = 2
 [node name="AnleitungTitel" type="Label" parent="Mitte/Panel/Spalte"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("2_fraktur")
 theme_override_font_sizes/font_size = 24
 text = "LOBBY_HOWTO_TITLE"
 
@@ -260,6 +256,5 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_fraktur")
 theme_override_font_sizes/font_size = 26
 text = "LOBBY_GO"

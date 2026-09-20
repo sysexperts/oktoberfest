@@ -8,7 +8,7 @@ const Texte := preload("res://scripts/ui/texte.gd")
 @export var stil_erreicht: StyleBox
 
 func setze(titel: String, text: String, wert: int, ziel: int, belohnung: String, erreicht: bool) -> void:
-	%Titel.text = ("🏆 " if erreicht else "") + titel
+	%Titel.text = titel
 	%Text.text = text
 	var angezeigt := mini(wert, ziel)
 	%Balken.max_value = ziel

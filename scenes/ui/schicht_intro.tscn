@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://vmllfkhnxuie"]
 
 [ext_resource type="Script" uid="uid://cyrawmhjknasy" path="res://scripts/ui/schicht_intro.gd" id="1_intro"]
-[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
 
 [node name="SchichtIntro" type="Control" unique_id=1020033424]
 visible = false
@@ -48,7 +47,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_outline_color = Color(0.15, 0.08, 0.02, 1)
 theme_override_constants/outline_size = 8
-theme_override_fonts/font = ExtResource("2_fraktur")
 theme_override_font_sizes/font_size = 22
 text = "INTRO_TITLE"
 autowrap_mode = 3

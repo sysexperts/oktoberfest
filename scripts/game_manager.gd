@@ -1067,7 +1067,7 @@ func _apply_daylight(clock: float) -> void:
 		# Sonne schien schlagartig durchs Zeltdach — das Zelt wurde plötzlich hell.
 		# Look „Stil“ (tools/look_test.tscn, Variante C): warme, kräftige Sonne am Tag
 		_sun.light_energy = lerpf(_day_sun_energy, _day_sun_energy * 0.096, t) * (1.0 - 0.45 * r)
-		_sun.light_color = Color(1.0, 0.9, 0.76).lerp(Color(0.62, 0.68, 0.92), t)
+		_sun.light_color = Color(1.0, 0.9, 0.76).lerp(Color(0.86, 0.8, 0.68), t)
 	if _world_env and _world_env.environment:
 		var env := _world_env.environment
 		env.ambient_light_energy = lerpf(_day_ambient, _day_ambient * 0.6, t) * (1.0 - 0.3 * r)
@@ -4031,7 +4031,7 @@ func _saison_abschluss() -> void:
 	var tage := maxi(1, int(_saison.tage))
 	net_popup.rpc("POPUP_SAISON", [_saison_nr, _eur(int(_saison.umsatz)), _eur(int(_saison.netto)),
 		int(_saison.bedient), roundi(float(_saison.pop_summe) / float(tage)),
-		"🍺".repeat(wertung) + "▫".repeat(5 - wertung)])
+		"★".repeat(wertung) + "☆".repeat(5 - wertung)])
 	_stats.saisons = int(_stats.get("saisons", 0)) + 1
 	_stats.beste_wertung = maxi(int(_stats.get("beste_wertung", 0)), wertung)
 	_saison_nr += 1

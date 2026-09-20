@@ -8,6 +8,7 @@ extends CanvasLayer
 ## gemerkt, damit ein Sprachwechsel alles neu beschriften kann.
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Symbole := preload("res://scripts/ui/symbole.gd")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 const ROT := Color(1, 0.42, 0.35)
 const GOLD := Color(1, 0.839, 0.349)
@@ -17,7 +18,8 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _zeit: Label = %Zeit
 @onready var _beliebtheit: ProgressBar = %Beliebtheit
 @onready var _beliebtheit_wert: Label = %BeliebtheitWert
-@onready var _lager: Label = %Lager
+@onready var _lager_bier: Label = %LagerBier
+@onready var _lager_essen: Label = %LagerEssen
 @onready var _sauberkeit: ProgressBar = %Sauberkeit
 @onready var _sauberkeit_wert: Label = %SauberkeitWert
 @onready var _aufgabe: Control = %Aufgabe
@@ -46,6 +48,10 @@ var _zustand := {}
 var _erledigt_token := 0
 
 func _ready() -> void:
+	Symbole.setze(%SymbolGeld, "geld")
+	Symbole.setze(%SymbolBier, "bier")
+	Symbole.setze(%SymbolEssen, "brezn")
+	Symbole.setze(%SymbolZeit, "uhr")
 	%HinweisfensterOk.pressed.connect(close_popup)
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
@@ -60,7 +66,7 @@ func _ready() -> void:
 	_einblenden()
 
 # ------------------------------------------------------------ Offene Bestellungen
-## Rechts unter der Aufgabe: was die Gäste gerade wollen, z. B. „🍺 8× Helles"
+## Rechts unter der Aufgabe: was die Gäste gerade wollen, z. B. „8× Helles"
 ## (Test 13.09.). Zählt die Bestellungen der sichtbaren Gäste, auch bei Clients.
 const BESTELL_ZEILE := preload("res://scenes/ui/bestell_zeile.tscn")
 const BESTELL_TAKT := 0.5
@@ -102,9 +108,9 @@ func _bestellungen_neu() -> void:
 			liste.add_child(zeile)
 			_bestell_zeilen[k] = zeile
 		if art == 2:
-			zeile.setzen("🥨", Customer.FOOD_COLORS.get(typ, Color.WHITE), int(zaehler[k]), ESSEN_NAMEN.get(typ, "?"))
+			zeile.setzen("brezn", Customer.FOOD_COLORS.get(typ, Color.WHITE), int(zaehler[k]), ESSEN_NAMEN.get(typ, "?"))
 		else:
-			zeile.setzen("🍺", Customer.BEER_COLORS.get(typ, Color.WHITE), int(zaehler[k]), BIER_NAMEN.get(typ, "?"))
+			zeile.setzen("bier", Customer.BEER_COLORS.get(typ, Color.WHITE), int(zaehler[k]), BIER_NAMEN.get(typ, "?"))
 		liste.move_child(zeile, i)
 	%Bestellungen.visible = not zaehler.is_empty()
 
@@ -139,12 +145,12 @@ func set_hint(key: String) -> void:
 	var hinweis: Label = %HinweisText
 	hinweis.text = Texte.mit_tasten(key)
 	var handlung := tr(key).contains("{")
-	hinweis.add_theme_color_override("font_color", WEISS if handlung else Color(0.72, 0.7, 0.82))
+	hinweis.add_theme_color_override("font_color", WEISS if handlung else Color(0.78, 0.73, 0.66))
 
 # ------------------------------------------------------------ Leiste
 func set_money(v: int) -> void:
 	_money = v
-	_geld.text = "💶 " + Texte.euro(v)
+	_geld.text = Texte.euro(v)
 	# Dispo: bis -1000 € erlaubt, Rückzahlung kostet 5 % Zinsen
 	_geld.add_theme_color_override("font_color", ROT if v < 0 else WEISS)
 	_buero.setze_geld(v)
@@ -161,12 +167,13 @@ func set_time(clock: float, night: bool = false) -> void:
 	var tag := tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
 	if clock < 0.0:
 		_zeit.text = "%s · %s" % [tag, tr("HUD_CLOSED")]
-		_zeit.add_theme_color_override("font_color", Color(0.72, 0.75, 0.88))
+		_zeit.add_theme_color_override("font_color", Color(0.82, 0.76, 0.66))
 		return
 	var h := int(clock)
 	var m := int((clock - float(h)) * 60.0)
-	_zeit.text = "%s · %s %02d:%02d" % [tag, "🌙" if night else "🕗", h, m]
-	_zeit.add_theme_color_override("font_color", Color(0.72, 0.78, 1) if night else WEISS)
+	Symbole.setze(%SymbolZeit, "mond" if night else "uhr")
+	_zeit.text = "%s · %02d:%02d" % [tag, h, m]
+	_zeit.add_theme_color_override("font_color", Color(0.86, 0.8, 0.68) if night else WEISS)
 
 func set_day(day: int) -> void:
 	_day = day
@@ -194,8 +201,11 @@ func set_hygiene(v: float) -> void:
 func set_stock(bier: int, essen: int) -> void:
 	_bier = bier
 	_essen = essen
-	_lager.text = "🍺 %d · 🥨 %d" % [bier, essen]
-	_lager.add_theme_color_override("font_color", WEISS if (bier > 0 or essen > 0) else ROT)
+	_lager_bier.text = str(bier)
+	_lager_essen.text = str(essen)
+	var leer := bier <= 0 and essen <= 0
+	for l: Label in [_lager_bier, _lager_essen]:
+		l.add_theme_color_override("font_color", ROT if leer else WEISS)
 
 ## Füllfarbe eines Balkens, ohne das Theme für alle anderen zu ändern.
 func _balken_farbe(balken: ProgressBar, farbe: Color) -> void:

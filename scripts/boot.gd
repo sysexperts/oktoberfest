@@ -47,7 +47,7 @@ func _build_ui() -> void:
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	_label = Label.new()
-	_label.text = "🍺 " + tr("GAME_TITLE")
+	_label.text = tr("GAME_TITLE")
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.set_anchors_preset(Control.PRESET_CENTER)
 	_label.add_theme_font_size_override("font_size", 22)
@@ -57,7 +57,7 @@ func _status(t: String) -> void:
 	if _ui:
 		_ui.status(t)
 	elif _label:
-		_label.text = "🍺 " + tr("GAME_TITLE") + "\n\n" + t
+		_label.text = tr("GAME_TITLE") + "\n\n" + t
 
 ## Während des Paketdownloads den echten Fortschritt anzeigen — es sind mehrere
 ## hundert Megabyte, ohne Anzeige wirkt das Fenster eingefroren.

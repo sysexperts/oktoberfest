@@ -3,9 +3,10 @@ extends Node3D
 ## einen wartenden Gast, eine Pfütze, ein Paket. Sehen alle, verschwindet nach 5 s.
 ## Farbe je Spieler. Aufbau: scenes/ui/ping_marker.tscn.
 
-const SYMBOLE := ["❗", "🍺", "🧽", "📦"]
+const SYMBOLE := ["ausruf", "bier", "besen", "kiste"]
 const FARBEN := [Color(1, 0.85, 0.3), Color(0.4, 0.8, 1), Color(0.5, 1, 0.5), Color(1, 0.5, 0.8)]
 const DAUER := 5.0
+const Symbole := preload("res://scripts/ui/symbole.gd")
 
 var _t := 0.0
 var _basis_y := 0.0
@@ -15,9 +16,9 @@ func _ready() -> void:
 
 ## art: 0 allgemein, 1 Gast, 2 Pfütze, 3 Paket · farbe: Spielernummer
 func zeige(art: int, farbe: int) -> void:
-	var symbol: Label3D = $Symbol
+	var symbol: Sprite3D = $Symbol
 	var pfeil: Label3D = $Pfeil
-	symbol.text = SYMBOLE[clampi(art, 0, SYMBOLE.size() - 1)]
+	symbol.texture = Symbole.bild(SYMBOLE[clampi(art, 0, SYMBOLE.size() - 1)])
 	var c: Color = FARBEN[posmod(farbe, FARBEN.size())]
 	symbol.modulate = c
 	pfeil.modulate = c

@@ -7,12 +7,14 @@ extends Control
 ## vom GameManager (net_lobby_setzen → _spieler_info).
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Symbole := preload("res://scripts/ui/symbole.gd")
 ## Gleiche Farben wie player.gd COSTUME_COLORS (Schal)
 const FARBEN := [Color(0.85, 0.2, 0.2), Color(0.2, 0.45, 0.85), Color(0.2, 0.7, 0.3),
 	Color(0.7, 0.3, 0.8), Color(0.95, 0.85, 0.2), Color(0.95, 0.95, 0.95)]
 ## Abteilung -> Knopf in der Szene
 const KNOEPFE := {"kueche": "Kueche", "service": "Service", "sauberkeit": "Sauberkeit", "lager": "Lager"}
-const SYMBOLE := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
+## Abteilung -> Symbolname aus assets/ui/symbole
+const SYMBOLE := {"kueche": "topf", "service": "bier", "sauberkeit": "besen", "lager": "kiste"}
 
 var _gm: Node
 var _info := {}
@@ -83,7 +85,8 @@ func _neu() -> void:
 			if str(d.get("abteilung", "")) == abt and int(peer) != ich:
 				leiter.append(str(d.get("name", "")))
 		var wer := tr("LOBBY_FREE") if leiter.is_empty() else tr("LOBBY_LEADS") % ", ".join(leiter)
-		knopf.text = "%s %s\n%s\n%s" % [SYMBOLE[abt], tr("ABT_" + abt.to_upper()), tr("ABT_%s_INFO" % abt.to_upper()), wer]
+		knopf.icon = Symbole.bild(SYMBOLE[abt])
+		knopf.text = "%s\n%s\n%s" % [tr("ABT_" + abt.to_upper()), tr("ABT_%s_INFO" % abt.to_upper()), wer]
 		knopf.button_pressed = abt == _abteilung
 	%Anleitung.text = Texte.mit_tasten("LOBBY_HOWTO")
 	%Los.disabled = _abteilung == ""

@@ -1,7 +1,9 @@
 extends HBoxContainer
-## Eine Zeile in „Offene Bestellungen" (HUD rechts), z. B. „🍺 8× Helles".
+## Eine Zeile in „Offene Bestellungen" (HUD rechts), z. B. „8× Helles".
 ## Neue Zeilen gleiten ein, bei geänderter Anzahl hüpft die Zahl kurz.
 ## Aufbau: scenes/ui/bestell_zeile.tscn. Befüllt von hud.gd (_bestellungen_neu).
+
+const Symbole := preload("res://scripts/ui/symbole.gd")
 
 var anzahl := -1
 
@@ -13,7 +15,7 @@ func _ready() -> void:
 	tw.tween_property(self, "position:x", position.x - 40.0, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func setzen(symbol: String, farbe: Color, n: int, name_text: String) -> void:
-	%Symbol.text = symbol
+	Symbole.setze(%Symbol, symbol)
 	%Symbol.modulate = farbe
 	%Name.text = name_text
 	%Anzahl.text = "%d×" % n

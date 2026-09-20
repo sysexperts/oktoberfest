@@ -3,6 +3,7 @@ extends Control
 ## Aufbau liegt in scenes/ui/zeltcomputer.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Symbole := preload("res://scripts/ui/symbole.gd")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
 
 var _gm: Node
@@ -83,9 +84,10 @@ func _neu() -> void:
 		var ohne_zelt := int(_z.get("stage", 0)) == 0
 		var lic: Dictionary = _z.get("lic", {})
 		var essen_ok := bool(lic.get("brezn", false)) or bool(lic.get("sosis", false)) or bool(lic.get("hendl", false))
-		for d: Array in [[%BierEins, 1, 1, "🍺"], [%BierFuenf, 1, 5, "🍺"], [%EssenEins, 2, 1, "🥨"], [%EssenFuenf, 2, 5, "🥨"]]:
+		for d: Array in [[%BierEins, 1, 1, "bier"], [%BierFuenf, 1, 5, "bier"], [%EssenEins, 2, 1, "brezn"], [%EssenFuenf, 2, 5, "brezn"]]:
 			var preis: int = Wirtschaft.paketpreis(int(_gm.PACK_COST[d[1]]), tag) * int(d[2])
-			(d[0] as Button).text = "%s %s" % [d[3], tr("BTN_PACKS") % [int(d[2]), Texte.euro(preis)]]
+			(d[0] as Button).icon = Symbole.bild(str(d[3]))
+			(d[0] as Button).text = tr("BTN_PACKS") % [int(d[2]), Texte.euro(preis)]
 			(d[0] as Button).disabled = ohne_zelt or (int(d[1]) == 2 and not essen_ok)
 	# Früher schließen geht nur, solange das Zelt offen ist
 	%ZeltSchliessen.disabled = not bool(_z.get("shift", false))

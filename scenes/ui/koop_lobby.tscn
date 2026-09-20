@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/ui/koop_lobby.gd" id="1_lobby"]
 [ext_resource type="PackedScene" path="res://scenes/ui/menue_hintergrund.tscn" id="2_hg"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
 [ext_resource type="PackedScene" path="res://scenes/ui/figur_vorschau.tscn" id="4_vorschau"]
 
 [sub_resource type="StyleBoxFlat" id="ZeileStil"]
@@ -77,7 +76,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
 theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.02, 1)
 theme_override_constants/outline_size = 12
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 56
 text = "KOOP_TITLE"
 horizontal_alignment = 1
@@ -203,7 +201,6 @@ theme_override_constants/separation = 8
 [node name="CodeTitel" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 30
 text = "KOOP_INVITE"
 horizontal_alignment = 1
@@ -240,7 +237,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 28
 text = "KOOP_PLAYERS"
 
@@ -265,13 +261,13 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
-auto_translate_mode = 2
-custom_minimum_size = Vector2(40, 0)
+[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "🪑"
-horizontal_alignment = 1
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
 layout_mode = 2
@@ -307,13 +303,13 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
-auto_translate_mode = 2
-custom_minimum_size = Vector2(40, 0)
+[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "🪑"
-horizontal_alignment = 1
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
 layout_mode = 2
@@ -349,13 +345,13 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
-auto_translate_mode = 2
-custom_minimum_size = Vector2(40, 0)
+[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "🪑"
-horizontal_alignment = 1
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
 layout_mode = 2
@@ -391,13 +387,13 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Symbol" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
-auto_translate_mode = 2
-custom_minimum_size = Vector2(40, 0)
+[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "🪑"
-horizontal_alignment = 1
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
 layout_mode = 2
@@ -447,7 +443,6 @@ theme_override_constants/separation = 14
 [node name="NameTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/NameZeile"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 28
 text = "LOBBY_NAME"
 
@@ -463,7 +458,6 @@ max_length = 16
 [node name="FigurTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 28
 text = "KOOP_FIGURE"
 
@@ -570,7 +564,6 @@ horizontal_alignment = 1
 [node name="AbtTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 28
 text = "KOOP_DEPT"
 
@@ -651,6 +644,5 @@ unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(300, 62)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_fraktur")
 theme_override_font_sizes/font_size = 34
 text = "KOOP_START"

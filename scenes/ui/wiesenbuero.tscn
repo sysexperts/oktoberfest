@@ -41,6 +41,16 @@ theme_override_constants/separation = 10
 
 [node name="Kopf" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=547551407]
 layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SymbolTitel" type="TextureRect" parent="Mitte/Panel/Spalte/Kopf"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Titel" type="Label" parent="Mitte/Panel/Spalte/Kopf" unique_id=79649445]
 layout_mode = 2
@@ -49,12 +59,21 @@ theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_font_sizes/font_size = 28
 text = "OFFICE_TITLE"
 
+[node name="SymbolGeld" type="TextureRect" parent="Mitte/Panel/Spalte/Kopf"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Geld" type="Label" parent="Mitte/Panel/Spalte/Kopf" unique_id=654861688]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
-text = "💶 1.200 €"
+text = "1.200 €"
 
 [node name="Status" type="Label" parent="Mitte/Panel/Spalte" unique_id=1328673015]
 unique_name_in_owner = true

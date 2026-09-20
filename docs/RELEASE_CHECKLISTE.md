@@ -157,3 +157,32 @@ Werkzeuge zum Prüfen: tools/test_tutorial, test_rundgang, test_tagesziel, test_
 test_duell, test_lieferwagen, test_zeitung, test_kalender, test_moebel, test_personal,
 test_saboteur, test_stamm,
 perf_messen, sim_saison.
+
+## 10. Oberfläche: ein Stil für alles (v204)
+
+Hauptmenü und Einstellungen geben den Ton an: dunkle Tafeln, runde Ecken, Gold nur
+als Akzent (assets/ui/menue_theme.tres, gebaut von tools/theme_bauen.gd). Der Rest der
+Oberfläche zieht jetzt nach:
+
+- **Symbole statt Emoji.** In `assets/ui/symbole/` liegen ~39 gleich gezeichnete
+  Strichgrafiken (24er Raster, Goldton, Strichstärke 1,7). `scripts/ui/symbole.gd` macht
+  aus einem Namen ein Bild: `Symbole.bild("bier")`, `Symbole.setze(%Symbol, "geld")`,
+  `Symbole.rechteck("kiste", 22)`. Emoji sahen auf jedem System anders aus und passten
+  nie zum Theme.
+- Aus `locale/texte.csv` sind alle Emoji raus. Wo das Emoji die Bedeutung trug
+  (COMP_GOODS_STOCK, WORLD_STORAGE), stehen jetzt Wörter.
+- Umgestellt: HUD (Geld, Uhr/Mond, Lager, offene Bestellungen), Wiesenbüro (Kopf,
+  Reitersymbole, jede Angebotszeile), Zeltcomputer, Koop-Lobby und Lobby (Abteilungen als
+  Knopfsymbol), Einrichtungskatalog, Ping-Marker (Sprite3D statt Label3D), Meilensteine.
+- Fraktur nur noch dort, wo sie gehört: Logo, Zeitung, Kalender, Kino, Schilder in der
+  Welt. Die Fenster im Spiel (Abstimmung, Lobby, Koop-Lobby, Schichtbeginn) nutzen die
+  normale Schrift wie das Hauptmenü.
+- Kalte Farbreste gewärmt: Kontrollkästchen, Schalterknopf, Reglerknopf, HUD-Hinweise.
+- Die Dialogknöpfe nutzen nicht mehr das alte `theme.tres`.
+
+Kontaktbogen aller Symbole: `Godot.exe --path . res://tools/symbol_blatt.tscn`
+→ `user://symbole.png`. Einzelne Fenster ansehen:
+`Godot.exe --path . res://tools/szene_schuss.tscn -- res://scenes/ui/<szene>.tscn <name>`
+
+Bewusst nicht angefasst: Sprechblasen über den Gästen und Schilder in der Welt — dort
+sind die bunten Emoji auf Entfernung besser lesbar als dünne Striche.

@@ -8,11 +8,13 @@ const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Aufbau: scenes/ui/koop_lobby.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Symbole := preload("res://scripts/ui/symbole.gd")
 const MENUE := "res://scenes/ui/hauptmenue.tscn"
 const SERVER_IP := "185.248.140.225"
 const EINSTELLUNGS_DATEI := "user://koop.cfg"
 const ABTEILUNGEN := {"kueche": "Kueche", "service": "Service", "sauberkeit": "Sauberkeit", "lager": "Lager"}
-const SYMBOLE := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
+## Abteilung -> Symbolname aus assets/ui/symbole
+const SYMBOLE := {"kueche": "topf", "service": "bier", "sauberkeit": "besen", "lager": "kiste"}
 
 ## Vermittler-Adresse; Tests setzen sie auf einen lokalen Vermittler
 var lobby_url := KoopDaten.LOBBY_URL
@@ -140,7 +142,7 @@ func _anzeigen() -> void:
 		var zeile := %Liste.get_child(i)
 		var name_l := zeile.get_node("Rand/Zeile/Text/SpielerName") as Label
 		var info_l := zeile.get_node("Rand/Zeile/Text/SpielerInfo") as Label
-		var symbol_l := zeile.get_node("Rand/Zeile/Symbol") as Label
+		var symbol_l := zeile.get_node("Rand/Zeile/Symbol") as TextureRect
 		if i < spieler.size():
 			var s: Dictionary = spieler[i]
 			name_l.text = str(s.name) + ("  " + tr("KOOP_YOU") if s.get("ich", false) else "")
@@ -148,16 +150,18 @@ func _anzeigen() -> void:
 			if s.get("host", false):
 				teile.append(tr("KOOP_HOST_TAG"))
 			var abt := str(s.get("abt", ""))
-			teile.append((SYMBOLE[abt] + " " + tr("ABT_" + abt.to_upper())) if abt != "" else tr("KOOP_NO_DEPT"))
+			teile.append(tr("ABT_" + abt.to_upper()) if abt != "" else tr("KOOP_NO_DEPT"))
 			if s.get("im_spiel", false) and str(_raum.get("status", "")) == "laeuft":
 				teile.append(tr("KOOP_IN_GAME"))
 			info_l.text = " · ".join(teile)
-			symbol_l.text = ["🫘", "🥨", "👗"][clampi(int(s.get("figur", 0)), 0, 2)]
+			Symbole.setze(symbol_l, "person")
+			symbol_l.modulate = Color(1, 1, 1)
 			zeile.modulate = Color.WHITE
 		else:
 			name_l.text = tr("KOOP_EMPTY_SLOT")
 			info_l.text = ""
-			symbol_l.text = "🪑"
+			Symbole.setze(symbol_l, "tisch")
+			symbol_l.modulate = Color(1, 1, 1, 0.5)
 			zeile.modulate = Color(1, 1, 1, 0.45)
 	# Figuren
 	for i in %Figuren.get_child_count():
@@ -167,7 +171,7 @@ func _anzeigen() -> void:
 		var fname := knopf.get_node("Inhalt/FigurName") as Label
 		fname.text = tr("KOOP_FIG_%d" % i)
 		# Auf der hellen, gewählten Karte dunkle Schrift wie bei gedrückten Knöpfen
-		fname.add_theme_color_override("font_color", Color(0.1, 0.08, 0.16) if i == _figur else Color(0.95, 0.93, 0.9))
+		fname.add_theme_color_override("font_color", Color(0.14, 0.1, 0.05) if i == _figur else Color(0.95, 0.93, 0.9))
 	# Abteilungen: belegte zeigen den Teamleiter und sind gesperrt
 	for abt: String in ABTEILUNGEN:
 		var knopf := get_node("%" + ABTEILUNGEN[abt]) as Button
@@ -176,7 +180,8 @@ func _anzeigen() -> void:
 			if str(s.get("abt", "")) == abt and not s.get("ich", false):
 				leiter = str(s.name)
 		var zeile3 := tr("KOOP_LEADER") % leiter if leiter != "" else tr("LOBBY_FREE")
-		knopf.text = "%s  %s\n%s\n%s" % [SYMBOLE[abt], tr("ABT_" + abt.to_upper()), tr("ABT_%s_INFO" % abt.to_upper()), zeile3]
+		knopf.icon = Symbole.bild(SYMBOLE[abt])
+		knopf.text = "%s\n%s\n%s" % [tr("ABT_" + abt.to_upper()), tr("ABT_%s_INFO" % abt.to_upper()), zeile3]
 		knopf.button_pressed = abt == _abt
 		knopf.disabled = leiter != ""
 	# Los / Warten

@@ -159,7 +159,7 @@ class Lauf extends Node:
 		print("  -- Meldungen (2.5)")
 		var texte := preload("res://scripts/ui/texte.gd")
 		var meldung: String = texte.meldung("MSG_NO_MONEY", ["OFFER_TOILET", {"euro": 1800}])
-		_check("Meldung übersetzt, Betrag formatiert", meldung == "💶 Zu wenig Geld für Toilette einbauen (1.800 €)", meldung)
+		_check("Meldung übersetzt, Betrag formatiert", meldung == "Zu wenig Geld für Toilette einbauen (1.800 €)", meldung)
 		var popup_text: String = texte.meldung("POPUP_RESERVE", [{"euro": 40}])
 		_check("Popup mit echten Zeilenumbrüchen", popup_text.contains("\n\n") and not popup_text.contains("\\n"), popup_text.left(30))
 		var tipp_bilanz: String = texte.bilanz({"day": 3, "missed": 15, "kellner": false, "zapfer": false,

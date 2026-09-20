@@ -59,20 +59,38 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 16
 
+[node name="SymbolGeld" type="TextureRect" parent="Oben/Leiste/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Geld" type="Label" parent="Oben/Leiste/Zeile"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "💶 1.200 €"
+text = "1.200 €"
 
 [node name="Trenner1" type="VSeparator" parent="Oben/Leiste/Zeile"]
 layout_mode = 2
+
+[node name="SymbolZeit" type="TextureRect" parent="Oben/Leiste/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Zeit" type="Label" parent="Oben/Leiste/Zeile"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Tag 1 · 🕗 07:00"
+text = "Tag 1 · 07:00"
 
 [node name="Trenner2" type="VSeparator" parent="Oben/Leiste/Zeile"]
 layout_mode = 2
@@ -116,11 +134,37 @@ theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 16
 text = "HUD_STOCK"
 
-[node name="Lager" type="Label" parent="Oben/Unterzeile/Zeile"]
+[node name="SymbolBier" type="TextureRect" parent="Oben/Unterzeile/Zeile"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LagerBier" type="Label" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "🍺 0 · 🥨 0"
+text = "0"
+
+[node name="SymbolEssen" type="TextureRect" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LagerEssen" type="Label" parent="Oben/Unterzeile/Zeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "0"
 
 [node name="Trenner" type="VSeparator" parent="Oben/Unterzeile/Zeile"]
 layout_mode = 2
@@ -222,7 +266,7 @@ autowrap_mode = 3
 [node name="AufgabeSkip" type="Label" parent="Rechts/Aufgabe/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 0.53, 0.66, 1)
+theme_override_colors/font_color = Color(0.62, 0.57, 0.5, 1)
 theme_override_font_sizes/font_size = 13
 text = "HUD_TASK_SKIP"
 horizontal_alignment = 2
@@ -262,7 +306,7 @@ offset_top = -34.0
 offset_right = 620.0
 offset_bottom = -12.0
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.72, 0.7, 0.82, 0.85)
+theme_override_colors/font_color = Color(0.78, 0.73, 0.66, 0.85)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 15

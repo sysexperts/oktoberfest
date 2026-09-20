@@ -1,11 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="240" height="64" viewBox="0 0 240 64">
   <defs>
-    <!-- diagonal von links unten nach rechts oben: wirkt wie Licht, das ueber
-         den Knopf streift, statt einer flachen Farbkante -->
     <linearGradient id="gold" x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#ffcf4d" stop-opacity="0.34"/>
-      <stop offset="0.45" stop-color="#ffb347" stop-opacity="0.15"/>
-      <stop offset="1" stop-color="#ffd659" stop-opacity="0.02"/>
+      <stop offset="0" stop-color="#ffcf4d" stop-opacity="0.11"/>
+      <stop offset="0.5" stop-color="#ffb347" stop-opacity="0.045"/>
+      <stop offset="1" stop-color="#ffd659" stop-opacity="0.008"/>
     </linearGradient>
   </defs>
   <rect x="0" y="0" width="240" height="64" rx="16" fill="#000000" fill-opacity="0.60"/>

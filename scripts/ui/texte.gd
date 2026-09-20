@@ -71,7 +71,7 @@ static func bilanz(b: Dictionary) -> String:
 	var zeilen := [
 		kopf,
 		"",
-		"📊 " + _t("HUD_DAY") % int(b.get("day", 1)),
+		_t("HUD_DAY") % int(b.get("day", 1)),
 		"%s: %s" % [_t("REPORT_REVENUE"), euro(int(b.get("earn", 0)))],
 		"      " + _t("REPORT_TIPS") % euro(int(b.get("tips", 0))),
 		"%s: %s" % [_t("REPORT_RENT"), euro(-int(b.get("rent", 0)))],

@@ -204,7 +204,7 @@ func naechstes_tor() -> Node3D:
 	return _tore[_naechstes % _tore.size()]
 
 func _anzeige_aktualisieren() -> void:
-	%Mass.text = "🍺 %d" % (KRUEGE - _verschuettet)
+	%Mass.text = "%d" % (KRUEGE - _verschuettet)
 	%Zeit.text = "%.1f s" % maxf(_t, 0.0) + ("  (+%.0f s)" % (_verschuettet * STRAF_SEKUNDEN) if _verschuettet > 0 else "")
 	%Huber.text = tr("DUELL_HUBER_TOR") % _huber_tor() if _t < _huber_zeit else tr("DUELL_HUBER_FERTIG") % _huber_zeit
 	%Schwapp.value = _schwapp

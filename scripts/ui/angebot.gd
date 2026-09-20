@@ -4,6 +4,8 @@ extends PanelContainer
 
 signal gedrueckt(index: int)
 
+const Symbole := preload("res://scripts/ui/symbole.gd")
+
 @export var stil_normal: StyleBox
 @export var stil_hervor: StyleBox
 
@@ -16,10 +18,18 @@ func _ready() -> void:
 	for i in _knoepfe.size():
 		_knoepfe[i].pressed.connect(gedrueckt.emit.bind(i))
 
-func setze(titel: String, info: String) -> void:
+## symbol: Name aus assets/ui/symbole, "" = kein Symbol
+func setze(titel: String, info: String, symbol_name: String = "") -> void:
+	symbol(symbol_name)
 	%Titel.text = titel
 	%Info.text = info
 	%Info.visible = info != ""
+
+## Symbol links in der Zeile ("" = keins). Für Zeilen, die ihren Text über
+## mehrere Zeilen zusammensetzen und das Symbol getrennt setzen.
+func symbol(name: String) -> void:
+	Symbole.setze(%Symbol, name)
+	%Symbol.visible = name != "" and %Symbol.texture != null
 
 ## Knopf i (0..2) zeigen. gesperrt = ausgegraut, der Grund steht per grund().
 func knopf(i: int, text: String, gesperrt := false) -> void:
