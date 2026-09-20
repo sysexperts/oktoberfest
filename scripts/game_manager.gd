@@ -638,10 +638,7 @@ func _ready() -> void:
 			_kino_gestartet = true
 			net_kino_start.rpc(multiplayer.get_peers().size() > 0)
 	else:
-		_client_ready.rpc_id(1, KoopDaten.version())
-		# Antwortet der Server nicht (etwa ein älterer Stand, der die Nachricht
-		# nicht versteht), nicht ewig in einer leeren Welt stehen
-		get_tree().create_timer(SPAWN_WARTEZEIT).timeout.connect(_pruefe_eigenen_spieler)
+		_anmelden_beim_server()
 
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
@@ -1202,6 +1199,35 @@ func _pruefe_eigenen_spieler() -> void:
 	if not multiplayer.is_server() and not _players_nodes.has(multiplayer.get_unique_id()):
 		Net.trennen_mit_meldung("NET_NO_ANSWER")
 
+## Beim Server anmelden — und es wiederholen, solange kein eigener Spieler kommt.
+##
+## Ein eigener Server (Koop über den Vermittler) öffnet den Port sofort, lädt die
+## Welt danach aber noch rund zehn Sekunden. Wer in dieser Lücke verbindet, steht
+## zwar in der Verbindung, aber am anderen Ende gibt es noch keinen GameManager,
+## der `_client_ready` hören könnte — die Nachricht verpufft und der Spieler flog
+## mit „Host hat das Spiel verlassen" wieder raus. Darum mehrfach anklopfen statt
+## einmal, und erst danach aufgeben.
+const ANMELDE_VERSUCHE := 12
+const ANMELDE_ABSTAND := 2.0
+
+func _anmelden_beim_server() -> void:
+	for _versuch in ANMELDE_VERSUCHE:
+		if not is_inside_tree() or multiplayer.is_server() \
+				or _players_nodes.has(multiplayer.get_unique_id()):
+			return
+		if multiplayer.multiplayer_peer == null \
+				or multiplayer.multiplayer_peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTED:
+			# Verbindung noch im Aufbau oder schon wieder weg — kurz warten und
+			# erneut sehen; abgelehnt wird getrennt über _net_abgelehnt gemeldet.
+			await get_tree().create_timer(ANMELDE_ABSTAND).timeout
+			continue
+		_client_ready.rpc_id(1, KoopDaten.version())
+		await get_tree().create_timer(ANMELDE_ABSTAND).timeout
+	# Antwortet der Server auch dann nicht (etwa ein älterer Stand, der die
+	# Nachricht nicht versteht), nicht ewig in einer leeren Welt stehen
+	if is_inside_tree():
+		_pruefe_eigenen_spieler()
+
 ## Server lehnt den Beitritt ab (z. B. andere Version) — beim Client.
 @rpc("authority", "reliable")
 func _net_abgelehnt(schluessel: String, werte: Array) -> void:
@@ -1212,6 +1238,10 @@ func _client_ready(version: String) -> void:
 	if not multiplayer.is_server():
 		return
 	var sender := multiplayer.get_remote_sender_id()
+	# Der Client klopft mehrfach an, bis sein Spieler da ist (_anmelden_beim_server).
+	# Wer schon angemeldet ist, darf kein zweites Mal eingesetzt werden.
+	if _spawn_index_by_peer.has(sender):
+		return
 	# Unterschiedliche Stände verstehen ihre Nachrichten nicht — sauber ablehnen,
 	# statt den Spieler in einer halb synchronen Welt stehen zu lassen.
 	if version != KoopDaten.version():
