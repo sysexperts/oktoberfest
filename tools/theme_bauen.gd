@@ -21,6 +21,8 @@ const RAND_LEISE := Color(0.58, 0.42, 0.24, 0.28)
 const GOLD := Color(1, 0.839, 0.349)
 const GOLD_HELL := Color(1, 0.906, 0.604)
 ## Knopffläche: das satte Gold der linken Schimmerkante, über die ganze Breite
+## Knopfgrund: schlicht schwarz mit etwas Transparenz
+const SCHWARZ := Color(0, 0, 0, 0.58)
 const GOLD_FLAECHE := Color(0.53, 0.44, 0.2, 0.88)
 const GOLD_FLAECHE_HELL := Color(0.66, 0.55, 0.25, 0.94)
 const TEXT := Color(0.96, 0.93, 0.89)
@@ -49,19 +51,20 @@ func _init() -> void:
 		t.set_constant("shadow_outline_size", typ, 2)
 	# Goldener Knopf trägt goldene Schrift; Auswahlfelder und der ruhige
 	# HolzKnopf bleiben bei heller Schrift.
-	t.set_color("font_color", "Button", GOLD)
-	t.set_color("font_hover_color", "Button", Color(1, 0.93, 0.66))
+	# Ruhig heller Text, gold erst beim Darüberfahren — wie in der Kategorieliste
+	t.set_color("font_color", "Button", TEXT)
+	t.set_color("font_hover_color", "Button", GOLD)
 	t.set_color("font_focus_color", "Button", GOLD)
-	t.set_color("icon_normal_color", "Button", GOLD)
+	t.set_color("icon_normal_color", "Button", Color(1, 1, 1))
 	for typ in ["OptionButton", "MenuButton", "HolzKnopf"]:
 		t.set_color("font_color", typ, TEXT)
 		t.set_color("font_hover_color", typ, Color(1, 0.98, 0.9))
 		t.set_color("font_focus_color", typ, Color(1, 0.98, 0.9))
 		t.set_color("icon_normal_color", typ, Color(1, 1, 1))
-	# Gedrückter Knopf ist goldgefüllt, da braucht die Schrift dunkel; beim
-	# offenen Auswahlfeld bleibt die Fläche dunkel, dort also helle Schrift.
-	t.set_color("font_pressed_color", "Button", Color(0.14, 0.09, 0.03))
-	t.set_color("icon_pressed_color", "Button", Color(0.14, 0.09, 0.03))
+	# Gedrückt bleibt der Knopf dunkel und bekommt nur einen goldenen Rand —
+	# deshalb helle statt dunkler Schrift.
+	t.set_color("font_pressed_color", "Button", GOLD_HELL)
+	t.set_color("icon_pressed_color", "Button", GOLD_HELL)
 	for typ in ["OptionButton", "MenuButton"]:
 		t.set_color("font_pressed_color", typ, Color(1, 0.98, 0.9))
 		t.set_color("icon_pressed_color", typ, Color(1, 1, 1))
@@ -217,16 +220,16 @@ func _feld(t: Theme, typ: String, radius: int, rand_x: float, rand_y: float) -> 
 	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), GOLD, 2, radius, rand_x, rand_y))
 	t.set_stylebox("disabled", typ, _kasten(Color(TIEF.r, TIEF.g, TIEF.b, 0.45), RAND_LEISE, 1, radius, rand_x, rand_y))
 
-## Durchgehend golden, goldene Schrift, kein Rand. GOLD_FLAECHE ist die Farbe,
-## die der auslaufende Schimmer an seiner linken, kräftigsten Stelle hat — sie
-## gilt jetzt über die ganze Breite, ohne Verlauf. Deshalb reicht hier eine
-## einfache Fläche, ein Verlaufsbild braucht es dafür nicht.
+## Ruhezustand schlicht schwarz mit etwas Transparenz, beim Darüberfahren ein
+## Hauch Gold über dem Schwarz und goldene Schrift. Gold bleibt damit Akzent
+## statt Grundfarbe — auf allen Knöpfen gleichzeitig nähme es der Seite jede
+## Hierarchie.
 func _schimmer_knopf(t: Theme, typ: String, rand_x: float, rand_y: float) -> void:
-	t.set_stylebox("normal", typ, _kasten(GOLD_FLAECHE, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
-	t.set_stylebox("hover", typ, _kasten(GOLD_FLAECHE_HELL, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
-	t.set_stylebox("pressed", typ, _kasten(GOLD, Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
+	t.set_stylebox("normal", typ, _kasten(SCHWARZ, RAND_LEISE, 1, 16, rand_x, rand_y))
+	t.set_stylebox("hover", typ, _verlauf("verlauf_knopf_hover", rand_x, rand_y))
+	t.set_stylebox("pressed", typ, _kasten(Color(0, 0, 0, 0.8), Color(GOLD.r, GOLD.g, GOLD.b, 0.85), 2, 16, rand_x, rand_y))
 	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), Color(GOLD.r, GOLD.g, GOLD.b, 0.8), 2, 16, rand_x, rand_y))
-	t.set_stylebox("disabled", typ, _kasten(Color(GOLD_FLAECHE.r, GOLD_FLAECHE.g, GOLD_FLAECHE.b, 0.35), Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
+	t.set_stylebox("disabled", typ, _kasten(Color(0, 0, 0, 0.3), Color(0, 0, 0, 0), 0, 16, rand_x, rand_y))
 
 ## Knöpfe mit senkrechtem Verlauf (oben heller) statt flacher Fläche — das gibt
 ## ihnen Tiefe. Gold kommt bei Hover und Fokus dazu.

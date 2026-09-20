@@ -1,19 +1,27 @@
 extends Node
-## Zeigt das Pausemenue mit den beiden goldenen Knopfvarianten zum Vergleich.
+## Vergleich am Pausemenue und Hauptmenue: alle Knoepfe ruhig, oder ruhig mit
+## einer goldenen Hauptaktion. Gold als Akzent statt als Grundfarbe.
 func _ready() -> void:
 	get_window().size = Vector2i(1280, 800)
-	for paar in [["GoldKnopf", "pause_gold"], ["SchimmerKnopf", "pause_schimmer"]]:
+	for haupt_gold in [false, true]:
 		var p: CanvasLayer = load("res://scenes/ui/pause.tscn").instantiate()
 		add_child(p)
 		p.visible = true
 		await _warte(0.5)
-		for n in _knoepfe(p):
-			n.theme_type_variation = paar[0]
+		if haupt_gold:
+			var k := _knoepfe(p)
+			if not k.is_empty():
+				k[0].theme_type_variation = "GoldKnopf"
 		await _warte(0.4)
-		get_viewport().get_texture().get_image().save_png("user://%s.png" % paar[1])
-		print("gespeichert %s.png" % paar[1])
+		_schuss("pause_ruhig_gold" if haupt_gold else "pause_ruhig")
 		p.queue_free()
 		await _warte(0.2)
+	var m: Control = load("res://scenes/ui/hauptmenue.tscn").instantiate()
+	add_child(m)
+	await _warte(2.2)
+	(m.get_node("Mitte/Hauptspalte/Weiterspielen") as Button).theme_type_variation = "GoldKnopf"
+	await _warte(0.4)
+	_schuss("menue_ruhig_gold")
 	get_tree().quit()
 
 func _knoepfe(n: Node) -> Array[Button]:
@@ -23,6 +31,10 @@ func _knoepfe(n: Node) -> Array[Button]:
 			liste.append(k)
 		liste.append_array(_knoepfe(k))
 	return liste
+
+func _schuss(name: String) -> void:
+	get_viewport().get_texture().get_image().save_png("user://%s.png" % name)
+	print("gespeichert %s.png" % name)
 
 func _warte(s: float) -> void:
 	var t := 0.0
