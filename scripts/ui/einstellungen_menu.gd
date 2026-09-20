@@ -40,6 +40,11 @@ func _ready() -> void:
 		"Ambiente": [%VolAmbiente, %VolAmbienteWert],
 	}
 	_werte_laden()
+	# Kategorien links schalten den (reiterlosen) TabContainer um
+	for i in _reiter.get_tab_count():
+		var kat := %Kategorien.get_node_or_null("Kat%d" % i) as Button
+		if kat != null:
+			kat.pressed.connect(func() -> void: _reiter.current_tab = i)
 	_vollbild.toggled.connect(_on_vollbild)
 	_vsync.toggled.connect(_on_vsync)
 	_qualitaet.item_selected.connect(_on_qualitaet)
@@ -85,6 +90,11 @@ func _werte_laden() -> void:
 func _texte() -> void:
 	for i in mini(REITER_TITEL.size(), _reiter.get_tab_count()):
 		_reiter.set_tab_title(i, tr(REITER_TITEL[i]))
+		# Die Kategorien links tragen dieselben Titel — die Reiterleiste des
+		# TabContainers ist ausgeblendet, umgeschaltet wird über sie.
+		var kat := %Kategorien.get_node_or_null("Kat%d" % i) as Button
+		if kat != null:
+			kat.text = tr(REITER_TITEL[i])
 	_maus_wert.text = "%.2f×" % Einstellungen.maus
 	# Qualitätsstufen neu beschriften (OptionButton übersetzt seine Einträge nicht selbst)
 	_qualitaet.clear()

@@ -10,8 +10,9 @@ func _ready() -> void:
 	add_child(e)
 	await _warte(0.8)
 	_schuss("einst_1")
-	var reiter: TabContainer = e.get_node("Mitte/Panel/Rand/Spalte/Reiter")
+	var reiter: TabContainer = e.get_node("Rahmen/Spalte/Inhalt/Reiter")
 	reiter.current_tab = 1
+	(e.get_node("Rahmen/Spalte/Inhalt/Kategorien/Kat1") as Button).button_pressed = true
 	await _warte(0.5)
 	_schuss("einst_2")
 	get_tree().quit()

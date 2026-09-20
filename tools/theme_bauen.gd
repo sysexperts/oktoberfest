@@ -51,6 +51,20 @@ func _init() -> void:
 	t.set_type_variation("EckKnopf", "Button")
 	_knopf(t, "EckKnopf", 18, 12.0, 12.0)
 
+	# Kategorien links in den Einstellungen: flach statt Kasten, die aktive
+	# bekommt einen goldenen Balken am linken Rand statt einer Füllung.
+	t.set_type_variation("Kategorie", "Button")
+	t.set_stylebox("normal", "Kategorie", _kasten(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 12, 20.0, 10.0))
+	t.set_stylebox("hover", "Kategorie", _kasten(Color(0.185, 0.132, 0.092, 0.5), Color(0, 0, 0, 0), 0, 12, 20.0, 10.0))
+	t.set_stylebox("focus", "Kategorie", _kasten(Color(0, 0, 0, 0), RAND, 1, 12, 20.0, 10.0))
+	t.set_stylebox("pressed", "Kategorie", _balken(GOLD, Color(0.185, 0.132, 0.092, 0.72), 12))
+	t.set_stylebox("disabled", "Kategorie", _kasten(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 12, 20.0, 10.0))
+	t.set_color("font_color", "Kategorie", TEXT_LEISE)
+	t.set_color("font_hover_color", "Kategorie", TEXT)
+	t.set_color("font_pressed_color", "Kategorie", GOLD)
+	t.set_color("font_focus_color", "Kategorie", TEXT)
+	t.set_font_size("font_size", "Kategorie", 21)
+
 	# ---------------------------------------------------------------- Flächen
 	t.set_stylebox("panel", "PanelContainer", _kasten(TAFEL, RAND_LEISE, 1, 24, 30.0, 26.0))
 	t.set_stylebox("panel", "Panel", _kasten(TAFEL, RAND_LEISE, 1, 24, 30.0, 26.0))
@@ -150,6 +164,20 @@ func _knopf(t: Theme, typ: String, radius: int, rand_x: float, rand_y: float) ->
 	t.set_stylebox("pressed", typ, _kasten(GOLD, Color(0, 0, 0, 0), 0, radius, rand_x, rand_y))
 	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), GOLD, 2, radius, rand_x, rand_y))
 	t.set_stylebox("disabled", typ, _kasten(Color(HOLZ.r, HOLZ.g, HOLZ.b, 0.4), RAND_LEISE, 1, radius, rand_x, rand_y))
+
+## Fläche mit farbigem Balken nur am linken Rand — markiert die aktive Zeile
+func _balken(balkenfarbe: Color, fuellung: Color, radius: int) -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = fuellung
+	s.border_color = balkenfarbe
+	s.border_width_left = 4
+	s.set_corner_radius_all(radius)
+	s.corner_detail = 12
+	s.content_margin_left = 20.0
+	s.content_margin_right = 20.0
+	s.content_margin_top = 10.0
+	s.content_margin_bottom = 10.0
+	return s
 
 func _linie() -> StyleBoxLine:
 	var l := StyleBoxLine.new()
