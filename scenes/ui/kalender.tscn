@@ -77,6 +77,7 @@ mouse_filter = 2
 theme_override_constants/separation = 10
 
 [node name="Titel" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
@@ -107,6 +108,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -114,6 +116,7 @@ theme_override_font_sizes/font_size = 24
 text = "1"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -122,6 +125,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -142,6 +146,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -149,6 +154,7 @@ theme_override_font_sizes/font_size = 24
 text = "2"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -157,6 +163,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -177,6 +184,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -184,6 +192,7 @@ theme_override_font_sizes/font_size = 24
 text = "3"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -192,6 +201,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -212,6 +222,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -219,6 +230,7 @@ theme_override_font_sizes/font_size = 24
 text = "4"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -227,6 +239,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -247,6 +260,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -254,6 +268,7 @@ theme_override_font_sizes/font_size = 24
 text = "5"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -262,6 +277,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -282,6 +298,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -289,6 +306,7 @@ theme_override_font_sizes/font_size = 24
 text = "6"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -297,6 +315,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -317,6 +336,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -324,6 +344,7 @@ theme_override_font_sizes/font_size = 24
 text = "7"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -332,6 +353,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -352,6 +374,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -359,6 +382,7 @@ theme_override_font_sizes/font_size = 24
 text = "8"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -367,6 +391,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -387,6 +412,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -394,6 +420,7 @@ theme_override_font_sizes/font_size = 24
 text = "9"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -402,6 +429,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -422,6 +450,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -429,6 +458,7 @@ theme_override_font_sizes/font_size = 24
 text = "10"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -437,6 +467,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -457,6 +488,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -464,6 +496,7 @@ theme_override_font_sizes/font_size = 24
 text = "11"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -472,6 +505,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -492,6 +526,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -499,6 +534,7 @@ theme_override_font_sizes/font_size = 24
 text = "12"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -507,6 +543,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -527,6 +564,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -534,6 +572,7 @@ theme_override_font_sizes/font_size = 24
 text = "13"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -542,6 +581,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -562,6 +602,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -569,6 +610,7 @@ theme_override_font_sizes/font_size = 24
 text = "14"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -577,6 +619,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -597,6 +640,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -604,6 +648,7 @@ theme_override_font_sizes/font_size = 24
 text = "15"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -612,6 +657,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -632,6 +678,7 @@ mouse_filter = 2
 theme_override_constants/separation = 2
 
 [node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -639,6 +686,7 @@ theme_override_font_sizes/font_size = 24
 text = "16"
 
 [node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
@@ -647,6 +695,7 @@ theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 
 [node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
@@ -654,6 +703,7 @@ theme_override_font_sizes/font_size = 12
 autowrap_mode = 3
 
 [node name="Legende" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")

@@ -195,6 +195,17 @@ func _init() -> void:
 	t.set_constant("shadow_outline_size", "Label", 3)
 	t.set_stylebox("separator", "HSeparator", _linie())
 
+	# Dunkle Schrift auf hellem Papier: Dialogpergament, Zeitung, Kalender, Kino.
+	# Der schwarze Schatten oben ist für helle Schrift auf dunklem Grund gedacht —
+	# auf dunkelbrauner Schrift macht er einen schwarzen Klumpen daraus. Diese
+	# Variante lässt ihn weg; die Farbe setzen die Szenen selbst.
+	t.set_type_variation("PapierText", "Label")
+	t.set_color("font_color", "PapierText", Color(0.2, 0.12, 0.05))
+	t.set_color("font_shadow_color", "PapierText", Color(0, 0, 0, 0))
+	t.set_constant("shadow_offset_x", "PapierText", 0)
+	t.set_constant("shadow_offset_y", "PapierText", 0)
+	t.set_constant("shadow_outline_size", "PapierText", 0)
+
 	var fehler := ResourceSaver.save(t, ZIEL)
 	print("Theme gespeichert: %s (Fehler %d)" % [ZIEL, fehler])
 	quit()

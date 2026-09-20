@@ -39,8 +39,13 @@ class Lauf extends Node:
 		sp.look_at(chef.global_position + Vector3(0, 0.1, 0), Vector3.UP)
 		await _warten(0.5)
 		chef.ansprechen()
-		for i in 4:
-			await _warten(0.4)
+		# Erst liest der Chef Onkel Sepps Brief vor, dann kommt seine Frage — so
+		# lange durchblättern, bis die Auswahl steht (feste Klickzahl bricht,
+		# sobald jemand eine Zeile ergänzt).
+		for _i in 30:
+			await _warten(0.3)
+			if dialog._auswahl.visible:
+				break
 			dialog._weiter()
 		await _warten(1.0)
 		_bild(dir + "/tut_frage.png")

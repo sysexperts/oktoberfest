@@ -1,6 +1,9 @@
 extends Node3D
 ## Der Wiesnchef führt durchs Tutorial. Am Anfang wartet er vor dem Wiesenbüro
-## (Onkel Sepps Brief schickt die Spieler hin, scripts/ui/kino.gd). Ansprechen
+## und liest den Spielern Onkel Sepps Brief vor, bevor er fragt, ob sie das Zelt
+## übernehmen. Früher lief der Brief als eigene Einleitung am Kirmestor
+## (scripts/ui/kino.gd) — die hing am Hochfahren des Hosts und kam bei Koop über
+## einen eigenen Server bei niemandem an. Ansprechen
 ## mit E öffnet das Gespräch unten im Bild (scripts/ui/dialog.gd).
 ##
 ## Rundgang: Stationen (scripts/rundgang_station.gd) unter „Rundgang" in
@@ -23,6 +26,8 @@ const TEMPO := 1.7
 ## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
 @export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
+## Onkel Sepps Brief, vor der ersten Frage. Texte wie oben mit _DU / _IHR.
+@export var zeilen_brief: Array[String] = ["BRIEF_1", "BRIEF_2", "BRIEF_3"]
 
 @onready var _ausruf: Label3D = get_node_or_null("Ausruf")
 
@@ -34,6 +39,8 @@ var _end_blick := 0.0
 var _station: RundgangStation = null
 var _gehoert := {}
 var _letzter_schritt := -1
+## Brief schon vorgelesen? Wer ohne Zusage weggeht, hört ihn nicht noch einmal.
+var _brief_gelesen := false
 var _alter := 0.0
 
 func _ready() -> void:
@@ -127,6 +134,16 @@ func ansprechen() -> void:
 ## Sepps Zelt übernimmt. Ja → net_chef_zusage (Schritt 0 erledigt, er geht vor),
 ## Nein → er ist traurig, man kann jederzeit wiederkommen.
 func _frage_stellen(dialog: Node, welt: Node, wer: String, a: String) -> void:
+	# Erst der Brief von Onkel Sepp, dann die Frage — als eigenes Gespräch mit
+	# ihm als Sprecher, damit klar ist, wer da redet.
+	if not _brief_gelesen and not zeilen_brief.is_empty():
+		_brief_gelesen = true
+		var brief: Array[String] = []
+		for k in zeilen_brief:
+			brief.append(String(TranslationServer.translate(k + a)))
+		dialog.zeigen(String(TranslationServer.translate("BRIEF_TITEL")), brief,
+			func() -> void: _frage_stellen(dialog, welt, wer, a))
+		return
 	var schulden := 0
 	if welt and "_hud" in welt and welt._hud:
 		schulden = int(welt._hud._zustand.get("bank_rest", 0))

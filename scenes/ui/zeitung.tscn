@@ -64,6 +64,7 @@ mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="Kopf" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
@@ -72,6 +73,7 @@ text = "ZEITUNG_NAME"
 horizontal_alignment = 1
 
 [node name="Ausgabe" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
@@ -87,6 +89,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("Linie")
 
 [node name="Schlagzeile" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
@@ -97,6 +100,7 @@ horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="Unterzeile" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
@@ -113,6 +117,7 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("Linie")
 
 [node name="Meldungen" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -123,6 +128,7 @@ text = "• Meldung"
 autowrap_mode = 3
 
 [node name="Zahlen" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
@@ -132,6 +138,7 @@ text = "Zahlen"
 horizontal_alignment = 1
 
 [node name="Hinweis" type="Label" parent="Blatt/Rand/Spalte"]
+theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
