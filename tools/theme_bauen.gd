@@ -55,9 +55,11 @@ func _init() -> void:
 	# bekommt einen goldenen Balken am linken Rand statt einer Füllung.
 	t.set_type_variation("Kategorie", "Button")
 	t.set_stylebox("normal", "Kategorie", _kasten(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 12, 20.0, 10.0))
-	t.set_stylebox("hover", "Kategorie", _kasten(Color(0.185, 0.132, 0.092, 0.5), Color(0, 0, 0, 0), 0, 12, 20.0, 10.0))
+	t.set_stylebox("hover", "Kategorie", _verlauf("verlauf_kategorie_hover", 20.0, 10.0))
 	t.set_stylebox("focus", "Kategorie", _kasten(Color(0, 0, 0, 0), RAND, 1, 12, 20.0, 10.0))
-	t.set_stylebox("pressed", "Kategorie", _balken(GOLD, Color(0.185, 0.132, 0.092, 0.72), 12))
+	# Aktive Kategorie: goldener Schimmer, der nach rechts ausläuft — statt eines
+	# harten Balkens am Rand.
+	t.set_stylebox("pressed", "Kategorie", _verlauf("verlauf_kategorie_aktiv", 20.0, 10.0))
 	t.set_stylebox("disabled", "Kategorie", _kasten(Color(0, 0, 0, 0), Color(0, 0, 0, 0), 0, 12, 20.0, 10.0))
 	t.set_color("font_color", "Kategorie", TEXT_LEISE)
 	t.set_color("font_hover_color", "Kategorie", TEXT)
@@ -91,8 +93,8 @@ func _init() -> void:
 	# Die senkrechten Ränder geben der Rinne ihre Dicke — ohne sie ist sie
 	# hauchdünn und man sieht nur den Griff.
 	t.set_stylebox("slider", "HSlider", _kasten(TIEF, RAND_LEISE, 1, 5, 0.0, 5.0))
-	t.set_stylebox("grabber_area", "HSlider", _kasten(GOLD, Color(0, 0, 0, 0), 0, 5, 0.0, 5.0))
-	t.set_stylebox("grabber_area_highlight", "HSlider", _kasten(GOLD_HELL, Color(0, 0, 0, 0), 0, 5, 0.0, 5.0))
+	t.set_stylebox("grabber_area", "HSlider", _verlauf("verlauf_regler", 0.0, 5.0, 6))
+	t.set_stylebox("grabber_area_highlight", "HSlider", _verlauf("verlauf_regler", 0.0, 5.0, 6))
 	t.set_icon("grabber", "HSlider", load("res://assets/ui/regler_knopf.svg"))
 	t.set_icon("grabber_highlight", "HSlider", load("res://assets/ui/regler_knopf.svg"))
 
@@ -157,26 +159,28 @@ func _kasten(fuellung: Color, rand: Color, randbreite: int, radius: int, rand_x:
 	s.content_margin_bottom = rand_y
 	return s
 
-## Ruhezustand mit dünnem, leisem Rand; Gold kommt erst bei Hover und Fokus dazu
+## Knöpfe mit senkrechtem Verlauf (oben heller) statt flacher Fläche — das gibt
+## ihnen Tiefe. Gold kommt bei Hover und Fokus dazu.
 func _knopf(t: Theme, typ: String, radius: int, rand_x: float, rand_y: float) -> void:
-	t.set_stylebox("normal", typ, _kasten(HOLZ, RAND, 1, radius, rand_x, rand_y))
-	t.set_stylebox("hover", typ, _kasten(HOLZ_HOVER, GOLD, 2, radius, rand_x, rand_y))
-	t.set_stylebox("pressed", typ, _kasten(GOLD, Color(0, 0, 0, 0), 0, radius, rand_x, rand_y))
+	t.set_stylebox("normal", typ, _verlauf("verlauf_knopf", rand_x, rand_y))
+	t.set_stylebox("hover", typ, _verlauf("verlauf_knopf_hover", rand_x, rand_y))
+	t.set_stylebox("pressed", typ, _verlauf("verlauf_knopf_gedrueckt", rand_x, rand_y))
 	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), GOLD, 2, radius, rand_x, rand_y))
 	t.set_stylebox("disabled", typ, _kasten(Color(HOLZ.r, HOLZ.g, HOLZ.b, 0.4), RAND_LEISE, 1, radius, rand_x, rand_y))
 
-## Fläche mit farbigem Balken nur am linken Rand — markiert die aktive Zeile
-func _balken(balkenfarbe: Color, fuellung: Color, radius: int) -> StyleBoxFlat:
-	var s := StyleBoxFlat.new()
-	s.bg_color = fuellung
-	s.border_color = balkenfarbe
-	s.border_width_left = 4
-	s.set_corner_radius_all(radius)
-	s.corner_detail = 12
-	s.content_margin_left = 20.0
-	s.content_margin_right = 20.0
-	s.content_margin_top = 10.0
-	s.content_margin_bottom = 10.0
+## Fläche aus einem Verlaufs-SVG. StyleBoxFlat kann keine Verläufe, deshalb als
+## Textur. Nur links und rechts als 9-Patch geteilt: waagerecht bleiben damit die
+## runden Ecken erhalten, senkrecht wird das Bild proportional gestreckt — ein
+## senkrechter Verlauf überlebt das, ein geteilter würde in der Mitte flach.
+func _verlauf(datei: String, rand_x: float, rand_y: float, seite: int = 24) -> StyleBoxTexture:
+	var s := StyleBoxTexture.new()
+	s.texture = load("res://assets/ui/%s.svg" % datei)
+	s.texture_margin_left = seite
+	s.texture_margin_right = seite
+	s.content_margin_left = rand_x
+	s.content_margin_right = rand_x
+	s.content_margin_top = rand_y
+	s.content_margin_bottom = rand_y
 	return s
 
 func _linie() -> StyleBoxLine:
