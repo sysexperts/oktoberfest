@@ -63,7 +63,13 @@ func _ready() -> void:
 	if not Net.connection_failed.is_connected(_on_verbindung_fehlgeschlagen):
 		Net.connection_failed.connect(_on_verbindung_fehlgeschlagen)
 	Einstellungen.geaendert.connect(_texte_aktualisieren)
-	Klang.an_knoepfe(self)
+	# Über den Knotenpfad statt über den Autoload-Namen: Autoloads stehen in der
+	# project.godot der .exe und kommen nicht mit dem nachgeladenen Paket. Mit
+	# "Klang.an_knoepfe()" würde dieses Skript in einer älteren .exe gar nicht
+	# laden — dann wäre kein einziger Knopf mehr verbunden.
+	var klang := get_node_or_null("/root/Klang")
+	if klang != null:
+		klang.an_knoepfe(self)
 	_texte_aktualisieren()
 	_zeige(_haupt)
 	_menue_musik()

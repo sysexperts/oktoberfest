@@ -40,13 +40,17 @@ func _ready() -> void:
 		"Ambiente": [%VolAmbiente, %VolAmbienteWert],
 	}
 	_werte_laden()
-	# Schließen klingt anders als ein normaler Knopf — vorher markieren, damit
-	# an_knoepfe() ihn überspringt und er nicht zwei Klänge bekommt.
-	%Schliessen.set_meta("klang", true)
-	%Schliessen.mouse_entered.connect(Klang.hover)
-	%Schliessen.pressed.connect(Klang.zurueck)
-	# Klänge für alle übrigen Knöpfe und Schalter der Seite
-	Klang.an_knoepfe(self)
+	# Über den Knotenpfad statt über den Autoload-Namen — siehe menu.gd: in einer
+	# älteren .exe gibt es das Autoload nicht, und dann würde diese Seite gar
+	# nicht mehr laden.
+	var klang := get_node_or_null("/root/Klang")
+	if klang != null:
+		# Schließen klingt anders als ein normaler Knopf — vorher markieren, damit
+		# an_knoepfe() ihn überspringt und er nicht zwei Klänge bekommt.
+		%Schliessen.set_meta("klang", true)
+		%Schliessen.mouse_entered.connect(klang.hover)
+		%Schliessen.pressed.connect(klang.zurueck)
+		klang.an_knoepfe(self)
 	# Kategorien links schalten den (reiterlosen) TabContainer um
 	for i in _reiter.get_tab_count():
 		var kat := %Kategorien.get_node_or_null("Kat%d" % i) as Button
