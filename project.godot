@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Oktoberfest Simulator"
 config/description="Fuehre dein eigenes Festzelt auf der Wiesn — allein oder mit Freunden."
-config/version="195"
+config/version="196"
 run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
@@ -24,6 +24,7 @@ Einstellungen="*res://autoload/einstellungen.gd"
 Net="*res://autoload/net.gd"
 Game="*res://autoload/game.gd"
 SteamDienst="*res://autoload/steam_dienst.gd"
+Klang="*res://autoload/klang.gd"
 
 [display]
 

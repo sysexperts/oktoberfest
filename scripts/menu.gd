@@ -63,6 +63,7 @@ func _ready() -> void:
 	if not Net.connection_failed.is_connected(_on_verbindung_fehlgeschlagen):
 		Net.connection_failed.connect(_on_verbindung_fehlgeschlagen)
 	Einstellungen.geaendert.connect(_texte_aktualisieren)
+	Klang.an_knoepfe(self)
 	_texte_aktualisieren()
 	_zeige(_haupt)
 	_menue_musik()
@@ -89,15 +90,24 @@ func _zeige_meldung() -> void:
 	Net.meldung_werte = []
 
 ## Menümusik aus assets/audio/musik/menue.* — ohne Datei bleibt es still.
+## Eigene Menümusik, sonst die Zeltmusik — die Wiesn-Kapelle passt zum Menü und
+## es gibt bisher kein eigenes Stück dafür.
 func _menue_musik() -> void:
 	var spieler: AudioStreamPlayer = %MenueMusik
-	for endung in [".ogg", ".wav", ".mp3"]:
-		var pfad: String = "res://assets/audio/musik/menue" + endung
-		if ResourceLoader.exists(pfad):
-			spieler.stream = load(pfad)
-			spieler.finished.connect(spieler.play)
-			spieler.play()
-			return
+	for name in ["menue", "zelt_01"]:
+		for endung in [".ogg", ".wav", ".mp3"]:
+			var pfad: String = "res://assets/audio/musik/%s%s" % [name, endung]
+			if ResourceLoader.exists(pfad):
+				spieler.stream = load(pfad)
+				# MP3 und OGG können selbst in Schleife laufen; sonst neu starten
+				if spieler.stream is AudioStreamMP3:
+					(spieler.stream as AudioStreamMP3).loop = true
+				elif spieler.stream is AudioStreamOggVorbis:
+					(spieler.stream as AudioStreamOggVorbis).loop = true
+				else:
+					spieler.finished.connect(spieler.play)
+				spieler.play()
+				return
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not _haupt.visible:
