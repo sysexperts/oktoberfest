@@ -30,20 +30,27 @@ func _init() -> void:
 
 	# ---------------------------------------------------------------- Knöpfe
 	_knopf(t, "Button", 16, 30.0, 12.0)
-	_knopf(t, "OptionButton", 12, 18.0, 10.0)
-	_knopf(t, "MenuButton", 12, 18.0, 10.0)
+	# Auswahlfelder sind Eingaben, keine Aktionsknöpfe: flache, ruhige Fläche wie
+	# beim Textfeld statt Verlauf — der Verlauf gab ihnen fälschlich Knopf-Tiefe.
+	_feld(t, "OptionButton", 12, 18.0, 10.0)
+	_feld(t, "MenuButton", 12, 18.0, 10.0)
 	for typ in ["Button", "OptionButton", "MenuButton"]:
 		t.set_color("font_color", typ, TEXT)
 		t.set_color("font_hover_color", typ, Color(1, 0.98, 0.9))
 		t.set_color("font_focus_color", typ, Color(1, 0.98, 0.9))
-		t.set_color("font_pressed_color", typ, Color(0.14, 0.09, 0.03))
 		t.set_color("font_disabled_color", typ, TEXT_AUS)
 		t.set_color("font_shadow_color", typ, Color(0, 0, 0, 0.75))
 		t.set_color("icon_normal_color", typ, Color(1, 1, 1))
-		t.set_color("icon_pressed_color", typ, Color(1, 1, 1))
 		t.set_constant("shadow_offset_x", typ, 1)
 		t.set_constant("shadow_offset_y", typ, 2)
 		t.set_constant("shadow_outline_size", typ, 2)
+	# Gedrückter Knopf ist goldgefüllt, da braucht die Schrift dunkel; beim
+	# offenen Auswahlfeld bleibt die Fläche dunkel, dort also helle Schrift.
+	t.set_color("font_pressed_color", "Button", Color(0.14, 0.09, 0.03))
+	t.set_color("icon_pressed_color", "Button", Color(0.14, 0.09, 0.03))
+	for typ in ["OptionButton", "MenuButton"]:
+		t.set_color("font_pressed_color", typ, Color(1, 0.98, 0.9))
+		t.set_color("icon_pressed_color", typ, Color(1, 1, 1))
 	t.set_font_size("font_size", "Button", 20)
 	t.set_font_size("font_size", "OptionButton", 17)
 
@@ -158,6 +165,14 @@ func _kasten(fuellung: Color, rand: Color, randbreite: int, radius: int, rand_x:
 	s.content_margin_top = rand_y
 	s.content_margin_bottom = rand_y
 	return s
+
+## Eingabefeld-Optik: ruhige dunkle Fläche, Gold erst bei Hover und Fokus
+func _feld(t: Theme, typ: String, radius: int, rand_x: float, rand_y: float) -> void:
+	t.set_stylebox("normal", typ, _kasten(TIEF, RAND_LEISE, 1, radius, rand_x, rand_y))
+	t.set_stylebox("hover", typ, _kasten(FELD, RAND, 1, radius, rand_x, rand_y))
+	t.set_stylebox("pressed", typ, _kasten(FELD, GOLD, 2, radius, rand_x, rand_y))
+	t.set_stylebox("focus", typ, _kasten(Color(0, 0, 0, 0), GOLD, 2, radius, rand_x, rand_y))
+	t.set_stylebox("disabled", typ, _kasten(Color(TIEF.r, TIEF.g, TIEF.b, 0.45), RAND_LEISE, 1, radius, rand_x, rand_y))
 
 ## Knöpfe mit senkrechtem Verlauf (oben heller) statt flacher Fläche — das gibt
 ## ihnen Tiefe. Gold kommt bei Hover und Fokus dazu.
