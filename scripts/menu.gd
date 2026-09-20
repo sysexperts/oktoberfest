@@ -95,16 +95,15 @@ func _zeige_meldung() -> void:
 	Net.meldung = ""
 	Net.meldung_werte = []
 
-## Menümusik aus assets/audio/musik/menue.* — ohne Datei bleibt es still.
-## Eigene Menümusik, sonst die Zeltmusik — die Wiesn-Kapelle passt zum Menü und
-## es gibt bisher kein eigenes Stück dafür.
+## Hauptmusik des Spiels: assets/music/Gamesound.* — dasselbe Stück, das dem
+## Spiel seinen Ton gibt, läuft auch im Hauptmenü. Ohne Datei bleibt es still.
 func _menue_musik() -> void:
 	var spieler: AudioStreamPlayer = %MenueMusik
-	for name in ["menue", "zelt_01"]:
+	for pfad in ["res://assets/music/Gamesound%s", "res://assets/audio/musik/menue%s"]:
 		for endung in [".ogg", ".wav", ".mp3"]:
-			var pfad: String = "res://assets/audio/musik/%s%s" % [name, endung]
-			if ResourceLoader.exists(pfad):
-				spieler.stream = load(pfad)
+			var pfad_voll: String = pfad % endung
+			if ResourceLoader.exists(pfad_voll):
+				spieler.stream = load(pfad_voll)
 				# MP3 und OGG können selbst in Schleife laufen; sonst neu starten
 				if spieler.stream is AudioStreamMP3:
 					(spieler.stream as AudioStreamMP3).loop = true

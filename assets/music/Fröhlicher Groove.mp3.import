@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d2q0fi04vmx8e"
+path="res://.godot/imported/Fröhlicher Groove.mp3-e0bd3d25a15ac3c8f535fbbe9901371a.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Fröhlicher Groove.mp3"
+dest_files=["res://.godot/imported/Fröhlicher Groove.mp3-e0bd3d25a15ac3c8f535fbbe9901371a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

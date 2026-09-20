@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c2am2shxfnqcp"
+path="res://.godot/imported/Tanzbare Melodie2.mp3-3a9384d56bb27702eb35cbebf38d379e.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Tanzbare Melodie2.mp3"
+dest_files=["res://.godot/imported/Tanzbare Melodie2.mp3-3a9384d56bb27702eb35cbebf38d379e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

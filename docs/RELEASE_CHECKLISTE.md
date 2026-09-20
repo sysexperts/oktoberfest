@@ -195,7 +195,7 @@ Textzeile kostete 815 MB. Seit v205 sind es zwei Pakete:
 
 | Paket | Inhalt | Größe | wie oft |
 |---|---|---|---|
-| `inhalt.pck` | voller Export (Modelle, Figuren, godotsteam) | ~815 MB | nur wenn sich `assets/models`, `assets/character` oder `addons` ändern — in v183–v204 kein einziges Mal |
+| `inhalt.pck` | voller Export (Modelle, Figuren, Musik, godotsteam) | ~860 MB | nur wenn sich `assets/models`, `assets/character`, `assets/music` oder `addons` ändern — in v183–v204 kein einziges Mal |
 | `spiel.pck` | alles außer diesen drei Ordnern | ~61 MB | jeder Deploy |
 
 `scripts/boot.gd` lädt beide, **inhalt zuerst, spiel zuletzt** — das zuletzt geladene

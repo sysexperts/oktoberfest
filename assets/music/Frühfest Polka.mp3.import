@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c8hgm74s3u83u"
+path="res://.godot/imported/Frühfest Polka.mp3-9bb73a176bf0127cc42aa4e1ae0d56f6.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Frühfest Polka.mp3"
+dest_files=["res://.godot/imported/Frühfest Polka.mp3-9bb73a176bf0127cc42aa4e1ae0d56f6.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

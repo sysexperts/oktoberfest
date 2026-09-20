@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://behh3hgpnggpa"
+path="res://.godot/imported/Voice_Ein bisserl Gemütlichkeit.mp3-ddd99e539458e577324c2d3e834acefc.mp3str"
+
+[deps]
+
+source_file="res://assets/music/Voice_Ein bisserl Gemütlichkeit.mp3"
+dest_files=["res://.godot/imported/Voice_Ein bisserl Gemütlichkeit.mp3-ddd99e539458e577324c2d3e834acefc.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

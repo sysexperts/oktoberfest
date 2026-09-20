@@ -8,7 +8,16 @@ extends Node
 ## Welche Dateien gebraucht werden, steht in docs/AUDIO.md.
 
 const SFX_DIR := "res://assets/audio/sfx/"
-const MUSIK_DIR := "res://assets/audio/musik/"
+## Die Stücke liegen in assets/music (mit Suno Pro erzeugt, kommerziell nutzbar).
+## Der Dateiname entscheidet, wann ein Stück läuft:
+##   Gamesound.*            Hauptmusik des Spiels, läuft im Hauptmenü (menu.gd)
+##   Voice_Last_Concert_*   Schlussnummer, wenn ein Künstler gebucht ist
+##   Voice_*                mit Gesang — nur mit gebuchtem Künstler auf der Bühne
+##   alles andere           Instrumentals, die normale Zeltmusik
+const MUSIK_DIR := "res://assets/music/"
+const HAUPTSTUECK := "Gamesound"
+const KENNUNG_GESANG := "Voice_"
+const KENNUNG_FINALE := "Voice_Last_Concert"
 const AMBIENTE := "res://assets/audio/ambiente/kirmes"
 const ENDUNGEN := [".ogg", ".wav", ".mp3"]
 
@@ -29,8 +38,20 @@ var _musik_db := -6.0
 var _musik_tween: Tween
 var _music_stream: AudioStream
 var _crowd_stream: AudioStream
-## Alle gefundenen Musikstücke — es wird zufällig durchgewechselt.
-var _playlist: Array[AudioStream] = []
+## Zeltmusik ohne Künstler — reine Instrumentals
+var _instrumental: Array[AudioStream] = []
+## Zeltmusik mit gebuchtem Künstler — der Sänger auf der Bühne singt dazu
+var _gesang: Array[AudioStream] = []
+## Schlussnummer des Auftritts; wird so gelegt, dass sie vor 22:00 durch ist
+var _finale: AudioStream
+## Stufe des gebuchten Künstlers (0 = keiner)
+var _kuenstler := 0
+var _finale_laeuft := false
+var _finale_gespielt := false
+## Nach der Schlussnummer bis zum Feierabend still bleiben
+var _stille_bis_feierabend := false
+## Verbleibende echte Sekunden bis Feierabend, vom GameManager gemeldet
+var _restzeit := INF
 
 func _ready() -> void:
 	if DisplayServer.get_name() == "headless":
@@ -60,8 +81,8 @@ func _ready() -> void:
 		add_child(p)
 		_players.append(p)
 
-	_playlist = _lade_ordner(MUSIK_DIR)
-	_music_stream = _playlist[0] if not _playlist.is_empty() else _music()
+	_musik_einlesen()
+	_music_stream = _instrumental[0] if not _instrumental.is_empty() else _music()
 	# Stimmengewirr nur mit echter Datei (assets/audio/ambiente/kirmes) — der
 	# früher erzeugte Ersatz war gefiltertes Rauschen und klang wie ein lautes
 	# Grundrauschen, sobald das Zelt offen war.
@@ -71,7 +92,7 @@ func _ready() -> void:
 	_music_player.stream = _music_stream
 	_music_player.bus = "Musik"
 	# Echte Musik ist schon abgemischt, der Ersatzton nicht.
-	_musik_db = -2.0 if not _playlist.is_empty() else -12.0
+	_musik_db = -2.0 if not _instrumental.is_empty() else -12.0
 	_music_player.volume_db = _musik_db
 	# Bis ~14 m voll (das ganze Zelt), danach leiser, ab 110 m nicht mehr hörbar
 	_music_player.unit_size = 14.0
@@ -95,39 +116,105 @@ func _lade(basis: String) -> AudioStream:
 			return load(basis + e) as AudioStream
 	return null
 
-func _lade_ordner(pfad: String) -> Array[AudioStream]:
-	var out: Array[AudioStream] = []
-	var d := DirAccess.open(pfad)
+## Stücke aus MUSIK_DIR auf die drei Listen verteilen — nach dem Dateinamen,
+## siehe Kommentar bei MUSIK_DIR.
+func _musik_einlesen() -> void:
+	var d := DirAccess.open(MUSIK_DIR)
 	if d == null:
-		return out
+		push_warning("[Sfx] %s nicht lesbar — keine Musik" % MUSIK_DIR)
+		return
 	d.list_dir_begin()
 	var n := d.get_next()
 	while n != "":
 		# Im Projekt liegt daneben eine .import, im fertigen Export eine .remap —
 		# beide Endungen abschneiden, sonst findet der Export die Musik nicht.
 		var clean := n.trim_suffix(".import").trim_suffix(".remap")
-		# menue.* ist die Menümusik (hauptmenue) — nicht im Zelt spielen
-		if clean.get_extension().to_lower() in ["ogg", "wav", "mp3"] and clean.get_basename() != "menue":
-			var s := load(pfad + clean) as AudioStream
-			if s != null and not out.has(s):
-				out.append(s)
+		if clean.get_extension().to_lower() in ["ogg", "wav", "mp3"]:
+			var s := load(MUSIK_DIR + clean) as AudioStream
+			var basis := clean.get_basename()
+			if s == null or basis == HAUPTSTUECK:
+				pass                                   # Hauptmusik läuft nur im Menü
+			elif basis.begins_with(KENNUNG_FINALE):
+				_finale = s
+			elif basis.begins_with(KENNUNG_GESANG):
+				if not _gesang.has(s):
+					_gesang.append(s)
+			elif not _instrumental.has(s):
+				_instrumental.append(s)
 		n = d.get_next()
 	d.list_dir_end()
-	out.shuffle()
-	return out
+	_instrumental.shuffle()
+	_gesang.shuffle()
 
-## Nach jedem Stück das nächste — nur wenn es mehrere gibt.
+## Welche Liste gerade dran ist: mit Künstler auf der Bühne der Gesang, sonst
+## die Instrumentals. Ist eine Liste leer, bleibt es bei der anderen.
+func _aktuelle_liste() -> Array[AudioStream]:
+	if _kuenstler > 0 and not _gesang.is_empty():
+		return _gesang
+	if _instrumental.is_empty():
+		return _gesang
+	return _instrumental
+
+## Nach jedem Stück das nächste.
 func _naechstes_stueck() -> void:
-	if _playlist.size() < 2:
+	if _finale_laeuft:
+		# Nach der Schlussnummer nichts mehr — gleich ist ohnehin Feierabend.
+		# Ohne diese Sperre würde play_music() sie beim nächsten Abgleich vom
+		# Server sofort wieder von vorn anwerfen.
+		_finale_laeuft = false
+		_stille_bis_feierabend = true
+		return
+	if _finale_faellig():
+		_finale_starten()
+		return
+	var liste := _aktuelle_liste()
+	if liste.is_empty():
 		if _music_player.stream != null:
 			_music_player.play()
 		return
 	var jetzt := _music_player.stream
-	var neu := jetzt
-	while neu == jetzt:
-		neu = _playlist[randi() % _playlist.size()]
+	var neu: AudioStream = liste[randi() % liste.size()]
+	if liste.size() > 1:
+		while neu == jetzt:
+			neu = liste[randi() % liste.size()]
 	_music_player.stream = neu
 	_music_player.play()
+
+## Muss die Schlussnummer jetzt anfangen, damit sie vor Feierabend durch ist?
+func _finale_faellig() -> bool:
+	return _kuenstler > 0 and _finale != null and not _finale_gespielt \
+		and _restzeit <= _finale.get_length()
+
+func _finale_starten() -> void:
+	_finale_gespielt = true
+	_finale_laeuft = true
+	_music_player.stream = _finale
+	_music_player.volume_db = _musik_db
+	_music_player.play()
+
+## Gebuchter Künstler (0 = keiner). Wechselt die Liste; das laufende Stück darf
+## zu Ende spielen, damit der Wechsel nicht mitten im Takt abschneidet.
+func kuenstler(stufe: int) -> void:
+	if _kuenstler == stufe:
+		return
+	_kuenstler = stufe
+	if stufe == 0:
+		_finale_gespielt = false
+		_finale_laeuft = false
+		_stille_bis_feierabend = false
+
+## Verbleibende echte Sekunden bis 22:00, vom GameManager. Danach entscheidet
+## sich, wann die Schlussnummer anfangen muss.
+func restzeit(sekunden: float) -> void:
+	_restzeit = sekunden
+	if not _ok or not _music_player.playing or _finale_laeuft:
+		return
+	if _finale_faellig():
+		# Das laufende Stück würde über 22:00 hinauslaufen — kurz ausblenden und
+		# die Schlussnummer anfangen, damit sie vor Feierabend durch ist.
+		var tw := create_tween()
+		tw.tween_property(_music_player, "volume_db", -40.0, 1.0)
+		tw.tween_callback(_finale_starten)
 
 func play_music() -> void:
 	if not _ok:
@@ -136,7 +223,7 @@ func play_music() -> void:
 		_musik_tween.kill()
 		_musik_tween = null
 	_music_player.volume_db = _musik_db
-	if not _music_player.playing:
+	if not _music_player.playing and not _stille_bis_feierabend:
 		_music_player.play()
 	if _crowd_stream != null and not _crowd_player.playing:
 		_crowd_player.play()

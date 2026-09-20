@@ -1,8 +1,8 @@
 # Ton — was gebraucht wird
 
-**Stand 2026-09-11:** eine Zeltmusik (`musik/zelt_01.mp3`), sonst noch keine
-Audiodatei. Alles andere erzeugt `scripts/sfx.gd` als Ersatztöne — daher der
-8-Bit-Eindruck.
+**Stand 2026-09-20:** 13 Musikstücke in `assets/music/` (mit Suno Pro erzeugt,
+Pro-Abo — kommerzielle Nutzung erlaubt). Geräusche und Ambiente fehlen weiter,
+die erzeugt `scripts/sfx.gd` als Ersatztöne — daher der 8-Bit-Eindruck.
 
 Das System nimmt jetzt **echte Dateien, sobald sie da sind**, und fällt nur auf
 die Piepstöne zurück, wo noch nichts liegt. Du musst also nichts programmieren:
@@ -18,10 +18,38 @@ Dateien den Haken **Loop** setzen.
 
 ---
 
-## Musik — `assets/audio/musik/`
+## Musik — `assets/music/`
 
-Beliebig viele Dateien, der Name ist egal. Das Spiel mischt sie zufällig durch
-und spielt nach jedem Stück das nächste.
+Hier entscheidet der **Dateiname**, wann ein Stück läuft (`scripts/sfx.gd`,
+`_musik_einlesen`):
+
+| Name | wann |
+|---|---|
+| `Gamesound.*` | Hauptmusik des Spiels, läuft im Hauptmenü (`scripts/menu.gd`) |
+| `Voice_Last_Concert_*` | Schlussnummer des Auftritts — nur mit gebuchtem Künstler |
+| `Voice_*` | mit Gesang — laufen nur, solange ein Künstler auf der Bühne steht |
+| alles andere | Instrumentals: die normale Zeltmusik |
+
+Innerhalb einer Liste mischt das Spiel zufällig durch und spielt nach jedem
+Stück das nächste. Bucht man im Wiesenbüro einen Künstler, stellt der GameManager
+beim Schichtbeginn die NPCs auf die Bühne (`_spawn_artists`) und schaltet die
+Musik auf die Gesangsliste um; am Feierabend geht beides wieder zurück.
+
+**Die Schlussnummer** fängt so früh an, dass sie vor 22:00 durch ist: der
+GameManager meldet laufend die Restzeit (`Sfx.restzeit`), und sobald die unter
+die Länge des Stücks fällt, wird das laufende Stück ausgeblendet und die
+Schlussnummer gestartet. Danach bleibt es bis zum Feierabend still.
+
+> **Achtung, Rechnung:** Eine Schicht dauert `SHIFT_TIME = 300 s` echte Zeit für
+> 07:00–22:00. Die Schlussnummer ist 197,5 s lang — sie würde also schon um
+> **12:07 Spielzeit** anfangen und zwei Drittel des Tages allein laufen. Wenn sie
+> sich wie ein Finale anfühlen soll, muss `SHIFT_TIME` hoch (bei 900 s startet
+> sie um 18:42) oder das Stück kürzer werden.
+
+Prüfen: `Godot.exe --headless --path . res://tools/test_musik.tscn`
+
+Die Datei `assets/audio/musik/zelt_01.mp3` war der Platzhalter davor und wird
+nicht mehr gespielt.
 
 | gebraucht | Länge | Stimmung |
 |---|---|---|

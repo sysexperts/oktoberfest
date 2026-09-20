@@ -1833,6 +1833,9 @@ func _add_artist(idx: int, pos: Vector3, tier: int, yaw: float) -> void:
 	_staff_container.add_child(a)
 	a.set_tier(tier)
 	_artist_nodes.append(a)
+	# Mit Künstler auf der Bühne laufen die Stücke mit Gesang (scripts/sfx.gd)
+	if _sfx_node:
+		_sfx_node.kuenstler(tier)
 
 @rpc("authority", "reliable", "call_local")
 func _remove_artists() -> void:
@@ -1840,6 +1843,8 @@ func _remove_artists() -> void:
 		if is_instance_valid(a):
 			a.queue_free()
 	_artist_nodes.clear()
+	if _sfx_node:
+		_sfx_node.kuenstler(0)
 
 ## Massenschlägerei: nach so vielen Sekunden flieht die Band, danach bleibt die
 ## Musik bis Schichtende aus.
@@ -4842,6 +4847,11 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 	_hud.set_popularity(pop)
 	if not multiplayer.is_server():
 		_nachts_geschlossen = night and clock < 0.0
+	# Wie lange dauert es noch bis 22:00? Die Schlussnummer des Künstlers muss so
+	# früh anfangen, dass sie vorher durch ist (scripts/sfx.gd restzeit).
+	if _sfx_node:
+		var rest: float = (DAY_END_HOUR - clock) / (DAY_END_HOUR - DAY_START_HOUR) * SHIFT_TIME
+		_sfx_node.restzeit(rest if clock >= 0.0 else INF)
 	_apply_daylight(clock)
 	_apply_crowd(clock)
 	_apply_stage(clock >= 0.0)

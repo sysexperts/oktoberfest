@@ -39,7 +39,10 @@ PRESET="Windows Desktop"
 # runter, und zu jedem Spieler. Jetzt gibt es zwei Pakete:
 #   inhalt.pck  voller Export (~815 MB), nur wenn sich die großen Ordner ändern
 #   spiel.pck   alles außer denen (~61 MB), bei jedem Deploy
-GROSS="assets/models/*,assets/character/*,addons/*"
+# Groß und stabil: gehört ins selten erneuerte inhalt.pck. An EINER Stelle
+# gepflegt, damit Exportfilter und Änderungserkennung nicht auseinanderlaufen.
+GROSS_ORDNER="assets/models assets/character assets/music addons"
+GROSS="$(echo "$GROSS_ORDNER" | sed 's#[^ ]*#&/*#g' | tr ' ' ',')"
 # Auf dieser Version bleiben alte .exe (Programm-Generation <= 3) stehen: sie
 # kennen nur game.pck und den Schlüssel "version" in version.json. Beides bleibt
 # eingefroren liegen, damit sie nicht jedes Mal 815 MB ziehen; menu_eingang.gd
@@ -152,7 +155,7 @@ schritt "3/8 Release-Pakete exportieren"
 # Braucht inhalt.pck überhaupt einen neuen Stand? Maßgeblich sind die Blob-Hashes
 # der großen Ordner aus dem Git-Index — deterministisch, anders als der Export
 # selbst. Der Server merkt sich den zuletzt ausgelieferten Wert in inhalt.quelle.
-INHALT_QUELLE="$(git ls-files -s assets/models assets/character addons | sha1sum | cut -c1-40)"
+INHALT_QUELLE="$(git ls-files -s $GROSS_ORDNER | sha1sum | cut -c1-40)"
 INHALT_SERVER="$(ssh_server "cat '$WEB/inhalt.quelle' 2>/dev/null" || true)"
 if [ "$INHALT_QUELLE" = "$INHALT_SERVER" ] && [ "$LIVE_INHALT" -gt 0 ]; then
 	INHALT_NEU=0
