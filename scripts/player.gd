@@ -385,8 +385,8 @@ func _handle_movement(delta: float) -> void:
 		dir = dir.rotated(Vector3.UP, sin(_rausch_t * 0.8) * 0.22 * promille)
 	# Springen (Leertaste) — nur vom Boden aus
 	if not _tippt() and InputMap.has_action("springen") and Input.is_action_just_pressed("springen") and is_on_floor():
+		# Ohne Klang — der Piepston beim Springen nervte im Koop (v210)
 		velocity.y = SPRUNG_TEMPO
-		_sfx("pop")
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
 	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
 	speed *= tempo_faktor   # z. B. 10 Maß beim Wettschleppen (scripts/wettschleppen.gd)
