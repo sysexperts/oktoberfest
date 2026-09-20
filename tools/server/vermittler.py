@@ -73,9 +73,16 @@ def name_pruefen(name):
 
 
 def live_version():
+    """Version der Spieldaten, die Clients laden.
+
+    Seit v205 liegen die Spieldaten in zwei Paketen: "spiel" ist die Zahl, die
+    zaehlt, "version" bleibt fuer alte .exe eingefroren. Wer weiter "version"
+    liest, weist jeden aktuellen Client mit LOBBY_ERR_VERSION ab.
+    """
     try:
         with open(VERSION_DATEI, encoding="utf-8") as f:
-            return str(json.load(f)["version"])
+            daten = json.load(f)
+        return str(daten.get("spiel", daten["version"]))
     except (OSError, ValueError, KeyError):
         return ""
 

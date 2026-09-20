@@ -497,6 +497,10 @@ var _quest_step := 0
 ## Einleitung gelaufen und dem Wiesnchef zum Zelt gefolgt (Schritt 0)
 var _folge_geschafft := false
 var _kino_gestartet := false
+## Frischer Spielstand, in dem die Einleitung noch aussteht. Auf einem eigenen
+## Server (Koop über den Vermittler) tritt jeder Spieler erst nach dem Start bei —
+## deshalb bekommt sie jeder beim Beitritt einzeln, nicht einmal beim Hochfahren.
+var _frisches_spiel := false
 var _quest_served_once := false
 var _ever_artist := false
 var _quest_timer := 0.0
@@ -608,6 +612,7 @@ func _ready() -> void:
 	_sichere_wohnwagen()
 
 	var neues_spiel := Net.neues_spiel
+	_frisches_spiel = neues_spiel
 	if multiplayer.is_server():
 		if Net.neues_spiel:
 			_loesche_speicherstand()
@@ -1223,6 +1228,12 @@ func _client_ready(version: String) -> void:
 	_next_spawn += 1
 	_spawn_index_by_peer[sender] = sidx
 	_add_player.rpc(sender, sidx)
+	# Einleitung (Brief von Onkel Sepp): Auf einem eigenen Server lief sie bei
+	# niemandem, weil sie beim Hochfahren am Host hing und dort `Net.dedicated`
+	# sie überspringt — der Server hat ja keine Oberfläche. Wer einem frischen
+	# Spiel beitritt, bekommt sie deshalb hier einzeln geschickt.
+	if Net.dedicated and _frisches_spiel and not Kino.werkzeuglauf():
+		net_kino_start.rpc_id(sender, true)
 	_melde("NET_PLAYER_JOINED", [], 2)
 	# Namen, Farben und Abteilungen der anderen (Lobby)
 	_net_spieler_info.rpc_id(sender, _spieler_info)
@@ -4289,6 +4300,7 @@ func _start_shift() -> void:
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
+	_frisches_spiel = false   # ab der ersten Schicht keine Einleitung mehr
 	_net_band_zurueck.rpc()   # neue Schicht: Band wieder da, Musik wieder an
 	_spawn_artists()          # E5: gebuchter Künstler betritt die Bühne
 	for sid in _staff_sim.keys():
