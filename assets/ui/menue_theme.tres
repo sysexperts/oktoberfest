@@ -1,0 +1,187 @@
+[gd_resource type="Theme" load_steps=11 format=3]
+
+; Knöpfe des Hauptmenüs: Holz, halbtransparent, mit abgeschrägten Ecken.
+; Die Fase entsteht aus corner_radius + corner_detail = 1 — dadurch wird aus der
+; Rundung eine gerade Schräge, ganz ohne eigene Grafik oder Skript.
+; Gold (1, 0.839, 0.349) ist der Akzent und passt zum Logo-Schriftzug.
+
+[sub_resource type="StyleBoxFlat" id="Normal"]
+content_margin_left = 30.0
+content_margin_top = 10.0
+content_margin_right = 30.0
+content_margin_bottom = 10.0
+bg_color = Color(0.15, 0.093, 0.055, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.33, 0.16, 0.95)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 30.0
+content_margin_top = 10.0
+content_margin_right = 30.0
+content_margin_bottom = 10.0
+bg_color = Color(0.26, 0.16, 0.085, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="Gedrueckt"]
+content_margin_left = 30.0
+content_margin_top = 10.0
+content_margin_right = 30.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.839, 0.349, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.906, 0.604, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="Fokus"]
+content_margin_left = 30.0
+content_margin_top = 10.0
+content_margin_right = 30.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="Gesperrt"]
+content_margin_left = 30.0
+content_margin_top = 10.0
+content_margin_right = 30.0
+content_margin_bottom = 10.0
+bg_color = Color(0.15, 0.093, 0.055, 0.45)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.33, 0.16, 0.4)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 1
+
+; EckKnopf: quadratische Symbolknöpfe oben rechts (Einstellungen, Beenden).
+; Gleiche Optik, nur kleinere Fase und schmale Ränder, damit das Symbol Platz hat.
+
+[sub_resource type="StyleBoxFlat" id="EckNormal"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.15, 0.093, 0.055, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.33, 0.16, 0.95)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="EckHover"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.26, 0.16, 0.085, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="EckGedrueckt"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.839, 0.349, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.906, 0.604, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="EckFokus"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+corner_detail = 1
+
+[resource]
+EckKnopf/base_type = &"Button"
+EckKnopf/styles/disabled = SubResource("Gesperrt")
+EckKnopf/styles/focus = SubResource("EckFokus")
+EckKnopf/styles/hover = SubResource("EckHover")
+EckKnopf/styles/normal = SubResource("EckNormal")
+EckKnopf/styles/pressed = SubResource("EckGedrueckt")
+Button/colors/font_color = Color(0.97, 0.93, 0.84, 1)
+Button/colors/font_disabled_color = Color(0.62, 0.55, 0.46, 1)
+Button/colors/font_focus_color = Color(1, 0.98, 0.9, 1)
+Button/colors/font_hover_color = Color(1, 0.98, 0.9, 1)
+Button/colors/font_pressed_color = Color(0.14, 0.09, 0.03, 1)
+Button/colors/font_shadow_color = Color(0, 0, 0, 0.75)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/shadow_offset_x = 1
+Button/constants/shadow_offset_y = 2
+Button/constants/shadow_outline_size = 2
+Button/font_sizes/font_size = 20
+Button/styles/disabled = SubResource("Gesperrt")
+Button/styles/focus = SubResource("Fokus")
+Button/styles/hover = SubResource("Hover")
+Button/styles/normal = SubResource("Normal")
+Button/styles/pressed = SubResource("Gedrueckt")

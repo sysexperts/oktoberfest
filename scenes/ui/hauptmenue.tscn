@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" path="res://assets/ui/main_background.jpg" id="2_hg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/logo_animiert.tscn" id="3_logo"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="4_mtheme"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_zahnrad.svg" id="5_zahn"]
+[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_tuer.svg" id="6_tuer"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -35,6 +38,38 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.07, 0.06, 0.12, 0.42)
 
+[node name="Ecke" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -148.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 76.0
+grow_horizontal = 0
+theme = ExtResource("4_mtheme")
+theme_override_constants/separation = 12
+
+[node name="Einstellungen" type="Button" parent="Ecke"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+tooltip_text = "MENU_SETTINGS"
+theme_type_variation = &"EckKnopf"
+icon = ExtResource("5_zahn")
+expand_icon = true
+
+[node name="Beenden" type="Button" parent="Ecke"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+tooltip_text = "MENU_QUIT"
+theme_type_variation = &"EckKnopf"
+icon = ExtResource("6_tuer")
+expand_icon = true
+
 [node name="Mitte" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -45,12 +80,13 @@ grow_vertical = 2
 
 [node name="Hauptspalte" type="VBoxContainer" parent="Mitte"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(460, 0)
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
-theme_override_constants/separation = 12
+theme = ExtResource("4_mtheme")
+theme_override_constants/separation = 10
 
 [node name="LogoBox" type="Control" parent="Mitte/Hauptspalte"]
-custom_minimum_size = Vector2(460, 150)
+custom_minimum_size = Vector2(620, 198)
 layout_mode = 2
 mouse_filter = 2
 
@@ -63,14 +99,14 @@ pivot_offset = Vector2(0, 0)
 mouse_filter = 2
 
 [node name="Abstand" type="Control" parent="Mitte/Hauptspalte"]
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 
 [node name="Weiterspielen" type="Button" parent="Mitte/Hauptspalte"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 58)
+custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 30
 text = "MENU_CONTINUE"
 
 [node name="WeiterInfo" type="Label" parent="Mitte/Hauptspalte"]
@@ -84,47 +120,45 @@ theme_override_constants/shadow_outline_size = 3
 theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 
-[node name="Laden" type="Button" parent="Mitte/Hauptspalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+[node name="Abstand2" type="Control" parent="Mitte/Hauptspalte"]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+
+[node name="Reihe1" type="HBoxContainer" parent="Mitte/Hauptspalte"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Laden" type="Button" parent="Mitte/Hauptspalte/Reihe1"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+size_flags_horizontal = 3
 text = "MENU_LOAD"
 
-[node name="NeuesSpiel" type="Button" parent="Mitte/Hauptspalte"]
+[node name="NeuesSpiel" type="Button" parent="Mitte/Hauptspalte/Reihe1"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 3
 text = "MENU_NEW_GAME"
 
-[node name="Koop" type="Button" parent="Mitte/Hauptspalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+[node name="Reihe2" type="HBoxContainer" parent="Mitte/Hauptspalte"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_constants/separation = 10
+
+[node name="Koop" type="Button" parent="Mitte/Hauptspalte/Reihe2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+size_flags_horizontal = 3
 text = "MENU_COOP"
 
-[node name="Einstellungen" type="Button" parent="Mitte/Hauptspalte"]
+[node name="Credits" type="Button" parent="Mitte/Hauptspalte/Reihe2"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "MENU_SETTINGS"
-
-[node name="Credits" type="Button" parent="Mitte/Hauptspalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 3
 text = "MENU_CREDITS"
-
-[node name="Beenden" type="Button" parent="Mitte/Hauptspalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "MENU_QUIT"
 
 [node name="KoopPanel" type="PanelContainer" parent="Mitte"]
 unique_name_in_owner = true

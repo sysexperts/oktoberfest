@@ -129,6 +129,9 @@ func _zeige(panel: Control) -> void:
 		%LizenzText.text = preload("res://scripts/lizenzen.gd").alle_texte()
 	for p: Control in [_haupt, _koop_panel, _credits_panel, _spielstand_panel]:
 		p.visible = p == panel
+	# Einstellungen und Beenden sitzen als Symbolknöpfe oben rechts — die gehören
+	# nur zum Hauptmenü, in den Unterpanels führt "Zurück" heraus
+	%Ecke.visible = panel == _haupt
 	_status.text = ""
 	if panel == _haupt:
 		(_weiter if _weiter.visible else _neu).grab_focus()
