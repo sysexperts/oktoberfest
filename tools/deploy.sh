@@ -106,7 +106,10 @@ fi
 
 # ------------------------------------------------------------------ 4 Abgleich (auch für --probe)
 abgleich() {
-	git ls-files | grep -vE "$NICHT_AUF_DEN_SERVER" > build/deploy_liste.txt
+	# core.quotepath=false: sonst schreibt git Namen mit Umlauten in
+	# Anführungszeichen und Oktal-Escapes ("assets/music/Festliche Br\303\274cke.mp3"),
+	# und sha1sum sucht danach eine Datei, die es so nicht gibt (Deploy v206).
+	git -c core.quotepath=false ls-files | grep -vE "$NICHT_AUF_DEN_SERVER" > build/deploy_liste.txt
 	tr '\n' '\0' < build/deploy_liste.txt | xargs -0 sha1sum -b | sort > build/deploy_lokal.sha1
 	# Fehlende Dateien liefern keine Zeile — genau das wollen wir
 	ssh_server "cd '$QUELLEN' && xargs -d '\n' sha1sum -b 2>/dev/null" < build/deploy_liste.txt \
@@ -155,7 +158,7 @@ schritt "3/8 Release-Pakete exportieren"
 # Braucht inhalt.pck überhaupt einen neuen Stand? Maßgeblich sind die Blob-Hashes
 # der großen Ordner aus dem Git-Index — deterministisch, anders als der Export
 # selbst. Der Server merkt sich den zuletzt ausgelieferten Wert in inhalt.quelle.
-INHALT_QUELLE="$(git ls-files -s $GROSS_ORDNER | sha1sum | cut -c1-40)"
+INHALT_QUELLE="$(git -c core.quotepath=false ls-files -s $GROSS_ORDNER | sha1sum | cut -c1-40)"
 INHALT_SERVER="$(ssh_server "cat '$WEB/inhalt.quelle' 2>/dev/null" || true)"
 if [ "$INHALT_QUELLE" = "$INHALT_SERVER" ] && [ "$LIVE_INHALT" -gt 0 ]; then
 	INHALT_NEU=0
