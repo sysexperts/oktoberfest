@@ -454,7 +454,7 @@ transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -8.4, 2.1, -8.62)
 [node name="Dialog" parent="." instance=ExtResource("107_dialog")]
 
 [node name="Muellplatz" parent="." instance=ExtResource("108_muellplatz")]
-transform = Transform3D(-0.9553, 0, -0.2955, 0, 1, 0, 0.2955, 0, -0.9553, 3.4, 0, 14.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 0, 12.3)
 
 [node name="Zeitung" parent="." instance=ExtResource("109_zeitung")]
 
