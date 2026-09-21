@@ -1143,8 +1143,10 @@ class Lauf extends Node:
 		steh_gast.queue_free()
 		for szene: PackedScene in figuren.GAESTE:
 			var id := 0
-			while figuren.fuer_gast(id) != szene:
+			# Deckel drauf: kommt eine Figur nie dran, lief der Test vorher endlos
+			while figuren.fuer_gast(id) != szene and id < 200:
 				id += 1
+			_check("Gast %s kommt überhaupt vor" % szene.resource_path.get_file(), id < 200, str(id))
 			var gast: Node3D = load("res://scenes/customer.tscn").instantiate()
 			gast.cust_id = id
 			gm.get_node("Customers").add_child(gast)

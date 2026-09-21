@@ -32,7 +32,10 @@ static func ist_stehgast(id: int) -> bool:
 static func fuer_gast(id: int) -> PackedScene:
 	if ist_stehgast(id):
 		return STEHGAESTE[posmod(id, STEHGAESTE.size())]
-	return GAESTE[posmod(id * 7 + 3, GAESTE.size())]
+	# id / 3 muss mit rein: Stehgäste sind genau die IDs mit id % 3 == 1, für die
+	# übrigen nimmt id % 3 nur zwei Werte an — mit drei sitzenden Figuren wäre
+	# sonst eine davon (charakter2) nie drangekommen.
+	return GAESTE[posmod(id + int(id / 3), GAESTE.size())]
 ## Gäste, Personal, Künstler: aus der ID — so sieht jeder Mitspieler dieselbe Figur,
 ## ohne dass die Wahl übers Netz geschickt werden muss.
 static func fuer_id(id: int) -> PackedScene:
