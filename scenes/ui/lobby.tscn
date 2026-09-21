@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/lobby.gd" id="1_lobby"]
+[ext_resource type="Texture2D" path="res://assets/ui/main_background.jpg" id="4_hg"]
 [ext_resource type="Texture2D" path="res://assets/ui/verlauf_knopf_start.svg" id="2_start"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/abspielen.svg" id="3_abspielen"]
 
@@ -47,6 +48,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lobby")
 
+[node name="Hintergrund" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_hg")
+expand_mode = 1
+stretch_mode = 6
+
 [node name="Abdunkeln" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -54,7 +67,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.02, 0.015, 0.035, 0.66)
+color = Color(0.03, 0.024, 0.02, 0.55)
 
 [node name="Mitte" type="CenterContainer" parent="."]
 layout_mode = 1
