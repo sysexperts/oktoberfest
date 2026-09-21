@@ -48,6 +48,9 @@ extends Node3D
 ## Weitere Quellen für geliehene Animationen (Alex: jede Animation in einer
 ## eigenen Datei). Heißen dann "geliehen2/<Name>", "geliehen3/<Name>" …
 @export var leih_animationen_mehr: Array[PackedScene] = []
+## Fertig umgerechnete Bibliothek (tools/bake_alex_animationen.gd) — für Modelle
+## mit anderem Skelett, bei denen Ausleihen nicht geht. Heißt "geliehen/<Name>".
+@export var leih_bibliothek: AnimationLibrary
 
 const LEIH_BIBLIOTHEK := "geliehen"
 
@@ -73,7 +76,7 @@ func _ready() -> void:
 		skelett = sks[0]
 	if anim == null:
 		return
-	if leih_animationen or not leih_animationen_mehr.is_empty():
+	if leih_animationen or not leih_animationen_mehr.is_empty() or leih_bibliothek:
 		_animationen_ausleihen()
 	# Die importierten Animationen haben keine Schleife gesetzt
 	var schleifen := [anim_stehen, anim_gehen, anim_rennen, anim_sitzen, anim_betrunken]
@@ -86,6 +89,8 @@ func _ready() -> void:
 func _animationen_ausleihen() -> void:
 	# Mehrere Quellen: Alex bringt jede Animation in einer eigenen Datei mit,
 	# jede mit demselben Skelett. Jede Quelle bekommt eine eigene Bibliothek.
+	if leih_bibliothek and not anim.has_animation_library(LEIH_BIBLIOTHEK):
+		anim.add_animation_library(LEIH_BIBLIOTHEK, leih_bibliothek)
 	var quellen: Array[PackedScene] = []
 	if leih_animationen:
 		quellen.append(leih_animationen)
@@ -101,8 +106,10 @@ func _animationen_ausleihen() -> void:
 			_leih_bibliotheken[pfad] = (aps[0] as AnimationPlayer).get_animation_library("") if not aps.is_empty() else null
 			quelle.free()
 		var bibliothek: AnimationLibrary = _leih_bibliotheken[pfad]
-		# Erste Quelle heißt „geliehen", weitere „geliehen2", „geliehen3" …
-		var name := LEIH_BIBLIOTHEK if i == 0 else "%s%d" % [LEIH_BIBLIOTHEK, i + 1]
+		# Erste Quelle heißt „geliehen", weitere „geliehen2", „geliehen3" … — ist
+		# schon eine fertige Bibliothek da, rücken die Szenen einen Platz weiter.
+		var nr := i + (1 if leih_bibliothek else 0)
+		var name := LEIH_BIBLIOTHEK if nr == 0 else "%s%d" % [LEIH_BIBLIOTHEK, nr + 1]
 		if bibliothek and not anim.has_animation_library(name):
 			anim.add_animation_library(name, bibliothek)
 

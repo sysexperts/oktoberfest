@@ -1,16 +1,16 @@
-[gd_scene load_steps=24 format=3 uid="uid://htava2tet720"]
+[gd_scene format=3 uid="uid://htava2tet720"]
 
 [ext_resource type="Script" uid="uid://c467s05xxmt8g" path="res://scripts/ui/zeltcomputer.gd" id="1_comp"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/bier.svg" id="2_bier"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/kreuz.svg" id="3_kreuz"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/aehre.svg" id="4_aehre"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/minus.svg" id="5_minus"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/plus.svg" id="6_plus"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/wagen.svg" id="7_wagen"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/geld.svg" id="8_geld"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/papier.svg" id="9_papier"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/pfeil_rechts.svg" id="10_pfeil"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/ein_aus.svg" id="11_einaus"]
+[ext_resource type="Texture2D" uid="uid://egohgl63ogyr" path="res://assets/ui/symbole/bier.svg" id="2_bier"]
+[ext_resource type="Texture2D" uid="uid://qfd1njllo226" path="res://assets/ui/symbole/kreuz.svg" id="3_kreuz"]
+[ext_resource type="Texture2D" uid="uid://bw7ru5topdvg5" path="res://assets/ui/symbole/aehre.svg" id="4_aehre"]
+[ext_resource type="Texture2D" uid="uid://b8c2d40ofuc5" path="res://assets/ui/symbole/minus.svg" id="5_minus"]
+[ext_resource type="Texture2D" uid="uid://cumfrs4amk2w2" path="res://assets/ui/symbole/plus.svg" id="6_plus"]
+[ext_resource type="Texture2D" uid="uid://cblsoungy0fgu" path="res://assets/ui/symbole/wagen.svg" id="7_wagen"]
+[ext_resource type="Texture2D" uid="uid://degij10fqpa5x" path="res://assets/ui/symbole/geld.svg" id="8_geld"]
+[ext_resource type="Texture2D" uid="uid://c6fjgycer1u4e" path="res://assets/ui/symbole/papier.svg" id="9_papier"]
+[ext_resource type="Texture2D" uid="uid://c5h7m3s1h2hst" path="res://assets/ui/symbole/pfeil_rechts.svg" id="10_pfeil"]
+[ext_resource type="Texture2D" uid="uid://c0gkqpww4mp31" path="res://assets/ui/symbole/ein_aus.svg" id="11_einaus"]
 
 [sub_resource type="StyleBoxFlat" id="Fenster"]
 content_margin_left = 30.0
@@ -31,6 +31,19 @@ corner_detail = 12
 shadow_color = Color(0, 0, 0, 0.55)
 shadow_size = 18
 
+[sub_resource type="StyleBoxEmpty" id="Leer"]
+
+[sub_resource type="StyleBoxFlat" id="Kreis"]
+bg_color = Color(1, 0.839, 0.349, 0.16)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 12
+
+[sub_resource type="StyleBoxLine" id="Linie"]
+color = Color(0.58, 0.42, 0.24, 0.45)
+
 [sub_resource type="StyleBoxFlat" id="Karte"]
 content_margin_left = 20.0
 content_margin_top = 18.0
@@ -48,23 +61,6 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 corner_detail = 10
 
-[sub_resource type="StyleBoxFlat" id="Feld"]
-content_margin_left = 18.0
-content_margin_top = 14.0
-content_margin_right = 18.0
-content_margin_bottom = 14.0
-bg_color = Color(0.113, 0.094, 0.072, 0.8)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.22)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-corner_detail = 10
-
 [sub_resource type="StyleBoxFlat" id="KnopfNormal"]
 content_margin_left = 16.0
 content_margin_top = 12.0
@@ -76,23 +72,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.58, 0.42, 0.24, 0.35)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-corner_detail = 10
-
-[sub_resource type="StyleBoxFlat" id="KnopfHover"]
-content_margin_left = 16.0
-content_margin_top = 12.0
-content_margin_right = 16.0
-content_margin_bottom = 12.0
-bg_color = Color(0.2, 0.163, 0.113, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.55)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -116,6 +95,23 @@ corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 corner_detail = 10
 
+[sub_resource type="StyleBoxFlat" id="KnopfHover"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.2, 0.163, 0.113, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.55)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 10
+
 [sub_resource type="StyleBoxFlat" id="KnopfAus"]
 content_margin_left = 16.0
 content_margin_top = 12.0
@@ -133,22 +129,24 @@ corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 corner_detail = 10
 
-[sub_resource type="StyleBoxFlat" id="Kreis"]
-bg_color = Color(1, 0.839, 0.349, 0.16)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-corner_detail = 12
+[sub_resource type="StyleBoxFlat" id="Feld"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 18.0
+content_margin_bottom = 14.0
+bg_color = Color(0.113, 0.094, 0.072, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.22)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 10
 
-[sub_resource type="StyleBoxEmpty" id="Leer"]
-
-[sub_resource type="StyleBoxLine" id="Linie"]
-color = Color(0.58, 0.42, 0.24, 0.45)
-thickness = 1
-
-[node name="Zeltcomputer" type="Control"]
-visible = false
+[node name="Zeltcomputer" type="Control" unique_id=2069397370]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -157,7 +155,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_comp")
 
-[node name="Abdunkeln" type="ColorRect" parent="."]
+[node name="Abdunkeln" type="ColorRect" parent="." unique_id=1123246291]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -166,7 +164,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.55)
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=409251061]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1180, 0)
 layout_mode = 1
@@ -179,15 +177,15 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("Fenster")
 
-[node name="Spalte" type="VBoxContainer" parent="Panel"]
+[node name="Spalte" type="VBoxContainer" parent="Panel" unique_id=1932280781]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kopf" type="HBoxContainer" parent="Panel/Spalte"]
+[node name="Kopf" type="HBoxContainer" parent="Panel/Spalte" unique_id=1840224109]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Titelsymbol" type="TextureRect" parent="Panel/Spalte/Kopf"]
+[node name="Titelsymbol" type="TextureRect" parent="Panel/Spalte/Kopf" unique_id=351603369]
 custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 size_flags_vertical = 4
@@ -195,43 +193,43 @@ texture = ExtResource("2_bier")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Kopftext" type="VBoxContainer" parent="Panel/Spalte/Kopf"]
+[node name="Kopftext" type="VBoxContainer" parent="Panel/Spalte/Kopf" unique_id=1075984289]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 2
 
-[node name="Titel" type="Label" parent="Panel/Spalte/Kopf/Kopftext"]
+[node name="Titel" type="Label" parent="Panel/Spalte/Kopf/Kopftext" unique_id=867550229]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_font_sizes/font_size = 36
 text = "COMP_TITLE"
 
-[node name="Status" type="Label" parent="Panel/Spalte/Kopf/Kopftext"]
+[node name="Status" type="Label" parent="Panel/Spalte/Kopf/Kopftext" unique_id=1971028872]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 17
 
-[node name="Kopfrechts" type="VBoxContainer" parent="Panel/Spalte/Kopf"]
+[node name="Kopfrechts" type="VBoxContainer" parent="Panel/Spalte/Kopf" unique_id=1772124172]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SchliessenX" type="Button" parent="Panel/Spalte/Kopf/Kopfrechts"]
+[node name="SchliessenX" type="Button" parent="Panel/Spalte/Kopf/Kopfrechts" unique_id=558553265]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "OFFICE_CLOSE"
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("Kreis")
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/pressed = SubResource("Kreis")
+theme_override_styles/hover = SubResource("Kreis")
+theme_override_styles/focus = SubResource("Leer")
 icon = ExtResource("3_kreuz")
 expand_icon = true
 
-[node name="Aehre" type="TextureRect" parent="Panel/Spalte/Kopf/Kopfrechts"]
+[node name="Aehre" type="TextureRect" parent="Panel/Spalte/Kopf/Kopfrechts" unique_id=2017017674]
 modulate = Color(1, 0.839, 0.349, 0.45)
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -240,29 +238,29 @@ texture = ExtResource("4_aehre")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TrennerOben" type="HSeparator" parent="Panel/Spalte"]
+[node name="TrennerOben" type="HSeparator" parent="Panel/Spalte" unique_id=1223278284]
 layout_mode = 2
 theme_override_styles/separator = SubResource("Linie")
 
-[node name="KartePreis" type="PanelContainer" parent="Panel/Spalte"]
+[node name="KartePreis" type="PanelContainer" parent="Panel/Spalte" unique_id=1817059815]
 layout_mode = 2
 theme_override_styles/panel = SubResource("Karte")
 
-[node name="Spalte" type="VBoxContainer" parent="Panel/Spalte/KartePreis"]
+[node name="Spalte" type="VBoxContainer" parent="Panel/Spalte/KartePreis" unique_id=2095548839]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kopfzeile" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte"]
+[node name="Kopfzeile" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte" unique_id=680627650]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile" unique_id=1513436533]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Kreis" unique_id=2089304937]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -271,54 +269,54 @@ texture = ExtResource("2_bier")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="VBoxContainer" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile"]
+[node name="Text" type="VBoxContainer" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile" unique_id=547294601]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 3
 
-[node name="Titel" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Text"]
+[node name="Titel" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Text" unique_id=1797915600]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 24
 text = "COMP_PRICE"
 
-[node name="Info" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Text"]
+[node name="Info" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Text" unique_id=587693113]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 text = "COMP_PRICE_INFO"
 autowrap_mode = 3
 
-[node name="Reihe" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte"]
+[node name="Reihe" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte" unique_id=1510171577]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Billiger" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe"]
+[node name="Billiger" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe" unique_id=1137266538]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(268, 88)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_constants/h_separation = 14
 theme_override_font_sizes/font_size = 27
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("KnopfNormal")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 text = "COMP_STEP"
 icon = ExtResource("5_minus")
 
-[node name="Werte" type="PanelContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe"]
+[node name="Werte" type="PanelContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe" unique_id=924083210]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("Feld")
 
-[node name="Zeile" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte"]
+[node name="Zeile" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte" unique_id=2018068426]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile" unique_id=1474030422]
 custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
 size_flags_vertical = 4
@@ -326,7 +324,7 @@ texture = ExtResource("2_bier")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Raster" type="GridContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile"]
+[node name="Raster" type="GridContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile" unique_id=290484787]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -334,13 +332,13 @@ theme_override_constants/h_separation = 24
 theme_override_constants/v_separation = 6
 columns = 2
 
-[node name="NameMass" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="NameMass" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=1586675715]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_BIER"
 
-[node name="WertMass" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="WertMass" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=37903241]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -349,13 +347,13 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 17
 horizontal_alignment = 2
 
-[node name="NameSnack" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="NameSnack" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=778025257]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_SNACK"
 
-[node name="WertSnack" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="WertSnack" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=674999236]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -364,13 +362,13 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 17
 horizontal_alignment = 2
 
-[node name="NameFaktor" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="NameFaktor" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=885577652]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_FACTOR"
 
-[node name="WertFaktor" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="WertFaktor" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=1816127989]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -379,18 +377,18 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 17
 horizontal_alignment = 2
 
-[node name="NameEssen" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="NameEssen" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=26874558]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_FOOD"
 
-[node name="EssenZeile" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster"]
+[node name="EssenZeile" type="HBoxContainer" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=170802594]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="WertEssen" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster/EssenZeile"]
+[node name="WertEssen" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster/EssenZeile" unique_id=1856432380]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -399,68 +397,68 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 17
 horizontal_alignment = 2
 
-[node name="EssenBilliger" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster/EssenZeile"]
+[node name="EssenBilliger" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster/EssenZeile" unique_id=1984530096]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "BTN_CHEAPER"
-theme_override_styles/disabled = SubResource("Leer")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("Kreis")
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/pressed = SubResource("Kreis")
+theme_override_styles/hover = SubResource("Kreis")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("Leer")
 icon = ExtResource("5_minus")
 expand_icon = true
 
-[node name="EssenTeurer" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster/EssenZeile"]
+[node name="EssenTeurer" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster/EssenZeile" unique_id=2109107331]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "BTN_PRICIER"
-theme_override_styles/disabled = SubResource("Leer")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("Kreis")
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/pressed = SubResource("Kreis")
+theme_override_styles/hover = SubResource("Kreis")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("Leer")
 icon = ExtResource("6_plus")
 expand_icon = true
 
-[node name="Teurer" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe"]
+[node name="Teurer" type="Button" parent="Panel/Spalte/KartePreis/Spalte/Reihe" unique_id=809574207]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(268, 88)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_constants/h_separation = 14
 theme_override_font_sizes/font_size = 27
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("KnopfNormal")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 text = "COMP_STEP"
 icon = ExtResource("6_plus")
 
-[node name="KarteWare" type="PanelContainer" parent="Panel/Spalte"]
+[node name="KarteWare" type="PanelContainer" parent="Panel/Spalte" unique_id=2016972051]
 layout_mode = 2
 theme_override_styles/panel = SubResource("Karte")
 
-[node name="Spalte" type="VBoxContainer" parent="Panel/Spalte/KarteWare"]
+[node name="Spalte" type="VBoxContainer" parent="Panel/Spalte/KarteWare" unique_id=1625814545]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kopfzeile" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte"]
+[node name="Kopfzeile" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte" unique_id=1659655584]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile" unique_id=1908802958]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile/Kreis" unique_id=2092919969]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -469,41 +467,41 @@ texture = ExtResource("7_wagen")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="VBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile"]
+[node name="Text" type="VBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile" unique_id=1946859138]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 3
 
-[node name="Titel" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile/Text"]
+[node name="Titel" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile/Text" unique_id=96691016]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 24
 text = "COMP_GOODS"
 
-[node name="WareText" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile/Text"]
+[node name="WareText" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Kopfzeile/Text" unique_id=554102895]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 
-[node name="Reihe" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte"]
+[node name="Reihe" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte" unique_id=1965942444]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="BierEins" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe"]
+[node name="BierEins" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe" unique_id=1300473672]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 86)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("KnopfNormal")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 
-[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins"]
+[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins" unique_id=191808866]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -517,14 +515,14 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt" unique_id=23810840]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt/Kreis" unique_id=2051767003]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -533,16 +531,14 @@ texture = ExtResource("2_bier")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt"]
+[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt" unique_id=1944124250]
 auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
-[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt"]
+[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt" unique_id=762721938]
 modulate = Color(0.72, 0.67, 0.61, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
@@ -552,18 +548,18 @@ texture = ExtResource("10_pfeil")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BierFuenf" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe"]
+[node name="BierFuenf" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe" unique_id=930600862]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 86)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("KnopfNormal")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 
-[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf"]
+[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf" unique_id=1330335539]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -577,14 +573,14 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt" unique_id=1996882414]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt/Kreis" unique_id=114534708]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -593,16 +589,14 @@ texture = ExtResource("2_bier")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt"]
+[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt" unique_id=964591156]
 auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
-[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt"]
+[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt" unique_id=1492154862]
 modulate = Color(0.72, 0.67, 0.61, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
@@ -612,18 +606,18 @@ texture = ExtResource("10_pfeil")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EssenEins" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe"]
+[node name="EssenEins" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe" unique_id=1934823952]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 86)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("KnopfNormal")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 
-[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins"]
+[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins" unique_id=366575399]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -637,14 +631,14 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt" unique_id=1981744264]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt/Kreis" unique_id=307007405]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -652,16 +646,14 @@ size_flags_vertical = 4
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt"]
+[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt" unique_id=598550328]
 auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
-[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt"]
+[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt" unique_id=938385894]
 modulate = Color(0.72, 0.67, 0.61, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
@@ -671,18 +663,18 @@ texture = ExtResource("10_pfeil")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="EssenFuenf" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe"]
+[node name="EssenFuenf" type="Button" parent="Panel/Spalte/KarteWare/Spalte/Reihe" unique_id=1412687160]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 86)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("KnopfNormal")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 
-[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf"]
+[node name="Inhalt" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf" unique_id=764002522]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -696,14 +688,14 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt" unique_id=639009276]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt/Kreis" unique_id=1755735293]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -711,16 +703,14 @@ size_flags_vertical = 4
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt"]
+[node name="Text" type="Label" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt" unique_id=513414180]
 auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
-[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt"]
+[node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt" unique_id=769144162]
 modulate = Color(0.72, 0.67, 0.61, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
@@ -730,25 +720,25 @@ texture = ExtResource("10_pfeil")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="KarteBilanz" type="PanelContainer" parent="Panel/Spalte"]
+[node name="KarteBilanz" type="PanelContainer" parent="Panel/Spalte" unique_id=2001545344]
 layout_mode = 2
 theme_override_styles/panel = SubResource("Karte")
 
-[node name="Spalte" type="VBoxContainer" parent="Panel/Spalte/KarteBilanz"]
+[node name="Spalte" type="VBoxContainer" parent="Panel/Spalte/KarteBilanz" unique_id=2024171991]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kopfzeile" type="HBoxContainer" parent="Panel/Spalte/KarteBilanz/Spalte"]
+[node name="Kopfzeile" type="HBoxContainer" parent="Panel/Spalte/KarteBilanz/Spalte" unique_id=920960416]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile"]
+[node name="Kreis" type="PanelContainer" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile" unique_id=1530041409]
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("Kreis")
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Kreis"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Kreis" unique_id=174184076]
 custom_minimum_size = Vector2(26, 26)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -757,24 +747,24 @@ texture = ExtResource("8_geld")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="VBoxContainer" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile"]
+[node name="Text" type="VBoxContainer" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile" unique_id=1367191704]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 3
 
-[node name="Titel" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Text"]
+[node name="Titel" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Text" unique_id=68077147]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 24
 text = "OFFICE_TAB_REPORT"
 
-[node name="BilanzRollen" type="ScrollContainer" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Text"]
+[node name="BilanzRollen" type="ScrollContainer" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Text" unique_id=813807761]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="BilanzText" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Text/BilanzRollen"]
+[node name="BilanzText" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/Kopfzeile/Text/BilanzRollen" unique_id=571398473]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -783,17 +773,17 @@ theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 15
 autowrap_mode = 3
 
-[node name="ZeltSchliessen" type="Button" parent="Panel/Spalte/KarteBilanz/Spalte"]
+[node name="ZeltSchliessen" type="Button" parent="Panel/Spalte/KarteBilanz/Spalte" unique_id=758916361]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 86)
 layout_mode = 2
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("Feld")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 
-[node name="Inhalt" type="VBoxContainer" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen"]
+[node name="Inhalt" type="VBoxContainer" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen" unique_id=347219669]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -801,10 +791,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-alignment = 1
 theme_override_constants/separation = 6
+alignment = 1
 
-[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen/Inhalt"]
+[node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen/Inhalt" unique_id=902461663]
 modulate = Color(0.72, 0.67, 0.61, 1)
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
@@ -814,32 +804,31 @@ texture = ExtResource("9_papier")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen/Inhalt"]
+[node name="Text" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen/Inhalt" unique_id=1532674348]
 layout_mode = 2
 size_flags_horizontal = 4
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_CLOSE_TENT"
 
-[node name="LobbyOeffnen" type="Button" parent="Panel/Spalte/KarteBilanz/Spalte"]
+[node name="LobbyOeffnen" type="Button" parent="Panel/Spalte/KarteBilanz/Spalte" unique_id=1331679690]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
 theme_override_font_sizes/font_size = 17
-theme_override_styles/disabled = SubResource("KnopfAus")
-theme_override_styles/focus = SubResource("Leer")
-theme_override_styles/hover = SubResource("KnopfHover")
 theme_override_styles/normal = SubResource("Feld")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("Leer")
 text = "COMP_LOBBY"
 
-[node name="Fuss" type="HBoxContainer" parent="Panel/Spalte"]
+[node name="Fuss" type="HBoxContainer" parent="Panel/Spalte" unique_id=365953098]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="AehreLinks" type="TextureRect" parent="Panel/Spalte/Fuss"]
+[node name="AehreLinks" type="TextureRect" parent="Panel/Spalte/Fuss" unique_id=1705845742]
 modulate = Color(1, 0.839, 0.349, 0.45)
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
@@ -848,13 +837,13 @@ texture = ExtResource("4_aehre")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LinieLinks" type="HSeparator" parent="Panel/Spalte/Fuss"]
+[node name="LinieLinks" type="HSeparator" parent="Panel/Spalte/Fuss" unique_id=1249755799]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_styles/separator = SubResource("Linie")
 
-[node name="Schliessen" type="Button" parent="Panel/Spalte/Fuss"]
+[node name="Schliessen" type="Button" parent="Panel/Spalte/Fuss" unique_id=1920023065]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(500, 62)
 layout_mode = 2
@@ -864,13 +853,13 @@ theme_override_font_sizes/font_size = 24
 text = "OFFICE_CLOSE"
 icon = ExtResource("11_einaus")
 
-[node name="LinieRechts" type="HSeparator" parent="Panel/Spalte/Fuss"]
+[node name="LinieRechts" type="HSeparator" parent="Panel/Spalte/Fuss" unique_id=2023414506]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_styles/separator = SubResource("Linie")
 
-[node name="AehreRechts" type="TextureRect" parent="Panel/Spalte/Fuss"]
+[node name="AehreRechts" type="TextureRect" parent="Panel/Spalte/Fuss" unique_id=2129616624]
 modulate = Color(1, 0.839, 0.349, 0.45)
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2

@@ -297,7 +297,7 @@ func _update_animation(delta: float) -> void:
 		_cur_anim = ""
 	# Sprung: in der Luft nach vorn lehnen, bei der Landung zurück
 	var in_luft := global_position.y > 0.35
-	var w := clampf(delta * 10.0, 0.0, 1.0)
+	var w := clampf(delta * 6.0, 0.0, 1.0)
 	_model.rotation.x = lerpf(_model.rotation.x, -0.35 if in_luft else 0.0, w)
 	# Sprung: in der Luft gestreckt, bei der Landung kurz gestaucht
 	var ziel_skala := Vector3(0.94, 1.1, 0.94) if in_luft else Vector3.ONE
@@ -334,7 +334,9 @@ func _update_animation(delta: float) -> void:
 		_emote_label.text = "Prost! 🍻"
 		_emote_label.modulate = Color(1, 1, 1)
 		if _cur_anim != "tanzen":
-			figur.tanzen()
+			# Ohne Tanz stehen bleiben — sonst bliebe die Figur in der T-Pose
+			if not figur.tanzen():
+				figur.stehen()
 			_cur_anim = "tanzen"
 		return
 	var spd: float
@@ -915,7 +917,7 @@ const KOTZ_REST := 0.8          # so viel Promille bleiben danach
 const KOTZ_TAKT := 0.95
 ## So weit beugt sich der Kopf in der eigenen Sicht nach vorn (Ruhe → voller Stoß)
 const KOTZ_NEIGUNG := -0.7
-const KOTZ_NEIGUNG_STOSS := -0.45
+const KOTZ_NEIGUNG_STOSS := -0.25
 var _kotz_t := 0.0
 var _kotz_fleck := false
 ## Läuft, solange gewürgt wird — auch bei Mitspielern (die kennen nur emote = 2)
@@ -963,10 +965,10 @@ func _kotzen(delta: float) -> void:
 	# dabei in die Knie — dieselbe Kurve, die auch die Figur bewegt.
 	var vergangen := KOTZ_DAUER - _kotz_t
 	var h := kotz_heftig(vergangen)
-	var w := clampf(delta * 10.0, 0.0, 1.0)
+	var w := clampf(delta * 6.0, 0.0, 1.0)
 	_head.rotation.x = lerpf(_head.rotation.x, KOTZ_NEIGUNG + KOTZ_NEIGUNG_STOSS * h, w)
-	_head.rotation.z = lerpf(_head.rotation.z, sin(vergangen * 5.0) * 0.05, w)
-	_head.position = _head.position.lerp(_kopf_ruhe + Vector3(0, -0.12 - 0.14 * h, -0.05 * h), w)
+	_head.rotation.z = lerpf(_head.rotation.z, sin(vergangen * 3.0) * 0.02, w)
+	_head.position = _head.position.lerp(_kopf_ruhe + Vector3(0, -0.12 - 0.06 * h, -0.03 * h), w)
 	# Bei jedem neuen Stoß ein Würgen zu hören
 	var stoesse := int(vergangen / KOTZ_TAKT) + 1
 	if stoesse > _kotz_stoesse:
@@ -1053,9 +1055,11 @@ func geste(jubel := false) -> void:
 	if figur == null or figur.anim == null:
 		return
 	if jubel:
-		figur.tanzen(1.0)
+		if not figur.tanzen(1.0):
+			figur.stehen()
 	elif not figur.extra():
-		figur.tanzen(0.8)
+		if not figur.tanzen(0.8):
+			figur.stehen()
 	_cur_anim = "geste"
 	_geste_bis = Time.get_ticks_msec() / 1000.0 + 2.6
 

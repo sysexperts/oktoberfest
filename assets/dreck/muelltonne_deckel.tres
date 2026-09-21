@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" format=4]
+[gd_resource type="ArrayMesh" format=4 uid="uid://djmq21agqypra"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gv3xs"]
 albedo_color = Color(0.13, 0.22, 0.16, 1)

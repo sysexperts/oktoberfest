@@ -1,23 +1,25 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/figur.gd" id="1_figur"]
 [ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Walking_withSkin.glb" id="2_modell"]
-[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb" id="3_rennen"]
-[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb" id="4_torkeln"]
+[ext_resource type="AnimationLibrary" path="res://assets/character/character4/alex_animationen.res" id="3_umgerechnet"]
+[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb" id="4_rennen"]
 [ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Casual_Walk_withSkin.glb" id="5_schlendern"]
+[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb" id="6_torkeln"]
 
 [node name="Alex" type="Node3D"]
 script = ExtResource("1_figur")
-idle_ist_standbild = true
-standbild_zeit = 0.52
+anim_stehen = "geliehen/Idle_12"
 anim_gehen = "Walking"
-anim_rennen = "geliehen/Running"
-anim_tanzen = PackedStringArray()
-anim_extras = PackedStringArray()
-anim_betrunken = "geliehen3/Unsteady_Walk"
+anim_rennen = "geliehen2/Running"
+anim_tanzen = PackedStringArray("geliehen/Hip_Hop_Dance", "geliehen/ymca_dance")
+anim_sitzen = "geliehen/Sit_and_Drink"
+anim_extras = PackedStringArray("geliehen/Confused_Scratch")
+anim_betrunken = "geliehen4/Unsteady_Walk"
 metall_ignorieren = true
 eigenleuchten = 0.35
-leih_animationen = ExtResource("3_rennen")
-leih_animationen_mehr = Array[PackedScene]([ExtResource("5_schlendern"), ExtResource("4_torkeln")])
+leih_animationen = ExtResource("4_rennen")
+leih_animationen_mehr = Array[PackedScene]([ExtResource("5_schlendern"), ExtResource("6_torkeln")])
+leih_bibliothek = ExtResource("3_umgerechnet")
 
 [node name="Modell" parent="." instance=ExtResource("2_modell")]

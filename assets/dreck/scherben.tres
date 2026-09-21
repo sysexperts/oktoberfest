@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" format=4]
+[gd_resource type="ArrayMesh" format=4 uid="uid://cxpjp60ehhbk0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g3vs6"]
 transparency = 1
