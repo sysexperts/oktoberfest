@@ -72,6 +72,8 @@ var _net_yaw: float
 @onready var _namensschild: Label3D = $Namensschild
 ## Besen beim Fegen (nur solange man putzt, schwingt hin und her)
 @onready var _besen: Node3D = get_node_or_null("Besen")
+## Strahl aus dem Mund beim Würgen (scenes/effekte/kotzstrahl.tscn)
+@onready var _kotzstrahl: GPUParticles3D = $Kotzstrahl
 var _fegt_bis := 0.0
 ## Abteilung, die dieser Spieler leitet ("" = keine) — aus der Lobby (GameManager._spieler_info)
 
@@ -304,15 +306,30 @@ func _update_animation(delta: float) -> void:
 	_war_in_luft = in_luft
 	_model.scale = _model.scale.lerp(ziel_skala, w)
 	_emote_label.visible = emote != 0
-	# Übergeben: vornüber gebeugt würgen, mit 🤮 über dem Kopf wie bei den Gästen
+	# Übergeben: gewürgt wird mit gestellten Knochen (Figur.kotz_pose), weil kein
+	# Modell dafür eine Animation mitbringt. Der Takt läuft hier mit, damit auch
+	# Mitspieler ihn sehen — die kennen nur emote, nicht _kotz_t.
 	if emote == 2:
 		_emote_label.text = "🤮"
 		_emote_label.modulate = Color(0.6, 0.9, 0.4)
-		_model.rotation.x = lerpf(_model.rotation.x, KOTZ_NEIGUNG, w)
-		if _cur_anim != "stehen":
-			figur.stehen()
-			_cur_anim = "stehen"
+		_kotz_anim_t += delta
+		var h := kotz_heftig(_kotz_anim_t)
+		figur.kotz_pose(h)
+		# Es kommt aus dem Mund, solange gewürgt wird (scenes/effekte/kotzstrahl.tscn).
+		# Die Schwälle macht der Explosiveness-Wert der Szene, nicht dieser Takt —
+		# ein- und ausschalten je Stoß hat die Brocken wieder weggeräumt.
+		if not _strahl_an:
+			_strahl_an = true
+			_kotzstrahl.emitting = true
+			_kotzstrahl.restart()
+		_cur_anim = "kotzen"
 		return
+	if _cur_anim == "kotzen":
+		_kotz_anim_t = 0.0
+		_kotzstrahl.emitting = false
+		_strahl_an = false
+		figur.kotz_pose_loesen()
+		_cur_anim = ""
 	if emote == 1:
 		_emote_label.text = "Prost! 🍻"
 		_emote_label.modulate = Color(1, 1, 1)
@@ -880,7 +897,8 @@ func _trinken(delta: float) -> void:
 			hud.melde("MSG_RAUSCH_STARK" if stufe == 2 else "MSG_RAUSCH", [], 0)
 	_rausch_stufe = stufe
 	# Kopf wiegt mit dem Rausch
-	_head.rotation.z = sin(_rausch_t * 1.3) * 0.05 * promille
+	if _kotz_t <= 0.0:
+		_head.rotation.z = sin(_rausch_t * 1.3) * 0.05 * promille
 	if promille >= KOTZ_GRENZE and _kotz_t <= 0.0:
 		_kotzen_starten()
 
@@ -893,10 +911,29 @@ const KOTZ_GRENZE := 2.2        # ab so viel Promille geht es los
 const KOTZ_DAUER := 3.0
 const KOTZ_FLECK_NACH := 0.9    # so lange wird erst gewürgt
 const KOTZ_REST := 0.8          # so viel Promille bleiben danach
-## So weit beugt sich der Kopf beim Würgen nach vorn
-const KOTZ_NEIGUNG := -0.9
+## Ein Stoß dauert so lange, danach der nächste
+const KOTZ_TAKT := 0.95
+## So weit beugt sich der Kopf in der eigenen Sicht nach vorn (Ruhe → voller Stoß)
+const KOTZ_NEIGUNG := -0.7
+const KOTZ_NEIGUNG_STOSS := -0.45
 var _kotz_t := 0.0
 var _kotz_fleck := false
+## Läuft, solange gewürgt wird — auch bei Mitspielern (die kennen nur emote = 2)
+var _kotz_anim_t := 0.0
+## Ruhelage des Kopfes, damit die eigene Sicht danach wieder sitzt
+var _kopf_ruhe := Vector3.ZERO
+var _kotz_stoesse := 0
+## Läuft der Schwall gerade?
+var _strahl_an := false
+
+## Takt des Würgens: schnell vorschnellen, langsam zurück. 0 = Luft holen,
+## 1 = voller Stoß. Figur und eigene Sicht laufen damit im Gleichschritt.
+static func kotz_heftig(t: float) -> float:
+	var p := fposmod(t, KOTZ_TAKT) / KOTZ_TAKT
+	if p < 0.18:
+		return p / 0.18
+	var r := (p - 0.18) / 0.82
+	return (1.0 - r) * (1.0 - r)
 
 ## Läuft gerade das Übergeben? (Wettschleppen und Co. fragen danach)
 func kotzt() -> bool:
@@ -905,7 +942,10 @@ func kotzt() -> bool:
 func _kotzen_starten() -> void:
 	_kotz_t = KOTZ_DAUER
 	_kotz_fleck = false
+	_kotz_stoesse = 0
 	emote = 2
+	if _kopf_ruhe == Vector3.ZERO:
+		_kopf_ruhe = _head.position
 	_sfx("splash")   # AUDIO.md: splash ist der Klang für Kotze
 	var hud := _world.get_node_or_null("HUD")
 	if hud and hud.has_method("melde"):
@@ -919,12 +959,25 @@ func _kotzen(delta: float) -> void:
 		promille = KOTZ_REST
 		if _world and _world.has_method("net_spieler_kotzt"):
 			_world.net_spieler_kotzt.rpc_id(1)
-	# Blick nach unten, solange es dauert; danach wieder dahin, wo die Maus steht
-	_head.rotation.x = lerpf(_head.rotation.x, KOTZ_NEIGUNG, clampf(delta * 8.0, 0.0, 1.0))
+	# Eigene Sicht: Kopf kippt mit jedem Stoß nach vorn und unten, der Körper geht
+	# dabei in die Knie — dieselbe Kurve, die auch die Figur bewegt.
+	var vergangen := KOTZ_DAUER - _kotz_t
+	var h := kotz_heftig(vergangen)
+	var w := clampf(delta * 10.0, 0.0, 1.0)
+	_head.rotation.x = lerpf(_head.rotation.x, KOTZ_NEIGUNG + KOTZ_NEIGUNG_STOSS * h, w)
+	_head.rotation.z = lerpf(_head.rotation.z, sin(vergangen * 5.0) * 0.05, w)
+	_head.position = _head.position.lerp(_kopf_ruhe + Vector3(0, -0.12 - 0.14 * h, -0.05 * h), w)
+	# Bei jedem neuen Stoß ein Würgen zu hören
+	var stoesse := int(vergangen / KOTZ_TAKT) + 1
+	if stoesse > _kotz_stoesse:
+		_kotz_stoesse = stoesse
+		_sfx("splash")
 	if _kotz_t <= 0.0:
 		_kotz_t = 0.0
 		emote = 0
 		_head.rotation.x = _pitch
+		_head.rotation.z = 0.0
+		_head.position = _kopf_ruhe
 
 ## Server hat den Krug aus der Hand auf die Ausgabe gestellt.
 func krug_abgestellt() -> void:

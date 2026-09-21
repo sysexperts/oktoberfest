@@ -199,3 +199,55 @@ func _hueft_spur(name: String) -> NodePath:
 ## Feierabend heim, morgens wieder da.
 func nachtruhe(an: bool) -> void:
 	visible = not an
+
+# --------------------------------------------------------------------- Würgen
+## Übergeben ohne eigene Animationsdatei: die Knochen werden selbst gestellt.
+## Alle drei Modelle haben dieselben Namen (Hips/Spine02/Spine01/Spine/neck/
+## Head/…Arm/…Leg), geprüft mit tools/modell_info.gd.
+##
+## `heftig` ist der Takt des Würgens: 0 = Luft holen, 1 = voller Stoß. Damit
+## sehen die eigene Sicht (scripts/player.gd) und die Figur denselben Rhythmus.
+const KOTZ_KNOCHEN := ["Spine02", "Spine01", "Spine", "neck", "Head",
+	"LeftArm", "RightArm", "LeftForeArm", "RightForeArm",
+	"LeftUpLeg", "RightUpLeg", "LeftLeg", "RightLeg"]
+
+func kotz_pose(heftig: float) -> void:
+	if skelett == null:
+		return
+	# Eine laufende Animation würde die Knochen jedes Bild überschreiben
+	if anim:
+		anim.active = false
+	var h := clampf(heftig, 0.0, 1.0)
+	# Oberkörper vornüber, mit jedem Stoß tiefer (Modelle sind 180° gebacken →
+	# positiv um RIGHT ist vorwärts, geprüft mit einer Seitenansicht)
+	_knochen("Spine02", 0.16 + 0.13 * h)
+	_knochen("Spine01", 0.22 + 0.15 * h)
+	_knochen("Spine", 0.26 + 0.17 * h)
+	_knochen("neck", 0.18 + 0.22 * h)
+	_knochen("Head", 0.25 + 0.35 * h)
+	# Arme nach vorn/unten, Ellbogen gebeugt — Hände Richtung Knie
+	_knochen("LeftArm", -0.45 - 0.2 * h)
+	_knochen("RightArm", -0.45 - 0.2 * h)
+	_knochen("LeftForeArm", -0.35)
+	_knochen("RightForeArm", -0.35)
+	# Leicht in die Knie
+	_knochen("LeftUpLeg", 0.30 + 0.12 * h)
+	_knochen("RightUpLeg", 0.30 + 0.12 * h)
+	_knochen("LeftLeg", -0.55 - 0.15 * h)
+	_knochen("RightLeg", -0.55 - 0.15 * h)
+
+## Zurück in die Ruhelage und Animationen wieder laufen lassen.
+func kotz_pose_loesen() -> void:
+	if skelett == null:
+		return
+	for name: String in KOTZ_KNOCHEN:
+		_knochen(name, 0.0)
+	if anim:
+		anim.active = true
+
+func _knochen(name: String, winkel: float) -> void:
+	var b := skelett.find_bone(name)
+	if b < 0:
+		return
+	var rest := skelett.get_bone_rest(b).basis.get_rotation_quaternion()
+	skelett.set_bone_pose_rotation(b, rest * Quaternion(Vector3.RIGHT, winkel))
