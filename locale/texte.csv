@@ -997,3 +997,11 @@ MSG_STAMM_BELOHNUNG_KATHI,Kathis Video geht viral: „Das beste Zelt der Wiesn!�
 MSG_STAMM_BELOHNUNG_FRANZ,Franz ist überzeugt und liefert euch 20 Portionen Zutaten gratis.,Franz is convinced and delivers 20 portions of ingredients for free.,Franz ikna oldu ve size 20 porsiyon malzemeyi bedava getiriyor.
 MSG_STAMM_BELOHNUNG_GIULIA,Giulia bringt eine ganze Reisegruppe mit — Trinkgeld 400 €!,Giulia brings a whole tour group — 400 € in tips!,Giulia bütün bir tur grubunu getiriyor — 400 € bahşiş!
 MSG_STAMM_BELOHNUNG_WIGGERL,"Wiggerl: „Der Sepp wär stolz auf euch.“ Er legt 300 € auf den Tresen — „die hat er mir mal geliehen.“","Wiggerl: “Sepp would be proud of you.” He puts 300 € on the bar — “he lent me that once.”","Wiggerl: “Sepp sizinle gurur duyardı.” Tezgaha 300 € bırakıyor — “bunu bir zamanlar bana ödünç vermişti.”"
+COMP_STEP,10 %,10 %,%10
+COMP_ROW_BIER,"Helles, Weizen, Radler:","Helles, wheat beer, shandy:","Helles, buğday birası, radler:"
+COMP_ROW_SNACK,"Brezn, Würstl:","Pretzel, sausage:","Brezel, sosis:"
+COMP_ROW_FACTOR,Preis:,Price:,Fiyat:
+COMP_ROW_FOOD,Essen:,Food:,Yemek:
+COMP_VAL_MASS,%s je Maß,%s per mug,kupa başı %s
+COMP_VAL_FACTOR,%d %% · Andrang: %d %%,%d %% · crowd: %d %%,%%%d · kalabalık: %%%d
+COMP_VAL_FOOD,%s je Portion (%d %%),%s per portion (%d %%),porsiyon başı %s (%%%d)
