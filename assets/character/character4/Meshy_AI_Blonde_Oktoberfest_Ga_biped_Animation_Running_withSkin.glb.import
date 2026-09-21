@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cv04m560n4psp"
-path="res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb-7a2821cb047afc872e42b0b4723d6be5.scn"
+uid="uid://b2vjtjcvutaxh"
+path="res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb-bd645968911b25925c6a22546924ebd4.scn"
 
 [deps]
 
-source_file="res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb"
-dest_files=["res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb-7a2821cb047afc872e42b0b4723d6be5.scn"]
+source_file="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb"
+dest_files=["res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb-bd645968911b25925c6a22546924ebd4.scn"]
 
 [params]
 

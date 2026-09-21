@@ -8,8 +8,8 @@ const MODELLE := [
 	"res://assets/character/character/bavarian_bean.glb",
 	"res://assets/character/character2/character2.glb",
 	"res://assets/character/character3/character3.glb",
-	"res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Walking_withSkin.glb",
-	"res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb",
+	"res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Walking_withSkin.glb",
+	"res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb",
 ]
 ## Knochen, die customer.gd / visitor.gd / staff.gd direkt ansprechen
 const GEBRAUCHTE_KNOCHEN := ["Hips", "Spine", "Head", "RightArm", "RightForeArm", "RightHand",

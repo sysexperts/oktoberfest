@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bydlpka7qgu67"
-path.s3tc="res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin_texture_0_metallic_roughness.png-e1900ac46e455b76021899b7682e90e1.s3tc.ctex"
+uid="uid://dcxmssddxy2a3"
+path.s3tc="res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Casual_Walk_withSkin_texture_0_metallic_roughness.png-e8bc22fb19316b7f82c89dae61749e15.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin_texture_0_metallic_roughness.png"
-dest_files=["res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin_texture_0_metallic_roughness.png-e1900ac46e455b76021899b7682e90e1.s3tc.ctex"]
+source_file="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Casual_Walk_withSkin_texture_0_metallic_roughness.png"
+dest_files=["res://.godot/imported/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Casual_Walk_withSkin_texture_0_metallic_roughness.png-e8bc22fb19316b7f82c89dae61749e15.s3tc.ctex"]
 
 [params]
 

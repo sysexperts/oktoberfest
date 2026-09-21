@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/figur.gd" id="1_figur"]
-[ext_resource type="PackedScene" path="res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Walking_withSkin.glb" id="2_modell"]
-[ext_resource type="PackedScene" path="res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb" id="3_rennen"]
-[ext_resource type="PackedScene" path="res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb" id="4_torkeln"]
-[ext_resource type="PackedScene" path="res://assets/character/character4 - Alex/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Casual_Walk_withSkin.glb" id="5_schlendern"]
+[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Walking_withSkin.glb" id="2_modell"]
+[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Running_withSkin.glb" id="3_rennen"]
+[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Unsteady_Walk_withSkin.glb" id="4_torkeln"]
+[ext_resource type="PackedScene" path="res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Casual_Walk_withSkin.glb" id="5_schlendern"]
 
 [node name="Alex" type="Node3D"]
 script = ExtResource("1_figur")

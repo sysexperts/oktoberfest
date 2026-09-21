@@ -96,8 +96,10 @@ LIVE="$(feld spiel)"; [ -n "$LIVE" ] || LIVE="$(feld version)"
 LIVE_INHALT="$(feld inhalt)"; [ -n "$LIVE_INHALT" ] || LIVE_INHALT=0
 echo "Commit $COMMIT · Version lokal $VERSION · live spiel $LIVE · live inhalt $LIVE_INHALT"
 [ -n "$LIVE" ] || abbruch "version.json vom Server nicht lesbar — Deploy abgebrochen."
-# In git lfs ls-files steht "-" statt "*", wenn nur der Zeiger ausgecheckt ist
-if git lfs ls-files | grep -q ' - '; then
+# In git lfs ls-files steht "-" statt "*" in der zweiten Spalte, wenn nur der
+# Zeiger ausgecheckt ist. Auf die zweite Spalte prüfen, nicht auf " - " im ganzen
+# Satz — ein Ordner namens "character4 - Alex" hat den Deploy sonst blockiert.
+if git lfs ls-files | awk '{ if ($2 == "-") gefunden = 1 } END { exit gefunden ? 0 : 1 }'; then
 	abbruch "LFS-Dateien nur als Zeiger vorhanden — git lfs pull."
 fi
 if [ "$PROBE" = 0 ] && [ "$VERSION" -le "$LIVE" ]; then
