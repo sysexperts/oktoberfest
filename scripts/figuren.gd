@@ -9,6 +9,7 @@ const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/bean.tscn"),
 	preload("res://scenes/figuren/charakter2.tscn"),
 	preload("res://scenes/figuren/charakter3.tscn"),
+	preload("res://scenes/figuren/alex.tscn"),
 ]
 
 ## Figuren, die sauber auf der Bank sitzen. charakter3 fehlt: ihr Rock ist an
@@ -22,8 +23,11 @@ const GAESTE: Array[PackedScene] = [
 ## Stehende Gäste: stehen hinter der Bank am Tisch statt zu sitzen, bestellen,
 ## trinken und tanzen sonst wie alle. charakter3 steht hier, bis ihr Modell
 ## Rock-Knochen hat — so gibt es weibliche Gäste, ohne die Rockscheibe beim Sitzen.
+## Alex steht hier, weil das Meshy-Modell andere Knochennamen hat (mixamorig_…)
+## und die Sitzpose in customer.gd nach den alten Namen sucht.
 const STEHGAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter3.tscn"),
+	preload("res://scenes/figuren/alex.tscn"),
 ]
 
 ## Steht dieser Gast? Etwa jeder dritte. Aus der ID, damit Server (Platz hinter

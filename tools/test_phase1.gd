@@ -1109,17 +1109,29 @@ class Lauf extends Node:
 		for i in 20:
 			verteilt[figuren.fuer_id(i).resource_path] = true
 		_check("IDs verteilen sich auf alle Figuren", verteilt.size() == figuren.ALLE.size(), str(verteilt.size()))
+		# Alex (Meshy): Animationen liegen in vier Dateien, geliehen über
+		# Figur.leih_animationen_mehr — ein falscher Bibliotheksname fällt sonst
+		# still auf „geht normal" zurück
+		var alex := preload("res://scenes/figuren/alex.tscn").instantiate() as Figur
+		add_child(alex)
+		await _frames(2)
+		_check("Alex geht, rennt und torkelt", alex.hat(alex.anim_gehen) and alex.hat(alex.anim_rennen)
+			and alex.kann_torkeln(), "gehen=%s rennen=%s torkeln=%s" % [str(alex.hat(alex.anim_gehen)),
+			str(alex.hat(alex.anim_rennen)), str(alex.kann_torkeln())])
+		_check("Alex: Knochen der Würge-Pose gefunden", alex.skelett != null
+			and alex.skelett.find_bone("mixamorig_Head") >= 0, "")
+		alex.queue_free()
 		# Sitzende Gäste nur aus GAESTE (charakter3 spreizt beim Sitzen den Rock)
 		_check("Gäste ohne charakter3", not figuren.GAESTE.has(preload("res://scenes/figuren/charakter3.tscn"))
 			and figuren.GAESTE.size() >= 2, str(figuren.GAESTE.size()))
-		# Weibliche Gäste: charakter3 kommt als Stehgast, etwa jeder dritte
+		# Stehgäste (charakter3, Alex) — etwa jeder dritte, und immer aus STEHGAESTE
 		var stehend := 0
 		for i in 30:
 			if figuren.ist_stehgast(i):
 				stehend += 1
-				if figuren.fuer_gast(i) != preload("res://scenes/figuren/charakter3.tscn"):
+				if not figuren.STEHGAESTE.has(figuren.fuer_gast(i)):
 					stehend = -99
-		_check("Stehgäste (charakter3) etwa jeder dritte", stehend >= 8 and stehend <= 12, str(stehend))
+		_check("Stehgäste etwa jeder dritte, alle aus STEHGAESTE", stehend >= 8 and stehend <= 12, str(stehend))
 		var steh_id := 0
 		while not figuren.ist_stehgast(steh_id):
 			steh_id += 1

@@ -68,7 +68,8 @@ func _ready() -> void:
 
 func _make_mug() -> void:
 	var ba := BoneAttachment3D.new()
-	ba.bone_name = "RightHand"
+	# Alex kommt aus Meshy und nennt seine Knochen mixamorig_… (scripts/figur.gd)
+	ba.bone_name = "RightHand" if _skel.find_bone("RightHand") >= 0 else "mixamorig_RightHand"
 	_skel.add_child(ba)
 	# Glaskrug aus scenes/krug.tscn — Ursprung am Boden, daher etwas tiefer
 	_mug = KRUG.instantiate()
@@ -114,6 +115,8 @@ func tanzt() -> bool:
 
 ## Rausch-Stufe vom Server: 0 gut gelaunt, 1 beschwipst, 2 betrunken, 3 Bierleiche
 var rausch_stufe := 0
+## Läuft gerade die Torkel-Animation? (nur Figuren mit Figur.anim_betrunken)
+var _torkelt := false
 
 func set_rausch(s: int) -> void:
 	if s == rausch_stufe:
@@ -250,12 +253,19 @@ func _process(delta: float) -> void:
 	# Stehgäste halten am Tisch ihren Krug, beim Gehen nicht
 	if _steht and _mug:
 		_mug.visible = want == "Idle"
-	if not _seated and want != _cur and _anim:
+	# Wer zu viel hat, torkelt statt zu gehen — Figuren ohne eigene Torkel-
+	# animation (Figur.anim_betrunken) gehen weiter normal.
+	var torkelt := want == "Walk" and rausch_stufe >= 2 and _figur.kann_torkeln()
+	if not _seated and (want != _cur or torkelt != _torkelt) and _anim:
 		if want == "Walk":
-			_figur.gehen()
+			if torkelt:
+				_figur.torkeln(randf_range(0.85, 1.05))
+			else:
+				_figur.gehen()
 		else:
 			_figur.stehen()
 		_cur = want
+		_torkelt = torkelt
 	# Otururken bankta biraz alçal + hafif sarhoş sallanma
 	if _model:
 		var target_y := _figur.sitz_hoehe if _seated else 0.0

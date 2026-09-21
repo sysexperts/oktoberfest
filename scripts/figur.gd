@@ -25,6 +25,9 @@ extends Node3D
 @export var anim_sitzen := ""
 ## Gelegentliche Stehanimationen (Kopf kratzen …), zufällig gewählt.
 @export var anim_extras: PackedStringArray = []
+## Betrunken torkeln — wird statt anim_gehen benutzt, wenn ein Gast zu viel
+## hat (scripts/customer.gd). Leer = die Figur torkelt nicht, sie geht normal.
+@export var anim_betrunken := ""
 ## So weit wird die Figur beim Sitzen angehoben (Bankhöhe).
 @export var sitz_hoehe := 0.05
 ## Metallic-Anteil des Modells ignorieren. Manche Modelle bringen eine gebackene
@@ -42,6 +45,9 @@ extends Node3D
 ## Skelett (gleiche Knochennamen, Pfad Armature/Skeleton3D). Die geliehenen
 ## Animationen heißen dann "geliehen/<Name>".
 @export var leih_animationen: PackedScene
+## Weitere Quellen für geliehene Animationen (Alex: jede Animation in einer
+## eigenen Datei). Heißen dann "geliehen2/<Name>", "geliehen3/<Name>" …
+@export var leih_animationen_mehr: Array[PackedScene] = []
 
 const LEIH_BIBLIOTHEK := "geliehen"
 
@@ -67,10 +73,10 @@ func _ready() -> void:
 		skelett = sks[0]
 	if anim == null:
 		return
-	if leih_animationen:
+	if leih_animationen or not leih_animationen_mehr.is_empty():
 		_animationen_ausleihen()
 	# Die importierten Animationen haben keine Schleife gesetzt
-	var schleifen := [anim_stehen, anim_gehen, anim_rennen, anim_sitzen]
+	var schleifen := [anim_stehen, anim_gehen, anim_rennen, anim_sitzen, anim_betrunken]
 	schleifen.append_array(anim_tanzen)
 	schleifen.append_array(anim_extras)
 	for n in schleifen:
@@ -78,15 +84,27 @@ func _ready() -> void:
 			anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
 
 func _animationen_ausleihen() -> void:
-	var pfad := leih_animationen.resource_path
-	if not _leih_bibliotheken.has(pfad):
-		var quelle := leih_animationen.instantiate()
-		var aps := quelle.find_children("*", "AnimationPlayer", true, false)
-		_leih_bibliotheken[pfad] = (aps[0] as AnimationPlayer).get_animation_library("") if not aps.is_empty() else null
-		quelle.free()
-	var bibliothek: AnimationLibrary = _leih_bibliotheken[pfad]
-	if bibliothek and not anim.has_animation_library(LEIH_BIBLIOTHEK):
-		anim.add_animation_library(LEIH_BIBLIOTHEK, bibliothek)
+	# Mehrere Quellen: Alex bringt jede Animation in einer eigenen Datei mit,
+	# jede mit demselben Skelett. Jede Quelle bekommt eine eigene Bibliothek.
+	var quellen: Array[PackedScene] = []
+	if leih_animationen:
+		quellen.append(leih_animationen)
+	for s: PackedScene in leih_animationen_mehr:
+		if s:
+			quellen.append(s)
+	for i in quellen.size():
+		var quelle_szene: PackedScene = quellen[i]
+		var pfad := quelle_szene.resource_path
+		if not _leih_bibliotheken.has(pfad):
+			var quelle := quelle_szene.instantiate()
+			var aps := quelle.find_children("*", "AnimationPlayer", true, false)
+			_leih_bibliotheken[pfad] = (aps[0] as AnimationPlayer).get_animation_library("") if not aps.is_empty() else null
+			quelle.free()
+		var bibliothek: AnimationLibrary = _leih_bibliotheken[pfad]
+		# Erste Quelle heißt „geliehen", weitere „geliehen2", „geliehen3" …
+		var name := LEIH_BIBLIOTHEK if i == 0 else "%s%d" % [LEIH_BIBLIOTHEK, i + 1]
+		if bibliothek and not anim.has_animation_library(name):
+			anim.add_animation_library(name, bibliothek)
 
 func _material_anpassen() -> void:
 	for mi: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):
@@ -143,6 +161,16 @@ func pose_auffrischen() -> void:
 func gehen(tempo := 1.0) -> void:
 	if hat(anim_gehen):
 		_spiele(anim_gehen, tempo)
+
+## Torkeln statt gehen — nur Figuren mit anim_betrunken können das.
+func kann_torkeln() -> bool:
+	return hat(anim_betrunken)
+
+func torkeln(tempo := 1.0) -> void:
+	if hat(anim_betrunken):
+		_spiele(anim_betrunken, tempo)
+	else:
+		gehen(tempo)
 
 func rennen(tempo := 1.0) -> void:
 	if hat(anim_rennen):
@@ -202,14 +230,33 @@ func nachtruhe(an: bool) -> void:
 
 # --------------------------------------------------------------------- Würgen
 ## Übergeben ohne eigene Animationsdatei: die Knochen werden selbst gestellt.
-## Alle drei Modelle haben dieselben Namen (Hips/Spine02/Spine01/Spine/neck/
-## Head/…Arm/…Leg), geprüft mit tools/modell_info.gd.
+##
+## Die Modelle heißen ihre Knochen unterschiedlich: Bean und character2/3 haben
+## Spine02/Spine01/Spine/neck/Head, Alex kommt aus Meshy mit mixamorig_Spine/
+## _Spine1/_Spine2/_Neck/_Head. Deshalb spricht der Code Rollen an und sucht
+## sich den Knochen aus der ersten passenden Schreibweise (tools/modell_info.gd
+## zeigt die Namen eines Modells).
 ##
 ## `heftig` ist der Takt des Würgens: 0 = Luft holen, 1 = voller Stoß. Damit
 ## sehen die eigene Sicht (scripts/player.gd) und die Figur denselben Rhythmus.
-const KOTZ_KNOCHEN := ["Spine02", "Spine01", "Spine", "neck", "Head",
-	"LeftArm", "RightArm", "LeftForeArm", "RightForeArm",
-	"LeftUpLeg", "RightUpLeg", "LeftLeg", "RightLeg"]
+const KNOCHEN_NAMEN := {
+	"wirbel_unten": ["Spine02", "mixamorig_Spine"],
+	"wirbel_mitte": ["Spine01", "mixamorig_Spine1"],
+	"wirbel_oben": ["Spine", "mixamorig_Spine2"],
+	"nacken": ["neck", "mixamorig_Neck"],
+	"kopf": ["Head", "mixamorig_Head"],
+	"arm_l": ["LeftArm", "mixamorig_LeftArm"],
+	"arm_r": ["RightArm", "mixamorig_RightArm"],
+	"unterarm_l": ["LeftForeArm", "mixamorig_LeftForeArm"],
+	"unterarm_r": ["RightForeArm", "mixamorig_RightForeArm"],
+	"oberschenkel_l": ["LeftUpLeg", "mixamorig_LeftUpLeg"],
+	"oberschenkel_r": ["RightUpLeg", "mixamorig_RightUpLeg"],
+	"unterschenkel_l": ["LeftLeg", "mixamorig_LeftLeg"],
+	"unterschenkel_r": ["RightLeg", "mixamorig_RightLeg"],
+}
+const KOTZ_KNOCHEN := ["wirbel_unten", "wirbel_mitte", "wirbel_oben", "nacken", "kopf",
+	"arm_l", "arm_r", "unterarm_l", "unterarm_r",
+	"oberschenkel_l", "oberschenkel_r", "unterschenkel_l", "unterschenkel_r"]
 
 func kotz_pose(heftig: float) -> void:
 	if skelett == null:
@@ -220,21 +267,21 @@ func kotz_pose(heftig: float) -> void:
 	var h := clampf(heftig, 0.0, 1.0)
 	# Oberkörper vornüber, mit jedem Stoß tiefer (Modelle sind 180° gebacken →
 	# positiv um RIGHT ist vorwärts, geprüft mit einer Seitenansicht)
-	_knochen("Spine02", 0.16 + 0.13 * h)
-	_knochen("Spine01", 0.22 + 0.15 * h)
-	_knochen("Spine", 0.26 + 0.17 * h)
-	_knochen("neck", 0.18 + 0.22 * h)
-	_knochen("Head", 0.25 + 0.35 * h)
+	_knochen("wirbel_unten", 0.16 + 0.13 * h)
+	_knochen("wirbel_mitte", 0.22 + 0.15 * h)
+	_knochen("wirbel_oben", 0.26 + 0.17 * h)
+	_knochen("nacken", 0.18 + 0.22 * h)
+	_knochen("kopf", 0.25 + 0.35 * h)
 	# Arme nach vorn/unten, Ellbogen gebeugt — Hände Richtung Knie
-	_knochen("LeftArm", -0.45 - 0.2 * h)
-	_knochen("RightArm", -0.45 - 0.2 * h)
-	_knochen("LeftForeArm", -0.35)
-	_knochen("RightForeArm", -0.35)
+	_knochen("arm_l", -0.45 - 0.2 * h)
+	_knochen("arm_r", -0.45 - 0.2 * h)
+	_knochen("unterarm_l", -0.35)
+	_knochen("unterarm_r", -0.35)
 	# Leicht in die Knie
-	_knochen("LeftUpLeg", 0.30 + 0.12 * h)
-	_knochen("RightUpLeg", 0.30 + 0.12 * h)
-	_knochen("LeftLeg", -0.55 - 0.15 * h)
-	_knochen("RightLeg", -0.55 - 0.15 * h)
+	_knochen("oberschenkel_l", 0.30 + 0.12 * h)
+	_knochen("oberschenkel_r", 0.30 + 0.12 * h)
+	_knochen("unterschenkel_l", -0.55 - 0.15 * h)
+	_knochen("unterschenkel_r", -0.55 - 0.15 * h)
 
 ## Zurück in die Ruhelage und Animationen wieder laufen lassen.
 func kotz_pose_loesen() -> void:
@@ -245,8 +292,14 @@ func kotz_pose_loesen() -> void:
 	if anim:
 		anim.active = true
 
-func _knochen(name: String, winkel: float) -> void:
-	var b := skelett.find_bone(name)
+## Knochen zu einer Rolle aus KNOCHEN_NAMEN drehen. Kennt das Modell keine der
+## Schreibweisen, passiert nichts — dann fehlt eben dieser Teil der Pose.
+func _knochen(rolle: String, winkel: float) -> void:
+	var b := -1
+	for name: String in KNOCHEN_NAMEN.get(rolle, [rolle]):
+		b = skelett.find_bone(name)
+		if b >= 0:
+			break
 	if b < 0:
 		return
 	var rest := skelett.get_bone_rest(b).basis.get_rotation_quaternion()
