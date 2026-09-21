@@ -40,7 +40,7 @@ class Lauf extends Node:
 		print("  gespeichert: intro_solo")
 		# Mit Abteilung: so sieht es ein Service-Teamleiter im Koop-Spiel
 		Net.solo = false
-		gm._spieler_info = {multiplayer.get_unique_id(): {"name": "Sepp", "farbe": 0, "abteilung": "service", "figur": 0}}
+		gm._spieler_info = {multiplayer.get_unique_id(): {"name": "Sepp", "farbe": 0, "figur": 0}}
 		intro._texte()
 		await _frames(10)
 		get_viewport().get_texture().get_image().save_png("res://tools/intro_service.png")

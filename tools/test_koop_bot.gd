@@ -2,7 +2,7 @@ extends Node
 ## Ein Bot für den Koop-Probelauf (tools/test_koop_bots.sh startet vier davon).
 ## Spielt gegen den LIVE-Vermittler und ein echtes Code-Spiel auf dem Server den
 ## Ablauf einer neuen Gruppe durch: Warteraum → Spiel → Zelt, Tische, Ware,
-## Teamleiter-Sperre, Abstimmung (erst Nein, dann Ja) → Schicht mit Gästen →
+## Personal, Abstimmung (erst Nein, dann Ja) → Schicht mit Gästen →
 ## ein Bot fliegt raus und kommt per Code zurück.
 ##
 ## Die Bots sprechen sich nicht ab — jeder wartet auf sichtbaren Spielstand
@@ -13,10 +13,10 @@ const Figuren := preload("res://scripts/figuren.gd")
 
 const SERVER := "185.248.140.225"
 const ROLLEN := {
-	"chef": {"name": "Bot-Chef", "abt": "service", "figur": 0},
-	"koch": {"name": "Bot-Koch", "abt": "kueche", "figur": 1},
-	"lager": {"name": "Bot-Lager", "abt": "lager", "figur": 2},
-	"putz": {"name": "Bot-Putz", "abt": "sauberkeit", "figur": 1},
+	"chef": {"name": "Bot-Chef", "figur": 0},
+	"koch": {"name": "Bot-Koch", "figur": 1},
+	"lager": {"name": "Bot-Lager", "figur": 2},
+	"putz": {"name": "Bot-Putz", "figur": 1},
 }
 const ZELTNAME := "Bot-Zelt"
 const ROLE_REINIGUNG := 3
@@ -61,7 +61,7 @@ class Lauf extends Node:
 				return
 			id = str(r.id)
 			code = str(r.raum.code)
-			r = await _post("setzen", {"code": code, "id": id, "abt": ich.abt, "figur": ich.figur})
+			r = await _post("setzen", {"code": code, "id": id, "figur": ich.figur})
 			_pruefe("eigene Wahl gesetzt", r.get("ok", false), str(r.get("fehler", "")))
 			var f := FileAccess.open(datei, FileAccess.WRITE)
 			f.store_string(code)
@@ -73,10 +73,10 @@ class Lauf extends Node:
 				r = await _post("raum", {"code": code, "id": id})
 				if r.get("ok", false):
 					raum = r.raum
-					if (raum.spieler as Array).size() >= 4 and _alle_gewaehlt(raum):
+					if (raum.spieler as Array).size() >= 4:
 						break
 				await _warte(1.0)
-			_pruefe("alle vier im Warteraum mit Abteilung", (raum.get("spieler", []) as Array).size() == 4 and _alle_gewaehlt(raum), _namen(raum))
+			_pruefe("alle vier im Warteraum", (raum.get("spieler", []) as Array).size() == 4, _namen(raum))
 			r = await _post("los", {"code": code, "id": id})
 			_pruefe("Los angenommen", r.get("ok", false), str(r.get("fehler", "")))
 			return
@@ -105,22 +105,13 @@ class Lauf extends Node:
 			code = ""
 			return
 		id = str(r.id)
-		if rolle == "koch":
-			var belegt := await _post("setzen", {"code": code, "id": id, "abt": "service"})
-			_pruefe("Abteilung des Chefs ist belegt", str(belegt.get("fehler", "")) == "LOBBY_ERR_DEPT_TAKEN", str(belegt.get("fehler", "")))
-		r = await _post("setzen", {"code": code, "id": id, "abt": ich.abt, "figur": ich.figur})
+		r = await _post("setzen", {"code": code, "id": id, "figur": ich.figur})
 		_pruefe("eigene Wahl gesetzt", r.get("ok", false), str(r.get("fehler", "")))
-
-	func _alle_gewaehlt(raum: Dictionary) -> bool:
-		for s: Dictionary in raum.get("spieler", []):
-			if str(s.get("abt", "")) == "":
-				return false
-		return true
 
 	func _namen(raum: Dictionary) -> String:
 		var n: Array[String] = []
 		for s: Dictionary in raum.get("spieler", []):
-			n.append("%s/%s" % [s.name, s.abt])
+			n.append("%s/%s" % [s.name, s.figur])
 		return ", ".join(n)
 
 	## Warten, bis das Spiel läuft, dann verbinden. Gibt true zurück, wenn der
@@ -145,7 +136,7 @@ class Lauf extends Node:
 		_pruefe("Spiel läuft auf dem Server", port > 0, "Port %d" % port)
 		if port == 0:
 			return false
-		KoopDaten.lobby_wahl = {"name": ich.name, "figur": ich.figur, "abt": ich.abt, "id": id}
+		KoopDaten.lobby_wahl = {"name": ich.name, "figur": ich.figur, "id": id}
 		Net.meldung = ""
 		Net.join_game(SERVER, port)
 		var t0 := Time.get_ticks_msec()
@@ -194,17 +185,12 @@ class Lauf extends Node:
 		ok = await _bis(func() -> bool: return int(_zustand().get("pending", 0)) >= 1 or int(_zustand().get("bier", 0)) > 0, 30.0)
 		_pruefe("Bier bestellt", ok, "offen %s, Bier %s" % [_zustand().get("pending", 0), _zustand().get("bier", 0)])
 
-		# 5 Teamleiter: Koch darf keine Putzkraft einstellen, der Putz-Leiter schon
-		var t_personal := Time.get_ticks_msec()
-		if rolle == "koch":
-			await _warte(1.0)
-			gm.net_hire_staff.rpc_id(1, ROLE_REINIGUNG)
-		await _warte_bis_ms(t_personal + 5000)
-		_pruefe("Nicht-Leiter kann kein Personal einstellen", _putzkraefte() == 0, "%d Putzkräfte" % _putzkraefte())
+		# 5 Personal: jeder Spieler darf im Wiesenbüro einstellen
+		await _warte(1.0)
 		if rolle == "putz":
 			gm.net_hire_staff.rpc_id(1, ROLE_REINIGUNG)
 		ok = await _bis(func() -> bool: return _putzkraefte() == 1, 10.0)
-		_pruefe("Teamleiter stellt Personal ein", ok, "%d Putzkräfte, Geld %d" % [_putzkraefte(), _hud()._money])
+		_pruefe("Spieler stellt Personal ein", ok, "%d Putzkräfte, Geld %d" % [_putzkraefte(), _hud()._money])
 
 		# 6 Abstimmung 1: Chef will schlafen, Koch und Lager sagen Nein → kein Tag
 		await _warte(1.0)
@@ -276,8 +262,8 @@ class Lauf extends Node:
 			if not r.get("ok", false):
 				return
 		id = str(r.id)
-		r = await _post("setzen", {"code": code, "id": id, "abt": ich.abt, "figur": ich.figur})
-		_pruefe("Wiederbeitritt: Abteilung wieder frei", r.get("ok", false), str(r.get("fehler", "")))
+		r = await _post("setzen", {"code": code, "id": id, "figur": ich.figur})
+		_pruefe("Wiederbeitritt: Wahl gesetzt", r.get("ok", false), str(r.get("fehler", "")))
 		await _beitreten(true)
 
 	func _figuren_und_namen_pruefen() -> void:

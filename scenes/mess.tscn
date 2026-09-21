@@ -64,3 +64,17 @@ mesh = ExtResource("7_staub")
 [node name="Plane" type="MeshInstance3D" parent="."]
 visible = false
 mesh = ExtResource("8_plane")
+
+[node name="Pfeil" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+visible = false
+pixel_size = 0.0012
+billboard = 1
+fixed_size = true
+render_priority = 8
+outline_render_priority = 7
+modulate = Color(1, 0.839, 0.349, 1)
+outline_modulate = Color(0.07, 0.06, 0.12, 1)
+text = "▼"
+font_size = 52
+outline_size = 14

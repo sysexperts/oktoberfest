@@ -2,7 +2,7 @@
 """Sloptoberfest-Vermittler: Warteräume mit Einladungscode.
 
 Einer erstellt ein Spiel und bekommt einen Code (z. B. BREZN-42), Freunde treten
-mit dem Code bei. Im Warteraum wählt jeder Name, Figur und Abteilung. Mit „Los"
+mit dem Code bei. Im Warteraum wählt jeder Name und Figur. Mit „Los"
 startet hier auf dem Server ein eigenes Spiel (dedizierter Godot-Server als
 systemd-Einheit) auf einem freien UDP-Port, alle verbinden sich dorthin.
 Ist niemand mehr im Spiel, beendet es sich selbst (game_manager.gd) — der
@@ -16,7 +16,7 @@ Schnittstelle: POST <aktion> mit JSON, Antwort {"ok": true, "raum": {...}} oder
   /erstellen {name, version}                → neuer Raum, du bist Host
   /beitreten {code, name, version}          → in den Raum
   /raum      {code, id}                     → Stand (zugleich Lebenszeichen)
-  /setzen    {code, id, name, figur, abt}   → eigene Wahl
+  /setzen    {code, id, name, figur}        → eigene Wahl
   /los       {code, id}                     → Host startet; läuft es schon: mitspielen
   /verlassen {code, id}
 """
@@ -42,7 +42,6 @@ MAX_SPIELER = 4
 MAX_RAEUME = 300
 NAME_MAX = 16
 FIGUREN = 3
-ABTEILUNGEN = ("kueche", "service", "sauberkeit", "lager")
 ## Sekunden ohne Lebenszeichen, bis ein Spieler aus dem Warteraum fliegt
 WARTE_TIMEOUT = 20
 ## Solange darf ein frisch gestartetes Spiel brauchen, bis sein Port offen ist
@@ -133,13 +132,13 @@ def neuer_code():
 
 
 def spieler_neu(name):
-    return {"name": name_pruefen(name), "figur": 0, "abt": "", "zuletzt": jetzt(), "im_spiel": False}
+    return {"name": name_pruefen(name), "figur": 0, "zuletzt": jetzt(), "im_spiel": False}
 
 
 def ansicht(raum, fuer_id=""):
     spieler = []
     for sid, d in raum["spieler"].items():
-        spieler.append({"id": sid, "name": d["name"], "figur": d["figur"], "abt": d["abt"],
+        spieler.append({"id": sid, "name": d["name"], "figur": d["figur"],
                         "host": sid == raum["host"], "im_spiel": d.get("im_spiel", False),
                         "ich": sid == fuer_id})
     return {"code": raum["code"], "status": raum["status"], "port": raum.get("port", 0),
@@ -292,14 +291,6 @@ def a_setzen(d):
         sp["name"] = name_pruefen(d["name"])
     if "figur" in d:
         sp["figur"] = max(0, min(FIGUREN - 1, int(d["figur"])))
-    if "abt" in d:
-        abt = str(d["abt"])
-        if abt not in ABTEILUNGEN:
-            abt = ""
-        # Jede Abteilung hat höchstens einen Teamleiter
-        if abt and any(x["abt"] == abt for s, x in raum["spieler"].items() if x is not sp):
-            return {"ok": False, "fehler": "LOBBY_ERR_DEPT_TAKEN", "raum": ansicht(raum, d.get("id", ""))}
-        sp["abt"] = abt
     raum["aktiv"] = jetzt()
     speichern()
     return {"ok": True, "raum": ansicht(raum, d.get("id", ""))}

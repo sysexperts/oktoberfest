@@ -30,8 +30,8 @@ func _ready() -> void:
 		if _gm:
 			_gm.net_close_tent.rpc_id(1))
 	%Schliessen.pressed.connect(schliessen)
-	# Mehrspieler: Abteilung (Teamleiter) wechseln — öffnet die Lobby erneut
-	%Abteilung.pressed.connect(func() -> void:
+	# Mehrspieler: Name und Farbe ändern — öffnet die Lobby erneut
+	%LobbyOeffnen.pressed.connect(func() -> void:
 		schliessen()
 		if _gm:
 			_gm.open_lobby_ui())
@@ -50,7 +50,7 @@ func setze_bilanz(b: Dictionary) -> void:
 
 func oeffnen() -> void:
 	visible = true
-	%Abteilung.visible = not Net.solo
+	%LobbyOeffnen.visible = not Net.solo
 	_neu()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 

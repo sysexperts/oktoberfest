@@ -96,11 +96,11 @@ class Lauf extends Node:
 		gm.add_child(kamera)
 		kamera.current = true
 		# Koop-Spieler (werden wie Mitspieler angezeigt: Figur, Namensschild)
-		var namen := [["Sepp", 0, "service", 0], ["Resi", 2, "kueche", 2], ["Toni", 1, "lager", 1]]
+		var namen := [["Sepp", 0, 0], ["Resi", 2, 2], ["Toni", 1, 1]]
 		for i in namen.size():
 			gm._add_player(101 + i, i + 1)
 			var p: Node3D = gm._players_nodes[101 + i]
-			p.set_info(str(namen[i][0]), int(namen[i][1]), str(namen[i][2]), int(namen[i][3]))
+			p.set_info(str(namen[i][0]), int(namen[i][1]), int(namen[i][2]))
 			p._net_pos = Vector3(-30, 0, -30)
 			p.global_position = p._net_pos
 			spieler.append(p)

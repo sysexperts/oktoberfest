@@ -228,3 +228,73 @@ Im normalen Deploy läuft das nicht mit, weil die Release-Pakete `tools/` nicht 
 
 Einmaliger Übergang (v205): `bash tools/deploy.sh --altpaket --mit-zip` — frischt
 `game.pck` ein letztes Mal auf und stellt die neue ZIP online. Danach nie wieder nötig.
+
+## 12. Koop ohne Teamleiter (v211)
+
+Die Abteilungen („Teamleiter") sind weg. Jeder Spieler darf alles im Wiesenbüro
+buchen und Personal einstellen, niemand ist mehr für einen Bereich gesperrt.
+Damit entfielen auch die kleinen Tempo-Boni (Zapfen, Kochen, Putzen, Tragen) —
+alle arbeiten gleich schnell.
+
+- Warteraum (`scenes/ui/koop_lobby.tscn`): neues Layout mit Kopfzeile
+  (Titel, Code-Karte, Kopieren, Verlassen), Spielerliste links, Name und drei
+  große Figurkarten rechts, Aktionsleiste unten. Nur noch Name und Figur zur Wahl.
+- Lobby im Spiel (`scenes/ui/lobby.tscn`): Name und Namensfarbe als Karten,
+  darunter wer schon dabei ist und die Kurzanleitung.
+- Der Zelt-Computer öffnet die Lobby jetzt als „Name und Farbe ändern" (COMP_LOBBY).
+- Die Menümusik läuft auch im Warteraum: `scripts/ui/menue_musik.gd` lädt das
+  Stück, Hauptmenü und Warteraum haben je einen `%MenueMusik`-Knoten. Beim
+  Szenenwechsel stirbt der Spieler der alten Szene — darum startet ihn jede
+  Szene selbst.
+- Vermittler (`tools/server/vermittler.py`): `abt` ist aus `/setzen` und der
+  Raumansicht raus, `LOBBY_ERR_DEPT_TAKEN` gibt es nicht mehr. Server mit
+  deployen, sonst schicken alte Räume noch das alte Feld (stört nicht, ist aber
+  toter Ballast).
+- Bilder: `godot --path . res://tools/render_koop_lobby.tscn --resolution 1280x720`
+  und `res://tools/render_lobby.tscn`.
+
+## 13. Abdeckplanen im Tutorial greifbar machen (v211)
+
+Beim Schritt „Zelt putzen" stand am Regal immer „Regal bewegen" statt „Plane
+abziehen". Zwei Ursachen, beide behoben:
+
+- Gemessen wurde bis zum Mittelpunkt der Plane. Die Regalplane ist 9 m lang —
+  an ihren Enden war der Mittelpunkt weiter weg als `Player.INTERACT_RANGE`
+  (3 m), also fiel sie aus der Auswahl. `Mess.naechster_punkt()` liefert jetzt
+  die nächstgelegene Stelle der Plane, `player.gd` misst dorthin.
+- Das Möbel unter der Plane war weiter ansprechbar und hat wegen des besseren
+  Winkels gewonnen. `Mess.deckt()` sagt, ob ein Punkt unter der Plane liegt;
+  `player.gd` überspringt zugedeckte `Lager`, `Einrichtung` und `BeerTable`,
+  solange die Plane liegt. Stationen (Fass, Herd, Computer) bleiben erreichbar.
+
+Geprüft in `tools/test_phase1` unter „Abdeckplanen": Reichweite am Planenende,
+Zudecken, und der Ernstfall — Spieler vor dem zugedeckten Regal bekommt
+`HINT_PLANE`, nach dem Abziehen wieder das Regal.
+
+Sichtprobe im laufenden Spiel: `godot --path . res://tools/render_plane.tscn
+--resolution 1280x720` stellt den Spieler vor das zugedeckte Regal und legt
+`tools/plane_regal.png` ab — dort muss „[E] halten: Plane abziehen" stehen.
+
+## 14. Putzen: Wegweiser und Mülltonne (v211)
+
+- **Wegweiser:** Liegt eine Plane oder ein Dreckhaufen länger als
+  `Mess.MAHN_ZEIT` (30 s) herum, schwebt ein kleiner goldener Pfeil darüber.
+  Immer nur über dem *nächstgelegenen* Stück (`Mess._ist_wegweiser`, Prüftakt
+  0,4 s) — bei einem Pfeil je Haufen stand sonst ein Pfeilwald im Zelt.
+  Bierlachen und Erbrochenes während der Schicht bekommen keinen.
+- **Mülltonne** statt Pfosten mit Schild: `tools/bake_muelltonne.gd` backt
+  Korpus und Deckel getrennt (`assets/dreck/muelltonne.tres`,
+  `muelltonne_deckel.tres`). Beim Abgeben klappt der Deckel auf, der Sack fliegt
+  im Bogen hinein (`Muellplatz.einwerfen`, vom Server per
+  `_net_muell_geworfen` an alle). Der Füllstand steht im Deckelspalt: je Sack
+  ein Stück weiter offen, höchstens drei Zipfel schauen heraus. Gestapelt wird
+  nichts mehr — damit sind auch die verrutschten Stapel weg.
+- **Zählfehler:** `net_muell_abgeben` nahm jede Meldung an. Gaben zwei Spieler
+  gleichzeitig ab, lief der Zähler über die Zahl der gefegten Haufen hinaus.
+  Jetzt bricht der Server ab, sobald `_muell_entsorgt >= _muell_erzeugt`.
+- Die Tonne steht vorn rechts am Rand des Vorplatzes (x=6, z=17.5) — die Stelle
+  ist mit einer Rastersuche über die Geometrie gewählt, nicht geschätzt.
+
+Geprüft in `tools/test_phase1` („Wegweiser…", „Mülltonne") und als Sichtprobe
+mit `tools/render_plane.tscn` (`plane_regal.png`, `dreck_pfeil.png`,
+`muelltonne.png`).

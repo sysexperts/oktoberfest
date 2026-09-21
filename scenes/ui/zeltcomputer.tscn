@@ -188,11 +188,11 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "COMP_CLOSE_TENT"
 
-[node name="Abteilung" type="Button" parent="Mitte/Panel/Spalte" unique_id=666361956]
+[node name="LobbyOeffnen" type="Button" parent="Mitte/Panel/Spalte" unique_id=666361956]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-text = "COMP_DEPT"
+text = "COMP_LOBBY"
 
 [node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte" unique_id=224918469]
 unique_name_in_owner = true

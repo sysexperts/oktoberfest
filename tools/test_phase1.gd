@@ -831,14 +831,116 @@ class Lauf extends Node:
 		gm._klo_setzen(-1)
 		gm._has_toilet = klo_vorher
 
-		print("  -- Lobby und Teamleiter")
-		_check("Abteilung je Personal-Rolle", gm.abteilung_fuer_rolle(gm.ROLE_KOCH) == "kueche"
-			and gm.abteilung_fuer_rolle(gm.ROLE_KELLNER) == "service" and gm.abteilung_fuer_rolle(gm.ROLE_ZAPFER) == "service"
-			and gm.abteilung_fuer_rolle(gm.ROLE_REINIGUNG) == "sauberkeit", "")
-		_check("Solo: Personal ohne Teamleiter erlaubt", gm._darf_personal(gm.ROLE_KOCH), "")
-		gm.net_lobby_setzen("  Wiesn-Sepp mit viel zu langem Namen ", 3, "kueche")
+		print("  -- Abdeckplanen")
+		# Die echten Lagerregale aus main.tscn stehen unter der Plane 14. Genau da
+		# stand beim Testen immer „Regal bewegen" statt „Plane abziehen".
+		var regale: Array[Node] = []
+		for n in gm.get_children():
+			if n is Lager:
+				regale.append(n)
+		_check("Lagerregale in der Welt", regale.size() >= 2, "%d" % regale.size())
+		var messe_vorher: Array = gm._messes.keys()
+		gm._spawn_mess_at(gm.DECKEN_PLAETZE[14], 14)
+		await _frames(3)
+		var plane: Mess = null
+		for id: int in gm._messes.keys():
+			if not id in messe_vorher and gm._messes[id] is Mess and (gm._messes[id] as Mess).ist_plane():
+				plane = gm._messes[id]
+		_check("Plane über dem Lager liegt da", plane != null, str(plane))
+		if plane:
+			var sp_plane := gm.get_node("Players").get_child(0) as Player
+			var pos_vorher := sp_plane.global_position
+			var dreh_vorher := sp_plane.rotation.y
+			# Vor jedem zugedeckten Regal stehen und auf die Wand schauen. Später
+			# dazugekaufte Regale stehen woanders und sind hier nicht gemeint.
+			var zugedeckt: Array[Node3D] = []
+			for regal: Node3D in regale:
+				if plane.deckt(regal.global_position):
+					zugedeckt.append(regal)
+			_check("Beide Wandregale liegen unter der Plane", zugedeckt.size() == 2, "%d von %d" % [zugedeckt.size(), regale.size()])
+			for regal: Node3D in zugedeckt:
+				sp_plane.global_position = regal.global_position + Vector3(1.8, 0, 0)
+				sp_plane.rotation.y = PI * 0.5
+				sp_plane._update_target()
+				var ziel: Node = sp_plane._current_target
+				_check("Am zugedeckten Regal %s: Plane abziehen" % regal.name,
+					ziel == plane and sp_plane._hint_for(ziel) == "HINT_PLANE",
+					"%s / %s" % [ziel, sp_plane._hint_for(ziel) if ziel else "-"])
+			# Auch am Ende der Plane, wo ihr Mittelpunkt außer Reichweite ist
+			sp_plane.global_position = Vector3(-9.4, 0, -6.1)
+			sp_plane.rotation.y = PI * 0.5
+			sp_plane._update_target()
+			_check("Auch am Planenende greift man die Plane",
+				sp_plane._hint_for(sp_plane._current_target) == "HINT_PLANE",
+				"%s" % sp_plane._hint_for(sp_plane._current_target))
+			# Abgezogen: jetzt gehört der Griff wieder dem Regal
+			plane.entfernen()
+			await _frames(2)
+			sp_plane.global_position = zugedeckt[0].global_position + Vector3(1.8, 0, 0)
+			sp_plane.rotation.y = PI * 0.5
+			sp_plane._update_target()
+			_check("Ohne Plane ist das Regal wieder dran", sp_plane._current_target == zugedeckt[0],
+				str(sp_plane._current_target))
+			sp_plane.global_position = pos_vorher
+			sp_plane.rotation.y = dreh_vorher
+
+		print("  -- Wegweiser über liegengebliebenem Dreck")
+		# Eigener Dreck für den Test: was sonst noch herumliegt, ist egal
+		for p2 in [Vector3(2, 0, 2), Vector3(-2, 0, 3), Vector3(4, 0, -2)]:
+			gm._spawn_mess_at(p2, Mess.DRECK)
+		await _frames(3)
+		var meine_mess: Array[Mess] = []
+		for n in get_tree().get_nodes_in_group("mess"):
+			if n is Mess and (n as Mess).ist_dreck():
+				meine_mess.append(n)
+		_check("Dreck liegt im Zelt", meine_mess.size() >= 3, "%d" % meine_mess.size())
+		if meine_mess.size() >= 3:
+			for m in meine_mess:
+				m._liegt = 0.0
+				m._pruef = 0.0
+			await _frames(3)
+			var an_vorher := 0
+			for m in meine_mess:
+				if m._pfeil.visible:
+					an_vorher += 1
+			_check("Frischer Dreck zeigt keinen Pfeil", an_vorher == 0, "%d Pfeile" % an_vorher)
+			for m in meine_mess:
+				m._liegt = m.MAHN_ZEIT + 1.0
+				m._pruef = 0.0
+			await _frames(4)
+			var an_nachher := 0
+			for m in meine_mess:
+				if m._pfeil.visible:
+					an_nachher += 1
+			_check("Liegengebliebener Dreck: genau ein Wegweiser", an_nachher == 1, "%d Pfeile" % an_nachher)
+			for m in meine_mess:
+				m.entfernen()
+
+		print("  -- Mülltonne")
+		var tonne := gm.get_node_or_null("Muellplatz")
+		_check("Mülltonne steht vor dem Zelt", tonne != null, "")
+		var erzeugt_vorher: int = gm._muell_erzeugt
+		var entsorgt_vorher: int = gm._muell_entsorgt
+		# Zwei Säcke gefegt, dreimal abgegeben: der dritte darf nicht zählen
+		gm._muellsack_hinlegen(Vector3(0, 0, 0))
+		gm._muellsack_hinlegen(Vector3(1, 0, 0))
+		for i in 3:
+			gm.net_muell_abgeben()
+		_check("Nie mehr entsorgt als gefegt", gm._muell_entsorgt - entsorgt_vorher == 2,
+			"%d entsorgt, %d gefegt" % [gm._muell_entsorgt - entsorgt_vorher, gm._muell_erzeugt - erzeugt_vorher])
+		if tonne:
+			tonne.anzahl_setzen(9)
+			var saecke_sichtbar := 0
+			for sack in tonne.get_node("Saecke").get_children():
+				if (sack as Node3D).visible:
+					saecke_sichtbar += 1
+			_check("Tonne stapelt nichts: höchstens drei Säcke sichtbar", saecke_sichtbar <= 3, "%d" % saecke_sichtbar)
+			tonne.anzahl_setzen(0)
+
+		print("  -- Lobby")
+		gm.net_lobby_setzen("  Wiesn-Sepp mit viel zu langem Namen ", 3, 2)
 		var eigen: Dictionary = gm._spieler_info.get(1, {})
-		_check("Lobby-Wahl gespeichert, Name gekürzt", str(eigen.get("abteilung", "")) == "kueche"
+		_check("Lobby-Wahl gespeichert, Name gekürzt", int(eigen.get("figur", -1)) == 2
 			and str(eigen.get("name", "")).length() <= gm.SPIELERNAME_MAX and int(eigen.get("farbe", -1)) == 3,
 			str(eigen))
 		_check("Meldungen nutzen den Lobby-Namen", gm._spieler_bezeichnung(1) == str(eigen.get("name", "")), "")

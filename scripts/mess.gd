@@ -9,23 +9,78 @@ const DRECK := 2
 const DECKE := 10
 ## Ab hier: Sabotage von Huber — auslaufendes Fass (Bierlache, kostet Bier bis sie weg ist)
 const SABOTAGE := 20
+## Etwas Luft um die Plane herum: das Möbel darunter steht nicht immer mittig
+const DECKEN_RAND := 0.4
 const DECKEN_GROESSE := {
 	10: Vector3(9.0, 1.15, 1.9), 11: Vector3(9.0, 1.15, 1.9), 12: Vector3(5.6, 1.1, 1.4),
 	13: Vector3(4.5, 1.05, 8.2), 14: Vector3(1.0, 1.9, 5.6),
 }
 
+## Liegt Dreck oder eine Plane so lange herum, taucht ein Pfeil darüber auf und
+## weist den Weg. Nur für Planen und Bodendreck — Bierlachen und Erbrochenes
+## während der Schicht sollen das Bild nicht zupflastern. Und immer nur über
+## dem nächstgelegenen Stück, sonst steht ein ganzer Pfeilwald im Zelt.
+const MAHN_ZEIT := 30.0
+## So oft wird geprüft, wer gerade der nächste ist
+const PRUEF_TAKT := 0.4
+## Schwebehöhe des Pfeils über Dreck bzw. über einer Plane
+const PFEIL_H := {"dreck": 1.0, "plane": 1.75}
+
 var mess_id := -1
 var kind := 0
+var _liegt := 0.0
+var _pruef := 0.0
 
 @onready var _disc: MeshInstance3D = $Disc
 @onready var _dreck: Node3D = $Dreck
 @onready var _label: Label3D = $Label
 @onready var _plane: MeshInstance3D = $Plane
+@onready var _pfeil: Label3D = $Pfeil
 
 func _ready() -> void:
 	add_to_group("interactable")
 	add_to_group("mess")
 	_apply_kind()
+
+func _process(delta: float) -> void:
+	_liegt += delta
+	_pruef -= delta
+	if _pruef <= 0.0:
+		_pruef = PRUEF_TAKT
+		_pfeil.visible = _ist_wegweiser()
+	if _pfeil.visible:
+		# Sachtes Auf und Ab, damit er auffällt, ohne zu blinken
+		_pfeil.position.y = _pfeil_hoehe() + sin(_liegt * 2.2) * 0.1
+
+## Nur das nächstgelegene liegengebliebene Stück weist den Weg.
+func _ist_wegweiser() -> bool:
+	if _liegt < MAHN_ZEIT:
+		return false
+	var sp := _spieler()
+	if sp == null:
+		return false
+	var meine := global_position.distance_squared_to(sp.global_position)
+	for n in get_tree().get_nodes_in_group("mess"):
+		var m := n as Mess
+		if m == null or m == self or m._liegt < MAHN_ZEIT:
+			continue
+		if not (m.ist_plane() or m.ist_dreck()):
+			continue
+		if m.global_position.distance_squared_to(sp.global_position) < meine:
+			return false
+	return true
+
+func _spieler() -> Node3D:
+	var welt := get_tree().current_scene
+	if welt == null:
+		return null
+	var leute := welt.get_node_or_null("Players")
+	if leute == null:
+		return null
+	return leute.get_node_or_null(str(multiplayer.get_unique_id())) as Node3D
+
+func _pfeil_hoehe() -> float:
+	return PFEIL_H["plane"] if ist_plane() else PFEIL_H["dreck"]
 
 func set_kind(k: int) -> void:
 	kind = k
@@ -41,9 +96,41 @@ func ist_plane() -> bool:
 func ist_dreck() -> bool:
 	return kind >= DRECK and kind < SABOTAGE
 
+## Wie weit die Plane vom Mittelpunkt aus reicht, in ihrem eigenen Raum.
+func _decken_halb() -> Vector3:
+	var g: Vector3 = DECKEN_GROESSE.get(kind, Vector3.ONE)
+	return Vector3(g.x * 0.5, g.y, g.z * 0.5)
+
+## Stelle der Plane, die diesem Ort am nächsten liegt. Ohne das wäre eine 9 m
+## lange Plane nur in ihrer Mitte in Reichweite und man käme an den Enden nicht
+## an sie heran (Feedback Tutorial).
+func naechster_punkt(von: Vector3) -> Vector3:
+	if not ist_plane():
+		return global_position
+	var h := _decken_halb()
+	var lokal := to_local(von)
+	lokal.x = clampf(lokal.x, -h.x, h.x)
+	lokal.y = 0.0
+	lokal.z = clampf(lokal.z, -h.z, h.z)
+	return to_global(lokal)
+
+## Steht an dieser Stelle etwas unter der Plane? Solange sie daliegt, gehört der
+## Griff ihr und nicht dem Regal darunter.
+func deckt(punkt: Vector3) -> bool:
+	if not ist_plane():
+		return false
+	var h := _decken_halb()
+	var lokal := to_local(punkt)
+	return absf(lokal.x) <= h.x + DECKEN_RAND and absf(lokal.z) <= h.z + DECKEN_RAND 		and lokal.y > -1.0 and lokal.y < h.y + 1.0
+
 func _apply_kind() -> void:
 	if _disc == null:
 		return
+	# Nur Planen und Bodendreck bekommen den Wegweiser
+	set_process(ist_plane() or ist_dreck())
+	if not (ist_plane() or ist_dreck()):
+		_pfeil.visible = false
+	_pfeil.position.y = _pfeil_hoehe()
 	if ist_sabotage():
 		var bier := (_disc.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
 		bier.albedo_color = Color(0.85, 0.58, 0.12, 0.92)
@@ -108,6 +195,8 @@ func apply_progress(p: float) -> void:
 func entfernen() -> void:
 	remove_from_group("interactable")
 	remove_from_group("mess")
+	set_process(false)
+	_pfeil.visible = false
 	if not ist_plane():
 		queue_free()
 		return

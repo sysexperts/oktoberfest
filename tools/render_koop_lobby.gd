@@ -25,14 +25,12 @@ class Lauf extends Node:
 		lobby._id = "a1"
 		lobby._code = "BREZN-42"
 		lobby._figur = 2
-		lobby._abt = "kueche"
 		lobby._name_gesendet = "Wiesn-Sepp"
-		(lobby.get_node("%Name") as LineEdit).text = "Wiesn-Sepp"
 		lobby._raum = {"code": "BREZN-42", "status": "warten", "port": 0, "host": "a1", "max": 4, "fehler": "",
 			"spieler": [
-				{"id": "a1", "name": "Wiesn-Sepp", "figur": 2, "abt": "kueche", "host": true, "ich": true},
-				{"id": "b2", "name": "Anna", "figur": 1, "abt": "service", "host": false, "ich": false},
-				{"id": "c3", "name": "Toni", "figur": 0, "abt": "", "host": false, "ich": false},
+				{"id": "a1", "name": "Wiesn-Sepp", "figur": 2, "host": true, "ich": true},
+				{"id": "b2", "name": "Anna", "figur": 1, "host": false, "ich": false},
+				{"id": "c3", "name": "Toni", "figur": 0, "host": false, "ich": false},
 			]}
 		lobby.get_node("%Start").visible = false
 		lobby.get_node("%Warteraum").visible = true

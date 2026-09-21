@@ -1,22 +1,21 @@
 extends Control
 ## Kurze Einführung „So läuft die Schicht" (dezent oben rechts unter der
-## Aufgabenkarte): wer zapft, wer serviert, Küche,
-## Lager, Putzen — mit den echten Tasten, die eigene Abteilung hervorgehoben.
+## Aufgabenkarte): zapfen, servieren, Küche, Lager, Putzen — mit den echten
+## Tasten.
 ## Erscheint beim ersten Schichtbeginn einmal pro Spielstart (auch für Spieler,
 ## die mitten in der Schicht dazukommen). Blockiert nichts: schließt mit Enter
 ## oder nach ANZEIGE_ZEIT von selbst. Aufbau: scenes/ui/schicht_intro.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
 const ANZEIGE_ZEIT := 20.0
-const GOLD := Color(1, 0.84, 0.35)
 const NORMAL := Color(0.93, 0.92, 0.97)
-## Zeile in der Szene → Übersetzungsschlüssel und zuständige Abteilung
+## Zeile in der Szene → Übersetzungsschlüssel
 const ZEILEN := {
-	"Zapfen": ["INTRO_ZAPFEN", "service"],
-	"Servieren": ["INTRO_SERVIEREN", "service"],
-	"Kueche": ["INTRO_KUECHE", "kueche"],
-	"Lager": ["INTRO_LAGER", "lager"],
-	"Putzen": ["INTRO_PUTZEN", "sauberkeit"],
+	"Zapfen": "INTRO_ZAPFEN",
+	"Servieren": "INTRO_SERVIEREN",
+	"Kueche": "INTRO_KUECHE",
+	"Lager": "INTRO_LAGER",
+	"Putzen": "INTRO_PUTZEN",
 }
 
 ## Einmal pro Spielstart — auch nach Wiederbeitritt nicht noch einmal
@@ -69,12 +68,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _texte() -> void:
-	var abt := ""
-	if _gm and _gm.has_method("_abteilung_von") and not Net.solo:
-		abt = str(_gm._abteilung_von(multiplayer.get_unique_id()))
 	for zeile: String in ZEILEN:
 		var l := get_node("%" + zeile) as Label
-		var eigene: bool = abt != "" and ZEILEN[zeile][1] == abt
-		l.text = Texte.mit_tasten(ZEILEN[zeile][0]) + ("   " + tr("INTRO_DEINE") if eigene else "")
-		l.add_theme_color_override("font_color", GOLD if eigene else NORMAL)
+		l.text = Texte.mit_tasten(ZEILEN[zeile])
+		l.add_theme_color_override("font_color", NORMAL)
 	%Schliessen.text = Texte.mit_tasten("INTRO_CLOSE")

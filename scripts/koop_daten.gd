@@ -16,7 +16,7 @@ const LOBBY_URL := "https://survival.vapur-it.de/lobby/"
 const VERSION_DATEI := "user://spiel.txt"
 const PAKET_DATEI := "user://spiel.pck"
 
-## Wahl aus dem Warteraum {name, figur, abt} — nach dem Beitritt an den Server
+## Wahl aus dem Warteraum {name, figur, id} — nach dem Beitritt an den Server
 static var lobby_wahl := {}
 ## Warteraum → „Offizieller Server / IP": Hauptmenü öffnet gleich das Koop-Feld
 static var menue_koop := false

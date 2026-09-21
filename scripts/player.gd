@@ -20,10 +20,6 @@ const TRAG_BREMSE := 0.12
 ## Absprunggeschwindigkeit (Schwerkraft 20 → gut 0,9 m hoch)
 const SPRUNG_TEMPO := 6.0
 var _war_in_luft := false
-## Teamleiter-Boni in der eigenen Abteilung (Putzen: GameManager.BONUS_PUTZEN)
-const BONUS_ZAPFEN := 1.4
-const BONUS_KOCHEN := 1.6
-const BONUS_LAGER_TEMPO := 1.2
 
 # 1 Helles, 2 Weizen, 3 Radler
 const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08), 5: Color(0.7, 0.88, 1.0)}
@@ -78,8 +74,6 @@ var _net_yaw: float
 @onready var _besen: Node3D = get_node_or_null("Besen")
 var _fegt_bis := 0.0
 ## Abteilung, die dieser Spieler leitet ("" = keine) — aus der Lobby (GameManager._spieler_info)
-var abteilung := ""
-const ABT_SYMBOL := {"kueche": "🍳", "service": "🍺", "sauberkeit": "🧹", "lager": "📦"}
 
 func _ready() -> void:
 	add_to_group("player")
@@ -118,28 +112,22 @@ func _ready() -> void:
 		_sfx_node = _world.get_node_or_null("Sfx")
 		if not Net.solo:
 			if not KoopDaten.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
-				# Aus dem Warteraum (Einladungscode): Name, Figur, Abteilung stehen schon fest
+				# Aus dem Warteraum (Einladungscode): Name und Figur stehen schon fest
 				var w := KoopDaten.lobby_wahl
-				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, str(w.get("abt", "")), int(w.get("figur", 0)), str(w.get("id", "")))
+				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, int(w.get("figur", 0)), str(w.get("id", "")))
 			elif _world.has_method("open_lobby_ui"):
 				# Direkt beigetreten (IP, offizieller Server): Lobby-Fenster im Spiel
 				_world.call_deferred("open_lobby_ui")
 
-## Name, Farbe, Abteilung und Figur aus der Lobby (vom Server an alle).
-func set_info(spielername: String, farbe: int, abt: String, figur: int = 0) -> void:
-	abteilung = abt
+## Name, Farbe und Figur aus der Lobby (vom Server an alle).
+func set_info(spielername: String, farbe: int, figur: int = 0) -> void:
 	costume = clampi(farbe, 0, COSTUME_COLORS.size() - 1)
 	_apply_costume()
 	_figur_setzen(figur)
 	if _is_local:
 		return
-	var symbol: String = ABT_SYMBOL.get(abt, "")
-	_namensschild.text = (symbol + " " if symbol != "" else "") + spielername
+	_namensschild.text = spielername
 	_namensschild.visible = spielername != ""
-
-## Bonus in der eigenen Abteilung — sonst normales Tempo.
-func _bonus(abt: String, faktor: float) -> float:
-	return faktor if abteilung == abt else 1.0
 
 func _sfx(name: String) -> void:
 	if _sfx_node:
@@ -390,8 +378,6 @@ func _handle_movement(delta: float) -> void:
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
 	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
 	speed *= tempo_faktor   # z. B. 10 Maß beim Wettschleppen (scripts/wettschleppen.gd)
-	if carry_state == 3:
-		speed *= _bonus("lager", BONUS_LAGER_TEMPO)   # Lager-Teamleiter trägt Pakete flotter
 	if dir != Vector3.ZERO:
 		velocity.x = move_toward(velocity.x, dir.x * speed, ACCEL * delta * speed)
 		velocity.z = move_toward(velocity.z, dir.z * speed, ACCEL * delta * speed)
@@ -429,6 +415,11 @@ func _update_target() -> void:
 	var origin := global_position + Vector3(0, EYE_HEIGHT * 0.5, 0)
 	# Nichts durch die Zeltwand greifen: drinnen nur Drinnenes, draußen nur Draußenes
 	var ich_drin: bool = _world.has_method("im_zelt") and _world.im_zelt(global_position)
+	# Abdeckplanen im Tutorial decken Möbel zu — die sind solange tabu
+	var planen: Array[Mess] = []
+	for m in get_tree().get_nodes_in_group("mess"):
+		if m is Mess and (m as Mess).ist_plane():
+			planen.append(m)
 	for node in get_tree().get_nodes_in_group("interactable"):
 		var n3 := node as Node3D
 		if n3 == null or not n3.is_visible_in_tree():
@@ -438,9 +429,16 @@ func _update_target() -> void:
 		# Emporen: nichts durch den Emporenboden hindurch (oben ↔ unten)
 		if ich_drin and (global_position.y > 1.8) != (n3.global_position.y > 3.3 and absf(n3.global_position.x) > 7.7):
 			continue
+		# Verschiebbares Möbel unter einer Plane: solange sie daliegt, gehört der
+		# Griff der Plane. Sonst stand am Regal immer „Regal bewegen" statt
+		# „Plane abziehen" (Feedback Tutorial).
+		if (n3 is Lager or n3 is Einrichtung or n3 is BeerTable) and _unter_plane(planen, n3.global_position):
+			continue
 		# Objekte dürfen einen eigenen Ansprechpunkt melden (z. B. Wohnwagen-Tür)
 		var ipos: Vector3 = n3.global_position
-		if n3.has_method("interact_point"):
+		if n3 is Mess and (n3 as Mess).ist_plane():
+			ipos = (n3 as Mess).naechster_punkt(origin)
+		elif n3.has_method("interact_point"):
 			ipos = n3.interact_point()
 		var to: Vector3 = ipos - origin
 		to.y = 0
@@ -456,6 +454,13 @@ func _update_target() -> void:
 			best = n3
 	_current_target = best
 	_update_highlight()
+
+## Liegt über dieser Stelle noch eine Abdeckplane?
+func _unter_plane(planen: Array[Mess], pos: Vector3) -> bool:
+	for m in planen:
+		if m.deckt(pos):
+			return true
+	return false
 
 ## Hinweis am Fadenkreuz — nur neu setzen, wenn er sich ändert.
 var _hint_key := "-"
@@ -751,7 +756,7 @@ func _handle_interaction(delta: float) -> void:
 			if carry_fill <= 0.0:
 				_sfx("zapfen")   # Zapfhahn auf — nur mit Datei
 			carry_type = (_current_target as KegStation).beer_type
-			carry_fill = minf(carry_fill + FILL_RATE * _bonus("service", BONUS_ZAPFEN) * delta, 1.0)
+			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
 			_sfx_loop("glug")
 	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
 	if Input.is_action_pressed("interact") and _current_target is FoodStation:
@@ -761,7 +766,7 @@ func _handle_interaction(delta: float) -> void:
 			carry_type = ft
 			carry_fill = 0.0
 		if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
-			carry_fill = minf(carry_fill + FILL_RATE * _bonus("kueche", BONUS_KOCHEN) * delta, 1.0)
+			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
 			_sfx_loop("sizzle")
 	# Kir temizle (E basılı tut)
 	if Input.is_action_pressed("interact") and _current_target is Mess:

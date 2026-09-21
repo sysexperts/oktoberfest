@@ -8,6 +8,7 @@ const EINSTELLUNGEN_SZENE := "res://scenes/ui/einstellungen.tscn"
 const SERVER_IP := "185.248.140.225"
 const KOOP_LOBBY_SZENE := "res://scenes/ui/koop_lobby.tscn"
 const Texte := preload("res://scripts/ui/texte.gd")
+const MenueMusik := preload("res://scripts/ui/menue_musik.gd")
 
 @onready var _haupt: Control = %Hauptspalte
 @onready var _weiter: Button = %Weiterspielen
@@ -96,23 +97,10 @@ func _zeige_meldung() -> void:
 	Net.meldung_werte = []
 
 ## Hauptmusik des Spiels: assets/music/Gamesound.* — dasselbe Stück, das dem
-## Spiel seinen Ton gibt, läuft auch im Hauptmenü. Ohne Datei bleibt es still.
+## Spiel seinen Ton gibt, läuft auch im Hauptmenü und im Koop-Warteraum
+## (scripts/ui/menue_musik.gd). Ohne Datei bleibt es still.
 func _menue_musik() -> void:
-	var spieler: AudioStreamPlayer = %MenueMusik
-	for pfad in ["res://assets/music/Gamesound%s", "res://assets/audio/musik/menue%s"]:
-		for endung in [".ogg", ".wav", ".mp3"]:
-			var pfad_voll: String = pfad % endung
-			if ResourceLoader.exists(pfad_voll):
-				spieler.stream = load(pfad_voll)
-				# MP3 und OGG können selbst in Schleife laufen; sonst neu starten
-				if spieler.stream is AudioStreamMP3:
-					(spieler.stream as AudioStreamMP3).loop = true
-				elif spieler.stream is AudioStreamOggVorbis:
-					(spieler.stream as AudioStreamOggVorbis).loop = true
-				else:
-					spieler.finished.connect(spieler.play)
-				spieler.play()
-				return
+	MenueMusik.starten(%MenueMusik)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not _haupt.visible:

@@ -1,6 +1,6 @@
 extends Node
 ## Fotografiert die Lobby (scenes/ui/lobby.tscn) im echten Spiel, mit zwei
-## erfundenen Mitspielern, die schon Abteilungen leiten.
+## erfundenen Mitspielern.
 ## Sichert Spielstände und Einstellungen vorher und stellt sie wieder her.
 ## Aufruf: godot --path . res://tools/render_lobby.tscn --resolution 1280x720
 ## Bild: tools/lobby.png (nicht im Git)
@@ -33,13 +33,13 @@ class Lauf extends Node:
 		await _frames(40)
 		var gm := get_tree().current_scene
 		gm._spieler_info = {
-			7: {"name": "Anna", "farbe": 2, "abteilung": "service"},
-			9: {"name": "Toni", "farbe": 4, "abteilung": "sauberkeit"},
+			7: {"name": "Anna", "farbe": 2, "figur": 1},
+			9: {"name": "Toni", "farbe": 4, "figur": 2},
 		}
 		gm.open_lobby_ui()
 		var lobby := gm.get_node("HUD/Lobby")
 		(lobby.get_node("%Name") as LineEdit).text = "Wiesn-Sepp"
-		lobby._abteilung_waehlen("kueche")
+		lobby._farbe_waehlen(0)
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png("res://tools/lobby.png")
 		print("  gespeichert: lobby")

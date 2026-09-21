@@ -1,20 +1,18 @@
 extends Control
 const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Warteraum mit Einladungscode. Einer erstellt ein Spiel und bekommt einen Code,
-## Freunde treten damit bei. Jeder wählt Name, Figur und Abteilung (Teamleiter);
-## der Gastgeber drückt „Los", der Server startet ein eigenes Spiel und alle
-## verbinden sich. Die Räume verwaltet der Vermittler auf dem Server
-## (tools/server/vermittler.py), gefragt wird jede Sekunde.
+## Freunde treten damit bei. Jeder wählt Name und Figur; der Gastgeber drückt
+## „Los", der Server startet ein eigenes Spiel und alle verbinden sich. Die Räume
+## verwaltet der Vermittler auf dem Server (tools/server/vermittler.py), gefragt
+## wird jede Sekunde.
 ## Aufbau: scenes/ui/koop_lobby.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
 const Symbole := preload("res://scripts/ui/symbole.gd")
+const MenueMusik := preload("res://scripts/ui/menue_musik.gd")
 const MENUE := "res://scenes/ui/hauptmenue.tscn"
 const SERVER_IP := "185.248.140.225"
 const EINSTELLUNGS_DATEI := "user://koop.cfg"
-const ABTEILUNGEN := {"kueche": "Kueche", "service": "Service", "sauberkeit": "Sauberkeit", "lager": "Lager"}
-## Abteilung -> Symbolname aus assets/ui/symbole
-const SYMBOLE := {"kueche": "topf", "service": "bier", "sauberkeit": "besen", "lager": "kiste"}
 
 ## Vermittler-Adresse; Tests setzen sie auf einen lokalen Vermittler
 var lobby_url := KoopDaten.LOBBY_URL
@@ -23,7 +21,6 @@ var _code := ""
 var _id := ""
 var _raum := {}
 var _figur := 0
-var _abt := ""
 var _name_gesendet := ""
 var _verbinde := false
 ## Wartende Aktionen: [pfad, daten, rückruf] — eine HTTPRequest gleichzeitig
@@ -32,6 +29,9 @@ var _aktion_laeuft := false
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	# Eigene Szene: die Musik des Hauptmenüs endet beim Szenenwechsel, hier
+	# läuft dasselbe Stück weiter.
+	MenueMusik.starten(%MenueMusik)
 	%Erstellen.pressed.connect(_erstellen)
 	%Beitreten.pressed.connect(_beitreten)
 	%CodeEingabe.text_submitted.connect(func(_t: String) -> void: _beitreten())
@@ -42,12 +42,8 @@ func _ready() -> void:
 	%Kopieren.pressed.connect(_kopieren)
 	%Verlassen.pressed.connect(_verlassen)
 	%Los.pressed.connect(_los)
-	%Name.text_submitted.connect(func(_t: String) -> void: _name_senden())
-	%Name.focus_exited.connect(_name_senden)
 	for i in %Figuren.get_child_count():
 		(%Figuren.get_child(i) as Button).pressed.connect(_figur_waehlen.bind(i))
-	for abt: String in ABTEILUNGEN:
-		(get_node("%" + ABTEILUNGEN[abt]) as Button).pressed.connect(_abt_waehlen.bind(abt))
 	%Takt.timeout.connect(_abfragen)
 	%Abfrage.request_completed.connect(_on_abfrage)
 	%Aktion.request_completed.connect(_on_aktion)
@@ -119,9 +115,8 @@ func _on_raum_betreten(antwort: Dictionary) -> void:
 	_code = str(_raum.get("code", ""))
 	var ich := _ich()
 	_figur = int(ich.get("figur", 0))
-	_abt = str(ich.get("abt", ""))
-	%Name.text = str(ich.get("name", ""))
-	_name_gesendet = %Name.text
+	# Der Name steht seit der Startseite fest — im Warteraum wählt man nur die Figur
+	_name_gesendet = str(ich.get("name", ""))
 	_status("")
 	_zeige_warteraum()
 
@@ -142,48 +137,40 @@ func _anzeigen() -> void:
 		var zeile := %Liste.get_child(i)
 		var name_l := zeile.get_node("Rand/Zeile/Text/SpielerName") as Label
 		var info_l := zeile.get_node("Rand/Zeile/Text/SpielerInfo") as Label
-		var symbol_l := zeile.get_node("Rand/Zeile/Symbol") as TextureRect
+		var symbol_l := zeile.get_node("Rand/Zeile/Kreis/Symbol") as TextureRect
+		var punkt := zeile.get_node("Rand/Zeile/Punkt") as Control
 		if i < spieler.size():
 			var s: Dictionary = spieler[i]
 			name_l.text = str(s.name) + ("  " + tr("KOOP_YOU") if s.get("ich", false) else "")
 			var teile: Array[String] = []
 			if s.get("host", false):
 				teile.append(tr("KOOP_HOST_TAG"))
-			var abt := str(s.get("abt", ""))
-			teile.append(tr("ABT_" + abt.to_upper()) if abt != "" else tr("KOOP_NO_DEPT"))
+			teile.append(tr("KOOP_FIG_%d" % clampi(int(s.get("figur", 0)), 0, 2)))
 			if s.get("im_spiel", false) and str(_raum.get("status", "")) == "laeuft":
 				teile.append(tr("KOOP_IN_GAME"))
-			info_l.text = " · ".join(teile)
+			info_l.text = " • ".join(teile)
 			Symbole.setze(symbol_l, "person")
 			symbol_l.modulate = Color(1, 1, 1)
+			punkt.visible = true
 			zeile.modulate = Color.WHITE
 		else:
+			# Freier Platz: Pluszeichen statt Person, kein grüner Punkt
 			name_l.text = tr("KOOP_EMPTY_SLOT")
 			info_l.text = ""
-			Symbole.setze(symbol_l, "tisch")
+			Symbole.setze(symbol_l, "plus")
 			symbol_l.modulate = Color(1, 1, 1, 0.5)
+			punkt.visible = false
 			zeile.modulate = Color(1, 1, 1, 0.45)
 	# Figuren
 	for i in %Figuren.get_child_count():
 		var knopf := %Figuren.get_child(i) as Button
 		knopf.button_pressed = i == _figur
 		(knopf.get_node("Inhalt/Vorschau") as Control).set("gewaehlt", i == _figur)
+		(knopf.get_node("Abzeichen") as Control).visible = i == _figur
 		var fname := knopf.get_node("Inhalt/FigurName") as Label
 		fname.text = tr("KOOP_FIG_%d" % i)
-		# Auf der hellen, gewählten Karte dunkle Schrift wie bei gedrückten Knöpfen
-		fname.add_theme_color_override("font_color", Color(0.14, 0.1, 0.05) if i == _figur else Color(0.95, 0.93, 0.9))
-	# Abteilungen: belegte zeigen den Teamleiter und sind gesperrt
-	for abt: String in ABTEILUNGEN:
-		var knopf := get_node("%" + ABTEILUNGEN[abt]) as Button
-		var leiter := ""
-		for s: Dictionary in spieler:
-			if str(s.get("abt", "")) == abt and not s.get("ich", false):
-				leiter = str(s.name)
-		var zeile3 := tr("KOOP_LEADER") % leiter if leiter != "" else tr("LOBBY_FREE")
-		knopf.icon = Symbole.bild(SYMBOLE[abt])
-		knopf.text = "%s\n%s\n%s" % [tr("ABT_" + abt.to_upper()), tr("ABT_%s_INFO" % abt.to_upper()), zeile3]
-		knopf.button_pressed = abt == _abt
-		knopf.disabled = leiter != ""
+		# Gewählte Karte: goldener Rand und Haken stehen in der Szene
+		fname.add_theme_color_override("font_color", Color(0.98, 0.96, 0.93) if i == _figur else Color(0.82, 0.79, 0.75))
 	# Los / Warten
 	var status := str(_raum.get("status", "warten"))
 	var bin_host := str(_raum.get("host", "")) == _id
@@ -220,19 +207,6 @@ func _figur_waehlen(i: int) -> void:
 	_anzeigen()
 	_anfrage("setzen", {"code": _code, "id": _id, "figur": i}, _on_raum_stand)
 
-func _abt_waehlen(abt: String) -> void:
-	# Nochmal auf die eigene Abteilung: Teamleitung abgeben
-	_abt = "" if abt == _abt else abt
-	_anzeigen()
-	_anfrage("setzen", {"code": _code, "id": _id, "abt": _abt}, _on_raum_stand)
-
-func _name_senden() -> void:
-	var n := (%Name.text as String).strip_edges()
-	if _id == "" or n == "" or n == _name_gesendet:
-		return
-	_name_gesendet = n
-	_anfrage("setzen", {"code": _code, "id": _id, "name": n}, _on_raum_stand)
-
 func _kopieren() -> void:
 	DisplayServer.clipboard_set(_code)
 	%Kopieren.text = tr("KOOP_COPIED")
@@ -241,7 +215,6 @@ func _kopieren() -> void:
 			%Kopieren.text = tr("KOOP_COPY"))
 
 func _los() -> void:
-	_name_senden()
 	_anfrage("los", {"code": _code, "id": _id}, _on_raum_stand)
 
 func _verlassen() -> void:
@@ -258,7 +231,6 @@ func _on_raum_stand(antwort: Dictionary) -> void:
 	if antwort.has("raum"):
 		_raum = antwort.raum
 		var ich := _ich()
-		_abt = str(ich.get("abt", _abt))
 		_figur = int(ich.get("figur", _figur))
 	_anzeigen()
 
@@ -268,7 +240,7 @@ func _ins_spiel() -> void:
 		return
 	_verbinde = true
 	%Takt.stop()
-	KoopDaten.lobby_wahl = {"name": _name_gesendet, "figur": _figur, "abt": _abt, "id": _id}
+	KoopDaten.lobby_wahl = {"name": _name_gesendet, "figur": _figur, "id": _id}
 	Net.player_name = _name_gesendet
 	_anzeigen()
 	if Net.join_game(SERVER_IP, int(_raum.get("port", 0))) != OK:

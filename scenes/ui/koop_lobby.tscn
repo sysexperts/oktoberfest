@@ -1,19 +1,170 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/koop_lobby.gd" id="1_lobby"]
-[ext_resource type="PackedScene" path="res://scenes/ui/menue_hintergrund.tscn" id="2_hg"]
+[ext_resource type="Texture2D" path="res://assets/ui/main_background.jpg" id="2_hg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/figur_vorschau.tscn" id="4_vorschau"]
+[ext_resource type="Texture2D" path="res://assets/ui/verlauf_knopf_start.svg" id="15_start"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/bier.svg" id="6_krug"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/leute.svg" id="7_leute"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/person.svg" id="8_person"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/kopieren.svg" id="9_kopieren"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/ausgang.svg" id="10_ausgang"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/abspielen.svg" id="11_abspielen"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/haken.svg" id="13_haken"]
+
+[sub_resource type="StyleBoxFlat" id="RaumStil"]
+content_margin_left = 34.0
+content_margin_top = 24.0
+content_margin_right = 34.0
+content_margin_bottom = 20.0
+bg_color = Color(0.086, 0.074, 0.062, 0.93)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 30
+
+[sub_resource type="StyleBoxFlat" id="FensterStil"]
+content_margin_left = 44.0
+content_margin_top = 34.0
+content_margin_right = 44.0
+content_margin_bottom = 34.0
+bg_color = Color(0.086, 0.074, 0.062, 0.95)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 30
+
+[sub_resource type="StyleBoxFlat" id="PilleStil"]
+content_margin_left = 30.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.13, 0.112, 0.09, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.22)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="UmrissRuhe"]
+content_margin_left = 22.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.94, 0.86, 0.035)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 0.4)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="UmrissHover"]
+content_margin_left = 22.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.94, 0.86, 0.1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 0.72)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxTexture" id="StartKnopf"]
+content_margin_left = 32.0
+content_margin_top = 16.0
+content_margin_right = 36.0
+content_margin_bottom = 16.0
+texture = ExtResource("15_start")
+texture_margin_left = 26.0
+texture_margin_right = 26.0
 
 [sub_resource type="StyleBoxFlat" id="ZeileStil"]
-content_margin_left = 10.0
-content_margin_top = 4.0
-content_margin_right = 10.0
-content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.078, 0.062, 0.85)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.94, 0.86, 0.045)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="KreisStil"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.839, 0.349, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.38)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
+
+[sub_resource type="StyleBoxFlat" id="PunktStil"]
+bg_color = Color(0.35, 0.83, 0.42, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="AbzeichenStil"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="KarteRuhe"]
+bg_color = Color(1, 0.94, 0.86, 0.05)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="KarteHover"]
+bg_color = Color(1, 0.94, 0.86, 0.09)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="KarteGewaehlt"]
+bg_color = Color(1, 0.839, 0.349, 0.08)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="KoopLobby" type="Control"]
 layout_mode = 3
@@ -24,7 +175,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lobby")
 
-[node name="Kirmesplatz" parent="." instance=ExtResource("2_hg")]
+[node name="Kirmesplatz" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_hg")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Abdunkeln" type="ColorRect" parent="."]
 layout_mode = 1
@@ -34,7 +195,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.03, 0.02, 0.06, 0.55)
+color = Color(0.03, 0.024, 0.02, 0.6)
+
+[node name="MenueMusik" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+bus = &"Musik"
 
 [node name="Takt" type="Timer" parent="."]
 unique_name_in_owner = true
@@ -57,112 +222,169 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Start"]
-custom_minimum_size = Vector2(640, 0)
+custom_minimum_size = Vector2(760, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("FensterStil")
 
-[node name="Rand" type="MarginContainer" parent="Start/Panel"]
+[node name="Spalte" type="VBoxContainer" parent="Start/Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 36
-theme_override_constants/margin_top = 26
-theme_override_constants/margin_right = 36
-theme_override_constants/margin_bottom = 26
+theme_override_constants/separation = 8
 
-[node name="Spalte" type="VBoxContainer" parent="Start/Panel/Rand"]
+[node name="Kopf" type="HBoxContainer" parent="Start/Panel/Spalte"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 16
+alignment = 1
 
-[node name="Titel" type="Label" parent="Start/Panel/Rand/Spalte"]
+[node name="Krug" type="TextureRect" parent="Start/Panel/Spalte/Kopf"]
+custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_colors/font_outline_color = Color(0.18, 0.09, 0.02, 1)
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 56
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("6_krug")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Titel" type="Label" parent="Start/Panel/Spalte/Kopf"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 44
 text = "KOOP_TITLE"
-horizontal_alignment = 1
 
-[node name="Untertitel" type="Label" parent="Start/Panel/Rand/Spalte"]
-custom_minimum_size = Vector2(560, 0)
+[node name="Untertitel" type="Label" parent="Start/Panel/Spalte"]
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.88, 0.84, 0.78, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 17
 text = "KOOP_SUB"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="NameTitel" type="Label" parent="Start/Panel/Rand/Spalte"]
+[node name="AbstandA" type="Control" parent="Start/Panel/Spalte"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+mouse_filter = 2
+
+[node name="NameTitel" type="Label" parent="Start/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
 text = "LOBBY_NAME"
 
-[node name="StartName" type="LineEdit" parent="Start/Panel/Rand/Spalte"]
+[node name="StartName" type="LineEdit" parent="Start/Panel/Spalte"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 58)
+custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 placeholder_text = "LOBBY_NAME_PLACEHOLDER"
 max_length = 16
 
-[node name="Erstellen" type="Button" parent="Start/Panel/Rand/Spalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 74)
+[node name="AbstandB" type="Control" parent="Start/Panel/Spalte"]
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+mouse_filter = 2
+
+[node name="ErstellZeile" type="HBoxContainer" parent="Start/Panel/Spalte"]
+layout_mode = 2
+alignment = 1
+
+[node name="Erstellen" type="Button" parent="Start/Panel/Spalte/ErstellZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 68)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.16, 0.1, 0.03, 1)
+theme_override_colors/font_focus_color = Color(0.16, 0.1, 0.03, 1)
+theme_override_colors/font_hover_color = Color(0.16, 0.1, 0.03, 1)
+theme_override_colors/font_pressed_color = Color(0.16, 0.1, 0.03, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/focus = SubResource("StartKnopf")
+theme_override_styles/hover = SubResource("StartKnopf")
+theme_override_styles/normal = SubResource("StartKnopf")
+theme_override_styles/pressed = SubResource("StartKnopf")
 text = "KOOP_CREATE"
 
-[node name="Oder" type="Label" parent="Start/Panel/Rand/Spalte"]
+[node name="OderZeile" type="HBoxContainer" parent="Start/Panel/Spalte"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.65, 0.59, 1)
-theme_override_font_sizes/font_size = 18
-text = "KOOP_OR"
-horizontal_alignment = 1
+theme_override_constants/separation = 16
 
-[node name="CodeZeile" type="HBoxContainer" parent="Start/Panel/Rand/Spalte"]
+[node name="LinieA" type="HSeparator" parent="Start/Panel/Spalte/OderZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Oder" type="Label" parent="Start/Panel/Spalte/OderZeile"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.58, 0.54, 0.49, 1)
+theme_override_font_sizes/font_size = 16
+text = "KOOP_OR"
+
+[node name="LinieB" type="HSeparator" parent="Start/Panel/Spalte/OderZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="CodeZeile" type="HBoxContainer" parent="Start/Panel/Spalte"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="CodeEingabe" type="LineEdit" parent="Start/Panel/Rand/Spalte/CodeZeile"]
+[node name="CodeEingabe" type="LineEdit" parent="Start/Panel/Spalte/CodeZeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 64)
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 24
 placeholder_text = "KOOP_CODE_PLACEHOLDER"
 alignment = 1
 max_length = 12
 
-[node name="Beitreten" type="Button" parent="Start/Panel/Rand/Spalte/CodeZeile"]
+[node name="Beitreten" type="Button" parent="Start/Panel/Spalte/CodeZeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(230, 64)
+custom_minimum_size = Vector2(250, 58)
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 21
+theme_override_styles/focus = SubResource("UmrissRuhe")
+theme_override_styles/hover = SubResource("UmrissHover")
+theme_override_styles/normal = SubResource("UmrissRuhe")
+theme_override_styles/pressed = SubResource("UmrissHover")
 text = "KOOP_JOIN"
 
-[node name="StartStatus" type="Label" parent="Start/Panel/Rand/Spalte"]
+[node name="StartStatus" type="Label" parent="Start/Panel/Spalte"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(560, 28)
+custom_minimum_size = Vector2(620, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 17
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="UntenZeile" type="HBoxContainer" parent="Start/Panel/Rand/Spalte"]
+[node name="UntenZeile" type="HBoxContainer" parent="Start/Panel/Spalte"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Zurueck" type="Button" parent="Start/Panel/Rand/Spalte/UntenZeile"]
+[node name="Zurueck" type="Button" parent="Start/Panel/Spalte/UntenZeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
-text = "KOOP_BACK"
-
-[node name="Mehr" type="Button" parent="Start/Panel/Rand/Spalte/UntenZeile"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
+theme_override_styles/focus = SubResource("UmrissRuhe")
+theme_override_styles/hover = SubResource("UmrissHover")
+theme_override_styles/normal = SubResource("UmrissRuhe")
+theme_override_styles/pressed = SubResource("UmrissHover")
+text = "KOOP_BACK"
+
+[node name="Mehr" type="Button" parent="Start/Panel/Spalte/UntenZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+theme_override_styles/focus = SubResource("UmrissRuhe")
+theme_override_styles/hover = SubResource("UmrissHover")
+theme_override_styles/normal = SubResource("UmrissRuhe")
+theme_override_styles/pressed = SubResource("UmrissHover")
 text = "KOOP_MORE"
 
 [node name="Warteraum" type="MarginContainer" parent="."]
@@ -174,475 +396,616 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 52
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 52
+theme_override_constants/margin_bottom = 26
 
-[node name="Spalten" type="HBoxContainer" parent="Warteraum"]
+[node name="Fenster" type="PanelContainer" parent="Warteraum"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("RaumStil")
+
+[node name="Alles" type="VBoxContainer" parent="Warteraum/Fenster"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Kopf" type="HBoxContainer" parent="Warteraum/Fenster/Alles"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Links" type="PanelContainer" parent="Warteraum/Spalten"]
-custom_minimum_size = Vector2(390, 0)
+[node name="Krug" type="TextureRect" parent="Warteraum/Fenster/Alles/Kopf"]
+custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("6_krug")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links"]
+[node name="Titel" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Kopf"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 4
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
 
-[node name="Spalte" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand"]
+[node name="Gross" type="Label" parent="Warteraum/Fenster/Alles/Kopf/Titel"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 42
+text = "KOOP_ROOM_TITLE"
 
-[node name="CodeTitel" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+[node name="Klein" type="Label" parent="Warteraum/Fenster/Alles/Kopf/Titel"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 17
+text = "KOOP_INVITE_HINT"
+
+[node name="CodePille" type="PanelContainer" parent="Warteraum/Fenster/Alles/Kopf"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("PilleStil")
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Kopf/CodePille"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="CodeBlock" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Kopf/CodePille/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="CodeTitel" type="Label" parent="Warteraum/Fenster/Alles/Kopf/CodePille/Zeile/CodeBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.67, 0.6, 1)
+theme_override_font_sizes/font_size = 14
 text = "KOOP_INVITE"
 horizontal_alignment = 1
 
-[node name="Code" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+[node name="Code" type="Label" parent="Warteraum/Fenster/Alles/Kopf/CodePille/Zeile/CodeBlock"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.95, 0.75, 1)
-theme_override_colors/font_outline_color = Color(0.35, 0.18, 0.02, 1)
-theme_override_constants/outline_size = 14
-theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 36
 text = "BREZN-42"
 horizontal_alignment = 1
 
-[node name="CodeHinweis" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.81, 0.74, 1)
-theme_override_font_sizes/font_size = 17
-text = "KOOP_INVITE_HINT"
-horizontal_alignment = 1
-
-[node name="Kopieren" type="Button" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+[node name="Kopieren" type="Button" parent="Warteraum/Fenster/Alles/Kopf/CodePille/Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
-theme_override_font_sizes/font_size = 21
+size_flags_vertical = 4
+theme_override_constants/h_separation = 10
+theme_override_font_sizes/font_size = 18
+theme_override_styles/focus = SubResource("UmrissRuhe")
+theme_override_styles/hover = SubResource("UmrissHover")
+theme_override_styles/normal = SubResource("UmrissRuhe")
+theme_override_styles/pressed = SubResource("UmrissHover")
 text = "KOOP_COPY"
+icon = ExtResource("9_kopieren")
 
-[node name="Trenner" type="HSeparator" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+[node name="LinieOben" type="HSeparator" parent="Warteraum/Fenster/Alles"]
 layout_mode = 2
 
-[node name="SpielerTitel" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+[node name="Spalten" type="HBoxContainer" parent="Warteraum/Fenster/Alles"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 40
+
+[node name="Links" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ListenKopf" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Symbol" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Links/ListenKopf"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("7_leute")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpielerTitel" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/ListenKopf"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_font_sizes/font_size = 28
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.88, 0.85, 0.81, 1)
+theme_override_font_sizes/font_size = 18
 text = "KOOP_PLAYERS"
 
-[node name="Liste" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte"]
+[node name="Liste" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 8
-
-[node name="Zeile0" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("ZeileStil")
-
-[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 2
-
-[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand"]
-layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
-custom_minimum_size = Vector2(34, 34)
+[node name="Zeile0" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste"]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Name"
-text_overrun_behavior = 3
-
-[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile0/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
-theme_override_font_sizes/font_size = 15
-text_overrun_behavior = 3
-
-[node name="Zeile1" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
-layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("ZeileStil")
 
-[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1"]
+[node name="Rand" type="MarginContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 2
 
-[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Name"
-text_overrun_behavior = 3
-
-[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile1/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
-theme_override_font_sizes/font_size = 15
-text_overrun_behavior = 3
-
-[node name="Zeile2" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("ZeileStil")
-
-[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 2
-
-[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Name"
-text_overrun_behavior = 3
-
-[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile2/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
-theme_override_font_sizes/font_size = 15
-text_overrun_behavior = 3
-
-[node name="Zeile3" type="PanelContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("ZeileStil")
-
-[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 2
-
-[node name="Zeile" type="HBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="Symbol" type="TextureRect" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Text" type="VBoxContainer" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="SpielerName" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Name"
-text_overrun_behavior = 3
-
-[node name="SpielerInfo" type="Label" parent="Warteraum/Spalten/Links/Rand/Spalte/Liste/Zeile3/Rand/Zeile/Text"]
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
-theme_override_font_sizes/font_size = 15
-text_overrun_behavior = 3
-
-[node name="Verlassen" type="Button" parent="Warteraum/Spalten/Links/Rand/Spalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 46)
-layout_mode = 2
-theme_override_font_sizes/font_size = 19
-text = "KOOP_LEAVE"
-
-[node name="Rechts" type="PanelContainer" parent="Warteraum/Spalten"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Rand" type="MarginContainer" parent="Warteraum/Spalten/Rechts"]
-layout_mode = 2
-theme_override_constants/margin_left = 22
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 4
-
-[node name="Spalte" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="NameZeile" type="HBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand"]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="NameTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/NameZeile"]
+[node name="Kreis" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand/Zeile"]
+custom_minimum_size = Vector2(52, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_font_sizes/font_size = 28
-text = "LOBBY_NAME"
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("KreisStil")
 
-[node name="Name" type="LineEdit" parent="Warteraum/Spalten/Rechts/Rand/Spalte/NameZeile"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 48)
+[node name="Symbol" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand/Zeile/Kreis"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand/Zeile"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 23
-placeholder_text = "LOBBY_NAME_PLACEHOLDER"
-max_length = 16
+size_flags_vertical = 4
+theme_override_constants/separation = 1
 
-[node name="FigurTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+[node name="SpielerName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand/Zeile/Text"]
+auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_font_sizes/font_size = 28
-text = "KOOP_FIGURE"
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 21
+text = "Name"
+text_overrun_behavior = 3
 
-[node name="Figuren" type="HBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
-unique_name_in_owner = true
+[node name="SpielerInfo" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand/Zeile/Text"]
+auto_translate_mode = 2
 layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Punkt" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile0/Rand/Zeile"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("PunktStil")
+
+[node name="Zeile1" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste"]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1"]
+layout_mode = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Kreis" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand/Zeile"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("KreisStil")
+
+[node name="Symbol" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand/Zeile/Kreis"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="SpielerName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 21
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Punkt" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile1/Rand/Zeile"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("PunktStil")
+
+[node name="Zeile2" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste"]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2"]
+layout_mode = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Kreis" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand/Zeile"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("KreisStil")
+
+[node name="Symbol" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand/Zeile/Kreis"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="SpielerName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 21
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Punkt" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile2/Rand/Zeile"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("PunktStil")
+
+[node name="Zeile3" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste"]
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("ZeileStil")
+
+[node name="Rand" type="MarginContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3"]
+layout_mode = 2
+
+[node name="Zeile" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Kreis" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand/Zeile"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("KreisStil")
+
+[node name="Symbol" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand/Zeile/Kreis"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="SpielerName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 21
+text = "Name"
+text_overrun_behavior = 3
+
+[node name="SpielerInfo" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand/Zeile/Text"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text_overrun_behavior = 3
+
+[node name="Punkt" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Links/Liste/Zeile3/Rand/Zeile"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("PunktStil")
+
+[node name="Rechts" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
-[node name="Figur0" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren"]
-custom_minimum_size = Vector2(0, 150)
+[node name="FigurKopf" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Symbol" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Rechts/FigurKopf"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("8_person")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FigurTitel" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Rechts/FigurKopf"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.98, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 21
+text = "KOOP_FIGURE"
+
+[node name="Linie" type="HSeparator" parent="Warteraum/Fenster/Alles/Spalten/Rechts/FigurKopf"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="Figuren" type="HBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+
+[node name="Figur0" type="Button" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/focus = SubResource("KarteRuhe")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
 toggle_mode = true
 
-[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur0"]
+[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur0"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 4.0
-offset_bottom = -6.0
+offset_top = 14.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 6
 
-[node name="Vorschau" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur0/Inhalt" instance=ExtResource("4_vorschau")]
-custom_minimum_size = Vector2(110, 118)
+[node name="Vorschau" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur0/Inhalt" instance=ExtResource("4_vorschau")]
+custom_minimum_size = Vector2(140, 170)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="FigurName" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur0/Inhalt"]
+[node name="FigurName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur0/Inhalt"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 20
 text = "KOOP_FIG_0"
 horizontal_alignment = 1
 
-[node name="Figur1" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren"]
-custom_minimum_size = Vector2(0, 150)
+[node name="Abzeichen" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur0"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_top = 14.0
+offset_right = -14.0
+offset_bottom = 50.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("AbzeichenStil")
+
+[node name="Haken" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur0/Abzeichen"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("13_haken")
+expand_mode = 1
+stretch_mode = 5
+self_modulate = Color(0.13, 0.09, 0.03, 1)
+
+[node name="Figur1" type="Button" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren"]
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/focus = SubResource("KarteRuhe")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
 toggle_mode = true
 
-[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur1"]
+[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur1"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 4.0
-offset_bottom = -6.0
+offset_top = 14.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 6
 
-[node name="Vorschau" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur1/Inhalt" instance=ExtResource("4_vorschau")]
-custom_minimum_size = Vector2(110, 118)
+[node name="Vorschau" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur1/Inhalt" instance=ExtResource("4_vorschau")]
+custom_minimum_size = Vector2(140, 170)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 figur = 1
 
-[node name="FigurName" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur1/Inhalt"]
+[node name="FigurName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur1/Inhalt"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 20
 text = "KOOP_FIG_1"
 horizontal_alignment = 1
 
-[node name="Figur2" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren"]
-custom_minimum_size = Vector2(0, 150)
+[node name="Abzeichen" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur1"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_top = 14.0
+offset_right = -14.0
+offset_bottom = 50.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("AbzeichenStil")
+
+[node name="Haken" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur1/Abzeichen"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("13_haken")
+expand_mode = 1
+stretch_mode = 5
+self_modulate = Color(0.13, 0.09, 0.03, 1)
+
+[node name="Figur2" type="Button" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren"]
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/focus = SubResource("KarteRuhe")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
 toggle_mode = true
 
-[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur2"]
+[node name="Inhalt" type="VBoxContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 4.0
-offset_bottom = -6.0
+offset_top = 14.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 6
 
-[node name="Vorschau" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur2/Inhalt" instance=ExtResource("4_vorschau")]
-custom_minimum_size = Vector2(110, 118)
+[node name="Vorschau" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur2/Inhalt" instance=ExtResource("4_vorschau")]
+custom_minimum_size = Vector2(140, 170)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 figur = 2
 
-[node name="FigurName" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Figuren/Figur2/Inhalt"]
+[node name="FigurName" type="Label" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur2/Inhalt"]
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 20
 text = "KOOP_FIG_2"
 horizontal_alignment = 1
 
-[node name="AbtTitel" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.45, 1)
-theme_override_font_sizes/font_size = 28
-text = "KOOP_DEPT"
+[node name="Abzeichen" type="PanelContainer" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur2"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_top = 14.0
+offset_right = -14.0
+offset_bottom = 50.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("AbzeichenStil")
 
-[node name="Regeln" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
-custom_minimum_size = Vector2(600, 0)
+[node name="Haken" type="TextureRect" parent="Warteraum/Fenster/Alles/Spalten/Rechts/Figuren/Figur2/Abzeichen"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 1)
-theme_override_font_sizes/font_size = 16
-text = "KOOP_RULES"
-autowrap_mode = 3
+mouse_filter = 2
+texture = ExtResource("13_haken")
+expand_mode = 1
+stretch_mode = 5
+self_modulate = Color(0.13, 0.09, 0.03, 1)
 
-[node name="Abteilungen" type="GridContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
+[node name="LinieUnten" type="HSeparator" parent="Warteraum/Fenster/Alles"]
 layout_mode = 2
+
+[node name="Fuss" type="HBoxContainer" parent="Warteraum/Fenster/Alles"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Verlassen" type="Button" parent="Warteraum/Fenster/Alles/Fuss"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_vertical = 4
 theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 8
-columns = 2
+theme_override_font_sizes/font_size = 19
+theme_override_styles/focus = SubResource("UmrissRuhe")
+theme_override_styles/hover = SubResource("UmrissHover")
+theme_override_styles/normal = SubResource("UmrissRuhe")
+theme_override_styles/pressed = SubResource("UmrissHover")
+text = "KOOP_LEAVE"
+icon = ExtResource("10_ausgang")
 
-[node name="Kueche" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(0, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-toggle_mode = true
-
-[node name="Service" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(0, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-toggle_mode = true
-
-[node name="Sauberkeit" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(0, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-toggle_mode = true
-
-[node name="Lager" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/Abteilungen"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(0, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
-toggle_mode = true
-
-[node name="UntenZeile" type="HBoxContainer" parent="Warteraum/Spalten/Rechts/Rand/Spalte"]
-layout_mode = 2
-size_flags_vertical = 10
-theme_override_constants/separation = 14
-
-[node name="Status" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/UntenZeile"]
+[node name="Status" type="Label" parent="Warteraum/Fenster/Alles/Fuss"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Warten" type="Label" parent="Warteraum/Spalten/Rechts/Rand/Spalte/UntenZeile"]
+[node name="Warten" type="Label" parent="Warteraum/Fenster/Alles/Fuss"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 visible = false
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
 theme_override_font_sizes/font_size = 20
 horizontal_alignment = 2
 
-[node name="Los" type="Button" parent="Warteraum/Spalten/Rechts/Rand/Spalte/UntenZeile"]
+[node name="Los" type="Button" parent="Warteraum/Fenster/Alles/Fuss"]
 unique_name_in_owner = true
 auto_translate_mode = 2
-custom_minimum_size = Vector2(300, 62)
+custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_focus_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/icon_normal_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/icon_hover_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/icon_pressed_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_constants/h_separation = 14
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StartKnopf")
+theme_override_styles/hover = SubResource("StartKnopf")
+theme_override_styles/normal = SubResource("StartKnopf")
+theme_override_styles/pressed = SubResource("StartKnopf")
 text = "KOOP_START"
+icon = ExtResource("11_abspielen")

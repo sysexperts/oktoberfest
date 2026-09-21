@@ -39,7 +39,7 @@ class Lauf extends Node:
 		_pruefe("Spiel läuft", port > 0, "Port %d nach %d ms" % [port, Time.get_ticks_msec() - t0])
 		if port == 0:
 			return _ende()
-		KoopDaten.lobby_wahl = {"name": "Testbot", "figur": 2, "abt": "lager"}
+		KoopDaten.lobby_wahl = {"name": "Testbot", "figur": 2}
 		Net.join_game(SERVER, port)
 		var gm: Node = null
 		t0 = Time.get_ticks_msec()
@@ -58,7 +58,7 @@ class Lauf extends Node:
 			while Time.get_ticks_msec() - t0 < 5000 and not (gm._spieler_info as Dictionary).has(ich):
 				await get_tree().process_frame
 			var info: Dictionary = (gm._spieler_info as Dictionary).get(ich, {})
-			_pruefe("Wahl kam an", str(info.get("name", "")) == "Testbot" and int(info.get("figur", -1)) == 2 and str(info.get("abteilung", "")) == "lager", str(info))
+			_pruefe("Wahl kam an", str(info.get("name", "")) == "Testbot" and int(info.get("figur", -1)) == 2, str(info))
 			await get_tree().create_timer(1.0).timeout
 			var spieler: Node = gm._players_nodes[ich]
 			_pruefe("Figur eingesetzt", spieler.get_node("Model").scene_file_path.ends_with("charakter3.tscn"), spieler.get_node("Model").scene_file_path)

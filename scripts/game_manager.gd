@@ -208,10 +208,6 @@ const KOOP_ANDRANG_JE_SPIELER := 0.2   # vorher 0.5 — zu viert war das nur noc
 const ABSTIMMUNG_ZEIT := 30.0
 ## Klo: so lange wartet ein Gast vor besetztem Klo, dann geht er irgendwo ins Zelt
 const KLO_WARTEN := 8.0
-## Teamleiter (Plan Koop): jeder Spieler leitet eine Abteilung. Er stellt deren
-## Personal ein und bekommt dort einen kleinen Bonus. Solo gilt nichts davon.
-const ABTEILUNGEN := ["kueche", "service", "sauberkeit", "lager"]
-const BONUS_PUTZEN := 2.0
 const SPIELERNAME_MAX := 16
 
 # Zelt / makro-döngü (Wasenplatz mantığı)
@@ -451,7 +447,7 @@ var _zelt_name := ""
 var _klo_gast := -1
 ## Laufende Abstimmung: {starter, ja: {peer: true}, nein: {peer: true}, rest: Sekunden}
 var _abstimmung := {}
-## Spieler aus der Lobby: {peer: {name, farbe, abteilung}}
+## Spieler aus der Lobby: {peer: {name, farbe, figur}}
 var _spieler_info := {}
 const ZELTNAME_MAX := 24
 var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
@@ -2481,8 +2477,6 @@ func net_hire_staff(role: int) -> void:
 		return
 	if not STAFF_HIRE_COST.has(role):
 		return
-	if not _darf_personal(role):
-		return
 	# Ohne Essenslizenz hätte der Koch nichts zu tun
 	if role == ROLE_KOCH and _foods_avail().is_empty():
 		_fehler("MSG_COOK_LICENSE")
@@ -2513,8 +2507,6 @@ func net_hire_staff(role: int) -> void:
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
-		return
-	if not _darf_personal(role):
 		return
 	if _kredit_sperrt():
 		return
@@ -3130,49 +3122,15 @@ func _spieler_bezeichnung(peer: int) -> String:
 	var nummer := int(_spawn_index_by_peer.get(peer, 0)) + 1
 	return tr("PLAYER_N") % nummer
 
-# ================================================= Lobby und Teamleiter
+# ================================================= Lobby
 func open_lobby_ui() -> void:
 	if _hud and _hud.has_method("open_lobby"):
 		_hud.lobby_aktualisieren(_spieler_info)
 		_hud.open_lobby()
 
-## Welche Abteilung ist für diese Personal-Rolle zuständig?
-static func abteilung_fuer_rolle(role: int) -> String:
-	match role:
-		ROLE_KOCH:
-			return "kueche"
-		ROLE_KELLNER, ROLE_ZAPFER:
-			return "service"
-		ROLE_REINIGUNG:
-			return "sauberkeit"
-	return ""
-
-func _abteilung_von(peer: int) -> String:
-	return str((_spieler_info.get(peer, {}) as Dictionary).get("abteilung", ""))
-
-## Darf dieser Absender Personal dieser Rolle einstellen oder aufstufen?
-## Solo und allein: immer. Hat die Abteilung Teamleiter, nur sie — sonst jeder.
-func _darf_personal(role: int) -> bool:
-	if Net.solo or _players_nodes.size() <= 1:
-		return true
-	var abt := abteilung_fuer_rolle(role)
-	var leiter: Array[String] = []
-	var s := multiplayer.get_remote_sender_id()
-	if s == 0:
-		s = 1
-	for peer in _spieler_info.keys():
-		if _players_nodes.has(peer) and _abteilung_von(peer) == abt:
-			if int(peer) == s:
-				return true
-			leiter.append(_spieler_bezeichnung(peer))
-	if leiter.is_empty():
-		return true
-	_fehler("MSG_ABT_NUR_LEITER", ["ABT_" + abt.to_upper(), ", ".join(leiter)])
-	return false
-
 ## Lobby-Wahl eines Spielers speichern und allen schicken.
 @rpc("any_peer", "reliable", "call_local")
-func net_lobby_setzen(spielername: String, farbe: int, abt: String, figur: int = -1, lobby_id: String = "") -> void:
+func net_lobby_setzen(spielername: String, farbe: int, figur: int = -1, lobby_id: String = "") -> void:
 	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
@@ -3183,17 +3141,12 @@ func net_lobby_setzen(spielername: String, farbe: int, abt: String, figur: int =
 	var n := zeltname_pruefen(spielername)
 	if n.length() > SPIELERNAME_MAX:
 		n = n.substr(0, SPIELERNAME_MAX).strip_edges()
-	if not abt in ABTEILUNGEN:
-		abt = ""
-	var vorher := _abteilung_von(s)
 	# Figur aus dem Warteraum; -1 = bisherige behalten (Lobby-Fenster im Spiel)
 	if figur < 0:
 		figur = int((_spieler_info.get(s, {}) as Dictionary).get("figur", 0))
-	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5), "abteilung": abt,
+	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5),
 		"figur": clampi(figur, 0, Figuren.ALLE.size() - 1)}
 	_net_spieler_info.rpc(_spieler_info)
-	if abt != "" and abt != vorher:
-		_melde("MSG_ABT_GEWAEHLT", [_spieler_bezeichnung(s), "ABT_" + abt.to_upper()], 2)
 
 @rpc("authority", "reliable", "call_local")
 func _net_spieler_info(info: Dictionary) -> void:
@@ -3202,7 +3155,7 @@ func _net_spieler_info(info: Dictionary) -> void:
 		var p = _players_nodes.get(int(peer))
 		if p and p.has_method("set_info"):
 			var d: Dictionary = info[peer]
-			p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), str(d.get("abteilung", "")), int(d.get("figur", 0)))
+			p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), int(d.get("figur", 0)))
 	if _hud and _hud.has_method("lobby_aktualisieren"):
 		_hud.lobby_aktualisieren(info)
 
@@ -4740,7 +4693,7 @@ func net_clean(id: int) -> void:
 	var putzer := multiplayer.get_remote_sender_id()
 	if putzer == 0:
 		putzer = 1
-	var putz_faktor := BONUS_PUTZEN if _abteilung_von(putzer) == "sauberkeit" else 1.0
+	var putz_faktor := 1.0
 	# Dreck fegen und Planen abziehen dauern ein paar Sekunden (≈ 3 s)
 	if int(_mess_kind.get(id, 0)) >= Mess.DRECK:
 		putz_faktor *= DRECK_TEMPO
@@ -5323,9 +5276,21 @@ func _muellsack_hinlegen(pos: Vector3) -> void:
 func net_muell_abgeben() -> void:
 	if not multiplayer.is_server():
 		return
+	# Es kann nie mehr entsorgt werden, als gefegt wurde. Ohne diese Schranke
+	# lief der Zähler hoch, wenn zwei Spieler gleichzeitig abgaben.
+	if _muell_entsorgt >= _muell_erzeugt:
+		return
 	_muell_entsorgt += 1
 	_muell_stapel += 1
+	_net_muell_geworfen.rpc()
 	_broadcast_meta()
+
+## Deckel auf, Sack hinein — bei allen Spielern (scripts/muellplatz.gd).
+@rpc("authority", "reliable", "call_local")
+func _net_muell_geworfen() -> void:
+	for m in get_tree().get_nodes_in_group("muellplatz"):
+		if m.has_method("einwerfen"):
+			m.einwerfen()
 
 func _muell_offen() -> bool:
 	return _muell_entsorgt < _muell_erzeugt

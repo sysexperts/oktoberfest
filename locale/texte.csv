@@ -208,28 +208,15 @@ RENT_DIALOG_CANCEL,Abbrechen,Cancel,Vazgeç
 TENT_NAME_DEFAULT,Festzelt,Beer Tent,Bira Çadırı
 PLAYER_N,Spieler %d,Player %d,Oyuncu %d
 LOBBY_TITLE,Willkommen im Festzelt!,Welcome to the beer tent!,Bira çadırına hoş geldin!
-LOBBY_SUB,"Ihr führt das Zelt gemeinsam. Jeder leitet eine Abteilung, stellt dort Personal ein und packt mit an — helfen darf man überall!","You run the tent together. Everyone leads a department, hires staff for it and lends a hand — helping out anywhere is allowed!","Çadırı birlikte işletiyorsunuz. Herkes bir mesleğin sorumlusu olur, oraya personel alır ve yardım eder — her yerde yardım etmek serbest!"
+LOBBY_SUB,"Ihr führt das Zelt gemeinsam: zapfen, kochen, putzen, Ware schleppen — und jeder darf im Wiesenbüro einkaufen und Personal einstellen.","You run the tent together: pour, cook, clean, haul supplies — and everyone may buy at the fair office and hire staff.","Çadırı birlikte işletiyorsunuz: bira doldurun, pişirin, temizleyin, malzeme taşıyın — ve herkes fuar ofisinden alışveriş yapıp personel alabilir."
 LOBBY_NAME,Dein Name,Your name,Adın
 LOBBY_NAME_PLACEHOLDER,z. B. Wiesn-Sepp,e.g. Beer Baron,örn. Bira Baronu
 LOBBY_COLOR,Namensfarbe,Name colour,İsim rengi
-LOBBY_DEPT,Deine Abteilung,Your department,Mesleğin
-LOBBY_FREE,noch frei,still free,henüz boş
-LOBBY_LEADS,Leitung: %s,Led by: %s,Yönetici: %s
-LOBBY_PICK_DEPT,Wähle eine Abteilung — ihr könnt sie später am Zelt-Computer wechseln.,Pick a department — you can switch later at the tent computer.,Bir meslek seç — sonra çadır bilgisayarından değiştirebilirsin.
+LOBBY_ALONE,Du bist bisher allein im Zelt.,You are alone in the tent so far.,Şimdilik çadırda yalnızsın.
+LOBBY_OTHERS,Schon dabei: %s,Already here: %s,Şimdiden burada: %s
 LOBBY_HOWTO_TITLE,So spielt ihr,How to play,Nasıl oynanır
-LOBBY_HOWTO,"1. Wiesenbüro: Zelt mieten und taufen, Tische aufstellen, Bier bestellen.\n2. Um 8 Uhr kommen die Gäste. Jeder kümmert sich um seine Abteilung und springt ein, wo es brennt.\n3. Um 22 Uhr ist Feierabend: im Wohnwagen schlafen — alle stimmen ab, die Mehrheit startet den nächsten Tag.\n{help} zeigt jederzeit die Hilfe.","1. Fair office: rent and name your tent, set up tables, order beer.\n2. Guests arrive at 8:00. Everyone looks after their department and jumps in wherever it gets busy.\n3. Closing time is 22:00: sleep in the caravan — everyone votes, the majority starts the next day.\n{help} shows the help at any time.","1. Fuar ofisi: çadırı kirala ve adlandır, masa kur, bira sipariş et.\n2. Misafirler 8:00'de gelir. Herkes kendi mesleğiyle ilgilenir ve yoğunluk olan yere yardım eder.\n3. Kapanış 22:00: karavanda uyu — herkes oy verir, çoğunluk sonraki günü başlatır.\n{help} her zaman yardımı gösterir."
-LOBBY_GO,Los geht's!,Let's go!,Hadi başlayalım!
-ABT_KUECHE,Küche,Kitchen,Mutfak
-ABT_SERVICE,Service,Service,Servis
-ABT_SAUBERKEIT,Sauberkeit,Cleaning,Temizlik
-ABT_LAGER,Lager,Storage,Depo
-ABT_KUECHE_INFO,Köche einstellen · du kochst schneller,Hire cooks · you cook faster,Aşçı al · daha hızlı pişirirsin
-ABT_SERVICE_INFO,Kellner & Zapfer einstellen · du zapfst schneller,Hire waiters & tapsters · you pour faster,Garson ve barmen al · daha hızlı doldurursun
-ABT_SAUBERKEIT_INFO,Putzkräfte einstellen · du putzt doppelt so schnell,Hire cleaners · you clean twice as fast,Temizlikçi al · iki kat hızlı temizlersin
-ABT_LAGER_INFO,Ware und Pakete · du trägst Pakete flotter,Supplies and parcels · you carry parcels faster,Malzeme ve paketler · paketleri daha hızlı taşırsın
-MSG_ABT_GEWAEHLT,%s leitet jetzt: %s,%s now leads: %s,%s artık yönetiyor: %s
-MSG_ABT_NUR_LEITER,Personal für %s stellt die Leitung ein (%s),Staff for %s is hired by its lead (%s),%s personelini yönetici alır (%s)
-COMP_DEPT,Abteilung wechseln,Change department,Meslek değiştir
+LOBBY_HOWTO,"1. Wiesenbüro: Zelt mieten und taufen, Tische aufstellen, Bier bestellen.\n2. Um 8 Uhr kommen die Gäste. Jeder packt dort an, wo es gerade brennt.\n3. Um 22 Uhr ist Feierabend: im Wohnwagen schlafen — alle stimmen ab, die Mehrheit startet den nächsten Tag.\n{help} zeigt jederzeit die Hilfe.","1. Fair office: rent and name your tent, set up tables, order beer.\n2. Guests arrive at 8:00. Everyone jumps in wherever it gets busy.\n3. Closing time is 22:00: sleep in the caravan — everyone votes, the majority starts the next day.\n{help} shows the help at any time.","1. Fuar ofisi: çadırı kirala ve adlandır, masa kur, bira sipariş et.\n2. Misafirler 8:00'de gelir. Herkes yoğunluk olan yere yardım eder.\n3. Kapanış 22:00: karavanda uyu — herkes oy verir, çoğunluk sonraki günü başlatır.\n{help} her zaman yardımı gösterir."
+LOBBY_GO,Start,Start,Başla
 VOTE_TITLE,Feierabend?,Call it a night?,Paydos mu?
 VOTE_TEXT,%s will schlafen gehen und den nächsten Tag starten.,%s wants to go to bed and start the next day.,%s yatmak ve sonraki günü başlatmak istiyor.
 VOTE_COUNT,Ja %d · Nein %d · %d Spieler · noch %d s,Yes %d · No %d · %d players · %d s left,Evet %d · Hayır %d · %d oyuncu · %d sn kaldı
@@ -326,6 +313,7 @@ COMP_PRICE_INFO,"Günstig lockt mehr Gäste, bringt aber weniger je Maß. Teuer 
 COMP_PRICE_VALUE,"Helles, Weizen, Radler: %s je Maß\nBrezn, Würstl: %s\nPreis %d %% · Andrang %d %%","Helles, wheat beer, shandy: %s per mug\nPretzel, sausage: %s\nPrice %d %% · crowd %d %%","Helles, buğday birası, radler: kupa başı %s\nBrezel, sosis: %s\nFiyat %%%d · kalabalık %%%d"
 BTN_CHEAPER,− 10 %,− 10 %,− 10 %
 BTN_PRICIER,+ 10 %,+ 10 %,+ 10 %
+COMP_LOBBY,Name und Farbe ändern,Change name and colour,Ad ve rengi değiştir
 COMP_CLOSE_TENT,Zelt jetzt schließen (kostet Beliebtheit),Close the tent now (costs popularity),Çadırı şimdi kapat (popülerlik kaybettirir)
 REPORT_NONE,Noch keine Schicht gespielt.,No shift played yet.,Henüz vardiya oynanmadı.
 REPORT_END_NORMAL,22:00 — Feierabend!,22:00 — closing time!,22:00 — mesai bitti!
@@ -403,9 +391,9 @@ PAUSE_HELP,Hilfe und Steuerung,Help and controls,Yardım ve kontroller
 HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
 HELP_FLOW,"1. Wiesenbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Hinten Krug nehmen, am Fass zapfen, vorne auf die Ausgabe stellen — dort holen Kellner ab und bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug at the back, pour at a keg, put it on the pass up front — waiters pick up there and serve. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Arkada kupa al, fıçıda doldur, öndeki servis yerine koy — garsonlar oradan alıp servis yapar. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
 HELP_TIPS_TITLE,Tipps,Tips,İpuçları
-HELP_TIPS,"• Gäste warten nicht ewig — verpasste Bestellungen kosten Beliebtheit.\n• Mehr Beliebtheit bringt mehr Gäste, ein sauberes Zelt mehr Geld pro Bestellung.\n• Ohne Toilette pinkeln Gäste in die Ecke und beschweren sich.\n• Das Konto darf bis −1.000 € ins Minus; beim Zurückzahlen gehen 5 % Zinsen ab.\n• Zusammen spielen: Jeder leitet eine Abteilung und stellt dort das Personal ein (wechseln am Zelt-Computer).\n• Schlafen startet eine Abstimmung — die Mehrheit entscheidet über den nächsten Tag.\n• Ist das Klo besetzt (rote Lampe), gehen ungeduldige Gäste in eine Ecke — Putzen nicht vergessen!
-• Gäste-Icons: Stammgast (treu, gibt Trinkgeld) · Tourist (ungeduldig) · in Tracht (bestellt gern) · VIP (wichtig für die Beliebtheit). [Strg] halten zeigt die Details.","• Guests don't wait forever — missed orders cost popularity.\n• More popularity brings more guests, a clean tent more money per order.\n• Without a toilet, guests pee in the corner and complain.\n• Your account can go down to −€1,000; paying it back costs 5 % interest.\n• Playing together: everyone leads a department and hires its staff (switch at the tent computer).\n• Going to bed starts a vote — the majority decides on the next day.\n• If the toilet is taken (red lamp), impatient guests go in a corner — don't forget to clean!
-• Guest icons: regular (loyal, tips) · tourist (impatient) · in traditional dress (likes to order) · VIP (important for popularity). Hold [Ctrl] for details.","• Misafirler sonsuza kadar beklemez — kaçırılan siparişler popülerlik kaybettirir.\n• Popülerlik daha çok misafir, temiz çadır sipariş başına daha çok para getirir.\n• Tuvalet yoksa misafirler köşeye işer ve şikâyet eder.\n• Hesabın −1.000 €'ya kadar eksiye düşebilir; geri öderken %5 faiz kesilir.\n• Birlikte oynarken: herkes bir mesleğin sorumlusudur ve personelini alır (çadır bilgisayarından değiştirilir).\n• Yatmak bir oylama başlatır — sonraki günü çoğunluk belirler.\n• Tuvalet doluysa (kırmızı lamba) sabırsız misafirler bir köşeye gider — temizlemeyi unutma!
+HELP_TIPS,"• Gäste warten nicht ewig — verpasste Bestellungen kosten Beliebtheit.\n• Mehr Beliebtheit bringt mehr Gäste, ein sauberes Zelt mehr Geld pro Bestellung.\n• Ohne Toilette pinkeln Gäste in die Ecke und beschweren sich.\n• Das Konto darf bis −1.000 € ins Minus; beim Zurückzahlen gehen 5 % Zinsen ab.\n• Zusammen spielen: Jeder darf im Wiesenbüro einkaufen und Personal einstellen.\n• Schlafen startet eine Abstimmung — die Mehrheit entscheidet über den nächsten Tag.\n• Ist das Klo besetzt (rote Lampe), gehen ungeduldige Gäste in eine Ecke — Putzen nicht vergessen!
+• Gäste-Icons: Stammgast (treu, gibt Trinkgeld) · Tourist (ungeduldig) · in Tracht (bestellt gern) · VIP (wichtig für die Beliebtheit). [Strg] halten zeigt die Details.","• Guests don't wait forever — missed orders cost popularity.\n• More popularity brings more guests, a clean tent more money per order.\n• Without a toilet, guests pee in the corner and complain.\n• Your account can go down to −€1,000; paying it back costs 5 % interest.\n• Playing together: everyone may buy at the fair office and hire staff.\n• Going to bed starts a vote — the majority decides on the next day.\n• If the toilet is taken (red lamp), impatient guests go in a corner — don't forget to clean!
+• Guest icons: regular (loyal, tips) · tourist (impatient) · in traditional dress (likes to order) · VIP (important for popularity). Hold [Ctrl] for details.","• Misafirler sonsuza kadar beklemez — kaçırılan siparişler popülerlik kaybettirir.\n• Popülerlik daha çok misafir, temiz çadır sipariş başına daha çok para getirir.\n• Tuvalet yoksa misafirler köşeye işer ve şikâyet eder.\n• Hesabın −1.000 €'ya kadar eksiye düşebilir; geri öderken %5 faiz kesilir.\n• Birlikte oynarken: herkes fuar ofisinden alışveriş yapabilir ve personel alabilir.\n• Yatmak bir oylama başlatır — sonraki günü çoğunluk belirler.\n• Tuvalet doluysa (kırmızı lamba) sabırsız misafirler bir köşeye gider — temizlemeyi unutma!
 • Misafir simgeleri: müdavim (sadık, bahşiş verir) · turist (sabırsız) · geleneksel kıyafetli (çok sipariş verir) · VIP (popülerlik için önemli). Ayrıntılar için [Ctrl] basılı tut."
 OFFICE_SEASON,"Tag %d: Miete und Ware +%d %%, Verkaufspreise +%d %%","Day %d: rent and supplies +%d %%, sale prices +%d %%","%d. gün: kira ve malzeme +%%%d, satış fiyatları +%%%d"
 OFFICE_LOAN,Rettungskredit: noch %s offen — %d %% jeder Einnahme gehen an die Brauerei,Rescue loan: %s still owed — %d %% of every income goes to the brewery,Kurtarma kredisi: %s borç kaldı — her gelirin %%%d kadarı bira fabrikasına gider
@@ -534,6 +522,10 @@ ACTION_PING,Markieren (für Mitspieler),Ping (for teammates),İşaretle (takım 
 MSG_SCREENSHOT,Bildschirmfoto gespeichert: %s,Screenshot saved: %s,Ekran görüntüsü kaydedildi: %s
 KOOP_TITLE,Mit Freunden spielen,Play with friends,Arkadaşlarla oyna
 KOOP_SUB,Einer erstellt das Spiel und schickt den Code herum — alle anderen treten mit dem Code bei.,One of you creates the game and shares the code — everyone else joins with it.,Biri oyunu kurar ve kodu paylaşır — diğer herkes bu kodla katılır.
+KOOP_HOST_HEAD,Spiel eröffnen,Host a game,Oyun kur
+KOOP_HOST_TEXT,Du bekommst einen Code und startest das Spiel für alle.,You get a code and start the game for everyone.,Bir kod alırsın ve oyunu herkes için başlatırsın.
+KOOP_JOIN_HEAD,Dabei sein,Join in,Katıl
+KOOP_ROOM_TITLE,Warteraum,Waiting room,Bekleme odası
 KOOP_CREATE,Neues Spiel erstellen,Create a new game,Yeni oyun kur
 KOOP_OR,— oder —,— or —,— ya da —
 KOOP_CODE_PLACEHOLDER,"Code, z. B. BREZN-42","Code, e.g. BREZN-42","Kod, örn. BREZN-42"
@@ -544,18 +536,14 @@ KOOP_NEED_CODE,Gib den Einladungscode ein.,Enter the invite code.,Davet kodunu g
 KOOP_WORKING,Einen Moment …,One moment …,Bir saniye …
 KOOP_INVITE,Einladungscode,Invite code,Davet kodu
 KOOP_INVITE_HINT,Schick diesen Code deinen Freunden.,Send this code to your friends.,Bu kodu arkadaşlarına gönder.
-KOOP_COPY,Code kopieren,Copy code,Kodu kopyala
+KOOP_COPY,Kopieren,Copy,Kopyala
 KOOP_COPIED,Kopiert!,Copied!,Kopyalandı!
-KOOP_PLAYERS,Mitspieler %d/%d,Players %d/%d,Oyuncular %d/%d
+KOOP_PLAYERS,%d von %d Spielern,%d of %d players,%d / %d oyuncu
 KOOP_EMPTY_SLOT,Platz frei …,Free seat …,Boş yer …
 KOOP_HOST_TAG,Gastgeber,Host,Ev sahibi
 KOOP_YOU,(du),(you),(sen)
-KOOP_NO_DEPT,keine Teamleitung,no team lead,ekip liderliği yok
 KOOP_IN_GAME,schon im Spiel,already in the game,zaten oyunda
 KOOP_FIGURE,Deine Figur,Your character,Karakterin
-KOOP_DEPT,Teamleiter für …,Team lead for …,Ekip lideri …
-KOOP_RULES,"Jeder kann alles machen: zapfen, kochen, putzen, Ware schleppen. Aber nur der Teamleiter einer Abteilung darf dort Personal einstellen — und ist dort etwas flotter. Hat eine Abteilung keinen Teamleiter, darf jeder einstellen.","Everyone can do everything: pour, cook, clean, haul supplies. But only a department's team lead may hire staff there — and is a bit faster at it. If a department has no team lead, anyone may hire.","Herkes her şeyi yapabilir: bira doldurmak, pişirmek, temizlemek, malzeme taşımak. Ama bir mesleğe sadece ekip lideri personel alabilir — ve orada biraz daha hızlıdır. Mesleğin lideri yoksa herkes personel alabilir."
-KOOP_LEADER,%s leitet,led by %s,lider: %s
 KOOP_START,Los geht's!,Let's go!,Hadi başlayalım!
 KOOP_ENTER,Ins Spiel!,Join the game!,Oyuna gir!
 KOOP_WAIT_HOST,"Warte, bis %s das Spiel startet …",Waiting for %s to start the game …,%s oyunu başlatana kadar bekleniyor …
@@ -569,7 +557,6 @@ KOOP_FIG_2,Dirndl-Resi,Dirndl Resi,Dirndl Resi
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
 LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).
-LOBBY_ERR_DEPT_TAKEN,Diese Abteilung leitet schon jemand.,Someone already leads this department.,Bu mesleği zaten biri yönetiyor.
 LOBBY_ERR_SERVER_FULL,Der Server ist gerade voll — probiert es in ein paar Minuten nochmal.,The server is full right now — try again in a few minutes.,Sunucu şu an dolu — birkaç dakika sonra tekrar deneyin.
 LOBBY_ERR_NOT_HOST,Nur der Gastgeber kann das Spiel starten.,Only the host can start the game.,Oyunu sadece ev sahibi başlatabilir.
 LOBBY_ERR_START,Das Spiel konnte nicht starten. Nochmal versuchen?,The game could not start. Try again?,Oyun başlatılamadı. Tekrar denensin mi?
@@ -584,7 +571,6 @@ INTRO_SERVIEREN,"Servieren: vorne an der Ausgabe {interact}, zum Gast mit passen
 INTRO_KUECHE,"Küche: an der Kochtheke {interact} halten, Essen zu den Gästen bringen","Kitchen: hold {interact} at the cooking counter, bring food to the guests","Mutfak: pişirme tezgahında {interact} basılı tut, yemeği misafirlere götür"
 INTRO_LAGER,"Lager: Pakete vom Lieferwagen ins Lager tragen — ohne Ware kein Bier","Storage: carry parcels from the van into storage — no stock, no beer","Depo: paketleri kamyonetten depoya taşı — mal yoksa bira da yok"
 INTRO_PUTZEN,Putzen: auf Pfützen und Dreck {interact} halten,Cleaning: hold {interact} on puddles and mess,Temizlik: birikinti ve pisliklerde {interact} basılı tut
-INTRO_DEINE,deine Abteilung,your department,senin mesleğin
 INTRO_CLOSE,[Enter] Verstanden · {help} Hilfe,[Enter] Got it · {help} Help,[Enter] Anladım · {help} Yardım
 HINT_PLACE_TABLE,{interact} Abstellen · {emote} Drehen,{interact} Put down · {emote} Rotate,{interact} Bırak · {emote} Döndür
 MSG_TABLE_VERSCHOBEN,Der Tisch passte dort nicht hin und steht jetzt auf dem nächsten freien Platz.,The table didn't fit there and now stands on the nearest free spot.,Masa oraya sığmadı ve en yakın boş yere kondu.
@@ -801,7 +787,6 @@ HINT_FEGEN,{interact} halten: fegen,Hold {interact}: sweep,{interact} basılı t
 HINT_MUELL_ABSTELLEN,{interact} Müllsack abstellen,{interact} Drop off rubbish bag,{interact} Çöp torbasını bırak
 HINT_MUELL_NICHT_LAGER,Müll gehört raus zum Müllplatz,Rubbish goes out to the bin area,Çöp dışarıdaki çöp yerine gider
 WORLD_MUELLSACK,Müllsack,Rubbish bag,Çöp torbası
-MUELLPLATZ_SCHILD,Müll · Abholung morgens,Rubbish · collected mornings,Çöp · sabah alınır
 CHEF_HUBER_DU,"Der Huber vom Nachbarzelt will Sepps Zelt schon ewig — es ist viel größer als seins. Aber der Sepp konnte ihn nicht ausstehen. Dem Huber hätte er's nie gegeben.","Huber from the tent next door has wanted Sepp's tent forever — it is much bigger than his. But Sepp could not stand him. He would never have let Huber have it.","Yan çadırdaki Huber, Sepp'in çadırını yıllardır istiyor — onunkinden çok daha büyük. Ama Sepp ona hiç katlanamazdı. Çadırı asla Huber'e vermezdi."
 CHEF_HUBER_IHR,"Der Huber vom Nachbarzelt will Sepps Zelt schon ewig — es ist viel größer als seins. Aber der Sepp konnte ihn nicht ausstehen. Dem Huber hätte er's nie gegeben.","Huber from the tent next door has wanted Sepp's tent forever — it is much bigger than his. But Sepp could not stand him. He would never have let Huber have it.","Yan çadırdaki Huber, Sepp'in çadırını yıllardır istiyor — onunkinden çok daha büyük. Ama Sepp ona hiç katlanamazdı. Çadırı asla Huber'e vermezdi."
 CHEF_NEIN_1_DU,"Schade … Dann bekommt's wohl der Huber, der hat schon dreimal gefragt. Der Sepp würde sich im Grab umdrehen.","What a shame … Then Huber will probably get it, he has asked three times already. Sepp would turn in his grave.","Ne yazık … O zaman büyük ihtimalle Huber alacak, üç kez sordu bile. Sepp mezarında ters dönerdi."
