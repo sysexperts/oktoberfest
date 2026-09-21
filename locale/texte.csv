@@ -1005,3 +1005,4 @@ COMP_ROW_FOOD,Essen:,Food:,Yemek:
 COMP_VAL_MASS,%s je Maß,%s per mug,kupa başı %s
 COMP_VAL_FACTOR,%d %% · Andrang: %d %%,%d %% · crowd: %d %%,%%%d · kalabalık: %%%d
 COMP_VAL_FOOD,%s je Portion (%d %%),%s per portion (%d %%),porsiyon başı %s (%%%d)
+MSG_KOTZ,Zu viel Bier — das kommt wieder hoch!,Too much beer — up it comes!,Fazla bira — hepsi geri geliyor!

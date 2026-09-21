@@ -37,7 +37,7 @@ var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler, 4 Festbier, 5 W
 const WASSER := 5
 ## Weitere volle Krüge (Biersorten), zusätzlich zum Krug in der Hand
 var extra_kruege: Array[int] = []
-var emote := 0           # 0 yok, 1 Prost/dans (senkron)
+var emote := 0           # 0 yok, 1 Prost/dans, 2 Übergeben (senkron)
 var costume := 0         # kostüm rengi indeksi (senkron)
 var _applied_costume := -1
 var _emote_until := 0.0
@@ -249,13 +249,22 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if _is_local:
 		_sfx_cd -= delta
+		if _kotz_t > 0.0:
+			_kotzen(delta)
 		_handle_movement(delta)
 		_update_target()
+		if _kotz_t > 0.0:
+			# Kein Ziel beim Würgen: sonst stünde „Putzen (E)" da, obwohl gerade
+			# nichts geht
+			_current_target = null
 		_update_hint()
-		if not _tippt():
+		if not _tippt() and _kotz_t <= 0.0:
 			_handle_interaction(delta)
 		_trinken(delta)
-		emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
+		if _kotz_t > 0.0:
+			emote = 2
+		else:
+			emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
@@ -294,8 +303,19 @@ func _update_animation(delta: float) -> void:
 		_model.scale = Vector3(1.1, 0.85, 1.1)
 	_war_in_luft = in_luft
 	_model.scale = _model.scale.lerp(ziel_skala, w)
-	_emote_label.visible = emote == 1
+	_emote_label.visible = emote != 0
+	# Übergeben: vornüber gebeugt würgen, mit 🤮 über dem Kopf wie bei den Gästen
+	if emote == 2:
+		_emote_label.text = "🤮"
+		_emote_label.modulate = Color(0.6, 0.9, 0.4)
+		_model.rotation.x = lerpf(_model.rotation.x, KOTZ_NEIGUNG, w)
+		if _cur_anim != "stehen":
+			figur.stehen()
+			_cur_anim = "stehen"
+		return
 	if emote == 1:
+		_emote_label.text = "Prost! 🍻"
+		_emote_label.modulate = Color(1, 1, 1)
 		if _cur_anim != "tanzen":
 			figur.tanzen()
 			_cur_anim = "tanzen"
@@ -363,6 +383,16 @@ func _tippt() -> bool:
 
 func _handle_movement(delta: float) -> void:
 	if _geschleudert():
+		return
+	# Beim Übergeben bleibt man stehen — gehen geht erst wieder danach
+	if _kotz_t > 0.0:
+		velocity.x = move_toward(velocity.x, 0.0, ACCEL * delta * SPEED)
+		velocity.z = move_toward(velocity.z, 0.0, ACCEL * delta * SPEED)
+		if not is_on_floor():
+			velocity.y -= 20.0 * delta
+		elif velocity.y <= 0.0:
+			velocity.y = 0.0
+		move_and_slide()
 		return
 	var input_dir := Vector2.ZERO if _tippt() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var dir := (transform.basis.x * input_dir.x) + (transform.basis.z * input_dir.y)
@@ -829,7 +859,7 @@ var _rausch_t := 0.0
 var _rausch_stufe := 0
 
 func _trinken(delta: float) -> void:
-	var trinkt := not _tippt() and InputMap.has_action("trinken") and Input.is_action_pressed("trinken") \
+	var trinkt := _kotz_t <= 0.0 and not _tippt() and InputMap.has_action("trinken") and Input.is_action_pressed("trinken") \
 		and carry_state == 1 and carry_fill > 0.0 and carry_type > 0
 	if trinkt:
 		var schluck := minf(carry_fill, TRINK_TEMPO * delta)
@@ -851,6 +881,50 @@ func _trinken(delta: float) -> void:
 	_rausch_stufe = stufe
 	# Kopf wiegt mit dem Rausch
 	_head.rotation.z = sin(_rausch_t * 1.3) * 0.05 * promille
+	if promille >= KOTZ_GRENZE and _kotz_t <= 0.0:
+		_kotzen_starten()
+
+# ------------------------------------------------------------------ Übergeben
+## Wer es übertreibt, übergibt sich: kurz gebückt würgen, dabei landet ein Fleck
+## auf dem Boden, danach ist der Rausch fast raus. Den Fleck legt der Server an
+## (GameManager.net_spieler_kotzt) — sonst hätte ihn nur der eigene Rechner.
+## Mitspieler sehen das Würgen, weil emote = 2 in _push_state mitläuft.
+const KOTZ_GRENZE := 2.2        # ab so viel Promille geht es los
+const KOTZ_DAUER := 3.0
+const KOTZ_FLECK_NACH := 0.9    # so lange wird erst gewürgt
+const KOTZ_REST := 0.8          # so viel Promille bleiben danach
+## So weit beugt sich der Kopf beim Würgen nach vorn
+const KOTZ_NEIGUNG := -0.9
+var _kotz_t := 0.0
+var _kotz_fleck := false
+
+## Läuft gerade das Übergeben? (Wettschleppen und Co. fragen danach)
+func kotzt() -> bool:
+	return _kotz_t > 0.0
+
+func _kotzen_starten() -> void:
+	_kotz_t = KOTZ_DAUER
+	_kotz_fleck = false
+	emote = 2
+	_sfx("splash")   # AUDIO.md: splash ist der Klang für Kotze
+	var hud := _world.get_node_or_null("HUD")
+	if hud and hud.has_method("melde"):
+		hud.melde("MSG_KOTZ", [], 1)
+
+func _kotzen(delta: float) -> void:
+	_kotz_t -= delta
+	# Erst würgen, dann liegt es auf dem Boden — wie bei den Gästen
+	if not _kotz_fleck and _kotz_t <= KOTZ_DAUER - KOTZ_FLECK_NACH:
+		_kotz_fleck = true
+		promille = KOTZ_REST
+		if _world and _world.has_method("net_spieler_kotzt"):
+			_world.net_spieler_kotzt.rpc_id(1)
+	# Blick nach unten, solange es dauert; danach wieder dahin, wo die Maus steht
+	_head.rotation.x = lerpf(_head.rotation.x, KOTZ_NEIGUNG, clampf(delta * 8.0, 0.0, 1.0))
+	if _kotz_t <= 0.0:
+		_kotz_t = 0.0
+		emote = 0
+		_head.rotation.x = _pitch
 
 ## Server hat den Krug aus der Hand auf die Ausgabe gestellt.
 func krug_abgestellt() -> void:

@@ -5285,6 +5285,21 @@ func net_muell_abgeben() -> void:
 	_net_muell_geworfen.rpc()
 	_broadcast_meta()
 
+## Ein Spieler hat zu viel getrunken und übergibt sich (scripts/player.gd).
+## Den Fleck legt der Server an — sonst läge er nur auf dem eigenen Rechner und
+## die Mitspieler hätten nichts zu putzen. Die Stelle nimmt der Server aus der
+## Figur, nicht aus der Nachricht.
+@rpc("any_peer", "reliable", "call_local")
+func net_spieler_kotzt() -> void:
+	if not multiplayer.is_server():
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	var pl: Node = _players_nodes.get(sender if sender > 0 else 1)
+	if pl == null or not is_instance_valid(pl):
+		return
+	_spawn_mess_at((pl as Node3D).global_position, 0)
+	_stats.gekotzt = int(_stats.get("gekotzt", 0)) + 1
+
 ## Deckel auf, Sack hinein — bei allen Spielern (scripts/muellplatz.gd).
 @rpc("authority", "reliable", "call_local")
 func _net_muell_geworfen() -> void:

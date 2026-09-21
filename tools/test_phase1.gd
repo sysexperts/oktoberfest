@@ -430,6 +430,34 @@ class Lauf extends Node:
 		Input.action_release("trinken")
 		_check("G halten: Bier wird getrunken, Rausch steigt", nehmer.carry_fill < 0.9 and nehmer.promille > 0.05,
 			"Füllung %.2f, Promille %.2f" % [nehmer.carry_fill, nehmer.promille])
+		# Zu viel Bier: der Spieler übergibt sich, es liegt ein Fleck da und der
+		# Rausch ist danach fast weg (scripts/player.gd, Feature 21.09.)
+		var flecken_vorher: int = gm._messes.size()
+		nehmer.promille = nehmer.KOTZ_GRENZE + 0.1
+		nehmer.carry_fill = 0.0
+		nehmer.carry_type = 0
+		await get_tree().physics_frame
+		_check("zu viel Promille: Spieler übergibt sich", nehmer.kotzt() and nehmer.emote == 2,
+			"kotzt=%s emote=%d" % [str(nehmer.kotzt()), nehmer.emote])
+		var stand_vorher: Vector3 = nehmer.global_position
+		Input.action_press("move_forward")
+		for k in 30:
+			await get_tree().physics_frame
+		Input.action_release("move_forward")
+		_check("beim Übergeben bleibt man stehen", stand_vorher.distance_to(nehmer.global_position) < 0.3,
+			"%.2f m" % stand_vorher.distance_to(nehmer.global_position))
+		for k in 220:
+			await get_tree().physics_frame
+		_check("nach dem Übergeben liegt ein Fleck und der Rausch ist weg",
+			gm._messes.size() > flecken_vorher and not nehmer.kotzt() and nehmer.promille <= nehmer.KOTZ_REST + 0.01,
+			"Flecken %d → %d, Promille %.2f" % [flecken_vorher, gm._messes.size(), nehmer.promille])
+		nehmer.promille = 0.0
+		nehmer.carry_state = 1
+		nehmer.carry_type = 1
+		# Weg vom eigenen Fleck: sonst putzt der nächste E-Druck den, statt den
+		# Krug abzulegen
+		nehmer.global_position += Vector3(4.0, 0.0, 0.0)
+		await _frames(3)
 		var abgelegt_vorher: int = gm._abgelegt.size()
 		nehmer.carry_fill = 1.0
 		nehmer._current_target = null
