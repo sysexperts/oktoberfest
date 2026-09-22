@@ -502,10 +502,10 @@ class Lauf extends Node:
 		print("  -- Ausgabe je Sorte, Bestellungen, Umriss, Lagerregale, Zelt-Etage (Test 13.09.)")
 		gm._ausgabe.clear()
 		var passt := 0
-		for k in 5:
+		for k in 18:
 			if gm._ausgabe_hinzufuegen(1, 2):
 				passt += 1
-		_check("Stellplatz Weizen fasst 3 Krüge", passt == 3 and int(gm._ausgabe.get("1_2", 0)) == 3, str(gm._ausgabe))
+		_check("Stellplatz Weizen fasst 16 Krüge", passt == 16 and int(gm._ausgabe.get("1_2", 0)) == 16, str(gm._ausgabe))
 		_check("anderer Platz bleibt frei", gm._ausgabe_hinzufuegen(1, 1), str(gm._ausgabe))
 		await _frames(2)
 		var ausgabe_neu: Node = get_tree().get_first_node_in_group("ausgabe")
@@ -514,7 +514,7 @@ class Lauf extends Node:
 			for c in ausgabe_neu.get_node("Plaetze/Bier2").get_children():
 				if c is Krug and c.visible:
 					sichtbar += 1
-		_check("Krüge stehen auf dem Weizen-Platz", sichtbar == 3, "%d sichtbar" % sichtbar)
+		_check("Krüge stehen auf dem Weizen-Platz", sichtbar == 16, "%d sichtbar" % sichtbar)
 		gm._ausgabe.clear()
 		gm._ausgabe_senden()
 		var hud_knoten: Node = gm.get_node("HUD")
