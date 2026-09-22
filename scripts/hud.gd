@@ -339,18 +339,30 @@ func is_popup_open() -> bool:
 	return _hinweisfenster.visible
 
 ## Kurze Schwarzblende beim Schlafen.
-func play_sleep_fade() -> void:
+## Schwarzblende beim Schlafen. Danach steht kurz der neue Tag im Bild — vorher
+## wechselte die Zahl oben in der Leiste einfach lautlos, und zwar schon nach
+## Feierabend statt nach dem Aufstehen.
+func play_sleep_fade(tag: int = 0) -> void:
 	var fade: ColorRect = %Abblenden
 	var zzz: Label = %Zzz
+	var titel: Control = %Tagstitel
 	fade.visible = true
 	fade.color.a = 0.0
 	zzz.modulate.a = 0.0
+	titel.modulate.a = 0.0
+	if tag > 0:
+		(%Tag as Label).text = tr("HUD_TAG_GROSS") % tag
 	var tw := create_tween()
 	tw.tween_property(fade, "color:a", 1.0, 0.7)
 	tw.parallel().tween_property(zzz, "modulate:a", 1.0, 0.7)
-	tw.tween_interval(0.8)
+	tw.tween_interval(0.6)
+	# Einschlafen aus, Tag ein — beides im Schwarzen
+	tw.tween_property(zzz, "modulate:a", 0.0, 0.3)
+	if tag > 0:
+		tw.tween_property(titel, "modulate:a", 1.0, 0.5)
+		tw.tween_interval(1.1)
+		tw.tween_property(titel, "modulate:a", 0.0, 0.5)
 	tw.tween_property(fade, "color:a", 0.0, 0.9)
-	tw.parallel().tween_property(zzz, "modulate:a", 0.0, 0.5)
 	tw.tween_callback(func() -> void: fade.visible = false)
 
 # ------------------------------------------------------------ Fenster (player.gd ruft das)

@@ -1021,3 +1021,5 @@ ZEITUNG_M_KUECHE,Aus der Küche gingen %d Portionen über die Theke.,%d portions
 ZEITUNG_M_KUECHE_LEER,Die Küche blieb kalt — kein einziges Essen ging über die Theke.,The kitchen stayed cold — not a single plate served.,Mutfak soğuk kaldı — tek bir tabak bile çıkmadı.
 ZEITUNG_M_RAUSWURF,%d Gäste flogen aus dem Zelt und haben Hausverbot.,%d guests were thrown out and are banned.,%d misafir çadırdan atıldı ve yasaklandı.
 ZEITUNG_M_RAUSWURF_1,Ein Gast flog aus dem Zelt und hat Hausverbot.,One guest was thrown out and is banned.,Bir misafir çadırdan atıldı ve yasaklandı.
+HUD_TAG_GROSS,Tag %d,Day %d,%d. Gün
+TAG_START,Die Wiesn öffnet,The Wiesn opens,Wiesn açılıyor

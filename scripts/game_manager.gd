@@ -3349,8 +3349,14 @@ func net_sleep() -> void:
 	_abstimmung_pruefen(false)
 
 ## Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
+## Der Tag wechselt erst hier, beim Schlafen — vorher stand nach Feierabend
+## schon der nächste Tag im Kalender und oben in der Leiste, obwohl niemand
+## geschlafen hatte.
 func _tag_starten() -> void:
-	net_sleep_fade.rpc()
+	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
+	_stats.days += 1
+	_broadcast_meta()
+	net_sleep_fade.rpc(_day)
 	_spieler_zum_wohnwagen()
 	_start_shift()
 	_melde("MSG_DAY_START", [_day])
@@ -4684,8 +4690,6 @@ func _end_shift(reason := 0) -> void:
 	_rausgeworfen = 0
 	_complaints = 0
 	_left_guests = 0
-	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
-	_stats.days += 1
 	_tagesziel_auswerten()
 	_huber_abrechnen()
 	if not _saboteur.is_empty():
@@ -5320,9 +5324,9 @@ func _update_puke(g: Dictionary, id: int, delta: float) -> void:
 
 ## Kurze Schwarzblende beim Schlafen (bei allen Spielern).
 @rpc("authority", "reliable", "call_local")
-func net_sleep_fade() -> void:
+func net_sleep_fade(tag: int = 0) -> void:
 	if _hud and _hud.has_method("play_sleep_fade"):
-		_hud.play_sleep_fade()
+		_hud.play_sleep_fade(tag)
 
 ## Letzte Tagesbilanz — im Wiesenbüro jederzeit nachlesbar.
 @rpc("authority", "reliable", "call_local")

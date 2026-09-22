@@ -218,7 +218,17 @@ class Lauf extends Node:
 		gm._phase = gm.Phase.SHIFT   # Tagesende gilt nur aus einer laufenden Schicht
 		gm._end_shift(0)
 		await _frames(3)
+		# Der Tag wechselt erst beim Schlafen (Fehler vom 22.09.: Kalender und
+		# Leiste zeigten schon nach Feierabend den nächsten Tag)
+		_check("nach Feierabend steht der Tag still", gm._day == 16, "Tag=%d" % gm._day)
+		gm._tag_starten()
+		await _frames(3)
 		_check("nach Tag 16 kommt Tag 17", gm._day == 17, "Tag=%d" % gm._day)
+		# _tag_starten() startet gleich die nächste Schicht — für die Prüfungen
+		# danach wieder in die Pause zurück
+		gm._phase = gm.Phase.INTERMISSION
+		gm._zelt_offen = false
+		gm._nachts_geschlossen = true
 		_check("HUD zeigt Tag 1/16 der neuen Wiesn", String(hud.get_node("%Zeit").text).begins_with("Tag 1/16"), hud.get_node("%Zeit").text)
 		_check("Wiesn nach dem Finale bewertet", gm._saison_nr >= 2 and int(gm._stats.saisons) >= 1
 			and hud.is_popup_open(), "Wiesn %d" % gm._saison_nr)
@@ -510,6 +520,7 @@ class Lauf extends Node:
 		await _frames(2)
 		_check("Zelt eröffnet, Fass verschwindet", gm._zelt_offen and eroeffnung != null and not eroeffnung.visible, "")
 		gm._zelt_offen = false
+		gm._nachts_geschlossen = true
 		gm._phase_time = gm.SHIFT_TIME * (1.0 - (10.5 - gm.DAY_START_HOUR) / (gm.DAY_END_HOUR - gm.DAY_START_HOUR))
 		gm._shift_process(0.01)
 		_check("um 10 Uhr öffnet das Zelt von selbst", gm._zelt_offen, "%.2f Uhr" % gm._clock_hour())
