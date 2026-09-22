@@ -2005,13 +2005,15 @@ const SCHLAEGEREI_UHR := Vector2(18.5, 21.0)  # Ausbruch irgendwann in diesem Ze
 const SCHLAEGEREI_SPAETESTENS := 21.75        # zu wenig Gäste: bis dahin erneut versuchen
 const SCHLAEGEREI_MIN_GAESTE := 10            # so viele sitzende Gäste müssen da sein
 const SCHLAEGEREI_MAX := 22
-const SCHLAEGEREI_DAUER := 30.0
+## Eine Massenschlägerei war nach einer halben Minute vorbei, bevor man
+## überhaupt drin war (Rückmeldung 22.09.)
+const SCHLAEGEREI_DAUER := 90.0
 const SCHLAEGEREI_POP := 20.0                 # Verlust ohne Rauswürfe — deutlich
 const SCHLAEGEREI_DRECK := 5
 ## Einzelne Schlägereien (zwei Gäste) sind ab Tag 5 normal: je Schicht so viele
 const EINZEL_JE_SCHICHT := Vector2i(1, 3)
 const EINZEL_UHR := Vector2(16.5, 21.5)
-const EINZEL_DAUER := 14.0
+const EINZEL_DAUER := 45.0
 const EINZEL_POP := 3.0
 const RAUSWURF_POP := 0.5                     # je rausgeworfenem Raufbold
 const RAUSWURF_TEMPO := Vector2(11.0, 4.5)    # waagerecht, senkrecht
@@ -2027,6 +2029,15 @@ var _schlaegerei_t := 0.0
 var _schlaegerei_raus := 0
 ## Gast-ID -> Raufbold (auf allen Rechnern)
 var _raufbolde := {}
+## Spieler-Peer -> Gast-ID, die er gerade auf dem Arm hat
+var _gepackt := {}
+## Spieler-Peer -> Restzeit, bis der Gepackte sich losreißt
+var _gepackt_t := {}
+## Spieler-Peer -> Peer des Mitspielers, den er auf dem Arm hat
+var _gepackt_spieler := {}
+var _gepackt_spieler_t := {}
+## So lange zappelt ein Gepackter, bevor er sich befreit
+const ZAPPEL_ZEIT := Vector2(3.5, 7.0)
 var _schlaegerei_knoten: Node3D
 
 ## Beim Schichtbeginn: ob und wann heute eine Schlägerei ausbricht.
@@ -2145,6 +2156,8 @@ func _raufbold_erzeugen(id: int, ort: Vector3) -> Node3D:
 	r.gast_id = id
 	r.flucht_ziel = ENTRANCE + Vector3(randf_range(-3.0, 3.0), 0.0, randf_range(7.0, 11.0))
 	r.add_to_group("interactable")
+	if multiplayer.is_server():
+		r.gelandet.connect(_raufbold_gelandet)
 	_raufbolde[id] = r
 	return r
 
@@ -2195,30 +2208,194 @@ func _net_schlaegerei_start(ids: PackedInt32Array, ort: Vector3) -> void:
 ## Spieler wirft einen Raufbold raus (E). Richtung: wohin der Spieler schaut.
 @rpc("any_peer", "reliable", "call_local")
 func net_rauswerfen(gast_id: int) -> void:
-	if not multiplayer.is_server() or not _guest_sim.has(gast_id):
-		return
-	var einzel: Dictionary = {}
-	for streit: Dictionary in _einzelstreits:
-		if (streit.ids as Array).has(gast_id):
-			einzel = streit
-	if einzel.is_empty() and not _schlaegerei_ids.has(gast_id):
+	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
 		s = 1
-	var vorn := Vector3(0, 0, 1)
+	# Schon jemanden auf dem Arm? Dann wirft dieser Druck ihn weg — dafür braucht
+	# es kein Ziel mehr im Blick.
+	if _gepackt.has(s):
+		_werfen(s)
+		return
+	if not _guest_sim.has(gast_id) or not _im_streit(gast_id):
+		return
+	if _gepackt.values().has(gast_id):
+		return   # hat schon ein anderer
 	var pl = _players_nodes.get(s)
+	if pl == null or not is_instance_valid(pl):
+		return
+	# Abstand zum Raufbold, nicht zum Gasteintrag: der Gast bleibt beim Prügeln
+	# auf seinem Sitzplatz stehen, während der Raufbold ins Knäuel läuft.
+	var r = _raufbolde.get(gast_id)
+	if r == null or not is_instance_valid(r):
+		return
+	if (pl as Node3D).global_position.distance_to((r as Node3D).global_position) > 2.6:
+		return
+	_gepackt[s] = gast_id
+	_gepackt_t[s] = randf_range(ZAPPEL_ZEIT.x, ZAPPEL_ZEIT.y)
+	_net_gepackt.rpc(gast_id, s)
+
+## Läuft dieser Gast gerade in einer Schlägerei mit?
+func _im_streit(gast_id: int) -> bool:
+	for streit: Dictionary in _einzelstreits:
+		if (streit.ids as Array).has(gast_id):
+			return true
+	return _schlaegerei_ids.has(gast_id)
+
+## Raufbold auf den Arm: bei allen Spielern zappelt er beim Träger.
+@rpc("authority", "reliable", "call_local")
+func _net_gepackt(gast_id: int, traeger: int) -> void:
+	var r = _raufbolde.get(gast_id)
+	if r == null or not is_instance_valid(r):
+		return
+	r.traeger = _players_nodes.get(traeger)
+	r.packen()
+	var p = _players_nodes.get(traeger)
+	if p and is_instance_valid(p) and p.has_method("raufbold_auf_dem_arm"):
+		p.raufbold_auf_dem_arm(true)
+
+## Er hat sich losgerissen — zurück in die Schlägerei.
+@rpc("authority", "reliable", "call_local")
+func _net_losgerissen(gast_id: int, traeger: int = 0) -> void:
+	var r = _raufbolde.get(gast_id)
+	if r and is_instance_valid(r):
+		r.traeger = null
+		r.loslassen()
+	_arme_leer_melden(traeger)
+
+## Der Wurf. Ob er draußen landet, entscheidet der Server beim Aufschlag.
+@rpc("authority", "reliable", "call_local")
+func _net_geworfen(gast_id: int, tempo: Vector3, traeger: int = 0) -> void:
+	var r = _raufbolde.get(gast_id)
+	if r and is_instance_valid(r):
+		r.traeger = null
+		r.werfen(tempo)
+	_arme_leer_melden(traeger)
+
+## Mitspieler packen und werfen — dieselbe Mechanik wie beim Raufbold. Ein
+## zweiter Druck wirft; wer sich losreißt, steht einfach wieder frei da.
+@rpc("any_peer", "reliable")
+func net_spieler_packen(ziel: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if _gepackt_spieler.has(s):
+		_spieler_werfen(s)
+		return
+	if s == ziel or not _players_nodes.has(s) or not _players_nodes.has(ziel):
+		return
+	if _gepackt_spieler.values().has(ziel):
+		return   # hat schon ein anderer
+	var a: Node3D = _players_nodes[s]
+	var b: Node3D = _players_nodes[ziel]
+	if not is_instance_valid(a) or not is_instance_valid(b):
+		return
+	if a.global_position.distance_to(b.global_position) > 2.4:
+		return
+	_gepackt_spieler[s] = ziel
+	_gepackt_spieler_t[s] = randf_range(ZAPPEL_ZEIT.x, ZAPPEL_ZEIT.y)
+	_net_traegt_spieler.rpc(s, true)
+
+## Beim Träger merken, damit sein Hinweis „werfen" zeigt und E wirft.
+@rpc("authority", "reliable", "call_local")
+func _net_traegt_spieler(peer: int, ja: bool) -> void:
+	var p = _players_nodes.get(peer)
+	if p and is_instance_valid(p) and p.has_method("spieler_auf_dem_arm"):
+		p.spieler_auf_dem_arm(ja)
+
+func _spieler_werfen(traeger: int) -> void:
+	if not _gepackt_spieler.has(traeger):
+		return
+	var ziel: int = _gepackt_spieler[traeger]
+	_gepackt_spieler.erase(traeger)
+	_gepackt_spieler_t.erase(traeger)
+	_net_traegt_spieler.rpc(traeger, false)
+	var pl = _players_nodes.get(traeger)
+	var zp = _players_nodes.get(ziel)
+	if zp == null or not is_instance_valid(zp):
+		return
+	var vorn := Vector3(0, 0, 1)
+	if pl and is_instance_valid(pl):
+		vorn = -(pl as Node3D).global_transform.basis.z
+		vorn.y = 0.0
+		vorn = vorn.normalized() if vorn.length() > 0.01 else Vector3(0, 0, 1)
+	zp.getragen_geworfen.rpc_id(ziel, vorn * RAUSWURF_TEMPO.x + Vector3.UP * RAUSWURF_TEMPO.y)
+
+## Getragene mitführen und Zappeln mitzählen (Server).
+func _update_gepackt(delta: float) -> void:
+	for traeger: int in _gepackt_spieler.keys().duplicate():
+		var ziel: int = _gepackt_spieler[traeger]
+		var pl = _players_nodes.get(traeger)
+		var zp = _players_nodes.get(ziel)
+		if pl == null or zp == null or not is_instance_valid(pl) or not is_instance_valid(zp):
+			_gepackt_spieler.erase(traeger)
+			_gepackt_spieler_t.erase(traeger)
+			_net_traegt_spieler.rpc(traeger, false)
+			continue
+		var vorn := -(pl as Node3D).global_transform.basis.z
+		vorn.y = 0.0
+		var ort: Vector3 = (pl as Node3D).global_position + vorn.normalized() * 1.0 + Vector3(0, 0.45, 0)
+		zp.getragen_stellen.rpc_id(ziel, ort, (pl as Node3D).rotation.y + PI)
+		_gepackt_spieler_t[traeger] = float(_gepackt_spieler_t[traeger]) - delta
+		if float(_gepackt_spieler_t[traeger]) <= 0.0:
+			_gepackt_spieler.erase(traeger)
+			_gepackt_spieler_t.erase(traeger)
+			_net_traegt_spieler.rpc(traeger, false)
+	for traeger: int in _gepackt.keys().duplicate():
+		var gast_id: int = _gepackt[traeger]
+		var pl = _players_nodes.get(traeger)
+		if pl == null or not is_instance_valid(pl) or not _guest_sim.has(gast_id):
+			_gepackt.erase(traeger)
+			_gepackt_t.erase(traeger)
+			_net_losgerissen.rpc(gast_id, traeger)
+			continue
+		# Wo er hängt, macht der Raufbold selbst (raufbold.gd, _beim_traeger) —
+		# die Gastposition bleibt liegen, sonst zöge sie die Gastsimulation
+		# jedes Bild wieder zum Prügelplatz zurück.
+		_gepackt_t[traeger] = float(_gepackt_t[traeger]) - delta
+		if float(_gepackt_t[traeger]) <= 0.0:
+			_gepackt.erase(traeger)
+			_gepackt_t.erase(traeger)
+			_net_losgerissen.rpc(gast_id, traeger)
+
+## Wirft, was dieser Spieler auf dem Arm hat.
+func _werfen(traeger: int) -> void:
+	if not _gepackt.has(traeger):
+		return
+	var gast_id: int = _gepackt[traeger]
+	_gepackt.erase(traeger)
+	_gepackt_t.erase(traeger)
+	var vorn := Vector3(0, 0, 1)
+	var pl = _players_nodes.get(traeger)
 	if pl:
 		vorn = -(pl as Node3D).global_transform.basis.z
 		vorn.y = 0.0
 		vorn = vorn.normalized() if vorn.length() > 0.01 else Vector3(0, 0, 1)
-	if einzel.is_empty():
+	_net_geworfen.rpc(gast_id, vorn * RAUSWURF_TEMPO.x + Vector3.UP * RAUSWURF_TEMPO.y, traeger)
+
+## Ein geworfener Raufbold ist aufgeschlagen (nur Server): außerhalb des Zelts
+## ist er draußen und kommt nicht wieder, drinnen rappelt er sich auf und
+## mischt weiter mit.
+func _raufbold_gelandet(r: Node3D) -> void:
+	if not multiplayer.is_server():
+		return
+	var gast_id: int = int(r.gast_id)
+	if not _guest_sim.has(gast_id) or not _im_streit(gast_id):
+		return
+	var p: Vector3 = r.global_position
+	if p.x > ZELT_MIN.x and p.x < ZELT_MAX.x and p.z > ZELT_MIN.z and p.z < ZELT_MAX.z:
+		return   # drinnen gelandet — er macht weiter
+	for streit: Dictionary in _einzelstreits:
+		if (streit.ids as Array).has(gast_id):
+			streit.raus = int(streit.raus) + 1
+	if _schlaegerei_ids.has(gast_id):
 		_schlaegerei_raus += 1
-	else:
-		einzel.raus = int(einzel.raus) + 1
 	_pop_erhoehen(RAUSWURF_POP)
 	_despawn_guest(gast_id)
-	_net_rauswurf.rpc(gast_id, vorn * RAUSWURF_TEMPO.x + Vector3.UP * RAUSWURF_TEMPO.y)
+	_net_rauswurf.rpc(gast_id, Vector3.ZERO)
 
 @rpc("authority", "reliable", "call_local")
 func _net_rauswurf(gast_id: int, tempo: Vector3) -> void:
@@ -3940,6 +4117,7 @@ func _shift_process(delta: float) -> void:
 		_ohne_ware_s += delta
 	_update_ereignis(delta)
 	_update_schlaegerei(delta)
+	_update_gepackt(delta)
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
@@ -5911,3 +6089,10 @@ func _stamm_belohnung(k: String) -> void:
 			_add_income(300)
 			_pop_erhoehen(3.0)
 	_melde("MSG_STAMM_BELOHNUNG_" + k.to_upper(), [], 2)
+
+## Nach Loslassen oder Wurf: kein Spieler trägt mehr einen Raufbold. Es kann
+## immer nur einer je Raufbold sein, darum reicht das Zurücksetzen bei allen.
+func _arme_leer_melden(traeger: int) -> void:
+	var p = _players_nodes.get(traeger)
+	if p and is_instance_valid(p) and p.has_method("raufbold_auf_dem_arm"):
+		p.raufbold_auf_dem_arm(false)

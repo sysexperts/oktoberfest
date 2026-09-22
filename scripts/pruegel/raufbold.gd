@@ -43,6 +43,11 @@ var ausdauer := 3
 var flucht_ziel := Vector3.INF
 ## Laufende Massenschlägerei, in der er mitmischt (null = keine)
 var schlaegerei: Node = null
+## Wer trägt ihn gerade (Spielerknoten) — nur zum Mitwandern
+var traeger: Node3D = null
+## Gegner und Knäuel vor dem Packen, damit er danach weitermacht
+var _gegner_vorher: Node3D = null
+var _schlaegerei_vorher: Node = null
 
 var _figur: Figur
 var _pose: Node
@@ -129,6 +134,7 @@ func _process(delta: float) -> void:
 			_anim_setzen("rennen")
 			_pose_wert("zappeln", 1.0)
 			_pose_wert("haltung", 0.0)
+			_beim_traeger(delta)
 		Zustand.FLIEGT:
 			_fliegen(delta)
 	# Treffer-Reaktion klingt ab
@@ -288,9 +294,13 @@ func _fluechten(delta: float) -> void:
 	global_position += zu.normalized() * minf(RENNEN * delta, zu.length())
 
 # ------------------------------------------------------------ Packen und Werfen
+## Vom Spieler auf den Arm genommen. Gegner und Knäuel werden gemerkt: reißt er
+## sich los oder landet er wieder im Zelt, macht er dort weiter.
 func packen() -> bool:
 	if zustand == Zustand.FLIEGT or zustand == Zustand.GEPACKT:
 		return false
+	_gegner_vorher = gegner
+	_schlaegerei_vorher = schlaegerei
 	schlaegerei = null
 	gegner = null
 	_kipper.rotation = Vector3.ZERO
@@ -338,6 +348,11 @@ func _fliegen(delta: float) -> void:
 
 func _liegen_bleiben() -> void:
 	_flug = Vector3.ZERO
+	# Nach dem Wurf wieder in die Schlägerei — wer draußen landet, wird vom
+	# GameManager entfernt, bevor er aufsteht
+	if _gegner_vorher != null:
+		gegner = _gegner_vorher
+		schlaegerei = _schlaegerei_vorher
 	global_rotation.y = _kipper.global_rotation.y
 	_kipper.rotation = Vector3(deg_to_rad(84.0), 0.0, 0.0)
 	_kipper.position = Vector3(0, 0.12, 0)
@@ -382,3 +397,33 @@ func _staub(ort: Vector3, staerke: float, ton: String) -> void:
 	get_tree().current_scene.add_child(s)
 	s.global_position = Vector3(ort.x, maxf(0.02, ort.y), ort.z)
 	s.ausloesen(staerke, ton)
+
+## Losgerissen: zurück zu dem, mit dem er sich gestritten hat.
+func loslassen() -> void:
+	traeger = null
+	if zustand != Zustand.GEPACKT:
+		return
+	_weiterkaempfen()
+
+## Gegner und Knäuel von vor dem Packen zurückholen. Ist der Gegner weg, haut er ab.
+func _weiterkaempfen() -> void:
+	gegner = _gegner_vorher
+	schlaegerei = _schlaegerei_vorher
+	if _gegner_da():
+		_setze(Zustand.HINGEHEN)
+	else:
+		_setze(Zustand.FLUCHT)
+
+## Vor dem Träger schweben und strampeln.
+func _beim_traeger(delta: float) -> void:
+	if traeger == null or not is_instance_valid(traeger):
+		return
+	var vorn := -traeger.global_transform.basis.z
+	vorn.y = 0.0
+	if vorn.length() < 0.01:
+		vorn = Vector3(0, 0, 1)
+	var ziel: Vector3 = traeger.global_position + vorn.normalized() * 0.9 + Vector3(0, 0.55, 0)
+	global_position = global_position.lerp(ziel, clampf(delta * 14.0, 0.0, 1.0))
+	# Schaut den Träger an und rudert dabei
+	_blick(-vorn, delta)
+	_kipper.rotation.z = sin(float(Time.get_ticks_msec()) * 0.012) * 0.25

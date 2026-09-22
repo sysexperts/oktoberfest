@@ -1014,3 +1014,5 @@ EMOTE_POSEN,Posen,Pose,Poz ver
 EMOTE_KOTZEN,Kotzen,Puke,Kusmak
 EMOTE_WINKEN,Winken,Wave,El salla
 EMOTE_HINWEIS,Maus oder Pfeiltasten zum Auswählen,Mouse or arrow keys to choose,Seçmek için fare veya ok tuşları
+HINT_PACKEN,{interact} Raufbold packen,{interact} Grab the brawler,{interact} Kavgacıyı yakala
+HINT_WERFEN,{interact} Werfen,{interact} Throw,{interact} Fırlat

@@ -730,11 +730,27 @@ class Lauf extends Node:
 			and gm._raufbolde.size() == gm._schlaegerei_ids.size(), "%d Raufbolde" % gm._raufbolde.size())
 		if not gestartet:
 			return
+		# Packen und werfen (Feature 22.09.): erstes E nimmt ihn auf den Arm,
+		# zweites wirft. Der Gast bleibt im Spiel, bis er draußen landet.
 		var erster: int = gm._schlaegerei_ids[0]
+		var werfer: Node3D = gm.get_node("Players").get_child(0)
+		var raufbold: Node3D = gm._raufbolde[erster]
+		werfer.global_position = raufbold.global_position + Vector3(0.8, 0, 0)
 		gm.net_rauswerfen(erster)
 		await _frames(2)
-		_check("Rauswurf: Gast weg, Raufbold fliegt", not gm._guest_sim.has(erster) and gm._schlaegerei_raus == 1
-			and gm._raufbolde[erster].zustand == gm._raufbolde[erster].Zustand.FLIEGT, "")
+		_check("erstes E: Raufbold hängt am Arm", gm._gepackt.get(1, -1) == erster
+			and raufbold.zustand == raufbold.Zustand.GEPACKT and werfer.traegt_raufbold,
+			"Zustand %d" % raufbold.zustand)
+		gm.net_rauswerfen(0)
+		await _frames(2)
+		_check("zweites E: er fliegt", not gm._gepackt.has(1)
+			and raufbold.zustand == raufbold.Zustand.FLIEGT and not werfer.traegt_raufbold, "")
+		# Draußen aufgeschlagen: raus aus dem Spiel und als Rauswurf gezählt
+		raufbold.global_position = Vector3(0, 0, gm.ZELT_MAX.z + 6.0)
+		gm._raufbold_gelandet(raufbold)
+		await _frames(2)
+		_check("draußen gelandet: Gast weg und als Rauswurf gezählt",
+			not gm._guest_sim.has(erster) and gm._schlaegerei_raus == 1, str(gm._schlaegerei_raus))
 		var beteiligt: Array = gm._schlaegerei_ids.duplicate()
 		gm._schlaegerei_beenden()
 		var alle_weg := true

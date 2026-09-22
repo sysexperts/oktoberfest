@@ -443,6 +443,11 @@ func _tippt() -> bool:
 func _handle_movement(delta: float) -> void:
 	if _geschleudert():
 		return
+	# Auf dem Arm eines Mitspielers: keine eigene Bewegung, nur zappeln
+	if wird_getragen():
+		velocity = Vector3.ZERO
+		_head.rotation.z = sin(float(Time.get_ticks_msec()) * 0.013) * 0.12
+		return
 	# Beim Übergeben bleibt man stehen — gehen geht erst wieder danach
 	if _kotz_t > 0.0:
 		velocity.x = move_toward(velocity.x, 0.0, ACCEL * delta * SPEED)
@@ -583,7 +588,9 @@ func _hint_for(t: Node3D) -> String:
 	if t.has_method("ist_wiesnchef"):
 		return "HINT_WIESNCHEF" if t.ansprechbar() else ""
 	if t.has_method("ist_raufbold"):
-		return "HINT_RAUSWERFEN" if t.ist_raufbold() else ""
+		if traegt_raufbold:
+			return "HINT_WERFEN"
+		return "HINT_PACKEN" if t.ist_raufbold() else ""
 	if t.has_method("ist_budenbesitzer"):
 		if t.bude == null or t.bude.laeuft() or carry_state != 0:
 			return ""
@@ -691,6 +698,22 @@ func _handle_interaction(delta: float) -> void:
 			and (_current_target == null or _hint_for(_current_target) == ""):
 		_ablegen()
 		return
+	if Input.is_action_just_pressed("interact"):
+		# Jemanden auf dem Arm? Dann wirft dieses E ihn weg, egal wohin man schaut.
+		if traegt_raufbold or traegt_spieler:
+			if traegt_spieler:
+				_world.net_spieler_packen.rpc_id(1, 0)
+			else:
+				_world.net_rauswerfen.rpc_id(1, 0)
+			_sfx("pop")
+			return
+		# Mitspieler packen: einer steht direkt vor einem und nichts im Blick
+		if _current_target == null and _world.has_method("net_spieler_packen"):
+			var wer := mitspieler_vor_mir()
+			if wer != 0:
+				_world.net_spieler_packen.rpc_id(1, wer)
+				_sfx("pop")
+				return
 	if _current_target == null:
 		return
 	if Input.is_action_just_pressed("interact"):
@@ -708,7 +731,7 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_schiessen_bezahlen.rpc_id(1, _world.get_path_to(bude))
 			return
 		if _current_target.has_method("ist_raufbold"):
-			# Massenschlägerei: Raufbold packen und rauswerfen
+			# Schlägerei: erst packen, mit dem nächsten E werfen
 			if _current_target.ist_raufbold():
 				_world.net_rauswerfen.rpc_id(1, _current_target.gast_id)
 				_sfx("pop")
@@ -1251,3 +1274,58 @@ func _kamera_aussen(an: bool, delta: float) -> void:
 	var draussen := an or _cam.position.distance_to(_kam_ruhe) > 0.25
 	if _is_local:
 		_model.visible = draussen
+
+## Trägt dieser Spieler gerade einen Raufbold? Setzt der GameManager
+## (_net_gepackt / _net_losgerissen / _net_geworfen). Damit zeigt der Hinweis
+## „werfen" statt „packen", und E wirft auch ohne Ziel im Blick.
+var traegt_raufbold := false
+
+func raufbold_auf_dem_arm(ja: bool) -> void:
+	traegt_raufbold = ja
+
+# --------------------------------------------- Von einem Mitspieler getragen
+## Ein anderer Spieler hat einen auf dem Arm: der Server schiebt die Figur jedes
+## Bild an ihren Platz, die eigene Steuerung ist so lange aus. Bleiben die
+## Päckchen aus (Verbindung weg), läuft man nach einer halben Sekunde weiter.
+var _getragen_bis := 0.0
+## Trägt dieser Spieler gerade einen Mitspieler?
+var traegt_spieler := false
+
+func wird_getragen() -> bool:
+	return Time.get_ticks_msec() / 1000.0 < _getragen_bis
+
+@rpc("any_peer", "unreliable_ordered")
+func getragen_stellen(pos: Vector3, yaw: float) -> void:
+	if multiplayer.get_remote_sender_id() not in [0, 1]:
+		return
+	_getragen_bis = Time.get_ticks_msec() / 1000.0 + 0.5
+	global_position = pos
+	rotation.y = yaw
+	velocity = Vector3.ZERO
+	_net_pos = pos
+	_net_yaw = yaw
+
+@rpc("any_peer", "reliable")
+func getragen_geworfen(tempo: Vector3) -> void:
+	if multiplayer.get_remote_sender_id() not in [0, 1]:
+		return
+	_getragen_bis = 0.0
+	geschleudert(tempo)
+
+func spieler_auf_dem_arm(ja: bool) -> void:
+	traegt_spieler = ja
+
+## Mitspieler in Reichweite vor einem — für das Packen in der Schlägerei.
+func mitspieler_vor_mir() -> int:
+	var vorn := -global_transform.basis.z
+	vorn.y = 0.0
+	for p in get_tree().get_nodes_in_group("player"):
+		if p == self or not is_instance_valid(p):
+			continue
+		var zu: Vector3 = (p as Node3D).global_position - global_position
+		zu.y = 0.0
+		if zu.length() > 2.0 or zu.length() < 0.01:
+			continue
+		if vorn.normalized().dot(zu.normalized()) > 0.55:
+			return (p as Node).name.to_int()
+	return 0
