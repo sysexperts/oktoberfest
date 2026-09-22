@@ -419,6 +419,9 @@ size = Vector3(3.8, 2.3, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_mq6do"]
 size = Vector3(1.6, 1, 1.1)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(4.951416015625, 2.89999985694885, 2.24549984931946)
+
 [node name="Wohnwagen" type="Node3D" unique_id=1893424243]
 
 [node name="Aufbau" type="Node3D" parent="." unique_id=1656605661]
@@ -1276,15 +1279,11 @@ light_color = Color(1, 0.84, 0.6, 1)
 light_energy = 0.6
 omni_range = 4.0
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=38420000]
-
-[node name="Aufbau" type="CollisionShape3D" parent="Kollision" unique_id=839486260]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
-shape = SubResource("BoxShape3D_s3uoj")
-
-[node name="Deichsel" type="CollisionShape3D" parent="Kollision" unique_id=454115231]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 0.5, 0)
-shape = SubResource("BoxShape3D_mq6do")
-
 [node name="Schild" type="Marker3D" parent="." unique_id=1582908692]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.73578691482544, 1.37000000476837, 0.12750005722046)
+shape = SubResource("KollisionForm")

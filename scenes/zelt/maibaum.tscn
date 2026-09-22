@@ -46,6 +46,9 @@ rings = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_rjqaq"]
 size = Vector3(0.6, 3, 0.6)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.55000001192093, 17.1000003814697, 0.55000001192093)
+
 [node name="Maibaum" type="Node3D" unique_id=1179549706]
 
 [node name="Sockel" type="MeshInstance3D" parent="." unique_id=1100980570]
@@ -150,8 +153,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.2, 0)
 material_override = ExtResource("3_d0xby")
 mesh = SubResource("CylinderMesh_iydta")
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=191361615]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=2102805514]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-shape = SubResource("BoxShape3D_rjqaq")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 8.55000019073486, 0.0)
+shape = SubResource("KollisionForm")

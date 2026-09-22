@@ -32,6 +32,9 @@ size = Vector3(0.05, 1.5700318, 0.05)
 [sub_resource type="BoxMesh" id="BoxMesh_q6yw7"]
 size = Vector3(0.05, 1.5890248, 0.05)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.81000000238419, 1.72832846641541, 0.62916034460068)
+
 [node name="Speisetafel" type="Node3D" unique_id=193148796]
 
 [node name="Tafel" type="MeshInstance3D" parent="." unique_id=1691880402]
@@ -82,3 +85,9 @@ mesh = SubResource("BoxMesh_c3hk0")
 transform = Transform3D(1, 0, 0, 0, 0.97544104, -0.22026087, 0, 0.22026087, 0.97544104, 0, 0.775, -0.175)
 material_override = ExtResource("2_r47mm")
 mesh = SubResource("BoxMesh_q6yw7")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.85865771770477, -0.02485248446465)
+shape = SubResource("KollisionForm")

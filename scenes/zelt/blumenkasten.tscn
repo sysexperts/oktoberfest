@@ -26,6 +26,9 @@ height = 0.2
 radial_segments = 12
 rings = 6
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(1.27123057842255, 0.62999999523163, 0.36674350500107)
+
 [node name="Blumenkasten" type="Node3D" unique_id=468013910]
 
 [node name="Kasten" type="MeshInstance3D" parent="." unique_id=2095615636]
@@ -92,3 +95,9 @@ mesh = SubResource("SphereMesh_ypb5g")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.02, 0.16)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_ypb5g")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.19499999284744, 0.05374638736248)
+shape = SubResource("KollisionForm")

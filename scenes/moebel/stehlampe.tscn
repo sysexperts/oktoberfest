@@ -5,19 +5,22 @@
 [sub_resource type="BoxShape3D" id="Form"]
 size = Vector3(0.3, 1.6, 0.3)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.43199998140335, 1.64999997615814, 0.43199998140335)
+
 [node name="Stehlampe" type="Node3D"]
 
 [node name="Modell" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_mesh")
-
-[node name="Kollision" type="StaticBody3D" parent="."]
-
-[node name="Form" type="CollisionShape3D" parent="Kollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-shape = SubResource("Form")
 
 [node name="Licht" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, 0)
 light_color = Color(1, 0.86, 0.62, 1)
 light_energy = 1.2
 omni_range = 5.0
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.82499998807907, 0.0)
+shape = SubResource("KollisionForm")

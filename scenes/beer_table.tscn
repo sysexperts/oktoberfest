@@ -7,6 +7,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_o2d3b"]
 size = Vector3(2.3977156, 0.70621455, 1.6067021)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(2.39771556854248, 0.70621454715729, 1.60670208930969)
+
 [node name="BeerTable" type="Node3D" unique_id=1941652932]
 script = ExtResource("1")
 
@@ -39,8 +42,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.72)
 [node name="Seat5" type="Marker3D" parent="Seats" unique_id=1307852768]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.1, -0.72)
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=1621545988]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1398320217]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0007160902, 0.3465455, -0.00092470646)
-shape = SubResource("BoxShape3D_o2d3b")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00071609020233, 0.34654548764229, -0.00092470645905)
+shape = SubResource("KollisionForm")

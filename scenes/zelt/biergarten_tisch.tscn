@@ -49,6 +49,9 @@ rings = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_q35jl"]
 size = Vector3(2.3, 0.9, 1.6)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(2.70000004768372, 2.72499990463257, 2.70000004768372)
+
 [node name="BiergartenTisch" type="Node3D" unique_id=94767310]
 
 [node name="Platte" type="MeshInstance3D" parent="." unique_id=1078347367]
@@ -126,8 +129,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.89, -0.06)
 material_override = ExtResource("6_esdqs")
 mesh = SubResource("CylinderMesh_1bqw0")
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=1594495696]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=361801941]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
-shape = SubResource("BoxShape3D_q35jl")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.35749995708466, 0.0)
+shape = SubResource("KollisionForm")

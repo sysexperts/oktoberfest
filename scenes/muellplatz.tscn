@@ -8,6 +8,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_0pa08"]
 size = Vector3(1.368, 1.277, 1.0170001)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(1.36800003051758, 1.27699995040894, 1.01700007915497)
+
 [node name="Muellplatz" type="Node3D" unique_id=2143040036]
 script = ExtResource("1_skript")
 
@@ -41,8 +44,8 @@ transform = Transform3D(-0.24, 0, 0.2, 0, 0.32, 0, -0.2, 0, -0.24, 0, 1.1, 0.22)
 visible = false
 mesh = ExtResource("2_sack")
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=350407229]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=178882191]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6365, 0.025000036)
-shape = SubResource("BoxShape3D_0pa08")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.63650000095367, 0.02500003576279)
+shape = SubResource("KollisionForm")

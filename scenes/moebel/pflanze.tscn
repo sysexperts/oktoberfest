@@ -5,6 +5,9 @@
 [sub_resource type="BoxShape3D" id="Form"]
 size = Vector3(0.45, 0.5, 0.45)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.65782815217972, 1.50954163074493, 0.67004823684692)
+
 [node name="Pflanze" type="Node3D"]
 
 [node name="Modell" type="MeshInstance3D" parent="."]
@@ -13,5 +16,5 @@ mesh = ExtResource("1_mesh")
 [node name="Kollision" type="StaticBody3D" parent="."]
 
 [node name="Form" type="CollisionShape3D" parent="Kollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-shape = SubResource("Form")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05551180243492, 0.75477081537247, -0.09396240115166)
+shape = SubResource("KollisionForm")

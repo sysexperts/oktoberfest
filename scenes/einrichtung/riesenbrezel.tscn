@@ -6,14 +6,17 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_boonq"]
 size = Vector3(1.08, 1.0125, 0.3786329)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(1.08000004291534, 1.01250004768372, 0.37863290309906)
+
 [node name="Riesenbrezel" type="Node3D" unique_id=50363015]
 script = ExtResource("1_e")
 
 [node name="Modell" type="Node3D" parent="." unique_id=309827144 instance=ExtResource("2_m")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0.22)
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=1630196951]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=20692176]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.22000001)
-shape = SubResource("BoxShape3D_boonq")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.0, 0.22000001370907)
+shape = SubResource("KollisionForm")

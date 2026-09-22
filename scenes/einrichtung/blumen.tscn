@@ -6,13 +6,16 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_lib0u"]
 size = Vector3(0.2893333, 0.5364797, 0.2893335)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.28933331370354, 0.53647971153259, 0.28933349251747)
+
 [node name="Blumen" type="Node3D" unique_id=1994564543]
 script = ExtResource("1_e")
 
 [node name="Modell" type="Node3D" parent="." unique_id=545407803 instance=ExtResource("2_m")]
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=943955277]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1410635310]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.940697e-08, 0.2682398, 2.682209e-07)
-shape = SubResource("BoxShape3D_lib0u")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00000008940697, 0.26823979616165, 0.0000002682209)
+shape = SubResource("KollisionForm")

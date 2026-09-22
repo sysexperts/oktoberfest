@@ -2,7 +2,16 @@
 
 [ext_resource type="ArrayMesh" path="res://assets/moebel/buerostuhl.tres" id="1_mesh"]
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.56492763757706, 1.07299065589905, 0.54190063476563)
+
 [node name="Buerostuhl" type="Node3D"]
 
 [node name="Modell" type="MeshInstance3D" parent="."]
 mesh = ExtResource("1_mesh")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.53649532794952, 0.02747583389282)
+shape = SubResource("KollisionForm")

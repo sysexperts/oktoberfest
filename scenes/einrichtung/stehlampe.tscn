@@ -31,6 +31,9 @@ emission_energy_multiplier = 1.5
 [sub_resource type="BoxShape3D" id="BoxShape3D_147ro"]
 size = Vector3(0.576, 1.925, 0.576)
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.57599997520447, 1.92499995231628, 0.57599997520447)
+
 [node name="Stehlampe" type="Node3D" unique_id=1326155833]
 script = ExtResource("1_e")
 
@@ -56,8 +59,8 @@ light_energy = 1.2
 omni_range = 7.0
 omni_attenuation = 1.4
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=1678752580]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=234399496]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9625, 0)
-shape = SubResource("BoxShape3D_147ro")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.96249997615814, 0.0)
+shape = SubResource("KollisionForm")

@@ -366,6 +366,9 @@ rings = 6
 height = 2.76
 radius = 0.22
 
+[sub_resource type="BoxShape3D" id="KollisionForm"]
+size = Vector3(0.55000001192093, 5.89414167404175, 0.55000001192093)
+
 [node name="BaumApfel" type="Node3D" unique_id=1368924971]
 
 [node name="Stamm" type="MeshInstance3D" parent="." unique_id=159124954]
@@ -653,8 +656,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4674902, 4.9098067, -0.524
 material_override = SubResource("StandardMaterial3D_00tbc")
 mesh = SubResource("SphereMesh_kg161")
 
-[node name="Kollision" type="StaticBody3D" parent="." unique_id=273756131]
+[node name="Kollision" type="StaticBody3D" parent="."]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1295508800]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38, 0)
-shape = SubResource("CylinderShape3D_dgbsb")
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07195687294006, 2.77644896507263, -0.03734564781189)
+shape = SubResource("KollisionForm")
