@@ -279,6 +279,7 @@ func _physics_process(delta: float) -> void:
 				emote = emote_wahl
 		else:
 			emote = 0
+		_kamera_aussen(emote != 0, delta)
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
@@ -1201,3 +1202,37 @@ func _emote_starten(welches: int) -> void:
 ## Läuft gerade ein Emote aus dem Rad?
 func emote_laeuft() -> bool:
 	return emote_wahl > 0 and Time.get_ticks_msec() / 1000.0 < _emote_until
+
+# ------------------------------------------------------- Kamera beim Emote
+## Während eines Emotes rückt die Kamera nach hinten und die eigene Figur wird
+## sichtbar — sonst sieht man von der eigenen Vorstellung nichts. Danach geht
+## sie weich zurück in die Ich-Perspektive.
+const KAMERA_ABSTAND := 2.8
+const KAMERA_HOCH := 0.65
+## Etwas über die Schulter statt genau dahinter — so verdeckt die eigene Figur
+## nicht die halbe Sicht
+const KAMERA_SEITE := 0.6
+var _kam_ruhe := Vector3.INF
+
+func _kamera_aussen(an: bool, delta: float) -> void:
+	if _kam_ruhe == Vector3.INF:
+		_kam_ruhe = _cam.position
+	var ziel := _kam_ruhe
+	if an:
+		# Nicht in die Wand: nach hinten tasten und davor bleiben
+		var weg := KAMERA_ABSTAND
+		var raum := get_world_3d().direct_space_state
+		if raum:
+			var von := _head.global_position
+			var abf := PhysicsRayQueryParameters3D.create(von,
+				von + _head.global_transform.basis.z * KAMERA_ABSTAND + Vector3(0, KAMERA_HOCH, 0))
+			abf.exclude = [get_rid()]
+			var t := raum.intersect_ray(abf)
+			if not t.is_empty():
+				weg = maxf(0.5, von.distance_to(t.position) - 0.35)
+		ziel = _kam_ruhe + Vector3(KAMERA_SEITE, KAMERA_HOCH, weg)
+	_cam.position = _cam.position.lerp(ziel, clampf(delta * 8.0, 0.0, 1.0))
+	# Figur einblenden, solange die Kamera draußen ist
+	var draussen := an or _cam.position.distance_to(_kam_ruhe) > 0.25
+	if _is_local:
+		_model.visible = draussen
