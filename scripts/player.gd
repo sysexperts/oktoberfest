@@ -764,9 +764,12 @@ func _handle_interaction(delta: float) -> void:
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
-		elif _current_target is Ausgabe and _has_full_mug() and carry_type != WASSER and hinter_der_theke(_current_target):
-			# Von hinten (Fassseite): vollen Krug für die Kellner abstellen
-			_world.net_put_ausgabe.rpc_id(1, carry_type)
+		elif _current_target is Ausgabe and _has_ready() and carry_state in [1, 2] \
+				and not (carry_state == 1 and carry_type == WASSER) and hinter_der_theke(_current_target):
+			# Von hinten (Fassseite): vollen Krug oder fertige Portion für die
+			# Kellner abstellen. Essen ging vorher gar nicht — es landete als
+			# Bier auf der Ausgabe und war nirgends zu sehen.
+			_world.net_put_ausgabe.rpc_id(1, carry_type, carry_state)
 			_sfx("pop")
 		elif _current_target is Ausgabe and (carry_state == 0 or kann_weiteren_krug()):
 			# Fertigen Krug/Teller von der Ausgabe nehmen (Server entscheidet was)
@@ -1036,7 +1039,8 @@ func _kotzen(delta: float) -> void:
 
 ## Server hat den Krug aus der Hand auf die Ausgabe gestellt.
 func krug_abgestellt() -> void:
-	if not _has_full_mug():
+	# Gilt auch für fertige Portionen — die kommen genauso auf die Ausgabe
+	if not _has_ready() or carry_state not in [1, 2]:
 		return
 	carry_state = 0
 	carry_fill = 0.0

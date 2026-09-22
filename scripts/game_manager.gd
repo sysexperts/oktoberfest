@@ -2863,8 +2863,9 @@ func _ausgabe_gesamt(art: int) -> int:
 			n += int(_ausgabe[schluessel])
 	return n
 
-## Stellplätze je Sorte auf der Ausgabe (scenes/ausgabe.tscn): Krüge 3, Teller 2
-const AUSGABE_JE_SORTE := {1: 3, 2: 2}
+## Stellplätze je Sorte auf der Ausgabe (scenes/ausgabe.tscn): 16 Krüge bzw.
+## 16 Teller, als 4 × 4 auf dem Tresen (tools/bake_ausgabe.gd)
+const AUSGABE_JE_SORTE := {1: 16, 2: 16}
 
 ## Stellt ein Stück auf den Platz seiner Sorte. false, wenn der Platz voll ist.
 func _ausgabe_hinzufuegen(art: int, typ: int) -> bool:
@@ -2926,22 +2927,26 @@ func net_take_ausgabe() -> void:
 
 ## Spieler stellt einen vollen Krug auf die Ausgabe (vordere Theke). Die Fässer
 ## stehen hinten am Rückwandregal: zapfen, vorne abstellen, Kellner holen ab.
-const AUSGABE_PLAETZE_KRUEGE := 12
+## Vier Biersorten und drei Gerichte, je 16 Stellplätze (scenes/ausgabe.tscn)
+const AUSGABE_PLAETZE_KRUEGE := 64
+const AUSGABE_PLAETZE_ESSEN := 48
 
 @rpc("any_peer", "reliable", "call_local")
-func net_put_ausgabe(typ: int) -> void:
+func net_put_ausgabe(typ: int, art: int = 1) -> void:
 	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
 		s = 1
-	typ = clampi(typ, 1, 4)
+	art = 2 if art == 2 else 1
+	typ = clampi(typ, 1, 4 if art == 1 else 3)
 	_leistung(s, "gezapft")
-	if _ausgabe_gesamt(1) >= AUSGABE_PLAETZE_KRUEGE:
-		_fehler("MSG_AUSGABE_FULL", [AUSGABE_PLAETZE_KRUEGE])
+	var gesamt: int = AUSGABE_PLAETZE_ESSEN if art == 2 else AUSGABE_PLAETZE_KRUEGE
+	if _ausgabe_gesamt(art) >= gesamt:
+		_fehler("MSG_AUSGABE_FULL", [gesamt])
 		return
-	if not _ausgabe_hinzufuegen(1, typ):
-		_fehler("MSG_AUSGABE_SORTE_VOLL", [AUSGABE_JE_SORTE[1]])
+	if not _ausgabe_hinzufuegen(art, typ):
+		_fehler("MSG_AUSGABE_SORTE_VOLL", [AUSGABE_JE_SORTE[art]])
 		return
 	if s == multiplayer.get_unique_id():
 		_net_ausgabe_abgestellt()

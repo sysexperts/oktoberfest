@@ -79,15 +79,6 @@ font_size = 56
 outline_size = 0
 text = "Helles"
 
-[node name="K0" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.03, -0.1)
-
-[node name="K1" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.1)
-
-[node name="K2" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 0.03, -0.1)
-
 [node name="Bier2" type="Node3D" parent="Plaetze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 0)
 metadata/art = 1
@@ -110,15 +101,6 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
 outline_size = 0
 text = "Weizen"
-
-[node name="K0" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.03, -0.1)
-
-[node name="K1" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.1)
-
-[node name="K2" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 0.03, -0.1)
 
 [node name="Bier3" type="Node3D" parent="Plaetze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 0)
@@ -143,15 +125,6 @@ font_size = 56
 outline_size = 0
 text = "Radler"
 
-[node name="K0" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.03, -0.1)
-
-[node name="K1" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.1)
-
-[node name="K2" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 0.03, -0.1)
-
 [node name="Bier4" type="Node3D" parent="Plaetze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, 0)
 metadata/art = 1
@@ -174,15 +147,6 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
 outline_size = 0
 text = "Festbier"
-
-[node name="K0" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.03, -0.1)
-
-[node name="K1" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.1)
-
-[node name="K2" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, 0.03, -0.1)
 
 [node name="Essen1" type="Node3D" parent="Plaetze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0, 0)
@@ -207,12 +171,6 @@ font_size = 56
 outline_size = 0
 text = "Brezn"
 
-[node name="T0" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.03, -0.1)
-
-[node name="T1" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.03, -0.1)
-
 [node name="Essen2" type="Node3D" parent="Plaetze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 0, 0)
 metadata/art = 2
@@ -236,12 +194,6 @@ font_size = 56
 outline_size = 0
 text = "Würstl"
 
-[node name="T0" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.03, -0.1)
-
-[node name="T1" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.03, -0.1)
-
 [node name="Essen3" type="Node3D" parent="Plaetze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, 0, 0)
 metadata/art = 2
@@ -264,12 +216,6 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 font_size = 56
 outline_size = 0
 text = "Hendl"
-
-[node name="T0" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.03, -0.1)
-
-[node name="T1" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.03, -0.1)
 
 [node name="Bild" parent="Plaetze/Bier1/Aufsteller" instance=ExtResource("2_krug")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
@@ -302,3 +248,339 @@ sorte = 2
 [node name="Bild" parent="Plaetze/Essen3/Aufsteller" instance=ExtResource("3_teller")]
 transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)
 sorte = 3
+
+[node name="K0" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.1)
+
+[node name="K1" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.1)
+
+[node name="K2" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.1)
+
+[node name="K3" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.1)
+
+[node name="K4" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.23)
+
+[node name="K5" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.23)
+
+[node name="K6" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.23)
+
+[node name="K7" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.23)
+
+[node name="K8" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.36)
+
+[node name="K9" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.36)
+
+[node name="K10" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.36)
+
+[node name="K11" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.36)
+
+[node name="K12" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.49)
+
+[node name="K13" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.49)
+
+[node name="K14" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.49)
+
+[node name="K15" parent="Plaetze/Bier1" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.49)
+
+[node name="K0" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.1)
+
+[node name="K1" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.1)
+
+[node name="K2" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.1)
+
+[node name="K3" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.1)
+
+[node name="K4" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.23)
+
+[node name="K5" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.23)
+
+[node name="K6" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.23)
+
+[node name="K7" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.23)
+
+[node name="K8" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.36)
+
+[node name="K9" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.36)
+
+[node name="K10" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.36)
+
+[node name="K11" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.36)
+
+[node name="K12" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.49)
+
+[node name="K13" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.49)
+
+[node name="K14" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.49)
+
+[node name="K15" parent="Plaetze/Bier2" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.49)
+
+[node name="K0" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.1)
+
+[node name="K1" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.1)
+
+[node name="K2" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.1)
+
+[node name="K3" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.1)
+
+[node name="K4" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.23)
+
+[node name="K5" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.23)
+
+[node name="K6" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.23)
+
+[node name="K7" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.23)
+
+[node name="K8" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.36)
+
+[node name="K9" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.36)
+
+[node name="K10" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.36)
+
+[node name="K11" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.36)
+
+[node name="K12" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.49)
+
+[node name="K13" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.49)
+
+[node name="K14" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.49)
+
+[node name="K15" parent="Plaetze/Bier3" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.49)
+
+[node name="K0" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.1)
+
+[node name="K1" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.1)
+
+[node name="K2" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.1)
+
+[node name="K3" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.1)
+
+[node name="K4" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.23)
+
+[node name="K5" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.23)
+
+[node name="K6" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.23)
+
+[node name="K7" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.23)
+
+[node name="K8" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.36)
+
+[node name="K9" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.36)
+
+[node name="K10" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.36)
+
+[node name="K11" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.36)
+
+[node name="K12" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.195, 0.03, -0.49)
+
+[node name="K13" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, -0.065, 0.03, -0.49)
+
+[node name="K14" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.065, 0.03, -0.49)
+
+[node name="K15" parent="Plaetze/Bier4" instance=ExtResource("2_krug")]
+transform = Transform3D(1.0, 0, 0, 0, 1.0, 0, 0, 0, 1.0, 0.195, 0.03, -0.49)
+
+[node name="T0" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.1)
+
+[node name="T1" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.1)
+
+[node name="T2" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.1)
+
+[node name="T3" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.1)
+
+[node name="T4" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.23)
+
+[node name="T5" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.23)
+
+[node name="T6" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.23)
+
+[node name="T7" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.23)
+
+[node name="T8" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.36)
+
+[node name="T9" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.36)
+
+[node name="T10" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.36)
+
+[node name="T11" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.36)
+
+[node name="T12" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.49)
+
+[node name="T13" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.49)
+
+[node name="T14" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.49)
+
+[node name="T15" parent="Plaetze/Essen1" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.49)
+
+[node name="T0" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.1)
+
+[node name="T1" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.1)
+
+[node name="T2" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.1)
+
+[node name="T3" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.1)
+
+[node name="T4" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.23)
+
+[node name="T5" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.23)
+
+[node name="T6" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.23)
+
+[node name="T7" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.23)
+
+[node name="T8" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.36)
+
+[node name="T9" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.36)
+
+[node name="T10" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.36)
+
+[node name="T11" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.36)
+
+[node name="T12" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.49)
+
+[node name="T13" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.49)
+
+[node name="T14" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.49)
+
+[node name="T15" parent="Plaetze/Essen2" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.49)
+
+[node name="T0" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.1)
+
+[node name="T1" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.1)
+
+[node name="T2" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.1)
+
+[node name="T3" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.1)
+
+[node name="T4" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.23)
+
+[node name="T5" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.23)
+
+[node name="T6" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.23)
+
+[node name="T7" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.23)
+
+[node name="T8" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.36)
+
+[node name="T9" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.36)
+
+[node name="T10" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.36)
+
+[node name="T11" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.36)
+
+[node name="T12" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.195, 0.03, -0.49)
+
+[node name="T13" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.065, 0.03, -0.49)
+
+[node name="T14" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.065, 0.03, -0.49)
+
+[node name="T15" parent="Plaetze/Essen3" instance=ExtResource("3_teller")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0.195, 0.03, -0.49)
