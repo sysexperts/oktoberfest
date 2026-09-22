@@ -2463,6 +2463,15 @@ func _has_stock(okind: int) -> bool:
 	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
 	return int(_stock.get(w, 0)) > 0
 
+## Ein Spieler hat selbst eine Maß ausgetrunken (scripts/player.gd). Die geht
+## genauso vom Lager ab wie eine verkaufte — Geld gibt es dafür natürlich keins.
+## Vorher kostete der Zapfhahn für einen selbst nichts, nur Verkaufen zählte.
+@rpc("any_peer", "reliable", "call_local")
+func net_selbst_getrunken() -> void:
+	if not multiplayer.is_server():
+		return
+	_consume_stock(1)
+
 func _consume_stock(okind: int) -> void:
 	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
 	_stock[w] = maxi(0, int(_stock.get(w, 0)) - 1)

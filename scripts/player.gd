@@ -916,6 +916,8 @@ const PROMILLE_MAX := 3.0
 var promille := 0.0
 var _rausch_t := 0.0
 var _rausch_stufe := 0
+## Summe des selbst getrunkenen Biers in Maß, seit der letzten gemeldeten Maß
+var _getrunken := 0.0
 
 func _trinken(delta: float) -> void:
 	var trinkt := _kotz_t <= 0.0 and not _tippt() and InputMap.has_action("trinken") and Input.is_action_pressed("trinken") \
@@ -923,6 +925,15 @@ func _trinken(delta: float) -> void:
 	if trinkt:
 		var schluck := minf(carry_fill, TRINK_TEMPO * delta)
 		carry_fill -= schluck
+		# Selbst getrunkenes Bier geht auch vom Lager ab — vorher kostete der
+		# Zapfhahn für einen selbst nichts, nur Verkaufen zählte. Gezählt wird
+		# in Maß: eine volle Maß ausgetrunken = eine weniger im Lager.
+		if carry_type != WASSER:
+			_getrunken += schluck
+			while _getrunken >= 1.0:
+				_getrunken -= 1.0
+				if _world and _world.has_method("net_selbst_getrunken"):
+					_world.net_selbst_getrunken.rpc_id(1)
 		promille = maxf(0.0, promille - schluck * PROMILLE_JE_KRUG) if carry_type == WASSER \
 			else minf(PROMILLE_MAX, promille + schluck * PROMILLE_JE_KRUG)
 		_sfx_loop("glug")

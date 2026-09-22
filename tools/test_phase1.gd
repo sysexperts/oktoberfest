@@ -430,6 +430,20 @@ class Lauf extends Node:
 		Input.action_release("trinken")
 		_check("G halten: Bier wird getrunken, Rausch steigt", nehmer.carry_fill < 0.9 and nehmer.promille > 0.05,
 			"Füllung %.2f, Promille %.2f" % [nehmer.carry_fill, nehmer.promille])
+		# Selbst getrunkenes Bier geht auch vom Lager ab — vorher kostete der
+		# Zapfhahn für einen selbst nichts (Fehler vom 22.09.)
+		gm._stock[1] = 5
+		nehmer.carry_state = 1
+		nehmer.carry_type = 1
+		nehmer.carry_fill = 1.0
+		nehmer._getrunken = 0.0
+		nehmer.promille = 0.0
+		Input.action_press("trinken")
+		for k in 140:
+			await get_tree().physics_frame
+		Input.action_release("trinken")
+		_check("selbst getrunken: eine Maß weniger im Lager", int(gm._stock[1]) == 4, str(gm._stock[1]))
+		nehmer.promille = 0.0
 		# Zu viel Bier: der Spieler übergibt sich, es liegt ein Fleck da und der
 		# Rausch ist danach fast weg (scripts/player.gd, Feature 21.09.)
 		var flecken_vorher: int = gm._messes.size()
