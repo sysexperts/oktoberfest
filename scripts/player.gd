@@ -1107,3 +1107,16 @@ func _geschleudert() -> bool:
 	_head.rotation.z = sin(rest * 9.0) * 0.35 * clampf(rest, 0.0, 1.0)
 	move_and_slide()
 	return true
+
+## Vom Server an einen einzelnen Spieler: hierhin stellen (nach dem Schlafen
+## vor den Wohnwagen, GameManager._spieler_zum_wohnwagen). Nur der Server darf
+## das — die eigene Figur gehört sonst allein diesem Rechner.
+@rpc("any_peer", "reliable")
+func versetzen(pos: Vector3, yaw: float) -> void:
+	if multiplayer.get_remote_sender_id() not in [0, 1]:
+		return
+	global_position = pos
+	rotation.y = yaw
+	velocity = Vector3.ZERO
+	_net_pos = pos
+	_net_yaw = yaw

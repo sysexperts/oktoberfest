@@ -3,7 +3,16 @@
 [ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
 [ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/Bush.fbx" id="2_m"]
 
-[node name="Busch" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_auuel"]
+size = Vector3(1.7623552, 1.1038071, 0.9428689)
+
+[node name="Busch" type="Node3D" unique_id=628951487]
 script = ExtResource("1_e")
 
-[node name="Modell" parent="." instance=ExtResource("2_m")]
+[node name="Modell" type="Node3D" parent="." unique_id=660433321 instance=ExtResource("2_m")]
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=984193857]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=54294491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02873689, 0.4250491, 0.07006773)
+shape = SubResource("BoxShape3D_auuel")

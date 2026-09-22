@@ -3,7 +3,16 @@
 [ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
 [ext_resource type="PackedScene" path="res://assets/kirmes/Models/Foliage/GardenBed_S.fbx" id="2_m"]
 
-[node name="Blumen" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_lib0u"]
+size = Vector3(0.2893333, 0.5364797, 0.2893335)
+
+[node name="Blumen" type="Node3D" unique_id=1994564543]
 script = ExtResource("1_e")
 
-[node name="Modell" parent="." instance=ExtResource("2_m")]
+[node name="Modell" type="Node3D" parent="." unique_id=545407803 instance=ExtResource("2_m")]
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=943955277]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1410635310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.940697e-08, 0.2682398, 2.682209e-07)
+shape = SubResource("BoxShape3D_lib0u")

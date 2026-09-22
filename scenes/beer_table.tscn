@@ -1,37 +1,46 @@
-[gd_scene format=3 uid="uid://b217cd2pklob3"]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/beer_table.gd" id="1"]
 [ext_resource type="PackedScene" path="res://assets/models/tisch.glb" id="2"]
 [ext_resource type="PackedScene" path="res://assets/models/bank.glb" id="3"]
 
-[node name="BeerTable" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_o2d3b"]
+size = Vector3(2.3977156, 0.70621455, 1.6067021)
+
+[node name="BeerTable" type="Node3D" unique_id=1941652932]
 script = ExtResource("1")
 
-[node name="Tisch" parent="." instance=ExtResource("2")]
+[node name="Tisch" type="Node3D" parent="." unique_id=1163119116 instance=ExtResource("2")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.35, 0)
 
-[node name="BenchFront" parent="." instance=ExtResource("3")]
+[node name="BenchFront" type="Node3D" parent="." unique_id=1449516385 instance=ExtResource("3")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.28, 0.72)
 
-[node name="BenchBack" parent="." instance=ExtResource("3")]
+[node name="BenchBack" type="Node3D" parent="." unique_id=1389009406 instance=ExtResource("3")]
 transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.28, -0.72)
 
-[node name="Seats" type="Node3D" parent="."]
+[node name="Seats" type="Node3D" parent="." unique_id=1420093593]
 
-[node name="Seat0" type="Marker3D" parent="Seats"]
+[node name="Seat0" type="Marker3D" parent="Seats" unique_id=2142669150]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.1, 0.72)
 
-[node name="Seat1" type="Marker3D" parent="Seats"]
+[node name="Seat1" type="Marker3D" parent="Seats" unique_id=1569616281]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.72)
 
-[node name="Seat2" type="Marker3D" parent="Seats"]
+[node name="Seat2" type="Marker3D" parent="Seats" unique_id=1344442998]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.1, 0.72)
 
-[node name="Seat3" type="Marker3D" parent="Seats"]
+[node name="Seat3" type="Marker3D" parent="Seats" unique_id=1251268938]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.1, -0.72)
 
-[node name="Seat4" type="Marker3D" parent="Seats"]
+[node name="Seat4" type="Marker3D" parent="Seats" unique_id=409283962]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.72)
 
-[node name="Seat5" type="Marker3D" parent="Seats"]
+[node name="Seat5" type="Marker3D" parent="Seats" unique_id=1307852768]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.1, -0.72)
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=1621545988]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1398320217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0007160902, 0.3465455, -0.00092470646)
+shape = SubResource("BoxShape3D_o2d3b")

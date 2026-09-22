@@ -3,9 +3,17 @@
 [ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
 [ext_resource type="ArrayMesh" path="res://assets/moebel/garderobe.tres" id="2_m"]
 
-[node name="Garderobe" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_xkis2"]
+size = Vector3(0.576, 1.8972108, 0.576)
+
+[node name="Garderobe" type="Node3D" unique_id=527345848]
 script = ExtResource("1_e")
 
-[node name="Modell" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Modell" type="MeshInstance3D" parent="." unique_id=1308643529]
 mesh = ExtResource("2_m")
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=1736875787]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1008867705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9486054, 0)
+shape = SubResource("BoxShape3D_xkis2")

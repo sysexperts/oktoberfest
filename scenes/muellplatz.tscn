@@ -5,35 +5,44 @@
 [ext_resource type="ArrayMesh" path="res://assets/dreck/muelltonne.tres" id="4_tonne"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/muelltonne_deckel.tres" id="5_deckel"]
 
-[node name="Muellplatz" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_0pa08"]
+size = Vector3(1.368, 1.277, 1.0170001)
+
+[node name="Muellplatz" type="Node3D" unique_id=2143040036]
 script = ExtResource("1_skript")
 
-[node name="Tonne" type="MeshInstance3D" parent="."]
+[node name="Tonne" type="MeshInstance3D" parent="." unique_id=1820243522]
 mesh = ExtResource("4_tonne")
 
-[node name="DeckelGelenk" type="Node3D" parent="."]
+[node name="DeckelGelenk" type="Node3D" parent="." unique_id=1256408202]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17, -0.53)
 
-[node name="Deckel" type="MeshInstance3D" parent="DeckelGelenk"]
+[node name="Deckel" type="MeshInstance3D" parent="DeckelGelenk" unique_id=1021927266]
 mesh = ExtResource("5_deckel")
 
-[node name="Wurfsack" type="MeshInstance3D" parent="."]
+[node name="Wurfsack" type="MeshInstance3D" parent="." unique_id=1329187923]
 visible = false
 mesh = ExtResource("2_sack")
 
-[node name="Saecke" type="Node3D" parent="."]
+[node name="Saecke" type="Node3D" parent="." unique_id=1528927039]
 
-[node name="Sack0" type="MeshInstance3D" parent="Saecke"]
+[node name="Sack0" type="MeshInstance3D" parent="Saecke" unique_id=732368996]
 transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, -0.34, 1.04, 0.1)
 visible = false
 mesh = ExtResource("2_sack")
 
-[node name="Sack1" type="MeshInstance3D" parent="Saecke"]
+[node name="Sack1" type="MeshInstance3D" parent="Saecke" unique_id=662967876]
 transform = Transform3D(0.28, 0, 0.15, 0, 0.32, 0, -0.15, 0, 0.28, 0.3, 1.07, -0.06)
 visible = false
 mesh = ExtResource("2_sack")
 
-[node name="Sack2" type="MeshInstance3D" parent="Saecke"]
-transform = Transform3D(-0.24, 0, 0.2, 0, 0.32, 0, -0.2, 0, -0.24, 0.0, 1.1, 0.22)
+[node name="Sack2" type="MeshInstance3D" parent="Saecke" unique_id=1913953427]
+transform = Transform3D(-0.24, 0, 0.2, 0, 0.32, 0, -0.2, 0, -0.24, 0, 1.1, 0.22)
 visible = false
 mesh = ExtResource("2_sack")
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=350407229]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=178882191]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6365, 0.025000036)
+shape = SubResource("BoxShape3D_0pa08")

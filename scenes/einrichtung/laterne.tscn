@@ -3,8 +3,17 @@
 [ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
 [ext_resource type="PackedScene" path="res://scenes/props/laterne.tscn" id="2_m"]
 
-[node name="Laterne" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_n2yhl"]
+size = Vector3(0.35240036, 3.066, 0.35240036)
+
+[node name="Laterne" type="Node3D" unique_id=841925686]
 script = ExtResource("1_e")
 
-[node name="Modell" parent="." instance=ExtResource("2_m")]
+[node name="Modell" type="Node3D" parent="." unique_id=2120290723 instance=ExtResource("2_m")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=67729087]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=2050314493]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.533, 0)
+shape = SubResource("BoxShape3D_n2yhl")

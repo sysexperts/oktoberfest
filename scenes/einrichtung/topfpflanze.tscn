@@ -3,9 +3,17 @@
 [ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
 [ext_resource type="ArrayMesh" path="res://assets/moebel/pflanze.tres" id="2_m"]
 
-[node name="Topfpflanze" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_isqt4"]
+size = Vector3(0.65782815, 1.5095416, 0.67004824)
+
+[node name="Topfpflanze" type="Node3D" unique_id=1333457177]
 script = ExtResource("1_e")
 
-[node name="Modell" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Modell" type="MeshInstance3D" parent="." unique_id=1701940682]
 mesh = ExtResource("2_m")
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=188245070]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1694636407]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.055511802, 0.7547708, -0.0939624)
+shape = SubResource("BoxShape3D_isqt4")

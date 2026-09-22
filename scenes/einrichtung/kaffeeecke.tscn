@@ -3,9 +3,17 @@
 [ext_resource type="Script" path="res://scripts/einrichtung.gd" id="1_e"]
 [ext_resource type="ArrayMesh" path="res://assets/moebel/kaffeeecke.tres" id="2_m"]
 
-[node name="Kaffeeecke" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_bc6i2"]
+size = Vector3(1.116, 1.265, 0.46170002)
+
+[node name="Kaffeeecke" type="Node3D" unique_id=1941259351]
 script = ExtResource("1_e")
 
-[node name="Modell" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="Modell" type="MeshInstance3D" parent="." unique_id=968594611]
 mesh = ExtResource("2_m")
+
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=1540787430]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=944273683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6325, -0.011500001)
+shape = SubResource("BoxShape3D_bc6i2")

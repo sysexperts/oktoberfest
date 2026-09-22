@@ -2630,6 +2630,10 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 	# der Kellner nie an einem Sitzplatz an (der liegt direkt am Tisch).
 	if d > 2.6:
 		dir = _avoid_tables(s.pos, dir)
+	# Und an allem entlang, was wirklich im Weg steht (Theke, Regale, Deko).
+	# Das letzte Stück bleibt frei, sonst käme niemand an der Theke an.
+	if d > 1.2:
+		dir = _um_hindernis(s.pos, dir)
 	# Blickrichtung weich nachziehen und IMMER vorwärts laufen,
 	# sonst schlurfen die Mitarbeiter seitlich oder rückwärts.
 	var want := atan2(-dir.x, -dir.z)
@@ -2643,6 +2647,37 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 		pos.y += (wp.y - pos.y) * (schritt / d)
 		s.pos = pos + fwd * schritt
 	return false
+## So weit voraus schaut das Personal nach Hindernissen
+const HINDERNIS_SICHT := 1.1
+
+## Führt der nächste Schritt in ein Möbel? Dann daran entlang statt hindurch.
+## Das Personal wird nur gerechnet (kein CharacterBody), lief also bisher mitten
+## durch die Schanktheke. Hier fragen wir dieselbe Kollision ab, an der auch
+## Spieler hängen bleiben — damit gilt sie automatisch für alles, was Kollision
+## hat, auch für später hingestelltes Zeug.
+func _um_hindernis(pos: Vector3, dir: Vector3) -> Vector3:
+	var raum := get_world_3d().direct_space_state
+	if raum == null:
+		return dir
+	var start := pos + Vector3(0, 0.9, 0)
+	var abf := PhysicsRayQueryParameters3D.create(start, start + dir * HINDERNIS_SICHT)
+	abf.collide_with_areas = false
+	var treffer := raum.intersect_ray(abf)
+	if treffer.is_empty():
+		return dir
+	var n: Vector3 = treffer.normal
+	n.y = 0.0
+	if n.length() < 0.01:
+		return dir
+	n = n.normalized()
+	# An der Fläche entlang weiterlaufen …
+	var entlang := dir - n * dir.dot(n)
+	entlang.y = 0.0
+	if entlang.length() < 0.15:
+		# … frontal davor: seitlich ausweichen, Richtung bleibt sonst stehen
+		entlang = Vector3(-n.z, 0.0, n.x)
+	return entlang.normalized()
+
 func _avoid_tables(pos: Vector3, dir: Vector3) -> Vector3:
 	var out := dir
 	for bt in _beertables:
@@ -3111,8 +3146,37 @@ func net_sleep() -> void:
 ## Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
 func _tag_starten() -> void:
 	net_sleep_fade.rpc()
+	_spieler_zum_wohnwagen()
 	_start_shift()
 	_melde("MSG_DAY_START", [_day])
+
+## Nach dem Schlafen stehen alle wieder vor dem Wohnwagen — vorher wachte man
+## da auf, wo man abends stehen geblieben war, im Koop also quer über die Wiesn
+## verstreut. Nebeneinander, damit niemand im anderen steht.
+func _spieler_zum_wohnwagen() -> void:
+	var wagen := _eigener_wohnwagen()
+	if wagen == null:
+		return
+	var tuer := wagen.interact_point() - Vector3(0, 1.0, 0)
+	var seitwaerts := wagen.global_transform.basis.x
+	var anzahl := _players_nodes.size()
+	var i := 0
+	for peer: int in _players_nodes.keys():
+		var p: Node = _players_nodes[peer]
+		if p == null or not is_instance_valid(p):
+			continue
+		var versatz := seitwaerts * (float(i) - float(anzahl - 1) * 0.5) * 1.2
+		var ziel: Vector3 = tuer + versatz
+		# Blick zum Wagen: so sieht man morgens gleich die Tür
+		var hin: Vector3 = wagen.global_position - ziel
+		p.versetzen.rpc_id(peer, Vector3(ziel.x, 0.2, ziel.z), atan2(-hin.x, -hin.z))
+		i += 1
+
+func _eigener_wohnwagen() -> Caravan:
+	for n in get_tree().get_nodes_in_group("interactable"):
+		if n is Caravan and (n as Caravan).is_mine:
+			return n as Caravan
+	return null
 
 ## Anzeigename eines Spielers in Meldungen: Name aus der Lobby, sonst „Spieler 2".
 func _spieler_bezeichnung(peer: int) -> String:
