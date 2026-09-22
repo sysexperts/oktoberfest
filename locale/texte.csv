@@ -1006,3 +1006,11 @@ COMP_VAL_MASS,%s je Maß,%s per mug,kupa başı %s
 COMP_VAL_FACTOR,%d %% · Andrang: %d %%,%d %% · crowd: %d %%,%%%d · kalabalık: %%%d
 COMP_VAL_FOOD,%s je Portion (%d %%),%s per portion (%d %%),porsiyon başı %s (%%%d)
 MSG_KOTZ,Zu viel Bier — das kommt wieder hoch!,Too much beer — up it comes!,Fazla bira — hepsi geri geliyor!
+EMOTE_TITEL,Emotes,Emotes,Emotlar
+EMOTE_TANZEN,Tanzen,Dance,Dans
+EMOTE_JUBEL,Jubel,Cheer,Tezahürat
+EMOTE_SITZEN,Sitzen,Sit,Otur
+EMOTE_POSEN,Posen,Pose,Poz ver
+EMOTE_KOTZEN,Kotzen,Puke,Kusmak
+EMOTE_WINKEN,Winken,Wave,El salla
+EMOTE_HINWEIS,Maus oder Pfeiltasten zum Auswählen,Mouse or arrow keys to choose,Seçmek için fare veya ok tuşları

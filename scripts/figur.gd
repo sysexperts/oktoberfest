@@ -291,17 +291,14 @@ func kotz_pose(heftig: float) -> void:
 	_knochen("unterschenkel_r", -0.55 - 0.15 * h)
 
 ## Zurück in die Ruhelage und Animationen wieder laufen lassen.
+## Alter Name, ruft pose_loesen() auf.
 func kotz_pose_loesen() -> void:
-	if skelett == null:
-		return
-	for name: String in KOTZ_KNOCHEN:
-		_knochen(name, 0.0)
-	if anim:
-		anim.active = true
+	pose_loesen()
+
 
 ## Knochen zu einer Rolle aus KNOCHEN_NAMEN drehen. Kennt das Modell keine der
 ## Schreibweisen, passiert nichts — dann fehlt eben dieser Teil der Pose.
-func _knochen(rolle: String, winkel: float) -> void:
+func _knochen(rolle: String, winkel: float, achse := Vector3.RIGHT) -> void:
 	var b := -1
 	for name: String in KNOCHEN_NAMEN.get(rolle, [rolle]):
 		b = skelett.find_bone(name)
@@ -310,4 +307,95 @@ func _knochen(rolle: String, winkel: float) -> void:
 	if b < 0:
 		return
 	var rest := skelett.get_bone_rest(b).basis.get_rotation_quaternion()
-	skelett.set_bone_pose_rotation(b, rest * Quaternion(Vector3.RIGHT, winkel))
+	skelett.set_bone_pose_rotation(b, rest * Quaternion(achse, winkel))
+
+# ---------------------------------------------------------------- Emote-Posen
+## Winken, Jubeln, Posieren: auch dafür bringt kein Modell eine Animation mit,
+## also werden die Knochen gestellt — wie beim Würgen. `t` ist die Zeit seit
+## dem Start, damit die Pose lebt (Arm wedelt, Körper wippt).
+## Gelöst wird alles zusammen mit kotz_pose_loesen().
+const EMOTE_KNOCHEN := ["arm_l", "arm_r", "unterarm_l", "unterarm_r",
+	"wirbel_oben", "nacken", "kopf", "oberschenkel_l", "oberschenkel_r",
+	"unterschenkel_l", "unterschenkel_r"]
+
+func winke_pose(t: float) -> void:
+	if skelett == null:
+		return
+	if anim:
+		anim.active = false
+	# Rechter Arm hoch, die Hand wedelt hin und her
+	_knochen_xz("arm_r", -1.95, -0.3)
+	_knochen_xz("unterarm_r", -0.45, sin(t * 7.0) * 0.5)
+	_knochen("arm_l", -0.15)
+	_knochen("wirbel_oben", 0.05)
+	_knochen("kopf", sin(t * 3.5) * 0.06)
+
+func jubel_pose(t: float) -> void:
+	if skelett == null:
+		return
+	if anim:
+		anim.active = false
+	# Beide Arme hoch, dabei leicht wippen
+	var wippe := absf(sin(t * 4.0))
+	_knochen_xz("arm_l", -1.75 - 0.2 * wippe, 0.4)
+	_knochen_xz("arm_r", -1.75 - 0.2 * wippe, -0.4)
+	_knochen("unterarm_l", -0.35)
+	_knochen("unterarm_r", -0.35)
+	_knochen("wirbel_oben", -0.12 - 0.08 * wippe)
+	_knochen("kopf", -0.15)
+
+func posen_pose(t: float) -> void:
+	if skelett == null:
+		return
+	if anim:
+		anim.active = false
+	# Arme verschränkt, Gewicht auf einem Bein, ruhiges Atmen
+	var atmen := sin(t * 1.6) * 0.03
+	_knochen("arm_l", -0.95)
+	_knochen("arm_r", -0.95)
+	_knochen("unterarm_l", -1.75)
+	_knochen("unterarm_r", -1.75)
+	_knochen("wirbel_oben", 0.06 + atmen)
+	_knochen("kopf", -0.05 + atmen)
+	_knochen("oberschenkel_l", 0.12)
+	_knochen("unterschenkel_l", -0.18)
+
+## Hinsetzen ohne Sitzanimation: Beine angewinkelt, Oberkörper aufrecht.
+func sitz_pose() -> void:
+	if skelett == null:
+		return
+	if anim:
+		anim.active = false
+	_knochen("oberschenkel_l", 1.35)
+	_knochen("oberschenkel_r", 1.35)
+	_knochen("unterschenkel_l", -1.5)
+	_knochen("unterschenkel_r", -1.5)
+	_knochen("wirbel_oben", -0.05)
+	_knochen("arm_l", -0.25)
+	_knochen("arm_r", -0.25)
+
+## Alle gestellten Knochen zurück in die Ruhelage.
+func pose_loesen() -> void:
+	if skelett == null:
+		return
+	for name: String in KOTZ_KNOCHEN:
+		_knochen(name, 0.0)
+	for name: String in EMOTE_KNOCHEN:
+		_knochen(name, 0.0, Vector3.FORWARD)
+		_knochen(name, 0.0)
+	if anim:
+		anim.active = true
+
+## Knochen um zwei Achsen drehen: vor/zurück (RIGHT) und seitwärts (FORWARD).
+## Zwei einzelne _knochen-Aufrufe gehen nicht — der zweite überschreibt den
+## ersten, weil die Drehung immer von der Ruhelage aus gesetzt wird.
+func _knochen_xz(rolle: String, vor: float, seit: float) -> void:
+	var b := -1
+	for name: String in KNOCHEN_NAMEN.get(rolle, [rolle]):
+		b = skelett.find_bone(name)
+		if b >= 0:
+			break
+	if b < 0:
+		return
+	var rest := skelett.get_bone_rest(b).basis.get_rotation_quaternion()
+	skelett.set_bone_pose_rotation(b, rest * Quaternion(Vector3.RIGHT, vor) * Quaternion(Vector3.FORWARD, seit))

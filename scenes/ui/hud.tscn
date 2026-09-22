@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/wiesenbuero.tscn" id="2_buero"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zeltcomputer.tscn" id="3_comp"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zelt_mieten.tscn" id="4_mieten"]
+[ext_resource type="PackedScene" path="res://scenes/ui/emote_rad.tscn" id="90_emote"]
 [ext_resource type="PackedScene" path="res://scenes/ui/abstimmung.tscn" id="5_abst"]
 [ext_resource type="PackedScene" path="res://scenes/ui/lobby.tscn" id="6_lobby"]
 [ext_resource type="PackedScene" path="res://scenes/ui/schicht_intro.tscn" id="7_intro"]
@@ -499,3 +500,6 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 44
 text = "😴 …"
 horizontal_alignment = 1
+
+[node name="EmoteRad" parent="." instance=ExtResource("90_emote")]
+unique_name_in_owner = true

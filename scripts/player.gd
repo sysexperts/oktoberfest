@@ -37,7 +37,9 @@ var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler, 4 Festbier, 5 W
 const WASSER := 5
 ## Weitere volle Krüge (Biersorten), zusätzlich zum Krug in der Hand
 var extra_kruege: Array[int] = []
-var emote := 0           # 0 yok, 1 Prost/dans, 2 Übergeben (senkron)
+var emote := 0           # 0 nichts, sonst EMOTE_* (senkron)
+## Zuletzt im Rad gewähltes Emote (nur lokal; emote trägt es dann ins Netz)
+var emote_wahl := 0
 var costume := 0         # kostüm rengi indeksi (senkron)
 var _applied_costume := -1
 var _emote_until := 0.0
@@ -216,9 +218,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif _world.has_method("haelt_lager") and _world.haelt_lager(name.to_int()):
 			_world.net_rotate_lager.rpc_id(1)
 		else:
-			_emote_until = Time.get_ticks_msec() / 1000.0 + 3.0
-			_sfx("cheer")
-			_sfx("prost")   # Krüge klirren — nur mit Datei
+			# Sonst das Emote-Rad öffnen: halten, aussuchen, loslassen
+			_rad_oeffnen()
+	if event.is_action_released("emote"):
+		var rad := _emote_rad()
+		if rad and rad.ist_offen():
+			rad.schliessen(true)
 	# Kostümfarbe wechseln — Aktion "costume"
 	if event.is_action_pressed("costume") and not event.is_echo():
 		# Wer eine Lampe/Deko trägt, verkauft sie stattdessen
@@ -264,9 +269,16 @@ func _physics_process(delta: float) -> void:
 			_handle_interaction(delta)
 		_trinken(delta)
 		if _kotz_t > 0.0:
-			emote = 2
+			emote = EMOTE_KOTZEN
+		elif emote_laeuft():
+			# Losgehen bricht das Emote ab — man steht ja mittendrin
+			if Vector2(velocity.x, velocity.z).length() > 0.6:
+				_emote_until = 0.0
+				emote = 0
+			else:
+				emote = emote_wahl
 		else:
-			emote = 1 if Time.get_ticks_msec() / 1000.0 < _emote_until else 0
+			emote = 0
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
@@ -309,7 +321,7 @@ func _update_animation(delta: float) -> void:
 	# Übergeben: gewürgt wird mit gestellten Knochen (Figur.kotz_pose), weil kein
 	# Modell dafür eine Animation mitbringt. Der Takt läuft hier mit, damit auch
 	# Mitspieler ihn sehen — die kennen nur emote, nicht _kotz_t.
-	if emote == 2:
+	if emote == EMOTE_KOTZEN:
 		_emote_label.text = "🤮"
 		_emote_label.modulate = Color(0.6, 0.9, 0.4)
 		_kotz_anim_t += delta
@@ -330,15 +342,42 @@ func _update_animation(delta: float) -> void:
 		_strahl_an = false
 		figur.kotz_pose_loesen()
 		_cur_anim = ""
-	if emote == 1:
+	# Die übrigen Emotes aus dem Rad (scenes/ui/emote_rad.tscn). Tanzen und Sitzen
+	# haben echte Animationen, der Rest wird über Knochen gestellt — dafür bringt
+	# kein Modell etwas mit.
+	if emote != 0:
+		_emote_anim_t += delta
+		_emote_label.visible = emote == EMOTE_JUBEL
 		_emote_label.text = "Prost! 🍻"
 		_emote_label.modulate = Color(1, 1, 1)
-		if _cur_anim != "tanzen":
-			# Ohne Tanz stehen bleiben — sonst bliebe die Figur in der T-Pose
-			if not figur.tanzen():
-				figur.stehen()
-			_cur_anim = "tanzen"
+		match emote:
+			EMOTE_TANZEN:
+				if _cur_anim != "tanzen":
+					# Ohne Tanz stehen bleiben — sonst bliebe die Figur in der T-Pose
+					if not figur.tanzen():
+						figur.stehen()
+					_cur_anim = "tanzen"
+			EMOTE_SITZEN:
+				if _cur_anim != "sitzen":
+					if figur.kann_sitzen():
+						figur.sitzen()
+					else:
+						figur.sitz_pose()
+					_cur_anim = "sitzen"
+			EMOTE_WINKEN:
+				figur.winke_pose(_emote_anim_t)
+				_cur_anim = "pose"
+			EMOTE_JUBEL:
+				figur.jubel_pose(_emote_anim_t)
+				_cur_anim = "pose"
+			EMOTE_POSEN:
+				figur.posen_pose(_emote_anim_t)
+				_cur_anim = "pose"
 		return
+	if _cur_anim == "pose" or _cur_anim == "sitzen":
+		figur.pose_loesen()
+		_cur_anim = ""
+	_emote_anim_t = 0.0
 	var spd: float
 	if _is_local:
 		spd = Vector2(velocity.x, velocity.z).length()
@@ -922,6 +961,8 @@ var _kotz_t := 0.0
 var _kotz_fleck := false
 ## Läuft, solange gewürgt wird — auch bei Mitspielern (die kennen nur emote = 2)
 var _kotz_anim_t := 0.0
+## Läuft, solange ein Emote aus dem Rad gezeigt wird (auch bei Mitspielern)
+var _emote_anim_t := 0.0
 ## Ruhelage des Kopfes, damit die eigene Sicht danach wieder sitzt
 var _kopf_ruhe := Vector3.ZERO
 var _kotz_stoesse := 0
@@ -1120,3 +1161,43 @@ func versetzen(pos: Vector3, yaw: float) -> void:
 	velocity = Vector3.ZERO
 	_net_pos = pos
 	_net_yaw = yaw
+
+# ------------------------------------------------------------------ Emote-Rad
+## Q halten öffnet das Rad (scenes/ui/emote_rad.tscn), loslassen spielt das
+## gewählte Emote. Die Nummer läuft über emote in _push_state mit — Mitspieler
+## sehen dasselbe.
+const EMOTE_TANZEN := 1
+const EMOTE_KOTZEN := 2
+const EMOTE_WINKEN := 3
+const EMOTE_JUBEL := 4
+const EMOTE_POSEN := 5
+const EMOTE_SITZEN := 6
+## So lange läuft ein Emote, wenn man nicht vorher weiterläuft
+const EMOTE_DAUER := 6.0
+
+func _emote_rad() -> Node:
+	var hud := _world.get_node_or_null("HUD") if _world else null
+	return hud.get_node_or_null("EmoteRad") if hud else null
+
+func _rad_oeffnen() -> void:
+	var rad := _emote_rad()
+	if rad == null:
+		return
+	if not rad.gewaehlt.is_connected(_emote_starten):
+		rad.gewaehlt.connect(_emote_starten)
+	rad.oeffnen()
+
+## Vom Rad: Emote läuft los.
+func _emote_starten(welches: int) -> void:
+	if welches == EMOTE_KOTZEN:
+		_kotzen_starten()
+		return
+	emote_wahl = welches
+	_emote_until = Time.get_ticks_msec() / 1000.0 + EMOTE_DAUER
+	if welches == EMOTE_JUBEL:
+		_sfx("cheer")
+		_sfx("prost")   # Krüge klirren — nur mit Datei
+
+## Läuft gerade ein Emote aus dem Rad?
+func emote_laeuft() -> bool:
+	return emote_wahl > 0 and Time.get_ticks_msec() / 1000.0 < _emote_until
