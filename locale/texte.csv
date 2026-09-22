@@ -1016,3 +1016,8 @@ EMOTE_WINKEN,Winken,Wave,El salla
 EMOTE_HINWEIS,Maus oder Pfeiltasten zum Auswählen,Mouse or arrow keys to choose,Seçmek için fare veya ok tuşları
 HINT_PACKEN,{interact} Raufbold packen,{interact} Grab the brawler,{interact} Kavgacıyı yakala
 HINT_WERFEN,{interact} Werfen,{interact} Throw,{interact} Fırlat
+MSG_EHRE_GEKOCHT,Küchenchef des Tages: %s (%d Portionen gekocht),Chef of the day: %s (%d portions cooked),Günün aşçıbaşısı: %s (%d porsiyon)
+ZEITUNG_M_KUECHE,Aus der Küche gingen %d Portionen über die Theke.,%d portions came out of the kitchen.,Mutfaktan %d porsiyon çıktı.
+ZEITUNG_M_KUECHE_LEER,Die Küche blieb kalt — kein einziges Essen ging über die Theke.,The kitchen stayed cold — not a single plate served.,Mutfak soğuk kaldı — tek bir tabak bile çıkmadı.
+ZEITUNG_M_RAUSWURF,%d Gäste flogen aus dem Zelt und haben Hausverbot.,%d guests were thrown out and are banned.,%d misafir çadırdan atıldı ve yasaklandı.
+ZEITUNG_M_RAUSWURF_1,Ein Gast flog aus dem Zelt und hat Hausverbot.,One guest was thrown out and is banned.,Bir misafir çadırdan atıldı ve yasaklandı.

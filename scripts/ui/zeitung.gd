@@ -75,6 +75,17 @@ static func meldungen(b: Dictionary, z: Dictionary) -> Array[String]:
 		m.append("• " + t.call("ZEITUNG_M_KLO"))
 	if int(b.get("missed", 0)) >= 5 and not bool(b.get("kellner", true)):
 		m.append("• " + t.call("ZEITUNG_M_KELLNER"))
+	# Küche: wer den ganzen Tag gekocht hat, stand vorher nirgends im Blatt
+	var gekocht := int(b.get("gekocht", 0))
+	if gekocht > 0:
+		m.append("• " + t.call("ZEITUNG_M_KUECHE") % gekocht)
+	elif int(b.get("served", 0)) > 0:
+		m.append("• " + t.call("ZEITUNG_M_KUECHE_LEER"))
+	var raus := int(b.get("rausgeworfen", 0))
+	if raus == 1:
+		m.append("• " + t.call("ZEITUNG_M_RAUSWURF_1"))
+	elif raus > 1:
+		m.append("• " + t.call("ZEITUNG_M_RAUSWURF") % raus)
 	for e: Array in b.get("ehren", []):
 		m.append("• " + String(TranslationServer.translate("MSG_EHRE_" + str(e[0]).to_upper())) % [str(e[1]), int(e[2])])
 	var huber := ["ZEITUNG_M_HUBER_1", "ZEITUNG_M_HUBER_2", "ZEITUNG_M_HUBER_3", "ZEITUNG_M_HUBER_4"]

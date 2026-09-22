@@ -491,6 +491,10 @@ var _has_toilet := false
 var _mess_kind := {}          # mess_id -> 0 Erbrochenes, 1 Urin
 var _complain_timer := 0.0
 var _urin_count := 0          # Tageszähler für den Report
+## Tageszähler: gekochte Portionen (Koch und Spieler) und rausgeworfene Gäste —
+## beides steht abends im Wiesn-Kurier
+var _essen_gekocht := 0
+var _rausgeworfen := 0
 var _complaints := 0
 var _left_guests := 0
 # Tutorial-Fortschritt
@@ -2400,6 +2404,7 @@ func _raufbold_gelandet(r: Node3D) -> void:
 	if _schlaegerei_ids.has(gast_id):
 		_schlaegerei_raus += 1
 	_pop_erhoehen(RAUSWURF_POP)
+	_rausgeworfen += 1
 	_despawn_guest(gast_id)
 	_net_rauswurf.rpc(gast_id, Vector3.ZERO)
 
@@ -3056,6 +3061,8 @@ func _ausgabe_hinzufuegen(art: int, typ: int) -> bool:
 	if int(_ausgabe.get(schluessel, 0)) >= int(AUSGABE_JE_SORTE.get(art, 3)):
 		return false
 	_ausgabe[schluessel] = int(_ausgabe.get(schluessel, 0)) + 1
+	if art == 2:
+		_essen_gekocht += 1
 	_ausgabe_senden()
 	return true
 
@@ -3123,7 +3130,8 @@ func net_put_ausgabe(typ: int, art: int = 1) -> void:
 		s = 1
 	art = 2 if art == 2 else 1
 	typ = clampi(typ, 1, 4 if art == 1 else 3)
-	_leistung(s, "gezapft")
+	# Wer Essen hinstellt, hat gekocht — das zählte vorher als Zapfen mit
+	_leistung(s, "gekocht" if art == 2 else "gezapft")
 	var gesamt: int = AUSGABE_PLAETZE_ESSEN if art == 2 else AUSGABE_PLAETZE_KRUEGE
 	if _ausgabe_gesamt(art) >= gesamt:
 		_fehler("MSG_AUSGABE_FULL", [gesamt])
@@ -4642,6 +4650,7 @@ func _end_shift(reason := 0) -> void:
 		"earn": _last_earn, "tips": _clean_tips, "rent": rent, "wages": wages, "goods": goods,
 		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
 		"urin": _urin_count, "complaints": _complaints, "left": _left_guests,
+		"gekocht": _essen_gekocht, "rausgeworfen": _rausgeworfen,
 		"loan": _kredit_heute,
 		"ehren": _auszeichnungen(),
 		# für die Tipps in der Bilanz (Texte.tipps)
@@ -4671,6 +4680,8 @@ func _end_shift(reason := 0) -> void:
 	_kredit_heute = 0
 	_goods_cost = 0
 	_urin_count = 0
+	_essen_gekocht = 0
+	_rausgeworfen = 0
 	_complaints = 0
 	_left_guests = 0
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
@@ -5942,7 +5953,7 @@ var _tag_leistung := {}   # Peer -> {"bedient": n, "gezapft": n, "geputzt": n}
 
 func _leistung(peer: int, art: String) -> void:
 	if not _tag_leistung.has(peer):
-		_tag_leistung[peer] = {"bedient": 0, "gezapft": 0, "geputzt": 0}
+		_tag_leistung[peer] = {"bedient": 0, "gezapft": 0, "geputzt": 0, "gekocht": 0}
 	_tag_leistung[peer][art] = int(_tag_leistung[peer][art]) + 1
 
 ## [[Art, Name, Anzahl], …] — die Besten des Tages (nur mit mehreren Spielern)
@@ -5950,7 +5961,7 @@ func _auszeichnungen() -> Array:
 	var ehren := []
 	if _tag_leistung.size() < 2 and multiplayer.get_peers().is_empty():
 		return ehren
-	for art in ["bedient", "gezapft", "geputzt"]:
+	for art in ["bedient", "gezapft", "geputzt", "gekocht"]:
 		var bester := -1
 		var n := 0
 		for peer: int in _tag_leistung:
