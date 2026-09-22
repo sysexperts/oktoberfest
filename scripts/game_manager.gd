@@ -2006,14 +2006,15 @@ const SCHLAEGEREI_SPAETESTENS := 21.75        # zu wenig Gäste: bis dahin erneu
 const SCHLAEGEREI_MIN_GAESTE := 10            # so viele sitzende Gäste müssen da sein
 const SCHLAEGEREI_MAX := 22
 ## Eine Massenschlägerei war nach einer halben Minute vorbei, bevor man
-## überhaupt drin war (Rückmeldung 22.09.)
-const SCHLAEGEREI_DAUER := 90.0
+## überhaupt drin war (Rückmeldung 22.09.). Schwer aufzulösen bleibt sie durch
+## das Zappeln beim Packen, nicht durch die Dauer.
+const SCHLAEGEREI_DAUER := 40.0
 const SCHLAEGEREI_POP := 20.0                 # Verlust ohne Rauswürfe — deutlich
 const SCHLAEGEREI_DRECK := 5
 ## Einzelne Schlägereien (zwei Gäste) sind ab Tag 5 normal: je Schicht so viele
 const EINZEL_JE_SCHICHT := Vector2i(1, 3)
 const EINZEL_UHR := Vector2(16.5, 21.5)
-const EINZEL_DAUER := 45.0
+const EINZEL_DAUER := 20.0
 const EINZEL_POP := 3.0
 const RAUSWURF_POP := 0.5                     # je rausgeworfenem Raufbold
 const RAUSWURF_TEMPO := Vector2(11.0, 4.5)    # waagerecht, senkrecht
