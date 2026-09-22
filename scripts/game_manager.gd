@@ -4296,9 +4296,19 @@ func buehnen_tanzplaetze() -> Array:
 		vorn = -vorn
 	var seite := b.global_transform.basis.x.normalized()
 	var out := []
-	for reihe in [2.9, 4.0]:
-		for k in [-3.0, -1.5, 0.0, 1.5, 3.0]:
-			var p: Vector3 = mitte + vorn * float(reihe) + seite * float(k)
+	# Versetzt statt in Reih und Glied: jede Reihe ist um eine halbe Lücke
+	# verschoben, dazu ein fester kleiner Versatz je Platz. Fest gerechnet und
+	# nicht gewürfelt, damit ein Platz beim nächsten Durchlauf derselbe bleibt.
+	var reihen := [2.7, 3.6, 4.6]
+	for r in reihen.size():
+		var reihe: float = reihen[r]
+		var schritt := 1.5
+		var versatz := schritt * 0.5 if r % 2 == 1 else 0.0
+		for i in 5:
+			var k := (float(i) - 2.0) * schritt + versatz
+			# Kleiner fester Zickzack, damit keine Linie entsteht
+			var tiefe := reihe + (0.35 if (i + r) % 2 == 0 else -0.25)
+			var p: Vector3 = mitte + vorn * tiefe + seite * k
 			var frei := true
 			for bt in _beertables:
 				var d: Vector3 = (bt as Node3D).global_position - p
@@ -4309,6 +4319,28 @@ func buehnen_tanzplaetze() -> Array:
 			if frei:
 				out.append(Vector3(p.x, 0.1, p.z))
 	return out
+
+## Blickrichtung beim Tanzen vor der Bühne. Die meisten schauen zur Bühne, jeder
+## dritte dreht sich zu seinem Nachbarn — sonst steht dort eine Reihe gleich
+## ausgerichteter Figuren.
+func _tanz_blick(g: Dictionary) -> float:
+	var platz := int(g.get("bplatz", 0))
+	var ziel := Vector3.ZERO
+	if platz % 3 == 1:
+		for anderer: Dictionary in _guest_sim.values():
+			if int(anderer.get("mode", 0)) == 6 and int(anderer.get("bplatz", -1)) == platz - 1:
+				ziel = anderer.pos
+				break
+	if ziel == Vector3.ZERO:
+		var stages := get_tree().get_nodes_in_group("stage")
+		if stages.is_empty():
+			return float(g.yaw)
+		ziel = (stages[0] as Node3D).global_position
+	var zum: Vector3 = ziel - (g.pos as Vector3)
+	zum.y = 0.0
+	if zum.length() < 0.2:
+		return float(g.yaw)
+	return atan2(-zum.x, -zum.z)
 
 ## Wie viele Gäste auf diesem Tisch tanzen dürfen: 2 oder 3, fest je Tisch.
 func tanz_max(tisch: int) -> int:
@@ -4575,8 +4607,10 @@ func _update_guests(delta: float) -> void:
 					continue
 				g.tgt = raus.pop_front()
 				g.raus = raus
-		# Oturan misafir: sipariş döngüsü
-		if g.mode == 1 and _phase == Phase.SHIFT:
+		# Oturan misafir: sipariş döngüsü. Wer vor der Bühne tanzt, bestellt auch —
+		# der hat den größten Durst. Kellner und Spieler bedienen ihn genauso, die
+		# schauen nur auf ostate.
+		if (g.mode == 1 or (g.mode == 6 and bool(g.get("tanz_da", false)))) and _phase == Phase.SHIFT:
 			_guest_order(g, id, delta)
 		# Feierabend: nach kurzer Wartezeit aufstehen und zum Ausgang gehen
 		if g.has("aufbruch_t"):
@@ -4589,7 +4623,12 @@ func _update_guests(delta: float) -> void:
 		if float(g.get("verpasst_t", 0.0)) > 0.0:
 			g.verpasst_t = float(g.verpasst_t) - delta
 		# Tanzt auf dem Tisch oder vor der Bühne — erst am Ziel, danach zurück auf den Platz
+		var tanzte := bool(g.get("tanz_da", false))
 		g.tanz_da = (g.mode == 5 or g.mode == 6) and d <= 0.3 and am_ziel
+		# Vor der Bühne beim Ankommen ausrichten: die meisten schauen zur Bühne,
+		# jeder dritte zu seinem Nachbarn. Einmal beim Ankommen, nicht jedes Bild.
+		if g.mode == 6 and bool(g.tanz_da) and not tanzte:
+			g.yaw = _tanz_blick(g)
 		if g.mode == 5 or g.mode == 6:
 			g.tanz_t = float(g.get("tanz_t", 0.0)) - delta
 			if float(g.tanz_t) <= 0.0:

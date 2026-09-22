@@ -198,7 +198,9 @@ func _update_bubble() -> void:
 		_bubble.text = "💤" + typ_zeile
 		_bubble.modulate = Color(0.7, 0.85, 1.0)
 		return
-	if _tanzt:
+	# Beim Tanzen vor der Bühne wird auch bestellt — dann geht die Bestellung vor,
+	# sonst sieht niemand, was der Tänzer will
+	if _tanzt and order_state != 1:
 		_bubble.visible = true
 		_bubble.text = "🎶" + typ_zeile
 		_bubble.modulate = Color(1, 0.85, 0.4)
