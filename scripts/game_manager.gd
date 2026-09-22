@@ -156,6 +156,11 @@ const POP_MISS := 2.0
 const TRINKGELD_MIN := 2
 const TRINKGELD_MAX := 8
 const MESS_CHANCE_PER_SEC := 0.02   # Wahrscheinlichkeit pro Sekunde
+## Müll am Tisch: je Gast und Sekunde. Bei 20 Gästen sind das etwa vier Stück
+## in der Minute — genug, dass immer etwas zu fegen ist, ohne das Zelt zuzumüllen.
+const GAST_MUELL_JE_SEK := 0.0035
+## Beim Gehen lässt ein Gast so oft noch etwas liegen
+const GAST_MUELL_BEIM_GEHEN := 0.55
 
 ## Rausch der Gäste (0–100): Stufen ab 40 beschwipst, 70 betrunken, 90 Bierleiche.
 const RAUSCH_STUFEN := [40.0, 70.0, 90.0]
@@ -1755,7 +1760,7 @@ func _dreck_verteilen() -> void:
 		_spawn_mess_at(DECKEN_PLAETZE[k], k)
 	for i in DRECK_PLAETZE.size():
 		var p: Vector3 = DRECK_PLAETZE[i] + Vector3(randf_range(-0.6, 0.6), 0, randf_range(-0.6, 0.6))
-		_spawn_mess_at(p, Mess.DRECK + i % 5)
+		_spawn_mess_at(p, Mess.DRECK + int(Mess.DRECK_ARTEN[i % Mess.DRECK_ARTEN.size()]))
 
 func _has_staff(role: int) -> bool:
 	for s in _staff_sim.values():
@@ -4796,6 +4801,9 @@ func _update_guests(delta: float) -> void:
 			g.aufbruch_t = float(g.aufbruch_t) - delta
 			if float(g.aufbruch_t) <= 0.0 and int(g.mode) != 2:
 				g.erase("aufbruch_t")
+				# Beim Aufbruch bleibt oft noch etwas am Platz liegen
+				if randf() < GAST_MUELL_BEIM_GEHEN:
+					_gast_muell(g)
 				g.mode = 2
 				g.tgt = ENTRANCE
 				g.ostate = 0
@@ -4874,6 +4882,11 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 	# Sarhoş: ara sıra kus + kir bırak (C3)
 	# Betrunken: erst nach ein paar Bier, dann steht der Gast auf und geht
 	# ein paar Schritte vom Tisch weg, bevor er sich übergibt.
+	# Gäste hinterlassen laufend Müll am Tisch: Servietten, Scherben, Laub von
+	# draußen. Das ist der Grund, warum man während der Schicht immer wieder
+	# fegen und die Säcke zur Tonne tragen muss.
+	if int(g.mode) == 1 and randf() < GAST_MUELL_JE_SEK * delta:
+		_gast_muell(g)
 	if rausch_stufe(g) >= 2 and randf() < MESS_CHANCE_PER_SEC * delta:
 		var seat: Dictionary = _seats[int(g.seat)]
 		g.mode = 4
@@ -6097,3 +6110,14 @@ func _arme_leer_melden(traeger: int) -> void:
 	var p = _players_nodes.get(traeger)
 	if p and is_instance_valid(p) and p.has_method("raufbold_auf_dem_arm"):
 		p.raufbold_auf_dem_arm(false)
+
+## Ein Gast lässt etwas am Tisch liegen (Serviette, Scherben, Laub). Landet
+## neben seinem Platz, nicht auf dem Tisch.
+func _gast_muell(g: Dictionary) -> void:
+	var seat: Dictionary = _seats[int(g.seat)] if _seats.size() > int(g.seat) else {}
+	var ort: Vector3 = seat.get("pos", g.pos) as Vector3
+	var weg := Vector3(randf_range(-1.0, 1.0), 0.0, randf_range(-1.0, 1.0))
+	if weg.length() < 0.2:
+		weg = Vector3(0.8, 0.0, 0.0)
+	_spawn_mess_at(ort + weg.normalized() * randf_range(0.7, 1.4),
+		Mess.DRECK + int(Mess.DRECK_ARTEN.pick_random()))

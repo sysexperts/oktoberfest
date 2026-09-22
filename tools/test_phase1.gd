@@ -430,6 +430,22 @@ class Lauf extends Node:
 		Input.action_release("trinken")
 		_check("G halten: Bier wird getrunken, Rausch steigt", nehmer.carry_fill < 0.9 and nehmer.promille > 0.05,
 			"Füllung %.2f, Promille %.2f" % [nehmer.carry_fill, nehmer.promille])
+		# Gäste lassen Müll liegen, und nie Stroh (sah aus wie Pommes)
+		var dreck_vorher: int = gm._messes.size()
+		var sitzt: Dictionary = {"mode": 1, "seat": 0, "pos": gm._seats[0].pos}
+		for k in 8:
+			gm._gast_muell(sitzt)
+		await _frames(2)
+		var nur_erlaubte := true
+		for mid: int in gm._mess_kind:
+			var art: int = int(gm._mess_kind[mid])
+			if art >= Mess.DRECK and art < Mess.DECKE:
+				if not Mess.DRECK_ARTEN.has(art - Mess.DRECK):
+					nur_erlaubte = false
+		_check("Gäste hinterlassen Müll", gm._messes.size() == dreck_vorher + 8, "%d → %d" % [dreck_vorher, gm._messes.size()])
+		_check("kein Stroh mehr im Dreck (sah aus wie Pommes)", nur_erlaubte, "")
+		for mid: int in gm._messes.keys().duplicate():
+			gm._remove_mess(mid)
 		# Selbst getrunkenes Bier geht auch vom Lager ab — vorher kostete der
 		# Zapfhahn für einen selbst nichts (Fehler vom 22.09.)
 		gm._stock[1] = 5

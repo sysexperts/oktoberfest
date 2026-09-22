@@ -5,6 +5,10 @@ extends Node3D
 ## (Tutorial „Putze das Zelt") — 2 + Nummer des Modells unter „Dreck".
 
 const DRECK := 2
+## Welche Dreckmodelle Gäste hinterlassen: Laub, Scherben, Papier, Staub.
+## Das Stroh (Nummer 3) ist raus — die gelben Halme sahen wie Pommes aus, und
+## Pommes verkaufen wir nicht.
+const DRECK_ARTEN := [0, 1, 2, 4]
 ## Ab hier: Abdeckplanen über Möbeln (abziehen statt fegen). Größe je Art.
 const DECKE := 10
 ## Ab hier: Sabotage von Huber — auslaufendes Fass (Bierlache, kostet Bier bis sie weg ist)
