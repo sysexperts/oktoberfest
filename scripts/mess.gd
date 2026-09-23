@@ -17,7 +17,7 @@ const SABOTAGE := 20
 const DECKEN_RAND := 0.4
 const DECKEN_GROESSE := {
 	10: Vector3(9.0, 1.15, 1.9), 11: Vector3(9.0, 1.15, 1.9), 12: Vector3(5.6, 1.1, 1.4),
-	13: Vector3(4.5, 1.05, 8.2), 14: Vector3(3.6, 1.9, 3.6),
+	13: Vector3(4.5, 1.05, 8.2),
 }
 
 ## Liegt Dreck oder eine Plane so lange herum, taucht ein Pfeil darüber auf und

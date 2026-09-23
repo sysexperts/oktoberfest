@@ -1062,62 +1062,47 @@ class Lauf extends Node:
 		gm._has_toilet = klo_vorher
 
 		print("  -- Abdeckplanen")
-		# Die echten Lagerregale aus main.tscn stehen unter der Plane 14. Genau da
-		# stand beim Testen immer „Regal bewegen" statt „Plane abziehen".
-		# Die beiden Regale stehen seit dem Lagerraum nicht mehr direkt im Zelt,
-		# sondern als Kinder von „Lagerraum" — über den Namen suchen, spätere
-		# Käufe (LagerKauf1 …) bleiben draußen.
+		# Die beiden Regale stehen seit v244 im Lagerraum (Kinder von
+		# „Lagerraum"), spätere Käufe (LagerKauf1 …) stehen weiter im Zelt.
+		# Über dem Lagerraum liegt bewusst keine Plane mehr.
 		var regale: Array[Node] = []
 		for n in gm.find_children("Lager*", "", true, false):
 			if n is Lager and not String(n.name).begins_with("LagerKauf"):
 				regale.append(n)
-		_check("Lagerregale in der Welt", regale.size() >= 2, "%d" % regale.size())
+		_check("beide Regale im Lagerraum", regale.size() == 2, "%d" % regale.size())
+		var im_lagerraum := true
+		for regal: Node3D in regale:
+			var pl: Vector3 = regal.global_position
+			if pl.x < -8.1 or pl.x > -3.9 or pl.z < 6.9 or pl.z > 11.4:
+				im_lagerraum = false
+		_check("Regale stehen im Raum, nicht im Zelt", im_lagerraum,
+			str(regale.map(func(r: Node3D) -> String: return "%.1f/%.1f" % [r.global_position.x, r.global_position.z])))
+		# Planenmechanik an der Bühnenplane prüfen (Plane 13 deckt die Bühne)
 		var messe_vorher: Array = gm._messes.keys()
-		gm._spawn_mess_at(gm.DECKEN_PLAETZE[14], 14)
+		gm._spawn_mess_at(gm.DECKEN_PLAETZE[13], 13)
 		await _frames(3)
 		var plane: Mess = null
 		for id: int in gm._messes.keys():
 			if not id in messe_vorher and gm._messes[id] is Mess and (gm._messes[id] as Mess).ist_plane():
 				plane = gm._messes[id]
-		_check("Plane über dem Lager liegt da", plane != null, str(plane))
+		_check("Plane über der Bühne liegt da", plane != null, str(plane))
 		if plane:
 			var sp_plane := gm.get_node("Players").get_child(0) as Player
 			var pos_vorher := sp_plane.global_position
 			var dreh_vorher := sp_plane.rotation.y
-			# Vor jedem zugedeckten Regal stehen und auf die Wand schauen. Später
-			# dazugekaufte Regale stehen woanders und sind hier nicht gemeint.
-			var zugedeckt: Array[Node3D] = []
-			for regal: Node3D in regale:
-				if plane.deckt(regal.global_position):
-					zugedeckt.append(regal)
-			_check("Beide Wandregale liegen unter der Plane", zugedeckt.size() == 2, "%d von %d" % [zugedeckt.size(), regale.size()])
-			for regal: Node3D in zugedeckt:
-				sp_plane.global_position = regal.global_position + Vector3(1.8, 0, 0)
-				sp_plane.rotation.y = PI * 0.5
-				sp_plane._update_target()
-				var ziel: Node = sp_plane._current_target
-				_check("Am zugedeckten Regal %s: Plane abziehen" % regal.name,
-					ziel == plane and sp_plane._hint_for(ziel) == "HINT_PLANE",
-					"%s / %s" % [ziel, sp_plane._hint_for(ziel) if ziel else "-"])
-			# Vor der Tür des Lagerraums: die Mitte der Plane ist mehr als
-			# INTERACT_RANGE weit weg, ihr Rand aber nicht — genau dafür gibt es
-			# Mess.naechster_punkt.
-			sp_plane.global_position = Vector3(-5.4, 0, 6.4)
-			sp_plane.rotation.y = PI
+			# Am Rand der Plane: ihre Mitte ist weiter weg als INTERACT_RANGE,
+			# der Rand nicht — genau dafür gibt es Mess.naechster_punkt.
+			sp_plane.global_position = Vector3(6.0, 0, 5.6)
+			var hin: Vector3 = plane.global_position - sp_plane.global_position
+			sp_plane.rotation.y = atan2(-hin.x, -hin.z)
 			sp_plane._update_target()
 			var mitte_weit: bool = sp_plane.global_position.distance_to(plane.global_position) > sp_plane.INTERACT_RANGE
 			_check("Auch am Planenrand greift man die Plane",
 				mitte_weit and sp_plane._hint_for(sp_plane._current_target) == "HINT_PLANE",
-				"Mitte %.1f m · %s · %s" % [sp_plane.global_position.distance_to(plane.global_position),
-					sp_plane._current_target, sp_plane._hint_for(sp_plane._current_target)])
-			# Abgezogen: jetzt gehört der Griff wieder dem Regal
+				"Mitte %.1f m · %s" % [sp_plane.global_position.distance_to(plane.global_position),
+					sp_plane._hint_for(sp_plane._current_target)])
 			plane.entfernen()
 			await _frames(2)
-			sp_plane.global_position = zugedeckt[0].global_position + Vector3(1.8, 0, 0)
-			sp_plane.rotation.y = PI * 0.5
-			sp_plane._update_target()
-			_check("Ohne Plane ist das Regal wieder dran", sp_plane._current_target == zugedeckt[0],
-				str(sp_plane._current_target))
 			sp_plane.global_position = pos_vorher
 			sp_plane.rotation.y = dreh_vorher
 

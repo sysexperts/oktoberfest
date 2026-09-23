@@ -1798,7 +1798,7 @@ const DRECK_PLAETZE := [
 ## Abdeckplanen über den Möbeln (Mess.DECKE + Art → Größe in mess.gd)
 const DECKEN_PLAETZE := {
 	10: Vector3(-4.7, 0, -9.15), 11: Vector3(4.7, 0, -9.15), 12: Vector3(6.4, 0, -13.3),
-	13: Vector3(9.95, 0, 2.0), 14: Vector3(-6.0, 0, 9.4),
+	13: Vector3(9.95, 0, 2.0),
 }
 
 ## Beim Übernehmen im Tutorial: das verlassene Zelt ist verdreckt und zugedeckt
