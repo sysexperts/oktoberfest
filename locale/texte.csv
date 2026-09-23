@@ -578,9 +578,9 @@ MSG_LIC_PREISRAUM,"Mehr Auswahl, mehr Spielraum: Den Bierpreis kannst du jetzt z
 SIGN_ZELT_EROEFFNEN,O'zapft is!,O'zapft is!,O'zapft is!
 SIGN_ZELT_EROEFFNEN_SUB,[E] Festzelt eröffnen,[E] Open the beer tent,[E] Bira çadırını aç
 HINT_ZELT_EROEFFNEN,{interact} Fass anstechen und das Zelt eröffnen,{interact} Tap the keg and open the tent,{interact} Fıçıyı aç ve çadırı aç
-MSG_ZELT_WARTET,"Die Kirmes hat offen — geht zum Zelteingang und eröffnet das Festzelt (Fass anstechen)!","The fair is open — go to the tent entrance and open the beer tent (tap the keg)!","Panayır açıldı — çadır girişine gidin ve bira çadırını açın (fıçıyı açın)!"
+MSG_ZELT_WARTET,"Die Kirmes hat offen, die Uhr steht noch — nehmt euch Zeit und eröffnet dann am Zelteingang das Festzelt (Fass anstechen)!","The fair is open and the clock is still standing — take your time, then open the beer tent at the entrance (tap the keg)!","Panayır açık, saat henüz durmuş — acele etmeyin, sonra çadır girişinde bira çadırını açın (fıçıyı açın)!"
 MSG_ZELT_OFFEN,"O'zapft is! %s hat das Zelt eröffnet — gleich kommen die Gäste.","O'zapft is! %s opened the tent — guests are on their way.","O'zapft is! %s çadırı açtı — misafirler geliyor."
-MSG_ZELT_AUTO,"10 Uhr: Das Zelt wurde von selbst eröffnet — nächstes Mal früher anstechen!","10 o'clock: the tent opened by itself — tap the keg earlier next time!","Saat 10: Çadır kendiliğinden açıldı — bir dahaki sefere fıçıyı daha erken açın!"
+MSG_ZELT_AUTO,"Das Zelt wurde von selbst eröffnet — nächstes Mal früher anstechen!","The tent opened by itself — tap the keg earlier next time!","Çadır kendiliğinden açıldı — bir dahaki sefere fıçıyı daha erken açın!"
 HINT_HAND_KRUG,[G] Trinken · {interact} Abstellen,[G] Drink · {interact} Put down,[G] İç · {interact} Bırak
 HINT_HAND_ABLEGEN,{interact} Abstellen,{interact} Put down,{interact} Bırak
 HINT_AUFHEBEN,{interact} Aufheben,{interact} Pick up,{interact} Al

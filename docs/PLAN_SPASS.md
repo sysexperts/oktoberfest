@@ -17,7 +17,7 @@ Aufwand S (≤ 1 Sitzung), M (2–3), L (mehr).
 
 | Bereich | Inhalt |
 |---|---|
-| Tag | 07:00–22:00 in 300 s echter Zeit, Gäste ab 08:00, ab 19:00 ungeduldiger |
+| Tag | 08:00–22:00 in 300 s echter Zeit; die Uhr läuft erst ab der Zelteröffnung, ab 19:00 ungeduldiger |
 | Angebot | Helles, Weizen, Radler, Brezn, Würstl (4 Lizenzen) |
 | Zelt | 3 Stufen, bis 12 Tische, Toilette, Werbung, Deko-Stufen, 5 Einrichtungsgegenstände |
 | Personal | Koch, Kellner (trägt 1–12 Krüge), Reinigung — je 5 Stufen |

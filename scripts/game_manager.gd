@@ -8,9 +8,9 @@ const KoopDaten := preload("res://scripts/koop_daten.gd")
 enum Phase { INTERMISSION = 0, SHIFT = 1 }
 
 const INTERMISSION_TIME := 40.0
-const SHIFT_TIME := 300.0          # 07:00–22:00 arası gerçek süre (sn)
+const SHIFT_TIME := 300.0          # 08:00–22:00 arası gerçek süre (sn)
 # Gün saati (oyun içi saat)
-const DAY_START_HOUR := 7.0        # uyanma / zelt açılış
+const DAY_START_HOUR := 8.0        # uyanma — die Uhr steht hier, bis das Zelt öffnet
 const GUEST_START_HOUR := 8.0      # misafirler bu saatten sonra gelir
 const DAY_END_HOUR := 22.0         # en geç kapanış
 const NIGHT_HOUR := 19.0           # bu saatten sonra akşam: karanlık + sabırsız
@@ -768,8 +768,13 @@ func net_paket_ablegen(kind: int, amount: int, pos: Vector3) -> void:
 ## Nach dem Aufstehen ist die Kirmes offen, das Festzelt noch zu. Ein Spieler sticht
 ## am Eingang das Fass an (scenes/zelt_eroeffnung.tscn), erst dann kommen Gäste.
 ## Macht es niemand, öffnet das Zelt um AUTO_OEFFNEN_STUNDE von selbst.
-const AUTO_OEFFNEN_STUNDE := 10.0
+## Solange das Zelt zu ist, steht die Uhr — vorbereiten geht also ohne
+## Zeitdruck. Macht es niemand auf, öffnet es nach dieser Wartezeit von selbst.
+## 60 s entsprechen den früheren drei Spielstunden von 7 bis 10 Uhr, als die Uhr
+## beim Warten noch weiterlief.
+const AUTO_OEFFNEN_WARTEN := 60.0
 var _zelt_offen := true
+var _zelt_wartet := 0.0   # Sekunden seit dem Aufstehen, in denen das Zelt zu ist
 
 func _eroeffnung_anzeigen() -> void:
 	var bereit := _phase == Phase.SHIFT and not _zelt_offen and _tent_stage > 0
@@ -797,7 +802,8 @@ func _zelt_eroeffnen(wer: String, von_selbst: bool) -> void:
 	_eroeffnung_anzeigen()
 	_broadcast_meta()
 
-## Vardiyadaki oyun içi saat (7.0 = 07:00). Kapalıyken -1.
+## Vardiyadaki oyun içi saat (8.0 = 08:00). Kapalıyken -1.
+## Zelt noch nicht eröffnet: die Uhr steht auf DAY_START_HOUR.
 func _clock_hour() -> float:
 	if _phase != Phase.SHIFT:
 		return -1.0
@@ -3348,7 +3354,7 @@ func net_sleep() -> void:
 	_melde("MSG_VOTE_STARTED", [_spieler_bezeichnung(s)])
 	_abstimmung_pruefen(false)
 
-## Uyu → ertesi sabah 07:00, zelt açılır. Misafirler 08:00'de gelmeye başlar.
+## Uyu → ertesi sabah 08:00. Die Uhr steht, bis ein Spieler das Zelt eröffnet.
 ## Der Tag wechselt erst hier, beim Schlafen — vorher stand nach Feierabend
 ## schon der nächste Tag im Kalender und oben in der Leiste, obwohl niemand
 ## geschlafen hatte.
@@ -4073,7 +4079,10 @@ func _process(delta: float) -> void:
 		elif ceili(float(_abstimmung.rest)) != vorher:
 			_abstimmung_pruefen(false)
 	if _phase == Phase.SHIFT:
-		_phase_time -= delta
+		# Die Uhr läuft erst ab der Eröffnung: vorher ist Zeit zum Einräumen,
+		# Putzen und Bauen, ohne dass der Tag wegläuft.
+		if _zelt_offen:
+			_phase_time -= delta
 		_shift_process(delta)
 		_huber_schicht(delta)
 		_saboteur_schicht(delta)
@@ -4103,9 +4112,12 @@ func _process(delta: float) -> void:
 
 func _shift_process(delta: float) -> void:
 	# Popülerliğe + saate göre misafir çağır (sabah az, akşam çok; 08:00'den önce yok)
-	# Zelt noch nicht eröffnet: keine Gäste — um 10 Uhr öffnet es von selbst
-	if not _zelt_offen and _clock_hour() >= AUTO_OEFFNEN_STUNDE:
-		_zelt_eroeffnen("", true)
+	# Zelt noch nicht eröffnet: keine Gäste, und die Uhr steht — nach
+	# AUTO_OEFFNEN_WARTEN öffnet es von selbst
+	if not _zelt_offen:
+		_zelt_wartet += delta
+		if _zelt_wartet >= AUTO_OEFFNEN_WARTEN:
+			_zelt_eroeffnen("", true)
 	_guest_spawn_timer -= delta
 	if _zelt_offen and _guest_spawn_timer <= 0.0:
 		_guest_spawn_timer = GUEST_SPAWN_INTERVAL
@@ -4590,6 +4602,7 @@ func _start_shift() -> void:
 		_staff_sim[sid] = st
 	# Kirmes offen, Zelt noch zu — ein Spieler eröffnet es am Eingang (net_zelt_eroeffnen)
 	_zelt_offen = _tent_stage == 0
+	_zelt_wartet = 0.0
 	_broadcast_meta()   # banner'ı net_sleep gönderir (gün başlangıcı mesajı)
 	_eroeffnung_anzeigen()
 	if not _zelt_offen:

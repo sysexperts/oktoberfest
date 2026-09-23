@@ -89,7 +89,7 @@ Ersetzt Buchungskiosk **und** Computer. Ein NPC am Schreibtisch, ein Menü mit R
 
 **Bleibt (funktioniert und passt):**
 Gäste sitzen die ganze Schicht und bestellen nach · Sitzplatz-System aus `beer_table.tscn` ·
-Tagesuhr 07:00–22:00 mit Gästekurve · Nacht/Abend-Beleuchtung · Speichern/Laden ·
+Tagesuhr 08:00–22:00 mit Gästekurve · Nacht/Abend-Beleuchtung · Speichern/Laden ·
 Multiplayer host-as-server · Hygiene/Dreck · Beliebtheit
 
 **Wird ersetzt:**

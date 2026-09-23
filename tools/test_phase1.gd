@@ -519,11 +519,24 @@ class Lauf extends Node:
 		gm.net_zelt_eroeffnen()
 		await _frames(2)
 		_check("Zelt eröffnet, Fass verschwindet", gm._zelt_offen and eroeffnung != null and not eroeffnung.visible, "")
+		# Die Uhr läuft erst ab der Eröffnung: vorher darf sie nicht weiterlaufen
+		gm._zelt_offen = false
+		gm._zelt_wartet = 0.0
+		gm._phase_time = gm.SHIFT_TIME
+		var uhr_vorher: float = gm._clock_hour()
+		for i in 20:
+			gm._process(0.1)
+		_check("vor der Eröffnung steht die Uhr", is_equal_approx(gm._clock_hour(), uhr_vorher)
+			and is_equal_approx(uhr_vorher, gm.DAY_START_HOUR), "%.2f statt %.2f Uhr" % [gm._clock_hour(), uhr_vorher])
+		gm._zelt_offen = true
+		gm._process(0.5)
+		_check("nach der Eröffnung läuft die Uhr", gm._clock_hour() > uhr_vorher, "%.3f Uhr" % gm._clock_hour())
 		gm._zelt_offen = false
 		gm._nachts_geschlossen = true
-		gm._phase_time = gm.SHIFT_TIME * (1.0 - (10.5 - gm.DAY_START_HOUR) / (gm.DAY_END_HOUR - gm.DAY_START_HOUR))
+		gm._zelt_wartet = gm.AUTO_OEFFNEN_WARTEN
 		gm._shift_process(0.01)
-		_check("um 10 Uhr öffnet das Zelt von selbst", gm._zelt_offen, "%.2f Uhr" % gm._clock_hour())
+		_check("nach der Wartezeit öffnet das Zelt von selbst", gm._zelt_offen, "%.2f Uhr" % gm._clock_hour())
+		gm._zelt_wartet = 0.0
 		gm._phase_time = gm.SHIFT_TIME
 
 		print("  -- Ausgabe je Sorte, Bestellungen, Umriss, Lagerregale, Zelt-Etage (Test 13.09.)")

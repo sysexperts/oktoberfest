@@ -159,7 +159,7 @@ func set_money(v: int) -> void:
 func set_score(_v: int) -> void:
 	pass
 
-## clock: Spieluhr (7.0 = 07:00). Negativ = Zelt geschlossen.
+## clock: Spieluhr (8.0 = 08:00). Negativ = Zelt geschlossen.
 func set_time(clock: float, night: bool = false) -> void:
 	_clock = clock
 	_night = night
