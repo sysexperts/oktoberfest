@@ -1,53 +1,54 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dvnakfnfndoqs"]
 
-[ext_resource type="Script" path="res://scripts/lieferwagen.gd" id="1_skript"]
-[ext_resource type="ArrayMesh" path="res://assets/fahrzeuge/lieferwagen.tres" id="2_wagen"]
-[ext_resource type="ArrayMesh" path="res://assets/fahrzeuge/rad.tres" id="3_rad"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
+[ext_resource type="Script" uid="uid://cva7aga4384e5" path="res://scripts/lieferwagen.gd" id="1_skript"]
+[ext_resource type="ArrayMesh" uid="uid://detc7wdrchwta" path="res://assets/fahrzeuge/lieferwagen.tres" id="2_wagen"]
+[ext_resource type="ArrayMesh" uid="uid://du50cf6nxj6g8" path="res://assets/fahrzeuge/rad.tres" id="3_rad"]
+[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
 
-[node name="DeliveryVan" type="Node3D"]
+[node name="DeliveryVan" type="Node3D" unique_id=1899668387]
 script = ExtResource("1_skript")
 
-[node name="Karosserie" type="MeshInstance3D" parent="."]
+[node name="Karosserie" type="MeshInstance3D" parent="." unique_id=1354891796]
 mesh = ExtResource("2_wagen")
 
-[node name="Raeder" type="Node3D" parent="."]
+[node name="Raeder" type="Node3D" parent="." unique_id=1422712050]
 
-[node name="VL" type="MeshInstance3D" parent="Raeder"]
+[node name="VL" type="MeshInstance3D" parent="Raeder" unique_id=1272686379]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.42, 1.75)
 mesh = ExtResource("3_rad")
 
-[node name="VR" type="MeshInstance3D" parent="Raeder"]
+[node name="VR" type="MeshInstance3D" parent="Raeder" unique_id=230732745]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.42, 1.75)
 mesh = ExtResource("3_rad")
 
-[node name="HL" type="MeshInstance3D" parent="Raeder"]
+[node name="HL" type="MeshInstance3D" parent="Raeder" unique_id=300351219]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.42, -1.6)
 mesh = ExtResource("3_rad")
 
-[node name="HR" type="MeshInstance3D" parent="Raeder"]
+[node name="HR" type="MeshInstance3D" parent="Raeder" unique_id=1502416815]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.42, -1.6)
 mesh = ExtResource("3_rad")
 
-[node name="SchriftLinks" type="Label3D" parent="."]
+[node name="SchriftLinks" type="Label3D" parent="." unique_id=592904935]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.07, 1.75, -1.05)
 pixel_size = 0.006
 double_sided = false
 modulate = Color(0.13, 0.3, 0.68, 1)
-text = "Wiesn-Brauerei"
+text = "Sloptober-Trans
+"
 font = ExtResource("4_fraktur")
 font_size = 72
 
-[node name="SchriftRechts" type="Label3D" parent="."]
+[node name="SchriftRechts" type="Label3D" parent="." unique_id=1662037099]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.07, 1.75, -1.05)
 pixel_size = 0.006
 double_sided = false
 modulate = Color(0.13, 0.3, 0.68, 1)
-text = "Wiesn-Brauerei"
+text = "Sloptober-Trans"
 font = ExtResource("4_fraktur")
 font_size = 72
 
-[node name="Scheinwerfer" type="SpotLight3D" parent="."]
+[node name="Scheinwerfer" type="SpotLight3D" parent="." unique_id=246349441]
 transform = Transform3D(-1, 0, 0, 0, 0.98, 0.2, 0, 0.2, -0.98, 0, 1.05, 2.7)
 light_color = Color(1, 0.95, 0.8, 1)
 light_energy = 2.0

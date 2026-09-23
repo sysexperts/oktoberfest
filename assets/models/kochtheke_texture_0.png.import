@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c0y8hcgl8v26f"
-path="res://.godot/imported/kochtheke_texture_0.png-d8ad183e5b89d536a9b1ac1ac9ebdaa3.ctex"
+path.s3tc="res://.godot/imported/kochtheke_texture_0.png-d8ad183e5b89d536a9b1ac1ac9ebdaa3.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "5c2f77bbf05275db909c579147aae6bf"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/kochtheke_texture_0.png"
-dest_files=["res://.godot/imported/kochtheke_texture_0.png-d8ad183e5b89d536a9b1ac1ac9ebdaa3.ctex"]
+dest_files=["res://.godot/imported/kochtheke_texture_0.png-d8ad183e5b89d536a9b1ac1ac9ebdaa3.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

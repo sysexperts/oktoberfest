@@ -1,6 +1,12 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://v0t4cujw55o8"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="1_fraktur"]
+[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="1_fraktur"]
+
+[sub_resource type="BoxMesh" id="Rahmen"]
+size = Vector3(2, 1.6, 0.03)
+
+[sub_resource type="StandardMaterial3D" id="MatRahmen"]
+albedo_color = Color(0.55, 0.37, 0.2, 1)
 
 [sub_resource type="BoxMesh" id="Tafel"]
 size = Vector3(1.9, 1.5, 0.05)
@@ -8,12 +14,6 @@ size = Vector3(1.9, 1.5, 0.05)
 [sub_resource type="StandardMaterial3D" id="MatTafel"]
 albedo_color = Color(0.2, 0.12, 0.06, 1)
 roughness = 0.9
-
-[sub_resource type="BoxMesh" id="Rahmen"]
-size = Vector3(2.0, 1.6, 0.03)
-
-[sub_resource type="StandardMaterial3D" id="MatRahmen"]
-albedo_color = Color(0.55, 0.37, 0.2, 1)
 
 [sub_resource type="BoxMesh" id="Feld"]
 size = Vector3(0.2, 0.13, 0.02)
@@ -42,78 +42,78 @@ emission_enabled = true
 emission = Color(0.75, 0.35, 0.08, 1)
 emission_energy_multiplier = 0.25
 
-[node name="GetraenkePoster" type="Node3D"]
+[node name="GetraenkePoster" type="Node3D" unique_id=924140880]
 
-[node name="Rahmen" type="MeshInstance3D" parent="."]
+[node name="Rahmen" type="MeshInstance3D" parent="." unique_id=2024311550]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
 mesh = SubResource("Rahmen")
 surface_material_override/0 = SubResource("MatRahmen")
 
-[node name="Tafel" type="MeshInstance3D" parent="."]
+[node name="Tafel" type="MeshInstance3D" parent="." unique_id=831731469]
 mesh = SubResource("Tafel")
 surface_material_override/0 = SubResource("MatTafel")
 
-[node name="Titel" type="Label3D" parent="."]
+[node name="Titel" type="Label3D" parent="." unique_id=1224892645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0.03)
 pixel_size = 0.004
 modulate = Color(1, 0.86, 0.45, 1)
+text = "Menü"
 font = ExtResource("1_fraktur")
 font_size = 64
-text = "Getränkekarte"
 
-[node name="FeldHelles" type="MeshInstance3D" parent="."]
+[node name="FeldHelles" type="MeshInstance3D" parent="." unique_id=1768326848]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.28, 0.03)
 mesh = SubResource("Feld")
 surface_material_override/0 = SubResource("MatHelles")
 
-[node name="Helles" type="Label3D" parent="."]
+[node name="Helles" type="Label3D" parent="." unique_id=1777326472]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.28, 0.03)
 pixel_size = 0.003
-font_size = 48
 text = "🍺 Helles"
+font_size = 48
 horizontal_alignment = 0
 
-[node name="FeldWeizen" type="MeshInstance3D" parent="."]
+[node name="FeldWeizen" type="MeshInstance3D" parent="." unique_id=678398170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.06, 0.03)
 mesh = SubResource("Feld")
 surface_material_override/0 = SubResource("MatWeizen")
 
-[node name="Weizen" type="Label3D" parent="."]
+[node name="Weizen" type="Label3D" parent="." unique_id=896455202]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.06, 0.03)
 pixel_size = 0.003
-font_size = 48
 text = "🍺 Weizen"
+font_size = 48
 horizontal_alignment = 0
 
-[node name="FeldRadler" type="MeshInstance3D" parent="."]
+[node name="FeldRadler" type="MeshInstance3D" parent="." unique_id=492744079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, -0.16, 0.03)
 mesh = SubResource("Feld")
 surface_material_override/0 = SubResource("MatRadler")
 
-[node name="Radler" type="Label3D" parent="."]
+[node name="Radler" type="Label3D" parent="." unique_id=1330283320]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.16, 0.03)
 pixel_size = 0.003
-font_size = 48
 text = "🍺 Radler"
+font_size = 48
 horizontal_alignment = 0
 
-[node name="FeldFestbier" type="MeshInstance3D" parent="."]
+[node name="FeldFestbier" type="MeshInstance3D" parent="." unique_id=1602852063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, -0.38, 0.03)
 mesh = SubResource("Feld")
 surface_material_override/0 = SubResource("MatFestbier")
 
-[node name="Festbier" type="Label3D" parent="."]
+[node name="Festbier" type="Label3D" parent="." unique_id=350177816]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.38, 0.03)
 pixel_size = 0.003
-font_size = 48
 text = "🍺 Festbier"
+font_size = 48
 horizontal_alignment = 0
 
-[node name="Essen" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.05, 0.03)
+[node name="Essen" type="Label3D" parent="." unique_id=421893899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6052374, 0.10400158, 0.03)
 pixel_size = 0.003
 modulate = Color(0.95, 0.85, 0.7, 1)
-font_size = 44
 text = "🥨 Brezn
 🌭 Würstl
 🍗 Hendl"
+font_size = 44
