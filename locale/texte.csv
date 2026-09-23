@@ -204,6 +204,7 @@ TENT_STAGE_2,Mittleres Zelt,Medium tent,Orta çadır
 TENT_STAGE_3,Großes Zelt,Large tent,Büyük çadır
 TENT_STAGE_4,Riesenzelt,Huge tent,Dev çadır
 WORLD_TOILET,WC,WC,WC
+WORLD_LAGER,Lager,Storage,Depo
 WORLD_BUERO,Büro,Office,Ofis
 RENT_DIALOG_TITLE,Festzelt mieten,Rent a beer tent,Bira çadırı kirala
 RENT_DIALOG_INFO,Das Festzelt kostet einmalig %s. Die ersten 5 Tage zahlst du keine Miete.,The beer tent costs %s once. You pay no rent for the first 5 days.,Bira çadırı bir kereliğine %s. İlk 5 gün kira ödemezsin.

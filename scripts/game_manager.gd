@@ -1798,7 +1798,7 @@ const DRECK_PLAETZE := [
 ## Abdeckplanen über den Möbeln (Mess.DECKE + Art → Größe in mess.gd)
 const DECKEN_PLAETZE := {
 	10: Vector3(-4.7, 0, -9.15), 11: Vector3(4.7, 0, -9.15), 12: Vector3(6.4, 0, -13.3),
-	13: Vector3(9.95, 0, 2.0), 14: Vector3(-11.2, 0, -3.5),
+	13: Vector3(9.95, 0, 2.0), 14: Vector3(-6.0, 0, 9.4),
 }
 
 ## Beim Übernehmen im Tutorial: das verlassene Zelt ist verdreckt und zugedeckt
@@ -3609,7 +3609,7 @@ const TISCH_SPERREN := [
 	[Vector2(10.0, 2.0), Vector2(3.2, 4.2)],    # Bühne
 	[Vector2(-8.0, 7.0), Vector2(3.6, 3.6)],    # Büroraum
 	[Vector2(10.4, 9.6), Vector2(2.6, 2.6)],    # Klo-Container
-	[Vector2(-11.2, -5.0), Vector2(2.4, 3.0)],  # Lager
+	[Vector2(-6.0, 9.0), Vector2(3.2, 3.2)],    # Lagerraum (Regale stehen darin)
 	[Vector2(0.0, 10.0), Vector2(1.8, 1.6)],    # Eingang
 	[Vector2(-11.35, 3.25), Vector2(2.4, 4.6)], # Treppe West
 	[Vector2(11.35, -6.75), Vector2(2.4, 4.6)], # Treppe Ost

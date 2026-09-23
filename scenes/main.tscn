@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" path="res://scenes/rueckwand_regal.tscn" id="98_regalwand"]
 [ext_resource type="PackedScene" path="res://scenes/kochtheke.tscn" id="99_kochtheke"]
 [ext_resource type="PackedScene" path="res://scenes/bueroraum.tscn" id="100_buero"]
+[ext_resource type="PackedScene" path="res://scenes/lagerraum.tscn" id="101_lagerraum"]
 [ext_resource type="PackedScene" path="res://scenes/zelt_eroeffnung.tscn" id="101_eroeffnung"]
 [ext_resource type="PackedScene" path="res://scenes/getraenke_poster.tscn" id="102_poster"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
@@ -184,6 +185,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -13.3)
 
 [node name="Bueroraum" parent="." instance=ExtResource("100_buero")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
+
+[node name="Lagerraum" parent="." instance=ExtResource("101_lagerraum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 7)
 
 [node name="Tables" type="Node3D" parent="." unique_id=594528377]
 
@@ -393,12 +397,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.1, -33)
 
 [node name="Buehne" parent="." unique_id=1815018836 instance=ExtResource("19_buehne")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 10, 0, 2)
-
-[node name="Lager" parent="." unique_id=262057811 instance=ExtResource("18_lager")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -5)
-
-[node name="Lager2" parent="." unique_id=1060943569 instance=ExtResource("18_lager")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -11.2, 0, -2)
 
 [node name="Crowd" type="Node3D" parent="." unique_id=755531113]
 script = ExtResource("20_crowd")

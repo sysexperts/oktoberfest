@@ -1064,9 +1064,12 @@ class Lauf extends Node:
 		print("  -- Abdeckplanen")
 		# Die echten Lagerregale aus main.tscn stehen unter der Plane 14. Genau da
 		# stand beim Testen immer „Regal bewegen" statt „Plane abziehen".
+		# Die beiden Regale stehen seit dem Lagerraum nicht mehr direkt im Zelt,
+		# sondern als Kinder von „Lagerraum" — über den Namen suchen, spätere
+		# Käufe (LagerKauf1 …) bleiben draußen.
 		var regale: Array[Node] = []
-		for n in gm.get_children():
-			if n is Lager:
+		for n in gm.find_children("Lager*", "", true, false):
+			if n is Lager and not String(n.name).begins_with("LagerKauf"):
 				regale.append(n)
 		_check("Lagerregale in der Welt", regale.size() >= 2, "%d" % regale.size())
 		var messe_vorher: Array = gm._messes.keys()
@@ -1096,13 +1099,17 @@ class Lauf extends Node:
 				_check("Am zugedeckten Regal %s: Plane abziehen" % regal.name,
 					ziel == plane and sp_plane._hint_for(ziel) == "HINT_PLANE",
 					"%s / %s" % [ziel, sp_plane._hint_for(ziel) if ziel else "-"])
-			# Auch am Ende der Plane, wo ihr Mittelpunkt außer Reichweite ist
-			sp_plane.global_position = Vector3(-9.4, 0, -6.1)
-			sp_plane.rotation.y = PI * 0.5
+			# Vor der Tür des Lagerraums: die Mitte der Plane ist mehr als
+			# INTERACT_RANGE weit weg, ihr Rand aber nicht — genau dafür gibt es
+			# Mess.naechster_punkt.
+			sp_plane.global_position = Vector3(-5.4, 0, 6.4)
+			sp_plane.rotation.y = PI
 			sp_plane._update_target()
-			_check("Auch am Planenende greift man die Plane",
-				sp_plane._hint_for(sp_plane._current_target) == "HINT_PLANE",
-				"%s" % sp_plane._hint_for(sp_plane._current_target))
+			var mitte_weit: bool = sp_plane.global_position.distance_to(plane.global_position) > sp_plane.INTERACT_RANGE
+			_check("Auch am Planenrand greift man die Plane",
+				mitte_weit and sp_plane._hint_for(sp_plane._current_target) == "HINT_PLANE",
+				"Mitte %.1f m · %s · %s" % [sp_plane.global_position.distance_to(plane.global_position),
+					sp_plane._current_target, sp_plane._hint_for(sp_plane._current_target)])
 			# Abgezogen: jetzt gehört der Griff wieder dem Regal
 			plane.entfernen()
 			await _frames(2)
