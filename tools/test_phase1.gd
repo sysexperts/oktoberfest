@@ -1258,6 +1258,62 @@ class Lauf extends Node:
 			_check("ohne Steam: Net lehnt Steam-Host und -Beitritt ab",
 				Net.host_steam(1) == ERR_UNAVAILABLE and Net.join_steam(1) == ERR_UNAVAILABLE, "")
 
+		print("  -- Kirmes-Besucher laufen nicht durch Stände")
+		var crowd := gm.get_node_or_null("Crowd")
+		_check("Crowd in der Szene", crowd != null, str(crowd))
+		if crowd:
+			# Wegpunkte: aus dem echten Freiraum gesucht, nicht mehr das alte
+			# feste Raster — sonst lagen sie mitten in den gebauten Buden.
+			var punkte: Array = crowd.get("_points")
+			if punkte.is_empty():
+				crowd.call("_build_points")
+				punkte = crowd.get("_points")
+			_check("Wegpunkte gefunden", punkte.size() > 40, "%d Punkte" % punkte.size())
+			var kapsel := CapsuleShape3D.new()
+			kapsel.radius = 0.45
+			kapsel.height = 1.5
+			# Für die Besucher selbst etwas dünner: streift einer im Gedränge eine
+			# Wand, ist das kein Durchlaufen — geprüft wird echtes Drinstecken.
+			var eng := CapsuleShape3D.new()
+			eng.radius = 0.28
+			eng.height = 1.4
+			var abf := PhysicsShapeQueryParameters3D.new()
+			abf.shape = kapsel
+			abf.collide_with_areas = false
+			var raum: PhysicsDirectSpaceState3D = gm.get_world_3d().direct_space_state
+			var im_stand := 0
+			for pk: Vector3 in punkte:
+				abf.transform = Transform3D(Basis.IDENTITY, Vector3(pk.x, 0.9, pk.z))
+				if not raum.intersect_shape(abf, 1).is_empty():
+					im_stand += 1
+			_check("kein Wegpunkt steckt in einem Stand", im_stand == 0, "%d von %d" % [im_stand, punkte.size()])
+			# Und die Besucher selbst: nach ein paar Sekunden Laufen darf keiner
+			# in der Kollision stehen (Hindernisblick in scripts/visitor.gd)
+			# Der GameManager stellt die Dichte aus der Uhrzeit ein und setzt sie
+			# jedes Bild vor der Menge zurück (Zelt geschlossen = leer). Fürs
+			# Prüfen nehmen wir ihm die Menge kurz aus der Hand.
+			var gm_crowd = gm.get("_crowd")
+			gm.set("_crowd", null)
+			crowd.set_density(0.5)
+			var bis := Time.get_ticks_msec() + 6000
+			while Time.get_ticks_msec() < bis:
+				await get_tree().process_frame
+			var besucher := get_tree().get_nodes_in_group("visitor")
+			_check("Besucher unterwegs", besucher.size() > 20, "%d Besucher" % besucher.size())
+			var drin := 0
+			abf.shape = eng
+			for v in besucher:
+				var gp: Vector3 = (v as Node3D).global_position
+				abf.transform = Transform3D(Basis.IDENTITY, gp + Vector3(0, 0.9, 0))
+				if not raum.intersect_shape(abf, 1).is_empty():
+					drin += 1
+			# Ein paar dürfen sich kurz überlappen (Spieler, Gedränge, engste Gassen).
+			# Gemessen 1–6 von 200; kaputt waren es 42 — die Grenze liegt bei 10 %.
+			_check("kaum ein Besucher steckt in etwas drin", drin <= maxi(2, besucher.size() / 10),
+				"%d von %d" % [drin, besucher.size()])
+			crowd.set_density(0.0)
+			gm.set("_crowd", gm_crowd)
+
 		print("  -- Pausemenü")
 		var pause := gm.get_node_or_null("PauseMenu")
 		_check("Pausemenü in der Szene", pause != null and pause.has_method("oeffnen"), str(pause))
