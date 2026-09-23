@@ -938,6 +938,44 @@ class Lauf extends Node:
 		for id in gm._guest_sim.keys().duplicate():
 			gm._despawn_guest(id)
 
+		print("  -- Lieferprobleme (nicht angekündigt)")
+		var lp_vorher: bool = gm._lieferproblem
+		var bier_vorher: int = gm._stock[gm.WARE_BIER]
+		gm._lieferproblem = false
+		var preis_normal: int = gm._reward_for(1)
+		gm._lieferproblem = true
+		var preis_knapp: int = gm._reward_for(1)
+		_check("Bier bringt 30 Prozent mehr", preis_knapp == roundi(float(preis_normal) * gm.LIEFERPROBLEM_ZUSCHLAG)
+			or absi(preis_knapp - roundi(float(preis_normal) * gm.LIEFERPROBLEM_ZUSCHLAG)) <= 1,
+			"%d statt %d" % [preis_knapp, preis_normal])
+		# Steht nicht im Kalender, wird also nirgends vorher angekündigt
+		var im_plan := false
+		for e in gm._kalender_plan():
+			if str(e) == "lieferproblem":
+				im_plan = true
+		_check("steht nicht im Saisonplan", not im_plan, "")
+		# Bier bestellen ist gesperrt, Essen geht weiter
+		var offen_vorher: int = gm._pending.size()
+		gm.net_order_goods.rpc_id(1, gm.WARE_BIER, 1)
+		await _frames(3)
+		_check("Bier bestellen gesperrt", gm._pending.size() == offen_vorher, "%d offen" % gm._pending.size())
+		gm.net_order_goods.rpc_id(1, gm.WARE_ESSEN, 1)
+		await _frames(3)
+		_check("Essen bestellen geht weiter", gm._pending.size() == offen_vorher + 1, "%d offen" % gm._pending.size())
+		# Und die Leiste sagt es dem Spieler
+		hud.set_buero(gm._buero_state())
+		await _frames(2)
+		_check("Warnung steht in der Leiste", hud.get_node("%LieferZeile").visible,
+			hud.get_node("%Liefer").text)
+		gm._lieferproblem = false
+		hud.set_buero(gm._buero_state())
+		await _frames(2)
+		_check("ohne Lieferproblem keine Warnung", not hud.get_node("%LieferZeile").visible, "")
+		gm._lieferproblem = lp_vorher
+		gm._stock[gm.WARE_BIER] = bier_vorher
+		while gm._pending.size() > offen_vorher:
+			gm._pending.pop_back()
+
 		print("  -- Tagesereignisse")
 		var weizen_vorher: bool = gm._lic["weizen"]
 		gm._lic["weizen"] = true

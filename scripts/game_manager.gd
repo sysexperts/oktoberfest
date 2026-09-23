@@ -383,6 +383,16 @@ const TANZ_PLAETZE := [Vector2(-0.55, 0.4), Vector2(-0.55, -0.4), Vector2(0.8, 0
 const TANZ_PARTNER := [1, 0, -1]
 ## Tagesereignisse (Spaß-Plan 3.1): ab Tag 3 wird morgens eins angekündigt.
 const EREIGNISSE := ["bus", "kontrolle", "happy", "fass", "prosit", "promi", "regen"]
+
+## Lieferprobleme bei der Brauerei — das einzige Ereignis, das *nicht* im
+## Kalender steht und darum nicht vorher angekündigt wird: es wird morgens beim
+## Aufstehen ausgewürfelt. Das Bier wird knapp, also nimmt das Zelt 30 % mehr
+## dafür; nachbestellen geht heute aber nicht mehr. Wer das Lager leerlaufen
+## lässt, verkauft den Rest des Tages kein Bier.
+const LIEFERPROBLEM_CHANCE := 0.15
+const LIEFERPROBLEM_AB_TAG := 3
+const LIEFERPROBLEM_ZUSCHLAG := 1.3
+var _lieferproblem := false
 const REGEN_VOLL_CHANCE := 0.6   # so oft flüchten bei Regen viele ins Zelt
 const EREIGNIS_AB_TAG := 3
 const EREIGNIS_CHANCE := 0.7
@@ -874,6 +884,7 @@ func _save_game() -> void:
 		"active_count": _active_count,
 		"upg_marketing": _upg_marketing,
 		"upg_deko": _upg_deko,
+		"lieferproblem": _lieferproblem,
 		"popularity": _popularity,
 		"shift_num": _shift_num,
 		"tables": tables,
@@ -939,6 +950,7 @@ func _load_game() -> bool:
 	_active_count = int(d.get("active_count", 0))
 	_upg_marketing = int(d.get("upg_marketing", 0))
 	_upg_deko = int(d.get("upg_deko", 0))
+	_lieferproblem = bool(d.get("lieferproblem", false))
 	_popularity = clampf(float(d.get("popularity", POP_START)), 5.0, 100.0)
 	_shift_num = int(d.get("shift_num", 0))
 	var lic: Variant = d.get("lic", {})
@@ -2494,6 +2506,9 @@ func net_order_goods(kind: int, packs: int) -> void:
 		_popup_to_sender("POPUP_NO_TENT", [_eur(TENT_BOOK_COST)])
 		return
 	if not PACK_COST.has(kind) or packs <= 0:
+		return
+	if kind == WARE_BIER and _lieferproblem:
+		_popup_to_sender("POPUP_LIEFERPROBLEM")
 		return
 	var cost: int = Wirtschaft.paketpreis(int(PACK_COST[kind]), _day) * packs
 	if not _afford(cost):
@@ -4080,7 +4095,9 @@ func _reward_for(okind: int, otype := 1) -> int:
 		return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)) * sorte * _essenpreis)
 	# Bier: Tagespreis × selbst gewählter Bierpreis
 	var happy := 0.7 if _happy_hour() else 1.0
-	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy * sorte)
+	# Lieferprobleme: das Bier ist knapp und kostet die Gäste mehr
+	var knapp := LIEFERPROBLEM_ZUSCHLAG if _lieferproblem else 1.0
+	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy * sorte * knapp)
 
 func CustomerReward() -> int:
 	return 15
@@ -4367,6 +4384,17 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 		if _regen_voll:
 			_melde("MSG_REGEN_VOLL", [], 2)
 
+## Morgens auswürfeln, ob die Brauerei heute Probleme hat. Nur mit Zelt und erst
+## ab LIEFERPROBLEM_AB_TAG, damit der Anfang planbar bleibt.
+func _lieferproblem_wuerfeln() -> void:
+	_lieferproblem = _tent_stage > 0 and _day >= LIEFERPROBLEM_AB_TAG and randf() < LIEFERPROBLEM_CHANCE
+	if _lieferproblem:
+		_melde("MSG_LIEFERPROBLEM", [int(round((LIEFERPROBLEM_ZUSCHLAG - 1.0) * 100.0))], 1)
+
+## Preiszuschlag auf Bier, solange die Lieferung klemmt
+func lieferproblem() -> bool:
+	return _lieferproblem
+
 func _happy_hour() -> bool:
 	var uhr := _clock_hour()
 	return _ereignis == "happy" and uhr >= HAPPY_VON and uhr < HAPPY_BIS
@@ -4636,6 +4664,7 @@ func _start_shift() -> void:
 	_ohne_ware_s = 0.0
 	_kombo.clear()
 	_ereignis_waehlen()
+	_lieferproblem_wuerfeln()
 	_schlaegerei_planen()
 	# Ausgabe bleibt: vor der Schicht vorgezapfte Krüge verschwinden nicht mehr
 	_ausgabe_senden()
@@ -5277,6 +5306,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
+		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
 		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,

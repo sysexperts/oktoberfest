@@ -74,6 +74,7 @@ func _ready() -> void:
 	Symbole.setze(%SymbolBeliebtheit, "stern")
 	Symbole.setze(%SymbolSauber, "besen")
 	Symbole.setze(%SymbolEreignis, "ausruf")
+	Symbole.setze(%SymbolLiefer, "warnung")
 	Symbole.setze(%SymbolAufgabe, "haken")
 	%HinweisfensterOk.pressed.connect(close_popup)
 	_einfliegen()
@@ -196,6 +197,11 @@ func set_hint(key: String) -> void:
 	hinweis.text = Texte.mit_tasten(key)
 	var handlung := tr(key).contains("{")
 	hinweis.add_theme_color_override("font_color", WEISS if handlung else Color(0.78, 0.73, 0.66))
+
+## Bierzuschlag bei Lieferproblemen — Wert steht im GameManager
+func _gm_zuschlag() -> float:
+	var gm := get_parent()
+	return float(gm.LIEFERPROBLEM_ZUSCHLAG) if gm and "LIEFERPROBLEM_ZUSCHLAG" in gm else 1.3
 
 # ------------------------------------------------------------ Krug füllen
 ## Füllstand des Krugs in der Hand, direkt über dem Fadenkreuz.
@@ -341,6 +347,15 @@ func set_buero(z: Dictionary) -> void:
 	_buero.setze_zustand(z)
 	_computer.setze_zustand(z)
 	_ziel_anzeigen()
+	# Lieferprobleme: steht als Warnung in der Leiste, solange sie gelten —
+	# angekündigt wird das Ereignis nicht, also muss man es hier sehen.
+	var liefer: Control = %LieferZeile
+	if bool(z.get("lieferproblem", false)) != liefer.visible:
+		liefer.visible = bool(z.get("lieferproblem", false))
+		if liefer.visible:
+			%Liefer.text = tr("HUD_LIEFERPROBLEM") % int(round((float(_gm_zuschlag()) - 1.0) * 100.0))
+			liefer.modulate.a = 0.0
+			create_tween().tween_property(liefer, "modulate:a", 1.0, 0.35)
 	# Heutiges Tagesereignis in der Leiste
 	var ereignis := str(z.get("ereignis", ""))
 	var pille: Control = %EreignisZeile

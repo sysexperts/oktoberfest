@@ -345,6 +345,10 @@ MSG_TOILET_HAVE,Die Toilette ist schon eingebaut,The toilet is already installed
 MSG_TOILET_DONE,Toilette eingebaut — keine Pfützen mehr in der Ecke,Toilet installed — no more puddles in the corner,Tuvalet kuruldu — köşede artık birikinti yok
 MSG_ACT_BOOKED_ALREADY,Schon gebucht: %s,Already booked: %s,Zaten ayarlandı: %s
 MSG_ACT_BOOKED,%s gebucht! Beliebtheit +%d %% · spielt in der nächsten Schicht,%s booked! Popularity +%d %% · plays next shift,%s ayarlandı! Popülerlik +%d %% · sonraki vardiyada çalar
+MSG_LIEFERPROBLEM,"Lieferprobleme bei der Brauerei! Das Bier ist knapp: die Gäste zahlen heute %d %% mehr, nachbestellen geht aber nicht.","Delivery trouble at the brewery! Beer is scarce: guests pay %d %% more today, but you cannot reorder.","Bira fabrikasında teslimat sorunu! Bira az: misafirler bugün %%%d fazla ödüyor, ama yeni sipariş veremezsin."
+POPUP_LIEFERPROBLEM,"Heute kommt kein Bier mehr\n\nDie Brauerei hat Lieferprobleme. Was im Lager ist, muss für heute reichen — morgen kannst du wieder bestellen.","No more beer today\n\nThe brewery has delivery trouble. What is in storage has to last — you can order again tomorrow.","Bugün bira gelmiyor\n\nBira fabrikasında teslimat sorunu var. Depodaki kadarıyla idare etmelisin — yarın yine sipariş verebilirsin."
+HUD_LIEFERPROBLEM,"Lieferprobleme · Bier +%d %% · keine Nachlieferung","Delivery trouble · beer +%d %% · no restock","Teslimat sorunu · bira +%%%d · yeni sevkiyat yok"
+WHY_LIEFERPROBLEM,Lieferprobleme — heute kein Bier mehr,Delivery trouble — no more beer today,Teslimat sorunu — bugün bira yok
 MSG_GOODS_ORDERED,%d× %s bestellt (%s) — Lieferung in etwa 30 Sekunden,Ordered %d× %s (%s) — delivery in about 30 seconds,%d× %s sipariş edildi (%s) — yaklaşık 30 saniyede teslim
 MSG_GOODS_DELIVERED,%d Paket(e) geliefert — bring sie ins Lager,%d package(s) delivered — carry them to storage,%d paket teslim edildi — depoya taşı
 MSG_STAFF_HIRED,%s eingestellt: %s · Lohn %s pro Schicht,%s hired: %s · wage %s per shift,%s işe alındı: %s · vardiya başı maaş %s

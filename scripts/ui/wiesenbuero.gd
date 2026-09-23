@@ -319,9 +319,13 @@ func _reiter_ware(ohne_zelt: String) -> void:
 			tr("GOODS_INFO") % [int(_gm.PACK_UNITS), Texte.euro(preis)],
 			tr("GOODS_STOCK") % [bestand, int(_z.get("pending", 0))]])
 		var erster_grund := ""
+		# Lieferprobleme: heute kommt kein Bier mehr nach
+		var gesperrt := ohne_zelt
+		if gesperrt == "" and sorte == 1 and bool(_z.get("lieferproblem", false)):
+			gesperrt = tr("WHY_LIEFERPROBLEM")
 		for i in PAKETE.size():
 			var kosten: int = preis * int(PAKETE[i])
-			var g := _kauf_grund(kosten, ohne_zelt, false, false)
+			var g := _kauf_grund(kosten, gesperrt, false, false)
 			z.knopf(i, tr("BTN_PACKS") % [PAKETE[i], Texte.euro(kosten)], g != "")
 			if erster_grund == "":
 				erster_grund = g
