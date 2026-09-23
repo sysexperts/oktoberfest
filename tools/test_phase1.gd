@@ -1067,6 +1067,28 @@ class Lauf extends Node:
 		_check("Deckendeko hängt oben, Bodendeko steht unten", gm.Katalog.hoehe("kronleuchter") > 3.0
 			and is_zero_approx(float(gm._deko_platz("regal", 0.0, 0.0, 0.0).y)), "")
 
+		print("  -- Deko macht gemütlich (mehr Geduld)")
+		var deko_vorher: Dictionary = gm._einrichtung.duplicate(true)
+		gm._einrichtung.clear()
+		var geduld_leer: float = gm._geduld()
+		_check("ohne Deko kein Zuschlag", is_zero_approx(gm.gemuetlichkeit()) and gm.deko_wert() == 0,
+			"%.3f" % gm.gemuetlichkeit())
+		# Kronleuchter kostet 450 € — vier davon sind 1800 €, also +18 %
+		for i in 4:
+			gm._einrichtung[9000 + i] = {"art": "kronleuchter", "x": 0.0, "z": 0.0, "rot": 0.0}
+		_check("Wert zählt, nicht die Stückzahl", gm.deko_wert() == 4 * gm.Katalog.preis("kronleuchter"),
+			"%d €" % gm.deko_wert())
+		_check("Gemütlichkeit plus 18 Prozent", is_equal_approx(snappedf(gm.gemuetlichkeit(), 0.001), 0.18),
+			"%.3f" % gm.gemuetlichkeit())
+		_check("Gäste warten länger", gm._geduld() > geduld_leer * 1.17,
+			"%.1f statt %.1f s" % [gm._geduld(), geduld_leer])
+		# Gedeckelt: ein volles Zelt teurer Deko darf die Geduld nicht sprengen
+		for i in 30:
+			gm._einrichtung[9100 + i] = {"art": "kronleuchter", "x": 0.0, "z": 0.0, "rot": 0.0}
+		_check("Zuschlag gedeckelt", is_equal_approx(gm.gemuetlichkeit(), gm.GEMUET_MAX),
+			"%.3f" % gm.gemuetlichkeit())
+		gm._einrichtung = deko_vorher
+
 		print("  -- Spätlizenzen")
 		var stufe_vorher: int = gm._tent_stage
 		gm._tent_stage = 1

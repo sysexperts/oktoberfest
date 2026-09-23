@@ -330,6 +330,13 @@ func _reiter_ware(ohne_zelt: String) -> void:
 ## Lampen und Deko — gleiche Regeln wie GameManager.net_buy_einrichtung.
 func _reiter_einrichtung(ohne_zelt: String) -> void:
 	var anzahl := int(_z.get("einrichtung", 0))
+	# Was die Deko gerade bringt — sonst merkt man den Nutzen nie
+	var info := get_node_or_null("Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste/Info") as Label
+	if info:
+		info.text = "%s
+%s" % [tr("DECO_TAB_INFO"),
+			tr("DECO_TAB_GEMUET") % [anzahl, int(_gm.DEKO_MAX), Texte.euro(int(_z.get("deko_wert", 0))),
+				int(round(float(_z.get("gemuet", 0.0)) * 100.0)), int(round(float(_gm.GEMUET_MAX) * 100.0))]]
 	var sperre := ohne_zelt
 	if sperre == "" and anzahl >= int(_gm.DEKO_MAX):
 		sperre = tr("WHY_DECO_LIMIT") % int(_gm.DEKO_MAX)

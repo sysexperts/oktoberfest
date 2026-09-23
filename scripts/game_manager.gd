@@ -653,6 +653,25 @@ const POP_KUENSTLER_GRENZE := {1: 10.0, 2: 20.0, 3: 35.0}
 const POP_DEKO_GRENZE := 2.0      # je Einrichtungsgegenstand …
 const POP_DEKO_GRENZE_MAX := 10.0 # … höchstens so viel
 
+## Gemütlichkeit: aufgestellte Einrichtung macht die Gäste geduldiger.
+## Vorher zog Deko nur die Beliebtheitsgrenze um höchstens 10 Punkte hoch —
+## im Spiel war das kaum zu merken, Deko also fast sinnlos. Jetzt zählt der
+## Wert des Aufgestellten (Katalogpreis): teure Stücke bringen mehr als viele
+## billige. Gerechnet je 100 €, gedeckelt — sonst wäre Warten irgendwann egal.
+const GEMUET_JE_100 := 0.01
+const GEMUET_MAX := 0.25
+
+## Wert der aufgestellten Einrichtung in Euro
+func deko_wert() -> int:
+	var w := 0
+	for e: Dictionary in _einrichtung.values():
+		w += Katalog.preis(str(e.get("art", "")))
+	return w
+
+## Geduldzuschlag aus der Gemütlichkeit (0.0 … GEMUET_MAX)
+func gemuetlichkeit() -> float:
+	return minf(GEMUET_MAX, float(deko_wert()) / 100.0 * GEMUET_JE_100)
+
 func _pop_grenze() -> float:
 	var g := POP_NATUR_MAX + float(POP_KUENSTLER_GRENZE.get(_artist_tier, 0.0))
 	g += minf(POP_DEKO_GRENZE_MAX, POP_DEKO_GRENZE * float(_einrichtung.size()))
@@ -1115,6 +1134,7 @@ func _geduld() -> float:
 		* maxf(0.7, 1.0 - SAISON_GEDULD * float(_saison_nr - 1))
 	if _ereignis == "familie":
 		g *= 1.2   # Familien warten geduldiger
+	g *= 1.0 + gemuetlichkeit()   # gemütliches Zelt: man wartet lieber
 	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
@@ -5202,6 +5222,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
+		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
 		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,
 		"essenpreis": _essenpreis, "essen_min": essenpreis_grenzen().x, "essen_max": essenpreis_grenzen().y,
 		"zelt_offen": _zelt_offen,

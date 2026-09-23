@@ -54,5 +54,8 @@ static func info_key(art: String) -> String:
 static func platz(art: String) -> String:
 	return str((ARTEN.get(art, {}) as Dictionary).get("platz", "boden"))
 
+static func preis(art: String) -> int:
+	return int((ARTEN.get(art, {}) as Dictionary).get("preis", 0))
+
 static func hoehe(art: String) -> float:
 	return float((ARTEN.get(art, {}) as Dictionary).get("hoehe", 0.0))
