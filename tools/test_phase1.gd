@@ -1061,6 +1061,35 @@ class Lauf extends Node:
 		gm._klo_setzen(-1)
 		gm._has_toilet = klo_vorher
 
+		print("  -- Lagerraum frei, Eingang frei")
+		# Der Lagerraum kam mit v244 dazu — an einem festen Tischplatz aus
+		# main.tscn merkt die Sperre in TISCH_SPERREN das nicht, der Tisch stand
+		# dann in der Kammer und verkeilte sich mit den Wänden.
+		var im_raum := []
+		for t in gm.get_node("Tables").get_children():
+			var pt: Vector3 = (t as Node3D).position
+			if pt.x > -8.1 and pt.x < -3.9 and pt.z > 6.9 and pt.z < 11.4:
+				im_raum.append("%s %.1f/%.1f" % [t.name, pt.x, pt.z])
+		_check("kein Tisch im Lagerraum", im_raum.is_empty(), str(im_raum))
+		# Nur die Toröffnung selbst (z 12,5 … 10): dort darf nichts stehen. Weiter
+		# innen stellt der Spieler seine Tische hin, das ist seine Sache.
+		var kapsel_e := CapsuleShape3D.new()
+		kapsel_e.radius = 0.35
+		kapsel_e.height = 1.7
+		var abf_e := PhysicsShapeQueryParameters3D.new()
+		abf_e.shape = kapsel_e
+		abf_e.collide_with_areas = false
+		var raum_e: PhysicsDirectSpaceState3D = gm.get_world_3d().direct_space_state
+		var blocker := []
+		for i in 6:
+			var zz := 12.5 - float(i) * 0.5
+			abf_e.transform = Transform3D(Basis.IDENTITY, Vector3(0.0, 1.0, zz))
+			for tr: Dictionary in raum_e.intersect_shape(abf_e, 4):
+				var k = tr.get("collider")
+				if k:
+					blocker.append("%s bei z %.1f" % [k.name, zz])
+		_check("Toröffnung ist frei", blocker.is_empty(), str(blocker))
+
 		print("  -- Abdeckplanen")
 		# Die beiden Regale stehen seit v244 im Lagerraum (Kinder von
 		# „Lagerraum"), spätere Käufe (LagerKauf1 …) stehen weiter im Zelt.
