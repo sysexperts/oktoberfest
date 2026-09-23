@@ -101,6 +101,7 @@ ACTION_COSTUME,Kostüm wechseln,Change costume,Kostüm değiştir
 ACTION_PAUSE,Pause,Pause,Duraklat
 ACTION_HELP,Hilfe,Help,Yardım
 HUD_DAY,Tag %d,Day %d,%d. Gün
+HUD_TAG,Tag,Day,Gün
 HUD_CLOSED,Zelt geschlossen,Tent closed,Çadır kapalı
 HUD_POPULARITY,Beliebtheit,Popularity,Popülerlik
 HUD_STOCK,Lager,Storage,Depo
