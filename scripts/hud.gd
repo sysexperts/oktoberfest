@@ -16,12 +16,11 @@ const WEISS := Color(0.949, 0.933, 0.902)
 
 @onready var _geld: Label = %GeldWert
 @onready var _zeit: Label = %Zeit
-@onready var _zeit_unten: Label = %ZeitUnten
-@onready var _beliebtheit: Ring = %Beliebtheit
+@onready var _beliebtheit: ProgressBar = %Beliebtheit
 @onready var _beliebtheit_wert: Label = %BeliebtheitWert
 @onready var _lager_bier: Label = %LagerBier
 @onready var _lager_essen: Label = %LagerEssen
-@onready var _sauberkeit: Ring = %Sauberkeit
+@onready var _sauberkeit: ProgressBar = %Sauberkeit
 @onready var _sauberkeit_wert: Label = %SauberkeitWert
 @onready var _aufgabe: Control = %Aufgabe
 @onready var _meldungen: Control = %Meldungen
@@ -72,7 +71,6 @@ func _ready() -> void:
 	Symbole.setze(%SymbolGeld, "geld")
 	Symbole.setze(%SymbolBier, "bier")
 	Symbole.setze(%SymbolEssen, "topf")
-	Symbole.setze(%SymbolZeit, "uhr")
 	Symbole.setze(%SymbolBeliebtheit, "stern")
 	Symbole.setze(%SymbolSauber, "besen")
 	Symbole.setze(%SymbolEreignis, "ausruf")
@@ -254,25 +252,34 @@ func _geld_zeigen(wert: float) -> void:
 func _geld_stoss(rauf: bool) -> void:
 	if _geld_puls:
 		_geld_puls.kill()
-	var chip: Control = %Geld
+	var chip: Control = %SymbolGeld
 	_geld.scale = Vector2(1.0, 1.0)
 	_geld_puls = create_tween().set_parallel(true)
 	_geld_puls.tween_property(_geld, "scale", Vector2(1.08, 1.08), 0.09).set_trans(Tween.TRANS_SINE)
 	_geld_puls.chain().tween_property(_geld, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	chip.modulate = GOLD if rauf else ROT
-	_geld_puls.parallel().tween_property(chip, "modulate", Color.WHITE, 0.45)
+	chip.self_modulate = Color.WHITE if rauf else ROT
+	_geld_puls.parallel().tween_property(chip, "self_modulate", GOLD, 0.45)
 
-## Ring gleitet auf den neuen Wert, die Prozentzahl daneben zählt mit.
-func _ring_gleiten(ring: Ring, wert: Label, ziel: float) -> void:
-	var laufend: Tween = _balken_laeuft.get(ring)
+## Balken gleitet auf den neuen Wert, die Prozentzahl daneben zählt mit.
+func _balken_gleiten(balken: ProgressBar, wert: Label, ziel: float) -> void:
+	var laufend: Tween = _balken_laeuft.get(balken)
 	if laufend:
 		laufend.kill()
 	var tw := create_tween()
 	tw.tween_method(func(v: float) -> void:
-			ring.wert = v
+			balken.value = v
 			wert.text = "%d %%" % roundi(v),
-		ring.wert, clampf(ziel, 0.0, 100.0), BALKEN_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_balken_laeuft[ring] = tw
+		balken.value, clampf(ziel, 0.0, 100.0), BALKEN_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_balken_laeuft[balken] = tw
+
+## Füllfarbe eines Balkens (Sauberkeit wird unter 40 % rot)
+func _balken_farbe(balken: ProgressBar, farbe: Color) -> void:
+	var box := balken.get_theme_stylebox("fill")
+	if not balken.has_theme_stylebox_override("fill"):
+		box = box.duplicate()
+		balken.add_theme_stylebox_override("fill", box)
+	if box is StyleBoxFlat:
+		(box as StyleBoxFlat).bg_color = farbe
 
 ## Punkte werden nicht mehr angezeigt — Geld und Beliebtheit sagen mehr.
 func set_score(_v: int) -> void:
@@ -282,19 +289,15 @@ func set_score(_v: int) -> void:
 func set_time(clock: float, night: bool = false) -> void:
 	_clock = clock
 	_night = night
-	# Tag innerhalb der Wiesn, z. B. „Tag 5/16"
-	# Kleine Vorzeile über der Uhr, in Großbuchstaben
-	_zeit.text = (tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]).to_upper()
-	# Zweite Zeile: Uhrzeit, bei geschlossenem Zelt der Hinweis darauf
+	# Eine Zeile unter dem Betrag: „Tag 3/16 · 18:30", bei geschlossenem Zelt
+	# steht dort der Hinweis darauf.
+	var tag := tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
 	if clock < 0.0:
-		_zeit_unten.text = tr("HUD_CLOSED")
-		_zeit_unten.add_theme_color_override("font_color", Color(0.82, 0.76, 0.66))
+		_zeit.text = "%s · %s" % [tag, tr("HUD_CLOSED")]
+		_zeit.add_theme_color_override("font_color", Color(0.78, 0.75, 0.71))
 		return
-	var h := int(clock)
-	var m := int((clock - float(h)) * 60.0)
-	Symbole.setze(%SymbolZeit, "mond" if night else "uhr")
-	_zeit_unten.text = "%02d:%02d" % [h, m]
-	_zeit_unten.add_theme_color_override("font_color", Color(0.86, 0.8, 0.68) if night else WEISS)
+	_zeit.text = "%s · %02d:%02d" % [tag, int(clock), int((clock - float(int(clock))) * 60.0)]
+	_zeit.add_theme_color_override("font_color", Color(0.86, 0.8, 0.68) if night else Color(0.78, 0.75, 0.71))
 
 func set_day(day: int) -> void:
 	_day = day
@@ -308,13 +311,14 @@ func set_phase(offen: bool) -> void:
 
 func set_popularity(v: float) -> void:
 	_pop = v
-	_ring_gleiten(_beliebtheit, _beliebtheit_wert, v)
+	_balken_gleiten(_beliebtheit, _beliebtheit_wert, v)
 
 func set_hygiene(v: float) -> void:
 	_hygiene = v
-	_ring_gleiten(_sauberkeit, _sauberkeit_wert, v)
-	# Unter 40 % färbt der Ring sich selbst rot (scripts/ui/ring.gd)
-	_sauberkeit_wert.add_theme_color_override("font_color", ROT if v <= 40.0 else WEISS)
+	_balken_gleiten(_sauberkeit, _sauberkeit_wert, v)
+	var schmutzig := v <= 40.0
+	_sauberkeit_wert.add_theme_color_override("font_color", ROT if schmutzig else WEISS)
+	_balken_farbe(_sauberkeit, ROT if schmutzig else GOLD)
 
 func set_stock(bier: int, essen: int) -> void:
 	var anders := bier != _bier or essen != _essen
@@ -339,7 +343,7 @@ func set_buero(z: Dictionary) -> void:
 	_ziel_anzeigen()
 	# Heutiges Tagesereignis in der Leiste
 	var ereignis := str(z.get("ereignis", ""))
-	var pille: Control = %EreignisPille
+	var pille: Control = %EreignisZeile
 	if ereignis == "":
 		pille.visible = false
 	else:

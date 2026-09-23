@@ -10,8 +10,6 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/schicht_intro.tscn" id="7_intro"]
 [ext_resource type="Shader" path="res://assets/shader/ui_glas.gdshader" id="80_glas"]
 [ext_resource type="Script" path="res://scripts/ui/glas.gd" id="81_glasskript"]
-[ext_resource type="Shader" path="res://assets/shader/ui_ring.gdshader" id="82_ringshader"]
-[ext_resource type="Script" path="res://scripts/ui/ring.gd" id="82_ring"]
 
 [sub_resource type="ShaderMaterial" id="MatGlas"]
 shader = ExtResource("80_glas")
@@ -22,37 +20,6 @@ shader_parameter/toenung = Color(0.05, 0.04, 0.032, 0.42)
 shader_parameter/schleier = 0.05
 shader_parameter/dimmen = 0.5
 
-[sub_resource type="StyleBoxFlat" id="Pille"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.97, 0.93, 0.2)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-shadow_color = Color(0, 0, 0, 0.35)
-shadow_size = 10
-shadow_offset = Vector2(0, 3)
-
-[sub_resource type="ShaderMaterial" id="MatRingGold"]
-shader = ExtResource("82_ringshader")
-shader_parameter/wert = 0.35
-shader_parameter/farbe = Color(1, 0.839, 0.349, 1)
-shader_parameter/spur = Color(1, 0.96, 0.9, 0.16)
-shader_parameter/dicke = 0.11
-shader_parameter/radius = 0.38
-
-[sub_resource type="ShaderMaterial" id="MatRingSauber"]
-shader = ExtResource("82_ringshader")
-shader_parameter/wert = 1.0
-shader_parameter/farbe = Color(1, 0.839, 0.349, 1)
-shader_parameter/spur = Color(1, 0.96, 0.9, 0.16)
-shader_parameter/dicke = 0.11
-shader_parameter/radius = 0.38
-
 [sub_resource type="StyleBoxFlat" id="Glasfeld"]
 bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
@@ -60,10 +27,10 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 0.97, 0.92, 0.13)
-corner_radius_top_left = 22
-corner_radius_top_right = 22
-corner_radius_bottom_right = 22
-corner_radius_bottom_left = 22
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
 
 [sub_resource type="StyleBoxFlat" id="Chip"]
 content_margin_left = 9.0
@@ -116,375 +83,164 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 0.97, 0.92, 0.13)
-corner_radius_top_left = 22
-corner_radius_top_right = 22
-corner_radius_bottom_right = 22
-corner_radius_bottom_left = 22
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
-[node name="Oben" type="HBoxContainer" parent="."]
+[node name="Oben" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 offset_left = 22.0
 offset_top = 20.0
-offset_right = 900.0
-offset_bottom = 68.0
+offset_right = 620.0
+offset_bottom = 110.0
 mouse_filter = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 0
 
-[node name="Geld" type="PanelContainer" parent="Oben"]
+[node name="Leiste" type="PanelContainer" parent="Oben"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_horizontal = 0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Pille")
+theme_override_styles/panel = SubResource("Glasfeld")
 
-[node name="Glas" type="ColorRect" parent="Oben/Geld"]
+[node name="Glas" type="ColorRect" parent="Oben/Leiste"]
 material = SubResource("MatGlas")
 layout_mode = 2
 mouse_filter = 2
 script = ExtResource("81_glasskript")
-radius = 24.0
+radius = 18.0
 
-[node name="Rand" type="MarginContainer" parent="Oben/Geld"]
+[node name="Rand" type="MarginContainer" parent="Oben/Leiste"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 12
 
-[node name="Zeile" type="HBoxContainer" parent="Oben/Geld/Rand"]
+[node name="Spalte" type="VBoxContainer" parent="Oben/Leiste/Rand"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 11
+theme_override_constants/separation = 9
 
-[node name="SymbolGeld" type="TextureRect" parent="Oben/Geld/Rand/Zeile"]
+[node name="Zeile" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Konto" type="VBoxContainer" parent="Oben/Leiste/Rand/Spalte/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Betrag" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte/Zeile/Konto"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 9
+
+[node name="SymbolGeld" type="TextureRect" parent="Oben/Leiste/Rand/Spalte/Zeile/Konto/Betrag"]
 unique_name_in_owner = true
 self_modulate = Color(1, 0.839, 0.349, 1)
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="GeldWert" type="Label" parent="Oben/Geld/Rand/Zeile"]
+[node name="GeldWert" type="Label" parent="Oben/Leiste/Rand/Spalte/Zeile/Konto/Betrag"]
 unique_name_in_owner = true
 pivot_offset = Vector2(0, 17)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
-theme_override_font_sizes/font_size = 27
-text = "1.200 EUR"
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/shadow_outline_size = 3
+theme_override_font_sizes/font_size = 26
+text = "1.200 EUR"
 
-[node name="Uhr" type="PanelContainer" parent="Oben"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Pille")
-
-[node name="Glas" type="ColorRect" parent="Oben/Uhr"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 24.0
-
-[node name="Rand" type="MarginContainer" parent="Oben/Uhr"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 7
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 7
-
-[node name="Zeile" type="HBoxContainer" parent="Oben/Uhr/Rand"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 11
-
-[node name="SymbolZeit" type="TextureRect" parent="Oben/Uhr/Rand/Zeile"]
-unique_name_in_owner = true
-self_modulate = Color(0.75, 0.72, 0.67, 1)
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Spalte" type="VBoxContainer" parent="Oben/Uhr/Rand/Zeile"]
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_constants/separation = 0
-
-[node name="Zeit" type="Label" parent="Oben/Uhr/Rand/Zeile/Spalte"]
+[node name="Zeit" type="Label" parent="Oben/Leiste/Rand/Spalte/Zeile/Konto"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.78, 0.75, 0.71, 1)
-theme_override_font_sizes/font_size = 11
-text = "TAG 1/16"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
 theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 13
+text = "Tag 1/16 · 08:00"
 
-[node name="ZeitUnten" type="Label" parent="Oben/Uhr/Rand/Zeile/Spalte"]
-unique_name_in_owner = true
+[node name="Trenner" type="ColorRect" parent="Oben/Leiste/Rand/Spalte/Zeile"]
+custom_minimum_size = Vector2(1, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
-theme_override_font_sizes/font_size = 18
-text = "08:00"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
+color = Color(1, 0.97, 0.93, 0.14)
 
-[node name="Werte" type="PanelContainer" parent="Oben"]
-unique_name_in_owner = true
+[node name="Raster" type="GridContainer" parent="Oben/Leiste/Rand/Spalte/Zeile"]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Pille")
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 7
+columns = 2
 
-[node name="Glas" type="ColorRect" parent="Oben/Werte"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 24.0
-
-[node name="Rand" type="MarginContainer" parent="Oben/Werte"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 13
-theme_override_constants/margin_top = 7
-theme_override_constants/margin_right = 17
-theme_override_constants/margin_bottom = 7
-
-[node name="Zeile" type="HBoxContainer" parent="Oben/Werte/Rand"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 14
-
-[node name="Beliebt" type="HBoxContainer" parent="Oben/Werte/Rand/Zeile"]
+[node name="Beliebt" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Beliebtheit" type="ColorRect" parent="Oben/Werte/Rand/Zeile/Beliebt"]
+[node name="SymbolBeliebtheit" type="TextureRect" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Beliebt"]
 unique_name_in_owner = true
-material = SubResource("MatRingGold")
-custom_minimum_size = Vector2(34, 34)
+self_modulate = Color(0.78, 0.75, 0.71, 1)
+custom_minimum_size = Vector2(17, 17)
 layout_mode = 2
 size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("82_ring")
-wert = 35.0
-
-[node name="SymbolBeliebtheit" type="TextureRect" parent="Oben/Werte/Rand/Zeile/Beliebt/Beliebtheit"]
-unique_name_in_owner = true
-self_modulate = Color(0.85, 0.82, 0.77, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 7.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BeliebtheitWert" type="Label" parent="Oben/Werte/Rand/Zeile/Beliebt"]
+[node name="Beliebtheit" type="ProgressBar" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Beliebt"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 5)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_styles/background = SubResource("BalkenSpur")
+theme_override_styles/fill = SubResource("BalkenGold")
+value = 35.0
+show_percentage = false
+
+[node name="BeliebtheitWert" type="Label" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Beliebt"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.91, 0.89, 0.86, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 13
 text = "35 %"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
 
-[node name="Sauber" type="HBoxContainer" parent="Oben/Werte/Rand/Zeile"]
+[node name="Bier" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Sauberkeit" type="ColorRect" parent="Oben/Werte/Rand/Zeile/Sauber"]
+[node name="SymbolBier" type="TextureRect" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Bier"]
 unique_name_in_owner = true
-material = SubResource("MatRingSauber")
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("82_ring")
-wert = 100.0
-
-[node name="SymbolSauber" type="TextureRect" parent="Oben/Werte/Rand/Zeile/Sauber/Sauberkeit"]
-unique_name_in_owner = true
-self_modulate = Color(0.85, 0.82, 0.77, 1)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = 7.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SauberkeitWert" type="Label" parent="Oben/Werte/Rand/Zeile/Sauber"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
-theme_override_font_sizes/font_size = 15
-text = "100 %"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
-
-[node name="Lager" type="PanelContainer" parent="Oben"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Pille")
-
-[node name="Glas" type="ColorRect" parent="Oben/Lager"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 24.0
-
-[node name="Rand" type="MarginContainer" parent="Oben/Lager"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 8
-
-[node name="Zeile" type="HBoxContainer" parent="Oben/Lager/Rand"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 9
-
-[node name="SymbolBier" type="TextureRect" parent="Oben/Lager/Rand/Zeile"]
-unique_name_in_owner = true
-self_modulate = Color(0.75, 0.72, 0.67, 1)
-custom_minimum_size = Vector2(19, 19)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LagerBier" type="Label" parent="Oben/Lager/Rand/Zeile"]
-unique_name_in_owner = true
-pivot_offset = Vector2(0, 12)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
-theme_override_font_sizes/font_size = 18
-text = "0"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
-
-[node name="Punkt" type="ColorRect" parent="Oben/Lager/Rand/Zeile"]
-custom_minimum_size = Vector2(3, 3)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-color = Color(1, 0.96, 0.9, 0.22)
-
-[node name="SymbolEssen" type="TextureRect" parent="Oben/Lager/Rand/Zeile"]
-unique_name_in_owner = true
-self_modulate = Color(0.75, 0.72, 0.67, 1)
-custom_minimum_size = Vector2(19, 19)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="LagerEssen" type="Label" parent="Oben/Lager/Rand/Zeile"]
-unique_name_in_owner = true
-pivot_offset = Vector2(0, 12)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
-theme_override_font_sizes/font_size = 18
-text = "0"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
-
-[node name="EreignisPille" type="PanelContainer" parent="Oben"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Pille")
-
-[node name="Glas" type="ColorRect" parent="Oben/EreignisPille"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 24.0
-
-[node name="Rand" type="MarginContainer" parent="Oben/EreignisPille"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 9
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 9
-
-[node name="Zeile" type="HBoxContainer" parent="Oben/EreignisPille/Rand"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 9
-
-[node name="SymbolEreignis" type="TextureRect" parent="Oben/EreignisPille/Rand/Zeile"]
-unique_name_in_owner = true
-self_modulate = Color(1, 0.839, 0.349, 1)
+self_modulate = Color(0.78, 0.75, 0.71, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -492,18 +248,118 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Ereignis" type="Label" parent="Oben/EreignisPille/Rand/Zeile"]
+[node name="LagerBier" type="Label" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Bier"]
+unique_name_in_owner = true
+pivot_offset = Vector2(0, 11)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="Sauber" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="SymbolSauber" type="TextureRect" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Sauber"]
+unique_name_in_owner = true
+self_modulate = Color(0.78, 0.75, 0.71, 1)
+custom_minimum_size = Vector2(17, 17)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Sauberkeit" type="ProgressBar" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Sauber"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(52, 5)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("BalkenSpur")
+theme_override_styles/fill = SubResource("BalkenGold")
+value = 100.0
+show_percentage = false
+
+[node name="SauberkeitWert" type="Label" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Sauber"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.91, 0.89, 0.86, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 13
+text = "100 %"
+
+[node name="Essen" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="SymbolEssen" type="TextureRect" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Essen"]
+unique_name_in_owner = true
+self_modulate = Color(0.78, 0.75, 0.71, 1)
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LagerEssen" type="Label" parent="Oben/Leiste/Rand/Spalte/Zeile/Raster/Essen"]
+unique_name_in_owner = true
+pivot_offset = Vector2(0, 11)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.965, 0.945, 0.91, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 16
+text = "0"
+
+[node name="EreignisZeile" type="HBoxContainer" parent="Oben/Leiste/Rand/Spalte"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 9
+
+[node name="SymbolEreignis" type="TextureRect" parent="Oben/Leiste/Rand/Spalte/EreignisZeile"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(17, 17)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ereignis" type="Label" parent="Oben/Leiste/Rand/Spalte/EreignisZeile"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.878, 0.541, 1)
-theme_override_font_sizes/font_size = 15
-text = "Ereignis"
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.55)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
 theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_offset_y = 2
-theme_override_constants/shadow_outline_size = 3
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 14
+text = "Ereignis"
 
 [node name="Rechts" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
