@@ -1439,7 +1439,7 @@ func _apply_tent() -> void:
 		var bt := _all_tables[i] as Node3D
 		var on: bool = i < _active_count
 		bt.idx = i
-		bt.visible = on
+		bt.aktiv_setzen(on)
 		if on:
 			if not bt.is_in_group("beertable"):
 				bt.add_to_group("beertable")

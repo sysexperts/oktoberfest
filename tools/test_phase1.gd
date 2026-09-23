@@ -1061,6 +1061,31 @@ class Lauf extends Node:
 		gm._klo_setzen(-1)
 		gm._has_toilet = klo_vorher
 
+		print("  -- Keine unsichtbaren Hindernisse im Zelt")
+		# Godot koppelt Physik nicht an Sichtbarkeit: ein ausgeblendeter Tisch
+		# blieb solide, und im Zelt standen bis zu 20 unsichtbare Tische im Weg.
+		var kapsel_u := CapsuleShape3D.new()
+		kapsel_u.radius = 0.35
+		kapsel_u.height = 1.7
+		var abf_u := PhysicsShapeQueryParameters3D.new()
+		abf_u.shape = kapsel_u
+		abf_u.collide_with_areas = false
+		var raum_u: PhysicsDirectSpaceState3D = gm.get_world_3d().direct_space_state
+		var unsichtbar := {}
+		var ux := -11.0
+		while ux <= 11.0:
+			var uz := -13.0
+			while uz <= 10.5:
+				abf_u.transform = Transform3D(Basis.IDENTITY, Vector3(ux, 1.0, uz))
+				for tr_u: Dictionary in raum_u.intersect_shape(abf_u, 8):
+					var kn = tr_u.get("collider")
+					if kn is Node3D and not (kn as Node3D).is_visible_in_tree():
+						unsichtbar[String((kn as Node3D).get_path()).replace("/root/Main/", "")] = true
+				uz += 1.0
+			ux += 1.0
+		_check("kein unsichtbarer Koerper im Zelt", unsichtbar.is_empty(),
+			", ".join(unsichtbar.keys()).left(160))
+
 		print("  -- Lagerraum frei, Eingang frei")
 		# Der Lagerraum kam mit v244 dazu — an einem festen Tischplatz aus
 		# main.tscn merkt die Sperre in TISCH_SPERREN das nicht, der Tisch stand
