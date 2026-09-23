@@ -373,7 +373,14 @@ const TANZ_SAUBERKEIT := 50.0
 const TANZ_PRUEF_INTERVALL := 4.0
 const TANZ_DAUER_MIN := 15.0
 const TANZ_DAUER_MAX := 30.0
-const TANZ_PLAETZE := [-0.6, 0.6, 0.0]   # Versatz entlang der Tischlänge
+## Tanzplätze auf dem Tisch, im Tischmaß (x = Länge 2,4 m, y = Tiefe 1,6 m).
+## Vorher lagen sie bei -0,6 / +0,6 / 0,0 alle auf der Mittellinie — der dritte
+## stand damit genau zwischen den beiden anderen, und weil der Platz nur aus der
+## Anzahl der Tänzer abgeleitet wurde, bekamen nach einem Wechsel auch zwei
+## denselben. Jetzt stehen sich zwei gegenüber, der dritte tanzt daneben.
+const TANZ_PLAETZE := [Vector2(-0.55, 0.4), Vector2(-0.55, -0.4), Vector2(0.8, 0.0)]
+## Wer wem zugewandt tanzt (Platz -> Gegenüber, -1 = niemand)
+const TANZ_PARTNER := [1, 0, -1]
 ## Tagesereignisse (Spaß-Plan 3.1): ab Tag 3 wird morgens eins angekündigt.
 const EREIGNISSE := ["bus", "kontrolle", "happy", "fass", "prosit", "promi", "regen"]
 const REGEN_VOLL_CHANCE := 0.6   # so oft flüchten bei Regen viele ins Zelt
@@ -4468,28 +4475,42 @@ func _update_tanz(delta: float) -> void:
 	_tanz_timer = TANZ_PRUEF_INTERVALL
 	if not stimmung_gut():
 		return
-	var je_tisch := {}
+	# Welche Plätze je Tisch schon belegt sind — am Platz selbst, nicht an der
+	# Anzahl: sonst bekommt nach einem Wechsel der Nächste denselben Platz.
+	var belegt_je_tisch := {}
 	for g: Dictionary in _guest_sim.values():
 		if int(g.mode) == 5 and int(g.seat) < _seats.size():
 			var t := int(_seats[int(g.seat)].table)
-			je_tisch[t] = int(je_tisch.get(t, 0)) + 1
+			if not belegt_je_tisch.has(t):
+				belegt_je_tisch[t] = {}
+			belegt_je_tisch[t][int(g.get("tanz_platz", -1))] = true
 	for id in _guest_sim.keys():
 		var g: Dictionary = _guest_sim[id]
 		if int(g.mode) != 1 or int(g.ostate) != 0 or int(g.get("drinks", 0)) < 1:
 			continue
 		var seat: Dictionary = _seats[int(g.seat)]
 		var ti := int(seat.table)
-		var belegt := int(je_tisch.get(ti, 0))
-		if belegt >= tanz_max(ti) or randf() > 0.35 or ti >= _beertables.size():
+		var belegt: Dictionary = belegt_je_tisch.get(ti, {})
+		if belegt.size() >= tanz_max(ti) or randf() > 0.35 or ti >= _beertables.size():
+			continue
+		var platz := -1
+		for i in mini(tanz_max(ti), TANZ_PLAETZE.size()):
+			if not belegt.has(i):
+				platz = i
+				break
+		if platz < 0:
 			continue
 		var bt := _beertables[ti] as Node3D
-		var ziel: Vector3 = bt.global_position + bt.global_transform.basis.x * float(TANZ_PLAETZE[belegt % TANZ_PLAETZE.size()])
+		var versatz: Vector2 = TANZ_PLAETZE[platz]
+		var ziel: Vector3 = bt.global_position + bt.global_transform.basis.x * versatz.x 			+ bt.global_transform.basis.z * versatz.y
 		g.mode = 5
+		g.tanz_platz = platz
 		g.tanz_t = randf_range(TANZ_DAUER_MIN, TANZ_DAUER_MAX)
 		_stats.tanzen = int(_stats.get("tanzen", 0)) + 1
 		g.tgt = Vector3(ziel.x, bt.global_position.y + 0.1, ziel.z)
 		_guest_sim[id] = g
-		je_tisch[ti] = belegt + 1
+		belegt[platz] = true
+		belegt_je_tisch[ti] = belegt
 	# Vor der Bühne: auf den freien Plätzen (kein Tisch im Weg) am Boden tanzen
 	var plaetze := buehnen_tanzplaetze()
 	var vergeben := {}
@@ -4566,6 +4587,36 @@ func _tanz_blick(g: Dictionary) -> float:
 		if stages.is_empty():
 			return float(g.yaw)
 		ziel = (stages[0] as Node3D).global_position
+	var zum: Vector3 = ziel - (g.pos as Vector3)
+	zum.y = 0.0
+	if zum.length() < 0.2:
+		return float(g.yaw)
+	return atan2(-zum.x, -zum.z)
+
+## Blickrichtung beim Tanzen auf dem Tisch: zum Gegenüber, sonst zum anderen
+## Tänzer auf dem Tisch, sonst in den Zeltraum hinaus.
+func _tanz_blick_tisch(g: Dictionary) -> float:
+	var platz := int(g.get("tanz_platz", -1))
+	if platz < 0 or int(g.seat) >= _seats.size():
+		return float(g.yaw)
+	var ti := int(_seats[int(g.seat)].table)
+	var partner: int = TANZ_PARTNER[platz] if platz < TANZ_PARTNER.size() else -1
+	var ziel := Vector3.ZERO
+	var ersatz := Vector3.ZERO
+	for anderer: Dictionary in _guest_sim.values():
+		if int(anderer.get("mode", 0)) != 5 or int(anderer.get("tanz_platz", -1)) == platz:
+			continue
+		if int(anderer.get("seat", -1)) >= _seats.size() or int(_seats[int(anderer.seat)].table) != ti:
+			continue
+		if int(anderer.get("tanz_platz", -1)) == partner:
+			ziel = anderer.pos
+			break
+		ersatz = anderer.pos
+	if ziel == Vector3.ZERO:
+		ziel = ersatz
+	if ziel == Vector3.ZERO:
+		# Allein auf dem Tisch: zur Zeltmitte schauen, nicht in die Wand
+		ziel = Vector3(0.0, float((g.pos as Vector3).y), 0.0)
 	var zum: Vector3 = ziel - (g.pos as Vector3)
 	zum.y = 0.0
 	if zum.length() < 0.2:
@@ -4864,10 +4915,15 @@ func _update_guests(delta: float) -> void:
 		# jeder dritte zu seinem Nachbarn. Einmal beim Ankommen, nicht jedes Bild.
 		if g.mode == 6 and bool(g.tanz_da) and not tanzte:
 			g.yaw = _tanz_blick(g)
+		# Auf dem Tisch: zum Gegenüber drehen. Nicht nur beim Ankommen, weil der
+		# Partner oft erst später hochsteigt — dann dreht sich der Erste nach.
+		if g.mode == 5 and bool(g.tanz_da):
+			g.yaw = lerp_angle(float(g.yaw), _tanz_blick_tisch(g), clampf(delta * 3.0, 0.0, 1.0))
 		if g.mode == 5 or g.mode == 6:
 			g.tanz_t = float(g.get("tanz_t", 0.0)) - delta
 			if float(g.tanz_t) <= 0.0:
 				g.mode = 0
+				g.tanz_platz = -1   # Platz auf dem Tisch wird frei
 				g.weg = []
 				g.tgt = _platz_pos_fuer(id, int(g.seat))
 				g.cooldown = randf_range(ORDER_COOLDOWN_MIN, ORDER_COOLDOWN_MAX)

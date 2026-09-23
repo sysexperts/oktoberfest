@@ -884,6 +884,55 @@ class Lauf extends Node:
 			if c.tanzt():
 				sichtbar_tanzend += 1
 		_check("Tänzer auch sichtbar", sichtbar_tanzend > 0, str(sichtbar_tanzend))
+		# Nicht ineinander stehen: je Tisch jeder Platz nur einmal, und Abstand
+		# zwischen zwei Tänzern mindestens 0,65 m
+		var plaetze_je_tisch := {}
+		var pos_je_tisch := {}
+		var doppelt := ""
+		for tg3: Dictionary in gm._guest_sim.values():
+			if int(tg3.mode) != 5:
+				continue
+			var ti3 := int(gm._seats[int(tg3.seat)].table)
+			var pl := int(tg3.get("tanz_platz", -1))
+			if not plaetze_je_tisch.has(ti3):
+				plaetze_je_tisch[ti3] = {}
+				pos_je_tisch[ti3] = []
+			if plaetze_je_tisch[ti3].has(pl) or pl < 0:
+				doppelt += "Tisch %d Platz %d · " % [ti3, pl]
+			plaetze_je_tisch[ti3][pl] = true
+			pos_je_tisch[ti3].append(tg3.pos)
+		_check("jeder Tanzplatz nur einmal belegt", doppelt == "", doppelt)
+		var engster := 0.0
+		for ti4 in pos_je_tisch:
+			var liste: Array = pos_je_tisch[ti4]
+			for a in liste.size():
+				for b in range(a + 1, liste.size()):
+					var da: Vector3 = liste[a]
+					var db: Vector3 = liste[b]
+					var abstand := Vector2(da.x - db.x, da.z - db.z).length()
+					if engster == 0.0 or abstand < engster:
+						engster = abstand
+		_check("Tänzer stehen nicht ineinander", engster >= 0.65, "engster Abstand %.2f m" % engster)
+		# Das Paar (Plätze 0 und 1) schaut sich an
+		var paare := 0
+		var angeschaut := 0
+		for tg5: Dictionary in gm._guest_sim.values():
+			if int(tg5.mode) != 5 or int(tg5.get("tanz_platz", -1)) != 0:
+				continue
+			var ti5 := int(gm._seats[int(tg5.seat)].table)
+			for tg6: Dictionary in gm._guest_sim.values():
+				if int(tg6.mode) != 5 or int(tg6.get("tanz_platz", -1)) != 1:
+					continue
+				if int(gm._seats[int(tg6.seat)].table) != ti5:
+					continue
+				paare += 1
+				var soll: float = gm._tanz_blick_tisch(tg5)
+				var zum: Vector3 = (tg6.pos as Vector3) - (tg5.pos as Vector3)
+				var richtung := atan2(-zum.x, -zum.z)
+				if absf(angle_difference(soll, richtung)) < 0.2:
+					angeschaut += 1
+		_check("Paar schaut sich beim Tanzen an", paare > 0 and angeschaut == paare,
+			"%d von %d Paaren" % [angeschaut, paare])
 		for id in gm._guest_sim.keys().duplicate():
 			gm._despawn_guest(id)
 
@@ -897,7 +946,7 @@ class Lauf extends Node:
 		_check("Touristenbus: mehr Andrang, weniger Geduld", is_equal_approx(gm._ereignis_andrang(), 1.5)
 			and gm._geduld() < Wirtschaft_geduld(gm), str(gm._ereignis_andrang()))
 		gm._ereignis_waehlen("happy")
-		gm._phase_time = gm.SHIFT_TIME * (1.0 - (18.5 - 7.0) / 15.0)   # 18:30
+		gm._phase_time = gm.SHIFT_TIME * (1.0 - (18.5 - gm.DAY_START_HOUR) / (gm.DAY_END_HOUR - gm.DAY_START_HOUR))   # 18:30
 		var preis_happy: int = gm._reward_for(1)
 		gm._ereignis = ""
 		_check("Happy Hour: Bier billiger", preis_happy < gm._reward_for(1), "%d < %d" % [preis_happy, gm._reward_for(1)])
