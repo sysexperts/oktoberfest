@@ -265,6 +265,7 @@ func _physics_process(delta: float) -> void:
 			# nichts geht
 			_current_target = null
 		_update_hint()
+		_update_krug_anzeige()
 		if not _tippt() and _kotz_t <= 0.0:
 			_handle_interaction(delta)
 		_trinken(delta)
@@ -559,6 +560,28 @@ func _unter_plane(planen: Array[Mess], pos: Vector3) -> bool:
 ## Hinweis am Fadenkreuz — nur neu setzen, wenn er sich ändert.
 var _hint_key := "-"
 
+## Füllstandsanzeige über dem Fadenkreuz — nur neu setzen, wenn sie sich ändert.
+var _krug_gezeigt := -1.0
+var _war_voll := false
+
+## Krug in der Hand: Füllstand anzeigen, beim Vollwerden einmal melden.
+## Vorher sah man den Fortschritt nur am Bier im Krug — zu wenig, um zu merken,
+## wann man abgeben kann.
+func _update_krug_anzeige() -> void:
+	var zeigen := carry_state == 1 and carry_type != 0
+	var wert := carry_fill if zeigen else -1.0
+	var voll := zeigen and carry_fill >= 0.999
+	if voll and not _war_voll and _sfx_node:
+		# kurzer Ton: fertig, ab zum Gast (ohne eigene Datei das Ding-Signal)
+		_sfx_node.play_oder("krug_voll", "ding", -6.0)
+	_war_voll = voll
+	if is_equal_approx(wert, _krug_gezeigt):
+		return
+	_krug_gezeigt = wert
+	var hud := _world.get_node_or_null("HUD")
+	if hud and hud.has_method("set_krug"):
+		hud.set_krug(carry_fill, zeigen)
+
 func _update_hint() -> void:
 	var key := ""
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and minispiel == null:
@@ -603,7 +626,13 @@ func _hint_for(t: Node3D) -> String:
 			return "HINT_WASSER_GEBEN" if g.rausch_stufe >= 1 else ""
 		if g.rausch_stufe == 3 and carry_state == 0 and extra_kruege.is_empty():
 			return "HINT_HEIMBRINGEN"
-		if g.order_state != 1 or not (_has_ready() or not extra_kruege.is_empty()):
+		if g.order_state != 1:
+			return ""
+		if not (_has_ready() or not extra_kruege.is_empty()):
+			# Halb voller Krug: bisher stand hier gar nichts und man rätselte,
+			# warum das Abgeben nicht geht
+			if carry_state == 1 and carry_fill > 0.0 and carry_fill < 0.999:
+				return "HINT_KRUG_NICHT_VOLL"
 			return ""
 		var passt := (_has_ready() and g.can_serve(_carry_kind(), carry_type)) \
 			or (g.order_kind == 1 and extra_kruege.has(g.order_type))
@@ -632,6 +661,8 @@ func _hint_for(t: Node3D) -> String:
 	if t is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			return "HINT_TAP"
+		if _has_full_mug():
+			return "HINT_KRUG_VOLL"
 		return "HINT_NEED_MUG" if carry_state == 0 else ""
 	if t is FoodStation:
 		var ft := (t as FoodStation).food_type

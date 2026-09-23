@@ -41,6 +41,12 @@ func _anwenden() -> void:
 	bier.scale = Vector3(1.0, maxf(h, 0.001), 1.0)
 	bier.position.y = boden + h * 0.5
 	schaum.position.y = boden + h + 0.006
+	# Voller Krug: dicke Schaumkrone über dem Rand. Vorher sah ein Krug mit 90 %
+	# genauso aus wie ein voller — abgeben ging aber nur bei ganz voll.
+	var voll := fuellung >= 0.999
+	schaum.scale = Vector3(1.12, 1.8, 1.12) if voll else Vector3.ONE
+	if voll:
+		schaum.position.y += 0.004
 	var schluessel := farbe.to_html()
 	if not _bier_materialien.has(schluessel):
 		var m := StandardMaterial3D.new()

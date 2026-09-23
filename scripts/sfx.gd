@@ -70,7 +70,7 @@ func _ready() -> void:
 		if echt != null:
 			_streams[name] = echt
 	# Namen ohne Ersatzklang: nur nutzbar, wenn eine Datei da ist.
-	for name in ["kasse", "zapfen", "prost", "schritte", "tuer", "muenzen", "fahrgeschaeft"]:
+	for name in ["kasse", "zapfen", "prost", "schritte", "tuer", "muenzen", "fahrgeschaeft", "krug_voll"]:
 		var echt := _lade(SFX_DIR + name)
 		if echt != null:
 			_streams[name] = echt

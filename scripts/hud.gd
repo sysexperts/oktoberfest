@@ -30,6 +30,9 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _mieten: Control = %ZeltMieten
 @onready var _abstimmung: Control = %Abstimmung
 @onready var _lobby: Control = %Lobby
+@onready var _krug: Control = %Krug
+@onready var _krug_balken: ProgressBar = %KrugBalken
+@onready var _krug_text: Label = %KrugText
 
 # Zuletzt gemeldete Werte
 var _money := 0
@@ -38,6 +41,10 @@ var _night := false
 var _day := 1
 var _pop := 0.0
 var _hygiene := 100.0
+var _krug_fuellung := 0.0
+var _krug_sichtbar := false
+var _krug_fuellt_stil: StyleBox = null
+var _krug_voll_stil: StyleBoxFlat = null
 var _bier := 0
 var _essen := 0
 var _quest_step := -1
@@ -131,6 +138,7 @@ func _alles_neu() -> void:
 	set_stock(_bier, _essen)
 	set_quest(_quest_step, _quest_total)
 	set_hint(_hint_key)
+	set_krug(_krug_fuellung, _krug_sichtbar)
 	set_buero(_zustand)
 	%HilfeHinweis.text = Texte.mit_tasten("HUD_HELP_HINT") + "   ·   " + tr("HUD_DETAILS_HINT")
 
@@ -146,6 +154,30 @@ func set_hint(key: String) -> void:
 	hinweis.text = Texte.mit_tasten(key)
 	var handlung := tr(key).contains("{")
 	hinweis.add_theme_color_override("font_color", WEISS if handlung else Color(0.78, 0.73, 0.66))
+
+# ------------------------------------------------------------ Krug füllen
+## Füllstand des Krugs in der Hand, direkt über dem Fadenkreuz.
+## Warum: Am Fass war nur am Bier im Krug zu erkennen, wie weit man ist — und
+## ein halb voller Krug lässt sich nicht abgeben, ohne dass das Spiel sagt warum.
+## fuellung: 0 … 1 · sichtbar: false blendet die Anzeige aus.
+const KRUG_VOLL_FARBE := Color(0.55, 0.95, 0.45)
+
+func set_krug(fuellung: float, sichtbar: bool) -> void:
+	_krug_fuellung = fuellung
+	_krug_sichtbar = sichtbar
+	_krug.visible = sichtbar
+	if not sichtbar:
+		return
+	var voll := fuellung >= 0.999
+	_krug_balken.value = clampf(fuellung, 0.0, 1.0) * 100.0
+	_krug_text.text = tr("HUD_KRUG_VOLL") if voll else tr("HUD_KRUG_FUELLT") % int(fuellung * 100.0)
+	_krug_text.add_theme_color_override("font_color", KRUG_VOLL_FARBE if voll else WEISS)
+	# Voll wird grün: gold auf gold war im Test nicht zu unterscheiden
+	if _krug_fuellt_stil == null:
+		_krug_fuellt_stil = _krug_balken.get_theme_stylebox("fill")
+		_krug_voll_stil = _krug_fuellt_stil.duplicate() as StyleBoxFlat
+		_krug_voll_stil.bg_color = KRUG_VOLL_FARBE
+	_krug_balken.add_theme_stylebox_override("fill", _krug_voll_stil if voll else _krug_fuellt_stil)
 
 # ------------------------------------------------------------ Leiste
 func set_money(v: int) -> void:

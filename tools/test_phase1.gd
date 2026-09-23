@@ -88,6 +88,49 @@ class Lauf extends Node:
 		await _frames(5)
 		_check("Tisch kaufen kommt an", gm.get("_active_count") == tische0 + 1, "")
 
+		print("  -- Krug füllen: Anzeige und Hinweise")
+		var hud_k: HUD = gm.get_node("HUD")
+		var kg: Node = gm.get_node("Players").get_child(0)
+		kg.carry_state = 1
+		kg.carry_type = 1
+		kg.carry_fill = 0.5
+		kg._update_krug_anzeige()
+		_check("halber Krug: Anzeige sichtbar", hud_k._krug.visible and int(hud_k._krug_balken.value) == 50,
+			"%.0f %%" % hud_k._krug_balken.value)
+		var text_halb: String = hud_k._krug_text.text
+		kg.carry_fill = 1.0
+		kg._update_krug_anzeige()
+		_check("voller Krug: Anzeige meldet voll", hud_k._krug_text.text != text_halb
+			and hud_k._krug_text.text == tr("HUD_KRUG_VOLL"), hud_k._krug_text.text)
+		_check("voller Balken", int(hud_k._krug_balken.value) == 100, "%.0f %%" % hud_k._krug_balken.value)
+		kg.carry_state = 0
+		kg.carry_fill = 0.0
+		kg._update_krug_anzeige()
+		_check("ohne Krug keine Anzeige", not hud_k._krug.visible, "")
+		# Am Gast mit halbem Krug muss dastehen, warum das Abgeben nicht geht
+		# (in der Pause sitzt noch kein Gast — einen zum Prüfen dazustellen)
+		var gast_k: Customer = gm.CUSTOMER_SCENE.instantiate() as Customer
+		gm.get_node("Customers").add_child(gast_k)
+		await _frames(2)
+		gast_k.order_state = 1
+		gast_k.order_kind = 1
+		gast_k.order_type = 1
+		kg.carry_state = 1
+		kg.carry_type = 1
+		kg.carry_fill = 0.5
+		_check("Gast mit halbem Krug: Hinweis erklärt es", kg._hint_for(gast_k) == "HINT_KRUG_NICHT_VOLL",
+			kg._hint_for(gast_k))
+		kg.carry_fill = 1.0
+		_check("voller Krug am Gast: abgeben", kg._hint_for(gast_k) == "HINT_SERVE", kg._hint_for(gast_k))
+		gast_k.queue_free()
+		kg.carry_state = 1
+		kg.carry_type = 1
+		kg.carry_fill = 1.0
+		_check("voller Krug am Fass: Hinweis schickt zum Gast",
+			kg._hint_for(gm.get_node("Stations/Keg1")) == "HINT_KRUG_VOLL", kg._hint_for(gm.get_node("Stations/Keg1")))
+		kg.carry_state = 0
+		kg.carry_fill = 0.0
+
 		print("  -- Hinweis am Fadenkreuz (2.2)")
 		var spieler := gm.get_node("Players").get_child(0)
 		var zapfhahn := gm.get_node("Stations/MugDispenser")

@@ -111,6 +111,7 @@ Kurz, trocken, ohne Hall. Namen genau so, sonst werden sie nicht gefunden.
 |---|---|---|
 | `kasse.ogg` | 0,6 s | Kassenklingel beim Verkauf |
 | `zapfen.ogg` | 2 s | Zapfhahn auf, Schaum |
+| `krug_voll.ogg` | 0,5 s | Krug ist voll — kurzes, klares Signal (ohne Datei: `ding`) |
 | `prost.ogg` | 1 s | Krüge klirren aneinander |
 | `schritte.ogg` | 0,4 s | Schritt auf Kies |
 | `tuer.ogg` | 0,5 s | Wohnwagentür |
