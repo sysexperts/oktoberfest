@@ -105,6 +105,7 @@ HUD_TAG,Tag,Day,Gün
 HUD_CLOSED,Zelt geschlossen,Tent closed,Çadır kapalı
 HUD_POPULARITY,Beliebtheit,Popularity,Popülerlik
 HUD_STOCK,Lager,Storage,Depo
+HUD_FOOD,Essen,Food,Yemek
 HUD_CLEAN,Sauberkeit,Cleanliness,Temizlik
 HUD_TASK,Aufgabe %d von %d,Task %d of %d,Görev %d / %d
 HUD_TASK_DONE,Erledigt: %s,Done: %s,Tamamlandı: %s

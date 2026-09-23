@@ -8,22 +8,61 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/abstimmung.tscn" id="5_abst"]
 [ext_resource type="PackedScene" path="res://scenes/ui/lobby.tscn" id="6_lobby"]
 [ext_resource type="PackedScene" path="res://scenes/ui/schicht_intro.tscn" id="7_intro"]
+[ext_resource type="Shader" path="res://assets/shader/ui_glas.gdshader" id="80_glas"]
+[ext_resource type="Script" path="res://scripts/ui/glas.gd" id="81_glasskript"]
+
+[sub_resource type="ShaderMaterial" id="MatGlas"]
+shader = ExtResource("80_glas")
+shader_parameter/groesse = Vector2(520, 60)
+shader_parameter/radius = 18.0
+shader_parameter/staerke = 3.4
+shader_parameter/toenung = Color(0.055, 0.042, 0.03, 0.66)
 
 [sub_resource type="StyleBoxFlat" id="Leiste"]
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
-bg_color = Color(0.05, 0.04, 0.032, 0.8)
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.5, 0.33, 0.16, 0.8)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+border_color = Color(1, 0.84, 0.45, 0.22)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="Chip"]
+content_margin_left = 7.0
+content_margin_top = 7.0
+content_margin_right = 7.0
+content_margin_bottom = 7.0
+bg_color = Color(1, 0.839, 0.349, 0.13)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.22)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[sub_resource type="StyleBoxFlat" id="BalkenSpur"]
+bg_color = Color(0, 0, 0, 0.45)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="BalkenGold"]
+bg_color = Color(1, 0.839, 0.349, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="KrugLeer"]
 bg_color = Color(0.09, 0.07, 0.05, 0.9)
@@ -45,17 +84,20 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="AufgabeRahmen"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 12.0
-bg_color = Color(0.05, 0.04, 0.032, 0.82)
-border_width_left = 4
-border_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 4
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.84, 0.45, 0.22)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -63,10 +105,10 @@ script = ExtResource("1_hud")
 [node name="Oben" type="VBoxContainer" parent="."]
 offset_left = 14.0
 offset_top = 12.0
-offset_right = 614.0
-offset_bottom = 100.0
+offset_right = 660.0
+offset_bottom = 112.0
 mouse_filter = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="Leiste" type="PanelContainer" parent="Oben"]
 layout_mode = 2
@@ -74,16 +116,29 @@ size_flags_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Leiste")
 
+[node name="Glas" type="ColorRect" parent="Oben/Leiste"]
+material = SubResource("MatGlas")
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("81_glasskript")
+radius = 18.0
+
 [node name="Zeile" type="HBoxContainer" parent="Oben/Leiste"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
-[node name="SymbolGeld" type="TextureRect" parent="Oben/Leiste/Zeile"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(24, 24)
+[node name="ChipGeld" type="PanelContainer" parent="Oben/Leiste/Zeile"]
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolGeld" type="TextureRect" parent="Oben/Leiste/Zeile/ChipGeld"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
@@ -91,50 +146,112 @@ stretch_mode = 5
 [node name="Geld" type="Label" parent="Oben/Leiste/Zeile"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "1.200 €"
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_font_sizes/font_size = 25
+text = "1.200 EUR"
 
-[node name="Trenner1" type="VSeparator" parent="Oben/Leiste/Zeile"]
-layout_mode = 2
-
-[node name="SymbolZeit" type="TextureRect" parent="Oben/Leiste/Zeile"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(22, 22)
+[node name="Trenner1" type="ColorRect" parent="Oben/Leiste/Zeile"]
+custom_minimum_size = Vector2(1, 28)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
+color = Color(1, 0.9, 0.75, 0.16)
+
+[node name="ChipZeit" type="PanelContainer" parent="Oben/Leiste/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolZeit" type="TextureRect" parent="Oben/Leiste/Zeile/ChipZeit"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Zeit" type="Label" parent="Oben/Leiste/Zeile"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Tag 1 · 07:00"
-
-[node name="Trenner2" type="VSeparator" parent="Oben/Leiste/Zeile"]
-layout_mode = 2
-
-[node name="BeliebtheitText" type="Label" parent="Oben/Leiste/Zeile"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
-theme_override_font_sizes/font_size = 16
-text = "HUD_POPULARITY"
-
-[node name="Beliebtheit" type="ProgressBar" parent="Oben/Leiste/Zeile"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 14)
+[node name="Tag" type="VBoxContainer" parent="Oben/Leiste/Zeile"]
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Zeit" type="Label" parent="Oben/Leiste/Zeile/Tag"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 19
+text = "Tag 1/16"
+
+[node name="ZeitUnten" type="Label" parent="Oben/Leiste/Zeile/Tag"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.63, 1)
+theme_override_font_sizes/font_size = 13
+text = "Zelt geschlossen"
+
+[node name="Trenner2" type="ColorRect" parent="Oben/Leiste/Zeile"]
+custom_minimum_size = Vector2(1, 28)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(1, 0.9, 0.75, 0.16)
+
+[node name="ChipBeliebtheit" type="PanelContainer" parent="Oben/Leiste/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolBeliebtheit" type="TextureRect" parent="Oben/Leiste/Zeile/ChipBeliebtheit"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Beliebt" type="VBoxContainer" parent="Oben/Leiste/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="BeliebtheitText" type="Label" parent="Oben/Leiste/Zeile/Beliebt"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.63, 1)
+theme_override_font_sizes/font_size = 13
+text = "HUD_POPULARITY"
+
+[node name="Zeile" type="HBoxContainer" parent="Oben/Leiste/Zeile/Beliebt"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Beliebtheit" type="ProgressBar" parent="Oben/Leiste/Zeile/Beliebt/Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/background = SubResource("BalkenSpur")
+theme_override_styles/fill = SubResource("BalkenGold")
 value = 35.0
 show_percentage = false
 
-[node name="BeliebtheitWert" type="Label" parent="Oben/Leiste/Zeile"]
+[node name="BeliebtheitWert" type="Label" parent="Oben/Leiste/Zeile/Beliebt/Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(52, 0)
+custom_minimum_size = Vector2(46, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
 text = "35 %"
 
 [node name="Unterzeile" type="PanelContainer" parent="Oben"]
@@ -143,81 +260,157 @@ size_flags_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Leiste")
 
+[node name="Glas" type="ColorRect" parent="Oben/Unterzeile"]
+material = SubResource("MatGlas")
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("81_glasskript")
+radius = 18.0
+
 [node name="Zeile" type="HBoxContainer" parent="Oben/Unterzeile"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 14
 
-[node name="LagerText" type="Label" parent="Oben/Unterzeile/Zeile"]
+[node name="ChipBier" type="PanelContainer" parent="Oben/Unterzeile/Zeile"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
-theme_override_font_sizes/font_size = 16
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolBier" type="TextureRect" parent="Oben/Unterzeile/Zeile/ChipBier"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Bier" type="VBoxContainer" parent="Oben/Unterzeile/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="LagerText" type="Label" parent="Oben/Unterzeile/Zeile/Bier"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.63, 1)
+theme_override_font_sizes/font_size = 13
 text = "HUD_STOCK"
 
-[node name="SymbolBier" type="TextureRect" parent="Oben/Unterzeile/Zeile"]
+[node name="LagerBier" type="Label" parent="Oben/Unterzeile/Zeile/Bier"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "0"
+
+[node name="ChipEssen" type="PanelContainer" parent="Oben/Unterzeile/Zeile"]
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolEssen" type="TextureRect" parent="Oben/Unterzeile/Zeile/ChipEssen"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LagerBier" type="Label" parent="Oben/Unterzeile/Zeile"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "0"
-
-[node name="SymbolEssen" type="TextureRect" parent="Oben/Unterzeile/Zeile"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(20, 20)
+[node name="Essen" type="VBoxContainer" parent="Oben/Unterzeile/Zeile"]
 layout_mode = 2
 size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="EssenText" type="Label" parent="Oben/Unterzeile/Zeile/Essen"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.63, 1)
+theme_override_font_sizes/font_size = 13
+text = "HUD_FOOD"
+
+[node name="LagerEssen" type="Label" parent="Oben/Unterzeile/Zeile/Essen"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "0"
+
+[node name="Trenner" type="ColorRect" parent="Oben/Unterzeile/Zeile"]
+custom_minimum_size = Vector2(1, 28)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(1, 0.9, 0.75, 0.16)
+
+[node name="ChipSauber" type="PanelContainer" parent="Oben/Unterzeile/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolSauber" type="TextureRect" parent="Oben/Unterzeile/Zeile/ChipSauber"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="LagerEssen" type="Label" parent="Oben/Unterzeile/Zeile"]
+[node name="Sauber" type="VBoxContainer" parent="Oben/Unterzeile/Zeile"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="SauberkeitText" type="Label" parent="Oben/Unterzeile/Zeile/Sauber"]
 unique_name_in_owner = true
-auto_translate_mode = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "0"
-
-[node name="Trenner" type="VSeparator" parent="Oben/Unterzeile/Zeile"]
-layout_mode = 2
-
-[node name="SauberkeitText" type="Label" parent="Oben/Unterzeile/Zeile"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
-theme_override_font_sizes/font_size = 16
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.63, 1)
+theme_override_font_sizes/font_size = 13
 text = "HUD_CLEAN"
 
-[node name="Sauberkeit" type="ProgressBar" parent="Oben/Unterzeile/Zeile"]
+[node name="Zeile" type="HBoxContainer" parent="Oben/Unterzeile/Zeile/Sauber"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Sauberkeit" type="ProgressBar" parent="Oben/Unterzeile/Zeile/Sauber/Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(90, 12)
+custom_minimum_size = Vector2(150, 10)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
+theme_override_styles/background = SubResource("BalkenSpur")
+theme_override_styles/fill = SubResource("BalkenGold")
 value = 100.0
 show_percentage = false
 
-[node name="SauberkeitWert" type="Label" parent="Oben/Unterzeile/Zeile"]
+[node name="SauberkeitWert" type="Label" parent="Oben/Unterzeile/Zeile/Sauber/Zeile"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(52, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
 text = "100 %"
 
 [node name="Ereignis" type="Label" parent="Oben/Unterzeile/Zeile"]
 unique_name_in_owner = true
-visible = false
-auto_translate_mode = 2
 layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 15
 text = "Ereignis"
 
 [node name="Rechts" type="VBoxContainer" parent="."]
@@ -239,6 +432,13 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("AufgabeRahmen")
 
+[node name="Glas" type="ColorRect" parent="Rechts/Erledigt"]
+material = SubResource("MatGlas")
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("81_glasskript")
+radius = 18.0
+
 [node name="ErledigtText" type="Label" parent="Rechts/Erledigt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
@@ -255,14 +455,43 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("AufgabeRahmen")
 
+[node name="Glas" type="ColorRect" parent="Rechts/Aufgabe"]
+material = SubResource("MatGlas")
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("81_glasskript")
+radius = 18.0
+
 [node name="Spalte" type="VBoxContainer" parent="Rechts/Aufgabe"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="AufgabeNummer" type="Label" parent="Rechts/Aufgabe/Spalte"]
+[node name="Kopf" type="HBoxContainer" parent="Rechts/Aufgabe/Spalte"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="ChipAufgabe" type="PanelContainer" parent="Rechts/Aufgabe/Spalte/Kopf"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="SymbolAufgabe" type="TextureRect" parent="Rechts/Aufgabe/Spalte/Kopf/ChipAufgabe"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AufgabeNummer" type="Label" parent="Rechts/Aufgabe/Spalte/Kopf"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_font_sizes/font_size = 14
 text = "Aufgabe 1 von 11"
@@ -297,6 +526,13 @@ visible = false
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("AufgabeRahmen")
+
+[node name="Glas" type="ColorRect" parent="Rechts/Bestellungen"]
+material = SubResource("MatGlas")
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("81_glasskript")
+radius = 18.0
 
 [node name="Spalte" type="VBoxContainer" parent="Rechts/Bestellungen"]
 layout_mode = 2
@@ -405,6 +641,13 @@ offset_bottom = 74.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Leiste")
+
+[node name="Glas" type="ColorRect" parent="Hinweis"]
+material = SubResource("MatGlas")
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("81_glasskript")
+radius = 18.0
 
 [node name="HinweisText" type="Label" parent="Hinweis"]
 unique_name_in_owner = true

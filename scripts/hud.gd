@@ -16,6 +16,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 
 @onready var _geld: Label = %Geld
 @onready var _zeit: Label = %Zeit
+@onready var _zeit_unten: Label = %ZeitUnten
 @onready var _beliebtheit: ProgressBar = %Beliebtheit
 @onready var _beliebtheit_wert: Label = %BeliebtheitWert
 @onready var _lager_bier: Label = %LagerBier
@@ -59,6 +60,9 @@ func _ready() -> void:
 	Symbole.setze(%SymbolBier, "bier")
 	Symbole.setze(%SymbolEssen, "brezn")
 	Symbole.setze(%SymbolZeit, "uhr")
+	Symbole.setze(%SymbolBeliebtheit, "stern")
+	Symbole.setze(%SymbolSauber, "besen")
+	Symbole.setze(%SymbolAufgabe, "haken")
 	%HinweisfensterOk.pressed.connect(close_popup)
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
@@ -196,16 +200,17 @@ func set_time(clock: float, night: bool = false) -> void:
 	_clock = clock
 	_night = night
 	# Tag innerhalb der Wiesn, z. B. „Tag 5/16"
-	var tag := tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
+	_zeit.text = tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
+	# Zweite Zeile: Uhrzeit, bei geschlossenem Zelt der Hinweis darauf
 	if clock < 0.0:
-		_zeit.text = "%s · %s" % [tag, tr("HUD_CLOSED")]
-		_zeit.add_theme_color_override("font_color", Color(0.82, 0.76, 0.66))
+		_zeit_unten.text = tr("HUD_CLOSED")
+		_zeit_unten.add_theme_color_override("font_color", Color(0.82, 0.76, 0.66))
 		return
 	var h := int(clock)
 	var m := int((clock - float(h)) * 60.0)
 	Symbole.setze(%SymbolZeit, "mond" if night else "uhr")
-	_zeit.text = "%s · %02d:%02d" % [tag, h, m]
-	_zeit.add_theme_color_override("font_color", Color(0.86, 0.8, 0.68) if night else WEISS)
+	_zeit_unten.text = "%02d:%02d" % [h, m]
+	_zeit_unten.add_theme_color_override("font_color", Color(0.86, 0.8, 0.68) if night else WEISS)
 
 func set_day(day: int) -> void:
 	_day = day
