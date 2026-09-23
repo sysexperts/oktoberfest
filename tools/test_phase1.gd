@@ -272,7 +272,10 @@ class Lauf extends Node:
 		gm._phase = gm.Phase.INTERMISSION
 		gm._zelt_offen = false
 		gm._nachts_geschlossen = true
-		_check("HUD zeigt Tag 1/16 der neuen Wiesn", String(hud.get_node("%Zeit").text).begins_with("Tag 1/16"), hud.get_node("%Zeit").text)
+		# Die Vorzeile über der Uhr steht in Großbuchstaben (neue Leiste)
+		_check("HUD zeigt Tag 1/16 der neuen Wiesn",
+			String(hud.get_node("%Zeit").text).begins_with((tr("HUD_DAY_SAISON") % [1, 16]).to_upper()),
+			hud.get_node("%Zeit").text)
 		_check("Wiesn nach dem Finale bewertet", gm._saison_nr >= 2 and int(gm._stats.saisons) >= 1
 			and hud.is_popup_open(), "Wiesn %d" % gm._saison_nr)
 		_check("Bewertung 1–5", gm.saison_wertung({"tage": 16, "netto": 16000, "pop_summe": 1500, "bedient": 900, "verpasst": 30}) == 5

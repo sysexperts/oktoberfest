@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://deeu8c8vidps5"]
 
 [ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="1_gowi3"]
 [ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="2_hqi2o"]

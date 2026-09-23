@@ -12,6 +12,13 @@ uniform vec2 groesse = vec2(300.0, 80.0);
 uniform float radius = 20.0;
 uniform float staerke = 2.5;     // Streuung in Pixeln je Schritt
 uniform vec4 toenung : source_color = vec4(0.0, 0.0, 0.0, 0.45);
+// Heller Schleier obendrauf: ohne ihn wirkt die Flaeche vor dunklem Hintergrund
+// einfach schwarz statt wie Milchglas.
+uniform float schleier = 0.06;
+// Das verwischte Bild wird zuerst gedaempft und dann getoent. Nur toenen reichte
+// nicht: vor einer hellen Zeltwand wurde die Flaeche beige und die Schrift
+// verlor den Halt, vor dunklem Grund war sie fast schwarz.
+uniform float dimmen = 0.55;
 
 // Abstand zum Rand eines abgerundeten Rechtecks (negativ = innen)
 float rund(vec2 p, vec2 halb, float r) {
@@ -29,7 +36,7 @@ void fragment() {
 		}
 	}
 	vec3 verwischt = summe / 9.0;
-	vec3 farbe = mix(verwischt, toenung.rgb, toenung.a);
+	vec3 farbe = mix(verwischt * dimmen, toenung.rgb, toenung.a) + vec3(schleier);
 	// Rand weich abschneiden, damit die Ecken rund sind
 	float d = rund((UV - vec2(0.5)) * groesse, groesse * 0.5, radius);
 	COLOR = vec4(farbe, 1.0 - smoothstep(-1.0, 0.5, d));

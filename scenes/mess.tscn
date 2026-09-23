@@ -1,71 +1,69 @@
 [gd_scene format=3 uid="uid://b7dl2t154eamo"]
 
-[ext_resource type="Script" path="res://scripts/mess.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/laub.tres" id="3_laub"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/scherben.tres" id="4_scherben"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/papier.tres" id="5_papier"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/stroh.tres" id="6_stroh"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/staub.tres" id="7_staub"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/plane.tres" id="8_plane"]
-
-[sub_resource type="CylinderMesh" id="Disc"]
-top_radius = 0.5
-bottom_radius = 0.55
-height = 0.05
+[ext_resource type="Script" uid="uid://bui7hu4phmx3n" path="res://scripts/mess.gd" id="1"]
+[ext_resource type="Script" uid="uid://dsssnidpdv2bt" path="res://scripts/welt_text.gd" id="2_wt"]
+[ext_resource type="ArrayMesh" uid="uid://b0pryutxjwb56" path="res://assets/dreck/laub.tres" id="3_laub"]
+[ext_resource type="ArrayMesh" uid="uid://cxpjp60ehhbk0" path="res://assets/dreck/scherben.tres" id="4_scherben"]
+[ext_resource type="ArrayMesh" uid="uid://cuc8ttpcua6ei" path="res://assets/dreck/papier.tres" id="5_papier"]
+[ext_resource type="ArrayMesh" uid="uid://twh5n68p0ks8" path="res://assets/dreck/stroh.tres" id="6_stroh"]
+[ext_resource type="ArrayMesh" uid="uid://rusy86fn6jx3" path="res://assets/dreck/staub.tres" id="7_staub"]
+[ext_resource type="ArrayMesh" uid="uid://dw8f17636ys17" path="res://assets/dreck/plane.tres" id="8_plane"]
 
 [sub_resource type="StandardMaterial3D" id="Mat"]
 resource_local_to_scene = true
-albedo_color = Color(0.55, 0.6, 0.15, 0.95)
 transparency = 1
+albedo_color = Color(0.55, 0.6, 0.15, 0.95)
 
-[node name="Mess" type="Node3D"]
+[sub_resource type="CylinderMesh" id="Disc"]
+bottom_radius = 0.55
+height = 0.05
+
+[node name="Mess" type="Node3D" unique_id=579409845]
 script = ExtResource("1")
 
-[node name="Disc" type="MeshInstance3D" parent="."]
+[node name="Disc" type="MeshInstance3D" parent="." unique_id=1040478075]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
-mesh = SubResource("Disc")
 material_override = SubResource("Mat")
+mesh = SubResource("Disc")
 
-[node name="Label" type="Label3D" parent="."]
+[node name="Label" type="Label3D" parent="." unique_id=2093245507]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 billboard = 1
-pixel_size = 0.005
-font_size = 36
 modulate = Color(0.7, 0.9, 0.3, 1)
 text = "WORLD_MESS"
+font_size = 36
 script = ExtResource("2_wt")
 schluessel = "WORLD_MESS"
 
-[node name="Dreck" type="Node3D" parent="."]
+[node name="Dreck" type="Node3D" parent="." unique_id=1567150671]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
 visible = false
 
-[node name="Laub" type="MeshInstance3D" parent="Dreck"]
+[node name="Laub" type="MeshInstance3D" parent="Dreck" unique_id=1285718757]
 visible = false
 mesh = ExtResource("3_laub")
 
-[node name="Scherben" type="MeshInstance3D" parent="Dreck"]
+[node name="Scherben" type="MeshInstance3D" parent="Dreck" unique_id=17760892]
 visible = false
 mesh = ExtResource("4_scherben")
 
-[node name="Papier" type="MeshInstance3D" parent="Dreck"]
+[node name="Papier" type="MeshInstance3D" parent="Dreck" unique_id=508719360]
 visible = false
 mesh = ExtResource("5_papier")
 
-[node name="Stroh" type="MeshInstance3D" parent="Dreck"]
+[node name="Stroh" type="MeshInstance3D" parent="Dreck" unique_id=1860319128]
 visible = false
 mesh = ExtResource("6_stroh")
 
-[node name="Staub" type="MeshInstance3D" parent="Dreck"]
+[node name="Staub" type="MeshInstance3D" parent="Dreck" unique_id=2050327362]
 visible = false
 mesh = ExtResource("7_staub")
 
-[node name="Plane" type="MeshInstance3D" parent="."]
+[node name="Plane" type="MeshInstance3D" parent="." unique_id=2004385402]
 visible = false
 mesh = ExtResource("8_plane")
 
-[node name="Pfeil" type="Label3D" parent="."]
+[node name="Pfeil" type="Label3D" parent="." unique_id=621163255]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 visible = false
 pixel_size = 0.0012

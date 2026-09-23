@@ -1,41 +1,44 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://uftfimvf5tbs"]
 
-[ext_resource type="Script" path="res://scripts/package.gd" id="1_script"]
-[ext_resource type="ArrayMesh" path="res://assets/dreck/muellsack.tres" id="2_sack"]
-
-[sub_resource type="BoxMesh" id="BoxMesh"]
-size = Vector3(0.7, 0.7, 0.7)
+[ext_resource type="Script" uid="uid://baihkaoi3anex" path="res://scripts/package.gd" id="1_script"]
+[ext_resource type="ArrayMesh" uid="uid://bskqk7t6ubeo0" path="res://assets/dreck/muellsack.tres" id="2_sack"]
 
 [sub_resource type="StandardMaterial3D" id="MatBox"]
 albedo_color = Color(0.7, 0.55, 0.35, 1)
 
-[sub_resource type="BoxMesh" id="TapeMesh"]
-size = Vector3(0.72, 0.08, 0.72)
+[sub_resource type="BoxMesh" id="BoxMesh"]
+size = Vector3(0.7, 0.7, 0.7)
 
 [sub_resource type="StandardMaterial3D" id="MatTape"]
 albedo_color = Color(0.85, 0.8, 0.6, 1)
 
-[node name="Package" type="Node3D"]
+[sub_resource type="BoxMesh" id="TapeMesh"]
+size = Vector3(0.72, 0.08, 0.72)
+
+[node name="Package" type="Node3D" unique_id=1963302186]
 script = ExtResource("1_script")
 
-[node name="Box" type="MeshInstance3D" parent="."]
+[node name="Box" type="MeshInstance3D" parent="." unique_id=680546983]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
-mesh = SubResource("BoxMesh")
 material_override = SubResource("MatBox")
+mesh = SubResource("BoxMesh")
 
-[node name="Tape" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
-mesh = SubResource("TapeMesh")
+[node name="Tape" type="MeshInstance3D" parent="." unique_id=1849016108]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0.18322918, 0.35088748, 0)
 material_override = SubResource("MatTape")
+mesh = SubResource("TapeMesh")
 
-[node name="Sack" type="MeshInstance3D" parent="."]
+[node name="Tape" type="MeshInstance3D" parent="Tape" unique_id=429480633]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0011286736, -0.35635516, 0)
+material_override = SubResource("MatTape")
+mesh = SubResource("TapeMesh")
+
+[node name="Sack" type="MeshInstance3D" parent="." unique_id=654909876]
 visible = false
 mesh = ExtResource("2_sack")
 
-[node name="Label" type="Label3D" parent="."]
+[node name="Label" type="Label3D" parent="." unique_id=637664721]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 billboard = 1
-pixel_size = 0.005
-font_size = 38
-outline_size = 12
 text = "Ware"
+font_size = 38

@@ -14,14 +14,14 @@ const ROT := Color(1, 0.42, 0.35)
 const GOLD := Color(1, 0.839, 0.349)
 const WEISS := Color(0.949, 0.933, 0.902)
 
-@onready var _geld: Label = %Geld
+@onready var _geld: Label = %GeldWert
 @onready var _zeit: Label = %Zeit
 @onready var _zeit_unten: Label = %ZeitUnten
-@onready var _beliebtheit: ProgressBar = %Beliebtheit
+@onready var _beliebtheit: Ring = %Beliebtheit
 @onready var _beliebtheit_wert: Label = %BeliebtheitWert
 @onready var _lager_bier: Label = %LagerBier
 @onready var _lager_essen: Label = %LagerEssen
-@onready var _sauberkeit: ProgressBar = %Sauberkeit
+@onready var _sauberkeit: Ring = %Sauberkeit
 @onready var _sauberkeit_wert: Label = %SauberkeitWert
 @onready var _aufgabe: Control = %Aufgabe
 @onready var _meldungen: Control = %Meldungen
@@ -71,10 +71,11 @@ var _balken_laeuft := {}
 func _ready() -> void:
 	Symbole.setze(%SymbolGeld, "geld")
 	Symbole.setze(%SymbolBier, "bier")
-	Symbole.setze(%SymbolEssen, "brezn")
+	Symbole.setze(%SymbolEssen, "topf")
 	Symbole.setze(%SymbolZeit, "uhr")
 	Symbole.setze(%SymbolBeliebtheit, "stern")
 	Symbole.setze(%SymbolSauber, "besen")
+	Symbole.setze(%SymbolEreignis, "ausruf")
 	Symbole.setze(%SymbolAufgabe, "haken")
 	%HinweisfensterOk.pressed.connect(close_popup)
 	_einfliegen()
@@ -151,15 +152,27 @@ func _einblenden() -> void:
 ## Leiste und Aufgabenseite kommen beim Start hereingeglitten statt einfach da
 ## zu sein. Nur Optik — Werte stehen sofort richtig.
 func _einfliegen() -> void:
-	for seite: Array in [[%Oben, -EINFLUG_WEG], [%Rechts, EINFLUG_WEG]]:
-		var feld: Control = seite[0]
-		var weg: float = seite[1]
+	# Die Inseln oben kommen versetzt von oben herab (je 70 ms später),
+	# die Aufgabenseite von rechts.
+	var i := 0
+	for insel in (%Oben as Control).get_children():
+		var feld := insel as Control
+		if feld == null:
+			continue
 		var ziel := feld.position
-		feld.position = ziel + Vector2(weg, 0.0)
+		feld.position = ziel - Vector2(0.0, EINFLUG_WEG)
 		feld.modulate.a = 0.0
 		var tw := create_tween().set_parallel(true)
-		tw.tween_property(feld, "position", ziel, EINFLUG_DAUER).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		tw.tween_property(feld, "modulate:a", 1.0, EINFLUG_DAUER * 0.7)
+		tw.tween_property(feld, "position", ziel, EINFLUG_DAUER) 			.set_delay(float(i) * 0.07).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tw.tween_property(feld, "modulate:a", 1.0, EINFLUG_DAUER * 0.6).set_delay(float(i) * 0.07)
+		i += 1
+	var rechts: Control = %Rechts
+	var ziel_r := rechts.position
+	rechts.position = ziel_r + Vector2(EINFLUG_WEG, 0.0)
+	rechts.modulate.a = 0.0
+	var tw_r := create_tween().set_parallel(true)
+	tw_r.tween_property(rechts, "position", ziel_r, EINFLUG_DAUER).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw_r.tween_property(rechts, "modulate:a", 1.0, EINFLUG_DAUER * 0.7)
 
 func _alles_neu() -> void:
 	set_money(_money)
@@ -227,6 +240,13 @@ func set_money(v: int) -> void:
 	_geld_lauf.tween_method(_geld_zeigen, float(vorher), float(v), GELD_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_geld_stoss(v > vorher)
 
+## Kurzer Stoß auf einer Zahl, wenn sie sich ändert (Lager).
+func _zahl_stoss(feld: Control) -> void:
+	feld.scale = Vector2.ONE
+	var tw := create_tween()
+	tw.tween_property(feld, "scale", Vector2(1.16, 1.16), 0.08).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(feld, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
 func _geld_zeigen(wert: float) -> void:
 	_geld.text = Texte.euro(roundi(wert))
 
@@ -234,7 +254,7 @@ func _geld_zeigen(wert: float) -> void:
 func _geld_stoss(rauf: bool) -> void:
 	if _geld_puls:
 		_geld_puls.kill()
-	var chip: Control = %ChipGeld
+	var chip: Control = %Geld
 	_geld.scale = Vector2(1.0, 1.0)
 	_geld_puls = create_tween().set_parallel(true)
 	_geld_puls.tween_property(_geld, "scale", Vector2(1.08, 1.08), 0.09).set_trans(Tween.TRANS_SINE)
@@ -242,17 +262,17 @@ func _geld_stoss(rauf: bool) -> void:
 	chip.modulate = GOLD if rauf else ROT
 	_geld_puls.parallel().tween_property(chip, "modulate", Color.WHITE, 0.45)
 
-## Balken gleitet auf den neuen Wert, die Prozentzahl zählt mit.
-func _balken_gleiten(balken: ProgressBar, wert: Label, ziel: float) -> void:
-	var laufend: Tween = _balken_laeuft.get(balken)
+## Ring gleitet auf den neuen Wert, die Prozentzahl daneben zählt mit.
+func _ring_gleiten(ring: Ring, wert: Label, ziel: float) -> void:
+	var laufend: Tween = _balken_laeuft.get(ring)
 	if laufend:
 		laufend.kill()
 	var tw := create_tween()
 	tw.tween_method(func(v: float) -> void:
-			balken.value = v
+			ring.wert = v
 			wert.text = "%d %%" % roundi(v),
-		balken.value, clampf(ziel, 0.0, 100.0), BALKEN_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	_balken_laeuft[balken] = tw
+		ring.wert, clampf(ziel, 0.0, 100.0), BALKEN_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_balken_laeuft[ring] = tw
 
 ## Punkte werden nicht mehr angezeigt — Geld und Beliebtheit sagen mehr.
 func set_score(_v: int) -> void:
@@ -263,7 +283,8 @@ func set_time(clock: float, night: bool = false) -> void:
 	_clock = clock
 	_night = night
 	# Tag innerhalb der Wiesn, z. B. „Tag 5/16"
-	_zeit.text = tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
+	# Kleine Vorzeile über der Uhr, in Großbuchstaben
+	_zeit.text = (tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]).to_upper()
 	# Zweite Zeile: Uhrzeit, bei geschlossenem Zelt der Hinweis darauf
 	if clock < 0.0:
 		_zeit_unten.text = tr("HUD_CLOSED")
@@ -287,16 +308,18 @@ func set_phase(offen: bool) -> void:
 
 func set_popularity(v: float) -> void:
 	_pop = v
-	_balken_gleiten(_beliebtheit, _beliebtheit_wert, v)
+	_ring_gleiten(_beliebtheit, _beliebtheit_wert, v)
 
 func set_hygiene(v: float) -> void:
 	_hygiene = v
-	_balken_gleiten(_sauberkeit, _sauberkeit_wert, v)
-	var schmutzig := v <= 40.0
-	_sauberkeit_wert.add_theme_color_override("font_color", ROT if schmutzig else WEISS)
-	_balken_farbe(_sauberkeit, ROT if schmutzig else GOLD)
+	_ring_gleiten(_sauberkeit, _sauberkeit_wert, v)
+	# Unter 40 % färbt der Ring sich selbst rot (scripts/ui/ring.gd)
+	_sauberkeit_wert.add_theme_color_override("font_color", ROT if v <= 40.0 else WEISS)
 
 func set_stock(bier: int, essen: int) -> void:
+	var anders := bier != _bier or essen != _essen
+	if anders and _lager_bier.text != "" and is_node_ready():
+		_zahl_stoss(_lager_bier if bier != _bier else _lager_essen)
 	_bier = bier
 	_essen = essen
 	_lager_bier.text = str(bier)
@@ -306,13 +329,6 @@ func set_stock(bier: int, essen: int) -> void:
 		l.add_theme_color_override("font_color", ROT if leer else WEISS)
 
 ## Füllfarbe eines Balkens, ohne das Theme für alle anderen zu ändern.
-func _balken_farbe(balken: ProgressBar, farbe: Color) -> void:
-	var box := balken.get_theme_stylebox("fill")
-	if not balken.has_theme_stylebox_override("fill"):
-		box = box.duplicate()
-		balken.add_theme_stylebox_override("fill", box)
-	if box is StyleBoxFlat:
-		(box as StyleBoxFlat).bg_color = farbe
 
 # ------------------------------------------------------------ Zustand vom Server
 ## Zelt, Personal, Lizenzen, Bierpreis … (GameManager._buero_state).
@@ -323,9 +339,17 @@ func set_buero(z: Dictionary) -> void:
 	_ziel_anzeigen()
 	# Heutiges Tagesereignis in der Leiste
 	var ereignis := str(z.get("ereignis", ""))
-	%Ereignis.visible = ereignis != ""
-	if ereignis != "":
+	var pille: Control = %EreignisPille
+	if ereignis == "":
+		pille.visible = false
+	else:
 		%Ereignis.text = tr("EREIGNIS_%s_TITEL" % ereignis.to_upper())
+		if not pille.visible:
+			# Neues Ereignis: Pille schiebt sich dazu
+			pille.visible = true
+			pille.modulate.a = 0.0
+			var tw := create_tween()
+			tw.tween_property(pille, "modulate:a", 1.0, 0.35)
 
 ## Großer Text oben (z. B. Feierabend): einblenden, stehen lassen, ausblenden.
 var _gross_tween: Tween
