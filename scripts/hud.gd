@@ -55,6 +55,19 @@ var _zustand := {}
 
 var _erledigt_token := 0
 
+# ------------------------------------------------------------ Bewegung
+## „Schicke Animationen" (Wunsch des Nutzers): die Leiste fliegt beim Start von
+## links herein, Beträge zählen mit statt zu springen, Balken gleiten, und bei
+## Geldänderungen stößt der Betrag kurz auf.
+const EINFLUG_DAUER := 0.55
+const EINFLUG_WEG := 48.0
+const GELD_DAUER := 0.45
+const BALKEN_DAUER := 0.5
+
+var _geld_lauf: Tween = null
+var _geld_puls: Tween = null
+var _balken_laeuft := {}
+
 func _ready() -> void:
 	Symbole.setze(%SymbolGeld, "geld")
 	Symbole.setze(%SymbolBier, "bier")
@@ -64,6 +77,7 @@ func _ready() -> void:
 	Symbole.setze(%SymbolSauber, "besen")
 	Symbole.setze(%SymbolAufgabe, "haken")
 	%HinweisfensterOk.pressed.connect(close_popup)
+	_einfliegen()
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
 	_mieten.einrichten(get_parent())
@@ -134,6 +148,19 @@ func _einblenden() -> void:
 	tw.tween_property(fade, "color:a", 0.0, 0.6)
 	tw.tween_callback(func() -> void: fade.visible = false)
 
+## Leiste und Aufgabenseite kommen beim Start hereingeglitten statt einfach da
+## zu sein. Nur Optik — Werte stehen sofort richtig.
+func _einfliegen() -> void:
+	for seite: Array in [[%Oben, -EINFLUG_WEG], [%Rechts, EINFLUG_WEG]]:
+		var feld: Control = seite[0]
+		var weg: float = seite[1]
+		var ziel := feld.position
+		feld.position = ziel + Vector2(weg, 0.0)
+		feld.modulate.a = 0.0
+		var tw := create_tween().set_parallel(true)
+		tw.tween_property(feld, "position", ziel, EINFLUG_DAUER).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		tw.tween_property(feld, "modulate:a", 1.0, EINFLUG_DAUER * 0.7)
+
 func _alles_neu() -> void:
 	set_money(_money)
 	set_time(_clock, _night)
@@ -185,11 +212,47 @@ func set_krug(fuellung: float, sichtbar: bool) -> void:
 
 # ------------------------------------------------------------ Leiste
 func set_money(v: int) -> void:
+	var vorher := _money
 	_money = v
-	_geld.text = Texte.euro(v)
 	# Dispo: bis -1000 € erlaubt, Rückzahlung kostet 5 % Zinsen
 	_geld.add_theme_color_override("font_color", ROT if v < 0 else WEISS)
 	_buero.setze_geld(v)
+	if vorher == v:
+		_geld.text = Texte.euro(v)
+		return
+	# Betrag läuft hoch bzw. runter statt zu springen, dazu ein kurzer Stoß
+	if _geld_lauf:
+		_geld_lauf.kill()
+	_geld_lauf = create_tween()
+	_geld_lauf.tween_method(_geld_zeigen, float(vorher), float(v), GELD_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_geld_stoss(v > vorher)
+
+func _geld_zeigen(wert: float) -> void:
+	_geld.text = Texte.euro(roundi(wert))
+
+## Kurzer Stoß auf Betrag und Münzsymbol: Einnahme hell, Ausgabe rot.
+func _geld_stoss(rauf: bool) -> void:
+	if _geld_puls:
+		_geld_puls.kill()
+	var chip: Control = %ChipGeld
+	_geld.scale = Vector2(1.0, 1.0)
+	_geld_puls = create_tween().set_parallel(true)
+	_geld_puls.tween_property(_geld, "scale", Vector2(1.08, 1.08), 0.09).set_trans(Tween.TRANS_SINE)
+	_geld_puls.chain().tween_property(_geld, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	chip.modulate = GOLD if rauf else ROT
+	_geld_puls.parallel().tween_property(chip, "modulate", Color.WHITE, 0.45)
+
+## Balken gleitet auf den neuen Wert, die Prozentzahl zählt mit.
+func _balken_gleiten(balken: ProgressBar, wert: Label, ziel: float) -> void:
+	var laufend: Tween = _balken_laeuft.get(balken)
+	if laufend:
+		laufend.kill()
+	var tw := create_tween()
+	tw.tween_method(func(v: float) -> void:
+			balken.value = v
+			wert.text = "%d %%" % roundi(v),
+		balken.value, clampf(ziel, 0.0, 100.0), BALKEN_DAUER) 		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_balken_laeuft[balken] = tw
 
 ## Punkte werden nicht mehr angezeigt — Geld und Beliebtheit sagen mehr.
 func set_score(_v: int) -> void:
@@ -224,13 +287,11 @@ func set_phase(offen: bool) -> void:
 
 func set_popularity(v: float) -> void:
 	_pop = v
-	_beliebtheit.value = v
-	_beliebtheit_wert.text = "%d %%" % roundi(v)
+	_balken_gleiten(_beliebtheit, _beliebtheit_wert, v)
 
 func set_hygiene(v: float) -> void:
 	_hygiene = v
-	_sauberkeit.value = v
-	_sauberkeit_wert.text = "%d %%" % roundi(v)
+	_balken_gleiten(_sauberkeit, _sauberkeit_wert, v)
 	var schmutzig := v <= 40.0
 	_sauberkeit_wert.add_theme_color_override("font_color", ROT if schmutzig else WEISS)
 	_balken_farbe(_sauberkeit, ROT if schmutzig else GOLD)

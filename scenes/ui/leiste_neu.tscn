@@ -1,0 +1,336 @@
+[gd_scene format=3 uid="uid://cvkewb4guwmqd"]
+
+[ext_resource type="Script" path="res://scripts/ui/leiste_neu.gd" id="1_s"]
+[ext_resource type="Shader" uid="uid://c7tdea2ii2r6d" path="res://assets/shader/ui_glas.gdshader" id="2_glas"]
+[ext_resource type="Shader" uid="uid://c26u84ht7cu2k" path="res://assets/shader/ui_verlauf.gdshader" id="3_verlauf"]
+[ext_resource type="Shader" uid="uid://cg0iuv4t2eiwx" path="res://assets/shader/ui_kreis.gdshader" id="4_kreis"]
+
+[sub_resource type="ShaderMaterial" id="MatGlas"]
+shader = ExtResource("2_glas")
+shader_parameter/groesse = Vector2(420, 84)
+shader_parameter/radius = 20.0
+shader_parameter/staerke = 2.2
+shader_parameter/toenung = Color(0, 0, 0, 0.42)
+
+[sub_resource type="StyleBoxFlat" id="Rahmen"]
+content_margin_left = 44.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.16)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="ShaderMaterial" id="MatGold"]
+shader = ExtResource("3_verlauf")
+shader_parameter/oben = Color(0.996, 0.937, 0.616, 1)
+shader_parameter/unten = Color(0.929, 0.667, 0.094, 1)
+
+[sub_resource type="StyleBoxFlat" id="Pille"]
+content_margin_left = 10.0
+content_margin_top = 3.0
+content_margin_right = 10.0
+content_margin_bottom = 3.0
+bg_color = Color(1, 1, 1, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Schiene"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Gradient" id="GruenVerlauf"]
+colors = PackedColorArray(0.24, 0.66, 0.31, 1, 0.55, 0.93, 0.47, 1)
+
+[sub_resource type="GradientTexture2D" id="GruenBalken"]
+gradient = SubResource("GruenVerlauf")
+width = 128
+height = 8
+
+[sub_resource type="Gradient" id="GoldVerlauf"]
+colors = PackedColorArray(0.929, 0.667, 0.094, 1, 0.996, 0.937, 0.616, 1)
+
+[sub_resource type="GradientTexture2D" id="GoldBalken"]
+gradient = SubResource("GoldVerlauf")
+width = 128
+height = 8
+
+[sub_resource type="ShaderMaterial" id="MatAvatar"]
+shader = ExtResource("4_kreis")
+shader_parameter/rand = Color(1, 0.839, 0.251, 1)
+shader_parameter/grund = Color(0.09, 0.08, 0.07, 0.95)
+shader_parameter/rand_dicke = 0.05
+
+[node name="LeisteNeu" type="Control" unique_id=79747299]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 500.0
+offset_bottom = 110.0
+mouse_filter = 2
+script = ExtResource("1_s")
+
+[node name="Glas" type="ColorRect" parent="." unique_id=1974277207]
+unique_name_in_owner = true
+material = SubResource("MatGlas")
+layout_mode = 0
+offset_left = 30.0
+offset_right = 450.0
+offset_bottom = 84.0
+mouse_filter = 2
+
+[node name="Rahmen" type="PanelContainer" parent="." unique_id=846653982]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Rahmen")
+
+[node name="Spalte" type="VBoxContainer" parent="Rahmen" unique_id=960897278]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Oben" type="HBoxContainer" parent="Rahmen/Spalte" unique_id=760529523]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="GeldSymbol" type="TextureRect" parent="Rahmen/Spalte/Oben" unique_id=1905545210]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.839, 0.251, 1)
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Geld" type="Label" parent="Rahmen/Spalte/Oben" unique_id=849265735]
+unique_name_in_owner = true
+material = SubResource("MatGold")
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "1.200 EUR"
+
+[node name="Trenner1" type="ColorRect" parent="Rahmen/Spalte/Oben" unique_id=729508010]
+custom_minimum_size = Vector2(1, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(1, 1, 1, 0.2)
+
+[node name="TagSymbol" type="TextureRect" parent="Rahmen/Spalte/Oben" unique_id=97229999]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.7)
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Tag" type="Label" parent="Rahmen/Spalte/Oben" unique_id=555377519]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.949, 0.933, 0.902, 1)
+theme_override_font_sizes/font_size = 15
+text = "Tag 1"
+
+[node name="TagVon" type="Label" parent="Rahmen/Spalte/Oben" unique_id=2030957068]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.5)
+theme_override_font_sizes/font_size = 12
+text = "/ 16"
+
+[node name="Trenner2" type="ColorRect" parent="Rahmen/Spalte/Oben" unique_id=688622484]
+custom_minimum_size = Vector2(1, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(1, 1, 1, 0.2)
+
+[node name="ZeitSymbol" type="TextureRect" parent="Rahmen/Spalte/Oben" unique_id=1323332593]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.7)
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Zeit" type="Label" parent="Rahmen/Spalte/Oben" unique_id=926916746]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.949, 0.933, 0.902, 1)
+theme_override_font_sizes/font_size = 15
+text = "18:30"
+
+[node name="Unten" type="HBoxContainer" parent="Rahmen/Spalte" unique_id=928916747]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Pille" type="PanelContainer" parent="Rahmen/Spalte/Unten" unique_id=848668508]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pille")
+
+[node name="Zeile" type="HBoxContainer" parent="Rahmen/Spalte/Unten/Pille" unique_id=1321215790]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="BierSymbol" type="TextureRect" parent="Rahmen/Spalte/Unten/Pille/Zeile" unique_id=1875584206]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.9)
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Bier" type="Label" parent="Rahmen/Spalte/Unten/Pille/Zeile" unique_id=1300555518]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Punkt" type="ColorRect" parent="Rahmen/Spalte/Unten/Pille/Zeile" unique_id=593656838]
+custom_minimum_size = Vector2(2, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(1, 1, 1, 0.3)
+
+[node name="EssenSymbol" type="TextureRect" parent="Rahmen/Spalte/Unten/Pille/Zeile" unique_id=229858550]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.9)
+custom_minimum_size = Vector2(13, 13)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Essen" type="Label" parent="Rahmen/Spalte/Unten/Pille/Zeile" unique_id=1283398971]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "0"
+
+[node name="Sauberkeit" type="VBoxContainer" parent="Rahmen/Spalte/Unten" unique_id=552797329]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Kopf" type="HBoxContainer" parent="Rahmen/Spalte/Unten/Sauberkeit" unique_id=778868865]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Name" type="Label" parent="Rahmen/Spalte/Unten/Sauberkeit/Kopf" unique_id=1699203179]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 10
+text = "SAUBERKEIT"
+
+[node name="Wert" type="Label" parent="Rahmen/Spalte/Unten/Sauberkeit/Kopf" unique_id=2042520928]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_font_sizes/font_size = 10
+text = "100 %"
+
+[node name="Schiene" type="PanelContainer" parent="Rahmen/Spalte/Unten/Sauberkeit" unique_id=840809955]
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Schiene")
+
+[node name="Fuellung" type="TextureRect" parent="Rahmen/Spalte/Unten/Sauberkeit/Schiene" unique_id=60555903]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+texture = SubResource("GruenBalken")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Beliebtheit" type="VBoxContainer" parent="Rahmen/Spalte/Unten" unique_id=1538344858]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Kopf" type="HBoxContainer" parent="Rahmen/Spalte/Unten/Beliebtheit" unique_id=349663855]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Name" type="Label" parent="Rahmen/Spalte/Unten/Beliebtheit/Kopf" unique_id=23647739]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 10
+text = "BELIEBTHEIT"
+
+[node name="Wert" type="Label" parent="Rahmen/Spalte/Unten/Beliebtheit/Kopf" unique_id=383960005]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_font_sizes/font_size = 10
+text = "35 %"
+
+[node name="Schiene" type="PanelContainer" parent="Rahmen/Spalte/Unten/Beliebtheit" unique_id=2085034108]
+custom_minimum_size = Vector2(0, 7)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Schiene")
+
+[node name="Fuellung" type="TextureRect" parent="Rahmen/Spalte/Unten/Beliebtheit/Schiene" unique_id=470617142]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+texture = SubResource("GoldBalken")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Avatar" type="TextureRect" parent="." unique_id=321397798]
+unique_name_in_owner = true
+material = SubResource("MatAvatar")
+layout_mode = 0
+offset_top = 10.0
+offset_right = 60.0
+offset_bottom = 70.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

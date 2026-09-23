@@ -7,15 +7,15 @@ content_margin_left = 16.0
 content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 8.0
-bg_color = Color(0.05, 0.04, 0.032, 0.9)
-border_width_left = 5
+bg_color = Color(0.045, 0.036, 0.028, 0.84)
+border_width_left = 4
 border_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-shadow_color = Color(0, 0, 0, 0.4)
-shadow_size = 6
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
 
 [node name="Meldung" type="PanelContainer"]
 mouse_filter = 2
