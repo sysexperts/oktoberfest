@@ -13,7 +13,11 @@ var deko_id := -1
 var art := ""
 
 func _ready() -> void:
-	add_to_group("interactable")
+	# Nur gekaufte Deko (vom GameManager mit deko_id versehen) laesst sich ansprechen.
+	# Die gleichen Szenen stecken auch als feste Kulisse in Buden und Torboegen —
+	# dort darf kein "Druck E" auftauchen.
+	if deko_id >= 0:
+		add_to_group("interactable")
 	Modell.ohne_metall(self)
 
 ## Angesprochen wird auf Brusthöhe unter dem Gegenstand — auch bei Wand- und
