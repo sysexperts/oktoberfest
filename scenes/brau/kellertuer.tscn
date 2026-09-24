@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/brau/kellertuer.gd" id="1_skript"]
+
+[sub_resource type="StandardMaterial3D" id="MatHolz"]
+albedo_color = Color(0.36, 0.22, 0.12, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="MatEisen"]
+albedo_color = Color(0.24, 0.24, 0.26, 1)
+roughness = 0.5
+metallic = 0.7
+
+[sub_resource type="BoxMesh" id="Brett"]
+size = Vector3(0.05, 1.95, 0.24)
+
+[sub_resource type="BoxMesh" id="Band"]
+size = Vector3(0.07, 0.1, 1.1)
+
+[sub_resource type="BoxMesh" id="Riegel"]
+size = Vector3(0.09, 0.08, 0.34)
+
+[sub_resource type="SphereMesh" id="Knauf"]
+radius = 0.055
+height = 0.11
+radial_segments = 12
+rings = 7
+
+[sub_resource type="BoxShape3D" id="KolTuer"]
+size = Vector3(0.12, 2.0, 1.15)
+
+[node name="Kellertuer" type="Node3D"]
+script = ExtResource("1_skript")
+
+[node name="Blatt" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.55)
+
+[node name="Brett1" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.14)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolz")
+
+[node name="Brett2" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.39)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolz")
+
+[node name="Brett3" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.64)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolz")
+
+[node name="Brett4" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.89)
+mesh = SubResource("Brett")
+surface_material_override/0 = SubResource("MatHolz")
+
+[node name="BandOben" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62, 0.52)
+mesh = SubResource("Band")
+surface_material_override/0 = SubResource("MatEisen")
+
+[node name="BandUnten" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0.52)
+mesh = SubResource("Band")
+surface_material_override/0 = SubResource("MatEisen")
+
+[node name="Riegel" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0.98)
+mesh = SubResource("Riegel")
+surface_material_override/0 = SubResource("MatEisen")
+
+[node name="Knauf" type="MeshInstance3D" parent="Blatt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 1.02, 0.92)
+mesh = SubResource("Knauf")
+surface_material_override/0 = SubResource("MatEisen")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("KolTuer")
+
+[node name="Ansprechpunkt" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)

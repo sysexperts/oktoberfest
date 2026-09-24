@@ -1,0 +1,149 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/braukeller/keller.tres" id="1_keller"]
+[ext_resource type="PackedScene" path="res://scenes/brau/maischbottich.tscn" id="2_maisch"]
+[ext_resource type="PackedScene" path="res://scenes/brau/sudkessel.tscn" id="3_kessel"]
+[ext_resource type="PackedScene" path="res://scenes/brau/gaerfass.tscn" id="4_fass"]
+[ext_resource type="PackedScene" path="res://scenes/brau/kellertuer.tscn" id="5_tuer"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="6_wt"]
+
+[sub_resource type="BoxShape3D" id="KolBoden"]
+size = Vector3(5.6, 0.4, 9.0)
+
+[sub_resource type="BoxShape3D" id="KolBodenTreppe"]
+size = Vector3(3.4, 0.4, 6.0)
+
+[sub_resource type="BoxShape3D" id="KolWandLang"]
+size = Vector3(0.3, 2.4, 9.0)
+
+[sub_resource type="BoxShape3D" id="KolWandQuer"]
+size = Vector3(5.6, 2.4, 0.3)
+
+[sub_resource type="BoxShape3D" id="KolWandTreppeLang"]
+size = Vector3(0.3, 2.4, 6.0)
+
+[sub_resource type="BoxShape3D" id="KolWandTreppeQuer"]
+size = Vector3(3.4, 2.4, 0.3)
+
+[sub_resource type="BoxShape3D" id="KolTrennwand"]
+size = Vector3(0.3, 2.4, 2.35)
+
+[sub_resource type="BoxShape3D" id="KolRampe"]
+size = Vector3(2.5, 0.3, 5.9)
+
+[sub_resource type="BoxShape3D" id="KolDecke"]
+size = Vector3(5.6, 0.3, 9.0)
+
+[node name="Braukeller" type="Node3D"]
+
+[node name="Gewoelbe" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_keller")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Boden" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -3.6, -9.9)
+shape = SubResource("KolBoden")
+
+[node name="BodenTreppe" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3, -3.6, -11.2)
+shape = SubResource("KolBodenTreppe")
+
+[node name="WandOst" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45, -2.2, -9.9)
+shape = SubResource("KolWandLang")
+
+[node name="WandSued" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -2.2, -14.35)
+shape = SubResource("KolWandQuer")
+
+[node name="WandNord" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -2.2, -5.45)
+shape = SubResource("KolWandQuer")
+
+[node name="TreppeWandWest" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.95, -2.2, -11.2)
+shape = SubResource("KolWandTreppeLang")
+
+[node name="TreppeWandSued" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3, -2.2, -14.15)
+shape = SubResource("KolWandTreppeQuer")
+
+[node name="TrennwandSued" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, -2.2, -13.075)
+shape = SubResource("KolTrennwand")
+
+[node name="TrennwandNord" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, -2.2, -7.775)
+shape = SubResource("KolTrennwand")
+
+[node name="Decke" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -0.85, -9.9)
+shape = SubResource("KolDecke")
+
+[node name="Rampe" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 0.81373347, 0.58125937, 0, -0.58125937, 0.81373347, -10.3, -1.78, -11)
+shape = SubResource("KolRampe")
+
+[node name="Maischbottich" parent="." instance=ExtResource("2_maisch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, -3.4, -7.1)
+
+[node name="Sudkessel" parent="." instance=ExtResource("3_kessel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, -3.4, -7.1)
+
+[node name="Gaerfass1" parent="." instance=ExtResource("4_fass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.7, -3.4, -11.6)
+
+[node name="Gaerfass2" parent="." instance=ExtResource("4_fass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.9, -3.4, -11.6)
+
+[node name="Gaerfass3" parent="." instance=ExtResource("4_fass")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1, -3.4, -11.6)
+
+[node name="Kellertuer" parent="." instance=ExtResource("5_tuer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, -3.4, -11.5)
+
+[node name="Licht1" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -1.75, -12.6)
+light_color = Color(1, 0.85, 0.62, 1)
+light_energy = 1.6
+omni_range = 6.5
+omni_attenuation = 1.4
+
+[node name="Licht2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -1.75, -9.9)
+light_color = Color(1, 0.85, 0.62, 1)
+light_energy = 1.6
+omni_range = 6.5
+omni_attenuation = 1.4
+
+[node name="Licht3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, -1.75, -7.2)
+light_color = Color(1, 0.85, 0.62, 1)
+light_energy = 1.6
+omni_range = 6.5
+omni_attenuation = 1.4
+
+[node name="LichtTreppe" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3, -1.6, -13.8)
+light_color = Color(1, 0.84, 0.6, 1)
+light_energy = 1.3
+omni_range = 5.0
+omni_attenuation = 1.5
+
+[node name="LichtTuer" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.22, -1.7, -12.45)
+light_color = Color(1, 0.82, 0.58, 1)
+light_energy = 1.4
+omni_range = 4.5
+omni_attenuation = 1.5
+
+[node name="Schild" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -10.3, -1.45, -8.5)
+pixel_size = 0.005
+font_size = 48
+outline_size = 12
+modulate = Color(1, 0.9, 0.6, 1)
+text = "WORLD_BRAUKELLER"
+script = ExtResource("6_wt")
+schluessel = "WORLD_BRAUKELLER"

@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/braukeller/sudkessel.tres" id="1_mesh"]
+[ext_resource type="Script" path="res://scripts/brau/braustation.gd" id="2_skript"]
+
+[sub_resource type="CylinderShape3D" id="Kol"]
+height = 1.47
+radius = 0.95
+
+[node name="Sudkessel" type="Node3D"]
+script = ExtResource("2_skript")
+schritt = 2
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.735, 0)
+shape = SubResource("Kol")
+
+[node name="Ansprechpunkt" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)

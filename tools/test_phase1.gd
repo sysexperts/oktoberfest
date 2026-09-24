@@ -623,7 +623,8 @@ class Lauf extends Node:
 		gm._phase = gm.Phase.SHIFT
 		var zelt := gm.get_node("Tent")
 		_check("Zelt hat Dielenboden, Galerie und hohes Dach",
-			zelt.has_node("Boden/Dielen") and zelt.has_node("Galerie/EmporeWest") and zelt.has_node("Dach/Plane/PlaneOst"),
+			zelt.has_node("Boden/DielenNord") and zelt.has_node("Boden/DielenWest")
+				and zelt.has_node("Galerie/EmporeWest") and zelt.has_node("Dach/Plane/PlaneOst"),
 			"%d Teile" % zelt.find_children("*", "Node3D", true, false).size())
 
 		print("  -- Emporen")
@@ -1060,6 +1061,65 @@ class Lauf extends Node:
 		_check("Klo besetzt zu lange: Gast geht ins Zelt", bool(g_b.get("wild", false)) and not bool(g_b.get("klo_wartet", false)), "")
 		gm._klo_setzen(-1)
 		gm._has_toilet = klo_vorher
+
+		print("  -- Braukeller: Treppe frei, Tuer erst nach dem Ausbau")
+		var keller: Node3D = gm.get_node_or_null("Braukeller")
+		_check("Braukeller in der Szene", keller != null, str(keller))
+		if keller:
+			var tuer: Node = keller.get_node_or_null("Kellertuer")
+			var stufe_vor: int = gm._tent_stage
+			# Vor dem Ausbau: Tuerblatt zu, Kollision an, Hinweis erklaert es
+			gm._tent_stage = 1
+			gm._keller_tuer_aktualisieren(true)
+			await _frames(3)
+			var sp_k := gm.get_node("Players").get_child(0) as Player
+			_check("Tuer zu bei Zeltstufe 1", tuer != null and not tuer.ist_offen()
+				and not (tuer.get_node("Kollision/Form") as CollisionShape3D).disabled, str(tuer))
+			_check("Hinweis erklaert die verschlossene Tuer",
+				sp_k._hint_for(tuer) == "HINT_KELLER_ZU", sp_k._hint_for(tuer))
+			# Nach dem ersten Ausbau: offen und durchlaessig
+			gm._tent_stage = gm.KELLER_AB_STUFE
+			gm._keller_tuer_aktualisieren(true)
+			await _frames(3)
+			_check("Tuer offen ab Zeltstufe %d" % gm.KELLER_AB_STUFE, tuer.ist_offen()
+				and (tuer.get_node("Kollision/Form") as CollisionShape3D).disabled, "")
+			# Weg vom Zeltboden die Treppe hinunter bis vor die Tuer
+			var kapsel_k := CapsuleShape3D.new()
+			kapsel_k.radius = 0.34
+			kapsel_k.height = 1.7
+			var abf_k := PhysicsShapeQueryParameters3D.new()
+			abf_k.shape = kapsel_k
+			abf_k.collide_with_areas = false
+			var raum_k: PhysicsDirectSpaceState3D = gm.get_world_3d().direct_space_state
+			var versperrt := []
+			var versperrt_boden := []
+			# Auf der Treppe liegt die Lauffläche schräg. Die Höhe nicht rechnen,
+			# sondern mit einem Strahl von oben suchen und die Kapsel darüber
+			# setzen — sonst prüft man die Rampe selbst und nicht den Weg.
+			var weg: Array[Vector3] = []
+			# Vom Zeltboden über die Treppe bis in den Brauraum. Nicht bis an die
+			# Wände heran messen — dort steht absichtlich etwas.
+			for stelle: Vector2 in [Vector2(-10.3, -8.0), Vector2(-10.3, -9.2), Vector2(-10.3, -10.4),
+					Vector2(-10.3, -11.6), Vector2(-10.3, -12.8), Vector2(-10.3, -13.2),
+					Vector2(-9.6, -11.5), Vector2(-7.0, -11.5), Vector2(-5.0, -9.6)]:
+				var oben := Vector3(stelle.x, 1.5, stelle.y)
+				var strahl := PhysicsRayQueryParameters3D.create(oben, oben + Vector3(0, -6.0, 0))
+				strahl.collide_with_areas = false
+				var treffer_s := raum_k.intersect_ray(strahl)
+				if treffer_s.is_empty():
+					versperrt_boden.append("kein Boden bei %.1f/%.1f" % [stelle.x, stelle.y])
+					continue
+				weg.append(Vector3(stelle.x, float(treffer_s.position.y) + 0.95, stelle.y))
+			for punkt: Vector3 in weg:
+				abf_k.transform = Transform3D(Basis.IDENTITY, punkt)
+				for tr_k: Dictionary in raum_k.intersect_shape(abf_k, 4):
+					var kn_k = tr_k.get("collider")
+					if kn_k:
+						versperrt.append("%s bei %.1f/%.1f/%.1f" % [kn_k.name, punkt.x, punkt.y, punkt.z])
+			_check("überall Boden unter den Füßen", versperrt_boden.is_empty(), str(versperrt_boden))
+			_check("Weg durch Treppe und Tuer ist frei", versperrt.is_empty(), str(versperrt).left(150))
+			gm._tent_stage = stufe_vor
+			gm._keller_tuer_aktualisieren(true)
 
 		print("  -- Keine unsichtbaren Hindernisse im Zelt")
 		# Godot koppelt Physik nicht an Sichtbarkeit: ein ausgeblendeter Tisch

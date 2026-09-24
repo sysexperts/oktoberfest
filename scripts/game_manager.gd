@@ -1431,8 +1431,23 @@ func _vermietung_aktualisieren() -> void:
 		schild.frei_setzen(_tent_stage == 0)
 
 ## Zelt kiralamaya göre masaları aktif/pasif yap + koltukları kur.
+## Ab welcher Zeltstufe der Braukeller offen ist — vorher gehoert er noch der
+## Brauerei. „Einmal ausgebaut" heisst Stufe 2.
+const KELLER_AB_STUFE := 2
+
+## Tür zum Braukeller auf- oder zumachen (scenes/brau/kellertuer.tscn)
+func _keller_tuer_aktualisieren(sofort := false) -> void:
+	var offen := _tent_stage >= KELLER_AB_STUFE
+	for t in get_tree().get_nodes_in_group("kellertuer"):
+		if t.has_method("setze_offen"):
+			t.setze_offen(offen, sofort)
+
+func keller_offen() -> bool:
+	return _tent_stage >= KELLER_AB_STUFE
+
 func _apply_tent() -> void:
 	_vermietung_aktualisieren()
+	_keller_tuer_aktualisieren()
 	_klo_anzeigen()
 	_zeltname_anzeigen()
 	for i in _all_tables.size():

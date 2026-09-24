@@ -33,69 +33,69 @@ rings = 6
 [sub_resource type="BoxMesh" id="BoxMesh_0umii"]
 size = Vector3(0.18, 0.28, 0.04)
 
-[node name="Girlande" type="Node3D" unique_id=1924112710]
+[node name="Girlande" type="Node3D" unique_id=1202385295]
 
-[node name="Stueck1" type="MeshInstance3D" parent="." unique_id=1798964752]
+[node name="Stueck1" type="MeshInstance3D" parent="." unique_id=1006100214]
 transform = Transform3D(-0.34425464, 0.93887633, 0, -0.93887633, -0.34425464, 0, 0, 0, 1, -1.0416666, -0.07638889, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("CylinderMesh_6dhji")
 
-[node name="Stueck2" type="MeshInstance3D" parent="." unique_id=1577644394]
+[node name="Stueck2" type="MeshInstance3D" parent="." unique_id=1783855544]
 transform = Transform3D(-0.2148618, 0.97664446, 0, -0.97664446, -0.2148618, 0, 0, 0, 1, -0.625, -0.19861111, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("CylinderMesh_xgx8e")
 
-[node name="Stueck3" type="MeshInstance3D" parent="." unique_id=1853972269]
+[node name="Stueck3" type="MeshInstance3D" parent="." unique_id=1922119164]
 transform = Transform3D(-0.073136955, 0.9973219, 0, -0.9973219, -0.073136955, 0, 0, 0, 1, -0.20833333, -0.25972223, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("CylinderMesh_i35o6")
 
-[node name="Stueck4" type="MeshInstance3D" parent="." unique_id=1740454948]
+[node name="Stueck4" type="MeshInstance3D" parent="." unique_id=345234642]
 transform = Transform3D(0.073136955, 0.9973219, 0, -0.9973219, 0.073136955, 0, 0, 0, 1, 0.20833333, -0.25972223, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("CylinderMesh_i35o6")
 
-[node name="Stueck5" type="MeshInstance3D" parent="." unique_id=1658033962]
+[node name="Stueck5" type="MeshInstance3D" parent="." unique_id=100497885]
 transform = Transform3D(0.2148618, 0.97664446, 0, -0.97664446, 0.2148618, 0, 0, 0, 1, 0.625, -0.19861111, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("CylinderMesh_xgx8e")
 
-[node name="Stueck6" type="MeshInstance3D" parent="." unique_id=1260917236]
+[node name="Stueck6" type="MeshInstance3D" parent="." unique_id=517477798]
 transform = Transform3D(0.34425464, 0.93887633, 0, -0.93887633, 0.34425464, 0, 0, 0, 1, 1.0416666, -0.07638889, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("CylinderMesh_6dhji")
 
-[node name="Dolde1" type="MeshInstance3D" parent="." unique_id=1256955666]
+[node name="Dolde1" type="MeshInstance3D" parent="." unique_id=901050246]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8333333, -0.15277778, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("SphereMesh_56o6e")
 
-[node name="Dolde2" type="MeshInstance3D" parent="." unique_id=1659715863]
+[node name="Dolde2" type="MeshInstance3D" parent="." unique_id=1247208016]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.41666666, -0.24444444, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("SphereMesh_56o6e")
 
-[node name="Dolde3" type="MeshInstance3D" parent="." unique_id=1539257331]
+[node name="Dolde3" type="MeshInstance3D" parent="." unique_id=297918234]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.275, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("SphereMesh_56o6e")
 
-[node name="Dolde4" type="MeshInstance3D" parent="." unique_id=951715078]
+[node name="Dolde4" type="MeshInstance3D" parent="." unique_id=1274134034]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41666666, -0.24444444, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("SphereMesh_56o6e")
 
-[node name="Dolde5" type="MeshInstance3D" parent="." unique_id=1631260136]
+[node name="Dolde5" type="MeshInstance3D" parent="." unique_id=886265334]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8333333, -0.15277778, 0)
 material_override = ExtResource("1_688kv")
 mesh = SubResource("SphereMesh_56o6e")
 
-[node name="SchleifeLinks" type="MeshInstance3D" parent="." unique_id=1676013591]
+[node name="SchleifeLinks" type="MeshInstance3D" parent="." unique_id=722298687]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, -0.12, 0.06)
 material_override = ExtResource("2_x8yi1")
 mesh = SubResource("BoxMesh_0umii")
 
-[node name="SchleifeRechts" type="MeshInstance3D" parent="." unique_id=1360209294]
+[node name="SchleifeRechts" type="MeshInstance3D" parent="." unique_id=1181973798]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, -0.12, 0.06)
 material_override = ExtResource("2_x8yi1")
 mesh = SubResource("BoxMesh_0umii")

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/braukeller/transportfass.tres" id="1_mesh"]
+[ext_resource type="Script" path="res://scripts/brau/transportfass.gd" id="2_skript"]
+
+[node name="Transportfass" type="Node3D"]
+script = ExtResource("2_skript")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+
+[node name="Ansprechpunkt" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Fuellstand" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+billboard = 1
+pixel_size = 0.0035
+font_size = 40
+outline_size = 10
+modulate = Color(1, 0.88, 0.55, 1)
+text = "0/50"

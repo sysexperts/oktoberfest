@@ -802,13 +802,43 @@ func _aussen(g: Node3D) -> void:
 	_instanz(g, s_biergarten, "BiergartenTisch1", Transform3D(_rot(Vector3(0, 90, 0)), Vector3(10.2, 0, ZF + 3.6)))
 	_instanz(g, s_tafel, "Speisetafel", Transform3D(_rot(Vector3(0, -15, 0)), Vector3(5.7, 0, ZF + 1.5)))
 
+## Loch im Dielenboden für die Kellertreppe (scenes/braukeller.tscn). Der Boden
+## ist deshalb in vier Streifen geteilt statt einer Platte.
+const SCHACHT_X0 := -11.8
+const SCHACHT_X1 := -8.8
+const SCHACHT_Z0 := -14.0
+const SCHACHT_Z1 := -8.4
+
 func _boden(g: Node3D) -> void:
 	# Oberkante 0.07 — knapp über dem Kirmes-Gelände (Terrain y 0.056)
-	_box(g, "Dielen", Vector3(24.0, 0.1, 25.0), Vector3(0, 0.02, -1.5), m.dielen, Vector3.ZERO, false)
+	# Vier Streifen um den Treppenschacht: West, Ost, Süd, Nord
+	var bx0 := -12.0
+	var bx1 := 12.0
+	var bz0 := -14.0
+	var bz1 := 11.0
+	_boden_streifen(g, "DielenWest", bx0, SCHACHT_X0, SCHACHT_Z0, SCHACHT_Z1)
+	_boden_streifen(g, "DielenOst", SCHACHT_X1, bx1, SCHACHT_Z0, SCHACHT_Z1)
+	_boden_streifen(g, "DielenSued", bx0, bx1, bz0, SCHACHT_Z0)
+	_boden_streifen(g, "DielenNord", bx0, bx1, SCHACHT_Z1, bz1)
+	# Bordbrett rings um das Loch, damit man die Kante sieht und nicht hineintritt
+	var randh := 0.16
+	_box(g, "SchachtRandWest", Vector3(0.08, randh, SCHACHT_Z1 - SCHACHT_Z0),
+		Vector3(SCHACHT_X0 - 0.04, randh / 2.0 + 0.07, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0), m.holz_dunkel, Vector3.ZERO, false)
+	_box(g, "SchachtRandOst", Vector3(0.08, randh, SCHACHT_Z1 - SCHACHT_Z0),
+		Vector3(SCHACHT_X1 + 0.04, randh / 2.0 + 0.07, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0), m.holz_dunkel, Vector3.ZERO, false)
+	_box(g, "SchachtRandNord", Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.16, randh, 0.08),
+		Vector3((SCHACHT_X0 + SCHACHT_X1) / 2.0, randh / 2.0 + 0.07, SCHACHT_Z1 + 0.04), m.holz_dunkel, Vector3.ZERO, false)
 	_box(g, "Schwelle", Vector3(6.6, 0.1, 1.4), Vector3(0, 0.02, 11.7), m.dielen, Vector3.ZERO, false)
 	_box(g, "SockelWest", Vector3(0.05, 0.12, 25.0), Vector3(-11.95, 0.12, -1.5), m.holz_dunkel, Vector3.ZERO, false)
 	_box(g, "SockelOst", Vector3(0.05, 0.12, 25.0), Vector3(11.95, 0.12, -1.5), m.holz_dunkel, Vector3.ZERO, false)
 	_box(g, "SockelHinten", Vector3(24.0, 0.12, 0.05), Vector3(0, 0.12, -13.95), m.holz_dunkel, Vector3.ZERO, false)
+
+## Ein Stück Dielenboden zwischen zwei x- und zwei z-Kanten
+func _boden_streifen(g: Node3D, name: String, x0: float, x1: float, z0: float, z1: float) -> void:
+	if x1 - x0 < 0.01 or z1 - z0 < 0.01:
+		return
+	_box(g, name, Vector3(x1 - x0, 0.1, z1 - z0),
+		Vector3((x0 + x1) / 2.0, 0.02, (z0 + z1) / 2.0), m.dielen, Vector3.ZERO, false)
 
 func _waende(g: Node3D) -> void:
 	var h := WAND_H

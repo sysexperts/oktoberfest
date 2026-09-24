@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" path="res://scenes/kochtheke.tscn" id="99_kochtheke"]
 [ext_resource type="PackedScene" path="res://scenes/bueroraum.tscn" id="100_buero"]
 [ext_resource type="PackedScene" path="res://scenes/lagerraum.tscn" id="101_lagerraum"]
+[ext_resource type="PackedScene" path="res://scenes/braukeller.tscn" id="102_keller"]
 [ext_resource type="PackedScene" path="res://scenes/zelt_eroeffnung.tscn" id="101_eroeffnung"]
 [ext_resource type="PackedScene" path="res://scenes/getraenke_poster.tscn" id="102_poster"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
@@ -77,7 +78,17 @@ adjustment_contrast = 1.06
 adjustment_saturation = 1.08
 adjustment_color_correction = ExtResource("103_lut")
 
-[sub_resource type="WorldBoundaryShape3D" id="Ground"]
+[sub_resource type="BoxShape3D" id="BodenSued"]
+size = Vector3(240, 0.4, 106)
+
+[sub_resource type="BoxShape3D" id="BodenNord"]
+size = Vector3(240, 0.4, 128.4)
+
+[sub_resource type="BoxShape3D" id="BodenWest"]
+size = Vector3(108.2, 0.4, 5.6)
+
+[sub_resource type="BoxShape3D" id="BodenOst"]
+size = Vector3(128.8, 0.4, 5.6)
 
 [sub_resource type="BoxShape3D" id="WallX"]
 size = Vector3(26, 8, 0.6)
@@ -103,7 +114,20 @@ shadow_enabled = true
 [node name="Floor" type="StaticBody3D" parent="." unique_id=2098207416]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=803608313]
-shape = SubResource("Ground")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -67)
+shape = SubResource("BodenSued")
+
+[node name="BodenNord" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 55.8)
+shape = SubResource("BodenNord")
+
+[node name="BodenWest" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.9, -0.2, -11.2)
+shape = SubResource("BodenWest")
+
+[node name="BodenOst" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.6, -0.2, -11.2)
+shape = SubResource("BodenOst")
 
 [node name="Walls" type="Node3D" parent="." unique_id=1116608952]
 
@@ -188,6 +212,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
 
 [node name="Lagerraum" parent="." instance=ExtResource("101_lagerraum")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 7)
+
+[node name="Braukeller" parent="." instance=ExtResource("102_keller")]
 
 [node name="Tables" type="Node3D" parent="." unique_id=594528377]
 

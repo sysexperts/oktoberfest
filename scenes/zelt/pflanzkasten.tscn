@@ -24,73 +24,64 @@ height = 0.14
 radial_segments = 12
 rings = 6
 
-[sub_resource type="BoxShape3D" id="KollisionForm"]
-size = Vector3(1.86116898059845, 0.76999998092651, 0.44999998807907)
+[node name="Pflanzkasten" type="Node3D" unique_id=403452818]
 
-[node name="Pflanzkasten" type="Node3D" unique_id=304422492]
-
-[node name="Kasten" type="MeshInstance3D" parent="." unique_id=1455746589]
+[node name="Kasten" type="MeshInstance3D" parent="." unique_id=1406037292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 material_override = ExtResource("1_uu28t")
 mesh = SubResource("BoxMesh_1mcvn")
 
-[node name="Leiste" type="MeshInstance3D" parent="." unique_id=1511956843]
+[node name="Leiste" type="MeshInstance3D" parent="." unique_id=1945336762]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
 material_override = ExtResource("2_uytc0")
 mesh = SubResource("BoxMesh_pqu25")
 
-[node name="Busch1" type="MeshInstance3D" parent="." unique_id=935855498]
+[node name="Busch1" type="MeshInstance3D" parent="." unique_id=1766916106]
 transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, -0.8, 0.55, 0)
 material_override = ExtResource("3_je2e5")
 mesh = SubResource("SphereMesh_gllhg")
 
-[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=695364917]
+[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=76303113]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.7, 0.14)
 material_override = ExtResource("4_1r1so")
 mesh = SubResource("SphereMesh_f8mpj")
 
-[node name="Busch2" type="MeshInstance3D" parent="." unique_id=2042398444]
+[node name="Busch2" type="MeshInstance3D" parent="." unique_id=230820406]
 transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, -0.4, 0.55, 0)
 material_override = ExtResource("3_je2e5")
 mesh = SubResource("SphereMesh_gllhg")
 
-[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=1732932184]
+[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=226589995]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.7, 0.14)
 material_override = ExtResource("5_vduo3")
 mesh = SubResource("SphereMesh_f8mpj")
 
-[node name="Busch3" type="MeshInstance3D" parent="." unique_id=680044520]
+[node name="Busch3" type="MeshInstance3D" parent="." unique_id=1849921581]
 transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, 0, 0.55, 0)
 material_override = ExtResource("3_je2e5")
 mesh = SubResource("SphereMesh_gllhg")
 
-[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=1740631620]
+[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=487138329]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0.7, 0.14)
 material_override = ExtResource("4_1r1so")
 mesh = SubResource("SphereMesh_f8mpj")
 
-[node name="Busch4" type="MeshInstance3D" parent="." unique_id=1930774823]
+[node name="Busch4" type="MeshInstance3D" parent="." unique_id=57602233]
 transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, 0.4, 0.55, 0)
 material_override = ExtResource("3_je2e5")
 mesh = SubResource("SphereMesh_gllhg")
 
-[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=336115126]
+[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=478881498]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.7, 0.14)
 material_override = ExtResource("5_vduo3")
 mesh = SubResource("SphereMesh_f8mpj")
 
-[node name="Busch5" type="MeshInstance3D" parent="." unique_id=1279491036]
+[node name="Busch5" type="MeshInstance3D" parent="." unique_id=1517434867]
 transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 0.9, 0.8, 0.55, 0)
 material_override = ExtResource("3_je2e5")
 mesh = SubResource("SphereMesh_gllhg")
 
-[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=2014401410]
+[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=2080086860]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.7, 0.14)
 material_override = ExtResource("4_1r1so")
 mesh = SubResource("SphereMesh_f8mpj")
-
-[node name="Kollision" type="StaticBody3D" parent="."]
-
-[node name="Form" type="CollisionShape3D" parent="Kollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.38499999046326, 0.0)
-shape = SubResource("KollisionForm")

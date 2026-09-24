@@ -26,78 +26,69 @@ height = 0.2
 radial_segments = 12
 rings = 6
 
-[sub_resource type="BoxShape3D" id="KollisionForm"]
-size = Vector3(1.27123057842255, 0.62999999523163, 0.36674350500107)
+[node name="Blumenkasten" type="Node3D" unique_id=1307548554]
 
-[node name="Blumenkasten" type="Node3D" unique_id=468013910]
-
-[node name="Kasten" type="MeshInstance3D" parent="." unique_id=2095615636]
+[node name="Kasten" type="MeshInstance3D" parent="." unique_id=656309959]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0)
 material_override = ExtResource("1_up022")
 mesh = SubResource("BoxMesh_og23q")
 
-[node name="Blatt1" type="MeshInstance3D" parent="." unique_id=2109282820]
+[node name="Blatt1" type="MeshInstance3D" parent="." unique_id=1068831142]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=103729683]
+[node name="Bluete1" type="MeshInstance3D" parent="." unique_id=1001506276]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt2" type="MeshInstance3D" parent="." unique_id=194847370]
+[node name="Blatt2" type="MeshInstance3D" parent="." unique_id=600810475]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=837769130]
+[node name="Bluete2" type="MeshInstance3D" parent="." unique_id=1714379751]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt3" type="MeshInstance3D" parent="." unique_id=2127521546]
+[node name="Blatt3" type="MeshInstance3D" parent="." unique_id=533098505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=1558328822]
+[node name="Bluete3" type="MeshInstance3D" parent="." unique_id=69556599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0.42, 0.08)
 material_override = ExtResource("4_m0xyw")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt4" type="MeshInstance3D" parent="." unique_id=992031522]
+[node name="Blatt4" type="MeshInstance3D" parent="." unique_id=313089844]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=1282894198]
+[node name="Bluete4" type="MeshInstance3D" parent="." unique_id=1989729630]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Blatt5" type="MeshInstance3D" parent="." unique_id=1657309766]
+[node name="Blatt5" type="MeshInstance3D" parent="." unique_id=1741323293]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 0.3, 0.02)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_e5o0v")
 
-[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=819343324]
+[node name="Bluete5" type="MeshInstance3D" parent="." unique_id=35644895]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61, 0.42, 0.08)
 material_override = ExtResource("3_62epu")
 mesh = SubResource("SphereMesh_gufor")
 
-[node name="Ranke1" type="MeshInstance3D" parent="." unique_id=1938415815]
+[node name="Ranke1" type="MeshInstance3D" parent="." unique_id=1153528671]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.02, 0.16)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_ypb5g")
 
-[node name="Ranke2" type="MeshInstance3D" parent="." unique_id=1616027686]
+[node name="Ranke2" type="MeshInstance3D" parent="." unique_id=937238723]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, -0.02, 0.16)
 material_override = ExtResource("2_gc8ri")
 mesh = SubResource("SphereMesh_ypb5g")
-
-[node name="Kollision" type="StaticBody3D" parent="."]
-
-[node name="Form" type="CollisionShape3D" parent="Kollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.19499999284744, 0.05374638736248)
-shape = SubResource("KollisionForm")

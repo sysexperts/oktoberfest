@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/braukeller/gaerfass.tres" id="1_mesh"]
+[ext_resource type="Script" path="res://scripts/brau/gaerfass.gd" id="2_skript"]
+
+[sub_resource type="BoxShape3D" id="Kol"]
+size = Vector3(1.66, 1.66, 3.0)
+
+[node name="Gaerfass" type="Node3D"]
+script = ExtResource("2_skript")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_mesh")
+
+[node name="Kollision" type="StaticBody3D" parent="."]
+
+[node name="Form" type="CollisionShape3D" parent="Kollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, 0)
+shape = SubResource("Kol")
+
+[node name="Ansprechpunkt" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.95, 0.9, 0)
+
+[node name="Sorte" type="Label3D" parent="."]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.87, 1.26, 0)
+pixel_size = 0.0035
+font_size = 44
+outline_size = 10
+modulate = Color(1, 0.88, 0.55, 1)
+text = "leer"

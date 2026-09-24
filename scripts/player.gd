@@ -602,6 +602,11 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_HAND_ABLEGEN" if carry_state != 0 or not extra_kruege.is_empty() else ""
 	if t.has_method("ist_abgelegt"):
 		return "HINT_AUFHEBEN" if carry_state == 0 else ""
+	if t is Kellertuer:
+		# Zu: sagen, woran es liegt. Offen: die Tür braucht keinen Hinweis.
+		if (t as Kellertuer).ist_offen():
+			return ""
+		return "HINT_KELLER_ZU"
 	if t.has_method("ist_eroeffnung"):
 		return "HINT_ZELT_EROEFFNEN"
 	if t.has_method("ist_saboteur"):

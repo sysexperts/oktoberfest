@@ -20,233 +20,233 @@ rings = 1
 [sub_resource type="PrismMesh" id="PrismMesh_wgwuy"]
 size = Vector3(0.28, 0.36, 0.01)
 
-[node name="Wimpelkette" type="Node3D" unique_id=1485683589]
+[node name="Wimpelkette" type="Node3D" unique_id=1241340094]
 
-[node name="Schnur1" type="MeshInstance3D" parent="." unique_id=523052876]
+[node name="Schnur1" type="MeshInstance3D" parent="." unique_id=1189776842]
 transform = Transform3D(-0.20551723, 0.9786535, 0, -0.9786535, -0.20551723, 0, 0, 0, 1, -5.4750004, -0.38325, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_sstuj")
 
-[node name="Schnur2" type="MeshInstance3D" parent="." unique_id=1712623259]
+[node name="Schnur2" type="MeshInstance3D" parent="." unique_id=1230017228]
 transform = Transform3D(-0.06982912, 0.997559, 0, -0.997559, -0.06982912, 0, 0, 0, 1, -1.825, -0.89425, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_7rqib")
 
-[node name="Schnur3" type="MeshInstance3D" parent="." unique_id=308577755]
+[node name="Schnur3" type="MeshInstance3D" parent="." unique_id=1164693392]
 transform = Transform3D(0.06982912, 0.997559, 0, -0.997559, 0.06982912, 0, 0, 0, 1, 1.825, -0.89425, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_7rqib")
 
-[node name="Schnur4" type="MeshInstance3D" parent="." unique_id=1266137431]
+[node name="Schnur4" type="MeshInstance3D" parent="." unique_id=829077243]
 transform = Transform3D(0.20551723, 0.9786535, 0, -0.9786535, 0.20551723, 0, 0, 0, 1, 5.4750004, -0.38325, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_sstuj")
 
-[node name="Wimpel" type="Node3D" parent="." unique_id=955905066]
+[node name="Wimpel" type="Node3D" parent="." unique_id=1220583344]
 
-[node name="Wimpel1" type="MeshInstance3D" parent="Wimpel" unique_id=107217675]
+[node name="Wimpel1" type="MeshInstance3D" parent="Wimpel" unique_id=1033262710]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -7.0852942, -0.23923357, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel2" type="MeshInstance3D" parent="Wimpel" unique_id=1457024700]
+[node name="Wimpel2" type="MeshInstance3D" parent="Wimpel" unique_id=428664630]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -6.6558824, -0.3523962, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel3" type="MeshInstance3D" parent="Wimpel" unique_id=726417279]
+[node name="Wimpel3" type="MeshInstance3D" parent="Wimpel" unique_id=380479191]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -6.2264705, -0.45848617, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel4" type="MeshInstance3D" parent="Wimpel" unique_id=614119543]
+[node name="Wimpel4" type="MeshInstance3D" parent="Wimpel" unique_id=1918568020]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -5.797059, -0.55750346, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel5" type="MeshInstance3D" parent="Wimpel" unique_id=319956639]
+[node name="Wimpel5" type="MeshInstance3D" parent="Wimpel" unique_id=624000979]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -5.367647, -0.6494481, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel6" type="MeshInstance3D" parent="Wimpel" unique_id=1069721005]
+[node name="Wimpel6" type="MeshInstance3D" parent="Wimpel" unique_id=239852857]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -4.9382353, -0.73432004, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel7" type="MeshInstance3D" parent="Wimpel" unique_id=1316576380]
+[node name="Wimpel7" type="MeshInstance3D" parent="Wimpel" unique_id=1639316279]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -4.5088234, -0.81211936, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel8" type="MeshInstance3D" parent="Wimpel" unique_id=552743986]
+[node name="Wimpel8" type="MeshInstance3D" parent="Wimpel" unique_id=1577412859]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -4.079412, -0.882846, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel9" type="MeshInstance3D" parent="Wimpel" unique_id=1886128523]
+[node name="Wimpel9" type="MeshInstance3D" parent="Wimpel" unique_id=1705516452]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -3.65, -0.9465, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel10" type="MeshInstance3D" parent="Wimpel" unique_id=1117482679]
+[node name="Wimpel10" type="MeshInstance3D" parent="Wimpel" unique_id=1169554848]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -3.2205882, -1.0030813, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel11" type="MeshInstance3D" parent="Wimpel" unique_id=595596957]
+[node name="Wimpel11" type="MeshInstance3D" parent="Wimpel" unique_id=1445209723]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -2.7911766, -1.05259, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel12" type="MeshInstance3D" parent="Wimpel" unique_id=2044344057]
+[node name="Wimpel12" type="MeshInstance3D" parent="Wimpel" unique_id=826422840]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -2.3617647, -1.0950259, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel13" type="MeshInstance3D" parent="Wimpel" unique_id=1661612645]
+[node name="Wimpel13" type="MeshInstance3D" parent="Wimpel" unique_id=1507229971]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -1.9323529, -1.1303893, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel14" type="MeshInstance3D" parent="Wimpel" unique_id=1479151393]
+[node name="Wimpel14" type="MeshInstance3D" parent="Wimpel" unique_id=1338977079]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -1.5029411, -1.15868, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel15" type="MeshInstance3D" parent="Wimpel" unique_id=1966423150]
+[node name="Wimpel15" type="MeshInstance3D" parent="Wimpel" unique_id=905930751]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -1.0735294, -1.1798979, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel16" type="MeshInstance3D" parent="Wimpel" unique_id=188521715]
+[node name="Wimpel16" type="MeshInstance3D" parent="Wimpel" unique_id=156938646]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -0.64411765, -1.1940433, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel17" type="MeshInstance3D" parent="Wimpel" unique_id=1157566300]
+[node name="Wimpel17" type="MeshInstance3D" parent="Wimpel" unique_id=753089895]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, -0.21470588, -1.201116, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel18" type="MeshInstance3D" parent="Wimpel" unique_id=121021882]
+[node name="Wimpel18" type="MeshInstance3D" parent="Wimpel" unique_id=1002876904]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0.21470588, -1.201116, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel19" type="MeshInstance3D" parent="Wimpel" unique_id=1428558344]
+[node name="Wimpel19" type="MeshInstance3D" parent="Wimpel" unique_id=414485430]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0.64411765, -1.1940433, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel20" type="MeshInstance3D" parent="Wimpel" unique_id=1139621900]
+[node name="Wimpel20" type="MeshInstance3D" parent="Wimpel" unique_id=1009440589]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 1.0735294, -1.1798979, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel21" type="MeshInstance3D" parent="Wimpel" unique_id=1192349711]
+[node name="Wimpel21" type="MeshInstance3D" parent="Wimpel" unique_id=951004281]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 1.5029411, -1.15868, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel22" type="MeshInstance3D" parent="Wimpel" unique_id=412068105]
+[node name="Wimpel22" type="MeshInstance3D" parent="Wimpel" unique_id=559557600]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 1.9323529, -1.1303893, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel23" type="MeshInstance3D" parent="Wimpel" unique_id=61110697]
+[node name="Wimpel23" type="MeshInstance3D" parent="Wimpel" unique_id=1749929232]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 2.3617647, -1.0950259, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel24" type="MeshInstance3D" parent="Wimpel" unique_id=383646515]
+[node name="Wimpel24" type="MeshInstance3D" parent="Wimpel" unique_id=1533658499]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 2.7911766, -1.05259, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel25" type="MeshInstance3D" parent="Wimpel" unique_id=1556700995]
+[node name="Wimpel25" type="MeshInstance3D" parent="Wimpel" unique_id=625171645]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 3.2205882, -1.0030813, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel26" type="MeshInstance3D" parent="Wimpel" unique_id=1170339126]
+[node name="Wimpel26" type="MeshInstance3D" parent="Wimpel" unique_id=2054024177]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 3.65, -0.9465, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel27" type="MeshInstance3D" parent="Wimpel" unique_id=2003755115]
+[node name="Wimpel27" type="MeshInstance3D" parent="Wimpel" unique_id=1867687107]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 4.079412, -0.882846, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel28" type="MeshInstance3D" parent="Wimpel" unique_id=173080922]
+[node name="Wimpel28" type="MeshInstance3D" parent="Wimpel" unique_id=791125867]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 4.5088234, -0.81211936, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel29" type="MeshInstance3D" parent="Wimpel" unique_id=686284546]
+[node name="Wimpel29" type="MeshInstance3D" parent="Wimpel" unique_id=411435379]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 4.9382353, -0.73432004, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel30" type="MeshInstance3D" parent="Wimpel" unique_id=665483049]
+[node name="Wimpel30" type="MeshInstance3D" parent="Wimpel" unique_id=115219868]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 5.367647, -0.6494481, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel31" type="MeshInstance3D" parent="Wimpel" unique_id=1197349952]
+[node name="Wimpel31" type="MeshInstance3D" parent="Wimpel" unique_id=793790645]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 5.797059, -0.55750346, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel32" type="MeshInstance3D" parent="Wimpel" unique_id=1004667099]
+[node name="Wimpel32" type="MeshInstance3D" parent="Wimpel" unique_id=155576074]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 6.2264705, -0.45848617, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel33" type="MeshInstance3D" parent="Wimpel" unique_id=278364065]
+[node name="Wimpel33" type="MeshInstance3D" parent="Wimpel" unique_id=851802165]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 6.6558824, -0.3523962, 0)
 material_override = ExtResource("2_shxm8")
 cast_shadow = 0
 mesh = SubResource("PrismMesh_wgwuy")
 
-[node name="Wimpel34" type="MeshInstance3D" parent="Wimpel" unique_id=1064020234]
+[node name="Wimpel34" type="MeshInstance3D" parent="Wimpel" unique_id=1277004230]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 7.0852942, -0.23923357, 0)
 material_override = ExtResource("1_foc1e")
 cast_shadow = 0

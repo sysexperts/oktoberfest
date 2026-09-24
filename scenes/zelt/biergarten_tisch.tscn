@@ -49,88 +49,85 @@ rings = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_q35jl"]
 size = Vector3(2.3, 0.9, 1.6)
 
-[sub_resource type="BoxShape3D" id="KollisionForm"]
-size = Vector3(2.70000004768372, 2.72499990463257, 2.70000004768372)
+[node name="BiergartenTisch" type="Node3D" unique_id=1629326491]
 
-[node name="BiergartenTisch" type="Node3D" unique_id=94767310]
-
-[node name="Platte" type="MeshInstance3D" parent="." unique_id=1078347367]
+[node name="Platte" type="MeshInstance3D" parent="." unique_id=272687996]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
 material_override = ExtResource("1_4s7fy")
 mesh = SubResource("BoxMesh_k3eea")
 
-[node name="Bock_-0_9" type="MeshInstance3D" parent="." unique_id=1754806452]
+[node name="Bock_-0_9" type="MeshInstance3D" parent="." unique_id=691910706]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.38, 0)
 material_override = ExtResource("2_0tkdo")
 mesh = SubResource("BoxMesh_b5jiq")
 
-[node name="Bankbein_-0_9_-0_65" type="MeshInstance3D" parent="." unique_id=1315607067]
+[node name="Bankbein_-0_9_-0_65" type="MeshInstance3D" parent="." unique_id=892115037]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.22, -0.65)
 material_override = ExtResource("2_0tkdo")
 mesh = SubResource("BoxMesh_r17o0")
 
-[node name="Bankbein_-0_9_0_65" type="MeshInstance3D" parent="." unique_id=1417294546]
+[node name="Bankbein_-0_9_0_65" type="MeshInstance3D" parent="." unique_id=2069482038]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.22, 0.65)
 material_override = ExtResource("2_0tkdo")
 mesh = SubResource("BoxMesh_r17o0")
 
-[node name="Bock_0_9" type="MeshInstance3D" parent="." unique_id=1314799259]
+[node name="Bock_0_9" type="MeshInstance3D" parent="." unique_id=1080475111]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.38, 0)
 material_override = ExtResource("2_0tkdo")
 mesh = SubResource("BoxMesh_b5jiq")
 
-[node name="Bankbein_0_9_-0_65" type="MeshInstance3D" parent="." unique_id=455079583]
+[node name="Bankbein_0_9_-0_65" type="MeshInstance3D" parent="." unique_id=198498100]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.22, -0.65)
 material_override = ExtResource("2_0tkdo")
 mesh = SubResource("BoxMesh_r17o0")
 
-[node name="Bankbein_0_9_0_65" type="MeshInstance3D" parent="." unique_id=1878006488]
+[node name="Bankbein_0_9_0_65" type="MeshInstance3D" parent="." unique_id=797417841]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.22, 0.65)
 material_override = ExtResource("2_0tkdo")
 mesh = SubResource("BoxMesh_r17o0")
 
-[node name="Bank_-0_65" type="MeshInstance3D" parent="." unique_id=1212224111]
+[node name="Bank_-0_65" type="MeshInstance3D" parent="." unique_id=52862694]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, -0.65)
 material_override = ExtResource("1_4s7fy")
 mesh = SubResource("BoxMesh_rvlav")
 
-[node name="Bank_0_65" type="MeshInstance3D" parent="." unique_id=179341513]
+[node name="Bank_0_65" type="MeshInstance3D" parent="." unique_id=1833934725]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, 0.65)
 material_override = ExtResource("1_4s7fy")
 mesh = SubResource("BoxMesh_rvlav")
 
-[node name="Schirmstock" type="MeshInstance3D" parent="." unique_id=429320359]
+[node name="Schirmstock" type="MeshInstance3D" parent="." unique_id=1744305382]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 material_override = ExtResource("3_ynecj")
 mesh = SubResource("CylinderMesh_y56u3")
 
-[node name="Schirm" type="MeshInstance3D" parent="." unique_id=409067111]
+[node name="Schirm" type="MeshInstance3D" parent="." unique_id=762392904]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)
 material_override = ExtResource("4_v10rg")
 mesh = SubResource("CylinderMesh_vsscj")
 
-[node name="Schirmknopf" type="MeshInstance3D" parent="." unique_id=639569823]
+[node name="Schirmknopf" type="MeshInstance3D" parent="." unique_id=1441623263]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.66, 0)
 material_override = ExtResource("5_7kyhq")
 mesh = SubResource("SphereMesh_57yk4")
 
-[node name="Krug1" type="MeshInstance3D" parent="." unique_id=1508979408]
+[node name="Krug1" type="MeshInstance3D" parent="." unique_id=426850847]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.89, 0.1)
 material_override = ExtResource("6_esdqs")
 mesh = SubResource("CylinderMesh_1bqw0")
 
-[node name="Krug2" type="MeshInstance3D" parent="." unique_id=731266351]
+[node name="Krug2" type="MeshInstance3D" parent="." unique_id=813976635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0.89, 0.02)
 material_override = ExtResource("6_esdqs")
 mesh = SubResource("CylinderMesh_1bqw0")
 
-[node name="Krug3" type="MeshInstance3D" parent="." unique_id=1375254744]
+[node name="Krug3" type="MeshInstance3D" parent="." unique_id=695188868]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.89, -0.06)
 material_override = ExtResource("6_esdqs")
 mesh = SubResource("CylinderMesh_1bqw0")
 
-[node name="Kollision" type="StaticBody3D" parent="."]
+[node name="Kollision" type="StaticBody3D" parent="." unique_id=2124693805]
 
-[node name="Form" type="CollisionShape3D" parent="Kollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.35749995708466, 0.0)
-shape = SubResource("KollisionForm")
+[node name="Form" type="CollisionShape3D" parent="Kollision" unique_id=1181205287]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("BoxShape3D_q35jl")

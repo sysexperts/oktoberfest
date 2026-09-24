@@ -31,36 +31,36 @@ height = 0.3
 radial_segments = 8
 rings = 1
 
-[node name="Lebkuchenherz" type="Node3D" unique_id=1277638171]
+[node name="Lebkuchenherz" type="Node3D" unique_id=944646913]
 
-[node name="BogenLinks" type="MeshInstance3D" parent="." unique_id=1908958580]
+[node name="BogenLinks" type="MeshInstance3D" parent="." unique_id=1051125126]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.12, -0.42, 0)
 material_override = ExtResource("1_gh4ox")
 mesh = SubResource("CylinderMesh_afkyt")
 
-[node name="BogenRechts" type="MeshInstance3D" parent="." unique_id=478148260]
+[node name="BogenRechts" type="MeshInstance3D" parent="." unique_id=1209896947]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.12, -0.42, 0)
 material_override = ExtResource("1_gh4ox")
 mesh = SubResource("CylinderMesh_afkyt")
 
-[node name="Spitze" type="MeshInstance3D" parent="." unique_id=1530489180]
+[node name="Spitze" type="MeshInstance3D" parent="." unique_id=687110293]
 transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, -0.66, 0)
 material_override = ExtResource("1_gh4ox")
 mesh = SubResource("PrismMesh_ynqgm")
 
-[node name="Zuckerguss" type="MeshInstance3D" parent="." unique_id=812487056]
+[node name="Zuckerguss" type="MeshInstance3D" parent="." unique_id=1527572026]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.52, 0.03)
 material_override = ExtResource("2_4rjm7")
 cast_shadow = 0
 mesh = SubResource("TorusMesh_aao8r")
 
-[node name="Schrift" type="MeshInstance3D" parent="." unique_id=611958738]
+[node name="Schrift" type="MeshInstance3D" parent="." unique_id=2109017040]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.52, 0.035)
 material_override = ExtResource("3_eulus")
 cast_shadow = 0
 mesh = SubResource("BoxMesh_cokrd")
 
-[node name="Schnur" type="MeshInstance3D" parent="." unique_id=1486432452]
+[node name="Schnur" type="MeshInstance3D" parent="." unique_id=1118486684]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -0.15, 0)
 material_override = ExtResource("4_cw86l")
 cast_shadow = 0
