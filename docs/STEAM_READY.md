@@ -34,10 +34,12 @@ Fenstertitel, exe-Metadaten und `GAME_TITLE` nachziehen — und der Store-Eintra
 wird unter diesem Namen angelegt. Danach ist der Name auf Steam nur noch mit
 Aufwand änderbar.
 
-- [ ] Entscheidung: endgültiger Name *(Du)*
-- [ ] Anwaltliche Einschätzung, ob „Oktoberfest" im Beschreibungstext auftauchen darf *(Du)*
-- [ ] `config/name`, beide Export-Presets, `GAME_TITLE` in drei Sprachen angleichen *(Ich)*
-- [ ] Prüfen, wo der alte Name sonst noch steht (Speicherordner `user://`, ZIP-Namen, Servertexte) *(Ich)*
+- [x] Entscheidung: **Sloptoberfest** (25.09.2026)
+- [ ] Anwaltliche Einschätzung, ob „Oktoberfest" und „Wiesn" im Spiel und in den Texten auftauchen dürfen *(Du)* — im Spiel stehen noch Wiesenbüro, Wiesn-Kurier, Wiesn-Kalender
+- [x] `config/name`, beide Export-Presets, `GAME_TITLE` in drei Sprachen angeglichen *(v251)*
+- [x] Datenordner: Godot leitet ihn aus dem Projektnamen ab — ohne Übernahme wären alle Spielstände weg gewesen. `Net._alten_datenordner_uebernehmen` holt sie beim ersten Start herüber *(v251)*
+- [x] ZIP-Namen und Werkzeuge umgestellt, Deploy-Skript erkennt beide Namen auf der Downloadseite *(v251)*
+- [x] Export geprüft: `build/steam/Sloptoberfest.exe`, ProductName und FileDescription stimmen
 
 ### A2 ⚠️ Das Spiel läuft auf Steams Test-App 480 *(Du lieferst App-ID, ich baue ein)*
 
@@ -55,8 +57,9 @@ ist bewusst abgeschaltet (`autoload/steam_dienst.gd:64`).
 Beide Export-Presets haben `application/icon=""`. Die exe zeigt damit Godots
 Standardsymbol — im Store, in der Taskleiste und in der Bibliothek.
 
-- [ ] Icon als `.ico` (256, 128, 64, 48, 32, 16 px in einer Datei) *(Du)*
-- [ ] In beide Presets eintragen, Export prüfen *(Ich)*
+- [x] Icon gebaut: die Brezn aus dem Logo, sechs Größen in `assets/ui/icon.ico` (`bash tools/icon_bauen.sh`) *(v251)*
+- [x] In beide Presets eingetragen, auch als Fenstersymbol; aus der fertigen exe zurückgelesen und angesehen — die Brezn ist drin
+- [ ] Wenn dir ein anderes Motiv lieber ist: Vorlage austauschen und das Werkzeug neu laufen lassen *(Du)*
 
 ### A4 ⚠️ Der Ton ist zur Hälfte Platzhalter
 
@@ -118,8 +121,9 @@ zu KI-erzeugten Inhalten (Meshy-Modelle, Suno-Musik, ChatGPT-UI-Grafiken).
 - [ ] Mindestens 5 Screenshots 1920×1080 — Spielstand dafür liegt auf Platz 3 (`tools/screenshot_stand.sh`)
 
 ### B3 Trailer
-- [ ] Trailer in **1920×1080** neu rendern — die aktuelle Fassung ist 1440×810, weil `--resolution` im Aufnahmemodus ignoriert wird *(Ich)*
-- [ ] Lieferwagen-Szene reparieren: `render_trailer.gd` ruft `VAN_START`/`VAN_DROP`/`VAN_END`, die API heißt heute `VAN_REIN`/`VAN_RAUS`/`DROP_POINT` *(Ich)*
+- [x] Trailer läuft in **1920×1080** — das Werkzeug setzt die Fenstergröße für die Aufnahme kurz hoch und schreibt sie danach zurück *(v251)*
+- [x] Lieferwagen-Szene repariert (`VAN_REIN`/`VAN_RAUS` statt der alten Konstanten) *(v251)*
+- [x] Schwebende Hängelaternen aus Trailer und Szenen-Werkzeug genommen — sie sitzen auf 3,6 m und brauchen einen Balken über sich
 - [ ] Musik unter den Trailer legen — erst wenn A5 geklärt ist *(Du + Ich)*
 - [ ] Hochladen, Sprachfassungen zuordnen
 
@@ -129,7 +133,7 @@ Steam-Aufruf (`steam_dienst.errungenschaft`). In Steamworks existieren sie noch 
 
 - [ ] 23 Einträge anlegen, API-Namen exakt wie die IDs im Code *(Du, Liste in `docs/steam/errungenschaften.md`)*
 - [ ] 46 Symbole (je freigeschaltet/gesperrt, 256×256) *(Du)*
-- [ ] Namen und Beschreibungen in drei Sprachen *(Ich liefere Texte)*
+- [x] Namen und Beschreibungen in drei Sprachen: `docs/steam/errungenschaften_texte.md`, erzeugt aus `locale/texte.csv` mit `python tools/steam_texte.py` — alle 23 haben bereits Texte
 - [ ] Mit zwei Konten prüfen, dass sie wirklich auslösen
 
 ### B5 Rich Presence
@@ -164,11 +168,15 @@ angelegt (`scripts/player.gd:103`, `autoload/einstellungen.gd`). Gamepad kommt
 nirgends vor. Damit ist das Spiel auf dem Steam Deck nicht spielbar und fällt
 bei der Deck-Prüfung durch.
 
-- [ ] Eingabekarte um Joypad-Ereignisse erweitern
-- [ ] Zielen und Menüführung mit Stick
-- [ ] Bildschirmtastatur für Namenseingabe
-- [ ] Steam-Input-Konfiguration hinterlegen
-- [ ] Entscheidung: gehen wir auf „Deck verifiziert" oder reicht „spielbar"? *(Du)*
+- [x] Jede Spielaktion hat einen Knopf, Laufen am linken Stick, Umschauen am rechten *(v251)*
+- [x] Totzone 0,2 statt Godots 0,5 — sonst müsste man den Stick halb durchdrücken
+- [x] `ui_accept`/`ui_cancel` hatten keinen Knopf: am Deck wäre man in kein Menü hinein- und aus keinem herausgekommen. Gefunden von `tools/test_pad`
+- [x] Hinweise zeigen am Gamepad Knöpfe statt Tasten („Krug nehmen [A]")
+- [ ] **Am echten Gerät prüfen** — ohne Deck ist nur die Zuordnung getestet, nicht das Spielgefühl *(Du)*
+- [ ] Weltbeschriftungen (Fass, Lager) aktualisieren sich erst beim nächsten Setzen; wer mitten im Spiel auf Gamepad wechselt, sieht dort kurz noch Tasten *(Ich, klein)*
+- [ ] Bildschirmtastatur für die Namenseingabe im Warteraum *(Ich)*
+- [ ] Steam-Input-Konfiguration in Steamworks hinterlegen *(Du)*
+- [ ] Entscheidung: „Deck verifiziert" anstreben oder reicht „spielbar"? *(Du)*
 
 ### C2 Erste zehn Minuten
 Aus `docs/PLAN_SPASS.md`: erster bedienter Gast nach 3,4 min, erste Tagesbilanz
@@ -184,14 +192,15 @@ Seitdem kamen Story, Personal, Braukeller, Minispiele dazu.
 
 ### C4 Fehlerbild im Betrieb
 - [ ] Was passiert bei Verbindungsabbruch mitten in der Schicht? (Koop, Vermittler weg)
-- [ ] Was passiert, wenn der Spielstand beschädigt ist? (JSON kaputt → heute stiller Neustart)
-- [ ] Absturzberichte: wenigstens eine Logdatei in `user://`, die man sich schicken lassen kann
+- [x] Beschädigter Spielstand: wird als `slot_N.json.kaputt_<zeit>` beiseitegelegt statt beim nächsten Speichern überschrieben *(v251)*
+- [x] Logdateien gibt es bereits — Godot schreibt sie nach `user://logs/` (bis zu 5 Stück). Pfad: `%APPDATA%/Godot/app_userdata/Sloptoberfest/logs`
+- [ ] Einen Knopf „Logordner öffnen" in die Einstellungen, damit Spieler ihn im Supportfall finden *(Ich, klein)*
 
 ### C5 Speicherformat einfrieren
 `Net.SAVE_FORMAT = 1`. Nach Release ändert sich das Format nicht mehr ohne
 Migration — sonst verlieren Käufer ihre Stände.
-- [ ] Alle Felder durchgehen, die noch fehlen könnten, **vor** dem Release ergänzen
-- [ ] Migrationspfad schreiben, falls doch etwas dazukommt
+- [x] Abgeglichen: 55 gespeicherte Felder, 55 geladene. Die einzigen Abweichungen sind `saved_at` (nur fürs Menü) und `rot` (steckt im Einrichtungs-Eintrag) — beides richtig so
+- [ ] Migrationspfad schreiben, falls nach Release doch ein Feld dazukommt
 
 ### C6 Leistung
 - [ ] Buden-Meshes zusammenfassen (steht seit v188 offen)
@@ -199,9 +208,10 @@ Migration — sonst verlieren Käufer ihre Stände.
 - [ ] Mindestanforderungen danach korrigieren
 
 ### C7 Aufräumen
-- [ ] `tools/` bleibt aus den Release-Paketen draußen (prüfen)
-- [ ] Debug-Ausgaben und Testschalter suchen (`ALWAYS_NIGHT` war schon mal an)
-- [ ] Keine CI vorhanden: wenigstens ein Skript, das alle 19 `tools/test_*.tscn` nacheinander laufen lässt und Fehler sammelt
+- [x] `tools/` bleibt draußen: beide Presets haben `exclude_filter="tools/*"`
+- [x] Testschalter geprüft: `ALWAYS_NIGHT` steht auf `false`, sonst gibt es keine. Die 11 `print`-Ausgaben im Spielcode sind alle beschriftete Diagnose
+- [x] `bash tools/alle_tests.sh` lässt alle Testszenen nacheinander laufen und sammelt die Ergebnisse *(v251)*
+- [ ] Echte CI (GitHub Actions) — erst sinnvoll, wenn ein Runner mit Godot bereitsteht
 
 ---
 

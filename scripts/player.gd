@@ -1276,7 +1276,12 @@ func _geschleudert() -> bool:
 ## Vom Server an einen einzelnen Spieler: hierhin stellen (nach dem Schlafen
 ## vor den Wohnwagen, GameManager._spieler_zum_wohnwagen). Nur der Server darf
 ## das — die eigene Figur gehört sonst allein diesem Rechner.
-@rpc("any_peer", "reliable")
+## "call_local", weil der Server sich selbst mitschickt: im Solo und beim Host
+## ist der eigene Spieler Peer 1, und Godot verwirft ein rpc_id an sich selbst
+## ohne dieses Merkmal ("RPC 'versetzen' on yourself is not allowed"). Der Host
+## blieb deshalb nach dem Schlafen stehen, wo er eingeschlafen ist, statt vor dem
+## Wohnwagen aufzuwachen (gefunden im Bot-Lauf tools/sim_saison, 25.09.2026).
+@rpc("any_peer", "reliable", "call_local")
 func versetzen(pos: Vector3, yaw: float) -> void:
 	if multiplayer.get_remote_sender_id() not in [0, 1]:
 		return
@@ -1379,7 +1384,9 @@ var traegt_spieler := false
 func wird_getragen() -> bool:
 	return Time.get_ticks_msec() / 1000.0 < _getragen_bis
 
-@rpc("any_peer", "unreliable_ordered")
+# call_local wie bei versetzen: der Server schickt das auch an sich selbst,
+# wenn der Host derjenige ist, der getragen wird.
+@rpc("any_peer", "unreliable_ordered", "call_local")
 func getragen_stellen(pos: Vector3, yaw: float) -> void:
 	if multiplayer.get_remote_sender_id() not in [0, 1]:
 		return
@@ -1390,7 +1397,7 @@ func getragen_stellen(pos: Vector3, yaw: float) -> void:
 	_net_pos = pos
 	_net_yaw = yaw
 
-@rpc("any_peer", "reliable")
+@rpc("any_peer", "reliable", "call_local")
 func getragen_geworfen(tempo: Vector3) -> void:
 	if multiplayer.get_remote_sender_id() not in [0, 1]:
 		return

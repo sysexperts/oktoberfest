@@ -141,8 +141,9 @@ Bir davet kodu açarsın, üç kişi katılır, vardiyanın ortasında bile. Her
 
 ## Systemanforderungen
 
-Eingetragen am 24.09.2026. Der Speicherplatz ist geschätzt — vor dem Release den
-fertigen Windows-Export messen und den echten Wert setzen.
+Eingetragen am 24.09.2026, Speicherplatz am 25.09.2026 am echten Export gemessen:
+`build/steam/Sloptoberfest.exe` ist 1099 MB (alles eingebettet). Mit Spielständen
+und Puffer sind 2000 MB angesetzt.
 
 | Feld | Minimum | Empfohlen |
 |---|---|---|
@@ -151,7 +152,7 @@ fertigen Windows-Export messen und den echten Wert setzen.
 | Speicher | 8000 MB | 16000 MB |
 | Grafik | GeForce GTX 1050 / Radeon RX 560 (Vulkan 1.2, 4 GB) | GeForce RTX 2060 / Radeon RX 5700 (6 GB) |
 | DirectX | N/A (das Spiel rendert über Vulkan) | N/A |
-| Speicherplatz | 4000 MB | 4000 MB |
+| Speicherplatz | 2000 MB | 2000 MB |
 | Netzwerk | Breitband (fuer Koop) | Breitband |
 | Soundkarte | DirectX compatible | DirectX compatible |
 

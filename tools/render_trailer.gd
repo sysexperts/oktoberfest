@@ -279,8 +279,9 @@ class Lauf extends Node:
 		_titel("Ware ranschaffen.", 0.6, 2.6)
 		_lieferwagen(4.5)
 		_spieler_laufen(2, Vector3(-3.0, 0.1, 13.0), Vector3(0.5, 0.1, 15.0), 4.0, false)
-		await _fahrt(Vector3(-4.0, 8.0, 31.0), Vector3(0.0, 1.0, 18.0),
-			Vector3(-2.0, 5.5, 27.0), Vector3(0.0, 0.8, 17.0), 5.0)
+		# Auf Wagen (haelt bei z 24,5) und Abladeplatz (z 21,4) zugleich schauen
+		await _fahrt(Vector3(-7.0, 5.5, 34.0), Vector3(0.0, 1.5, 23.0),
+			Vector3(-5.0, 3.2, 29.5), Vector3(0.0, 1.0, 22.0), 5.0)
 
 		# 5 Zeitraffer: 2 → 24 Tische, Gäste, Deko, Band, Abend
 		_titel("… und groß rauskommen!", 0.8, 4.0)
@@ -493,7 +494,11 @@ class Lauf extends Node:
 				gm._add_package(_paket_id, ort, 1 + (k % 2), 10)
 				var paket: Node3D = gm._packages[_paket_id]
 				_ploppen(paket, 0.4, float(k) * 0.12)
-				_staub(ort, 0.5, ""))
+				_staub(ort, 0.5, "")
+			# Die Pakete entstehen erst hier und bringen ihre eigenen Schilder
+			# mit ("Bierfass x10 ([E]: aufnehmen)") — die lagen sonst quer
+			# uebereinander mitten im Bild.
+			_beschriftungen_aus())
 		tw.tween_interval(dauer * 0.25)
 		tw.tween_property(wagen, "position", weg, dauer).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		tw.tween_callback(func() -> void: gm._van_show(false, weg))
