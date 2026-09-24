@@ -101,6 +101,28 @@ func status_loeschen() -> void:
 	if aktiv:
 		_steam.call("clearRichPresence")
 
+# ------------------------------------------------------------ Bildschirmtastatur
+## Steams schwebende Tastatur über einem Eingabefeld — am Steam Deck die einzige
+## Möglichkeit, einen Namen einzutippen. Das Feld wird in Bildschirmkoordinaten
+## übergeben, damit Steam sie nicht darüber legt.
+##
+## Gibt false zurück, wenn Steam nicht läuft, die Bibliothek diese Funktion nicht
+## kennt (ältere GodotSteam-Fassungen) oder gerade mit Maus und Tastatur gespielt
+## wird. Der Aufrufer muss nichts prüfen.
+func tastatur_zeigen(feld: Control) -> bool:
+	if not aktiv or feld == null or not Einstellungen.am_pad:
+		return false
+	if not _steam.has_method("showFloatingGamepadTextInput"):
+		return false
+	var r := feld.get_global_rect()
+	# 0 = einzeilig
+	return bool(_steam.call("showFloatingGamepadTextInput", 0,
+		int(r.position.x), int(r.position.y), int(r.size.x), int(r.size.y)))
+
+func tastatur_verstecken() -> void:
+	if aktiv and _steam.has_method("dismissFloatingGamepadTextInput"):
+		_steam.call("dismissFloatingGamepadTextInput")
+
 # ------------------------------------------------------------ Errungenschaften (5.4)
 ## Schaltet eine Steam-Errungenschaft frei. API-Name = Meilenstein-ID aus
 ## scripts/meilensteine.gd — in Steamworks genauso anlegen (docs/steam/errungenschaften.md).

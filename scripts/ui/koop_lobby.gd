@@ -66,6 +66,8 @@ func _zeige_start() -> void:
 	%Warteraum.visible = false
 	%Takt.stop()
 	%StartName.grab_focus.call_deferred()
+	if not %StartName.focus_entered.is_connected(_tastatur):
+		%StartName.focus_entered.connect(_tastatur)
 
 func _zeige_warteraum() -> void:
 	%Start.visible = false
@@ -322,3 +324,8 @@ func _auswerten(result: int, code: int, body: PackedByteArray) -> Dictionary:
 
 func _kopf() -> PackedStringArray:
 	return PackedStringArray(["Content-Type: application/json"])
+
+## Steam Deck: Steams Bildschirmtastatur ueber dem Namensfeld. Ohne Steam oder
+## mit Maus und Tastatur passiert nichts.
+func _tastatur() -> void:
+	SteamDienst.tastatur_zeigen(%StartName)

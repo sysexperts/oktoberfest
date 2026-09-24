@@ -23,6 +23,9 @@ func _ready() -> void:
 		knopf.pressed.connect(_farbe_waehlen.bind(i))
 	%Los.pressed.connect(_los)
 	%Name.text_submitted.connect(func(_t: String) -> void: _los())
+	# Am Steam Deck gibt es keine Tastatur — Steam blendet seine eigene ein,
+	# sobald das Feld den Fokus bekommt. Ohne Steam oder mit Maus passiert nichts.
+	%Name.focus_entered.connect(func() -> void: SteamDienst.tastatur_zeigen(%Name))
 	Einstellungen.geaendert.connect(_neu)
 
 func einrichten(gm: Node) -> void:
