@@ -1,99 +1,172 @@
-# Store-Seite — Vorlage (Plan 6.4)
+# Store-Seite: Texte zum Einfügen
 
-Entwurf zum Einfügen in Steamworks. Name und Wortmarken erst nach der
-Namensprüfung (6.3) festlegen — „Oktoberfest" und „Wiesn" sind Marken der Stadt
-München. Bis dahin steht hier der Arbeitstitel.
+Stand 24.09.2026. Der Name steht fest: **Sloptoberfest**. „Oktoberfest" und
+„Wiesn" sind Marken der Stadt München — sie kommen in den Store-Texten deshalb
+nicht vor, auch nicht beiläufig. Im Spiel selbst steht „Wiesn" noch an einigen
+Stellen (Wiesenbüro, Wiesn-Kurier, Wiesn-Kalender); das ist vor dem Release
+anwaltlich zu klären.
+
+Der Aufbau folgt der Reihenfolge in Steamworks. Was hier steht, ist einfügefertig
+— Steam nimmt in der langen Beschreibung BBCode.
+
+---
 
 ## Kurzbeschreibung (max. 300 Zeichen)
 
-**Deutsch:**
-Miete dein eigenes Festzelt, stell Tische auf, zapf Bier und halte bis 22 Uhr
-durch — allein oder mit bis zu drei Freunden. Richte dein Zelt ein, stell
-Personal ein, bestimm deine Preise und werde vom kleinen Zelt zum größten Wirt
-der Wiesn.
+**Deutsch** (220 Zeichen)
 
-**English:**
-Rent your own beer tent, set up tables, pour beer and keep going until 10 pm —
-solo or with up to three friends. Furnish your tent, hire staff, set your prices
-and grow from a small tent to the biggest landlord at the fair.
+```
+Onkel Sepp hinterlässt dir sein Festzelt und seine Schulden. Zapfen, kochen,
+servieren, putzen — und abends abrechnen. Allein oder mit drei Freunden, bis
+die Bänke wackeln und der Wirt von nebenan dir die Gäste wegnimmt.
+```
+
+**English** (215 Zeichen)
+
+```
+Uncle Sepp left you his beer tent and his debts. Pour, cook, serve, clean — and
+count what's left at closing time. Alone or with three friends, until the
+benches wobble and the landlord next door steals your guests.
+```
+
+**Türkçe** (215 Zeichen)
+
+```
+Sepp Amca sana çadırını ve borçlarını bıraktı. Bira doldur, yemek pişir, servis
+yap, temizle — akşam da hesabı çıkar. Tek başına ya da üç arkadaşınla, sıralar
+sallanana ve yandaki rakibin müşterilerini çalana kadar.
+```
+
+---
 
 ## Lange Beschreibung
 
-**Deutsch:**
+### Deutsch
 
-> **Dein Festzelt, dein Chaos.**
->
-> Morgens mietest du dein Zelt, bestellst Bier beim Lieferwagen und räumst die
-> Pakete ins Regal. Ab 8 Uhr kommen die Gäste durchs Tor — und sie wollen Helles,
-> Weizen, Radler, Brezn und Würstl. Schnell, bitte.
->
-> - **Zapfen, servieren, putzen:** Krug nehmen, am Fass zapfen, zum richtigen
->   Gast bringen. Wer zu viel trinkt, wird es wieder los — und jemand muss
->   aufwischen.
-> - **Zusammen oder allein:** Koop für bis zu 4 Spieler, Einladungen über Steam.
-> - **Dein Zelt, deine Regeln:** Tische umstellen, Lampen und Deko platzieren,
->   Bierpreis festlegen. Billig bringt volle Bänke, teuer volle Kassen.
-> - **Wachsen:** Kellner, Koch und Putzkraft einstellen und aufstufen, Lizenzen
->   kaufen, Musiker buchen, das Zelt vergrößern.
-> - **Endlos weiter:** Kosten steigen mit jedem Tag, Meilensteine und
->   Errungenschaften warten.
+```
+[h2]Sloptoberfest[/h2]
+Onkel Sepp hat den letzten Ausschank hinter sich. Was er dir hinterlässt: ein kleines Zelt mit vier Tischen, eine Zapfanlage, ein Klo, das noch keins ist, und die Raten bei der Bank.
 
-**English:**
+[h2]Ein Tag im Zelt[/h2]
+Morgens ist Ruhe. Du bestellst Bier, Brezn und Würstl, stellst Tische auf, entscheidest, was das Maß heute kosten soll. Dann sperrst du auf und die Uhr läuft.
 
-> **Your beer tent, your chaos.**
->
-> In the morning you rent your tent, order beer from the delivery van and
-> stock the shelf. At 7 am the gate opens — and the guests want Helles, wheat
-> beer, shandy, pretzels and sausages. Quickly, please.
->
-> - **Pour, serve, clean:** grab a mug, pour at the keg, bring it to the right
->   guest. Whoever drinks too much brings it back up — and someone has to mop.
-> - **Together or alone:** co-op for up to 4 players, invites via Steam.
-> - **Your tent, your rules:** rearrange tables, place lamps and decorations,
->   set the beer price. Cheap fills the benches, expensive fills the till.
-> - **Grow:** hire and upgrade waiters, cooks and cleaners, buy licenses, book
->   musicians, enlarge the tent.
-> - **Keep going:** costs rise every day, milestones and achievements await.
+Gäste setzen sich und bestellen. Du nimmst einen Krug vom Stapel, hältst ihn unter den Hahn, wartest bis er voll ist, trägst ihn zum Tisch. Mehr als einen gleichzeitig geht auch, bis dir der Überblick fehlt, an welchem Tisch das Weizen hinsollte. Würstl brauchen Zeit auf dem Grill und werden schwarz, wenn du sie vergisst.
 
-## Merkmale in Steamworks
+Wer vier Maß intus hat, hält sie nicht immer bei sich. Das liegt dann auf dem Boden und muss weg, sonst wird der Rest der Gäste ungemütlich. Ohne Klo passiert dasselbe, nur öfter.
 
-- Einzelspieler, Online-Koop (2–4), Steam-Errungenschaften, Steam Cloud
-- Sprachen: Deutsch, Englisch, Türkisch (Oberfläche und Untertitel, keine Sprachausgabe)
-- Tags-Vorschlag: Simulation, Management, Co-op, Online Co-Op, Casual, Funny,
-  First-Person, Cartoony
+Ab sieben wird es voll und alle werden ungeduldiger. Wer zu lang wartet, beschwert sich und geht. Das spricht sich rum — am nächsten Tag kommen weniger.
 
-## KI-Angabe (Content Survey)
+[h2]Zwischen den Tagen[/h2]
+Abends rechnest du ab: Einnahmen gegen Miete, Wareneinsatz und Bankrate. Was übrig bleibt, geht in ein größeres Zelt, mehr Tische, ein richtiges Klo, Deko, Werbung. Oder in Personal — Koch, Kellner, Reinigung, die dir Arbeit abnehmen, aber jeden Tag Lohn kosten.
 
-Pflichtangabe seit 2024. Vorschlag für „Pre-Generated AI Content":
+Auf die Bühne kannst du einen Straßenmusiker stellen. Oder eine Blaskapelle. Oder, wenn das Geld reicht, einen Star.
 
-> Einige 3D-Modelle (Spielfiguren, Festzelt, Tische, Bänke, Theke) wurden mit
-> Meshy aus eigenen Vorlagen erzeugt und in Blender nachbearbeitet. Die
-> Hintergrundmusik wurde mit AIMusic.so erzeugt. Für beides besteht ein
-> kostenpflichtiger Tarif mit kommerziellen Nutzungsrechten. Im laufenden Spiel
-> werden keine Inhalte mit KI erzeugt.
+Im Keller steht eine Braustrecke. Maischen, kochen, gären lassen — dauert mehrere Tage, dann brauchst du den Lieferanten nicht mehr.
 
-> Some 3D models (characters, beer tent, tables, benches, bar) were generated
-> with Meshy from our own reference material and refined in Blender. The
-> background music was generated with AIMusic.so. Both were produced under paid
-> plans that grant commercial usage rights. No content is generated by AI while
-> the game is running.
+[h2]Zu viert[/h2]
+Du machst einen Einladungscode auf, drei Leute kommen dazu, auch mitten in der Schicht. Jeder übernimmt eine Abteilung — Ausschank, Küche, Service, Sauberkeit — oder ihr rennt alle durcheinander, was meistens passiert. Größere Entscheidungen werden abgestimmt.
 
-Vor dem Absenden mit den Nachweisen in `docs/lizenzen/` abgleichen.
+[h2]Draußen[/h2]
+Vor dem Zelt ist Kirmes: Schießbude, Entenangeln, Drehscheibe. Spielt man zwischen zwei Tagen.
 
-## Grafiken — Größen
+[h2]Und Huber[/h2]
+Drei Zelte weiter steht die Konkurrenz und macht es besser als du. Es gibt eine Geschichte, mit Stammgästen, die noch Sepp kannten, und einem Ende — irgendwann steht die Sache mit Huber an.
+```
 
-| Grafik | Größe |
-|---|---|
-| Header Capsule | 920 × 430 |
-| Small Capsule | 462 × 174 |
-| Main Capsule | 1232 × 706 |
-| Vertical Capsule | 748 × 896 |
-| Library Capsule | 600 × 900 |
-| Library Hero | 3840 × 1240 |
-| Screenshots | mind. 5, 1920 × 1080 |
+### English
 
-Screenshots aus dem Spiel: im laufenden Spiel **F12** drücken (Taste in den
-Einstellungen umbelegbar). Die Bilder landen in
-`%APPDATA%\Godot\app_userdata\Oktoberfest Simulator\screenshots\`, die Meldung
-unten zeigt den Pfad. Für Store-Bilder in 1920 × 1080 und Vollbild spielen,
-Grafik auf Hoch, ein volles Zelt am Abend wirkt am besten.
+```
+[h2]Sloptoberfest[/h2]
+Uncle Sepp has poured his last one. What he left you: a small tent with four tables, a tap system, a toilet that isn't one yet, and the payments due at the bank.
+
+[h2]A day in the tent[/h2]
+Mornings are quiet. You order beer, pretzels and sausages, put out tables, decide what a litre costs today. Then you open up and the clock starts.
+
+Guests sit down and order. You take a stein off the stack, hold it under the tap, wait for it to fill, carry it over. More than one at a time works too, until you lose track of which table wanted the wheat beer. Sausages need time on the grill and turn black if you forget them.
+
+Four litres in, not everyone keeps them down. That ends up on the floor and has to go, or the rest of the room turns on you. Without a toilet the same thing happens, only more often.
+
+From seven it gets crowded and everyone's patience gets shorter. Wait too long and they complain and leave. Word gets around — fewer show up tomorrow.
+
+[h2]Between days[/h2]
+In the evening you count up: takings against rent, supplies and the bank. What's left goes into a bigger tent, more tables, a proper toilet, decorations, advertising. Or staff — cook, waiter, cleaner, who take work off your hands and cost wages every single day.
+
+You can put a busker on the stage. Or a brass band. Or, if the money's there, a star act.
+
+There's a brewery in the cellar. Mash, boil, ferment — takes days, and then you don't need the supplier any more.
+
+[h2]Four players[/h2]
+You open an invite code, three people join, even mid-shift. Everyone takes a department — taps, kitchen, service, cleaning — or you all run into each other, which is what usually happens. Bigger decisions get a vote.
+
+[h2]Outside[/h2]
+There's a fairground in front of the tent: shooting gallery, duck pond, spinning wheel. For between days.
+
+[h2]And Huber[/h2]
+Three tents down the competition is doing it better than you. There's a story, with regulars who still remember Sepp, and an ending — sooner or later there's the business with Huber.
+```
+
+### Türkçe
+
+```
+[h2]Sloptoberfest[/h2]
+Sepp Amca son birasını da doldurdu. Sana bıraktıkları: dört masalı küçük bir çadır, bir bira musluğu, henüz tuvalet sayılmayan bir tuvalet ve bankaya olan taksitler.
+
+[h2]Çadırda bir gün[/h2]
+Sabahlar sakindir. Bira, simit ve sosis sipariş edersin, masaları dizersin, biranın bugün kaça satılacağına karar verirsin. Sonra kapıyı açarsın ve saat işlemeye başlar.
+
+Misafirler oturur ve sipariş verir. Yığından bir bardak alırsın, musluğun altına tutarsın, dolmasını beklersin, masaya götürürsün. Aynı anda birden fazla da olur — ta ki hangi masanın buğday birası istediğini unutana kadar. Sosisler ızgarada zaman ister, unutursan kararır.
+
+Dört bira içen herkes onu içeride tutamaz. O da yere gider ve temizlenmesi gerekir, yoksa geri kalan misafirler huysuzlanır. Tuvalet yoksa aynı şey daha sık olur.
+
+Yediden sonra kalabalıklaşır ve herkesin sabrı azalır. Çok bekleyen şikâyet eder ve gider. Bu duyulur — ertesi gün daha azı gelir.
+
+[h2]Günler arasında[/h2]
+Akşam hesabı çıkarırsın: gelir karşısında kira, mal masrafı ve banka taksiti. Kalan para daha büyük bir çadıra, daha çok masaya, düzgün bir tuvalete, dekora, reklama gider. Ya da personele — aşçı, garson, temizlikçi; işini hafifletirler ama her gün maaş isterler.
+
+Sahneye bir sokak müzisyeni çıkarabilirsin. Ya da bir bando. Ya da para yetiyorsa bir yıldız.
+
+Mahzende bir bira hattı var. Mayşele, kaynat, mayalandır — birkaç gün sürer, sonra tedarikçiye ihtiyacın kalmaz.
+
+[h2]Dört kişi[/h2]
+Bir davet kodu açarsın, üç kişi katılır, vardiyanın ortasında bile. Herkes bir bölümü üstlenir — bar, mutfak, servis, temizlik — ya da hep birlikte birbirinize çarparsınız, genelde böyle olur. Büyük kararlar oylanır.
+
+[h2]Dışarısı[/h2]
+Çadırın önünde panayır var: atış standı, ördek avı, çarkıfelek. İki gün arasında oynanır.
+
+[h2]Ve Huber[/h2]
+Üç çadır ötede rakibin var ve senden iyi iş çıkarıyor. Bir hikâye var, Sepp'i hâlâ hatırlayan müdavimlerle, ve bir sonu var — er ya da geç Huber meselesi gelir.
+```
+
+---
+
+## Systemanforderungen
+
+Eingetragen am 24.09.2026. Der Speicherplatz ist geschätzt — vor dem Release den
+fertigen Windows-Export messen und den echten Wert setzen.
+
+| Feld | Minimum | Empfohlen |
+|---|---|---|
+| Betriebssystem | Windows 10 (64-bit) | Windows 11 (64-bit) |
+| Prozessor | Intel Core i5-4460 / AMD FX-6300 | Intel Core i5-10400 / AMD Ryzen 5 3600 |
+| Speicher | 8000 MB | 16000 MB |
+| Grafik | GeForce GTX 1050 / Radeon RX 560 (Vulkan 1.2, 4 GB) | GeForce RTX 2060 / Radeon RX 5700 (6 GB) |
+| DirectX | N/A (das Spiel rendert über Vulkan) | N/A |
+| Speicherplatz | 4000 MB | 4000 MB |
+| Netzwerk | Breitband (fuer Koop) | Breitband |
+| Soundkarte | DirectX compatible | DirectX compatible |
+
+Anmerkung je Sprache:
+
+- Deutsch: `Für den Online-Koop wird eine Breitband-Internetverbindung benötigt.`
+- English: `Online co-op requires a broadband connection.`
+- Türkçe: `Çevrimiçi ortak oyun için geniş bant internet bağlantısı gerekir.`
+
+---
+
+## Noch offen
+
+- Genre und Schlagwörter festlegen
+- Screenshots: Spielstand dafür liegt auf Platz 3 (`bash tools/screenshot_stand.sh`)
+- Trailer hochladen (`bash tools/render_trailer.sh`)
+- Store-Grafiken in allen Kapselgrößen — siehe `docs/STEAM_READY.md` Abschnitt B2
+- KI-Angabe im Content Survey: Meshy (Modelle), Suno (Musik), ChatGPT (UI-Grafiken)

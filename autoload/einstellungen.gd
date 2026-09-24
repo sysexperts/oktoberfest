@@ -26,6 +26,40 @@ const STANDARD_TASTEN := {
 	"kalender": KEY_K,
 }
 
+## Gamepad (Xbox-Layout, so auch auf dem Steam Deck). Fest, nicht umbelegbar —
+## siehe _pad_anwenden. A bleibt für „Benutzen" frei, weil das die Taste ist,
+## die man in einer Schicht am häufigsten drückt.
+const PAD_KNOEPFE := {
+	"interact": JOY_BUTTON_A,
+	"springen": JOY_BUTTON_B,
+	"trinken": JOY_BUTTON_X,
+	"ping": JOY_BUTTON_Y,
+	"emote": JOY_BUTTON_LEFT_SHOULDER,
+	"sprint": JOY_BUTTON_RIGHT_SHOULDER,
+	"costume": JOY_BUTTON_DPAD_UP,
+	"kalender": JOY_BUTTON_DPAD_DOWN,
+	"help": JOY_BUTTON_DPAD_LEFT,
+}
+## Laufen mit dem linken Stick: Achse und Richtung (-1 = negativ, 1 = positiv).
+const PAD_ACHSEN := {
+	"move_left": [JOY_AXIS_LEFT_X, -1.0],
+	"move_right": [JOY_AXIS_LEFT_X, 1.0],
+	"move_forward": [JOY_AXIS_LEFT_Y, -1.0],
+	"move_back": [JOY_AXIS_LEFT_Y, 1.0],
+}
+## Umschauen mit dem rechten Stick.
+const BLICK_ACHSEN := {
+	"blick_links": [JOY_AXIS_RIGHT_X, -1.0],
+	"blick_rechts": [JOY_AXIS_RIGHT_X, 1.0],
+	"blick_hoch": [JOY_AXIS_RIGHT_Y, -1.0],
+	"blick_runter": [JOY_AXIS_RIGHT_Y, 1.0],
+}
+## Wie schnell sich der Blick mit dem Stick dreht (Bogenmaß je Sekunde bei vollem
+## Ausschlag). Wird mit der Mausempfindlichkeit aus den Einstellungen skaliert.
+const PAD_BLICK_TEMPO := 2.8
+## Ab hier zaehlt ein Stickausschlag. Godots Vorgabe 0,5 ist fuer Laufen zu grob.
+const STICK_TOTZONE := 0.2
+
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.
 signal screenshot_gespeichert(pfad: String)
 const FOTO_ORDNER := "user://screenshots"
@@ -131,6 +165,60 @@ func _tasten_anwenden() -> void:
 		var ev := InputEventKey.new()
 		ev.physical_keycode = taste(aktion)
 		InputMap.action_add_event(aktion, ev)
+	_pad_anwenden()
+
+## Gamepad fest dazu (Steam Deck, Xbox-Layout). Kommt nach den Tasten, weil
+## _tasten_anwenden alle Ereignisse einer Aktion löscht.
+##
+## Die Belegung ist nicht umbelegbar — wer am Deck spielt, kann sie über Steams
+## eigene Controller-Einstellungen ändern, und ein zweiter Belegungsdialog im
+## Spiel wäre doppelte Arbeit für denselben Zweck.
+func _pad_anwenden() -> void:
+	for aktion: String in PAD_KNOEPFE:
+		_pad_knopf(aktion, int(PAD_KNOEPFE[aktion]))
+	for aktion: String in PAD_ACHSEN:
+		var a: Array = PAD_ACHSEN[aktion]
+		_pad_achse(aktion, int(a[0]), float(a[1]))
+		# Godots Vorgabe ist 0,5 — damit müsste man den Stick halb durchdrücken,
+		# bevor sich die Figur bewegt.
+		InputMap.action_set_deadzone(aktion, STICK_TOTZONE)
+	# Menüführung: Godots eingebaute ui_accept/ui_cancel haben hier nur Tasten,
+	# keinen Knopf (geprüft mit tools/test_pad). Ohne diese zwei Zeilen käme man
+	# am Steam Deck in kein Menü hinein und aus keinem wieder heraus.
+	if not _hat_pad_knopf("ui_accept"):
+		_pad_knopf("ui_accept", JOY_BUTTON_A)
+	if not _hat_pad_knopf("ui_cancel"):
+		_pad_knopf("ui_cancel", JOY_BUTTON_B)
+	# Blick mit dem rechten Stick — als eigene Aktionen, damit player.gd sie wie
+	# die Maus auswerten kann.
+	for aktion: String in BLICK_ACHSEN:
+		if not InputMap.has_action(aktion):
+			InputMap.add_action(aktion)
+		InputMap.action_erase_events(aktion)
+		var a: Array = BLICK_ACHSEN[aktion]
+		_pad_achse(aktion, int(a[0]), float(a[1]))
+		InputMap.action_set_deadzone(aktion, STICK_TOTZONE)
+
+func _hat_pad_knopf(aktion: String) -> bool:
+	if not InputMap.has_action(aktion):
+		return false
+	for ev in InputMap.action_get_events(aktion):
+		if ev is InputEventJoypadButton:
+			return true
+	return false
+
+func _pad_knopf(aktion: String, knopf: int) -> void:
+	if not InputMap.has_action(aktion):
+		InputMap.add_action(aktion)
+	var ev := InputEventJoypadButton.new()
+	ev.button_index = knopf
+	InputMap.action_add_event(aktion, ev)
+
+func _pad_achse(aktion: String, achse: int, richtung: float) -> void:
+	var ev := InputEventJoypadMotion.new()
+	ev.axis = achse
+	ev.axis_value = richtung
+	InputMap.action_add_event(aktion, ev)
 
 func speichern() -> void:
 	var cfg := ConfigFile.new()

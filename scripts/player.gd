@@ -253,8 +253,25 @@ func _unhandled_input(event: InputEvent) -> void:
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
+## Umschauen mit dem rechten Stick. Anders als die Maus liefert ein Stick keine
+## Ereignisse, sondern eine gehaltene Auslenkung — deshalb hier je Bild statt in
+## _unhandled_input.
+func _pad_blick(delta: float) -> void:
+	if _tippt() or Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		return
+	var dreh := Input.get_axis("blick_links", "blick_rechts")
+	var neigung := Input.get_axis("blick_hoch", "blick_runter")
+	if absf(dreh) < 0.01 and absf(neigung) < 0.01:
+		return
+	var tempo := Einstellungen.PAD_BLICK_TEMPO * Einstellungen.maus * delta
+	var y_dir := -1.0 if Einstellungen.maus_y_umkehren else 1.0
+	rotate_y(-dreh * tempo)
+	_pitch = clampf(_pitch - neigung * tempo * y_dir, -PITCH_LIMIT, PITCH_LIMIT)
+	_head.rotation.x = _pitch
+
 func _physics_process(delta: float) -> void:
 	if _is_local:
+		_pad_blick(delta)
 		_sfx_cd -= delta
 		if _kotz_t > 0.0:
 			_kotzen(delta)

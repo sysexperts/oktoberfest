@@ -12,10 +12,10 @@ config_version=5
 
 config/name="Sloptoberfest"
 config/description="Fuehre dein eigenes Festzelt auf dem Sloptoberfest — allein oder mit Freunden."
-config/version="250"
+config/version="251"
 run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/ui/icon_256.png"
 config/programm_generation=4
 
 [autoload]

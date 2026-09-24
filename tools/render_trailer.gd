@@ -472,10 +472,17 @@ class Lauf extends Node:
 		create_tween().tween_property(p, "_net_pos", nach, dauer)
 
 	func _lieferwagen(dauer: float) -> void:
-		gm._van_show(true, gm.VAN_START)
+		# Der Wagen fährt seit v179 eine Wegpunktliste ab (VAN_REIN/VAN_RAUS);
+		# die alten Konstanten VAN_START/VAN_DROP/VAN_END gibt es nicht mehr.
+		# Erster Punkt von VAN_REIN = Zufahrt, letzter = Halt, letzter von
+		# VAN_RAUS = wieder weg.
+		var start: Vector3 = gm.VAN_REIN[0][0]
+		var halt: Vector3 = gm.VAN_REIN[gm.VAN_REIN.size() - 1][0]
+		var weg: Vector3 = gm.VAN_RAUS[gm.VAN_RAUS.size() - 1][0]
+		gm._van_show(true, start)
 		var wagen: Node3D = gm._van_node
 		var tw := create_tween()
-		tw.tween_property(wagen, "position", gm.VAN_DROP, dauer * 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tw.tween_property(wagen, "position", halt, dauer * 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tw.tween_callback(func() -> void:
 			gm._van_honk()
 			for k in 5:
@@ -486,8 +493,8 @@ class Lauf extends Node:
 				_ploppen(paket, 0.4, float(k) * 0.12)
 				_staub(ort, 0.5, ""))
 		tw.tween_interval(dauer * 0.25)
-		tw.tween_property(wagen, "position", gm.VAN_END, dauer).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tw.tween_callback(func() -> void: gm._van_show(false, gm.VAN_END))
+		tw.tween_property(wagen, "position", weg, dauer).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tw.tween_callback(func() -> void: gm._van_show(false, weg))
 
 	func _deko_setzen(arten: Array, orte: Array) -> void:
 		for k in arten.size():

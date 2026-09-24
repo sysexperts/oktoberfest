@@ -930,6 +930,16 @@ func _save_game() -> void:
 		f.close()
 
 ## Kayıt varsa yükle. Başarılıysa true.
+## Unbrauchbaren Spielstand wegräumen statt überschreiben. Der Zeitstempel im
+## Namen verhindert, dass ein zweiter Versuch die erste Kopie wieder auffrisst.
+func _stand_beiseite(pfad: String, grund: String) -> void:
+	var echt := ProjectSettings.globalize_path(pfad)
+	var ziel := "%s.%s_%d" % [echt, grund, int(Time.get_unix_time_from_system())]
+	if DirAccess.rename_absolute(echt, ziel) == OK:
+		push_error("Spielstand unlesbar (%s) — beiseitegelegt als %s" % [grund, ziel])
+	else:
+		push_error("Spielstand unlesbar (%s) und ließ sich nicht umbenennen: %s" % [grund, echt])
+
 func _load_game() -> bool:
 	var pfad := Net.speicherstand_pfad()
 	if not FileAccess.file_exists(pfad):
@@ -941,6 +951,11 @@ func _load_game() -> bool:
 	f.close()
 	var parsed: Variant = JSON.parse_string(txt)
 	if typeof(parsed) != TYPE_DICTIONARY:
+		# Beschädigt (Absturz beim Speichern, volle Platte, Cloud-Konflikt). Bisher
+		# startete das Spiel dann still bei Tag 1 und überschrieb die Datei beim
+		# ersten Speichern — der Rest des Standes war endgültig weg. Jetzt bleibt
+		# sie als .kaputt liegen, damit man sie sich schicken lassen kann.
+		_stand_beiseite(pfad, "kaputt")
 		return false
 	var d: Dictionary = parsed
 	if int(d.get("format", 0)) > Net.SAVE_FORMAT:
