@@ -14,7 +14,7 @@ cd "$(dirname "$0")/.."
 mkdir -p build
 
 GODOT="${GODOT:-/c/Users/vase/OneDrive - Intelego GmbH/Desktop/Godot.exe}"
-DATEN="$APPDATA/Godot/app_userdata/Oktoberfest Simulator"
+DATEN="$APPDATA/Godot/app_userdata/Sloptoberfest"
 SICHERUNG="build/netztest_sicherung"
 SERVER_LOG="build/netztest_server.log"
 CLIENT_LOG="build/netztest_client.log"

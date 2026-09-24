@@ -15,8 +15,10 @@ mkdir -p build
 GODOT="${GODOT:-/c/Users/vase/OneDrive - Intelego GmbH/Desktop/Godot.exe}"
 FF="${FF:-/c/Users/vase/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-9.0.1-full_build/bin/ffmpeg}"
 rm -f build/trailer.avi build/trailer_lauf_godot.log
-"$GODOT" --path . res://tools/render_trailer.tscn --resolution 1920x1080 \
-	--write-movie build/trailer.avi --fixed-fps 30 > build/trailer_lauf_godot.log 2>&1
+# Optionen vor den Szenenpfad: sonst nimmt der Movie-Modus die Fenstergröße aus
+# project.godot (1440x810) statt der gewünschten Auflösung.
+"$GODOT" --path . --resolution 1920x1080 --write-movie build/trailer.avi --fixed-fps 30 \
+	res://tools/render_trailer.tscn > build/trailer_lauf_godot.log 2>&1
 grep -E "TRAILER|SCRIPT ERROR" build/trailer_lauf_godot.log | grep -v "invalid UID" | head -20
 [ -s build/trailer.avi ] || { echo "Aufnahme fehlgeschlagen"; exit 1; }
 # Aufbau (Ladebildschirm, Zelt aufstellen) wegschneiden: ab der Schnittmarke

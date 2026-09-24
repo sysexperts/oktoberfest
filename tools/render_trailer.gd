@@ -57,13 +57,7 @@ class Lauf extends Node:
 		_ueberlagerung_bauen()
 		_sichern()
 		TranslationServer.set_locale("de")
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
-		await _frames(30)
-		gm = get_tree().current_scene
+		await _spiel_starten()
 		TranslationServer.set_locale("de")
 		await _aufbauen()
 		_grafik_aufwerten()
@@ -74,6 +68,28 @@ class Lauf extends Node:
 		_zuruecksichern()
 		print("TRAILER FERTIG")
 		get_tree().quit()
+
+	## Spiel starten und warten, bis es wirklich da ist.
+	## Nicht über Net.start_solo: das geht über den Ladebildschirm, und der
+	## wechselt im Aufnahmemodus (--write-movie) nie weiter — das Werkzeug hat
+	## dann stundenlang den Ladebildschirm gefilmt. Hier direkt in die Spielszene.
+	func _spiel_starten() -> void:
+		Net.solo = true
+		Net.neues_spiel = true
+		Net.slot = 1
+		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+		get_tree().change_scene_to_file(Net.GAME_SCENE)
+		for i in 3000:
+			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
+				break
+			await get_tree().process_frame
+		gm = get_tree().current_scene
+		if gm == null or not gm.has_method("net_book_tent"):
+			push_error("Spielszene kam nicht hoch — Abbruch statt ins Leere filmen.")
+			print("TRAILER ABBRUCH: keine Spielszene")
+			get_tree().quit(1)
+			return
+		await _frames(30)
 
 	# ------------------------------------------------------------ Aufbau
 	func _aufbauen() -> void:

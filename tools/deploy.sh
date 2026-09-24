@@ -314,11 +314,11 @@ echo "version.json: spiel $VERSION · inhalt $INHALT_VERSION · spiel.pck $SHA_H
 # ------------------------------------------------------------------ Download-ZIP
 if [ "$MIT_ZIP" = 1 ]; then
 	schritt "ZIP: aktuelle .exe bauen, hochladen, auf der Download-Seite verlinken"
-	ZIP_NAME="OktoberfestSimulator_v$VERSION.zip"
+	ZIP_NAME="Sloptoberfest_v$VERSION.zip"
 	rm -rf build/zip "build/$ZIP_NAME"
 	mkdir -p build/zip
-	"$GODOT" --headless --path . --export-release "$PRESET" build/zip/OktoberfestSimulator.exe > build/deploy_export_exe.log 2>&1 || true
-	[ -s build/zip/OktoberfestSimulator.exe ] || abbruch "exe-Export fehlgeschlagen (build/deploy_export_exe.log)."
+	"$GODOT" --headless --path . --export-release "$PRESET" build/zip/Sloptoberfest.exe > build/deploy_export_exe.log 2>&1 || true
+	[ -s build/zip/Sloptoberfest.exe ] || abbruch "exe-Export fehlgeschlagen (build/deploy_export_exe.log)."
 	ls build/zip
 	powershell -NoProfile -Command "Compress-Archive -Path 'build/zip/*' -DestinationPath 'build/$ZIP_NAME' -Force"
 	[ -s "build/$ZIP_NAME" ] || abbruch "ZIP nicht erstellt."
@@ -333,7 +333,8 @@ chown www-data:www-data "$ZIP.neu"
 mv "$ZIP.neu" "$ZIP"
 # Link und Versionsangabe auf der Download-Seite umstellen (Sicherung daneben)
 cp index.html "index.html.vor_v$VERSION"
-sed -i -E "s/OktoberfestSimulator_v[0-9]+\.zip/$ZIP/g; s/· v[0-9]+</· v$VERSION</g" index.html
+# Beide Namen: auf der Seite steht bis zur Umbenennung (v251) noch der alte
+sed -i -E "s/(OktoberfestSimulator|Sloptoberfest)_v[0-9]+\.zip/$ZIP/g; s/· v[0-9]+</· v$VERSION</g" index.html
 grep -o "href=\"[^\"]*zip\"" index.html
 SERVER_EOF
 	ZIP_HTTPS="$(curl -fsS "$URL/$ZIP_NAME" | sha256sum | cut -c1-64)"

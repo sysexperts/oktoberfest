@@ -21,10 +21,10 @@ cd "$(dirname "$0")/.."
 mkdir -p build
 
 GODOT="${GODOT:-/c/Users/vase/OneDrive - Intelego GmbH/Desktop/Godot.exe}"
-DATEN="$APPDATA/Godot/app_userdata/Oktoberfest Simulator"
+DATEN="$APPDATA/Godot/app_userdata/Sloptoberfest"
 ALT="build/alt_v100.exe"
 NEU_ORDNER="build/test_exe"
-NEU="$NEU_ORDNER/OktoberfestSimulator.exe"
+NEU="$NEU_ORDNER/Sloptoberfest.exe"
 PAKET="build/test_exe_paket.pck"
 SICHERUNG="build/test_exe_sicherung"
 DATEIEN=(saves einstellungen.cfg game.pck version.txt)
@@ -34,7 +34,7 @@ pruefe() {  # Name, Bedingung-Ergebnis (0 = ok), Info
 	if [ "$2" = 0 ]; then echo "  [OK  ] $1  $3"; else echo "  [FAIL] $1  $3"; FEHLER=$((FEHLER + 1)); fi
 }
 alle_beenden() {
-	taskkill //F //IM OktoberfestSimulator.exe >/dev/null 2>&1 || true
+	taskkill //F //IM Sloptoberfest.exe >/dev/null 2>&1 || true
 	taskkill //F //IM alt_v100.exe >/dev/null 2>&1 || true
 }
 anzahl_prozesse() {  # Image-Name
@@ -90,7 +90,7 @@ echo "=== 2 neue .exe + Paket v$VERSION"
 lager_vorbereiten
 "$NEU" > build/test_exe_2.log 2>&1 &
 sleep 30
-LAEUFT=$(anzahl_prozesse OktoberfestSimulator.exe)
+LAEUFT=$(anzahl_prozesse Sloptoberfest.exe)
 pruefe "neue .exe läuft" "$([ "$LAEUFT" -ge 1 ] && echo 0 || echo 1)" "$LAEUFT Prozess(e) nach 30 s"
 pruefe "kommt ins Hauptmenü" "$(grep -q "weiter ins Hauptmenü" build/test_exe_2.log && echo 0 || echo 1)" ""
 pruefe "keine Skriptfehler" "$(grep -qE "SCRIPT ERROR|Parse Error" build/test_exe_2.log && echo 1 || echo 0)" \
@@ -102,8 +102,8 @@ lager_vorbereiten
 printf '[grafik]\n\nrenderer="gl_compatibility"\n' > "$DATEN/einstellungen.cfg"
 "$NEU" > build/test_exe_3.log 2>&1 &
 sleep 30
-LAEUFT=$(anzahl_prozesse OktoberfestSimulator.exe)
-ZEILE="$(powershell -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"Name='OktoberfestSimulator.exe'\" | Select-Object -First 1).CommandLine" 2>/dev/null | tr -d '\r')"
+LAEUFT=$(anzahl_prozesse Sloptoberfest.exe)
+ZEILE="$(powershell -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"Name='Sloptoberfest.exe'\" | Select-Object -First 1).CommandLine" 2>/dev/null | tr -d '\r')"
 pruefe "Neustart angestoßen" "$(grep -q "Neustart mit --rendering-method gl_compatibility" build/test_exe_3.log && echo 0 || echo 1)" ""
 pruefe "neuer Prozess läuft weiter" "$([ "$LAEUFT" -ge 1 ] && echo 0 || echo 1)" "$LAEUFT Prozess(e) nach 30 s"
 pruefe "mit --rendering-method gestartet" "$(echo "$ZEILE" | grep -q "rendering-method" && echo 0 || echo 1)" "$ZEILE"

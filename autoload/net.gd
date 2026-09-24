@@ -57,6 +57,9 @@ func wechsle_zu(pfad: String) -> void:
 	get_tree().change_scene_to_file(LADE_SZENE)
 
 func _ready() -> void:
+	# Reihenfolge zählt: erst der Ordner des alten Spielnamens, dann der alte
+	# Einzelstand darin.
+	_alten_datenordner_uebernehmen()
 	_alten_spielstand_uebernehmen()
 	# Dedicated server modu: "-- --server" ile başlatılınca otomatik host
 	if OS.get_cmdline_user_args().has("--server"):
@@ -256,6 +259,57 @@ func letzter_slot() -> int:
 			zeit = int(info.saved_at)
 			bester = platz
 	return bester
+
+## Umbenennung „Oktoberfest Simulator" → „Sloptoberfest" (v251): Godot leitet den
+## Datenordner aus dem Projektnamen ab, also wären mit dem neuen Namen alle
+## Spielstände, Einstellungen und Karten schlagartig verschwunden — sie liegen
+## noch im Ordner des alten Namens. Beim ersten Start einmal herüberholen.
+##
+## Der alte Pfad wird aus dem neuen abgeleitet (letzter Ordner ausgetauscht),
+## damit das auf jedem Betriebssystem stimmt und keine Pfade fest im Code stehen.
+const ALTER_ORDNER_NAME := "Oktoberfest Simulator"
+## Was mitkommt. Alles andere im alten Ordner sind Bildschirmfotos, Zwischenspeicher
+## und Testbilder — die bleiben liegen.
+const UEBERNEHMEN := ["einstellungen.cfg", "koop.cfg", "ui.cfg", "karte.json",
+	"oktoberfest_save.json", "inhalt.txt", "spiel.txt"]
+const UEBERNEHMEN_ORDNER := ["saves"]
+## Die Pakete sind zusammen über 900 MB. Kopieren würde den Start minutenlang
+## blockieren und den Platz verdoppeln — sie ziehen deshalb um.
+const VERSCHIEBEN := ["inhalt.pck", "spiel.pck", "game.pck"]
+
+func _alten_datenordner_uebernehmen() -> void:
+	var neu := OS.get_user_data_dir()
+	var eltern := neu.get_base_dir()
+	if eltern == "" or neu.get_file() == ALTER_ORDNER_NAME:
+		return
+	var alt := eltern.path_join(ALTER_ORDNER_NAME)
+	if not DirAccess.dir_exists_absolute(alt):
+		return
+	# Nur übernehmen, solange im neuen Ordner noch nichts liegt — sonst würde ein
+	# alter Stand einen neueren überschreiben.
+	if FileAccess.file_exists(neu.path_join("einstellungen.cfg")) \
+			or DirAccess.dir_exists_absolute(neu.path_join("saves")):
+		return
+	DirAccess.make_dir_recursive_absolute(neu)
+	for datei: String in UEBERNEHMEN:
+		if FileAccess.file_exists(alt.path_join(datei)):
+			DirAccess.copy_absolute(alt.path_join(datei), neu.path_join(datei))
+	for ordner: String in UEBERNEHMEN_ORDNER:
+		_ordner_kopieren(alt.path_join(ordner), neu.path_join(ordner))
+	for datei: String in VERSCHIEBEN:
+		if FileAccess.file_exists(alt.path_join(datei)):
+			DirAccess.rename_absolute(alt.path_join(datei), neu.path_join(datei))
+	print("[Net] Daten aus '%s' übernommen." % ALTER_ORDNER_NAME)
+
+func _ordner_kopieren(von: String, nach: String) -> void:
+	var d := DirAccess.open(von)
+	if d == null:
+		return
+	DirAccess.make_dir_recursive_absolute(nach)
+	for datei in d.get_files():
+		DirAccess.copy_absolute(von.path_join(datei), nach.path_join(datei))
+	for unter in d.get_directories():
+		_ordner_kopieren(von.path_join(unter), nach.path_join(unter))
 
 ## Der alte Einzelstand wird Platz 1 — aber nur, wenn Platz 1 noch frei ist.
 func _alten_spielstand_uebernehmen() -> void:
