@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Lieferwagen prüfen: Bier bestellen, Anfahrt über die Allee, Abladen mit Staub,
 ## Wenden, Abfahrt. Besucher im Weg fliegen. → SHOT_DIR/van_*.png
 
@@ -69,7 +70,7 @@ class Lauf extends Node:
 					geflogen += 1
 			for k in bilder.keys():
 				if t >= k:
-					get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/van_%s.png" % bilder[k])
+					Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/van_%s.png" % bilder[k])
 					print("  %.1f s  Zustand %d  Wagen %s" % [t, gm._van_state, van.global_position if van else "weg"])
 					bilder.erase(k)
 		var pakete := 0

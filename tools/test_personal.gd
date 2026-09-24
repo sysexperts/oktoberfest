@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Personal prüfen: Namen, Lohnwunsch, Huber wirbt ab, Kündigung, Teamliste.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -59,7 +60,7 @@ class Lauf extends Node:
 		if scroll:
 			scroll.scroll_vertical = 10000
 		await _warten(0.4)
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/personal.png")
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/personal.png")
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit()
 	func _warten(s: float) -> void:

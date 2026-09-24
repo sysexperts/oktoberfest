@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Rundgang des Wiesnchefs prüfen: Tutorialschritte der Reihe nach setzen,
 ## warten bis er an der Station steht, ansprechen, Bild. → SHOT_DIR/rundgang_*.png
 
@@ -51,4 +52,4 @@ class Lauf extends Node:
 			t += get_process_delta_time()
 
 	func _bild(pfad: String) -> void:
-		get_viewport().get_texture().get_image().save_png(pfad)
+		Schuss.speichern(get_viewport(), pfad)

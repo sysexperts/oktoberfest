@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Huber prüfen: Wette an Tag 3 anbieten, annehmen, abrechnen; Sabotage auslösen
 ## (Leck kostet Bier bis weggeputzt). → SHOT_DIR/huber_*.png
 
@@ -84,4 +85,4 @@ class Lauf extends Node:
 			t += get_process_delta_time()
 
 	func _bild(n: String) -> void:
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/%s.png" % n)
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/%s.png" % n)

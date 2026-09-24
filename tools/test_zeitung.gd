@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Wiesn-Kurier prüfen: Schlagzeilen für verschiedene Tage, Bild der Zeitung.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -27,7 +28,7 @@ class Lauf extends Node:
 		gm.net_report.rpc({"day": 3, "served": 112, "earn": 2450, "net": 900, "pop": 71, "missed": 2, "toilet": false,
 			"kellner": true, "gekocht": 38, "rausgeworfen": 3})
 		await _warten(4.5)
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/zeitung.png")
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/zeitung.png")
 		print("  Zeitung offen: ", gm.get_node("Zeitung").aktiv)
 		get_tree().quit()
 	func _warten(s: float) -> void:

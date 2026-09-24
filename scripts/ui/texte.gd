@@ -125,7 +125,7 @@ static func mit_tasten(schluessel: String) -> String:
 	for aktion: String in Einstellungen.STANDARD_TASTEN:
 		var platzhalter := "{%s}" % aktion
 		if t.contains(platzhalter):
-			t = t.replace(platzhalter, "[%s]" % Einstellungen.tasten_name(aktion))
+			t = t.replace(platzhalter, "[%s]" % Einstellungen.anzeige_name(aktion))
 	return t
 
 ## Tagesziel als Satz, z. B. „Bediene 43 Gäste" (GameManager._tagesziel_waehlen)

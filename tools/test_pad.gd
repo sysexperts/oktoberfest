@@ -1,4 +1,5 @@
 extends Node
+const Texte := preload("res://scripts/ui/texte.gd")
 ## Gamepad-Belegung prüfen (Steam Deck): Liegt auf jeder Spielaktion auch ein
 ## Knopf oder eine Stickachse? Stimmen die Totzonen? Bleibt die Tastatur heil,
 ## wenn jemand eine Taste umbelegt?
@@ -64,6 +65,18 @@ class Lauf extends Node:
 		Einstellungen.tasten_zuruecksetzen()
 		_check("zurückgesetzt auf E", Einstellungen.taste("interact") == KEY_E)
 		_check("Knopf immer noch da", _hat("interact", InputEventJoypadButton))
+
+		print("-- Hinweistexte")
+		Einstellungen.am_pad = false
+		_check("Tastatur: interact zeigt E", Einstellungen.anzeige_name("interact") == "E",
+			Einstellungen.anzeige_name("interact"))
+		Einstellungen.am_pad = true
+		_check("Gamepad: interact zeigt A", Einstellungen.anzeige_name("interact") == "A",
+			Einstellungen.anzeige_name("interact"))
+		var satz := Texte.mit_tasten("HUD_HELP_HINT")
+		_check("Hinweissatz nutzt Knopfnamen", not satz.contains("[F1]"), satz)
+		Einstellungen.am_pad = false
+		_check("Belegungsmenü zeigt weiter die Taste", Einstellungen.tasten_name("interact") == "E")
 
 		print("-- Menüführung")
 		for aktion in ["ui_accept", "ui_cancel", "ui_up", "ui_down", "ui_left", "ui_right"]:

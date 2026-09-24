@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Büromöbel kaufen: alle neuen Arten, Wiesenbüro-Reiter Einrichtung ansehen.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -31,7 +32,7 @@ class Lauf extends Node:
 		var buero = gm.get_node("HUD")._buero
 		buero._reiter.current_tab = 7
 		await _warten(0.5)
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/moebel_buero.png")
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/moebel_buero.png")
 		get_tree().quit()
 	func _warten(s: float) -> void:
 		var t := 0.0

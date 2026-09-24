@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Tagesziele und Sepps Schulden prüfen (Logik + Bild der Aufgabenkarte und des
 ## Wiesnchef-Gesprächs). → SHOT_DIR/tagesziel_*.png
 
@@ -78,4 +79,4 @@ class Lauf extends Node:
 			t += get_process_delta_time()
 
 	func _bild(pfad: String) -> void:
-		get_viewport().get_texture().get_image().save_png(pfad)
+		Schuss.speichern(get_viewport(), pfad)

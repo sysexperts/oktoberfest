@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Saboteur prüfen: losschicken, erwischen (Geld), nochmal losschicken und ankommen lassen (Leck).
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -30,7 +31,7 @@ class Lauf extends Node:
 		sp.global_position = s.global_position + Vector3(0, 0.1, 2)
 		sp.look_at(s.global_position + Vector3(0, 0.1, 0), Vector3.UP)
 		await _warten(0.3)
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/saboteur.png")
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/saboteur.png")
 		_check("Hinweis", sp._hint_for(s) == "HINT_SABOTEUR", sp._hint_for(s))
 		var geld: int = Game.money
 		gm.net_saboteur_fangen()

@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Kalender prüfen: Plan der Saison, Ansicht an Tag 5, Sondertag wirkt.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -31,7 +32,7 @@ class Lauf extends Node:
 		await _warten(0.4)
 		gm.get_node("Kalender").zeigen()
 		await _warten(0.5)
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/kalender.png")
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/kalender.png")
 		get_tree().quit()
 	func _warten(s: float) -> void:
 		var t := 0.0

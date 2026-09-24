@@ -10,7 +10,7 @@ Nachweis in diesem Ordner liegen.
 | Zelt | `scenes/tent.tscn`, `scenes/zelt/`, `assets/zelt/` | selbst erzeugt (`tools/bake_zelt.gd`, Texturen per Code) — die alten Meshy-Modelle floor/wall/roof sind seit 2026-09-15 entfernt | eigene Arbeit | — | ✅ |
 | Zelt-Einrichtung | `assets/models/tisch,bank,theke.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
 | Kirmesstände (alt) | `assets/models/drehscheibe,enten,schiessstand,suessigkeiten.glb` | Meshy (bezahlt, eigene Vorlagen) → Blender | volle Rechte, keine Nennung | Rechnung ablegen | ✅ |
-| Zeltmusik | `assets/audio/musik/zelt_01.mp3` | AIMusic.so | Tarif prüfen — nur bezahlt ist kommerziell | Lizenzzertifikat holen | ⚠️ |
+| Musik | `assets/music/*.mp3` (13 Stücke) | Suno Pro | bezahlter Tarif: kommerzielle Nutzung erlaubt, Rechte bleiben nach Abo-Ende | Rechnung + Erzeugungsdatum ablegen | ⚠️ |
 | Ton übrig | `assets/audio/sfx`, `ambiente` | — | — | — | fehlt noch |
 | Engine | Godot 4.7 (samt FreeType, Jolt …) | godotengine.org | MIT + Drittlizenzen | Hinweis im Spiel (Mitwirkende) | ✅ |
 | Steam-Anbindung | `addons/godotsteam/**` 4.22.1 | GodotSteam | MIT | `addons/godotsteam/license.md`, Hinweis im Spiel | ✅ |
@@ -83,7 +83,29 @@ docs/lizenzen/
 Screenshots mit sichtbarem Datum reichen. Wichtig ist, dass Rechnungszeitraum
 und Erzeugungsdatum zusammenpassen.
 
-## Musik aus AIMusic.so
+## Musik aus Suno Pro
+
+Die 13 Stuecke in `assets/music/` sind mit **Suno Pro** erzeugt. Suno raeumt
+zahlenden Nutzern die kommerzielle Nutzung ein, und die Rechte an bereits
+erzeugten Stuecken bleiben auch nach Ende des Abos bestehen.
+
+**Vor dem Release selbst nachlesen** (Stand der Bedingungen aendert sich) und in
+diesen Ordner legen:
+
+```
+docs/lizenzen/
+  suno-rechnung.pdf    Abo-Rechnung: Tarif + Zeitraum
+  suno-lizenz.pdf      Bedingungen zur kommerziellen Nutzung, mit Datum
+```
+
+Wichtig ist wie bei Meshy, dass der Abo-Zeitraum die Erzeugungsdaten der Stuecke
+abdeckt.
+
+## Musik aus AIMusic.so (erledigt: Datei entfernt)
+
+Die einzige Datei dieses Anbieters (`zelt_01.mp3`) wurde in v251 geloescht — sie
+war seit dem Wechsel auf Suno nirgends mehr eingebunden. Der Abschnitt bleibt
+als Merkposten stehen, falls doch noch etwas von dort auftaucht.
 
 Laut Anbieter: **kostenlose Nutzer haben keine kommerziellen Rechte** — sie
 dürfen die Stücke nur auf nicht-kommerziellen Plattformen teilen und müssen

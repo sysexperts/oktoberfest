@@ -58,7 +58,7 @@ func _neu() -> void:
 		c.queue_free()
 	_zeile(tr("ACTION_LOOK"), tr("HELP_MOUSE"))
 	for aktion: String in Einstellungen.STANDARD_TASTEN:
-		_zeile(tr("ACTION_" + aktion.to_upper()), Einstellungen.tasten_name(aktion))
+		_zeile(tr("ACTION_" + aktion.to_upper()), Einstellungen.anzeige_name(aktion))
 	_zeile(tr("ACTION_PAUSE"), "Esc")
 
 func _zeile(aktion: String, taste: String) -> void:

@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Minispiel prüfen: startet das Spiel, sucht die erste Bude mit dem Skript aus
 ## MINISPIEL, spielt Würfe im Raster (Neigung × Kraft) durch und zählt, wie viele
 ## Treffer landen — so lässt sich die Schwierigkeit einstellen. Danach eine Runde
@@ -126,7 +127,7 @@ class Lauf extends Node:
 		for i in 30:
 			await get_tree().process_frame
 		var dir := OS.get_environment("SHOT_DIR")
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_blick.png" % art)
+		Schuss.speichern(get_viewport(), dir + "/spiel_%s_blick.png" % art)
 		bude._beenden()
 		var kamera := Camera3D.new()
 		gm.add_child(kamera)
@@ -136,7 +137,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_%s_stand.png" % art)
+		Schuss.speichern(get_viewport(), dir + "/spiel_%s_stand.png" % art)
 		print("MINISPIEL FERTIG")
 		get_tree().quit()
 
@@ -165,7 +166,7 @@ class Lauf extends Node:
 								bude.rollen(randf(), deg_to_rad(randf_range(-9.0, 9.0)))
 					if not bild and modus == "gerade" and runde == 0 and bude._kugel != null and bude._rollt > 0.45:
 						bild = true
-						get_viewport().get_texture().get_image().save_png(dir + "/spiel_kegeln_blick.png")
+						Schuss.speichern(get_viewport(), dir + "/spiel_kegeln_blick.png")
 					await get_tree().process_frame
 				summe += bude.punkte()
 			print("  %s: Schnitt %.1f Punkte" % [modus, summe / 3.0])
@@ -177,7 +178,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_kegeln_stand.png")
+		Schuss.speichern(get_viewport(), dir + "/spiel_kegeln_stand.png")
 		print("MINISPIEL FERTIG")
 
 	## Nagelbalken: Automat „gezielt“ schlägt, wenn Kraft hoch und Hammer mittig ist,
@@ -205,7 +206,7 @@ class Lauf extends Node:
 					bild_in -= get_process_delta_time()
 					if not bild and bild_in <= 0.0 and modus == "gezielt" and runde == 0 and not bude._animation:
 						bild = true
-						get_viewport().get_texture().get_image().save_png(dir + "/spiel_nagelbalken_blick.png")
+						Schuss.speichern(get_viewport(), dir + "/spiel_nagelbalken_blick.png")
 					var los := false
 					match modus:
 						"gezielt":
@@ -232,7 +233,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_nagelbalken_stand.png")
+		Schuss.speichern(get_viewport(), dir + "/spiel_nagelbalken_stand.png")
 		print("MINISPIEL FERTIG")
 
 	## Maßkrugstemmen: Automaten mit unterschiedlich guter Reaktion (Gegensteuern mit
@@ -258,7 +259,7 @@ class Lauf extends Node:
 					bude._process(schritt)
 					if frames == 60 * 12 and runde == 0 and stufe[0] == "normal":
 						await get_tree().process_frame
-						get_viewport().get_texture().get_image().save_png(dir + "/spiel_stemmen_blick.png")
+						Schuss.speichern(get_viewport(), dir + "/spiel_stemmen_blick.png")
 				summe += bude._gehalten
 				punkte += bude.punkte()
 				if bude.laeuft():
@@ -272,7 +273,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_stemmen_stand.png")
+		Schuss.speichern(get_viewport(), dir + "/spiel_stemmen_stand.png")
 		print("MINISPIEL FERTIG")
 
 	## Glücksrad: Automat mit perfektem Timing (klickt, wenn Winkel + Bremsweg auf der 10
@@ -302,7 +303,7 @@ class Lauf extends Node:
 						bild = true
 						for i in 3:
 							await get_tree().process_frame
-						get_viewport().get_texture().get_image().save_png(dir + "/spiel_gluecksrad_blick.png")
+						Schuss.speichern(get_viewport(), dir + "/spiel_gluecksrad_blick.png")
 					await get_tree().process_frame
 				summe += bude.punkte()
 			print("  %s: Schnitt %.1f Punkte" % [modus, summe / 6.0])
@@ -314,7 +315,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_gluecksrad_stand.png")
+		Schuss.speichern(get_viewport(), dir + "/spiel_gluecksrad_stand.png")
 		print("MINISPIEL FERTIG")
 
 	## Entenangeln: ein einfacher Spieler-Automat. Er fährt die Spitze vor die nächste
@@ -348,7 +349,7 @@ class Lauf extends Node:
 				await get_tree().process_frame
 				if not bild and bude._am_haken != null and runde == 0:
 					bild = true
-					get_viewport().get_texture().get_image().save_png(dir + "/spiel_entenangeln_blick.png")
+					Schuss.speichern(get_viewport(), dir + "/spiel_entenangeln_blick.png")
 			print("  RUNDE %d: %d Enten, %d Punkte, %.1f s übrig" % [runde, bude._gefangen, bude.punkte(), bude._zeit_rest])
 			if bude.laeuft():
 				bude._beenden()
@@ -362,7 +363,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(dir + "/spiel_entenangeln_stand.png")
+		Schuss.speichern(get_viewport(), dir + "/spiel_entenangeln_stand.png")
 		print("MINISPIEL FERTIG")
 
 	func _bild_stand(bude: Node, gm: Node, name: String) -> void:
@@ -374,7 +375,7 @@ class Lauf extends Node:
 		kamera.current = true
 		for i in 20:
 			await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_%s_stand.png" % name)
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/spiel_%s_stand.png" % name)
 		kamera.queue_free()
 
 	## Ballonstechen: Werfer, die auf einen Ballon zielen und mit unterschiedlicher
@@ -402,7 +403,7 @@ class Lauf extends Node:
 								bude.werfen()
 					if frames == 60 * 5 and runde == 0 and stufe[0] == "normal":
 						await get_tree().process_frame
-						get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_pfeilwurf_blick.png")
+						Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/spiel_pfeilwurf_blick.png")
 					bude._process(schritt)
 				punkte += bude.punkte()
 				if bude.laeuft():
@@ -431,7 +432,7 @@ class Lauf extends Node:
 							gesehen.erase(i)
 					if frames == 60 * 8 and runde == 0 and stufe[0] == "normal":
 						await get_tree().process_frame
-						get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_maulwurf_blick.png")
+						Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/spiel_maulwurf_blick.png")
 					bude._process(schritt)
 				print("    %s Runde %d: %d Treffer" % [stufe[0], runde, bude._treffer])
 				punkte += bude.punkte()
@@ -461,7 +462,7 @@ class Lauf extends Node:
 						soll = bude.kraft_fuer(float(stufe[2])) + randf_range(-1, 1) * float(stufe[1])
 					if frames == 40 and runde == 0 and stufe[0] == "normal":
 						await get_tree().process_frame
-						get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/spiel_krugschieben_blick.png")
+						Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/spiel_krugschieben_blick.png")
 				punkte += bude.punkte()
 				if bude.laeuft():
 					bude._beenden()

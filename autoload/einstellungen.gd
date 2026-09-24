@@ -59,6 +59,23 @@ const BLICK_ACHSEN := {
 const PAD_BLICK_TEMPO := 2.8
 ## Ab hier zaehlt ein Stickausschlag. Godots Vorgabe 0,5 ist fuer Laufen zu grob.
 const STICK_TOTZONE := 0.2
+## Wie die Knoepfe in Hinweisen heissen. Kurz halten — der Text steht mitten im
+## Satz („Krug nehmen [A]").
+const PAD_NAMEN := {
+	JOY_BUTTON_A: "A",
+	JOY_BUTTON_B: "B",
+	JOY_BUTTON_X: "X",
+	JOY_BUTTON_Y: "Y",
+	JOY_BUTTON_LEFT_SHOULDER: "LB",
+	JOY_BUTTON_RIGHT_SHOULDER: "RB",
+	JOY_BUTTON_DPAD_UP: "↑",
+	JOY_BUTTON_DPAD_DOWN: "↓",
+	JOY_BUTTON_DPAD_LEFT: "←",
+	JOY_BUTTON_DPAD_RIGHT: "→",
+}
+
+## Wurde zuletzt am Gamepad gespielt? Steuert die Hinweistexte, sonst nichts.
+var am_pad := false
 
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.
 signal screenshot_gespeichert(pfad: String)
@@ -87,8 +104,19 @@ func _ready() -> void:
 	anwenden()
 
 func _unhandled_input(event: InputEvent) -> void:
+	_eingabeart_merken(event)
 	if event.is_action_pressed("screenshot") and not event.is_echo():
 		bildschirmfoto()
+
+## Woran wird gerade gespielt? Steuert, ob in Hinweisen „[E]" oder „[A]" steht.
+## Ein Stick driftet im Ruhezustand leicht — darum erst ab halbem Ausschlag.
+func _eingabeart_merken(event: InputEvent) -> void:
+	if event is InputEventJoypadButton:
+		am_pad = true
+	elif event is InputEventJoypadMotion and absf((event as InputEventJoypadMotion).axis_value) > 0.5:
+		am_pad = true
+	elif event is InputEventKey or event is InputEventMouseButton or event is InputEventMouseMotion:
+		am_pad = false
 
 ## Speichert das aktuelle Bild. Gibt den Dateipfad zurück, "" wenn es nicht ging.
 func bildschirmfoto() -> String:
@@ -143,9 +171,18 @@ func aktive_sprache() -> String:
 func taste(aktion: String) -> int:
 	return int(tasten.get(aktion, STANDARD_TASTEN.get(aktion, KEY_NONE)))
 
-## Anzeigename einer Taste, z. B. "E" oder "Shift".
+## Anzeigename einer Taste, z. B. "E" oder "Shift". Immer die Tastatur — das
+## Belegungsmenü zeigt damit, was umbelegt wird.
 func tasten_name(aktion: String) -> String:
 	return OS.get_keycode_string(taste(aktion))
+
+## Was in Hinweisen steht („Krug nehmen [E]"). Wer zuletzt am Gamepad gedrückt
+## hat, bekommt den Knopf gezeigt — sonst stünde am Steam Deck überall eine
+## Taste, die es dort nicht gibt.
+func anzeige_name(aktion: String) -> String:
+	if am_pad and PAD_KNOEPFE.has(aktion):
+		return PAD_NAMEN.get(int(PAD_KNOEPFE[aktion]), tasten_name(aktion))
+	return tasten_name(aktion)
 
 func setze_taste(aktion: String, keycode: int) -> void:
 	tasten[aktion] = keycode

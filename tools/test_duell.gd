@@ -1,4 +1,5 @@
 extends Node
+const Schuss := preload("res://tools/schuss.gd")
 ## Finale prüfen: letzter Wiesn-Tag, Duell starten, der Spieler läuft die Tore
 ## automatisch ab (ohne Rennen), Ergebnis vom Server, Brief nach dem Sieg.
 ## → SHOT_DIR/duell_*.png
@@ -81,4 +82,4 @@ class Lauf extends Node:
 			t += get_process_delta_time()
 
 	func _bild(n: String) -> void:
-		get_viewport().get_texture().get_image().save_png(OS.get_environment("SHOT_DIR") + "/%s.png" % n)
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/%s.png" % n)
