@@ -203,12 +203,28 @@ class Lauf extends Node:
 	func _schicht() -> void:
 		leerlauf = 0.0
 		ohne_bier = 0.0
+		# Sicherheitsgrenze: ohne sie steht der Bot still, wenn die Schicht nicht
+		# endet — und man sieht dem Log nicht an, woran es lag. Ein Spieltag
+		# dauert SHIFT_TIME (300 s), bei DT 0,2 also 1500 Schritte; das Zehnfache
+		# ist grosszuegig und faengt trotzdem jeden Haenger ab.
+		var grenze := int(gm.SHIFT_TIME / DT) * 10
+		var schritte := 0
 		while gm._phase == gm.Phase.SHIFT:
 			if beschaeftigt <= 0.0:
 				_handeln()
 			if int(gm._stock[gm.WARE_BIER]) <= 0 and gm._clock_hour() >= gm.GUEST_START_HOUR:
 				ohne_bier += DT
 			await _schritt()
+			schritte += 1
+			if schritte > grenze:
+				push_error(("Schicht endet nicht: Tag %d, Uhr %.1f, Zelt offen %s, "
+					+ "Restzeit %.1f, Gaeste %d, Pakete %d, Geld %d") % [gm._day,
+					gm._clock_hour(), str(gm._zelt_offen), gm._phase_time,
+					gm._guest_sim.size(), gm._packages.size(), Game.money])
+				print("ABBRUCH: Schicht an Tag %d endet nicht (Zelt offen: %s, Uhr %.1f)"
+					% [gm._day, str(gm._zelt_offen), gm._clock_hour()])
+				gm._end_shift(2)
+				break
 		# Restliche Gäste gehen noch
 		for k in 100:
 			await _schritt()
