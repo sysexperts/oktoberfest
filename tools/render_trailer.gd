@@ -279,7 +279,10 @@ class Lauf extends Node:
 		_titel("Ware ranschaffen.", 0.6, 2.6)
 		_lieferwagen(4.5)
 		_spieler_laufen(2, Vector3(-3.0, 0.1, 13.0), Vector3(0.5, 0.1, 15.0), 4.0, false)
-		# Auf Wagen (haelt bei z 24,5) und Abladeplatz (z 21,4) zugleich schauen
+		# Auf Wagen (haelt bei z 24,5) und Abladeplatz (z 21,4) zugleich schauen.
+		# Von Osten heranfahren wurde ausprobiert und war schlechter: dort steckt
+		# die Kamera im Dach einer Bude. Links ragt jetzt eine Bude ins Bild —
+		# stoert weniger als eine schwarze Flaeche.
 		await _fahrt(Vector3(-7.0, 5.5, 34.0), Vector3(0.0, 1.5, 23.0),
 			Vector3(-5.0, 3.2, 29.5), Vector3(0.0, 1.0, 22.0), 5.0)
 
