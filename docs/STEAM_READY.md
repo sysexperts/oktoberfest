@@ -172,7 +172,21 @@ bei der Deck-Prüfung durch.
 - [x] Totzone 0,2 statt Godots 0,5 — sonst müsste man den Stick halb durchdrücken
 - [x] `ui_accept`/`ui_cancel` hatten keinen Knopf: am Deck wäre man in kein Menü hinein- und aus keinem herausgekommen. Gefunden von `tools/test_pad`
 - [x] Hinweise zeigen am Gamepad Knöpfe statt Tasten („Krug nehmen [A]")
+- [x] Steams Bildschirmtastatur für die Namenseingabe im Warteraum und in der Lobby *(v251)*
 - [ ] **Am echten Gerät prüfen** — ohne Deck ist nur die Zuordnung getestet, nicht das Spielgefühl *(Du)*
+- [ ] **Minispiele, Baumodus und einige Fenster hängen noch an der Maus** *(Ich, eigene Sitzung)*
+
+  17 Stellen prüfen `MOUSE_BUTTON_LEFT` direkt statt einer Aktion. Am Gamepad
+  passiert dort nichts. Sie zerfallen in drei Gruppen:
+
+  | Gruppe | Dateien | Aufwand |
+  |---|---|---|
+  | einfacher Klick | `gluecksrad`, `pfeilwurf`, `schiessstand`, `player`, `dialog`, `emote_rad`, `kino`, `zeitung` | klein: Aktion statt Maustaste |
+  | halten und loslassen | `dosenwurf`, `entenangeln`, `hau_den_lukas`, `kegeln`, `krugschieben`, `nagelbalken`, `ringwurf` | mittel: gedrückt/losgelassen sauber trennen |
+  | Klick auf eine Bildschirmstelle | `maulwurf`, `baumodus` | groß: braucht einen Cursor, den man mit dem Stick führt |
+
+  Das ist keine Sucherei-und-Ersetzen-Arbeit und gehört ausprobiert, nicht nur
+  kompiliert — deshalb habe ich es nicht nachts nebenbei gemacht.
 - [ ] Weltbeschriftungen (Fass, Lager) aktualisieren sich erst beim nächsten Setzen; wer mitten im Spiel auf Gamepad wechselt, sieht dort kurz noch Tasten *(Ich, klein)*
 - [ ] Bildschirmtastatur für die Namenseingabe im Warteraum *(Ich)*
 - [ ] Steam-Input-Konfiguration in Steamworks hinterlegen *(Du)*
