@@ -602,6 +602,28 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_HAND_ABLEGEN" if carry_state != 0 or not extra_kruege.is_empty() else ""
 	if t.has_method("ist_abgelegt"):
 		return "HINT_AUFHEBEN" if carry_state == 0 else ""
+	if t is Braustation:
+		var st: Dictionary = _world.brau_stand(int((t as Braustation).schritt)) if _world.has_method("brau_stand") else {}
+		if bool(st.get("fertig", false)):
+			# Bottich fertig: weiter zum Kessel. Kessel fertig: ins Gärfass.
+			return "HINT_BRAU_WEITER" if int((t as Braustation).schritt) == 1 else "HINT_BRAU_INS_FASS"
+		if not bool(st.get("bereit", true)):
+			return "HINT_BRAU_ERST_MAISCHE"
+		if int(st.get("zutat", 0)) <= 0:
+			return "HINT_BRAU_MALZ_FEHLT" if int((t as Braustation).schritt) == 1 else "HINT_BRAU_HOPFEN_FEHLT"
+		return "HINT_BRAU_RUEHREN" if int((t as Braustation).schritt) == 1 else "HINT_BRAU_KOCHEN"
+	if t is Gaerfass:
+		var idx: int = _world.gaerfass_index(t) if _world.has_method("gaerfass_index") else -1
+		var fass: Dictionary = _world.gaerfass_stand(idx) if _world.has_method("gaerfass_stand") else {}
+		match int(fass.get("zustand", 0)):
+			1:
+				return "HINT_GAERT"
+			2:
+				return "HINT_GAERFASS_FERTIG"
+			_:
+				if _world.has_method("sud_fertig") and _world.sud_fertig():
+					return "HINT_GAERFASS_FUELLEN"
+				return "HINT_GAERFASS_LEER"
 	if t is Kellertuer:
 		# Zu: sagen, woran es liegt. Offen: die Tür braucht keinen Hinweis.
 		if (t as Kellertuer).ist_offen():
@@ -896,12 +918,22 @@ func _handle_interaction(delta: float) -> void:
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				if _world.has_method("open_booking_ui"):
 					_world.open_booking_ui()
+		elif _current_target is Gaerfass:
+			# Sud mit Hefe ins Fass — danach gärt es fünf Minuten
+			if _world.has_method("net_gaerfass_fuellen"):
+				_world.net_gaerfass_fuellen.rpc_id(1, _world.gaerfass_index(_current_target))
+				_sfx("pop")
 		elif _current_target is Caravan:
 			# Uyu → sonraki gün (sadece molada)
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				_world.net_sleep.rpc_id(1)
 				if _sfx_node:
 					_sfx_node.play_oder("tuer", "pop")
+	# Brauen: Halten ruehrt im Bottich bzw. kocht im Kessel (Server rechnet)
+	if Input.is_action_pressed("interact") and _current_target is Braustation:
+		if _world.has_method("net_brauen"):
+			_world.net_brauen.rpc_id(1, int((_current_target as Braustation).schritt))
+			_sfx_loop("glug" if int((_current_target as Braustation).schritt) == 1 else "sizzle")
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			if carry_fill <= 0.0:

@@ -22,3 +22,12 @@ shape = SubResource("Kol")
 
 [node name="Ansprechpunkt" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+
+[node name="Anzeige" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50, 0)
+billboard = 1
+pixel_size = 0.004
+font_size = 44
+outline_size = 12
+modulate = Color(1, 0.86, 0.5, 1)
+text = ""

@@ -885,6 +885,10 @@ func _save_game() -> void:
 		"upg_marketing": _upg_marketing,
 		"upg_deko": _upg_deko,
 		"lieferproblem": _lieferproblem,
+		"zutat": _zutat.duplicate(),
+		"gaerfaesser": _gaerfaesser.duplicate(true),
+		"maische": _maische, "maische_fertig": _maische_fertig,
+		"sud": _sud, "sud_fertig": _sud_fertig, "sud_hopfen": _sud_hopfen,
 		"popularity": _popularity,
 		"shift_num": _shift_num,
 		"tables": tables,
@@ -951,6 +955,23 @@ func _load_game() -> bool:
 	_upg_marketing = int(d.get("upg_marketing", 0))
 	_upg_deko = int(d.get("upg_deko", 0))
 	_lieferproblem = bool(d.get("lieferproblem", false))
+	var zut: Variant = d.get("zutat", {})
+	if zut is Dictionary:
+		for art: String in _zutat.keys():
+			_zutat[art] = int((zut as Dictionary).get(art, 0))
+	var gf: Variant = d.get("gaerfaesser", [])
+	if gf is Array:
+		for i in mini((gf as Array).size(), _gaerfaesser.size()):
+			var e: Variant = (gf as Array)[i]
+			if e is Dictionary:
+				_gaerfaesser[i] = {"zustand": int((e as Dictionary).get("zustand", 0)),
+					"rest": float((e as Dictionary).get("rest", 0.0)),
+					"menge": int((e as Dictionary).get("menge", 0))}
+	_maische = float(d.get("maische", 0.0))
+	_maische_fertig = bool(d.get("maische_fertig", false))
+	_sud = float(d.get("sud", 0.0))
+	_sud_fertig = bool(d.get("sud_fertig", false))
+	_sud_hopfen = bool(d.get("sud_hopfen", false))
 	_popularity = clampf(float(d.get("popularity", POP_START)), 5.0, 100.0)
 	_shift_num = int(d.get("shift_num", 0))
 	var lic: Variant = d.get("lic", {})
@@ -1434,6 +1455,32 @@ func _vermietung_aktualisieren() -> void:
 ## Ab welcher Zeltstufe der Braukeller offen ist — vorher gehoert er noch der
 ## Brauerei. „Einmal ausgebaut" heisst Stufe 2.
 const KELLER_AB_STUFE := 2
+
+# ================================================= Braukeller (Hausbier)
+## Rezept: Malz + Wasser (Bottich ruehren) -> Kochen + Hopfen (Sudkessel) ->
+## Hefe ins Gaerfass -> fuenf Minuten gaeren -> ins Transportfass -> oben ins
+## Thekenfass. Warum ueberhaupt brauen: gekauftes Bier wird mit jedem Tag
+## teurer (Wirtschaft.kosten_faktor, bis zum Doppelten), die Zutaten unten
+## nicht. Ab etwa Tag 6 ist Brauen billiger, am Saisonende halb so teuer.
+## Preis je Portion — ein Ansatz braucht je eine und ergibt ANSATZ_MENGE Bier
+const ZUTAT_PREIS := {"malz": 60, "hopfen": 40, "hefe": 20}
+const ANSATZ_MENGE := 60
+const GAER_DAUER := 300.0
+## Fortschritt je gehaltenem Tastendruck (wie CLEAN_PER_CALL beim Putzen)
+const BRAU_PER_CALL := 0.05
+## Bei diesem Kochfortschritt kommt der Hopfen dazu
+const HOPFEN_AB := 0.6
+
+var _zutat := {"malz": 0, "hopfen": 0, "hefe": 0}
+## Bottich und Kessel: Fortschritt 0 bis 1, danach fertig
+var _maische := 0.0
+var _maische_fertig := false
+var _sud := 0.0
+var _sud_fertig := false
+var _sud_hopfen := false
+## Je Gaerfass: zustand 0 leer / 1 gaert / 2 fertig, rest in Sekunden, menge Bier
+var _gaerfaesser := [{"zustand": 0, "rest": 0.0, "menge": 0},
+	{"zustand": 0, "rest": 0.0, "menge": 0}, {"zustand": 0, "rest": 0.0, "menge": 0}]
 
 ## Tür zum Braukeller auf- oder zumachen (scenes/brau/kellertuer.tscn)
 func _keller_tuer_aktualisieren(sofort := false) -> void:
@@ -3914,6 +3961,180 @@ func net_buy_einrichtung(art: String) -> void:
 	_melde("MSG_DECO_BOUGHT", [Katalog.name_key(art)], 2)
 	_broadcast_meta()
 
+## Brauzutat kaufen (Wiesenbuero, Reiter Ware). Ohne Tagesaufschlag - genau das
+## macht Brauen mit der Zeit guenstiger als Kaufen.
+@rpc("any_peer", "reliable", "call_local")
+func net_buy_zutat(art: String, menge: int) -> void:
+	if not multiplayer.is_server() or not ZUTAT_PREIS.has(art):
+		return
+	if _tent_stage < KELLER_AB_STUFE:
+		_popup_to_sender("POPUP_KELLER_ZU")
+		return
+	var anzahl := clampi(menge, 1, 10)
+	var kosten: int = int(ZUTAT_PREIS[art]) * anzahl
+	if not _afford(kosten):
+		_fehler("MSG_NO_MONEY", ["ZUTAT_%s" % art.to_upper(), _eur(kosten)])
+		return
+	Game.add_money(-kosten)
+	_goods_cost += kosten
+	_zutat[art] = int(_zutat.get(art, 0)) + anzahl
+	_melde("MSG_ZUTAT_GEKAUFT", [anzahl, "ZUTAT_%s" % art.to_upper(), _eur(kosten)], 2)
+	_brau_senden()
+
+## Ruehren im Maischbottich bzw. Kochen im Sudkessel - beim Halten wiederholt
+## gerufen, wie net_clean beim Putzen. schritt: 1 Bottich, 2 Kessel.
+@rpc("any_peer", "reliable", "call_local")
+func net_brauen(schritt: int) -> void:
+	if not multiplayer.is_server() or _tent_stage < KELLER_AB_STUFE:
+		return
+	if schritt == 1:
+		if _maische_fertig:
+			return
+		if _maische <= 0.0:
+			# Malz wird beim ersten Ruehren verbraucht. Die Pruefung darf nur
+			# hier stehen: sonst bricht jedes weitere Ruehren ab, weil das Malz
+			# schon weg ist.
+			if int(_zutat.get("malz", 0)) <= 0:
+				return
+			_zutat["malz"] = int(_zutat["malz"]) - 1
+		_maische = minf(_maische + BRAU_PER_CALL, 1.0)
+		if _maische >= 1.0:
+			_maische_fertig = true
+			_melde("MSG_MAISCHE_FERTIG", [], 2)
+		_brau_senden()
+		return
+	if schritt == 2:
+		if _sud_fertig or not _maische_fertig:
+			return
+		_sud = minf(_sud + BRAU_PER_CALL, 1.0)
+		# Hopfen kommt in der zweiten Haelfte dazu
+		if not _sud_hopfen and _sud >= HOPFEN_AB:
+			if int(_zutat.get("hopfen", 0)) <= 0:
+				_sud = HOPFEN_AB
+				_fehler("MSG_HOPFEN_FEHLT")
+				_brau_senden()
+				return
+			_zutat["hopfen"] = int(_zutat["hopfen"]) - 1
+			_sud_hopfen = true
+			_melde("MSG_HOPFEN_DRIN", [], 2)
+		if _sud >= 1.0:
+			_sud_fertig = true
+			_maische = 0.0
+			_maische_fertig = false
+			_melde("MSG_SUD_FERTIG", [], 2)
+		_brau_senden()
+
+## Sud mit Hefe in ein freies Gaerfass umfuellen - danach gaert es fuenf Minuten.
+@rpc("any_peer", "reliable", "call_local")
+func net_gaerfass_fuellen(index: int) -> void:
+	if not multiplayer.is_server() or _tent_stage < KELLER_AB_STUFE:
+		return
+	if index < 0 or index >= _gaerfaesser.size():
+		return
+	var fass: Dictionary = _gaerfaesser[index]
+	if int(fass.zustand) != 0 or not _sud_fertig:
+		return
+	if int(_zutat.get("hefe", 0)) <= 0:
+		_fehler("MSG_HEFE_FEHLT")
+		return
+	_zutat["hefe"] = int(_zutat["hefe"]) - 1
+	fass.zustand = 1
+	fass.rest = GAER_DAUER
+	fass.menge = 0
+	_gaerfaesser[index] = fass
+	_sud = 0.0
+	_sud_fertig = false
+	_sud_hopfen = false
+	_melde("MSG_GAERUNG_START", [int(GAER_DAUER) / 60], 2)
+	_brau_senden()
+
+## Gaerung mitzaehlen - laeuft auch in der Pause weiter, fuenf Minuten sind
+## fuenf Minuten, egal ob das Zelt offen ist.
+func _gaerung_zaehlen(delta: float) -> void:
+	var geaendert := false
+	for i in _gaerfaesser.size():
+		var fass: Dictionary = _gaerfaesser[i]
+		if int(fass.zustand) != 1:
+			continue
+		fass.rest = maxf(0.0, float(fass.rest) - delta)
+		if float(fass.rest) <= 0.0:
+			fass.zustand = 2
+			fass.menge = ANSATZ_MENGE
+			_melde("MSG_GAERUNG_FERTIG", [ANSATZ_MENGE], 2)
+		_gaerfaesser[i] = fass
+		geaendert = true
+	if geaendert:
+		_brau_senden()
+
+## Stand der Brauerei an alle schicken
+func _brau_senden() -> void:
+	if not multiplayer.is_server():
+		return
+	var zustaende := PackedInt32Array()
+	var reste := PackedFloat32Array()
+	var mengen := PackedInt32Array()
+	for fass: Dictionary in _gaerfaesser:
+		zustaende.append(int(fass.zustand))
+		reste.append(float(fass.rest))
+		mengen.append(int(fass.menge))
+	_net_brau.rpc(_maische, _maische_fertig, _sud, _sud_fertig, zustaende, reste, mengen)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_brau(maische: float, maische_fertig: bool, sud: float, sud_fertig: bool,
+		zustaende: PackedInt32Array, reste: PackedFloat32Array, mengen: PackedInt32Array) -> void:
+	_maische = maische
+	_maische_fertig = maische_fertig
+	_sud = sud
+	_sud_fertig = sud_fertig
+	for i in mini(zustaende.size(), _gaerfaesser.size()):
+		_gaerfaesser[i] = {"zustand": zustaende[i], "rest": reste[i], "menge": mengen[i]}
+	_brau_anzeigen()
+
+## Fortschritt und Gaerzeit an den Gefaessen im Keller zeigen
+func _brau_anzeigen() -> void:
+	for st in get_tree().get_nodes_in_group("braustation"):
+		if not st.has_method("setze_fortschritt"):
+			continue
+		if int(st.schritt) == 1:
+			st.setze_fortschritt(_maische, _maische_fertig)
+		else:
+			st.setze_fortschritt(_sud, _sud_fertig)
+	var faesser := _gaerfass_knoten()
+	for i in mini(faesser.size(), _gaerfaesser.size()):
+		var fass: Dictionary = _gaerfaesser[i]
+		if faesser[i].has_method("setze"):
+			faesser[i].setze(int(fass.zustand), float(fass.rest), int(fass.menge))
+
+## Gaerfaesser in fester Reihenfolge (nach Knotenname), damit Index und Fass
+## auf jedem Rechner zusammenpassen
+func _gaerfass_knoten() -> Array:
+	var faesser := get_tree().get_nodes_in_group("gaerfass")
+	faesser.sort_custom(func(a, b): return String(a.name) < String(b.name))
+	return faesser
+
+func gaerfass_index(knoten: Node) -> int:
+	return _gaerfass_knoten().find(knoten)
+
+## Stand fuer die Hinweise am Fadenkreuz (scripts/player.gd)
+func brau_stand(schritt: int) -> Dictionary:
+	if schritt == 1:
+		return {"fortschritt": _maische, "fertig": _maische_fertig,
+			"zutat": int(_zutat.get("malz", 0)), "bereit": true}
+	return {"fortschritt": _sud, "fertig": _sud_fertig,
+		"zutat": int(_zutat.get("hopfen", 0)), "bereit": _maische_fertig}
+
+func gaerfass_stand(index: int) -> Dictionary:
+	if index < 0 or index >= _gaerfaesser.size():
+		return {}
+	return _gaerfaesser[index]
+
+func sud_fertig() -> bool:
+	return _sud_fertig
+
+func zutat_stand() -> Dictionary:
+	return _zutat.duplicate()
+
 @rpc("authority", "reliable", "call_local")
 func _add_einrichtung(did: int, art: String, x: float, z: float, rot: float) -> void:
 	if _einrichtung_nodes.has(did) or not Katalog.ARTEN.has(art):
@@ -4150,6 +4371,7 @@ func _process(delta: float) -> void:
 	elif not _guest_sim.is_empty():
 		# Nach Feierabend laufen die restlichen Gäste noch hinaus
 		_update_guests(delta)
+	_gaerung_zaehlen(delta)   # Gärung läuft in beiden Phasen weiter
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
 	_apply_stage(_clock_hour() >= 0.0)
@@ -5324,6 +5546,7 @@ func _buero_state() -> Dictionary:
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
+		"zutat": _zutat.duplicate(), "keller": keller_offen(),
 		"haelt_tisch": haelt_tisch, "preis_min": preis.x, "preis_max": preis.y,
 		"essenpreis": _essenpreis, "essen_min": essenpreis_grenzen().x, "essen_max": essenpreis_grenzen().y,
 		"zelt_offen": _zelt_offen,

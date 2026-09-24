@@ -37,6 +37,11 @@ const PERSONAL := {
 const KUENSTLER := {1: ["Strassenmusiker", "musik"], 2: ["Blaskapelle", "musik"], 3: ["StarAct", "stern"]}
 ## Sorte -> [Zeile, Symbolname, Name]
 const WARE := {1: ["Bier", "bier", "GOODS_BEER"], 2: ["Zutaten", "brezn", "GOODS_FOOD"]}
+## Brauzutaten fuer den Keller: Zeile, Symbol, Name, Schluessel fuer den Server.
+## Preis kommt aus GameManager.ZUTAT_PREIS, ohne Tagesaufschlag.
+const ZUTATEN := [["ZutatMalz", "aehre", "ZUTAT_MALZ", "malz"],
+	["ZutatHopfen", "pflanze", "ZUTAT_HOPFEN", "hopfen"],
+	["ZutatHefe", "topf", "ZUTAT_HEFE", "hefe"]]
 const PAKETE := [1, 5, 10]
 ## Tutorialschritt -> [Reiter, Zeile]; Schritte wie in GameManager._quest_done.
 const TUTORIAL_ZIEL := {
@@ -79,6 +84,8 @@ func _ready() -> void:
 		_verbinde(KUENSTLER[stufe][0], func(_i: int) -> void: _rpc("net_book_artist", [stufe]))
 	for sorte: int in WARE:
 		_verbinde(WARE[sorte][0], func(i: int) -> void: _rpc("net_order_goods", [sorte, PAKETE[i]]))
+	for zutat: Array in ZUTATEN:
+		_verbinde(str(zutat[0]), func(i: int) -> void: _rpc("net_buy_zutat", [str(zutat[3]), PAKETE[i]]))
 	for art: String in Katalog.ARTEN:
 		_verbinde(Katalog.ARTEN[art].zeile, func(_i: int) -> void: _rpc("net_buy_einrichtung", [art]))
 	Einstellungen.geaendert.connect(_neu)
@@ -330,6 +337,31 @@ func _reiter_ware(ohne_zelt: String) -> void:
 			if erster_grund == "":
 				erster_grund = g
 		z.grund(erster_grund)
+	_zeilen_zutaten(ohne_zelt)
+
+## Brauzutaten: erst nach dem ersten Zeltausbau zu haben, weil vorher der
+## Braukeller verschlossen ist. Kein Tagesaufschlag — deshalb lohnt Brauen mit
+## der Zeit immer mehr.
+func _zeilen_zutaten(ohne_zelt: String) -> void:
+	var offen := bool(_z.get("keller", false))
+	var vorrat: Dictionary = _z.get("zutat", {})
+	for zutat: Array in ZUTATEN:
+		var z := _zeile(str(zutat[0]))
+		var preis: int = int(_gm.ZUTAT_PREIS[str(zutat[3])])
+		z.symbol(str(zutat[1]))
+		z.setze(tr(str(zutat[2])), "%s\n%s" % [tr("GOODS_ZUTAT_INFO"),
+			tr("GOODS_STOCK") % [int(vorrat.get(str(zutat[3]), 0)), 0]])
+		var sperre := ohne_zelt
+		if sperre == "" and not offen:
+			sperre = tr("WHY_KELLER_ZU")
+		var erster := ""
+		for i in PAKETE.size():
+			var kosten: int = preis * int(PAKETE[i])
+			var g := _kauf_grund(kosten, sperre, false, false)
+			z.knopf(i, tr("BTN_PACKS") % [PAKETE[i], Texte.euro(kosten)], g != "")
+			if erster == "":
+				erster = g
+		z.grund(erster)
 
 ## Lampen und Deko — gleiche Regeln wie GameManager.net_buy_einrichtung.
 func _reiter_einrichtung(ohne_zelt: String) -> void:

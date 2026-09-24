@@ -1062,6 +1062,61 @@ class Lauf extends Node:
 		gm._klo_setzen(-1)
 		gm._has_toilet = klo_vorher
 
+		print("  -- Brauen: Malz und Wasser, Kochen mit Hopfen, Gaerung")
+		var stufe_brau: int = gm._tent_stage
+		gm._tent_stage = 1
+		Game.add_money(2000)
+		gm.net_buy_zutat.rpc_id(1, "malz", 1)
+		await _frames(3)
+		_check("ohne Ausbau keine Zutaten", int(gm.zutat_stand()["malz"]) == 0, str(gm.zutat_stand()))
+		gm._tent_stage = gm.KELLER_AB_STUFE
+		for art: String in ["malz", "hopfen", "hefe"]:
+			gm.net_buy_zutat.rpc_id(1, art, 1)
+		await _frames(3)
+		var vorrat: Dictionary = gm.zutat_stand()
+		_check("Zutaten gekauft", int(vorrat["malz"]) == 1 and int(vorrat["hopfen"]) == 1
+			and int(vorrat["hefe"]) == 1, str(vorrat))
+		# Ruehren: erst nach genug Haltezeit ist die Maische fertig
+		for i in 25:
+			gm.net_brauen.rpc_id(1, 1)
+			await get_tree().process_frame
+		_check("Maische fertig nach dem Ruehren", bool(gm.brau_stand(1)["fertig"]), str(gm.brau_stand(1)))
+		_check("Malz ist verbraucht", int(gm.zutat_stand()["malz"]) == 0, str(gm.zutat_stand()))
+		# Kochen: der Hopfen geht bei 60 Prozent hinein
+		for i in 25:
+			gm.net_brauen.rpc_id(1, 2)
+			await get_tree().process_frame
+		_check("Sud fertig nach dem Kochen", gm.sud_fertig(), str(gm.brau_stand(2)))
+		_check("Hopfen ist verbraucht", int(gm.zutat_stand()["hopfen"]) == 0, str(gm.zutat_stand()))
+		# Gaerfass fuellen und die Gaerung vorspulen
+		gm.net_gaerfass_fuellen.rpc_id(1, 0)
+		await _frames(3)
+		var fass0: Dictionary = gm.gaerfass_stand(0)
+		_check("Gaerung laeuft im ersten Fass", int(fass0.zustand) == 1
+			and absf(float(fass0.rest) - gm.GAER_DAUER) < 2.0, str(fass0))
+		_check("Hefe ist verbraucht und der Kessel leer",
+			int(gm.zutat_stand()["hefe"]) == 0 and not gm.sud_fertig(), str(gm.zutat_stand()))
+		_check("Gaerdauer sind fuenf Minuten", is_equal_approx(gm.GAER_DAUER, 300.0), "%.0f s" % gm.GAER_DAUER)
+		gm._gaerfaesser[0]["rest"] = 0.05
+		gm._gaerung_zaehlen(0.1)
+		await _frames(3)
+		var fass_fertig: Dictionary = gm.gaerfass_stand(0)
+		_check("Nach der Gaerung liegt Hausbier im Fass", int(fass_fertig.zustand) == 2
+			and int(fass_fertig.menge) == gm.ANSATZ_MENGE, str(fass_fertig))
+		# Am Fass sagt der Hinweis, dass es fertig ist
+		var sp_b := gm.get_node("Players").get_child(0) as Player
+		var fass_knoten: Node = gm._gaerfass_knoten()[0]
+		_check("Hinweis am fertigen Fass", sp_b._hint_for(fass_knoten) == "HINT_GAERFASS_FERTIG",
+			sp_b._hint_for(fass_knoten))
+		# Brauen ist billiger als Kaufen: ein Ansatz kostet 120 Euro fuer 60 Mass
+		var zutat_kosten: int = int(gm.ZUTAT_PREIS["malz"]) + int(gm.ZUTAT_PREIS["hopfen"]) + int(gm.ZUTAT_PREIS["hefe"])
+		# Wirtschaft ist im Test nicht eingebunden — über den GameManager rechnen
+		var kauf_spaet: int = gm.Wirtschaft.paketpreis(int(gm.PACK_COST[gm.WARE_BIER]), 16) * 6
+		_check("ein Ansatz ist guenstiger als 60 Mass gekauft am Tag 16",
+			zutat_kosten < kauf_spaet, "%d gegen %d Euro" % [zutat_kosten, kauf_spaet])
+		gm._gaerfaesser[0] = {"zustand": 0, "rest": 0.0, "menge": 0}
+		gm._tent_stage = stufe_brau
+
 		print("  -- Braukeller: Treppe frei, Tuer erst nach dem Ausbau")
 		var keller: Node3D = gm.get_node_or_null("Braukeller")
 		_check("Braukeller in der Szene", keller != null, str(keller))

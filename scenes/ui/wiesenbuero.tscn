@@ -287,6 +287,18 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="ZutatMalz" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZutatHopfen" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZutatHefe" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Bilanz" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=2120920256]
 visible = false
 layout_mode = 2
