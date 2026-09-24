@@ -186,11 +186,11 @@ class Lauf extends Node:
 				gm._artist_tier = 3
 				gm._remove_artists()
 				gm._spawn_artists()
+				# Ohne Haengelaternen — die brauchen einen Balken ueber sich.
 				_deko_setzen(["lichtergirlande", "lichtergirlande", "kronleuchter", "kronleuchter",
-					"kronleuchter", "banner", "riesenbrezel", "haengelaterne", "haengelaterne"],
+					"kronleuchter", "banner", "riesenbrezel"],
 					[Vector2(-5.0, 1.0), Vector2(5.0, 1.0), Vector2(-6.0, -3.0), Vector2(0.0, -3.0),
-					Vector2(6.0, -3.0), Vector2(-11.6, -2.0), Vector2(11.6, -6.0),
-					Vector2(-3.0, 5.0), Vector2(3.0, 5.0)])
+					Vector2(6.0, -3.0), Vector2(-11.6, -2.0), Vector2(11.6, -6.0)])
 				await _gaeste_setzen(96)
 				_kruege_fuellen()
 				_kellner(Vector3(-6.0, 0.1, -2.0), 0.0)

@@ -306,8 +306,10 @@ class Lauf extends Node:
 					gm._remove_artists()
 					gm._artist_tier = 3
 					gm._spawn_artists()
-					_deko_setzen(["banner", "riesenbrezel", "haengelaterne", "haengelaterne"],
-						[Vector2(-11.6, -2.0), Vector2(11.6, -6.0), Vector2(-3.0, 5.0), Vector2(3.0, 5.0)])
+					# Keine Haengelaternen: die haengen auf 3,6 m und brauchen einen
+					# Balken ueber sich. Frei in den Raum gesetzt schweben sie im Bild.
+					_deko_setzen(["banner", "riesenbrezel"],
+						[Vector2(-11.6, -2.0), Vector2(11.6, -6.0)])
 			_beschriftungen_aus()
 			for k in 20:
 				uhr = minf(21.0, uhr + 0.02)

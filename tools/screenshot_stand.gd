@@ -103,10 +103,11 @@ class Lauf extends Node:
 
 	func _deko() -> void:
 		var arten := ["lichtergirlande", "lichtergirlande", "kronleuchter", "kronleuchter",
-			"kronleuchter", "banner", "riesenbrezel", "haengelaterne", "haengelaterne"]
+			"kronleuchter", "banner", "riesenbrezel"]
+		# Haengelaternen bleiben draussen: sie sitzen auf 3,6 m und brauchen einen
+		# Balken ueber sich, sonst schweben sie frei im Raum.
 		var orte := [Vector2(-5.0, 1.0), Vector2(5.0, 1.0), Vector2(-6.0, -3.0), Vector2(0.0, -3.0),
-			Vector2(6.0, -3.0), Vector2(-11.6, -2.0), Vector2(11.6, -6.0),
-			Vector2(-3.0, 5.0), Vector2(3.0, 5.0)]
+			Vector2(6.0, -3.0), Vector2(-11.6, -2.0), Vector2(11.6, -6.0)]
 		var nr := 800
 		for k in arten.size():
 			var ort: Vector2 = orte[k]
