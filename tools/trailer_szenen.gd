@@ -30,7 +30,7 @@ class Lauf extends Node:
 	## "menge": um diesen Punkt werden die Kirmes-Besucher zusammengeholt,
 	## sonst verteilen sie sich über das ganze Gelände und das Bild wirkt leer.
 	const SZENEN := [
-		{"name": "kirmes_gasse", "ort": Vector3(-26.0, 1.75, 10.0), "ziel": Vector3(-14.0, 1.6, -6.0),
+		{"name": "kirmes_gasse", "ort": Vector3(-25.0, 2.6, 12.0), "ziel": Vector3(-14.0, 1.6, -6.0),
 			"uhr": 18.6, "fov": 60.0, "aufbau": "draussen", "menge": Vector3(-18.0, 0.0, 0.0)},
 		{"name": "kirmes_schraeg", "ort": Vector3(-34.0, 9.0, 26.0), "ziel": Vector3(-12.0, 1.5, -4.0),
 			"uhr": 18.6, "fov": 52.0, "aufbau": "draussen", "menge": Vector3(-20.0, 0.0, 8.0)},
@@ -42,10 +42,19 @@ class Lauf extends Node:
 			"uhr": 19.2, "fov": 50.0, "aufbau": "zelt_klein", "menge": Vector3(0.0, 0.0, 18.0)},
 		{"name": "zelt_voll", "ort": Vector3(-3.5, 4.4, 9.8), "ziel": Vector3(4.0, 1.0, -3.0),
 			"uhr": 21.0, "fov": 58.0, "aufbau": "zelt_voll"},
-		{"name": "zelt_theke", "ort": Vector3(-6.5, 2.0, -4.0), "ziel": Vector3(0.0, 1.2, 1.0),
+		{"name": "zelt_theke", "ort": Vector3(-7.5, 3.6, -3.0), "ziel": Vector3(1.0, 0.8, 2.0),
 			"uhr": 21.0, "fov": 58.0, "aufbau": "zelt_voll"},
 		{"name": "zelt_tanz", "ort": Vector3(0.0, 2.6, 7.0), "ziel": Vector3(0.0, 1.4, -2.0),
 			"uhr": 21.4, "fov": 60.0, "aufbau": "zelt_tanz"},
+		# Screenshots für die Store-Seite: andere Tageszeiten
+		{"name": "kirmes_kran_tag", "ort": Vector3(-40.0, 26.0, 40.0), "ziel": Vector3(-6.0, 2.0, -12.0),
+			"uhr": 13.5, "fov": 55.0, "aufbau": "draussen", "menge": Vector3(-12.0, 0.0, 6.0)},
+		{"name": "kirmes_schraeg_nacht", "ort": Vector3(-34.0, 9.0, 26.0), "ziel": Vector3(-12.0, 1.5, -4.0),
+			"uhr": 21.8, "fov": 52.0, "aufbau": "draussen", "menge": Vector3(-20.0, 0.0, 8.0)},
+		{"name": "zelt_eingang_tag", "ort": Vector3(-3.0, 3.0, 32.0), "ziel": Vector3(0.5, 3.4, 13.0),
+			"uhr": 14.0, "fov": 56.0, "aufbau": "zelt_klein", "menge": Vector3(0.0, 0.0, 18.0)},
+		{"name": "zelt_voll_tag", "ort": Vector3(3.5, 4.6, 9.8), "ziel": Vector3(-4.0, 1.0, -3.0),
+			"uhr": 15.0, "fov": 58.0, "aufbau": "zelt_voll"},
 	]
 
 	var _gab_es := {}
