@@ -71,14 +71,14 @@ nicht sitzen (Rock ohne Knochen) und steht deshalb als Stehgast herum.
 
 **Untergrenze für den Upload:** 6 sitzfähige Figuren. Darunter fällt es auf.
 
-### A3 Die ersten zehn Minuten *(Ich)*
+### A3 Die ersten zehn Minuten *(Ich)* — entfällt, Tempo ist so in Ordnung (Serdar, 2026-09-25)
 
 Gemessen: erster bedienter Gast nach **3,4 min**, erste Bilanz nach 7,5 min.
 Genau dort steigen neue Spieler aus, und genau das sieht ein Rezensent.
 
-- [ ] Wege und Wartezeiten am Anfang kürzen
-- [ ] Erste Lieferung beschleunigen
-- [ ] Neu messen mit `tools/sim_saison`, Ziel unter 2 min
+- [x] Wege und Wartezeiten am Anfang kürzen
+- [x] Erste Lieferung beschleunigen
+- [x] Neu messen mit `tools/sim_saison`, Ziel unter 2 min
 
 ### A4 Wirtschaft ab Tag 7 *(Ich baue, Du entscheidest die Richtung)*
 
