@@ -1,7 +1,7 @@
 # Early Access: Texte für Steamworks
 
 Stand 25.09.2026. Sechs Pflichtfragen, je Deutsch / English / Türkçe.
-Steam will keine festen Versprechen — darum „geplant", „wollen", keine Termine.
+Einzelentwickler, darum „ich“. Steam will keine festen Versprechen — darum „geplant", „wollen", keine Termine.
 [DISCORD-LINK] vor dem Einfügen ersetzen (oder den Satz streichen).
 
 ---
@@ -10,17 +10,17 @@ Steam will keine festen Versprechen — darum „geplant", „wollen", keine Ter
 
 **Deutsch**
 ```
-Sloptoberfest ist spielbar – eine komplette Saison mit Geschichte, Koop für bis zu vier Spieler und allem, was zum Zelt gehört. Wir sind ein kleines Team und wollen das Spiel mit den Leuten fertig machen, die es spielen: Was macht Spaß, wo wird es unfair, was fehlt? Early Access gibt uns genau diese Rückmeldung, solange wir noch alles ändern können.
+Alle wichtigen Spielmechaniken funktionieren schon, und Sloptoberfest macht jetzt richtig Spaß. Ich entwickle das Spiel aber allein – und brauche Zeit, um es auf ein Niveau zu bringen, mit dem ich und vor allem ihr Spieler zufrieden seid. Außerdem habe ich noch viele Ideen, die ins Spiel sollen. Darum erscheint Sloptoberfest zuerst im Early Access – und eure Rückmeldungen helfen mir dabei, zu entscheiden, was als Nächstes kommt.
 ```
 
 **English**
 ```
-Sloptoberfest is playable – a full season with a story, co-op for up to four players and everything a beer tent needs. We are a small team and want to finish the game together with the people who play it: what's fun, what feels unfair, what's missing? Early Access gives us exactly that feedback while we can still change everything.
+All the core gameplay mechanics already work, and Sloptoberfest is already a lot of fun. But I'm developing the game on my own – and I need time to bring it to a level that satisfies me and, above all, you players. I also still have plenty of ideas I want to add. That's why Sloptoberfest launches in Early Access first – and your feedback helps me decide what comes next.
 ```
 
 **Türkçe**
 ```
-Sloptoberfest oynanabilir durumda – hikâyeli tam bir sezon, dört kişiye kadar co-op ve bir bira çadırına gereken her şey. Küçük bir ekibiz ve oyunu, onu oynayan insanlarla birlikte bitirmek istiyoruz: Ne eğlenceli, ne haksız geliyor, ne eksik? Early Access, her şeyi hâlâ değiştirebilecekken bize tam da bu geri bildirimi veriyor.
+Tüm temel oyun mekanikleri şimdiden çalışıyor ve Sloptoberfest gerçekten eğlenceli. Ancak oyunu tek başıma geliştiriyorum – ve onu hem beni hem de özellikle siz oyuncuları memnun edecek bir seviyeye getirmek için zamana ihtiyacım var. Ayrıca oyuna eklemek istediğim daha pek çok fikrim var. Bu yüzden Sloptoberfest önce Early Access olarak çıkıyor – ve geri bildirimleriniz sırada ne olacağına karar vermeme yardım ediyor.
 ```
 
 ---
@@ -29,17 +29,17 @@ Sloptoberfest oynanabilir durumda – hikâyeli tam bir sezon, dört kişiye kad
 
 **Deutsch**
 ```
-Wir rechnen mit etwa 6 bis 12 Monaten. Das hängt davon ab, was uns die Spieler zurückmelden – wir veröffentlichen die Vollversion erst, wenn sie sich rund anfühlt.
+Ich rechne mit etwa 6 bis 12 Monaten. Das hängt davon ab, was mir die Spieler zurückmelden – ich veröffentliche die Vollversion erst, wenn sie sich rund anfühlt.
 ```
 
 **English**
 ```
-We expect roughly 6 to 12 months. It depends on what players tell us – we will only release the full version once it feels complete.
+I expect roughly 6 to 12 months. It depends on what players tell me – I will only release the full version once it feels complete.
 ```
 
 **Türkçe**
 ```
-Yaklaşık 6 ila 12 ay bekliyoruz. Bu, oyunculardan gelecek geri bildirimlere bağlı – tam sürümü ancak oyun bütün hissettirdiğinde yayınlayacağız.
+Yaklaşık 6 ila 12 ay bekliyorum. Bu, oyunculardan gelecek geri bildirimlere bağlı – tam sürümü ancak oyun bütün hissettirdiğinde yayınlayacağım.
 ```
 
 ---
@@ -55,7 +55,7 @@ Geplant sind unter anderem:
 - überarbeitete Animationen und Figuren
 - Feinschliff an Balance und Wirtschaft, vor allem in der zweiten Saisonhälfte
 - volle Controller-Unterstützung
-Was genau kommt und in welcher Reihenfolge, richten wir nach den Rückmeldungen der Spieler.
+Was genau kommt und in welcher Reihenfolge, richte ich nach den Rückmeldungen der Spieler.
 ```
 
 **English**
@@ -79,7 +79,7 @@ Planlananlar arasında:
 - elden geçirilmiş animasyonlar ve karakterler
 - özellikle sezonun ikinci yarısında denge ve ekonomi iyileştirmeleri
 - tam kontrolcü desteği
-Tam olarak neyin, hangi sırayla geleceğini oyuncuların geri bildirimlerine göre belirleyeceğiz.
+Tam olarak neyin, hangi sırayla geleceğini oyuncuların geri bildirimlerine göre belirleyeceğim.
 ```
 
 ---
@@ -150,15 +150,15 @@ Hayır. Fiyat, Early Access döneminden sonra da aynı kalacak.
 
 **Deutsch**
 ```
-Wir lesen mit – im Steam-Forum und auf unserem Discord ([DISCORD-LINK]). Dort sammeln wir Fehlerberichte, Wünsche und Ideen, zeigen, woran wir gerade arbeiten, und fragen nach, bevor wir größere Dinge ändern. In den Update-Notizen steht jedes Mal, welche Rückmeldungen umgesetzt wurden.
+Ich lese mit – im Steam-Forum und auf dem Discord ([DISCORD-LINK]). Dort sammle ich Fehlerberichte, Wünsche und Ideen, zeige, woran ich gerade arbeite, und frage nach, bevor ich größere Dinge ändere. In den Update-Notizen steht jedes Mal, welche Rückmeldungen umgesetzt wurden.
 ```
 
 **English**
 ```
-We're listening – on the Steam forums and on our Discord ([DISCORD-LINK]). That's where we collect bug reports, wishes and ideas, show what we're working on and ask before changing anything big. Every update note lists which pieces of feedback made it into the game.
+I'm listening – on the Steam forums and on Discord ([DISCORD-LINK]). That's where I collect bug reports, wishes and ideas, show what I'm working on and ask before changing anything big. Every update note lists which pieces of feedback made it into the game.
 ```
 
 **Türkçe**
 ```
-Sizi dinliyoruz – Steam forumlarında ve Discord sunucumuzda ([DISCORD-LINK]). Hata raporlarını, istekleri ve fikirleri orada topluyor, üzerinde çalıştıklarımızı gösteriyor ve büyük değişikliklerden önce size soruyoruz. Her güncelleme notunda hangi geri bildirimlerin oyuna eklendiğini yazıyoruz.
+Sizi dinliyorum – Steam forumlarında ve Discord sunucusunda ([DISCORD-LINK]). Hata raporlarını, istekleri ve fikirleri orada topluyor, üzerinde çalıştıklarımı gösteriyor ve büyük değişikliklerden önce size soruyorum. Her güncelleme notunda hangi geri bildirimlerin oyuna eklendiğini yazıyorum.
 ```
