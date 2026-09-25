@@ -269,15 +269,27 @@ func tasten_name(aktion: String) -> String:
 	return OS.get_keycode_string(taste(aktion))
 
 ## Bild des Knopfes für eine Aktion, "" wenn gerade mit Tastatur gespielt wird
-## oder es für die Aktion kein Bild gibt. Die Dateien baut tools/glyphen_bauen.gd.
+## oder es für die Aktion kein Bild gibt.
+##
+## Zwei Sätze, beide von Kenney (CC0, siehe docs/lizenzen): auf dem Steam Deck
+## die Deck-Knöpfe, sonst die vom Xbox-Controller. Wer am Deck spielt, sieht dort
+## seine eigenen Tasten — genau das verlangt Steams Prüfliste.
 func glyph_pfad(aktion: String) -> String:
 	if not am_pad or not PAD_KNOEPFE.has(aktion):
 		return ""
 	var datei: String = GLYPH_DATEI.get(int(PAD_KNOEPFE[aktion]), "")
 	if datei == "":
 		return ""
-	var pfad := "res://assets/ui/glyphen/%s.png" % datei
+	var pfad := "res://assets/ui/glyphen/%s/%s.svg" % ["deck" if auf_deck() else "xbox", datei]
 	return pfad if ResourceLoader.exists(pfad) else ""
+
+## Läuft das Spiel auf einem Steam Deck? Steam setzt dort diese Umgebungsvariable;
+## GodotSteam hat dafür keine eigene Abfrage.
+var _deck := -1
+func auf_deck() -> bool:
+	if _deck < 0:
+		_deck = 1 if OS.get_environment("SteamDeck") == "1" else 0
+	return _deck == 1
 
 ## Was in Hinweisen steht („Krug nehmen [E]"). Wer zuletzt am Gamepad gedrückt
 ## hat, bekommt den Knopf gezeigt — sonst stünde am Steam Deck überall eine

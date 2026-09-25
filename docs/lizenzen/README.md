@@ -18,6 +18,7 @@ Nachweis in diesem Ordner liegen.
 | Einrichtung (Laterne, Stehlampe, Lichterkette) | `scenes/einrichtung/**`, `scenes/props/laterne,lichterkette.tscn` | selbst gebaut in Godot | eigene | — | ✅ |
 | Neue Modelle (2026-09-12) | `assets/models/krug, *_mit_teller, fass_mit_zapfhahn, kochtheke, buehne, regal, schreibtisch, deco_1…8.glb` | vom Nutzer geliefert — Herkunft vermutlich Meshy | prüfen | Rechnung/Erzeugungsdatum ablegen | ⚠️ |
 | UI-Grafiken | `assets/ui/menue_vorlage.png, ui_bogen.png, knopf_zustaende.png` (+ daraus freigestellt `knopf_*.png`) | ChatGPT-Bilderzeugung (Dateiname) | laut OpenAI-Nutzungsbedingungen gehören Ausgaben dem Nutzer — vor Release selbst nachlesen, KI-Angabe bei Steam | Konto-Tarif + Datum ablegen | ⚠️ |
+| Controller-Glyphen | `assets/ui/glyphen/xbox/**`, `assets/ui/glyphen/deck/**` (30 Dateien) | Kenney „Input Prompts" 1.5, kenney.nl | **CC0** — kommerziell nutzbar, keine Nennung nötig | `docs/lizenzen/kenney-input-prompts-CC0.txt` | ✅ |
 | Schrift UnifrakturCook | `assets/fonts/UnifrakturCook-Bold.ttf` | Google Fonts (j. 'mach' wust, Peter Wiegel) | SIL Open Font License 1.1 — frei, auch kommerziell, im Spiel bündeln erlaubt | `assets/fonts/UnifrakturCook-OFL.txt` | ✅ |
 
 Schriftarten: UnifrakturCook (OFL, siehe oben) für das Wiesn-UI, sonst Godots
