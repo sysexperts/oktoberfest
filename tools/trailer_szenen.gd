@@ -55,6 +55,16 @@ class Lauf extends Node:
 			"uhr": 14.0, "fov": 56.0, "aufbau": "zelt_klein", "menge": Vector3(0.0, 0.0, 18.0)},
 		{"name": "zelt_voll_tag", "ort": Vector3(3.5, 4.6, 9.8), "ziel": Vector3(-4.0, 1.0, -3.0),
 			"uhr": 15.0, "fov": 58.0, "aufbau": "zelt_voll"},
+		# Spielmechanik — Personal bei der Arbeit. "personal": [Rolle, Ort, Blick, Krüge]
+		{"name": "spiel_kellner", "ort": Vector3(5.4, 1.8, 4.2), "ziel": Vector3(3.0, 1.0, 2.0),
+			"uhr": 20.6, "fov": 50.0, "aufbau": "zelt_voll",
+			"personal": []},
+		{"name": "spiel_zapfen", "ort": Vector3(-2.6, 1.7, -9.9), "ziel": Vector3(-4.2, 1.1, -12.4),
+			"uhr": 20.6, "fov": 55.0, "aufbau": "zelt_voll",
+			"personal": [[4, Vector3(-4.2, 0.1, -12.3), PI, 0], [2, Vector3(-2.0, 0.1, -8.4), 0.0, 3]]},
+		{"name": "spiel_kueche", "ort": Vector3(3.4, 1.8, -9.2), "ziel": Vector3(5.6, 1.0, -12.2),
+			"uhr": 20.6, "fov": 55.0, "aufbau": "zelt_voll",
+			"personal": [[1, Vector3(5.0, 0.1, -11.9), PI, 1], [1, Vector3(6.4, 0.1, -11.8), PI * 1.1, 0]]},
 	]
 
 	var _gab_es := {}
@@ -185,7 +195,14 @@ class Lauf extends Node:
 				gm._apply_tent()
 				gm._rebuild_seats()
 				await _gaeste_setzen(20)
+			"lieferung":
+				gm._van_show(true, gm.DROP_POINT + Vector3(-3.5, 0.0, 3.5), PI * 0.5)
+				for k in 6:
+					gm._add_package(700 + k, gm.DROP_POINT + Vector3(randf_range(-1.4, 1.4), 0.0, randf_range(-0.7, 0.7)), 1 + k % 2, 10)
+				await _menge_fuellen()
 			"zelt_voll", "zelt_tanz":
+				gm._zelt_name = ZELTNAME
+				gm._zeltname_anzeigen()
 				gm._tent_stage = 4
 				gm._active_count = 24
 				gm._apply_tent()
@@ -273,6 +290,16 @@ class Lauf extends Node:
 		k.set_carrying(4)
 		k.set_net(ort, blick)
 
+	func _personal(rolle: int, ort: Vector3, blick: float, kruege: int) -> void:
+		_staff_id += 1
+		gm._add_staff(_staff_id, ort, rolle, 3)
+		var container: Node = gm._staff_container
+		var k: Node3D = container.get_child(container.get_child_count() - 1)
+		k.set_carrying(kruege)
+		k.set_net(ort, blick)
+		k.global_position = ort
+		k.rotation.y = blick
+
 	func _kruege_fuellen() -> void:
 		var ausgabe := get_tree().get_first_node_in_group("ausgabe")
 		if ausgabe == null:
@@ -309,6 +336,10 @@ class Lauf extends Node:
 		if s.has("menge"):
 			await _menge_bei(s.menge as Vector3, 26.0)
 		_stimmung(float(s.uhr))
+		for p: Array in s.get("personal", []):
+			_personal(int(p[0]), p[1], float(p[2]), int(p[3]))
+		if s.has("personal"):
+			_beschriftungen_aus()
 		kamera.fov = float(s.get("fov", 55.0))
 		kamera.global_position = s.ort
 		kamera.look_at(s.ziel)
