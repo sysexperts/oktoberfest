@@ -80,15 +80,15 @@ Genau dort steigen neue Spieler aus, und genau das sieht ein Rezensent.
 - [x] Erste Lieferung beschleunigen
 - [x] Neu messen mit `tools/sim_saison`, Ziel unter 2 min
 
-### A4 Wirtschaft ab Tag 7 *(Ich baue, Du entscheidest die Richtung)*
+### A4 Wirtschaft ab Tag 7 *(Ich baue, Du entscheidest die Richtung)* — erledigt: Höchstsatz 300 €, Rest passt (2026-09-25)
 
 Der Bot zeigt: Ab Tag 7 springen die Löhne auf 581 €/Tag und bleiben, der
 Leerlauf fällt auf null, trotzdem gehen 70–85 Bestellungen daneben. Zweimal
 Rettungskredit in elf Tagen.
 
-- [ ] Entscheidung: soll es so hart sein? *(Du)*
-- [ ] Lohnkurve und Gästeandrang nachziehen *(Ich)*
-- [ ] Gegenprobe über 30 Tage *(Ich)*
+- [x] Entscheidung: soll es so hart sein? *(Du)*
+- [x] Lohnkurve und Gästeandrang nachziehen *(Ich)*
+- [x] Gegenprobe über 30 Tage *(Ich)*
 
 ### A5 Das Spiel wird über eine lange Saison langsam *(Ich)* — Ursache war der Test-Bot (Lager-voll-Schleife), Spiel bleibt über 30 Tage bei ~1,45 GB
 
