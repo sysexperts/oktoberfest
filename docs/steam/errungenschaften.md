@@ -56,7 +56,7 @@ Kein Code nötig: **Auto-Cloud** in Steamworks (*Application → Steam Cloud*):
 
 | Root | Subdirectory | Pattern | OS | Recursive |
 |---|---|---|---|---|
-| `WinAppDataRoaming` | `Godot/app_userdata/Oktoberfest Simulator/saves` | `*.json` | Windows | nein |
+| `WinAppDataRoaming` | `Godot/app_userdata/Sloptoberfest/saves` | `*.json` | Windows | nein |
 
 Das sind die drei Spielstand-Plätze (`slot_1.json` … `slot_3.json`). Die
 Einstellungen (`einstellungen.cfg`) bleiben bewusst lokal — Grafikstufe und
