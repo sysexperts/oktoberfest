@@ -84,8 +84,14 @@ class Lauf extends Node:
 		await _frames(14)
 
 	func _bild(name: String) -> void:
+		# Anzeige, Fadenkreuz-Hinweise und Umrandungen stören im Bild
+		var gm := get_tree().current_scene
+		gm.get_node("HUD").visible = false
+		for n in gm.find_children("*", "CanvasLayer", true, false):
+			(n as CanvasLayer).visible = false
+		get_tree().call_group("interactable", "set_highlight", false)
 		await _frames(8)
-		get_viewport().get_texture().get_image().save_png("res://tools/%s.png" % name)
+		get_viewport().get_texture().get_image().save_png("res://build/szenen/%s.png" % name)
 		print("  gespeichert: ", name)
 
 	func _frames(n: int) -> void:
