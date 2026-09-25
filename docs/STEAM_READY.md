@@ -246,7 +246,7 @@ sehen Rezensenten.
 ### C3 Balancing-Lauf zum Schluss
 - [x] Bot gelaufen (25.09.2026). Die Todesspirale von damals gibt es nicht mehr — dafür zwei neue Befunde, Zahlen in `docs/BERICHT_2026-09-25.md` Abschnitt 11
 - [ ] **Ab Tag 7 kippt die Wirtschaft:** Löhne springen auf 581 €/Tag und bleiben, der Leerlauf fällt auf null, trotzdem gehen 70–85 Bestellungen daneben. Zweimal Rettungskredit in elf Tagen *(Du entscheidest die Richtung, ich setze um)*
-- [ ] **Speicher wächst rund 280 MB alle fünf Tage** — bei Tag 21 sind es 3 GB statt 1,5 GB beim Start, das Spiel kriecht dann. Knoten sind es nicht; was wächst, ist noch unklar *(Ich, eigene Sitzung)*
+- [ ] **Das Spiel wird über eine lange Saison langsam.** Bei Tag 21 belegte der Prozess 3 GB statt 1,5 GB, ein Spieltag dauerte dann über 45 Minuten statt zwei. Im Spiel gemessener Speicher wächst nur um 23 MB über zehn Tage — der Zuwachs steckt also ausserhalb von Godots eigener Zählung (Texturen, Treiberpuffer). Auffällig: an Liefertagen springen verwaiste Knoten von 15 auf 270 *(Ich, Messung läuft)*
 - [ ] Schwierigkeitsgrade gegenprüfen
 
 ### C4 Fehlerbild im Betrieb — grösstenteils erledigt
