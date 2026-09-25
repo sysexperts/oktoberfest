@@ -164,7 +164,7 @@ Der Text ist fertig (`docs/steam/store_seite.md`), die Bilder fehlen alle:
 
 - [ ] 23 Einträge anlegen — API-Namen **genau** wie in
       `docs/steam/errungenschaften_texte.md`
-- [ ] 46 Symbole (erreicht + grau, je 256×256)
+- [x] 46 Symbole (erreicht + grau, je 256×256) — `tools/bake_errungenschaften.gd` → build/errungenschaften
 - [ ] Mit zwei Konten prüfen, dass sie wirklich auslösen
 
 ### B4 Technisches in Steamworks *(Du)*
