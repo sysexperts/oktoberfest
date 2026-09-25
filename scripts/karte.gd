@@ -76,11 +76,31 @@ func naechster(pos: Vector3, max_abstand: float) -> int:
 		var knoten := get_node_or_null("K%d" % n) as Node3D
 		if knoten == null:
 			continue
-		var d := Vector2(knoten.position.x - pos.x, knoten.position.z - pos.z).length()
+		# Große Teile (Hubers Zelt) über ihre Grundfläche anklickbar, nicht nur
+		# 4 m um den Mittelpunkt
+		var d := maxf(0.0, Vector2(knoten.position.x - pos.x, knoten.position.z - pos.z).length() - _greifweite(knoten))
 		if d < best_d:
 			best_d = d
 			beste = n
 	return beste
+
+## Halbe Breite des Teils am Boden, abzüglich Rand — 0 für kleine Buden
+func _greifweite(k: Node3D) -> float:
+	if k.has_meta("greifweite"):
+		return float(k.get_meta("greifweite"))
+	var box := AABB()
+	var erstes := true
+	for m in k.find_children("*", "MeshInstance3D", true, false):
+		var mi := m as MeshInstance3D
+		var b := mi.global_transform * mi.get_aabb()
+		box = b if erstes else box.merge(b)
+		erstes = false
+	var r := 0.0
+	if not erstes:
+		r = minf(box.size.x, box.size.z) * 0.5 * 0.8
+	r = r if r > 6.0 else 0.0
+	k.set_meta("greifweite", r)
+	return r
 
 func knoten(n: int) -> Node3D:
 	return get_node_or_null("K%d" % n) as Node3D
