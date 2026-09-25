@@ -65,6 +65,9 @@ class Lauf extends Node:
 		{"name": "spiel_kueche", "ort": Vector3(3.4, 1.8, -9.2), "ziel": Vector3(5.6, 1.0, -12.2),
 			"uhr": 20.6, "fov": 55.0, "aufbau": "zelt_voll",
 			"personal": [[1, Vector3(5.0, 0.1, -11.9), PI, 1], [1, Vector3(6.4, 0.1, -11.8), PI * 1.1, 0]]},
+		# Werbebild (Kapseln): Heldengruppe nah vor der Kamera, fliegende Krüge
+		{"name": "keyart", "ort": Vector3(0.0, 1.45, 5.6), "ziel": Vector3(0.0, 1.45, 2.8),
+			"uhr": 21.0, "fov": 54.0, "aufbau": "zelt_voll", "dof": true, "dof_ab": 7.0, "helden": true},
 	]
 
 	var _gab_es := {}
@@ -300,6 +303,43 @@ class Lauf extends Node:
 		k.global_position = ort
 		k.rotation.y = blick
 
+	var _posen: Array[Callable] = []
+	const KRUG_SZENE := preload("res://scenes/krug.tscn")
+
+	## Witzige Gruppe für das Werbebild. Platz davor freiräumen, dann:
+	## Kellnerin mit Krug-Traube in der Mitte, links ein Jubler auf der Bank,
+	## rechts einer, der winkt, darüber fliegende Krüge.
+	func _helden() -> void:
+		var mitte := Vector3(0.0, 0.0, 3.4)
+		for g in gm._guests.values():
+			if is_instance_valid(g) and (g as Node3D).global_position.distance_to(mitte) < 3.2:
+				(g as Node3D).visible = false
+		_personal(2, mitte + Vector3(0.0, 0.1, 0.0), PI, 6)
+		var bank := _held(0, mitte + Vector3(-1.5, 0.45, -0.3), 0.35)
+		var winker := _held(3, mitte + Vector3(1.5, 0.1, 0.2), -0.35)
+		var hinten := _held(1, mitte + Vector3(0.7, 0.1, -1.6), -0.1)
+		for k: Array in [[Vector3(-0.8, 2.4, 3.0), Vector3(0.6, 0.3, 0.9)], [Vector3(0.9, 2.7, 2.7), Vector3(-0.5, 1.2, -0.7)],
+				[Vector3(0.1, 3.0, 3.6), Vector3(1.4, -0.4, 0.2)]]:
+			var krug: Node3D = KRUG_SZENE.instantiate()
+			gm.add_child(krug)
+			krug.global_position = k[0]
+			krug.rotation = k[1]
+			if "fuellung" in krug:
+				krug.fuellung = 1.0
+		_posen = [func() -> void: bank.jubel_pose(0.4), func() -> void: winker.winke_pose(0.2),
+			func() -> void: hinten.jubel_pose(1.1)]
+		_beschriftungen_aus()
+
+	func _held(nr: int, ort: Vector3, blick: float) -> Figur:
+		var halter := Node3D.new()
+		gm.add_child(halter)
+		halter.global_position = ort
+		halter.rotation.y = blick
+		var fig := Figuren.ALLE[nr].instantiate() as Figur
+		fig.name = "Model"
+		halter.add_child(fig)
+		return fig
+
 	func _kruege_fuellen() -> void:
 		var ausgabe := get_tree().get_first_node_in_group("ausgabe")
 		if ausgabe == null:
@@ -340,6 +380,8 @@ class Lauf extends Node:
 			_personal(int(p[0]), p[1], float(p[2]), int(p[3]))
 		if s.has("personal"):
 			_beschriftungen_aus()
+		if bool(s.get("helden", false)):
+			await _helden()
 		kamera.fov = float(s.get("fov", 55.0))
 		kamera.global_position = s.ort
 		kamera.look_at(s.ziel)
@@ -350,6 +392,13 @@ class Lauf extends Node:
 			attribute.dof_blur_amount = 0.06
 		# ein paar Frames, damit Licht, Schatten und Nebel stehen
 		await _frames(30 if stufe == "voll" else 12)
+		# Posen erst ganz zum Schluss — die Animation würde sie sonst überschreiben
+		for f in _posen:
+			f.call()
+		await get_tree().process_frame
+		for f in _posen:
+			f.call()
+		await RenderingServer.frame_post_draw
 		var bild := get_viewport().get_texture().get_image()
 		var pfad := "res://%s/%s.png" % [AUSGABE, String(s.name)]
 		bild.save_png(pfad)
