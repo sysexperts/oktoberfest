@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 ## Look-Test: dieselben Ansichten in drei Grafik-Varianten nebeneinander (A | B | C).
 ##   A Aktuell   — wie im Spiel
 ##   B Natürlich — AgX, weniger Himmelslicht, wärmere Sonne, weiche Schatten, kräftigeres SSAO, Dunst
@@ -30,11 +31,8 @@ class Lauf extends Node:
 
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		for i in 40:
 			await get_tree().process_frame
 		gm = get_tree().current_scene

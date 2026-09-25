@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 const Schuss := preload("res://tools/schuss.gd")
 ## Minispiel prüfen: startet das Spiel, sucht die erste Bude mit dem Skript aus
 ## MINISPIEL, spielt Würfe im Raster (Neigung × Kraft) durch und zählt, wie viele
@@ -19,11 +20,8 @@ class Lauf extends Node:
 		var art := "ringwurf"
 		if not OS.get_cmdline_user_args().is_empty():
 			art = OS.get_cmdline_user_args()[0]
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		for i in 60:
 			await get_tree().process_frame
 		var gm := get_tree().current_scene

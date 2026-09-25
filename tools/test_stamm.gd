@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 ## Stammgäste prüfen: benannter Gast erscheint mit Name, Wunsch, dreimal bedient → Belohnung.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -11,11 +12,8 @@ class Lauf extends Node:
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
 		TranslationServer.set_locale("de")
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		var gm := get_tree().current_scene
 		await _warten(2.0)
 		var kino = gm.get_node_or_null("Kino")

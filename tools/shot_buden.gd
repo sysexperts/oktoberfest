@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 ## Bilder der Minispiel-Buden von außen (Vorderseite), auf Deutsch.
 ## Godot --path . res://tools/shot_buden.tscn   (SHOT_DIR = Zielordner)
 
@@ -11,11 +12,8 @@ class Lauf extends Node:
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
 		TranslationServer.set_locale("de")
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		for i in 60:
 			await get_tree().process_frame
 		var gm := get_tree().current_scene

@@ -111,12 +111,18 @@ func _unhandled_input(event: InputEvent) -> void:
 ## Woran wird gerade gespielt? Steuert, ob in Hinweisen „[E]" oder „[A]" steht.
 ## Ein Stick driftet im Ruhezustand leicht — darum erst ab halbem Ausschlag.
 func _eingabeart_merken(event: InputEvent) -> void:
+	var vorher := am_pad
 	if event is InputEventJoypadButton:
 		am_pad = true
 	elif event is InputEventJoypadMotion and absf((event as InputEventJoypadMotion).axis_value) > 0.5:
 		am_pad = true
 	elif event is InputEventKey or event is InputEventMouseButton or event is InputEventMouseMotion:
 		am_pad = false
+	if am_pad != vorher:
+		# Schilder in der Welt (Fass, Lager, Ausgabe) beschriften sich beim
+		# gleichen Signal neu wie nach einer Tastenumbelegung — sonst stünde
+		# dort weiter "[E]", nachdem man zum Gamepad gegriffen hat.
+		geaendert.emit()
 
 ## Speichert das aktuelle Bild. Gibt den Dateipfad zurück, "" wenn es nicht ging.
 func bildschirmfoto() -> String:

@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 ## Leistung: Bereiche nacheinander abschalten und die Skriptzeit messen.
 
 func _ready() -> void:
@@ -7,11 +8,8 @@ func _ready() -> void:
 class Lauf extends Node:
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		var gm := get_tree().current_scene
 		await _warten(3.0)
 		var kino = gm.get_node_or_null("Kino")

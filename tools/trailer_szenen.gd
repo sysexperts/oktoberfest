@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 ## Einzelne Trailer-Einstellungen als Standbild — zum Aussuchen, bevor gefilmt wird.
 ##
 ## Zwei Stufen:
@@ -62,11 +63,8 @@ class Lauf extends Node:
 		_argumente_lesen()
 		_sichern()
 		TranslationServer.set_locale("de")
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		await _frames(30)
 		gm = get_tree().current_scene
 		TranslationServer.set_locale("de")

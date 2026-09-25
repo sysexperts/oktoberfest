@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 ## Prüft die Aufstellung: misst die Grundfläche jeder Bude und jedes anderen
 ## Gegenstands auf dem Platz und meldet, was ineinandersteckt.
 ##   Godot --path . res://tools/pruef_buden.tscn
@@ -14,11 +15,8 @@ class Lauf extends Node:
 
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		for i in 40:
 			await get_tree().process_frame
 		var gm := get_tree().current_scene

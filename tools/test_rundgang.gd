@@ -1,4 +1,5 @@
 extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
 const Schuss := preload("res://tools/schuss.gd")
 ## Rundgang des Festleiters prüfen: Tutorialschritte der Reihe nach setzen,
 ## warten bis er an der Station steht, ansprechen, Bild. → SHOT_DIR/rundgang_*.png
@@ -10,11 +11,8 @@ class Lauf extends Node:
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
 		TranslationServer.set_locale("de")
-		Net.start_solo(true)
-		for i in 60000:
-			if get_tree().current_scene != null and get_tree().current_scene.has_method("net_book_tent"):
-				break
-			await get_tree().process_frame
+		if await Spielstart.starten(self) == null:
+			return
 		var gm := get_tree().current_scene
 		TranslationServer.set_locale("de")
 		await _warten(5.0)

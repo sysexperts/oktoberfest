@@ -75,6 +75,16 @@ class Lauf extends Node:
 			Einstellungen.anzeige_name("interact"))
 		var satz := Texte.mit_tasten("HUD_HELP_HINT")
 		_check("Hinweissatz nutzt Knopfnamen", not satz.contains("[F1]"), satz)
+		# Schilder in der Welt hoeren auf dieses Signal — ohne es bliebe dort die
+		# Tastatur stehen, wenn man mitten im Spiel zum Gamepad greift.
+		var gemeldet := [false]
+		Einstellungen.geaendert.connect(func() -> void: gemeldet[0] = true, CONNECT_ONE_SHOT)
+		var pad_ereignis := InputEventJoypadButton.new()
+		pad_ereignis.button_index = JOY_BUTTON_A
+		pad_ereignis.pressed = true
+		Einstellungen.am_pad = false
+		Einstellungen._eingabeart_merken(pad_ereignis)
+		_check("Wechsel zum Gamepad meldet sich", gemeldet[0])
 		Einstellungen.am_pad = false
 		_check("Belegungsmenü zeigt weiter die Taste", Einstellungen.tasten_name("interact") == "E")
 
