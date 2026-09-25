@@ -69,7 +69,7 @@ class Lauf extends Node:
 		gm._shift_num = TAG
 		gm._popularity = 100.0
 		gm._hygiene = 100.0
-		# Tutorial und Wiesnchef-Folge sind durch
+		# Tutorial und Festleiter-Folge sind durch
 		gm._quest_step = 99
 		gm._folge_geschafft = true
 		# Zelt: größte Stufe, alle Tische

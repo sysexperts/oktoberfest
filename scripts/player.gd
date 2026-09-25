@@ -652,8 +652,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_SABOTEUR" if t.ist_saboteur() else ""
 	if t.has_method("ist_huber"):
 		return "HINT_HUBER"
-	if t.has_method("ist_wiesnchef"):
-		return "HINT_WIESNCHEF" if t.ansprechbar() else ""
+	if t.has_method("ist_festleiter"):
+		return "HINT_FESTLEITER" if t.ansprechbar() else ""
 	if t.has_method("ist_raufbold"):
 		if traegt_raufbold:
 			return "HINT_WERFEN"
@@ -823,7 +823,7 @@ func _handle_interaction(delta: float) -> void:
 		if _current_target.has_method("ist_huber"):
 			_current_target.ansprechen()
 			return
-		if _current_target.has_method("ist_wiesnchef"):
+		if _current_target.has_method("ist_festleiter"):
 			_current_target.ansprechen()
 			return
 		if _current_target is Customer and carry_state == 1 and carry_type == WASSER and carry_fill >= 0.999:
@@ -924,7 +924,7 @@ func _handle_interaction(delta: float) -> void:
 				_world.open_rent_ui()
 			_sfx("pop")
 		elif _current_target is OfficeDesk:
-			# Wiesenbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
+			# Festbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
 			if _world.has_method("in_intermission") and _world.in_intermission():
 				if _world.has_method("open_booking_ui"):
 					_world.open_booking_ui()

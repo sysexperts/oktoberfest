@@ -1,5 +1,5 @@
 extends SceneTree
-## Backt Büromöbel (Wiesenbüro, später auch fürs Zeltbüro zu kaufen) zu je einem
+## Backt Büromöbel (Festbüro, später auch fürs Zeltbüro zu kaufen) zu je einem
 ## ArrayMesh mit einer Oberfläche pro Material — viele Einzelteile, wenige
 ## Zeichenaufrufe. Szenen dazu: scenes/moebel/*.tscn (Mesh + Kollision).
 ## Aufruf: godot --headless --script res://tools/bake_moebel.gd
@@ -211,7 +211,7 @@ func _wanduhr() -> void:
 	_add("messing", _zyl(0.045, 0.045, 0.012, 16), Transform3D(vorn, Vector3(0, -0.3, -0.05)))
 	_speichern("wanduhr")
 
-## Gerahmtes Wiesn-Plakat (Rahmen, Passepartout, Motiv aus Farbflächen)
+## Gerahmtes Fest-Plakat (Rahmen, Passepartout, Motiv aus Farbflächen)
 func _plakat() -> void:
 	_neu()
 	_holz_mats()

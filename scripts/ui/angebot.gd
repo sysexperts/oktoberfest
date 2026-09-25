@@ -1,5 +1,5 @@
 extends PanelContainer
-## Eine Zeile im Wiesenbüro: Titel, Beschreibung, bis zu drei Knöpfe und —
+## Eine Zeile im Festbüro: Titel, Beschreibung, bis zu drei Knöpfe und —
 ## wenn etwas gesperrt ist — der Grund in Orange. Aufbau: scenes/ui/angebot.tscn.
 
 signal gedrueckt(index: int)

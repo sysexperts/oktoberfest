@@ -29,7 +29,7 @@ Je Errungenschaft fehlen noch zwei Symbole (64x64: erreicht und grau).
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Eine Woche Wiesn | Schließe 7 Tage ab. |
+| Deutsch | Eine Woche Fest | Schließe 7 Tage ab. |
 | English | A week at the fair | Finish 7 days. |
 | Turkce | Fuarda bir hafta | 7 günü tamamla. |
 
@@ -85,7 +85,7 @@ Je Errungenschaft fehlen noch zwei Symbole (64x64: erreicht und grau).
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Ein Monat Wiesn | Schließe 30 Tage ab. |
+| Deutsch | Ein Monat Fest | Schließe 30 Tage ab. |
 | English | A month at the fair | Finish 30 days. |
 | Turkce | Fuarda bir ay | 30 günü tamamla. |
 
@@ -109,7 +109,7 @@ Je Errungenschaft fehlen noch zwei Symbole (64x64: erreicht und grau).
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Wiesn-Wirt | Nimm insgesamt 100.000 € ein. |
+| Deutsch | Festwirt | Nimm insgesamt 100.000 € ein. |
 | English | Beer tent tycoon | Earn €100,000 in total. |
 | Turkce | Çadır patronu | Toplam 100.000 € kazan. |
 
@@ -117,15 +117,15 @@ Je Errungenschaft fehlen noch zwei Symbole (64x64: erreicht und grau).
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Erste Wiesn geschafft | Spiele eine ganze Wiesn bis zum Finale. |
+| Deutsch | Erstes Fest geschafft | Spiele ein ganzes Fest bis zum Finale. |
 | English | First fair done | Play a whole fair until the finale. |
 | Turkce | İlk fuar tamam | Bir fuarı finaline kadar oyna. |
 
-## WIESN_WIRT_5
+## FEST_WIRT_5
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Fünf Maßkrüge | Beende eine Wiesn mit der Bestbewertung. |
+| Deutsch | Fünf Maßkrüge | Beende ein Fest mit der Bestbewertung. |
 | English | Five mugs | Finish a fair with the top rating. |
 | Turkce | Beş kupa | Bir fuarı en yüksek puanla bitir. |
 
@@ -173,7 +173,7 @@ Je Errungenschaft fehlen noch zwei Symbole (64x64: erreicht und grau).
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Wiesn-Veteran | Erlebe 10 Tagesereignisse. |
+| Deutsch | Festveteran | Erlebe 10 Tagesereignisse. |
 | English | Fair veteran | Experience 10 daily events. |
 | Turkce | Fuar kurdu | 10 günlük olay yaşa. |
 
@@ -189,7 +189,7 @@ Je Errungenschaft fehlen noch zwei Symbole (64x64: erreicht und grau).
 
 | Sprache | Name | Beschreibung |
 |---|---|---|
-| Deutsch | Drei Wiesn | Spiele drei ganze Wiesn bis zum Finale. |
+| Deutsch | Drei Feste | Spiele drei ganze Feste bis zum Finale. |
 | English | Three fairs | Play three whole fairs until the finale. |
 | Turkce | Üç fuar | Üç fuarı finaline kadar oyna. |
 

@@ -1,6 +1,6 @@
 extends Node
 ## Einleitung prüfen: neues Solospiel, Brief (jede Seite), Überblende, dann
-## Gespräch mit dem Wiesnchef am Büro, Weg zum Zelt, Gespräch am Zelt.
+## Gespräch mit dem Festleiter am Büro, Weg zum Zelt, Gespräch am Zelt.
 ## → SHOT_DIR/kino_*.png
 
 func _ready() -> void:
@@ -21,7 +21,7 @@ class Lauf extends Node:
 			await get_tree().process_frame
 		var kino = gm.get_node_or_null("Kino")
 		var dialog = gm.get_node_or_null("Dialog")
-		var chef = gm.get_node_or_null("Kirmes/Wiesnchef")
+		var chef = gm.get_node_or_null("Kirmes/Festleiter")
 		var sp: Node3D = gm._players_nodes.get(1)
 		print("Brief offen: ", kino.aktiv, "   Chef: ", chef != null, "  Dialog: ", dialog != null)
 		var dir := OS.get_environment("SHOT_DIR")
@@ -33,7 +33,7 @@ class Lauf extends Node:
 		_bild(dir + "/kino_blende.png")
 		await _warten(2.0)
 		_bild(dir + "/kino_tor.png")
-		# zum Büro, Wiesnchef ansprechen
+		# zum Büro, Festleiter ansprechen
 		sp.global_position = chef.global_position + Vector3(-3.0, 0.1, 0)
 		sp.look_at(chef.global_position + Vector3(0, 0.1, 0), Vector3.UP)
 		await _warten(0.5)

@@ -1,5 +1,5 @@
 extends CanvasLayer
-## „Wiesn-Kurier": nach Feierabend eine Zeitungsseite über den Tag (Schlagzeile
+## „Festkurier": nach Feierabend eine Zeitungsseite über den Tag (Schlagzeile
 ## aus den Zahlen der Tagesbilanz, ein paar Kurzmeldungen). Kommt bei jedem
 ## Spieler lokal mit der Bilanz (GameManager.net_report → HUD.set_report).
 ## Klick, E oder Enter schließt. Aufbau: scenes/ui/zeitung.tscn.

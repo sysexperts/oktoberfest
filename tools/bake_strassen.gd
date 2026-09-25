@@ -71,7 +71,7 @@ const HINDERNISSE := [
 	[Vector2(23.3, -29.3), 5.0], # Gift_Shop2
 	[Vector2(5.9, 29.6), 9.0],   # Parkplatz
 	[Vector2(6.8, 26.8), 6.0],   # Park_Entrance
-	[Vector2(41.5, 18.4), 8.0],  # Wiesenbüro
+	[Vector2(41.5, 18.4), 8.0],  # Festbüro
 	[Vector2(22.8, 21.9), 5.0],  # Bäckerei
 	[Vector2(20.9, 37.9), 6.0],  # Café
 	[Vector2(14, 43.6), 5.0],    # Gift_Shop

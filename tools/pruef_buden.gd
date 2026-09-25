@@ -36,9 +36,9 @@ class Lauf extends Node:
 			var eltern_pfad := String(kirmes.get_path_to(n.get_parent())) if n.get_parent() else ""
 			var ist_bude: bool = eltern_pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest",
 				"Strassen/Buden", "Strassen/Marktbuden"]
-			var behaelter := pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest", "Strassen", "Wohnwagenplatz", "Wiesenbuero", "Kirmes"]
+			var behaelter := pfad in ["StaendeNord", "StaendeSued", "StaendeOst", "StaendeWest", "Strassen", "Wohnwagenplatz", "Festbuero", "Kirmes"]
 			var ist_ding := not behaelter and eltern_pfad == "." or eltern_pfad.begins_with("Strassen/Ausstattung/") \
-				or eltern_pfad in ["Wohnwagenplatz", "Wiesenbuero"]
+				or eltern_pfad in ["Wohnwagenplatz", "Festbuero"]
 			if not (ist_bude or ist_ding):
 				continue
 			var rechteck := _flaeche(n as Node3D)

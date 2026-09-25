@@ -29,7 +29,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		schliessen()
 
 ## Im Solo steht die Zeit still, solange man liest. Was vorher war (Pausemenü
-## offen, Maus frei im Wiesenbüro), wird beim Schließen wiederhergestellt.
+## offen, Maus frei im Festbüro), wird beim Schließen wiederhergestellt.
 func oeffnen() -> void:
 	if visible:
 		return

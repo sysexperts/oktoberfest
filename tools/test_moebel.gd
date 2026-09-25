@@ -1,6 +1,6 @@
 extends Node
 const Schuss := preload("res://tools/schuss.gd")
-## Büromöbel kaufen: alle neuen Arten, Wiesenbüro-Reiter Einrichtung ansehen.
+## Büromöbel kaufen: alle neuen Arten, Festbüro-Reiter Einrichtung ansehen.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
 class Lauf extends Node:

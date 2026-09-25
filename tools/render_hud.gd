@@ -33,7 +33,7 @@ class Lauf extends Node:
 		await _frames(60)
 		var gm := get_tree().current_scene
 		var hud: HUD = gm.get_node("HUD")
-		# Spieler zum Zielmarker (Wiesenbüro) drehen, damit er im Bild ist
+		# Spieler zum Zielmarker (Festbüro) drehen, damit er im Bild ist
 		var spieler: Node3D = gm.get_node("Players").get_child(0)
 		var ziel: Node3D = gm.get_node("Zielmarker").ziel_suchen()
 		if ziel:
@@ -67,7 +67,7 @@ class Lauf extends Node:
 		await _bild("hud_popup")
 		hud.close_popup()
 
-		# Wiesenbüro: Zelt gemietet, damit nicht alles gesperrt ist; Beispielbilanz
+		# Festbüro: Zelt gemietet, damit nicht alles gesperrt ist; Beispielbilanz
 		gm.net_book_tent.rpc_id(1)
 		gm.net_buy_table.rpc_id(1)
 		await _frames(5)
@@ -78,7 +78,7 @@ class Lauf extends Node:
 			Einstellungen.sprache = lang
 			Einstellungen.anwenden()
 			hud.open_booking()
-			var reiter: TabContainer = hud.get_node("%Wiesenbuero").get_node("%Reiter")
+			var reiter: TabContainer = hud.get_node("%Festbuero").get_node("%Reiter")
 			for i in reiter.get_tab_count():
 				reiter.current_tab = i
 				await _bild("buero_%s_%d" % [lang, i])

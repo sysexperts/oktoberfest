@@ -185,7 +185,7 @@ class Lauf extends Node:
 		ok = await _bis(func() -> bool: return int(_zustand().get("pending", 0)) >= 1 or int(_zustand().get("bier", 0)) > 0, 30.0)
 		_pruefe("Bier bestellt", ok, "offen %s, Bier %s" % [_zustand().get("pending", 0), _zustand().get("bier", 0)])
 
-		# 5 Personal: jeder Spieler darf im Wiesenbüro einstellen
+		# 5 Personal: jeder Spieler darf im Festbüro einstellen
 		await _warte(1.0)
 		if rolle == "putz":
 			gm.net_hire_staff.rpc_id(1, ROLE_REINIGUNG)

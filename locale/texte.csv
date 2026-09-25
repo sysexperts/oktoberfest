@@ -55,7 +55,7 @@ LOAD_TIP_2,Tipp: Ein sauberes Zelt bringt mehr Geld pro Bestellung. {interact} g
 LOAD_TIP_3,Tipp: Kellner auf höherer Stufe tragen bis zu 12 Krüge auf einmal.,Tip: Higher-level waiters carry up to 12 mugs at once.,İpucu: Üst seviye garsonlar tek seferde 12 kupaya kadar taşır.
 LOAD_TIP_4,Tipp: Ab 19 Uhr wird das Zelt voll und die Gäste werden ungeduldig.,Tip: From 19:00 the tent fills up and guests get impatient.,İpucu: Saat 19:00'dan sonra çadır dolar ve misafirler sabırsızlanır.
 LOAD_TIP_5,Tipp: {help} öffnet die Hilfe mit allen Tasten.,Tip: {help} opens help with all controls.,İpucu: {help} tüm tuşlarla yardımı açar.
-LOAD_TIP_6,Tipp: Meilensteine im Wiesenbüro bringen Bonusgeld.,Tip: Milestones in the Fair Office pay bonus money.,İpucu: Fuar Ofisindeki kilometre taşları bonus para kazandırır.
+LOAD_TIP_6,Tipp: Meilensteine im Festbüro bringen Bonusgeld.,Tip: Milestones in the Fair Office pay bonus money.,İpucu: Fuar Ofisindeki kilometre taşları bonus para kazandırır.
 PAUSE_TITLE,Pause,Paused,Duraklatıldı
 PAUSE_RESUME,Fortsetzen,Resume,Devam Et
 PAUSE_SAVE_MENU,Speichern und zum Hauptmenü,Save and return to menu,Kaydet ve ana menüye dön
@@ -117,7 +117,7 @@ HUD_DAY_SAISON,Tag %d/%d,Day %d/%d,Gün %d/%d
 DIFF_LABEL,Schwierigkeit,Difficulty,Zorluk
 DIFF_0,"Gemütlich — geduldige Gäste, weniger Miete","Relaxed — patient guests, lower rent","Rahat — sabırlı misafirler, düşük kira"
 DIFF_1,Normal,Normal,Normal
-DIFF_2,"Wiesn-Wahnsinn — mehr Gäste, weniger Geduld","Fair frenzy — more guests, less patience","Fuar çılgınlığı — daha çok misafir, daha az sabır"
+DIFF_2,"Festwahnsinn — mehr Gäste, weniger Geduld","Fair frenzy — more guests, less patience","Fuar çılgınlığı — daha çok misafir, daha az sabır"
 MSG_FEIERABEND_GROSS,22:00 — Feierabend!,22:00 — closing time!,22:00 — mesai bitti!
 COMP_GOODS,Ware nachbestellen,Reorder supplies,Malzeme sipariş et
 COMP_GOODS_STOCK,Im Lager: Bier %d · Essen %d · Lieferungen unterwegs: %d,In storage: beer %d · food %d · deliveries on the way: %d,Depoda: bira %d · yemek %d · yoldaki teslimat: %d
@@ -126,13 +126,13 @@ MSG_COOK_LICENSE,Ohne Brezn- oder Würstl-Lizenz hat der Koch nichts zu tun,With
 EREIGNIS_REGEN_TITEL,Regen,Rain,Yağmur
 EREIGNIS_REGEN_START,"Heute regnet es — draußen ist kaum jemand unterwegs, vielleicht flüchten viele ins Zelt.","Rain today — hardly anyone is outside, maybe many will take shelter in the tent.","Bugün yağmur var — dışarıda pek kimse yok, belki çoğu çadıra sığınır."
 MSG_REGEN_VOLL,Alle flüchten vor dem Regen ins Zelt — heute wird es voll!,Everyone is fleeing the rain into the tent — it'll be packed today!,Herkes yağmurdan çadıra kaçıyor — bugün çadır dolacak!
-EREIGNIS_FINALE_TITEL,Finale — letzter Wiesn-Tag,Finale — last day of the fair,Final — fuarın son günü
-EREIGNIS_FINALE_START,"Letzter Wiesn-Tag! Der Star-Act spielt gratis, das Zelt wird rappelvoll!","Last day of the fair! The star act plays for free, the tent will be packed!","Fuarın son günü! Yıldız sanatçı bedava çıkıyor, çadır tıklım tıklım dolacak!"
-POPUP_SAISON,"Wiesn %d ist vorbei!\n\nUmsatz: %s\nGewinn: %s\nBedient: %d\nØ Beliebtheit: %d %%\n\nBewertung: %s\n\nMorgen beginnt die nächste Wiesn — die Kosten steigen weiter.","Fair %d is over!\n\nRevenue: %s\nProfit: %s\nServed: %d\nØ popularity: %d %%\n\nRating: %s\n\nThe next fair starts tomorrow — costs keep rising.","%d. fuar bitti!\n\nCiro: %s\nKâr: %s\nServis: %d\nOrt. popülerlik: %%%d\n\nPuan: %s\n\nYarın yeni fuar başlıyor — masraflar artmaya devam ediyor."
-MS_SAISON_1_TITLE,Erste Wiesn geschafft,First fair done,İlk fuar tamam
-MS_SAISON_1_TEXT,Spiele eine ganze Wiesn bis zum Finale.,Play a whole fair until the finale.,Bir fuarı finaline kadar oyna.
-MS_WIESN_WIRT_5_TITLE,Fünf Maßkrüge,Five mugs,Beş kupa
-MS_WIESN_WIRT_5_TEXT,Beende eine Wiesn mit der Bestbewertung.,Finish a fair with the top rating.,Bir fuarı en yüksek puanla bitir.
+EREIGNIS_FINALE_TITEL,Finale — letzter Festtag,Finale — last day of the fair,Final — fuarın son günü
+EREIGNIS_FINALE_START,"Letzter Festtag! Der Star-Act spielt gratis, das Zelt wird rappelvoll!","Last day of the fair! The star act plays for free, the tent will be packed!","Fuarın son günü! Yıldız sanatçı bedava çıkıyor, çadır tıklım tıklım dolacak!"
+POPUP_SAISON,"Fest %d ist vorbei!\n\nUmsatz: %s\nGewinn: %s\nBedient: %d\nØ Beliebtheit: %d %%\n\nBewertung: %s\n\nMorgen beginnt das nächste Fest — die Kosten steigen weiter.","Fair %d is over!\n\nRevenue: %s\nProfit: %s\nServed: %d\nØ popularity: %d %%\n\nRating: %s\n\nThe next fair starts tomorrow — costs keep rising.","%d. fuar bitti!\n\nCiro: %s\nKâr: %s\nServis: %d\nOrt. popülerlik: %%%d\n\nPuan: %s\n\nYarın yeni fuar başlıyor — masraflar artmaya devam ediyor."
+MS_SAISON_1_TITLE,Erstes Fest geschafft,First fair done,İlk fuar tamam
+MS_SAISON_1_TEXT,Spiele ein ganzes Fest bis zum Finale.,Play a whole fair until the finale.,Bir fuarı finaline kadar oyna.
+MS_FEST_WIRT_5_TITLE,Fünf Maßkrüge,Five mugs,Beş kupa
+MS_FEST_WIRT_5_TEXT,Beende ein Fest mit der Bestbewertung.,Finish a fair with the top rating.,Bir fuarı en yüksek puanla bitir.
 MS_TANZ_50_TITLE,Auf den Tischen,On the tables,Masaların üstünde
 MS_TANZ_50_TEXT,50 Mal sind Gäste auf deine Tische gestiegen und haben getanzt.,Guests climbed onto your tables and danced 50 times.,Misafirler 50 kez masalarına çıkıp dans etti.
 MS_KOTZE_100_TITLE,Kotzbrocken-Zelt,The barf tent,Kusmuk çadırı
@@ -143,12 +143,12 @@ MS_SAUBER_5_TITLE,Keine Pfütze,Not a single puddle,Tek birikinti yok
 MS_SAUBER_5_TEXT,Schließe 5 Tage ohne eine einzige Pfütze ab.,Finish 5 days without a single puddle.,Tek bir birikinti olmadan 5 gün bitir.
 MS_DEKO_10_TITLE,Gemütlich eingerichtet,Cosy furnished,Rahat döşenmiş
 MS_DEKO_10_TEXT,Stell 10 Einrichtungsgegenstände in dein Zelt.,Place 10 furnishing items in your tent.,Çadırına 10 eşya yerleştir.
-MS_EREIGNIS_10_TITLE,Wiesn-Veteran,Fair veteran,Fuar kurdu
+MS_EREIGNIS_10_TITLE,Festveteran,Fair veteran,Fuar kurdu
 MS_EREIGNIS_10_TEXT,Erlebe 10 Tagesereignisse.,Experience 10 daily events.,10 günlük olay yaşa.
 MS_PERSONAL_8_TITLE,Großbetrieb,Big business,Büyük işletme
 MS_PERSONAL_8_TEXT,Beschäftige 8 Leute gleichzeitig.,Employ 8 people at the same time.,Aynı anda 8 kişi çalıştır.
-MS_SAISON_3_TITLE,Drei Wiesn,Three fairs,Üç fuar
-MS_SAISON_3_TEXT,Spiele drei ganze Wiesn bis zum Finale.,Play three whole fairs until the finale.,Üç fuarı finaline kadar oyna.
+MS_SAISON_3_TITLE,Drei Feste,Three fairs,Üç fuar
+MS_SAISON_3_TEXT,Spiele drei ganze Feste bis zum Finale.,Play three whole fairs until the finale.,Üç fuarı finaline kadar oyna.
 EREIGNIS_BUS_TITEL,Touristenbus,Tourist bus,Turist otobüsü
 EREIGNIS_BUS_START,"Heute kommt ein Touristenbus: viel mehr Gäste, aber sie sind ungeduldig!","A tourist bus arrives today: many more guests, but they're impatient!","Bugün turist otobüsü geliyor: çok daha fazla misafir ama sabırsızlar!"
 EREIGNIS_KONTROLLE_TITEL,Hygienekontrolle 15:00,Hygiene inspection 15:00,Hijyen denetimi 15:00
@@ -176,8 +176,8 @@ HINT_BRAU_KOCHEN,"{interact} halten: kochen und hopfen","Hold {interact}: boil a
 HINT_BRAU_WEITER,"Maische fertig — weiter zum Sudkessel","Mash is ready - move on to the kettle","Mayseniz hazir - kazana gecin"
 HINT_BRAU_INS_FASS,"Sud fertig — mit Hefe in ein Gaerfass","Wort is ready - into a barrel with yeast","Sira hazir - mayayla bir ficiya"
 HINT_BRAU_ERST_MAISCHE,"Erst im Bottich maischen","Mash in the tun first","Once teknede mayse yap"
-HINT_BRAU_MALZ_FEHLT,"Kein Malz da (Wiesenbuero, Reiter Ware)","No malt left (office, goods tab)","Malt yok (ofis, mal sekmesi)"
-HINT_BRAU_HOPFEN_FEHLT,"Kein Hopfen da (Wiesenbuero, Reiter Ware)","No hops left (office, goods tab)","Sahmaran yok (ofis, mal sekmesi)"
+HINT_BRAU_MALZ_FEHLT,"Kein Malz da (Festbuero, Reiter Ware)","No malt left (office, goods tab)","Malt yok (ofis, mal sekmesi)"
+HINT_BRAU_HOPFEN_FEHLT,"Kein Hopfen da (Festbuero, Reiter Ware)","No hops left (office, goods tab)","Sahmaran yok (ofis, mal sekmesi)"
 HINT_GAERFASS_FUELLEN,"{interact}: Sud mit Hefe einfuellen","{interact}: fill in the wort with yeast","{interact}: sirayi mayayla doldur"
 HINT_GAERFASS_LEER,"Leeres Gaerfass","Empty fermentation barrel","Bos fermentasyon ficisi"
 HINT_GAERT,"Gaert noch","Still fermenting","Hala fermente oluyor"
@@ -209,14 +209,14 @@ HINT_PICKUP,{interact} Paket aufnehmen,{interact} Pick up package,{interact} Pak
 HINT_RAUSWERFEN,{interact} Raufbold rauswerfen,{interact} Throw the brawler out,{interact} Kavgacıyı dışarı at
 HINT_STORE,{interact} Paket einlagern,{interact} Store package,{interact} Paketi depola
 HINT_STORAGE,Lager — Pakete hierher bringen,Storage — bring packages here,Depo — paketleri buraya getir
-HINT_OFFICE,{interact} Wiesenbüro öffnen,{interact} Open Fair Office,{interact} Fuar Ofisini aç
-HINT_OFFICE_SHIFT,Wiesenbüro öffnet nach Feierabend,The Fair Office opens after closing time,Fuar Ofisi kapanıştan sonra açılır
+HINT_OFFICE,{interact} Festbüro öffnen,{interact} Open Fair Office,{interact} Fuar Ofisini aç
+HINT_OFFICE_SHIFT,Festbüro öffnet nach Feierabend,The Fair Office opens after closing time,Fuar Ofisi kapanıştan sonra açılır
 HINT_SLEEP,{interact} Schlafen — neuer Tag,{interact} Sleep — next day,{interact} Uyu — yeni gün
 HINT_SLEEP_SHIFT,Schlafen erst nach Feierabend,You can sleep after closing time,Kapanıştan sonra uyuyabilirsin
 HINT_MOVE_TABLE,{interact} Tisch verschieben,{interact} Move table,{interact} Masayı taşı
 HINT_COMPUTER,{interact} Zelt-Computer,{interact} Tent computer,{interact} Çadır bilgisayarı
 HINT_CLEAN,{interact} halten: putzen,Hold {interact}: clean,{interact} basılı tut: temizle
-OFFICE_TITLE,Wiesenbüro,Fair Office,Fuar Ofisi
+OFFICE_TITLE,Festbüro,Fair Office,Fuar Ofisi
 OFFICE_TAB_TENT,Zelt,Tent,Çadır
 OFFICE_TAB_LICENSES,Lizenzen,Licenses,Lisanslar
 OFFICE_TAB_STAFF,Personal,Staff,Personel
@@ -243,14 +243,14 @@ RENT_DIALOG_CANCEL,Abbrechen,Cancel,Vazgeç
 TENT_NAME_DEFAULT,Festzelt,Beer Tent,Bira Çadırı
 PLAYER_N,Spieler %d,Player %d,Oyuncu %d
 LOBBY_TITLE,Willkommen im Festzelt!,Welcome to the beer tent!,Bira çadırına hoş geldin!
-LOBBY_SUB,"Ihr führt das Zelt gemeinsam: zapfen, kochen, putzen, Ware schleppen — und jeder darf im Wiesenbüro einkaufen und Personal einstellen.","You run the tent together: pour, cook, clean, haul supplies — and everyone may buy at the fair office and hire staff.","Çadırı birlikte işletiyorsunuz: bira doldurun, pişirin, temizleyin, malzeme taşıyın — ve herkes fuar ofisinden alışveriş yapıp personel alabilir."
+LOBBY_SUB,"Ihr führt das Zelt gemeinsam: zapfen, kochen, putzen, Ware schleppen — und jeder darf im Festbüro einkaufen und Personal einstellen.","You run the tent together: pour, cook, clean, haul supplies — and everyone may buy at the fair office and hire staff.","Çadırı birlikte işletiyorsunuz: bira doldurun, pişirin, temizleyin, malzeme taşıyın — ve herkes fuar ofisinden alışveriş yapıp personel alabilir."
 LOBBY_NAME,Dein Name,Your name,Adın
-LOBBY_NAME_PLACEHOLDER,z. B. Wiesn-Sepp,e.g. Beer Baron,örn. Bira Baronu
+LOBBY_NAME_PLACEHOLDER,z. B. Bier-Sepp,e.g. Beer Baron,örn. Bira Baronu
 LOBBY_COLOR,Namensfarbe,Name colour,İsim rengi
 LOBBY_ALONE,Du bist bisher allein im Zelt.,You are alone in the tent so far.,Şimdilik çadırda yalnızsın.
 LOBBY_OTHERS,Schon dabei: %s,Already here: %s,Şimdiden burada: %s
 LOBBY_HOWTO_TITLE,So spielt ihr,How to play,Nasıl oynanır
-LOBBY_HOWTO,"1. Wiesenbüro: Zelt mieten und taufen, Tische aufstellen, Bier bestellen.\n2. Um 8 Uhr kommen die Gäste. Jeder packt dort an, wo es gerade brennt.\n3. Um 22 Uhr ist Feierabend: im Wohnwagen schlafen — alle stimmen ab, die Mehrheit startet den nächsten Tag.\n{help} zeigt jederzeit die Hilfe.","1. Fair office: rent and name your tent, set up tables, order beer.\n2. Guests arrive at 8:00. Everyone jumps in wherever it gets busy.\n3. Closing time is 22:00: sleep in the caravan — everyone votes, the majority starts the next day.\n{help} shows the help at any time.","1. Fuar ofisi: çadırı kirala ve adlandır, masa kur, bira sipariş et.\n2. Misafirler 8:00'de gelir. Herkes yoğunluk olan yere yardım eder.\n3. Kapanış 22:00: karavanda uyu — herkes oy verir, çoğunluk sonraki günü başlatır.\n{help} her zaman yardımı gösterir."
+LOBBY_HOWTO,"1. Festbüro: Zelt mieten und taufen, Tische aufstellen, Bier bestellen.\n2. Um 8 Uhr kommen die Gäste. Jeder packt dort an, wo es gerade brennt.\n3. Um 22 Uhr ist Feierabend: im Wohnwagen schlafen — alle stimmen ab, die Mehrheit startet den nächsten Tag.\n{help} zeigt jederzeit die Hilfe.","1. Fair office: rent and name your tent, set up tables, order beer.\n2. Guests arrive at 8:00. Everyone jumps in wherever it gets busy.\n3. Closing time is 22:00: sleep in the caravan — everyone votes, the majority starts the next day.\n{help} shows the help at any time.","1. Fuar ofisi: çadırı kirala ve adlandır, masa kur, bira sipariş et.\n2. Misafirler 8:00'de gelir. Herkes yoğunluk olan yere yardım eder.\n3. Kapanış 22:00: karavanda uyu — herkes oy verir, çoğunluk sonraki günü başlatır.\n{help} her zaman yardımı gösterir."
 LOBBY_GO,Start,Start,Başla
 VOTE_TITLE,Feierabend?,Call it a night?,Paydos mu?
 VOTE_TEXT,%s will schlafen gehen und den nächsten Tag starten.,%s wants to go to bed and start the next day.,%s yatmak ve sonraki günü başlatmak istiyor.
@@ -290,7 +290,7 @@ LIC_INFO,Danach bestellen Gäste auch das.,Guests will order it too.,Misafirler 
 LIC_FESTBIER,Festbier-Lizenz,Festival beer license,Festival birası lisansı
 LIC_HENDL,Hendl-Lizenz,Roast chicken license,Tavuk lisansı
 LIC_INFO_LATE,Premium: Gäste zahlen deutlich mehr dafür.,Premium: guests pay a lot more for it.,Premium: misafirler bunun için çok daha fazla öder.
-WHY_LIC_LATE,Erst ab Zeltstufe 3 oder der 2. Wiesn,Only from tent level 3 or the 2nd season,Ancak çadır seviyesi 3 veya 2. sezondan itibaren
+WHY_LIC_LATE,Erst ab Zeltstufe 3 oder dem 2. Fest,Only from tent level 3 or the 2nd season,Ancak çadır seviyesi 3 veya 2. sezondan itibaren
 STAFF_COOK,Koch,Cook,Aşçı
 STAFF_WAITER,Kellner,Waiter,Garson
 STAFF_CLEANER,Reinigungskraft,Cleaner,Temizlikçi
@@ -364,7 +364,7 @@ REPORT_NET,Netto,Net,Net
 REPORT_SERVED,Serviert %d · Verpasst %d,Served %d · Missed %d,Servis %d · Kaçırılan %d
 REPORT_MESS,Pfützen %d · Beschwerden %d · Gäste gegangen %d,Puddles %d · Complaints %d · Guests who left %d,Birikinti %d · Şikâyet %d · Giden misafir %d
 MSG_NO_MONEY,Zu wenig Geld für %s (%s),Not enough money for %s (%s),%s için para yetmiyor (%s)
-MSG_NEED_TENT,Zuerst ein Zelt mieten (Wiesenbüro),Rent a tent first (Fair Office),Önce bir çadır kirala (Fuar Ofisi)
+MSG_NEED_TENT,Zuerst ein Zelt mieten (Festbüro),Rent a tent first (Fair Office),Önce bir çadır kirala (Fuar Ofisi)
 MSG_TENT_RENTED,%s gemietet! Stell jetzt Tische auf.,%s rented! Now set up tables.,%s kiralandı! Şimdi masa kur.
 MSG_TABLE_LIMIT,Tischgrenze erreicht (%d) — Zelt vergrößern,Table limit reached (%d) — enlarge the tent,Masa sınırı doldu (%d) — çadırı büyüt
 MSG_TABLE_PLACED,Tisch aufgestellt (%d/%d),Table placed (%d/%d),Masa kuruldu (%d/%d)
@@ -393,15 +393,15 @@ MSG_SLEEP_NEED_TABLE,Stell zuerst mindestens einen Tisch auf,Place at least one 
 MSG_DAY_START,"Tag %d · 07:00 — Zelt offen! Gäste ab 08:00, Feierabend um 22:00","Day %d · 7:00 — tent open! Guests from 8:00, closing at 22:00","%d. Gün · 07:00 — çadır açık! Misafirler 08:00'den itibaren, kapanış 22:00"
 MSG_TABLE_NONE,Kein Tisch zum Verkaufen,No table to sell,Satılacak masa yok
 MSG_TABLE_SOLD,Tisch verkauft (+%s) · noch %d,Table sold (+%s) · %d left,Masa satıldı (+%s) · %d kaldı
-MSG_STOCK_EMPTY,Lager leer! %s nachbestellen (Wiesenbüro Ware),Storage empty! Reorder %s (Fair Office Supplies),Depo boş! %s sipariş et (Fuar Ofisi Malzeme)
+MSG_STOCK_EMPTY,Lager leer! %s nachbestellen (Festbüro Ware),Storage empty! Reorder %s (Fair Office Supplies),Depo boş! %s sipariş et (Fuar Ofisi Malzeme)
 MSG_EVENING,"19:00 — das Zelt wird voll, die Gäste werden ungeduldig","19:00 — the tent fills up, guests get impatient","19:00 — çadır doluyor, misafirler sabırsızlanıyor"
-MSG_DAY_END,Feierabend! Netto %s · Bilanz im Wiesenbüro · schlafen startet den nächsten Tag,Closing time! Net %s · report in the Fair Office · sleep to start the next day,Mesai bitti! Net %s · bilanço Fuar Ofisinde · uyumak sonraki günü başlatır
-POPUP_RESERVE,"Zuerst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %s für ein Paket Bier — sonst kannst du nichts verkaufen.\n\nWiesenbüro Ware","Buy supplies first!\n\nYou have no beer in storage and no delivery on the way.\nKeep at least %s for a package of beer — otherwise you can't sell anything.\n\nFair Office Supplies","Önce malzeme al!\n\nDepoda bira yok ve yolda teslimat yok.\nBir paket bira için en az %s ayır — yoksa hiçbir şey satamazsın.\n\nFuar Ofisi Malzeme"
-POPUP_NO_TENT,"Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst eins: Wiesenbüro Zelt (%s)","You don't have a tent yet!\n\nWithout a tent you can't store supplies.\nRent one first: Fair Office Tent (%s)","Henüz çadırın yok!\n\nÇadır olmadan malzeme depolayamazsın.\nÖnce bir tane kirala: Fuar Ofisi Çadır (%s)"
+MSG_DAY_END,Feierabend! Netto %s · Bilanz im Festbüro · schlafen startet den nächsten Tag,Closing time! Net %s · report in the Fair Office · sleep to start the next day,Mesai bitti! Net %s · bilanço Fuar Ofisinde · uyumak sonraki günü başlatır
+POPUP_RESERVE,"Zuerst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %s für ein Paket Bier — sonst kannst du nichts verkaufen.\n\nFestbüro Ware","Buy supplies first!\n\nYou have no beer in storage and no delivery on the way.\nKeep at least %s for a package of beer — otherwise you can't sell anything.\n\nFair Office Supplies","Önce malzeme al!\n\nDepoda bira yok ve yolda teslimat yok.\nBir paket bira için en az %s ayır — yoksa hiçbir şey satamazsın.\n\nFuar Ofisi Malzeme"
+POPUP_NO_TENT,"Du hast noch kein Zelt!\n\nOhne Festzelt kannst du keine Ware lagern.\nMiete zuerst eins: Festbüro Zelt (%s)","You don't have a tent yet!\n\nWithout a tent you can't store supplies.\nRent one first: Fair Office Tent (%s)","Henüz çadırın yok!\n\nÇadır olmadan malzeme depolayamazsın.\nÖnce bir tane kirala: Fuar Ofisi Çadır (%s)"
 QUEST_3_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
-QUEST_3_TEXT,Wiesenbüro (im Osten) Zelt Tisch aufstellen (200 € pro Tisch).,Fair Office (in the east) Tent Place table (€200 each).,Fuar Ofisi (doğuda) Çadır Masa koy (masa başı 200 €).
+QUEST_3_TEXT,Festbüro (im Osten) Zelt Tisch aufstellen (200 € pro Tisch).,Fair Office (in the east) Tent Place table (€200 each).,Fuar Ofisi (doğuda) Çadır Masa koy (masa başı 200 €).
 QUEST_4_TITLE,Bestelle Bier,Order beer,Bira sipariş et
-QUEST_4_TEXT,"Ohne Bier kann niemand bedient werden. Im Wiesenbüro Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.","Bira olmadan kimseye servis yapılamaz. Fuar Ofisi Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al."
+QUEST_4_TEXT,"Ohne Bier kann niemand bedient werden. Im Festbüro Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.","Bira olmadan kimseye servis yapılamaz. Fuar Ofisi Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al."
 QUEST_5_TITLE,Warte auf den Lieferwagen,Wait for the delivery van,Teslimat aracını bekle
 QUEST_5_TEXT,"Deine Bestellung ist unterwegs. In etwa 30 Sekunden fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about 30 seconds the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık 30 saniye içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
 QUEST_6_TITLE,Pakete ins Regal räumen,Stock the shelf,Paketleri rafa diz
@@ -413,13 +413,13 @@ QUEST_8_TEXT,"Krug nehmen, am Fass {interact} gedrückt halten, dann zum Gast un
 QUEST_9_TITLE,Halte bis 22:00 durch,Keep going until 22:00,22:00'ye kadar dayan
 QUEST_9_TEXT,Danach kommt die Tagesbilanz.,Then you get the daily report.,Ardından günlük bilanço gelir.
 QUEST_10_TITLE,Stelle einen Kellner ein,Hire a waiter,Bir garson işe al
-QUEST_10_TEXT,Wiesenbüro Personal. Er bedient die Gäste für dich.,Fair Office Staff. They serve guests for you.,Fuar Ofisi Personel. Misafirlere senin yerine servis yapar.
+QUEST_10_TEXT,Festbüro Personal. Er bedient die Gäste für dich.,Fair Office Staff. They serve guests for you.,Fuar Ofisi Personel. Misafirlere senin yerine servis yapar.
 QUEST_11_TITLE,Kaufe eine Lizenz,Buy a license,Bir lisans satın al
-QUEST_11_TEXT,Wiesenbüro Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office Licenses. More choice means more sales.,Fuar Ofisi Lisanslar. Daha fazla çeşit daha fazla satış demek.
+QUEST_11_TEXT,Festbüro Lizenzen. Mehr Auswahl bringt mehr Umsatz.,Fair Office Licenses. More choice means more sales.,Fuar Ofisi Lisanslar. Daha fazla çeşit daha fazla satış demek.
 QUEST_12_TITLE,Baue eine Toilette ein,Install a toilet,Tuvalet kur
-QUEST_12_TEXT,Wiesenbüro Zelt (1.000 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office Tent (€1,000). Otherwise guests pee in the corner.",Fuar Ofisi Çadır (1.000 €). Yoksa misafirler köşeye işer.
+QUEST_12_TEXT,Festbüro Zelt (1.000 €). Sonst pinkeln die Gäste in die Ecke.,"Fair Office Tent (€1,000). Otherwise guests pee in the corner.",Fuar Ofisi Çadır (1.000 €). Yoksa misafirler köşeye işer.
 QUEST_13_TITLE,Buche einen Künstler,Book an act,Bir sanatçı ayarla
-QUEST_13_TEXT,Wiesenbüro Künstler. Musik lockt mehr Gäste an.,Fair Office Acts. Music draws more guests.,Fuar Ofisi Sanatçılar. Müzik daha çok misafir çeker.
+QUEST_13_TEXT,Festbüro Künstler. Musik lockt mehr Gäste an.,Fair Office Acts. Music draws more guests.,Fuar Ofisi Sanatçılar. Müzik daha çok misafir çeker.
 HELP_TITLE,Hilfe,Help,Yardım
 HELP_CONTROLS,Steuerung,Controls,Kontroller
 HELP_MOUSE,Maus,Mouse,Fare
@@ -428,9 +428,9 @@ ACTION_LOOK,Umsehen,Look around,Etrafa bak
 HUD_HELP_HINT,{help} Hilfe · {kalender} Kalender,{help} Help · {kalender} Calendar,{help} Yardım · {kalender} Takvim
 PAUSE_HELP,Hilfe und Steuerung,Help and controls,Yardım ve kontroller
 HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
-HELP_FLOW,"1. Wiesenbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Hinten Krug nehmen, am Fass zapfen, vorne auf die Ausgabe stellen — dort holen Kellner ab und bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug at the back, pour at a keg, put it on the pass up front — waiters pick up there and serve. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Arkada kupa al, fıçıda doldur, öndeki servis yerine koy — garsonlar oradan alıp servis yapar. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
+HELP_FLOW,"1. Festbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Hinten Krug nehmen, am Fass zapfen, vorne auf die Ausgabe stellen — dort holen Kellner ab und bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug at the back, pour at a keg, put it on the pass up front — waiters pick up there and serve. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Arkada kupa al, fıçıda doldur, öndeki servis yerine koy — garsonlar oradan alıp servis yapar. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
 HELP_TIPS_TITLE,Tipps,Tips,İpuçları
-HELP_TIPS,"• Gäste warten nicht ewig — verpasste Bestellungen kosten Beliebtheit.\n• Mehr Beliebtheit bringt mehr Gäste, ein sauberes Zelt mehr Geld pro Bestellung.\n• Ohne Toilette pinkeln Gäste in die Ecke und beschweren sich.\n• Das Konto darf bis −1.000 € ins Minus; beim Zurückzahlen gehen 5 % Zinsen ab.\n• Zusammen spielen: Jeder darf im Wiesenbüro einkaufen und Personal einstellen.\n• Schlafen startet eine Abstimmung — die Mehrheit entscheidet über den nächsten Tag.\n• Ist das Klo besetzt (rote Lampe), gehen ungeduldige Gäste in eine Ecke — Putzen nicht vergessen!
+HELP_TIPS,"• Gäste warten nicht ewig — verpasste Bestellungen kosten Beliebtheit.\n• Mehr Beliebtheit bringt mehr Gäste, ein sauberes Zelt mehr Geld pro Bestellung.\n• Ohne Toilette pinkeln Gäste in die Ecke und beschweren sich.\n• Das Konto darf bis −1.000 € ins Minus; beim Zurückzahlen gehen 5 % Zinsen ab.\n• Zusammen spielen: Jeder darf im Festbüro einkaufen und Personal einstellen.\n• Schlafen startet eine Abstimmung — die Mehrheit entscheidet über den nächsten Tag.\n• Ist das Klo besetzt (rote Lampe), gehen ungeduldige Gäste in eine Ecke — Putzen nicht vergessen!
 • Gäste-Icons: Stammgast (treu, gibt Trinkgeld) · Tourist (ungeduldig) · in Tracht (bestellt gern) · VIP (wichtig für die Beliebtheit). [Strg] halten zeigt die Details.","• Guests don't wait forever — missed orders cost popularity.\n• More popularity brings more guests, a clean tent more money per order.\n• Without a toilet, guests pee in the corner and complain.\n• Your account can go down to −€1,000; paying it back costs 5 % interest.\n• Playing together: everyone may buy at the fair office and hire staff.\n• Going to bed starts a vote — the majority decides on the next day.\n• If the toilet is taken (red lamp), impatient guests go in a corner — don't forget to clean!
 • Guest icons: regular (loyal, tips) · tourist (impatient) · in traditional dress (likes to order) · VIP (important for popularity). Hold [Ctrl] for details.","• Misafirler sonsuza kadar beklemez — kaçırılan siparişler popülerlik kaybettirir.\n• Popülerlik daha çok misafir, temiz çadır sipariş başına daha çok para getirir.\n• Tuvalet yoksa misafirler köşeye işer ve şikâyet eder.\n• Hesabın −1.000 €'ya kadar eksiye düşebilir; geri öderken %5 faiz kesilir.\n• Birlikte oynarken: herkes fuar ofisinden alışveriş yapabilir ve personel alabilir.\n• Yatmak bir oylama başlatır — sonraki günü çoğunluk belirler.\n• Tuvalet doluysa (kırmızı lamba) sabırsız misafirler bir köşeye gider — temizlemeyi unutma!
 • Misafir simgeleri: müdavim (sadık, bahşiş verir) · turist (sabırsız) · geleneksel kıyafetli (çok sipariş verir) · VIP (popülerlik için önemli). Ayrıntılar için [Ctrl] basılı tut."
@@ -477,7 +477,7 @@ DECO_HAENGELATERNE_INFO,Kleine Laterne unter dem Dach.,Small lantern under the r
 DECO_HOPFEN,Hopfengirlande,Hop garland,Şerbetçiotu girlandı
 DECO_HOPFEN_INFO,Hängt an der Zeltwand.,Hangs on the tent wall.,Çadır duvarına asılır.
 DECO_RIESENBREZEL,Riesenbrezel,Giant pretzel,Dev brezel
-DECO_RIESENBREZEL_INFO,Das Wahrzeichen jeder Wiesn — für die Wand.,The landmark of every fair — for the wall.,Her panayırın simgesi — duvar için.
+DECO_RIESENBREZEL_INFO,Das Wahrzeichen jedes Fests — für die Wand.,The landmark of every fair — for the wall.,Her panayırın simgesi — duvar için.
 DECO_BANNER,Wirtshaus-Banner,Tavern banner,Meyhane sancağı
 DECO_BANNER_INFO,Banner mit Maßkrug für die Zeltwand.,Banner with a beer mug for the tent wall.,Çadır duvarı için bira kupalı sancak.
 DECO_WIMPEL,Wimpelkette,Bunting,Flama zinciri
@@ -495,7 +495,7 @@ MS_ERSTE_MASS_TITLE,Die erste Maß,The first mug,İlk kupa
 MS_ERSTE_MASS_TEXT,Bediene deinen ersten Gast.,Serve your first guest.,İlk misafirine servis yap.
 MS_UMSATZ_1000_TITLE,Die ersten 1.000 €,"The first €1,000",İlk 1.000 €
 MS_UMSATZ_1000_TEXT,Nimm insgesamt 1.000 € ein.,"Earn €1,000 in total.",Toplam 1.000 € kazan.
-MS_TAG_7_TITLE,Eine Woche Wiesn,A week at the fair,Fuarda bir hafta
+MS_TAG_7_TITLE,Eine Woche Fest,A week at the fair,Fuarda bir hafta
 MS_TAG_7_TEXT,Schließe 7 Tage ab.,Finish 7 days.,7 günü tamamla.
 MS_MASS_100_TITLE,100 Bestellungen,100 orders,100 sipariş
 MS_MASS_100_TEXT,Bediene insgesamt 100 Bestellungen.,Serve 100 orders in total.,Toplam 100 sipariş servis et.
@@ -509,21 +509,21 @@ MS_UMSATZ_10000_TITLE,10.000 € Umsatz,"€10,000 revenue",10.000 € ciro
 MS_UMSATZ_10000_TEXT,Nimm insgesamt 10.000 € ein.,"Earn €10,000 in total.",Toplam 10.000 € kazan.
 MS_KELLNER_5_TITLE,Meisterkellner,Master waiter,Usta garson
 MS_KELLNER_5_TEXT,Bring einen Kellner auf Stufe 5.,Get a waiter to level 5.,Bir garsonu 5. seviyeye çıkar.
-MS_TAG_30_TITLE,Ein Monat Wiesn,A month at the fair,Fuarda bir ay
+MS_TAG_30_TITLE,Ein Monat Fest,A month at the fair,Fuarda bir ay
 MS_TAG_30_TEXT,Schließe 30 Tage ab.,Finish 30 days.,30 günü tamamla.
 MS_MASS_1000_TITLE,1.000 Bestellungen,"1,000 orders",1.000 sipariş
 MS_MASS_1000_TEXT,Bediene insgesamt 1.000 Bestellungen.,"Serve 1,000 orders in total.",Toplam 1.000 sipariş servis et.
 MS_ZELT_3_TITLE,Das große Zelt,The big tent,Büyük çadır
 MS_ZELT_3_TEXT,Vergrößere dein Zelt auf die größte Stufe.,Enlarge your tent to the largest size.,Çadırını en büyük boya büyüt.
-MS_UMSATZ_100000_TITLE,Wiesn-Wirt,Beer tent tycoon,Çadır patronu
+MS_UMSATZ_100000_TITLE,Festwirt,Beer tent tycoon,Çadır patronu
 MS_UMSATZ_100000_TEXT,Nimm insgesamt 100.000 € ein.,"Earn €100,000 in total.",Toplam 100.000 € kazan.
 CREDITS_TITLE,Mitwirkende,Credits,Emeği Geçenler
 CREDITS_BODY,"Spielidee und Entwicklung\nSerdar Vapur\n\nKirmes-Modelle\nAmusement Park Pack\n\nFiguren und Zelt\nerstellt mit Meshy und Blender\n\nMusik\nerstellt mit AIMusic.so\n\nEngine\nGodot Engine\n\nSteam-Anbindung\nGodotSteam\n\nLizenzhinweise stehen unten.","Game design and development\nSerdar Vapur\n\nFairground models\nAmusement Park Pack\n\nCharacters and tent\ncreated with Meshy and Blender\n\nMusic\ncreated with AIMusic.so\n\nEngine\nGodot Engine\n\nSteam integration\nGodotSteam\n\nLicence notices are below.","Oyun tasarımı ve geliştirme\nSerdar Vapur\n\nLunapark modelleri\nAmusement Park Pack\n\nKarakterler ve çadır\nMeshy ve Blender ile yapıldı\n\nMüzik\nAIMusic.so ile yapıldı\n\nOyun motoru\nGodot Engine\n\nSteam bağlantısı\nGodotSteam\n\nLisans bildirimleri aşağıdadır."
 CREDITS_LICENSES,Lizenzhinweise,Licence notices,Lisans bildirimleri
 WORLD_COMPUTER,"Zelt-Computer\n({interact}: Bierpreis · Bilanz)","Tent computer\n({interact}: beer price · report)","Çadır bilgisayarı\n({interact}: bira fiyatı · bilanço)"
 WORLD_MUGS,"Krüge ({interact})","Mugs ({interact})","Kupalar ({interact})"
-WORLD_OFFICE,"Wiesenbüro\n({interact}: Zelt · Personal · Ware)","Fair Office\n({interact}: tent · staff · supplies)","Fuar Ofisi\n({interact}: çadır · personel · malzeme)"
-WORLD_OFFICE_SIGN,WIESENBÜRO,FAIR OFFICE,FUAR OFİSİ
+WORLD_OFFICE,"Festbüro\n({interact}: Zelt · Personal · Ware)","Fair Office\n({interact}: tent · staff · supplies)","Fuar Ofisi\n({interact}: çadır · personel · malzeme)"
+WORLD_OFFICE_SIGN,FESTBÜRO,FAIR OFFICE,FUAR OFİSİ
 WORLD_CARAVAN,"Wohnwagen\n({interact}: schlafen nächster Tag)","Caravan\n({interact}: sleep next day)","Karavan\n({interact}: uyu sonraki gün)"
 WORLD_KIOSK,"Zelt buchen\n({interact})","Book a tent\n({interact})","Çadır kirala\n({interact})"
 WORLD_STAGE,BÜHNE,STAGE,SAHNE
@@ -592,7 +592,7 @@ KOOP_CONNECTING,Verbinde mit dem Spiel …,Connecting to the game …,Oyuna bağ
 KOOP_LEAVE,Verlassen,Leave,Ayrıl
 KOOP_BACK,Zurück,Back,Geri
 KOOP_FIG_0,Bohnen-Bartl,Bean Bartl,Fasulye Bartl
-KOOP_FIG_1,Wiesn-Wastl,Wiesn Wastl,Wiesn Wastl
+KOOP_FIG_1,Bier-Wastl,Beer Wastl,Bira Wastl
 KOOP_FIG_2,Dirndl-Resi,Dirndl Resi,Dirndl Resi
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
@@ -639,7 +639,7 @@ MSG_AUSGABE_SORTE_VOLL,Der Platz für diese Sorte ist voll (%s) — erst abholen
 OFFER_LAGERREGAL,Lagerregal,Storage shelf,Depo rafı
 OFFER_LAGERREGAL_INFO,"Mehr Platz für Ware: jedes Regal fasst %s Bier und %s Zutaten. Jetzt %s von höchstens %s Regalen.","More room for supplies: each shelf holds %s beer and %s ingredients. Now %s of at most %s shelves.","Mallar için daha çok yer: her raf %s bira ve %s malzeme alır. Şu an en fazla %s rafın %s tanesi var."
 MSG_LAGERREGAL_GEKAUFT,"Neues Lagerregal aufgestellt — jetzt passen %s Einheiten je Ware ins Lager.","New storage shelf set up — storage now holds %s units per kind.","Yeni depo rafı kuruldu — depo artık her mal için %s birim alıyor."
-MSG_LAGER_VOLL,"Das Lager ist voll (%s je Ware) — Paket liegt wieder am Boden. Mehr Regale gibt es im Wiesenbüro.","Storage is full (%s per kind) — the parcel is back on the floor. More shelves in the fair office.","Depo dolu (her mal için %s) — paket yeniden yerde. Daha fazla raf fuar ofisinde."
+MSG_LAGER_VOLL,"Das Lager ist voll (%s je Ware) — Paket liegt wieder am Boden. Mehr Regale gibt es im Festbüro.","Storage is full (%s per kind) — the parcel is back on the floor. More shelves in the fair office.","Depo dolu (her mal için %s) — paket yeniden yerde. Daha fazla raf fuar ofisinde."
 WHY_MAX_REGALE,Mehr als %s Lagerregale passen nicht ins Zelt.,No more than %s storage shelves fit in the tent.,Çadıra en fazla %s depo rafı sığar.
 HINT_MOVE_LAGER,{interact} Regal verschieben,{interact} Move shelf,{interact} Rafı taşı
 HINT_PLACE_LAGER,{interact} Abstellen · {emote} Drehen,{interact} Put down · {emote} Rotate,{interact} Bırak · {emote} Döndür
@@ -697,7 +697,7 @@ if you are reading this, the last beer got me. Forty years I poured at the Slopt
 bu mektubu okuyorsanız son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi festival çadırımı size bırakıyorum."
 BRIEF_2_DU,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Huber vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Huber from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Huber pes etmeni bekliyor. Ona bu iyiliği yapma."
 BRIEF_2_IHR,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Huber vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Huber from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Huber pes etmenizi bekliyor. Ona bu iyiliği yapmayın."
-BRIEF_3_DU,"Der Wiesnchef erwartet dich in seinem Wiesenbüro, ganz im Osten der Kirmes. Such ihn auf, er zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+BRIEF_3_DU,"Der Festleiter erwartet dich in seinem Festbüro, ganz im Osten der Kirmes. Such ihn auf, er zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat di,
 dein Onkel Sepp","The fair manager is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
@@ -707,7 +707,7 @@ your Uncle Sepp","Fuar müdürü seni fuarın en doğusundaki ofisinde bekliyor.
 
 Şerefe ve hoşça kal,
 Sepp Amcan"
-BRIEF_3_IHR,"Der Wiesnchef erwartet euch in seinem Wiesenbüro, ganz im Osten der Kirmes. Sucht ihn auf, er zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+BRIEF_3_IHR,"Der Festleiter erwartet euch in seinem Festbüro, ganz im Osten der Kirmes. Sucht ihn auf, er zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat eich,
 euer Onkel Sepp","The fair manager is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
@@ -725,14 +725,14 @@ CHEF_6_DU,"Und der Huber vom Nachbarzelt reibt sich schon die Hände …","And H
 CHEF_6_IHR,"Und der Huber vom Nachbarzelt reibt sich schon die Hände …","And Huber from the tent next door is already rubbing his hands …","Yan çadırdaki Huber de şimdiden ellerini ovuşturuyor …"
 CHEF_8_DU,"Du schaffst das. Der Sepp wäre stolz auf dich.","You can do it. Sepp would be proud of you.","Bunu başarırsın. Sepp seninle gurur duyardı."
 CHEF_8_IHR,"Ihr schafft das. Der Sepp wäre stolz auf euch.","You can do it. Sepp would be proud of you.","Bunu başarırsınız. Sepp sizinle gurur duyardı."
-HINT_WIESNCHEF,{interact} Mit dem Wiesnchef reden,{interact} Talk to the fair manager,{interact} Fuar müdürüyle konuş
+HINT_FESTLEITER,{interact} Mit dem Festleiter reden,{interact} Talk to the fair manager,{interact} Fuar müdürüyle konuş
 DIALOG_WEITER,Linksklick / E weiter,Left click / E for next,Devam için sol tık / E
 DIALOG_ENDE,Linksklick / E beenden,Left click / E to finish,Bitirmek için sol tık / E
-WIESNCHEF_NAME,Wiesnchef,Fair manager,Fuar müdürü
+FESTLEITER_NAME,Festleiter,Fair manager,Fuar müdürü
 CHEF_7_DU,"Unterschreib vorne am roten Schild, dann gehört das Zelt dir. Danach komm zu mir — ich zeig dir, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzala, çadır senin olsun. Sonra yanıma gel — devamını göstereyim."
 CHEF_7_IHR,"Unterschreibt vorne am roten Schild, dann gehört das Zelt euch. Danach kommt zu mir — ich zeig euch, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzalayın, çadır sizin olsun. Sonra yanıma gelin — devamını göstereyim."
-CHEF_BUERO_1_DU,"Das ist mein Wiesenbüro. Hier am Schreibtisch kaufst du alles, was dein Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırının ihtiyacı olan her şeyi bu masadan alırsın."
-CHEF_BUERO_1_IHR,"Das ist mein Wiesenbüro. Hier am Schreibtisch kauft ihr alles, was euer Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırınızın ihtiyacı olan her şeyi bu masadan alırsınız."
+CHEF_BUERO_1_DU,"Das ist mein Festbüro. Hier am Schreibtisch kaufst du alles, was dein Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırının ihtiyacı olan her şeyi bu masadan alırsın."
+CHEF_BUERO_1_IHR,"Das ist mein Festbüro. Hier am Schreibtisch kauft ihr alles, was euer Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırınızın ihtiyacı olan her şeyi bu masadan alırsınız."
 CHEF_BUERO_2_DU,"Ein leeres Zelt lockt keinen. Reiter Zelt: Stell zuerst zwei Tische auf.","An empty tent attracts nobody. Tent tab: first put up two tables.","Boş çadır kimseyi çekmez. Çadır sekmesi: önce iki masa kur."
 CHEF_BUERO_2_IHR,"Ein leeres Zelt lockt keinen. Reiter Zelt: Stellt zuerst zwei Tische auf.","An empty tent attracts nobody. Tent tab: first put up two tables.","Boş çadır kimseyi çekmez. Çadır sekmesi: önce iki masa kurun."
 CHEF_BUERO_3_DU,"Und ohne Bier kein Geschäft: Reiter Ware, ein Paket Bier bestellen. Der Lieferwagen bringt's dann zum Zelt.","And no beer, no business: Goods tab, order a parcel of beer. The van brings it to the tent.","Bira yoksa iş de yok: Mal sekmesi, bir paket bira sipariş et. Kamyonet çadıra getirir."
@@ -773,7 +773,7 @@ ZIEL_SAUBER,Keine einzige Pfütze im Zelt,Not a single puddle in the tent,Çadı
 ZIEL_VERPASST,Höchstens %d Bestellungen verpassen,Miss at most %d orders,En fazla %d siparişi kaçır
 ZIEL_BESCHWERDEN,Keine einzige Beschwerde,Not a single complaint,Tek bir şikayet bile olmasın
 MSG_ZIEL_NEU,Tagesziel: %s,Daily goal: %s,Günlük hedef: %s
-MSG_ZIEL_GESCHAFFT,Tagesziel geschafft! Der Wiesnchef legt %s drauf,Daily goal reached! The fair manager adds %s,Günlük hedef tamam! Fuar müdürü %s ekliyor
+MSG_ZIEL_GESCHAFFT,Tagesziel geschafft! Der Festleiter legt %s drauf,Daily goal reached! The fair manager adds %s,Günlük hedef tamam! Fuar müdürü %s ekliyor
 MSG_ZIEL_VERFEHLT,Tagesziel verfehlt — morgen neues Glück,Daily goal missed — better luck tomorrow,Günlük hedef kaçtı — yarın yeni şans
 MSG_BANK_MORGEN,Morgen Abend bucht die Bank %s für Sepps Schulden ab,Tomorrow evening the bank collects %s for Sepp's debts,Yarın akşam banka Sepp'in borçları için %s çekecek
 MSG_BANK_BEZAHLT,Rate von %s bezahlt — noch %s Schulden,Instalment of %s paid — %s debt left,%s taksit ödendi — %s borç kaldı
@@ -795,10 +795,10 @@ MSG_PLEITE_HUBER,Der Huber vom Nachbarzelt hat's schon gehört — und grinst,Hu
 CHEF_KREDIT_DU,"Und die Brauerei will noch %s von dir. Der Huber erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeig's ihm!","And the brewery still wants %s from you. Huber is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası senden hâlâ %s istiyor. Huber herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü göster!"
 CHEF_KREDIT_IHR,"Und die Brauerei will noch %s von euch. Der Huber erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeigt's ihm!","And the brewery still wants %s from you. Huber is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası sizden hâlâ %s istiyor. Huber herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü gösterin!"
 QUEST_1_TITLE,Übernimm Sepps Zelt,Take over Sepp's tent,Sepp'in çadırını devral
-QUEST_1_TEXT,"Folge dem Wiesnchef zum Festzelt. Am Eingang steht das rote Schild — dort mit {interact} unterschreiben und dem Zelt einen Namen geben (500 € Gebühr, die ersten 5 Tage ohne Miete).","Follow the fair manager to the beer tent. The red board is at the entrance — sign there with {interact} and name the tent (500 € fee, the first 5 days rent-free).","Fuar müdürünü bira çadırına kadar takip et. Girişte kırmızı tabela var — orada {interact} ile imzala ve çadıra bir isim ver (500 € ücret, ilk 5 gün kira yok)."
+QUEST_1_TEXT,"Folge dem Festleiter zum Festzelt. Am Eingang steht das rote Schild — dort mit {interact} unterschreiben und dem Zelt einen Namen geben (500 € Gebühr, die ersten 5 Tage ohne Miete).","Follow the fair manager to the beer tent. The red board is at the entrance — sign there with {interact} and name the tent (500 € fee, the first 5 days rent-free).","Fuar müdürünü bira çadırına kadar takip et. Girişte kırmızı tabela var — orada {interact} ile imzala ve çadıra bir isim ver (500 € ücret, ilk 5 gün kira yok)."
 QUEST_2_TITLE,Putze das Zelt,Clean the tent,Çadırı temizle
-QUEST_0_TITLE,Sprich mit dem Wiesnchef,Talk to the fair manager,Fuar müdürüyle konuş
-QUEST_0_TEXT,"Der Wiesnchef wartet vor seinem Wiesenbüro im Osten der Kirmes. Hör dir an, was er zu Sepps Zelt sagt.","The fair manager is waiting outside his fair office in the east of the fair. Hear what he has to say about Sepp's tent.","Fuar müdürü fuarın doğusundaki ofisinin önünde bekliyor. Sepp'in çadırı hakkında ne dediğini dinle."
+QUEST_0_TITLE,Sprich mit dem Festleiter,Talk to the fair manager,Fuar müdürüyle konuş
+QUEST_0_TEXT,"Der Festleiter wartet vor seinem Festbüro im Osten der Kirmes. Hör dir an, was er zu Sepps Zelt sagt.","The fair manager is waiting outside his fair office in the east of the fair. Hear what he has to say about Sepp's tent.","Fuar müdürü fuarın doğusundaki ofisinin önünde bekliyor. Sepp'in çadırı hakkında ne dediğini dinle."
 CHEF_1_DU,"Na so was — du musst Sepps Patenkind sein! Er hat mir so viel von dir erzählt. Mein Beileid.","Well I never — you must be Sepp's godchild! He told me so much about you. My condolences.","Vay — sen Sepp'in vaftiz çocuğu olmalısın! Bana senden çok bahsetti. Başın sağ olsun."
 CHEF_1_IHR,"Na so was — ihr müsst Sepps Erben sein! Er hat mir so viel von euch erzählt. Mein Beileid.","Well I never — you must be Sepp's heirs! He told me so much about you. My condolences.","Vay — siz Sepp'in varisleri olmalısınız! Bana sizden çok bahsetti. Başınız sağ olsun."
 CHEF_2_DU,"Ich muss ehrlich sein: Sepps Zelt stand ein ganzes Jahr leer und ist völlig verdreckt. Und die Bank will noch %s von seinen Schulden.","I have to be honest: Sepp's tent stood empty for a whole year and is filthy. And the bank still wants %s of his debts.","Dürüst olmalıyım: Sepp'in çadırı koca bir yıl boş kaldı ve berbat halde. Banka da onun borçlarından hâlâ %s istiyor."
@@ -815,7 +815,7 @@ CHEF_JA_DU,"Wunderbar! Der Sepp wär stolz. Komm mit, ich bring dich zum Zelt!",
 CHEF_JA_IHR,"Wunderbar! Der Sepp wär stolz. Kommt mit, ich bring euch zum Zelt!","Wonderful! Sepp would be proud. Come along, I will take you to the tent!","Harika! Sepp gurur duyardı. Gelin, sizi çadıra götüreyim!"
 CHEF_NEIN_2_DU,"Wenn du's dir anders überlegst: Ich bin hier im Büro.","If you change your mind: I am here at the office.","Fikrini değiştirirsen: buradayım, ofiste."
 CHEF_NEIN_2_IHR,"Wenn ihr's euch anders überlegt: Ich bin hier im Büro.","If you change your mind: I am here at the office.","Fikrinizi değiştirirseniz: buradayım, ofiste."
-QUEST_2_TEXT,"Das Zelt stand ein Jahr leer: Planen abziehen, Dreck fegen (je {interact} halten), die Müllsäcke vor die Tür zum Müllplatz tragen. Danach ab ins Wiesenbüro.","The tent stood empty for a year: pull off the covers, sweep the dirt (hold {interact} for each), carry the rubbish bags out to the bin area by the door. Then off to the fair office.","Çadır bir yıl boş kaldı: örtüleri çek, pislikleri süpür (her biri için {interact} basılı tut), çöp torbalarını kapının önündeki çöp yerine taşı. Sonra fuar ofisine git."
+QUEST_2_TEXT,"Das Zelt stand ein Jahr leer: Planen abziehen, Dreck fegen (je {interact} halten), die Müllsäcke vor die Tür zum Müllplatz tragen. Danach ab ins Festbüro.","The tent stood empty for a year: pull off the covers, sweep the dirt (hold {interact} for each), carry the rubbish bags out to the bin area by the door. Then off to the fair office.","Çadır bir yıl boş kaldı: örtüleri çek, pislikleri süpür (her biri için {interact} basılı tut), çöp torbalarını kapının önündeki çöp yerine taşı. Sonra fuar ofisine git."
 CHEF_PUTZ_1_DU,"Oje … so sieht's aus, wenn ein Zelt ein Jahr leer steht. Alles unter Planen, und überall Laub, Scherben und Stroh.","Oh dear … that is what a tent looks like after a year standing empty. Everything under covers, and leaves, shards and straw everywhere.","Eyvah … bir yıl boş kalan çadır işte böyle görünür. Her şey örtülerin altında, her yerde yaprak, cam kırığı ve saman."
 CHEF_PUTZ_1_IHR,"Oje … so sieht's aus, wenn ein Zelt ein Jahr leer steht. Alles unter Planen, und überall Laub, Scherben und Stroh.","Oh dear … that is what a tent looks like after a year standing empty. Everything under covers, and leaves, shards and straw everywhere.","Eyvah … bir yıl boş kalan çadır işte böyle görünür. Her şey örtülerin altında, her yerde yaprak, cam kırığı ve saman."
 CHEF_PUTZ_2_DU,"Zieh die Planen von Theke, Bühne und Regalen. Den Dreck fegst du mit dem Besen zusammen — halt E gedrückt, dann kommt er in einen Sack.","Pull the covers off the bar, the stage and the shelves. Sweep the dirt together with the broom — hold E and it goes into a bag.","Tezgahın, sahnenin ve rafların örtülerini çek. Pislikleri süpürgeyle topla — E'ye basılı tut, hepsi bir torbaya girer."
@@ -845,8 +845,8 @@ HUBER_KRIEG_2_DU,"Riecht's bei dir im Zelt nicht ein bisserl komisch? Die Leute 
 HUBER_KRIEG_2_IHR,"Riecht's bei euch im Zelt nicht ein bisserl komisch? Die Leute reden schon.","Doesn't your tent smell a little funny? People are already talking.","Çadırınızda biraz tuhaf bir koku yok mu? İnsanlar konuşmaya başladı bile."
 HUBER_KRIEG_3_DU,"Ich hab nix gemacht. Ich steh nur hier und trink mein Bier. Prost!","I have done nothing. I am just standing here drinking my beer. Cheers!","Ben bir şey yapmadım. Sadece burada durup biramı içiyorum. Şerefe!"
 HUBER_KRIEG_3_IHR,"Ich hab nix gemacht. Ich steh nur hier und trink mein Bier. Prost!","I have done nothing. I am just standing here drinking my beer. Cheers!","Ben bir şey yapmadım. Sadece burada durup biramı içiyorum. Şerefe!"
-HUBER_FINALE_1_DU,"Jetzt reicht's. Am letzten Wiesn-Tag machen wir das aus: Maß-Wettschleppen, vor allen Leuten.","That's enough. On the last day of the fair we settle this: a stein-carrying race, in front of everyone.","Yeter artık. Fuarın son günü bunu çözeriz: herkesin önünde kupa taşıma yarışı."
-HUBER_FINALE_1_IHR,"Jetzt reicht's. Am letzten Wiesn-Tag machen wir das aus: Maß-Wettschleppen, vor allen Leuten.","That's enough. On the last day of the fair we settle this: a stein-carrying race, in front of everyone.","Yeter artık. Fuarın son günü bunu çözeriz: herkesin önünde kupa taşıma yarışı."
+HUBER_FINALE_1_DU,"Jetzt reicht's. Am letzten Festtag machen wir das aus: Maß-Wettschleppen, vor allen Leuten.","That's enough. On the last day of the fair we settle this: a stein-carrying race, in front of everyone.","Yeter artık. Fuarın son günü bunu çözeriz: herkesin önünde kupa taşıma yarışı."
+HUBER_FINALE_1_IHR,"Jetzt reicht's. Am letzten Festtag machen wir das aus: Maß-Wettschleppen, vor allen Leuten.","That's enough. On the last day of the fair we settle this: a stein-carrying race, in front of everyone.","Yeter artık. Fuarın son günü bunu çözeriz: herkesin önünde kupa taşıma yarışı."
 HUBER_FINALE_2_DU,"Verlierst du, sagst du laut, dass der Sepp ein Stümper war. Gewinnst du … na, das wird nicht passieren.","If you lose, you say out loud that Sepp was a bungler. If you win … well, that won't happen.","Kaybedersen, Sepp'in beceriksiz olduğunu yüksek sesle söylersin. Kazanırsan … neyse, o olmayacak."
 HUBER_FINALE_2_IHR,"Verliert ihr, sagt ihr laut, dass der Sepp ein Stümper war. Gewinnt ihr … na, das wird nicht passieren.","If you lose, you say out loud that Sepp was a bungler. If you win … well, that won't happen.","Kaybederseniz, Sepp'in beceriksiz olduğunu yüksek sesle söylersiniz. Kazanırsanız … neyse, o olmayacak."
 HUBER_PLEITE_DU,"Na, braucht's a Darlehen? Ich kauf dir das Zelt gern ab. Zum Freundschaftspreis.","Well, need a loan? I will gladly buy the tent off you. At a friendly price.","Ee, borç lazım mı? Çadırı senden seve seve alırım. Dostluk fiyatına."
@@ -882,8 +882,8 @@ DUELL_HUBER_TOR,Huber: Tor %d,Huber: gate %d,Huber: kapı %d
 DUELL_HUBER_FERTIG,Huber: %.1f s,Huber: %.1f s,Huber: %.1f sn
 DUELL_HINWEIS,"Durch alle %d Tore und zurück ins Ziel. Nicht rennen, nicht scharf lenken — sonst schwappt's über (+2,5 s je Maß).","Through all %d gates and back to the finish. Don't run, don't turn sharply — or it spills (+2.5 s per stein).","%d kapının hepsinden geçip bitişe dön. Koşma, sert dönme — yoksa taşar (kupa başına +2,5 sn)."
 MSG_DUELL_ERGEBNIS,"Wettschleppen: %.1f s (%d verschüttet) — Huber %.1f s","Stein race: %.1f s (%d spilled) — Huber %.1f s","Kupa yarışı: %.1f sn (%d döküldü) — Huber %.1f sn"
-HUBER_DUELL_1_DU,"Heut ist der letzte Wiesn-Tag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
-HUBER_DUELL_1_IHR,"Heut ist der letzte Wiesn-Tag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
+HUBER_DUELL_1_DU,"Heut ist der letzte Festtag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
+HUBER_DUELL_1_IHR,"Heut ist der letzte Festtag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
 HUBER_DUELL_2_DU,"Zehn Maß, einmal durch alle Tore und zurück. Wer schneller ist und weniger verschüttet, gewinnt. Verlierst du, gibst du zu, dass der Sepp ein Stümper war.","Ten steins, once through all the gates and back. Whoever is faster and spills less wins. If you lose, you admit Sepp was a bungler.","On kupa, bütün kapılardan geçip geri. Kim daha hızlı olur ve daha az dökerse kazanır. Kaybedersen Sepp'in beceriksiz olduğunu kabul edersin."
 HUBER_DUELL_2_IHR,"Zehn Maß, einmal durch alle Tore und zurück. Wer schneller ist und weniger verschüttet, gewinnt. Verliert ihr, gebt ihr zu, dass der Sepp ein Stümper war.","Ten steins, once through all the gates and back. Whoever is faster and spills less wins. If you lose, you admit Sepp was a bungler.","On kupa, bütün kapılardan geçip geri. Kim daha hızlı olur ve daha az dökerse kazanır. Kaybederseniz Sepp'in beceriksiz olduğunu kabul edersiniz."
 HUBER_DUELL_FRAGE_DU,Also — traust du dich? Jetzt gleich?,So — dare you? Right now?,Peki — cesaretin var mı? Hemen şimdi?
@@ -906,8 +906,8 @@ HUBER_NACH_SIEG_DU,"Jaja, schon gut. Nächstes Jahr krieg ich dich. Prost.","Yea
 HUBER_NACH_SIEG_IHR,"Jaja, schon gut. Nächstes Jahr krieg ich euch. Prost.","Yeah, yeah, fine. Next year I'll get you. Cheers.","Tamam tamam. Seneye sizi yakalayacağım. Şerefe."
 BRIEF_ENDE_TITEL,Ein letzter Brief von Onkel Sepp,One last letter from Uncle Sepp,Sepp Amca'dan son bir mektup
 BRIEF_SCHLIESSEN,Linksklick: schließen,Left click: close,Sol tık: kapat
-BRIEF_ENDE_1_DU,"Der Wiesnchef hat mir versprochen, dir das hier erst zu geben, wenn du den Huber geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu sana ancak Huber'i yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
-BRIEF_ENDE_1_IHR,"Der Wiesnchef hat mir versprochen, euch das hier erst zu geben, wenn ihr den Huber geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu size ancak Huber'i yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
+BRIEF_ENDE_1_DU,"Der Festleiter hat mir versprochen, dir das hier erst zu geben, wenn du den Huber geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu sana ancak Huber'i yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
+BRIEF_ENDE_1_IHR,"Der Festleiter hat mir versprochen, euch das hier erst zu geben, wenn ihr den Huber geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu size ancak Huber'i yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
 BRIEF_ENDE_2_DU,"Das Zelt gehört jetzt wirklich dir. Mach's besser als ich, und vergiss nie: Eine kalte Maß und ein freundliches Wort — mehr braucht's nicht.
 
 Prost, mein Patenkind.
@@ -928,43 +928,43 @@ Your Uncle Sepp","Çadır artık gerçekten sizin. Benden daha iyisini yapın ve
 
 Şerefe, sevgililerim.
 Sepp Amcanız"
-ZEITUNG_NAME,Wiesn-Kurier,Fair Courier,Fuar Postası
+ZEITUNG_NAME,Festkurier,Fair Courier,Fuar Postası
 ZEITUNG_AUSGABE,Abendausgabe · Tag %d · 20 Pfennig,Evening edition · Day %d · 20 pence,Akşam baskısı · Gün %d · 20 kuruş
 ZEITUNG_SCHLIESSEN,Klick / E: Zeitung weglegen,Click / E: put the paper away,Tık / E: gazeteyi bırak
 ZEITUNG_ZAHLEN,"Heute: %d Gäste bedient · %s Umsatz · Beliebtheit %d %%","Today: %d guests served · %s in sales · popularity %d %%","Bugün: %d misafire servis · %s ciro · popülerlik %%%d"
 ZEITUNG_LEER,Gähnende Leere im Zelt „%s“,Deathly quiet at „%s“,%s'da derin sessizlik
 ZEITUNG_LEER_UNTER,Kein einziger Gast bedient — die Blaskapelle spielte für die Tauben.,Not a single guest served — the brass band played for the pigeons.,Tek bir misafire bile servis yapılmadı — bando güvercinlere çaldı.
 ZEITUNG_BESCHWERDEN,Beschwerdeflut im Zelt „%s“!,Flood of complaints at „%s“!,%s'da şikayet yağmuru!
-ZEITUNG_BESCHWERDEN_UNTER,"%d Gäste beschwerten sich — der Wiesnchef runzelt die Stirn.","%d guests complained — the fair manager is frowning.","%d misafir şikayet etti — fuar müdürü kaşlarını çattı."
+ZEITUNG_BESCHWERDEN_UNTER,"%d Gäste beschwerten sich — der Festleiter runzelt die Stirn.","%d guests complained — the fair manager is frowning.","%d misafir şikayet etti — fuar müdürü kaşlarını çattı."
 ZEITUNG_PFUETZEN,Pfützen-Alarm im Zelt „%s“,Puddle alert at „%s“,%s'da birikinti alarmı
 ZEITUNG_PFUETZEN_UNTER,"%d Pfützen in einer Schicht. Leser fragen: Gibt es dort überhaupt ein Klo?","%d puddles in one shift. Readers ask: is there even a toilet?","Bir vardiyada %d birikinti. Okurlar soruyor: orada tuvalet var mı?"
 ZEITUNG_GEGANGEN,%d Gäste gehen durstig heim,%d guests go home thirsty,%d misafir susuz eve gitti
-ZEITUNG_GEGANGEN_UNTER,"Lange Wartezeiten im Zelt „%s“ — die Geduld der Wiesnbesucher ist endlich.","Long waits at „%s“ — fairgoers' patience has limits.","%s'da uzun bekleme — ziyaretçilerin sabrı sınırlı."
+ZEITUNG_GEGANGEN_UNTER,"Lange Wartezeiten im Zelt „%s“ — die Geduld der Festbesucher ist endlich.","Long waits at „%s“ — fairgoers' patience has limits.","%s'da uzun bekleme — ziyaretçilerin sabrı sınırlı."
 ZEITUNG_VERLUST,Rote Zahlen im Zelt „%s“,In the red at „%s“,%s zararda
 ZEITUNG_VERLUST_UNTER,Der Tag hat mehr gekostet als eingebracht. Huber lacht sich ins Fäustchen.,The day cost more than it brought in. Huber is laughing up his sleeve.,Gün getirdiğinden fazlasına mal oldu. Huber bıyık altından gülüyor.
 ZEITUNG_REKORD,Rekord! %d Gäste an einem Tag,Record! %d guests in one day,Rekor! Bir günde %d misafir
 ZEITUNG_REKORD_UNTER,"Im Zelt „%s“ fließt das Bier wie zu Sepps besten Zeiten.","At „%s“ the beer flows like in Sepp's best days.","%s'da bira Sepp'in en iyi günlerindeki gibi akıyor."
-ZEITUNG_BELIEBT,„%s“ — bald das beliebteste Zelt der Wiesn?,%s — soon the most popular tent of the fair?,%s — yakında fuarın en sevilen çadırı mı?
+ZEITUNG_BELIEBT,„%s“ — bald das beliebteste Zelt des Fests?,%s — soon the most popular tent of the fair?,%s — yakında fuarın en sevilen çadırı mı?
 ZEITUNG_BELIEBT_UNTER,Besucher schwärmen von kalter Maß und freundlicher Bedienung.,Visitors rave about cold beer and friendly service.,Ziyaretçiler soğuk bira ve güler yüzlü servise hayran.
 ZEITUNG_SOLIDE,Solider Tag im Zelt „%s“: %d Gäste bedient,A solid day at „%s“: %d guests served,%s'da sağlam bir gün: %d misafire servis
-ZEITUNG_SOLIDE_UNTER,"Keine Katastrophe, kein Rekord — die Wiesn läuft.","No disaster, no record — the fair rolls on.","Felaket yok, rekor yok — fuar devam ediyor."
+ZEITUNG_SOLIDE_UNTER,"Keine Katastrophe, kein Rekord — das Fest läuft.","No disaster, no record — the fair rolls on.","Felaket yok, rekor yok — fuar devam ediyor."
 ZEITUNG_M_KREDIT,Brauerei bestätigt: Sepps Erben stehen in der Kreide.,Brewery confirms: Sepp's heirs are in debt.,Bira fabrikası doğruladı: Sepp'in varisleri borçlu.
 ZEITUNG_M_BANK,Bank erinnert: Rate fällig am Abend von Tag %d (%s).,Bank reminds: instalment due on the evening of day %d (%s).,Banka hatırlatıyor: taksit %d. günün akşamı (%s).
 ZEITUNG_M_KLO,Leserbrief: „Warum hat das Festzelt kein Klo?“,Letter to the editor: “Why doesn't the tent have a toilet?”,Okur mektubu: “Çadırda neden tuvalet yok?”
 ZEITUNG_M_KELLNER,Gäste klagen über lange Wartezeiten — fehlt es an Kellnern?,Guests complain about long waits — not enough waiters?,Misafirler uzun beklemeden şikayetçi — garson mu eksik?
-ZEITUNG_M_HUBER_1,Huber-Zelt kündigt „die kälteste Maß der Wiesn“ an.,Huber's tent promises “the coldest stein of the fair”.,Huber'in çadırı “fuarın en soğuk birası” sözü veriyor.
+ZEITUNG_M_HUBER_1,Huber-Zelt kündigt „die kälteste Maß des Fests“ an.,Huber's tent promises “the coldest stein of the fair”.,Huber'in çadırı “fuarın en soğuk birası” sözü veriyor.
 ZEITUNG_M_HUBER_2,Alois Huber im Interview: „Sepps Zelt? Das hält keine Woche.“,Alois Huber in an interview: “Sepp's tent? Won't last a week.”,Alois Huber röportajda: “Sepp'in çadırı mı? Bir hafta dayanmaz.”
 ZEITUNG_M_HUBER_3,Gerücht: Huber soll nachts um fremde Zelte schleichen.,Rumour: Huber is said to sneak around other tents at night.,Söylenti: Huber'in geceleri başka çadırların etrafında dolaştığı söyleniyor.
 ZEITUNG_M_HUBER_4,Huber verlost Freibier — aber nur für Stammgäste.,Huber raffles free beer — regulars only.,Huber bedava bira çekilişi yapıyor — sadece müdavimlere.
 ACTION_KALENDER,Kalender,Calendar,Takvim
-KALENDER_TITEL,Wiesn-Kalender · Saison %d,Fair calendar · season %d,Fuar takvimi · sezon %d
+KALENDER_TITEL,Festkalender · Saison %d,Fair calendar · season %d,Fuar takvimi · sezon %d
 KALENDER_LEGENDE,"Heute ist hervorgehoben. Bankrate am Abend · Huber bietet eine Wette an · Duell um Sepps Ehre · K oder Esc schließt","Today is highlighted. bank instalment in the evening · Huber offers a bet · duel for Sepp's honour · K or Esc closes","Bugün vurgulandı. akşam banka taksiti · Huber bahis teklif ediyor · Sepp'in onuru için düello · K veya Esc kapatır"
-KALENDER_ERSTER,Erster Wiesn-Tag,First day of the fair,Fuarın ilk günü
+KALENDER_ERSTER,Erster Festtag,First day of the fair,Fuarın ilk günü
 KALENDER_BANK,%s,%s,%s
 KALENDER_WETTE,Huber-Wette,Huber bet,Huber bahsi
 KALENDER_DUELL,Duell mit Huber,Duel with Huber,Huber ile düello
 EREIGNIS_ANSTICH_TITEL,Anstich — O'zapft is!,Tapping — O'zapft is!,Fıçı açılışı — O'zapft is!
-EREIGNIS_ANSTICH_START,"Anstich! Der erste Wiesn-Tag lockt viele Neugierige ins Zelt.","Tapping day! The first day of the fair draws plenty of curious visitors.","Fıçı açılışı! Fuarın ilk günü çok sayıda meraklı çekiyor."
+EREIGNIS_ANSTICH_START,"Anstich! Der erste Festtag lockt viele Neugierige ins Zelt.","Tapping day! The first day of the fair draws plenty of curious visitors.","Fıçı açılışı! Fuarın ilk günü çok sayıda meraklı çekiyor."
 EREIGNIS_TRACHT_TITEL,Trachtenumzug,Costume parade,Geleneksel kıyafet alayı
 EREIGNIS_TRACHT_START,"Trachtenumzug! Viele Trachtler kommen ins Zelt — und die trinken nur Helles.","Costume parade! Lots of people in traditional dress come in — and they only drink Helles.","Geleneksel kıyafet alayı! Çok sayıda kişi geliyor — ve sadece Helles içiyorlar."
 EREIGNIS_FAMILIE_TITEL,Familientag,Family day,Aile günü
@@ -981,7 +981,7 @@ DECO_TOPFPFLANZE,Gummibaum,Rubber plant,Kauçuk ağacı
 DECO_TOPFPFLANZE_INFO,Grün im Terrakottatopf.,Greenery in a terracotta pot.,Toprak saksıda yeşillik.
 DECO_WANDUHR,Wanduhr,Wall clock,Duvar saati
 DECO_WANDUHR_INFO,Pendeluhr aus dunklem Holz — rastet an der Wand ein.,Dark wood pendulum clock — snaps to the wall.,Koyu ahşap sarkaçlı saat — duvara oturur.
-DECO_PLAKAT,Wiesn-Plakat,Fair poster,Fuar posteri
+DECO_PLAKAT,Festplakat,Fair poster,Fuar posteri
 DECO_PLAKAT_INFO,Gerahmtes Plakat mit Zelt und Riesenrad.,Framed poster with tent and Ferris wheel.,Çadır ve dönme dolaplı çerçeveli poster.
 DECO_BUEROLEUCHTE,Kranzleuchte,Ring chandelier,Halka avize
 DECO_BUEROLEUCHTE_INFO,Holzkranz mit vier Glaskugeln — hängt unter dem Dach.,Wooden ring with four glass globes — hangs from the roof.,Dört cam küreli ahşap halka — çatıdan asılır.
@@ -990,7 +990,7 @@ DECO_TEPPICH_INFO,Roter Teppich mit Rautenmuster.,Red rug with diamond pattern.,
 DECO_WARTEBANK,Holzbank,Wooden bench,Ahşap bank
 DECO_WARTEBANK_INFO,Bank mit Lehne zum Verschnaufen.,Bench with backrest for a breather.,Soluklanmak için arkalıklı bank.
 DECO_GARDEROBE,Garderobe,Coat stand,Portmanto
-DECO_GARDEROBE_INFO,Mit Hut und Janker — wie beim Wiesnchef.,With hat and jacket — just like the fair manager's.,Şapka ve ceketle — fuar müdürününki gibi.
+DECO_GARDEROBE_INFO,Mit Hut und Janker — wie beim Festleiter.,With hat and jacket — just like the fair manager's.,Şapka ve ceketle — fuar müdürününki gibi.
 DECO_KAFFEEECKE,Kaffeeecke,Coffee corner,Kahve köşesi
 DECO_KAFFEEECKE_INFO,Anrichte mit Kaffeemaschine und Tassen.,Sideboard with coffee machine and cups.,Kahve makinesi ve fincanlarla büfe.
 TEAM_TITEL,Dein Team (%d),Your team (%d),Ekibin (%d)
@@ -1001,15 +1001,15 @@ TEAM_HALTEN,Halten (mehr Lohn),Keep (higher wage),Tut (daha fazla maaş)
 TEAM_ENTLASSEN,Entlassen,Dismiss,İşten çıkar
 TEAM_ANLIEGEN_LOHN,"Möchte mehr Lohn (+15 %). Ignoriert: erst unzufrieden, dann Kündigung.","Wants a raise (+15 %). Ignored: first unhappy, then quits.","Zam istiyor (+%15). Görmezden gelinirse: önce memnuniyetsiz, sonra istifa."
 TEAM_ANLIEGEN_HUBER,"Huber will abwerben! Nur mit mehr Lohn (+20 %) bleibt er — sonst ist er morgen weg.","Huber wants to poach them! They only stay for a higher wage (+20 %) — otherwise gone tomorrow.","Huber ayartmak istiyor! Sadece daha yüksek maaşla (+%20) kalır — yoksa yarın gider."
-MSG_PERSONAL_LOHNWUNSCH,%s möchte mehr Lohn (+%s pro Tag) — Wiesenbüro · Personal,%s wants a raise (+%s per day) — fair office · staff,%s zam istiyor (günlük +%s) — fuar ofisi · personel
+MSG_PERSONAL_LOHNWUNSCH,%s möchte mehr Lohn (+%s pro Tag) — Festbüro · Personal,%s wants a raise (+%s per day) — fair office · staff,%s zam istiyor (günlük +%s) — fuar ofisi · personel
 MSG_PERSONAL_UNZUFRIEDEN,%s ist unzufrieden und arbeitet langsamer. Morgen kündigt sie/er!,%s is unhappy and works slower. Will quit tomorrow!,%s memnun değil ve daha yavaş çalışıyor. Yarın istifa edecek!
 MSG_PERSONAL_KUENDIGT,%s hat gekündigt.,%s has quit.,%s istifa etti.
-MSG_PERSONAL_HUBER,Huber will %s abwerben! Halten kostet +%s pro Tag — Wiesenbüro · Personal,Huber wants to poach %s! Keeping them costs +%s per day — fair office · staff,Huber %s'yi ayartmak istiyor! Tutmak günlük +%s — fuar ofisi · personel
+MSG_PERSONAL_HUBER,Huber will %s abwerben! Halten kostet +%s pro Tag — Festbüro · Personal,Huber wants to poach %s! Keeping them costs +%s per day — fair office · staff,Huber %s'yi ayartmak istiyor! Tutmak günlük +%s — fuar ofisi · personel
 MSG_PERSONAL_ABGEWORBEN,%s (%s) ist zu Huber gewechselt.,%s (%s) has switched to Huber.,%s (%s) Huber'e geçti.
 MSG_PERSONAL_ZUFRIEDEN,%s ist zufrieden und bleibt.,%s is happy and stays.,%s memnun ve kalıyor.
 MSG_PERSONAL_ENTLASSEN,%s wurde entlassen.,%s has been dismissed.,%s işten çıkarıldı.
-CHEF_ENDE_3_DU,"Ein Tipp noch: Im Wiesn-Kalender (Taste K) siehst du, was dich erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
-CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Wiesn-Kalender (Taste K) seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
+CHEF_ENDE_3_DU,"Ein Tipp noch: Im Festkalender (Taste K) siehst du, was dich erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
+CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Festkalender (Taste K) seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
 MSG_EHRE_BEDIENT,Bester Kellner heute: %s (%d Gäste bedient),Best waiter today: %s (%d guests served),Bugünün en iyi garsonu: %s (%d misafir)
 MSG_EHRE_GEZAPFT,Schnellster Zapfer heute: %s (%d Maß gezapft),Fastest tapster today: %s (%d steins poured),Bugünün en hızlı fıçıcısı: %s (%d kupa)
 MSG_EHRE_GEPUTZT,Putzteufel des Tages: %s (%d Flecken weg),Cleaning champion of the day: %s (%d messes gone),Günün temizlik şampiyonu: %s (%d leke)
@@ -1033,7 +1033,7 @@ MSG_STAMM_ZUFRIEDEN,%s ist zufrieden (%d/%d),%s is happy (%d/%d),%s memnun (%d/%
 MSG_STAMM_VERAERGERT,%s musste zu lange warten — und ist verärgert.,%s had to wait too long — and is annoyed.,%s çok uzun bekledi — ve kızgın.
 MSG_STAMM_BELOHNUNG_ALOIS,Opa Alois erzählt überall von eurem Zelt — die Alten kommen jetzt alle (+Beliebtheit).,Grandpa Alois tells everyone about your tent — the old folks all come now (+popularity).,Alois Dede çadırınızı herkese anlatıyor — yaşlılar artık hep geliyor (+popülerlik).
 MSG_STAMM_BELOHNUNG_VRONI,Der Trachtenverein feiert ab jetzt bei euch! Vroni zahlt die Vereinskasse ein (+250 € und Beliebtheit).,The costume club celebrates with you from now on! Vroni pays in the club funds (+250 € and popularity).,Kıyafet kulübü artık sizde kutluyor! Vroni kulüp kasasını ödüyor (+250 € ve popülerlik).
-MSG_STAMM_BELOHNUNG_KATHI,Kathis Video geht viral: „Das beste Zelt der Wiesn!“ (+viel Beliebtheit),Kathi's video goes viral: “Best tent at the fair!” (+lots of popularity),Kathi'nin videosu viral oldu: “Fuarın en iyi çadırı!” (+çok popülerlik)
+MSG_STAMM_BELOHNUNG_KATHI,Kathis Video geht viral: „Das beste Zelt des Fests!“ (+viel Beliebtheit),Kathi's video goes viral: “Best tent at the fair!” (+lots of popularity),Kathi'nin videosu viral oldu: “Fuarın en iyi çadırı!” (+çok popülerlik)
 MSG_STAMM_BELOHNUNG_FRANZ,Franz ist überzeugt und liefert euch 20 Portionen Zutaten gratis.,Franz is convinced and delivers 20 portions of ingredients for free.,Franz ikna oldu ve size 20 porsiyon malzemeyi bedava getiriyor.
 MSG_STAMM_BELOHNUNG_GIULIA,Giulia bringt eine ganze Reisegruppe mit — Trinkgeld 400 €!,Giulia brings a whole tour group — 400 € in tips!,Giulia bütün bir tur grubunu getiriyor — 400 € bahşiş!
 MSG_STAMM_BELOHNUNG_WIGGERL,"Wiggerl: „Der Sepp wär stolz auf euch.“ Er legt 300 € auf den Tresen — „die hat er mir mal geliehen.“","Wiggerl: “Sepp would be proud of you.” He puts 300 € on the bar — “he lent me that once.”","Wiggerl: “Sepp sizinle gurur duyardı.” Tezgaha 300 € bırakıyor — “bunu bir zamanlar bana ödünç vermişti.”"
@@ -1062,4 +1062,4 @@ ZEITUNG_M_KUECHE_LEER,Die Küche blieb kalt — kein einziges Essen ging über d
 ZEITUNG_M_RAUSWURF,%d Gäste flogen aus dem Zelt und haben Hausverbot.,%d guests were thrown out and are banned.,%d misafir çadırdan atıldı ve yasaklandı.
 ZEITUNG_M_RAUSWURF_1,Ein Gast flog aus dem Zelt und hat Hausverbot.,One guest was thrown out and is banned.,Bir misafir çadırdan atıldı ve yasaklandı.
 HUD_TAG_GROSS,Tag %d,Day %d,%d. Gün
-TAG_START,Die Wiesn öffnet,The Wiesn opens,Wiesn açılıyor
+TAG_START,Das Fest öffnet,The fair opens,Festival açılıyor

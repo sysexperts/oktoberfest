@@ -202,7 +202,7 @@ const HYGIENE_MIN_ANTEIL := 0.7
 const HYGIENE_REGEN := 1.0
 const NPC_CLEAN_RATE := 0.06
 const START_MONEY := 1200   # Startbudget: Zelt 500 + 2 Tische 400 + 1 Paket Bier 60
-## Schwierigkeit (Spaß-Plan 6.1): 0 Gemütlich, 1 Normal, 2 Wiesn-Wahnsinn
+## Schwierigkeit (Spaß-Plan 6.1): 0 Gemütlich, 1 Normal, 2 Festwahnsinn
 const STARTGELD := [1600, 1200, 900]
 const GEDULD_FAKTOR := [1.35, 1.0, 0.8]
 const ANDRANG_FAKTOR := [0.9, 1.0, 1.2]
@@ -230,7 +230,7 @@ const MARKETING_COST := 400   # her seviye +15 popülerlik enjeksiyonu
 const MARKETING_BOOST := 15.0
 const DEKO_COST := 600        # her seviye +%15 gelir
 const DEKO_BONUS := 0.15
-# E2.4 Lizenzen — başta sadece Helles satılır, gerisi Wiesenbüro'dan alınır
+# E2.4 Lizenzen — başta sadece Helles satılır, gerisi Festbüro'dan alınır
 ## Test 13.09.: etwas teurer — dafür bringt jede Lizenz mehr Spielraum beim Bierpreis
 const LIC_COST := {"weizen": 1000, "radler": 1000, "brezn": 1500, "sosis": 1500, "festbier": 5000, "hendl": 6000}
 ## Bierpreis-Spielraum: ohne Lizenz 80–130 %, jede Lizenz erweitert ihn
@@ -270,7 +270,7 @@ func net_set_essenpreis(schritte: int) -> void:
 	var raum := essenpreis_grenzen()
 	_essenpreis = clampf(snappedf(_essenpreis + 0.1 * float(clampi(schritte, -5, 5)), 0.1), raum.x, raum.y)
 	_broadcast_meta()
-## Spätlizenzen (Spaß-Plan 4.3): erst ab Zeltstufe 3 oder der 2. Wiesn, dafür teurer im Verkauf
+## Spätlizenzen (Spaß-Plan 4.3): erst ab Zeltstufe 3 oder dem 2. Fest, dafür teurer im Verkauf
 const LIC_SPAET := ["festbier", "hendl"]
 const BIER_FESTBIER := 4
 const ESSEN_HENDL := 3
@@ -407,9 +407,9 @@ const PROSIT_ALLE := 40.0          # Sekunden (~2 Spielstunden)
 const KOMBO_FENSTER_MS := 8000
 const KOMBO_BONUS := 2
 const KOMBO_MAX := 10
-## Finale am letzten Wiesn-Tag: voller Andrang, Star-Act spielt gratis
+## Finale am letzten Festtag: voller Andrang, Star-Act spielt gratis
 const FINALE_ANDRANG := 1.3
-## Nächste Wiesn wird anspruchsvoller (Spaß-Plan 4.2) — je Wiesn nach der ersten:
+## Nächstes Fest wird anspruchsvoller (Spaß-Plan 4.2) — je Fest nach der ersten:
 const SAISON_MIETE := 0.2       # +20 % Miete
 const SAISON_GEDULD := 0.06     # −6 % Geduld (nie unter 70 %)
 const SAISON_ANDRANG := 0.1     # +10 % Gäste
@@ -447,7 +447,7 @@ var _ereignis_erledigt := false
 var _prosit_timer := 0.0
 var _fass_kaputt := 0        # Sorte, die heute fehlt (Ereignis "fass")
 var _kombo := {}             # Peer -> {n, t}: Kombo beim Bedienen
-## Zahlen der laufenden Wiesn (für die Bewertung am Finale), wird gespeichert
+## Zahlen der laufenden Fests (für die Bewertung am Finale), wird gespeichert
 var _saison := {"umsatz": 0, "netto": 0, "bedient": 0, "verpasst": 0, "pop_summe": 0, "tage": 0}
 var _saison_nr := 1
 var _schwierigkeit := 1
@@ -473,7 +473,7 @@ var _abstimmung := {}
 var _spieler_info := {}
 const ZELTNAME_MAX := 24
 var _active_count := 0   # aktif (görünür/oturulabilir) masa sayısı
-var _day := 1            # Wiesn günü
+var _day := 1            # Festtag
 var _upg_marketing := 0  # Werbung seviyesi (popülerlik enjeksiyonu)
 var _upg_deko := 0       # Deko seviyesi (gelir çarpanı)
 # E2.4: satın alınan lisanslar (Helles lisanssız hep satılır)
@@ -509,14 +509,14 @@ var _mess_kind := {}          # mess_id -> 0 Erbrochenes, 1 Urin
 var _complain_timer := 0.0
 var _urin_count := 0          # Tageszähler für den Report
 ## Tageszähler: gekochte Portionen (Koch und Spieler) und rausgeworfene Gäste —
-## beides steht abends im Wiesn-Kurier
+## beides steht abends im Festkurier
 var _essen_gekocht := 0
 var _rausgeworfen := 0
 var _complaints := 0
 var _left_guests := 0
 # Tutorial-Fortschritt
 var _quest_step := 0
-## Einleitung gelaufen und dem Wiesnchef zum Zelt gefolgt (Schritt 0)
+## Einleitung gelaufen und dem Festleiter zum Zelt gefolgt (Schritt 0)
 var _folge_geschafft := false
 var _quest_served_once := false
 var _ever_artist := false
@@ -651,8 +651,8 @@ func _ready() -> void:
 		# Onkel Sepps Brief läuft nicht mehr als Einleitung am Kirmestor: die hing
 		# am Hochfahren des Hosts und wurde auf einem eigenen Server (Koop über
 		# den Vermittler) übersprungen, wo es keine Oberfläche gibt — dort sah ihn
-		# niemand. Jetzt liest ihn der Wiesnchef im ersten Gespräch vor
-		# (scripts/npc_wiesnchef.gd).
+		# niemand. Jetzt liest ihn der Festleiter im ersten Gespräch vor
+		# (scripts/npc_festleiter.gd).
 	else:
 		_anmelden_beim_server()
 
@@ -1005,7 +1005,7 @@ func _load_game() -> bool:
 	var quest_alt := int(d.get("quest_version", 1))
 	if quest_alt < 2 and _quest_step >= 3:
 		_quest_step += 1
-	# Version 3: Schritt 0 (dem Wiesnchef folgen) kam vorn dazu — der ist in alten
+	# Version 3: Schritt 0 (dem Festleiter folgen) kam vorn dazu — der ist in alten
 	# Spielständen längst gelaufen, also rücken alle Schritte eins weiter.
 	if quest_alt < 4 and quest_alt >= 3 and _quest_step >= 2:
 		_quest_step += 1
@@ -1220,7 +1220,7 @@ func _foods_avail() -> Array:
 		a.append(ESSEN_HENDL)
 	return a
 
-## Spätlizenzen kaufbar? (Zeltstufe 3 oder ab der 2. Wiesn)
+## Spätlizenzen kaufbar? (Zeltstufe 3 oder ab dem 2. Fest)
 func spaetlizenz_frei() -> bool:
 	return _tent_stage >= 3 or _saison_nr >= 2
 
@@ -1550,7 +1550,7 @@ func net_book_tent(zelt_name := "") -> void:
 		_dreck_verteilen()
 	_broadcast_meta()
 
-## Mietdialog öffnen (vom Schild und aus dem Wiesenbüro)
+## Mietdialog öffnen (vom Schild und aus dem Festbüro)
 func open_rent_ui() -> void:
 	_hud.open_rent()
 
@@ -1650,7 +1650,7 @@ func net_buy_deko() -> void:
 	_broadcast_meta()
 
 # ================================================= E6: Klo & Beschwerden
-## Wiesenbüro: Toilette einbauen — danach pinkelt niemand mehr in die Ecke.
+## Festbüro: Toilette einbauen — danach pinkelt niemand mehr in die Ecke.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_toilet() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
@@ -1831,14 +1831,14 @@ func _reserve_ok(cost: int) -> bool:
 const QUEST_COUNT := 14
 ## Seit Version 4 gibt es Schritt 2 „Putze das Zelt" — ältere Stände ab Schritt 2
 ## rücken eins weiter.
-## Seit Version 3 führt Schritt 0 über das Gespräch mit dem Wiesnchef (Einleitung).
+## Seit Version 3 führt Schritt 0 über das Gespräch mit dem Festleiter (Einleitung).
 ## Seit Version 2 gibt es die Schritte „auf den Lieferwagen warten" und „Pakete
 ## ins Regal räumen" — ältere Spielstände ab Schritt 3 rücken eins weiter.
 const QUEST_VERSION := 4
 
 func _quest_done(step: int) -> bool:
 	match step:
-		# Dem Wiesnchef „Ja" gesagt (oder das Zelt schon gemietet)
+		# Dem Festleiter „Ja" gesagt (oder das Zelt schon gemietet)
 		0: return _folge_geschafft or _tent_stage > 0
 		1: return _tent_stage > 0
 		# Der Dreck im übernommenen Zelt ist weggefegt
@@ -1936,7 +1936,7 @@ func net_skip_tutorial() -> void:
 	_broadcast_meta()
 
 # ================================================= E5: Künstler
-## Wiesenbüro: Künstler für die nächste Schicht buchen.
+## Festbüro: Künstler für die nächste Schicht buchen.
 @rpc("any_peer", "reliable", "call_local")
 func net_book_artist(tier: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
@@ -2574,7 +2574,7 @@ func _net_schlaegerei_ende() -> void:
 
 
 # ================================================= E4: Ware & Lieferung
-## Wiesenbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
+## Festbüro: Ware bestellen. Kommt nach ~1 Minute per Lieferwagen.
 @rpc("any_peer", "reliable", "call_local")
 func net_order_goods(kind: int, packs: int) -> void:
 	if not multiplayer.is_server():
@@ -2792,7 +2792,7 @@ func _consume_stock(okind: int) -> void:
 
 
 # ================================================= E3: Personal
-## Wiesenbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
+## Festbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
 @rpc("any_peer", "reliable", "call_local")
 func net_hire_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
@@ -2825,7 +2825,7 @@ func net_hire_staff(role: int) -> void:
 	_melde("MSG_STAFF_HIRED", [STAFF_KEYS[role], "EIG_" + eig.to_upper(), _eur(_staff_wage(role, 1, eig))], 2)
 	_broadcast_meta()
 
-## Wiesenbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
+## Festbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_staff(role: int) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
@@ -3371,7 +3371,7 @@ func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sy: PackedFloat32
 			if i < scarry.size() and n.has_method("set_carrying"):
 				n.set_carrying(scarry[i])
 
-## Wiesenbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
+## Festbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_license(key: String) -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
@@ -3487,7 +3487,7 @@ func _tag_starten() -> void:
 	_melde("MSG_DAY_START", [_day])
 
 ## Nach dem Schlafen stehen alle wieder vor dem Wohnwagen — vorher wachte man
-## da auf, wo man abends stehen geblieben war, im Koop also quer über die Wiesn
+## da auf, wo man abends stehen geblieben war, im Koop also quer über das Fest
 ## verstreut. Nebeneinander, damit niemand im anderen steht.
 func _spieler_zum_wohnwagen() -> void:
 	var wagen := _eigener_wohnwagen()
@@ -3789,7 +3789,7 @@ func _tisch_freistellen(idx: int) -> bool:
 
 # ================================================= Lagerregale (Test 13.09.)
 ## Jedes Regal fasst Lager.KAPAZITAET je Ware. Zwei stehen von Anfang an im Zelt,
-## weitere kauft man im Wiesenbüro. Außerhalb der Schicht lassen sich alle mit E
+## weitere kauft man im Festbüro. Außerhalb der Schicht lassen sich alle mit E
 ## aufnehmen, mit der Prost-Taste drehen und woanders abstellen.
 const LAGER_SCENE := preload("res://scenes/lager.tscn")
 const LAGERREGAL_KOSTEN := 350
@@ -3945,7 +3945,7 @@ func _update_held_tables() -> void:
 		n.rotation.y = lage.rot
 
 # ================================================= Einrichtung (Lampen, Deko)
-## Wiesenbüro: Gegenstand kaufen. Er erscheint am Zelteingang (drinnen) — das
+## Festbüro: Gegenstand kaufen. Er erscheint am Zelteingang (drinnen) — das
 ## Büro steht weit weg, dort vor dem Käufer wäre er fehl am Platz.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_einrichtung(art: String) -> void:
@@ -3976,7 +3976,7 @@ func net_buy_einrichtung(art: String) -> void:
 	_melde("MSG_DECO_BOUGHT", [Katalog.name_key(art)], 2)
 	_broadcast_meta()
 
-## Brauzutat kaufen (Wiesenbuero, Reiter Ware). Ohne Tagesaufschlag - genau das
+## Brauzutat kaufen (Festbuero, Reiter Ware). Ohne Tagesaufschlag - genau das
 ## macht Brauen mit der Zeit guenstiger als Kaufen.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_zutat(art: String, menge: int) -> void:
@@ -4428,7 +4428,7 @@ func _shift_process(delta: float) -> void:
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
 		andrang *= _ereignis_andrang()
 		andrang *= float(ANDRANG_FAKTOR[_schwierigkeit])
-		andrang *= 1.0 + SAISON_ANDRANG * float(_saison_nr - 1)   # jede Wiesn voller
+		andrang *= 1.0 + SAISON_ANDRANG * float(_saison_nr - 1)   # jedes Fest voller
 		# Koop: mit mehr Spielern kommen mehr Gäste, sonst ist es zu leicht
 		andrang *= 1.0 + KOOP_ANDRANG_JE_SPIELER * float(maxi(1, _players_nodes.size()) - 1)
 		var target := mini(_seats.size(), int(round(andrang * float(_seats.size()) * _time_factor() * draw)))
@@ -4573,7 +4573,7 @@ func _typ_trinkgeld(g: Dictionary) -> int:
 func _typ_pop(g: Dictionary) -> float:
 	return float(TYP_POP.get(str(g.get("typ", "")), 1.0))
 
-## Ist heute der letzte Wiesn-Tag?
+## Ist heute der letzte Festtag?
 func ist_finale() -> bool:
 	return Wirtschaft.saison_tag(_day) == Wirtschaft.SAISON_TAGE
 
@@ -4596,7 +4596,7 @@ func saison_wertung(s: Dictionary) -> int:
 		punkte += 1
 	return clampi(punkte, 1, 5)
 
-## Finale vorbei: Bewertung zeigen, nächste Wiesn beginnt.
+## Finale vorbei: Bewertung zeigen, nächste Fest beginnt.
 func _saison_abschluss() -> void:
 	var wertung := saison_wertung(_saison)
 	var tage := maxi(1, int(_saison.tage))
@@ -4614,7 +4614,7 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 	_ereignis_erledigt = false
 	_prosit_timer = PROSIT_ALLE
 	_fass_kaputt = 0
-	# Letzter Wiesn-Tag: immer Finale mit Star-Act gratis
+	# Letzter Festtag: immer Finale mit Star-Act gratis
 	if erzwingen == "" and ist_finale():
 		_ereignis = "finale"
 		_artist_tier = 3
@@ -5034,7 +5034,7 @@ func _end_shift(reason := 0) -> void:
 		2:
 			_melde("REPORT_END_EARLY", [int(closed_at), roundi(pop_penalty)], 1)
 	_melde("MSG_DAY_END", [_eur(net_profit)], 2 if net_profit >= 0 else 1)
-	# Wiesn-Zahlen sammeln, am Finale bewerten
+	# Fest-Zahlen sammeln, am Finale bewerten
 	_saison.umsatz = int(_saison.umsatz) + _last_earn
 	_saison.netto = int(_saison.netto) + net_profit
 	_saison.bedient = int(_saison.bedient) + _served
@@ -5536,8 +5536,8 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 		if m:
 			m.apply_progress(pr[i])
 
-## Alles, was Wiesenbüro, Zelt-Computer und HUD anzeigen — als Zahlen, nicht
-## als Text: übersetzt wird beim Spieler (scripts/ui/texte.gd, wiesenbuero.gd).
+## Alles, was Festbüro, Zelt-Computer und HUD anzeigen — als Zahlen, nicht
+## als Text: übersetzt wird beim Spieler (scripts/ui/texte.gd, festbuero.gd).
 func _buero_state() -> Dictionary:
 	var staff := []
 	for sid: int in _staff_sim:
@@ -5701,7 +5701,7 @@ func net_sleep_fade(tag: int = 0) -> void:
 	if _hud and _hud.has_method("play_sleep_fade"):
 		_hud.play_sleep_fade(tag)
 
-## Letzte Tagesbilanz — im Wiesenbüro jederzeit nachlesbar.
+## Letzte Tagesbilanz — im Festbüro jederzeit nachlesbar.
 @rpc("authority", "reliable", "call_local")
 func net_report(bilanz: Dictionary) -> void:
 	_last_report = bilanz
@@ -5767,7 +5767,7 @@ func net_kino_start(mehrere: bool) -> void:
 	if kino and kino.has_method("starten"):
 		kino.starten(mehrere)
 
-## Wiesnchef im Büro: Ein Spieler hat „Ja, ich übernehm das Zelt" gesagt —
+## Festleiter im Büro: Ein Spieler hat „Ja, ich übernehm das Zelt" gesagt —
 ## Schritt 0 ist erledigt, der Rundgang schickt ihn zum Zelt (bei allen).
 @rpc("any_peer", "reliable", "call_local")
 func net_chef_zusage() -> void:
@@ -5889,7 +5889,7 @@ func net_ziel_stand(stand: int) -> void:
 	if _hud and _hud.has_method("set_ziel_stand"):
 		_hud.set_ziel_stand(stand)
 
-## Was der Wiesnchef nach dem Tutorial erzählt: heutiges Ziel und die Schulden.
+## Was der Festleiter nach dem Tutorial erzählt: heutiges Ziel und die Schulden.
 ## Fertig übersetzte Zeilen; mehrere = Anrede „ihr".
 func chef_tageszeilen(mehrere: bool, z: Dictionary) -> Array[String]:
 	var a := "_IHR" if mehrere else "_DU"
@@ -6109,16 +6109,16 @@ func _sabotieren() -> void:
 		_melde("MSG_SABOTAGE_STINK", [], 1)
 
 # ================================================= Finale: Maß-Wettschleppen
-## Am letzten Wiesn-Tag fordert Huber zum Duell um Sepps Ehre (scripts/wettschleppen.gd).
+## Am letzten Festtag fordert Huber zum Duell um Sepps Ehre (scripts/wettschleppen.gd).
 ## Starten über das Gespräch mit Huber; Hubers Zeit legt der Server fest (je
 ## Schwierigkeit), das Ergebnis meldet der Herausforderer. Gewonnen: Sepps Ehre
 ## gerettet, viel Beliebtheit, Brief zum Abschluss. Verloren: Huber triumphiert,
 ## Beliebtheit sinkt, am selben Tag darf man es nochmal versuchen.
 ## Hubers Zeit = Streckenlänge / Gehtempo mit 10 Maß × Faktor je Schwierigkeit:
 ## Gemütlich reicht ruhiges Gehen, Normal braucht geschickte kurze Sprints (Balken
-## im Blick), Wiesn-Wahnsinn fast durchgehend — dann schwappt auch mal was über.
+## im Blick), Festwahnsinn fast durchgehend — dann schwappt auch mal was über.
 const DUELL_GEHTEMPO := 3.4
-const DUELL_FAKTOR := [1.05, 0.8, 0.7]   # Gemütlich · Normal · Wiesn-Wahnsinn
+const DUELL_FAKTOR := [1.05, 0.8, 0.7]   # Gemütlich · Normal · Festwahnsinn
 const DUELL_POP_SIEG := 15.0
 const DUELL_POP_NIEDERLAGE := 5.0
 var _duell := {}
@@ -6188,7 +6188,7 @@ func _net_duell_ergebnis(gewonnen: bool, gesamt: float, huber_zeit: float, versc
 				kino.brief_zeigen(mehrere, "BRIEF_ENDE", 2, "BRIEF_ENDE_TITEL")
 	dialog.zeigen(tr("HUBER_NAME"), zeilen, danach)
 
-# ================================================= Wiesn-Kalender
+# ================================================= Festkalender
 ## Die Tagesereignisse einer Saison stehen im Voraus fest (Kalender, Taste K,
 ## scenes/ui/kalender.tscn): feste Sondertage plus zufällige Ereignisse ab Tag 3.
 ## Geplant zu Saisonbeginn, gespeichert und an alle geschickt (Büro-Zustand „plan").
@@ -6227,7 +6227,7 @@ func _kalender_plan() -> Array:
 ##   "lohn"  — will mehr Lohn; einmal ignoriert → unzufrieden (langsamer),
 ##             zweimal → kündigt
 ##   "huber" — Huber will ihn abwerben (Tage 5–10); nicht gehalten → morgen weg
-## Lohn erhöhen und entlassen im Wiesenbüro (Reiter Personal, Teamliste).
+## Lohn erhöhen und entlassen im Festbüro (Reiter Personal, Teamliste).
 const PERSONAL_NAMEN := ["Anna", "Thomas", "Julia", "Stefan", "Sabine", "Michael", "Laura", "Markus", "Katrin",
 	"Andreas", "Lisa", "Florian", "Claudia", "Tobias", "Sandra", "Daniel", "Nina", "Martin", "Petra", "Jonas"]
 const LOHN_WUNSCH_AB := 4        # so viele Tage im Dienst, bevor jemand mehr will
@@ -6285,7 +6285,7 @@ func _lohn_plus(sid: int, anteil: float) -> int:
 	var s: Dictionary = _staff_sim[sid]
 	return roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * float(s.get("lohn", 1.0)) * anteil)
 
-## Wiesenbüro: Anliegen erfüllen (Lohn erhöhen bzw. vor Huber halten)
+## Festbüro: Anliegen erfüllen (Lohn erhöhen bzw. vor Huber halten)
 @rpc("any_peer", "reliable", "call_local")
 func net_personal_lohn(sid: int) -> void:
 	if not multiplayer.is_server() or not _staff_sim.has(sid):
@@ -6300,7 +6300,7 @@ func net_personal_lohn(sid: int) -> void:
 	_melde("MSG_PERSONAL_ZUFRIEDEN", [str(s.get("name", ""))], 2)
 	_broadcast_meta()
 
-## Wiesenbüro: entlassen
+## Festbüro: entlassen
 @rpc("any_peer", "reliable", "call_local")
 func net_personal_entlassen(sid: int) -> void:
 	if not multiplayer.is_server() or not _staff_sim.has(sid) or _phase != Phase.INTERMISSION:
@@ -6325,7 +6325,7 @@ func _remove_staff(id: int) -> void:
 
 # ================================================= Koop: Auszeichnungen am Abend
 ## Wer hat heute am meisten bedient, gezapft, geputzt? Nur im Koop, abends als
-## Meldung und im Wiesn-Kurier (Bilanz "ehren").
+## Meldung und im Festkurier (Bilanz "ehren").
 var _tag_leistung := {}   # Peer -> {"bedient": n, "gezapft": n, "geputzt": n}
 
 func _leistung(peer: int, art: String) -> void:
@@ -6418,7 +6418,7 @@ func _net_saboteur_weg() -> void:
 ## Sechs Stammgäste kommen nach dem Tutorial immer wieder (höchstens einer am Tag).
 ## Jeder hat einen Wunsch (Alois: Helles, Franz: Hendl, Giulia: Radler …). Dreimal
 ## zufrieden bedient → Belohnung auf seine Art, verpasst → zählt zurück.
-## Stand im Spielstand ("stamm"), Anzeige im Wiesn-Kurier und über dem Kopf.
+## Stand im Spielstand ("stamm"), Anzeige im Festkurier und über dem Kopf.
 const STAMMGAESTE := ["alois", "vroni", "kathi", "franz", "giulia", "wiggerl"]
 const STAMM_ZIEL := 3
 const STAMM_CHANCE := 0.03   # je neuem Gast, bis heute einer da war

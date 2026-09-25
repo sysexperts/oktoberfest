@@ -2,7 +2,7 @@ class_name HUD
 extends CanvasLayer
 ## Oyun içi arayüz. Aufbau liegt in scenes/ui/hud.tscn — Leiste oben links
 ## (Geld · Tag und Uhrzeit · Beliebtheit, darunter Lager und Sauberkeit),
-## Aufgabe rechts, Fadenkreuz mit Hinweis, Wiesenbüro, Zelt-Computer,
+## Aufgabe rechts, Fadenkreuz mit Hinweis, Festbüro, Zelt-Computer,
 ## Hinweisfenster, Schlaf-Abblende.
 ## Die Werte kommen vom GameManager; hier wird nur angezeigt. Jeder Wert wird
 ## gemerkt, damit ein Sprachwechsel alles neu beschriften kann.
@@ -25,7 +25,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _aufgabe: Control = %Aufgabe
 @onready var _meldungen: Control = %Meldungen
 @onready var _hinweisfenster: Control = %Hinweisfenster
-@onready var _buero: Control = %Wiesenbuero
+@onready var _buero: Control = %Festbuero
 @onready var _computer: Control = %Zeltcomputer
 @onready var _mieten: Control = %ZeltMieten
 @onready var _abstimmung: Control = %Abstimmung
@@ -406,7 +406,7 @@ func zeige_kombo(n: int) -> void:
 func set_report(b: Dictionary) -> void:
 	_buero.setze_bilanz(b)
 	_computer.setze_bilanz(b)
-	# Nach Feierabend: der Wiesn-Kurier (scenes/ui/zeitung.tscn), kurz nach der Bilanz
+	# Nach Feierabend: der Festkurier (scenes/ui/zeitung.tscn), kurz nach der Bilanz
 	var zeitung := get_parent().get_node_or_null("Zeitung")
 	var im_test := Array(OS.get_cmdline_args()).any(func(a: String) -> bool: return a.begins_with("res://tools/") and not a.contains("zeitung"))
 	if zeitung and b.has("day") and not im_test:

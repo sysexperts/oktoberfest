@@ -1,5 +1,5 @@
 extends PanelContainer
-## Eine Zeile im Reiter „Ziele" des Wiesenbüros: Titel, Beschreibung,
+## Eine Zeile im Reiter „Ziele" des Festbüros: Titel, Beschreibung,
 ## Fortschrittsbalken, Belohnung, Haken. Aufbau: scenes/ui/meilenstein_zeile.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")

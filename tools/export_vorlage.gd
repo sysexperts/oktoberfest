@@ -3,7 +3,7 @@ extends Node
 ## Bau-Vorlage nach res://daten/karte_vorlage.json (für den Baumodus, F8).
 ## Aufruf: Godot --path . res://tools/export_vorlage.tscn
 
-const BEHALTEN := ["Altstadt", "Wiesenbuero", "Wohnwagenplatz", "Mauern", "Pflaster", "Besucherwege", "Stadtgrenze", "Ground"]
+const BEHALTEN := ["Altstadt", "Festbuero", "Wohnwagenplatz", "Mauern", "Pflaster", "Besucherwege", "Stadtgrenze", "Ground"]
 
 var _liste: Array = []
 

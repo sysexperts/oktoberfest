@@ -28,8 +28,8 @@ zwei Symbole 64×64 (erreicht, grau). Danach **Publish** nicht vergessen.
 | `MASS_1000` | 1.000 Maß |
 | `ZELT_3` | Zeltstufe 3 |
 | `UMSATZ_100000` | 100.000 € Umsatz |
-| `SAISON_1` | erste Wiesn (16 Tage) bis zum Finale gespielt |
-| `WIESN_WIRT_5` | eine Wiesn mit 5 Maßkrügen bewertet |
+| `SAISON_1` | erste Fest (16 Tage) bis zum Finale gespielt |
+| `FEST_WIRT_5` | ein Fest mit 5 Maßkrügen bewertet |
 | `TANZ_50` | 50 Mal tanzen Gäste auf den Tischen |
 | `KOTZE_100` | 100 Mal wurde im Zelt gekotzt |
 | `KOMBO_10` | Kombo ×10 beim Bedienen |
@@ -37,7 +37,7 @@ zwei Symbole 64×64 (erreicht, grau). Danach **Publish** nicht vergessen.
 | `DEKO_10` | 10 Einrichtungsgegenstände im Zelt |
 | `EREIGNIS_10` | 10 Tagesereignisse erlebt |
 | `PERSONAL_8` | 8 Angestellte gleichzeitig |
-| `SAISON_3` | drei Wiesn bis zum Finale |
+| `SAISON_3` | drei Fest bis zum Finale |
 
 Neue Meilensteine nur **anhängen**, IDs nie umbenennen — sonst verlieren Spieler
 ihre Errungenschaften.

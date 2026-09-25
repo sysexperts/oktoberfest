@@ -1,0 +1,468 @@
+[gd_scene format=3 uid="uid://dkhr4jlcj7mpw"]
+
+[ext_resource type="Script" uid="uid://c3kwk8oi4eby4" path="res://scripts/ui/festbuero.gd" id="1_buero"]
+[ext_resource type="PackedScene" path="res://scenes/ui/angebot.tscn" id="2_ang"]
+
+[node name="Festbuero" type="Control" unique_id=16575608]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_buero")
+
+[node name="Abdunkeln" type="ColorRect" parent="." unique_id=1751310926]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Mitte" type="CenterContainer" parent="." unique_id=1886756593]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte" unique_id=1559141596]
+custom_minimum_size = Vector2(860, 580)
+layout_mode = 2
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel" unique_id=1373640632]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Kopf" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=547551407]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SymbolTitel" type="TextureRect" parent="Mitte/Panel/Spalte/Kopf"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte/Kopf" unique_id=79649445]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 28
+text = "OFFICE_TITLE"
+
+[node name="SymbolGeld" type="TextureRect" parent="Mitte/Panel/Spalte/Kopf"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Geld" type="Label" parent="Mitte/Panel/Spalte/Kopf" unique_id=654861688]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "1.200 €"
+
+[node name="Status" type="Label" parent="Mitte/Panel/Spalte" unique_id=1328673015]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_font_sizes/font_size = 15
+text = "Kleines Zelt · Tische 2/4"
+
+[node name="Reiter" type="TabContainer" parent="Mitte/Panel/Spalte" unique_id=1695365311]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Zelt" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=1338827241]
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 0
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Zelt" unique_id=1388063774]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand" unique_id=1566677737]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ZeltMieten" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=348785377 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TischStellen" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=1246066182 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TischVerkaufen" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=266096858 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZeltVergroessern" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=451997269 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Toilette" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=768346787 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Lagerregal" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=1801044251 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Werbung" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=1956689438 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Deko" parent="Mitte/Panel/Spalte/Reiter/Zelt/Rand/Liste" unique_id=573918299 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Lizenzen" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=2117701403]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 1
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Lizenzen" unique_id=1623806886]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand" unique_id=1180356643]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=1809999134]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_font_sizes/font_size = 15
+text = "OFFER_LICENSE_INFO"
+
+[node name="LizenzWeizen" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=1405191488 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LizenzRadler" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=2126187778 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LizenzBrezn" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=527579478 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LizenzSosis" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=777294069 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LizenzFestbier" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=1328494822 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LizenzHendl" parent="Mitte/Panel/Spalte/Reiter/Lizenzen/Rand/Liste" unique_id=1068069948 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Personal" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=1890082654]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 2
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Personal" unique_id=482964708]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand" unique_id=1415320418]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Koch" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" unique_id=681020741 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Zapfer" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" unique_id=1250160507 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Kellner" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" unique_id=429756599 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Reinigung" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" unique_id=1517094039 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TeamTitel" type="Label" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" unique_id=1982413108]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_font_sizes/font_size = 20
+text = "TEAM_TITEL"
+
+[node name="Team" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Personal/Rand/Liste" unique_id=496791570]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Kuenstler" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=634609782]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 3
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Kuenstler" unique_id=948066276]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Kuenstler/Rand" unique_id=1761177587]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Kuenstler/Rand/Liste" unique_id=1926491153]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_font_sizes/font_size = 15
+text = "ACT_TAB_INFO"
+
+[node name="Strassenmusiker" parent="Mitte/Panel/Spalte/Reiter/Kuenstler/Rand/Liste" unique_id=1430795545 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Blaskapelle" parent="Mitte/Panel/Spalte/Reiter/Kuenstler/Rand/Liste" unique_id=908738385 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StarAct" parent="Mitte/Panel/Spalte/Reiter/Kuenstler/Rand/Liste" unique_id=284027421 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Ware" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=1447670006]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 4
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Ware" unique_id=1466524614]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand" unique_id=606645192]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" unique_id=738518188]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_font_sizes/font_size = 15
+text = "GOODS_TAB_INFO"
+autowrap_mode = 3
+
+[node name="Bier" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" unique_id=1419785306 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Zutaten" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" unique_id=1512601382 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZutatMalz" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZutatHopfen" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZutatHefe" parent="Mitte/Panel/Spalte/Reiter/Ware/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Bilanz" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=2120920256]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 5
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Bilanz" unique_id=820077459]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+
+[node name="BilanzText" type="Label" parent="Mitte/Panel/Spalte/Reiter/Bilanz/Rand" unique_id=775437259]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+
+[node name="Ziele" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=653773440]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 6
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Ziele" unique_id=1165437563]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="ZieleListe" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Ziele/Rand" unique_id=2114186207]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Einrichtung" type="ScrollContainer" parent="Mitte/Panel/Spalte/Reiter" unique_id=1513004823]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 7
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel/Spalte/Reiter/Einrichtung" unique_id=971478263]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 14
+
+[node name="Liste" type="VBoxContainer" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand" unique_id=542144324]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=775358590]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_font_sizes/font_size = 15
+text = "DECO_TAB_INFO"
+autowrap_mode = 3
+
+[node name="EinrLaterne" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1305801625 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrStehlampe" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=340879003 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrLichterkette" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=838480713 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBlumen" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=176384083 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBusch" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=2018105340 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrRegal" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=774259113 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrFass" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=2061453203 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrKronleuchter" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=2048501154 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrLichtergirlande" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=411760141 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrHaengelaterne" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1939355607 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrHopfen" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1475769969 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrRiesenbrezel" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1295773010 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBanner" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1681656303 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrWimpel" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=619485461 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrAktenschrank" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1904706649 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrOrdnerregal" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1573827018 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBuerostuhl" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=2076957846 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrTopfpflanze" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1773248556 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrWanduhr" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=10050221 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrPlakat" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=2049534110 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrBueroleuchte" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=724141587 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrTeppich" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=288801953 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrWartebank" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1833453773 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrGarderobe" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=1390291617 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EinrKaffeeecke" parent="Mitte/Panel/Spalte/Reiter/Einrichtung/Rand/Liste" unique_id=596447215 instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Unten" type="HBoxContainer" parent="Mitte/Panel/Spalte" unique_id=591761930]
+layout_mode = 2
+alignment = 2
+
+[node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte/Unten" unique_id=1706113704]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+text = "OFFICE_CLOSE"

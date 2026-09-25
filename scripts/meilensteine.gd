@@ -22,7 +22,7 @@ const LISTE := [
 	{"id": "ZELT_3", "wert": "tent_stage", "ziel": 3, "belohnung": 2000},
 	{"id": "UMSATZ_100000", "wert": "earned", "ziel": 100000, "belohnung": 5000},
 	{"id": "SAISON_1", "wert": "saisons", "ziel": 1, "belohnung": 1000},
-	{"id": "WIESN_WIRT_5", "wert": "beste_wertung", "ziel": 5, "belohnung": 3000},
+	{"id": "FEST_WIRT_5", "wert": "beste_wertung", "ziel": 5, "belohnung": 3000},
 	{"id": "TANZ_50", "wert": "tanzen", "ziel": 50, "belohnung": 400},
 	{"id": "KOTZE_100", "wert": "gekotzt", "ziel": 100, "belohnung": 500},
 	{"id": "KOMBO_10", "wert": "kombo_max", "ziel": 10, "belohnung": 600},

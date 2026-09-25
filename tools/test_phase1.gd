@@ -173,12 +173,12 @@ class Lauf extends Node:
 		hud.set_hint("")
 		_check("Hinweis ausgeblendet", not hud.get_node("%Hinweis").visible, "")
 
-		print("  -- Wiesenbüro (2.4)")
+		print("  -- Festbüro (2.4)")
 		# Stand hier: Zelt gemietet, 1 Tisch, 500 € übrig, kein Bier im Lager
 		hud.open_booking()
 		await _frames(3)
-		var buero: Control = hud.get_node("%Wiesenbuero")
-		_check("Wiesenbüro offen", hud.is_booking_open() and buero.visible, "")
+		var buero: Control = hud.get_node("%Festbuero")
+		_check("Festbüro offen", hud.is_booking_open() and buero.visible, "")
 		var mieten: Node = buero.get_node("%ZeltMieten")
 		_check("Zelt mieten: gesperrt, schon gemietet", mieten.knopf_node(0).disabled, mieten.knopf_node(0).text)
 		var tisch: Node = buero.get_node("%TischStellen")
@@ -197,7 +197,7 @@ class Lauf extends Node:
 		_check("Bier ×1 bestellen kommt an", gm._pending.size() == lieferungen + 1, "Lieferungen=%d" % gm._pending.size())
 		_check("Bilanz ohne Schicht", buero.get_node("%BilanzText").text == "Noch keine Schicht gespielt.", buero.get_node("%BilanzText").text)
 		hud.close_booking()
-		_check("Wiesenbüro zu", not hud.is_booking_open(), "")
+		_check("Festbüro zu", not hud.is_booking_open(), "")
 
 		print("  -- Meldungen (2.5)")
 		var texte := preload("res://scripts/ui/texte.gd")
@@ -229,7 +229,7 @@ class Lauf extends Node:
 		_check("Zielmarker in der Szene", marker != null, "")
 		if marker:
 			var ziel: Node = marker.ziel_suchen()
-			_check("Marker zeigt auf Wiesnchef oder Dreck", ziel is Mess or (ziel != null and ziel.has_method("ist_wiesnchef")), str(ziel))
+			_check("Marker zeigt auf Festleiter oder Dreck", ziel is Mess or (ziel != null and ziel.has_method("ist_festleiter")), str(ziel))
 		# Der Haken für "Zelt mieten" darf noch sichtbar sein — Überspringen darf
 		# nur keinen neuen auslösen.
 		var haken_vorher: int = hud._erledigt_token
@@ -272,11 +272,11 @@ class Lauf extends Node:
 		gm._phase = gm.Phase.INTERMISSION
 		gm._zelt_offen = false
 		gm._nachts_geschlossen = true
-		_check("HUD zeigt Tag 1/16 der neuen Wiesn",
+		_check("HUD zeigt Tag 1/16 der neuen Fest",
 			String(hud.get_node("%Zeit").text).begins_with(tr("HUD_DAY_SAISON") % [1, 16]),
 			hud.get_node("%Zeit").text)
-		_check("Wiesn nach dem Finale bewertet", gm._saison_nr >= 2 and int(gm._stats.saisons) >= 1
-			and hud.is_popup_open(), "Wiesn %d" % gm._saison_nr)
+		_check("Fest nach dem Finale bewertet", gm._saison_nr >= 2 and int(gm._stats.saisons) >= 1
+			and hud.is_popup_open(), "Fest %d" % gm._saison_nr)
 		_check("Bewertung 1–5", gm.saison_wertung({"tage": 16, "netto": 16000, "pop_summe": 1500, "bedient": 900, "verpasst": 30}) == 5
 			and gm.saison_wertung({"tage": 16, "netto": -500, "pop_summe": 300, "bedient": 100, "verpasst": 100}) == 1, "")
 		_check("Nach Feierabend bleibt es Nacht bis zum Schlafen", gm._daylight_factor(-1.0) >= 1.0, "")
@@ -301,7 +301,7 @@ class Lauf extends Node:
 			and (gespeichert.get("meilensteine", []) as Array).has("MASS_100")
 			and int(gespeichert.get("stats", {}).get("served", 0)) == 100, "")
 		hud.set_buero(gm._buero_state())
-		var ziele: Node = hud.get_node("%Wiesenbuero").get_node("%ZieleListe")
+		var ziele: Node = hud.get_node("%Festbuero").get_node("%ZieleListe")
 		_check("Reiter Ziele listet alle", ziele.get_child_count() == gm.Meilensteine.LISTE.size(), str(ziele.get_child_count()))
 
 		print("  -- Wirtschaft (3.4)")
@@ -316,7 +316,7 @@ class Lauf extends Node:
 		_check("Geduld nie unter 60 %", w.geduld(38.0, 999) >= 38.0 * 0.6 - 0.001, str(w.geduld(38.0, 999)))
 		_check("Schonfrist: bis Tag 7 kein Beliebtheitsverlust", w.beliebtheit_verlust(7) == 0.0
 			and w.beliebtheit_verlust(8) > 0.0, "")
-		gm._saison_nr = 1   # Wiesn-Aufschlag separat geprüft
+		gm._saison_nr = 1   # Fest-Aufschlag separat geprüft
 		_check("Miete im Spiel folgt dem Tag", gm._daily_rent() ==w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._day),
 			"Tag %d, Miete %d" % [gm._day, gm._daily_rent()])
 
@@ -1016,7 +1016,7 @@ class Lauf extends Node:
 		gm._schwierigkeit = 1
 		_check("Gemütlich geduldiger, Wahnsinn ungeduldiger", geduld_gemuetlich > geduld_normal and geduld_wahnsinn < geduld_normal,
 			"%.1f / %.1f / %.1f" % [geduld_gemuetlich, geduld_normal, geduld_wahnsinn])
-		_check("Wiesn-Wahnsinn: Miete höher (oder mietfrei)", miete_wahnsinn >= miete_normal, "%d / %d" % [miete_normal, miete_wahnsinn])
+		_check("Festwahnsinn: Miete höher (oder mietfrei)", miete_wahnsinn >= miete_normal, "%d / %d" % [miete_normal, miete_wahnsinn])
 
 		print("  -- Gästetypen")
 		var typen := {}
@@ -1026,7 +1026,7 @@ class Lauf extends Node:
 		_check("VIP doppelter Umsatz, Stammgast geduldiger", gm._typ_umsatz({"typ": "vip"}) == 2.0
 			and gm._geduld_max({"typ": "stamm"}) > gm._geduld() and gm._geduld_max({"typ": "tourist"}) < gm._geduld(), "")
 
-		print("  -- Nächste Wiesn schwerer")
+		print("  -- Nächstes Fest schwerer")
 		var saison_vorher: int = gm._saison_nr
 		gm._saison_nr = 1
 		var miete_w1: int = gm._daily_rent()
@@ -1329,7 +1329,7 @@ class Lauf extends Node:
 			tonne.anzahl_setzen(0)
 
 		print("  -- Lobby")
-		gm.net_lobby_setzen("  Wiesn-Sepp mit viel zu langem Namen ", 3, 2)
+		gm.net_lobby_setzen("  Fest-Sepp mit viel zu langem Namen ", 3, 2)
 		var eigen: Dictionary = gm._spieler_info.get(1, {})
 		_check("Lobby-Wahl gespeichert, Name gekürzt", int(eigen.get("figur", -1)) == 2
 			and str(eigen.get("name", "")).length() <= gm.SPIELERNAME_MAX and int(eigen.get("farbe", -1)) == 3,
@@ -1399,7 +1399,7 @@ class Lauf extends Node:
 			gm._staff_wage(2, 1, "schnell") > gm._staff_wage(2, 1) and gm._staff_wage(2, 1, "schluckspecht") < gm._staff_wage(2, 1)
 			and gm._staff_wage(2, 1, "quatsch") == gm._staff_wage(2, 1), "")
 		_check("Flink läuft schneller", gm._staff_tempo({"eig": "schnell"}) > gm._staff_tempo({}), "")
-		_check("Wiesn 3: mehr Miete, weniger Geduld", miete_w3 >= miete_w1 and geduld_w3 < geduld_w1,
+		_check("Fest 3: mehr Miete, weniger Geduld", miete_w3 >= miete_w1 and geduld_w3 < geduld_w1,
 			"Miete %d → %d, Geduld %.1f → %.1f" % [miete_w1, miete_w3, geduld_w1, geduld_w3])
 		gm._phase = gm.Phase.INTERMISSION
 
@@ -1427,8 +1427,8 @@ class Lauf extends Node:
 		_check("Ausbau gesperrt", gm._upg_marketing == werbung_vorher, "")
 		hud.set_buero(gm._buero_state())
 		hud.set_money(Game.money)
-		var werbung_zeile: Node = hud.get_node("%Wiesenbuero").get_node("%Werbung")
-		_check("Wiesenbüro nennt den Kredit als Grund", werbung_zeile.grund_text().contains("Rettungskredit"), werbung_zeile.grund_text())
+		var werbung_zeile: Node = hud.get_node("%Festbuero").get_node("%Werbung")
+		_check("Festbüro nennt den Kredit als Grund", werbung_zeile.grund_text().contains("Rettungskredit"), werbung_zeile.grund_text())
 		gm._add_income(100)
 		_check("25 % jeder Einnahme gehen an die Brauerei", Game.money == 75 and gm._kredit_rest == 1775,
 			"Konto %d, Schuld %d" % [Game.money, gm._kredit_rest])

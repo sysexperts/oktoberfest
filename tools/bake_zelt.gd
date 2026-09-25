@@ -4,7 +4,7 @@ extends SceneTree
 ##   assets/zelt/materialien/*.tres
 ##   scenes/zelt/*.tscn            Bauteile (Kranzleuchter, Laterne, Fenster, Girlande …)
 ##   scenes/tent.tscn              das Zelt selbst (Boden, Wände, Emporen, Dach, Fassade)
-## Vorbild: Wiesn-Festhallen — Holzdielen, begehbare Emporen mit Rautenbrüstung,
+## Vorbild: Fest-Festhallen — Holzdielen, begehbare Emporen mit Rautenbrüstung,
 ## hellblaue Wolkendecke („Himmel der Bayern“), Hopfenkränze als Leuchter, Krone
 ## auf dem Giebel, Maibaum vor dem Eingang.
 ## Maße passen zu main.tscn (Kollision innen x ±12, z -14 … 11, Tür x ±3) und zu den

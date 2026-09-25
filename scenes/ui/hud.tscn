@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/wiesenbuero.tscn" id="2_buero"]
+[ext_resource type="PackedScene" path="res://scenes/ui/festbuero.tscn" id="2_buero"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zeltcomputer.tscn" id="3_comp"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zelt_mieten.tscn" id="4_mieten"]
 [ext_resource type="PackedScene" path="res://scenes/ui/emote_rad.tscn" id="90_emote"]
@@ -713,7 +713,7 @@ theme_override_font_sizes/font_size = 30
 text = "🔥 Kombo ×3"
 horizontal_alignment = 1
 
-[node name="Wiesenbuero" parent="." instance=ExtResource("2_buero")]
+[node name="Festbuero" parent="." instance=ExtResource("2_buero")]
 unique_name_in_owner = true
 
 [node name="Zeltcomputer" parent="." instance=ExtResource("3_comp")]

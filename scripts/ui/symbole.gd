@@ -1,7 +1,7 @@
 extends RefCounted
 ## Symbole der Oberfläche: ein Satz gleich gezeichneter Strichgrafiken aus
 ## assets/ui/symbole. Vorher standen überall Emoji im Text — die sehen auf jedem
-## System anders aus und passen nicht zum Wiesn-Theme. Hier liegt die eine Stelle,
+## System anders aus und passen nicht zum Fest-Theme. Hier liegt die eine Stelle,
 ## an der ein Name (z. B. "bier") zu einem Bild wird.
 ##
 ##   const Symbole := preload("res://scripts/ui/symbole.gd")

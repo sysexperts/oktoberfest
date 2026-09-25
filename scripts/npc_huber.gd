@@ -82,7 +82,7 @@ func ansprechen() -> void:
 	var duell := get_tree().get_first_node_in_group("wettschleppen")
 	if duell and duell.aktiv:
 		return
-	# Letzter Wiesn-Tag: Duell um Sepps Ehre anbieten
+	# Letzter Festtag: Duell um Sepps Ehre anbieten
 	if bool(z.get("duell_offen", false)):
 		zeilen = [_t("HUBER_DUELL_1" + a), _t("HUBER_DUELL_2" + a), _t("HUBER_DUELL_FRAGE" + a)]
 		var duell_wahl: Array[String] = [_t("HUBER_DUELL_JA" + a), _t("HUBER_DUELL_NEIN" + a)]

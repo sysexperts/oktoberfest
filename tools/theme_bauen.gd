@@ -1,5 +1,5 @@
 extends SceneTree
-## Baut das Wiesn-Theme (Holz, halbtransparent, Gold als Akzent) und speichert es
+## Baut das Fest-Theme (Holz, halbtransparent, Gold als Akzent) und speichert es
 ## nach assets/ui/menue_theme.tres. Danach ist es eine ganz normale Theme-Ressource
 ## und im Editor bearbeitbar — der Generator ist nur da, damit die vielen
 ## StyleBoxen konsistent bleiben und nicht von Hand gepflegt werden müssen.

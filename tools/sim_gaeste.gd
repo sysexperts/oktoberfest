@@ -121,7 +121,7 @@ class Lauf extends Node:
 				am_tor = true
 			gm._update_guests(SCHRITT)
 			zeit += SCHRITT
-		_check("verlässt die Wiesn durchs Haupttor", am_tor and not gm._guest_sim.has(id), "%.0f s" % zeit)
+		_check("verlässt das Fest durchs Haupttor", am_tor and not gm._guest_sim.has(id), "%.0f s" % zeit)
 		_ende()
 
 	func _ende() -> void:

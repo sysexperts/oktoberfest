@@ -1,5 +1,5 @@
 extends SceneTree
-## Altstadt-Kulisse rund um die Wiesn (ersetzt das Low-Poly-Bergterrain des Kirmes-Pakets):
+## Altstadt-Kulisse rund um das Fest (ersetzt das Low-Poly-Bergterrain des Kirmes-Pakets):
 ##   Wiese, Stadtmauer mit Toren und Wehrtürmen, Reihen bayerischer Bürgerhäuser am Hang
 ##   (Giebel-, Trauf- und Treppengiebelhäuser, Fachwerk, Läden, Blumenkästen, Balkone,
 ##   Gauben, Markisen), Kirchtürme mit Zwiebelhauben, Frauenkirche, Rathaus, Maibäume, Wald.

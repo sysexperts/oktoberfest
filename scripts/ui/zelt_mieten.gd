@@ -1,6 +1,6 @@
 extends Control
 ## Zelt mieten: zeigt den Preis, fragt nach dem Zeltnamen und mietet erst nach
-## Bestätigung. Geöffnet vom „Zu vermieten"-Schild und aus dem Wiesenbüro.
+## Bestätigung. Geöffnet vom „Zu vermieten"-Schild und aus dem Festbüro.
 ## Aufbau: scenes/ui/zelt_mieten.tscn. Der Name wird auf dem Server geprüft
 ## (GameManager.zeltname_pruefen) und steht danach groß am Zelteingang und über
 ## der Theke (Label3D in der Gruppe "zeltname").

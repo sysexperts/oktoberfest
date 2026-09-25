@@ -1,6 +1,6 @@
 extends Node
 const Schuss := preload("res://tools/schuss.gd")
-## Wiesn-Kurier prüfen: Schlagzeilen für verschiedene Tage, Bild der Zeitung.
+## Festkurier prüfen: Schlagzeilen für verschiedene Tage, Bild der Zeitung.
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
 class Lauf extends Node:

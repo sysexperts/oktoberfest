@@ -12,7 +12,7 @@ extends SceneTree
 ## Danach: scenes/figuren/alex.tscn benutzt die Bibliothek als leih_bibliothek.
 
 const QUELLE := "res://assets/character/character2/character2.glb"
-const ZIEL := "res://assets/character/character4/Meshy_AI_Blonde_Oktoberfest_Ga_biped_Animation_Walking_withSkin.glb"
+const ZIEL := "res://assets/character/character4/alex_Walking_withSkin.glb"
 const AUSGABE := "res://assets/character/character4/alex_animationen.res"
 ## Pfad des Skeletts in Alex' Szene (steht in den Spuren der neuen Animationen)
 const ZIEL_SKELETT := "target_character/Skeleton3D"

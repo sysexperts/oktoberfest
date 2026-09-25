@@ -292,7 +292,7 @@ label_settings = SubResource("Zeile")
 
 [node name="Info" type="Label" parent="Buero/Liste/Hendl/Text"]
 layout_mode = 2
-text = "Erst ab Zeltstufe 3 oder der 2. Wiesn"
+text = "Erst ab Zeltstufe 3 oder dem 2. Fest"
 label_settings = SubResource("Gesperrt")
 
 [node name="Knopf" type="TextureRect" parent="Buero/Liste/Hendl"]

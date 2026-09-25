@@ -1,6 +1,6 @@
 class_name RundgangStation
 extends Node3D
-## Eine Station im Rundgang des Wiesnchefs (scripts/npc_wiesnchef.gd).
+## Eine Station im Rundgang des Festleiters (scripts/npc_festleiter.gd).
 ## Sobald das Tutorial Schritt `schritt` erreicht (GameManager._quest_done),
 ## läuft er die Marker3D-Kinder der Reihe nach ab, bleibt am letzten stehen
 ## (Blickrichtung = Drehung des letzten Markers) und erklärt beim Ansprechen

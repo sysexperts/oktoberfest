@@ -1,7 +1,7 @@
 extends CanvasLayer
 ## Einleitung: Brief von Onkel Sepp („Ich vermache dir mein Festzelt …") auf
 ## schwarzem Grund, danach Überblende auf die Kirmes. Der Brief schickt die
-## Spieler zum Wiesnchef in sein Wiesenbüro (scripts/npc_wiesnchef.gd), dort
+## Spieler zum Festleiter in sein Festbüro (scripts/npc_festleiter.gd), dort
 ## beginnt die erste Mission. Aufbau: scenes/ui/kino.tscn.
 ##
 ## Läuft einmal beim ersten Start eines neuen Spielstands. Der Server startet sie

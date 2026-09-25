@@ -1,6 +1,6 @@
 extends Node
 const Schuss := preload("res://tools/schuss.gd")
-## Rundgang des Wiesnchefs prüfen: Tutorialschritte der Reihe nach setzen,
+## Rundgang des Festleiters prüfen: Tutorialschritte der Reihe nach setzen,
 ## warten bis er an der Station steht, ansprechen, Bild. → SHOT_DIR/rundgang_*.png
 
 func _ready() -> void:
@@ -19,7 +19,7 @@ class Lauf extends Node:
 		TranslationServer.set_locale("de")
 		await _warten(5.0)
 		var dialog = gm.get_node("Dialog")
-		var chef = gm.get_node("Kirmes/Wiesnchef")
+		var chef = gm.get_node("Kirmes/Festleiter")
 		var sp: Node3D = gm._players_nodes.get(1)
 		var dir := OS.get_environment("SHOT_DIR")
 		print("Start: neues ", chef.hat_neues(), " bei ", chef.global_position)

@@ -36,7 +36,7 @@ var player_name: String = "Spieler"
 var dedicated := false ## true ise oyuncu spawn edilmez (headless dedicated server)
 ## Vom Menü gesetzt: vorhandenen Spielstand verwerfen und frisch beginnen.
 var neues_spiel := false
-## Schwierigkeit für ein neues Spiel (vom Menü): 0 Gemütlich, 1 Normal, 2 Wiesn-Wahnsinn.
+## Schwierigkeit für ein neues Spiel (vom Menü): 0 Gemütlich, 1 Normal, 2 Festwahnsinn.
 var schwierigkeit := 1
 ## Allein spielen, ganz ohne Netzwerk — keine Firewall-Abfrage.
 var solo := false

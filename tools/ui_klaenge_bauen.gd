@@ -1,6 +1,6 @@
 extends SceneTree
 ## Erzeugt die UI-Klänge nach assets/audio/sfx/. Es gab keine Sounddateien, und
-## ein Holz-"Tock" passt zum Wiesn-Thema besser als ein Piepser.
+## ein Holz-"Tock" passt zum Fest-Thema besser als ein Piepser.
 ##
 ##   Godot.exe --headless --script tools/ui_klaenge_bauen.gd
 ##

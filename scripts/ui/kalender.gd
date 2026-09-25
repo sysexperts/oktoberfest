@@ -1,5 +1,5 @@
 extends CanvasLayer
-## Wiesn-Kalender (Taste K): die 16 Tage der Saison mit Sondertagen und
+## Festkalender (Taste K): die 16 Tage der Saison mit Sondertagen und
 ## geplanten Ereignissen (GameManager._plan), Bankraten, Hubers Wetttagen
 ## (ab Tag 3 jeder dritte) und dem Finale. Heute ist hervorgehoben, vergangene
 ## Tage sind blass. Aufbau: scenes/ui/kalender.tscn (16 Zellen „TagN").

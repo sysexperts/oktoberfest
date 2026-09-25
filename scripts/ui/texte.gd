@@ -37,7 +37,7 @@ static func meldung(schluessel: String, werte: Array = []) -> String:
 	var t := _t(schluessel)
 	return t % fertig if not fertig.is_empty() else t
 
-## Kopfzeile von Wiesenbüro und Zelt-Computer aus GameManager._buero_state.
+## Kopfzeile von Festbüro und Zelt-Computer aus GameManager._buero_state.
 static func buero_status(z: Dictionary) -> String:
 	var text := _t("OFFICE_STATUS") % [
 		_t("TENT_STAGE_%d" % int(z.get("stage", 0))), int(z.get("tables", 0)), int(z.get("limit", 0)),

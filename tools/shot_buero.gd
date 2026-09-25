@@ -1,5 +1,5 @@
 extends Node
-## Wiesenbüro von innen fotografieren → SHOT_DIR/buero_*.png
+## Festbüro von innen fotografieren → SHOT_DIR/buero_*.png
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
 class Lauf extends Node:
@@ -15,7 +15,7 @@ class Lauf extends Node:
 		var kino = gm.get_node_or_null("Kino")
 		if kino and kino.aktiv:
 			kino.beenden()
-		var hut := gm.get_node("Kirmes/Wiesenbuero") as Node3D
+		var hut := gm.get_node("Kirmes/Festbuero") as Node3D
 		var cam := Camera3D.new()
 		cam.fov = 80
 		gm.add_child(cam)

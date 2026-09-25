@@ -1,7 +1,7 @@
 class_name ZeltVermietung
 extends Node3D
 ## „Zu vermieten"-Schild am Festzelt: Mit E wird das Zelt direkt hier gemietet,
-## ohne Umweg über das Wiesenbüro. Verschwindet, sobald das Zelt gemietet ist
+## ohne Umweg über das Festbüro. Verschwindet, sobald das Zelt gemietet ist
 ## (GameManager._vermietung_aktualisieren). Aufbau: scenes/zelt_vermietung.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")

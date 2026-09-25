@@ -38,7 +38,7 @@ class Lauf extends Node:
 		}
 		gm.open_lobby_ui()
 		var lobby := gm.get_node("HUD/Lobby")
-		(lobby.get_node("%Name") as LineEdit).text = "Wiesn-Sepp"
+		(lobby.get_node("%Name") as LineEdit).text = "Fest-Sepp"
 		lobby._farbe_waehlen(0)
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png("res://tools/lobby.png")

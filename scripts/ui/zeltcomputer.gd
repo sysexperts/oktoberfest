@@ -104,7 +104,7 @@ func _neu() -> void:
 	%EssenTeurer.disabled = essen_faktor >= float(_z.get("essen_max", 1.0)) - 0.001
 	%EssenBilliger.modulate.a = 0.35 if %EssenBilliger.disabled else 1.0
 	%EssenTeurer.modulate.a = 0.35 if %EssenTeurer.disabled else 1.0
-	# Ware: gleiche Preise wie im Wiesenbüro (GameManager.net_order_goods)
+	# Ware: gleiche Preise wie im Festbüro (GameManager.net_order_goods)
 	if _gm:
 		%WareText.text = tr("COMP_GOODS_STOCK") % [int(_z.get("bier", 0)), int(_z.get("essen", 0)), int(_z.get("pending", 0))]
 		var ohne_zelt := int(_z.get("stage", 0)) == 0

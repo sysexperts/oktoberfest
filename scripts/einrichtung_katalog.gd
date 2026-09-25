@@ -3,7 +3,7 @@ extends RefCounted
 ##
 ## Neuer Gegenstand: Szene unter scenes/einrichtung/ anlegen (Wurzel mit
 ## scripts/einrichtung.gd, Modell als Kind), hier eintragen, eine Angebotszeile
-## im Wiesenbüro-Reiter „Einrichtung" (scenes/ui/wiesenbuero.tscn) mit dem Namen
+## im Festbüro-Reiter „Einrichtung" (scenes/ui/festbuero.tscn) mit dem Namen
 ## aus "zeile" anlegen und DECO_<ART> / DECO_<ART>_INFO in locale/texte.csv.
 ## Ohne class_name, einbinden per preload.
 ##
@@ -14,7 +14,7 @@ extends RefCounted
 ## "hoehe": Höhe des Szenenursprungs über dem Boden (Wand: Aufhängung, Decke:
 ## Aufhängepunkt; das Modell sitzt in der Szene darunter bzw. davor).
 
-## art -> Szene, Preis, Symbol, Zeile im Wiesenbüro, Platz, Höhe
+## art -> Szene, Preis, Symbol, Zeile im Festbüro, Platz, Höhe
 const ARTEN := {
 	"laterne": {"szene": preload("res://scenes/einrichtung/laterne.tscn"), "preis": 150, "symbol": "lampe", "zeile": "EinrLaterne", "platz": "boden", "hoehe": 0.0},
 	"stehlampe": {"szene": preload("res://scenes/einrichtung/stehlampe.tscn"), "preis": 90, "symbol": "lampe", "zeile": "EinrStehlampe", "platz": "boden", "hoehe": 0.0},

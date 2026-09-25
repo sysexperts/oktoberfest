@@ -1,7 +1,7 @@
 extends Node
 const Schuss := preload("res://tools/schuss.gd")
 ## Tagesziele und Sepps Schulden prüfen (Logik + Bild der Aufgabenkarte und des
-## Wiesnchef-Gesprächs). → SHOT_DIR/tagesziel_*.png
+## Festleiter-Gesprächs). → SHOT_DIR/tagesziel_*.png
 
 func _ready() -> void:
 	get_tree().root.add_child.call_deferred(Lauf.new())
@@ -53,7 +53,7 @@ class Lauf extends Node:
 		var zeilen: Array[String] = gm.chef_tageszeilen(false, gm._hud._zustand)
 		_check("Chef sagt Ziel + Bank", zeilen.size() == 2 and zeilen[0].contains("43") and zeilen[1].contains("Tag 8"), str(zeilen))
 		# Gespräch am Büro
-		var chef = gm.get_node("Kirmes/Wiesnchef")
+		var chef = gm.get_node("Kirmes/Festleiter")
 		await _warten(1.0)
 		var sp: Node3D = gm._players_nodes.get(1)
 		sp.global_position = chef.global_position + chef.global_transform.basis.z * 2.2 + Vector3(0, 0.1, 0)

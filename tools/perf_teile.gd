@@ -44,7 +44,7 @@ class Lauf extends Node:
 		for k in karte.get_children():
 			k.process_mode = Node.PROCESS_MODE_DISABLED
 		await _mess("Kartenteile angehalten")
-		for n in ["HUD", "Zielmarker", "Kirmes/Wiesnchef"]:
+		for n in ["HUD", "Zielmarker", "Kirmes/Festleiter"]:
 			var x := gm.get_node_or_null(n)
 			if x:
 				x.process_mode = Node.PROCESS_MODE_DISABLED

@@ -33,7 +33,7 @@ func einrichten(gm: Node) -> void:
 
 ## Beim ersten Schichtbeginn zeigen (vom HUD aufgerufen).
 func beim_schichtbeginn() -> void:
-	# Im Tutorial erklärt der Wiesnchef das an der Theke — dann nicht doppelt
+	# Im Tutorial erklärt der Festleiter das an der Theke — dann nicht doppelt
 	if _gm and _gm.has_method("tutorial_active") and _gm.tutorial_active():
 		return
 	if schon_gezeigt:

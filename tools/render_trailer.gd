@@ -242,7 +242,7 @@ class Lauf extends Node:
 
 		# 1 Kirmes am späten Nachmittag: Kranfahrt aufs leere Zelt zu
 		_blende(0.0, 1.2)
-		_titel("Die Wiesn ruft.", 0.8, 3.4)
+		_titel("Die Fest ruft.", 0.8, 3.4)
 		await _fahrt(Vector3(-40.0, 26.0, 74.0), Vector3(0.0, 2.0, 10.0),
 			Vector3(-12.0, 8.0, 36.0), Vector3(2.0, 2.5, 13.0), 6.0)
 

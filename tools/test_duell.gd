@@ -1,6 +1,6 @@
 extends Node
 const Schuss := preload("res://tools/schuss.gd")
-## Finale prüfen: letzter Wiesn-Tag, Duell starten, der Spieler läuft die Tore
+## Finale prüfen: letzter Festtag, Duell starten, der Spieler läuft die Tore
 ## automatisch ab (ohne Rennen), Ergebnis vom Server, Brief nach dem Sieg.
 ## → SHOT_DIR/duell_*.png
 

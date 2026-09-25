@@ -1,6 +1,6 @@
 extends SceneTree
-## Baut die Schanktheke (scenes/schanktheke.tscn) und das Wiesenbüro
-## (scenes/wiesenbuero.tscn) als echte Knoten. Materialien und Bauteile kommen aus
+## Baut die Schanktheke (scenes/schanktheke.tscn) und das Festbüro
+## (scenes/festbuero.tscn) als echte Knoten. Materialien und Bauteile kommen aus
 ## tools/bake_zelt.gd (assets/zelt/, scenes/zelt/).
 ##
 ## Theke: Maße wie früher (18,4 m, Platte 1,09 m, Ausgabe bei x −2), Vorderseite
@@ -28,7 +28,7 @@ func _init() -> void:
 	m.messing = _mat_speichern("messing", Color(0.85, 0.62, 0.26), 0.3)
 	m.papier = _mat_speichern("papier", Color(0.96, 0.93, 0.82), 0.9)
 	_speichern(_theke(), "res://scenes/schanktheke.tscn")
-	_speichern(_buero(), "res://scenes/wiesenbuero.tscn")
+	_speichern(_buero(), "res://scenes/festbuero.tscn")
 	print("THEKE BUERO FERTIG")
 	quit()
 
@@ -225,9 +225,9 @@ func _theke() -> Node3D:
 	_instanz(r, "res://scenes/ausgabe.tscn", "Ausgabe", Transform3D(Basis(), Vector3(-2, 1.09, 0.3)))
 	return r
 
-# ------------------------------------------------------------ Wiesenbüro
+# ------------------------------------------------------------ Festbüro
 func _buero() -> Node3D:
-	var r := _neu("Wiesenbuero")
+	var r := _neu("Festbuero")
 	var hw := 5.0
 	var hd := 4.0
 	var sockel := 0.14

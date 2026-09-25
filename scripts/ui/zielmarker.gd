@@ -43,19 +43,19 @@ func ziel_suchen() -> Node3D:
 	if sp == null or not gm.has_method("tutorial_active") or not gm.tutorial_active():
 		return null
 	var geschlossen: bool = gm.in_intermission()
-	# Rundgang: Hat der Wiesnchef Neues zu erzählen oder läuft er voraus, zeigt der Pfeil auf ihn
-	var fuehrer := get_tree().get_first_node_in_group("wiesnchef") as Node3D
+	# Rundgang: Hat der Festleiter Neues zu erzählen oder läuft er voraus, zeigt der Pfeil auf ihn
+	var fuehrer := get_tree().get_first_node_in_group("festleiter") as Node3D
 	if fuehrer and fuehrer.has_method("hat_neues") and (fuehrer.hat_neues() or fuehrer.unterwegs()):
 		return fuehrer
 	match int(gm._quest_step):
 		0:
-			# Erste Mission: dem Wiesnchef nach — er läuft zum Zelteingang vor
-			var chef := get_tree().get_first_node_in_group("wiesnchef") as Node3D
+			# Erste Mission: dem Festleiter nach — er läuft zum Zelteingang vor
+			var chef := get_tree().get_first_node_in_group("festleiter") as Node3D
 			if chef:
 				return chef
 			return _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
 		1:
-			# Das Schild am Zelteingang — ist es weg (gemietet), bleibt das Wiesenbüro
+			# Das Schild am Zelteingang — ist es weg (gemietet), bleibt das Festbüro
 			var schild := _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
 			if schild:
 				return schild

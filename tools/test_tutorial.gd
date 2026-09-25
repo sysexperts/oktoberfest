@@ -1,6 +1,6 @@
 extends Node
 const Schuss := preload("res://tools/schuss.gd")
-## Tutorial-Anfang prüfen: Brief → Wiesnchef (Nein, dann Ja) → er geht zum Zelt
+## Tutorial-Anfang prüfen: Brief → Festleiter (Nein, dann Ja) → er geht zum Zelt
 ## → Zelt mieten → Dreck liegt im Zelt → wegfegen → er geht ins Büro.
 ## → SHOT_DIR/tut_*.png
 
@@ -28,14 +28,14 @@ class Lauf extends Node:
 		var dir := OS.get_environment("SHOT_DIR")
 		var kino = gm.get_node("Kino")
 		var dialog = gm.get_node("Dialog")
-		var chef = gm.get_node("Kirmes/Wiesnchef")
+		var chef = gm.get_node("Kirmes/Festleiter")
 		var sp: Node3D = gm._players_nodes.get(1)
 		while kino.aktiv:
 			kino._weiter()
 			await _warten(0.2)
 		await _warten(8.0)
 		var start: Vector3 = chef.global_position
-		_check("Wiesnchef wartet im Büro", not chef.unterwegs() and chef.global_position.distance_to(start) < 0.1 and gm._quest_step == 0, "Schritt %d" % gm._quest_step)
+		_check("Festleiter wartet im Büro", not chef.unterwegs() and chef.global_position.distance_to(start) < 0.1 and gm._quest_step == 0, "Schritt %d" % gm._quest_step)
 		sp.global_position = chef.global_position + chef.global_transform.basis.z * 2.2 + Vector3(0, 0.1, 0)
 		sp.look_at(chef.global_position + Vector3(0, 0.1, 0), Vector3.UP)
 		await _warten(0.5)

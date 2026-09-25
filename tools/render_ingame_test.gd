@@ -1,6 +1,6 @@
 extends Node
 ## Fotografiert den Ingame-UI-Test (scenes/ui/ingame_test.tscn): HUD, Ereignis-Band,
-## Wiesenbüro auf Pergament mit echten (übersetzbaren) Texten über einem Spielbild.
+## Festbüro auf Pergament mit echten (übersetzbaren) Texten über einem Spielbild.
 ## Aufruf: godot --path . res://tools/render_ingame_test.tscn --resolution 1600x900
 ## Bild: tools/ingame_test.png (nicht im Git)
 

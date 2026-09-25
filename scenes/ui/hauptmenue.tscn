@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" path="res://assets/ui/main_background.jpg" id="2_hg"]
 [ext_resource type="PackedScene" path="res://scenes/ui/logo_animiert.tscn" id="3_logo"]
 [ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="4_mtheme"]
-[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_zahnrad.svg" id="5_zahn"]
-[ext_resource type="Texture2D" path="res://assets/ui/wiesn/symbol_tuer.svg" id="6_tuer"]
+[ext_resource type="Texture2D" path="res://assets/ui/fest/symbol_zahnrad.svg" id="5_zahn"]
+[ext_resource type="Texture2D" path="res://assets/ui/fest/symbol_tuer.svg" id="6_tuer"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3

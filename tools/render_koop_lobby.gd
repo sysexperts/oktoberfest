@@ -19,16 +19,16 @@ class Lauf extends Node:
 		var lobby := get_tree().current_scene
 		var breite := get_viewport().get_visible_rect().size.x
 		var fenster := DisplayServer.window_get_size().x
-		(lobby.get_node("%StartName") as LineEdit).text = "Wiesn-Sepp"
+		(lobby.get_node("%StartName") as LineEdit).text = "Fest-Sepp"
 		await _frames(40)
 		_foto("koop_lobby_start_%d" % fenster)
 		lobby._id = "a1"
 		lobby._code = "BREZN-42"
 		lobby._figur = 2
-		lobby._name_gesendet = "Wiesn-Sepp"
+		lobby._name_gesendet = "Fest-Sepp"
 		lobby._raum = {"code": "BREZN-42", "status": "warten", "port": 0, "host": "a1", "max": 4, "fehler": "",
 			"spieler": [
-				{"id": "a1", "name": "Wiesn-Sepp", "figur": 2, "host": true, "ich": true},
+				{"id": "a1", "name": "Fest-Sepp", "figur": 2, "host": true, "ich": true},
 				{"id": "b2", "name": "Anna", "figur": 1, "host": false, "ich": false},
 				{"id": "c3", "name": "Toni", "figur": 0, "host": false, "ich": false},
 			]}

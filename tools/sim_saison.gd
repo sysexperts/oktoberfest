@@ -90,9 +90,8 @@ class Lauf extends Node:
 			_tageszeile()
 			if tag < tage - 1:
 				await _pause_und_schlafen(false)
-			if tag % 5 == 4:
-				print("  Tag %d · Geld %d · Beliebtheit %d %% · Zelt %d%s" % [gm._day - 1,
-					Game.money, roundi(gm._popularity), gm._tent_stage, _last()])
+			print("  Tag %d · Geld %d · Beliebtheit %d %% · Zelt %d%s" % [gm._day - 1,
+				Game.money, roundi(gm._popularity), gm._tent_stage, _last()])
 
 	## Was ueber die Tage waechst. Im 30-Tage-Lauf kroch der Bot ab Tag 21 dahin
 	## (volle CPU-Last, 3 GB Speicher statt 1,5 GB beim Start) — ohne diese Zahlen
@@ -100,8 +99,16 @@ class Lauf extends Node:
 	func _last() -> String:
 		var knoten := gm.get_tree().get_node_count()
 		var mb := float(OS.get_static_memory_usage()) / 1048576.0
-		return " · Knoten %d · Gaeste %d · Dreck %d · Pakete %d · Speicher %.0f MB" % [
-			knoten, gm._guest_sim.size(), gm._messes.size(), gm._packages.size(), mb]
+		# Waisen: aus dem Baum genommen, aber nie freigegeben. Der haeufigste
+		# Grund fuer wachsenden Speicher bei gleichbleibender Knotenzahl.
+		var waisen := Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)
+		var objekte := Performance.get_monitor(Performance.OBJECT_COUNT)
+		var ressourcen := Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)
+		var vram := Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576.0
+		return (" · Knoten %d · Waisen %d · Objekte %d · Ressourcen %d"
+			+ " · Gaeste %d · Dreck %d · Pakete %d · Speicher %.0f MB · VRAM %.0f MB") % [
+			knoten, waisen, objekte, ressourcen,
+			gm._guest_sim.size(), gm._messes.size(), gm._packages.size(), mb, vram]
 
 	## Pause: einkaufen wie ein vernünftiger Spieler, auf die Ware warten, schlafen.
 	func _pause_und_schlafen(erster: bool) -> void:

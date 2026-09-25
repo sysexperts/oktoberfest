@@ -17,7 +17,7 @@ func _ready() -> void:
 	kasten.modulate.a = 1.0
 	(d.get_node("%Sprecher") as Label).text = "Letzter Wille von Onkel Sepp"
 	var t := d.get_node("%Text") as Label
-	t.text = "Mein liebes Patenkind, wenn du das liest, bin ich schon auf der Wiesn im Himmel. Das Zelt gehoert jetzt dir."
+	t.text = "Mein liebes Patenkind, wenn du das liest, bin ich schon auf des Fests im Himmel. Das Zelt gehoert jetzt dir."
 	t.visible_ratio = 1.0
 	(d.get_node("%Hinweis") as Label).text = "Linksklick weiter · Esc schliesst"
 	await get_tree().process_frame

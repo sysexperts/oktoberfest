@@ -1,5 +1,5 @@
 extends Node3D
-## Finale gegen Huber: Maß-Wettschleppen um Sepps Ehre (letzter Wiesn-Tag).
+## Finale gegen Huber: Maß-Wettschleppen um Sepps Ehre (letzter Festtag).
 ## Der Herausforderer trägt 10 volle Maß durch die Tore (Tore/T1 … T6, dann
 ## zurück durchs Start-Tor), Huber läuft seine Runde gleichzeitig daneben.
 ## Rennen oder scharfes Lenken bringt die Krüge zum Schwappen (Balken oben);
@@ -57,7 +57,7 @@ func _ready() -> void:
 				if i == 0:
 					label.font_size = 56
 
-## Tore sieht man am letzten Wiesn-Tag und während des Duells
+## Tore sieht man am letzten Festtag und während des Duells
 func _process(delta: float) -> void:
 	var gm := get_tree().current_scene
 	if not aktiv:
