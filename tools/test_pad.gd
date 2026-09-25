@@ -66,6 +66,27 @@ class Lauf extends Node:
 		_check("zurückgesetzt auf E", Einstellungen.taste("interact") == KEY_E)
 		_check("Knopf immer noch da", _hat("interact", InputEventJoypadButton))
 
+		print("-- PlayStation-Geraete werden erkannt")
+		# Die Namen, unter denen Godot/SDL PlayStation-Pads meldet — je nach
+		# Treiber und ob per USB oder Bluetooth verbunden.
+		for geraet in ["PS5 Controller", "DualSense Wireless Controller",
+				"Sony Interactive Entertainment Wireless Controller",
+				"PS4 Controller", "DUALSHOCK 4 Wireless Controller",
+				"Sony PLAYSTATION(R)3 Controller"]:
+			var treffer := false
+			for wort: String in Einstellungen.PS_NAMEN:
+				if geraet.to_lower().contains(wort):
+					treffer = true
+					break
+			_check("erkannt: %s" % geraet, treffer)
+		for geraet in ["Xbox Series Controller", "XInput Gamepad"]:
+			var treffer2 := false
+			for wort: String in Einstellungen.PS_NAMEN:
+				if geraet.to_lower().contains(wort):
+					treffer2 = true
+					break
+			_check("nicht faelschlich PlayStation: %s" % geraet, not treffer2)
+
 		print("-- Glyphenschrift haengt an der Oberflaeche")
 		# Ohne Ersatzschrift zeigt jedes Label nur ein leeres Kaestchen. Godot
 		# beantwortet das direkt: kennt die Schrift das Zeichen?

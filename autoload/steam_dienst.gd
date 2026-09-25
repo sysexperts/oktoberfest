@@ -101,6 +101,38 @@ func status_loeschen() -> void:
 	if aktiv:
 		_steam.call("clearRichPresence")
 
+# ------------------------------------------------------------ Controller-Typ
+## Welche Art Controller haengt dran? "playstation", "xbox", "deck" oder "".
+##
+## Warum ueber Steam und nicht ueber den Geraetenamen: Steam Input legt sich
+## zwischen Controller und Spiel und meldet ein PlayStation-Pad meist als Xbox.
+## Das Spiel wuerde dann Xbox-Knoepfe anzeigen, obwohl ein DualSense in der Hand
+## liegt. Steam selbst kennt den echten Typ — hier wird er erfragt.
+##
+## Zahlen aus ESteamInputType (Steamworks SDK).
+const STEAM_PAD_TYP := {
+	2: "xbox",        # Xbox 360
+	3: "xbox",        # Xbox One
+	5: "playstation", # PS4 (DUALSHOCK 4)
+	12: "playstation",# PS3
+	13: "playstation",# PS5 (DualSense)
+	14: "deck",       # Steam Deck
+}
+var _input_bereit := false
+
+func pad_typ() -> String:
+	if not aktiv or not _steam.has_method("getConnectedControllers"):
+		return ""
+	if not _input_bereit:
+		if _steam.has_method("inputInit"):
+			_steam.call("inputInit", false)
+		_input_bereit = true
+	var handles: Variant = _steam.call("getConnectedControllers")
+	if not (handles is Array) or (handles as Array).is_empty():
+		return ""
+	var typ := int(_steam.call("getInputTypeForHandle", (handles as Array)[0]))
+	return str(STEAM_PAD_TYP.get(typ, ""))
+
 # ------------------------------------------------------------ Bildschirmtastatur
 ## Steams schwebende Tastatur über einem Eingabefeld — am Steam Deck die einzige
 ## Möglichkeit, einen Namen einzutippen. Das Feld wird in Bildschirmkoordinaten

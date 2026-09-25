@@ -135,7 +135,11 @@ var glyph_stil := "auto"
 const GLYPH_STILE := ["auto", "xbox", "playstation", "deck"]
 ## Woran ein PlayStation-Pad zu erkennen ist. Godot meldet je nach Treiber
 ## unterschiedliche Namen — deshalb mehrere Stichwoerter statt eines Vergleichs.
-const PS_NAMEN := ["playstation", "dualshock", "dualsense", "ps3", "ps4", "ps5", "wireless controller"]
+## Godot/SDL melden je nach Treiber und Verbindungsart (USB oder Bluetooth)
+## verschiedene Namen fuer dasselbe Geraet — deshalb Stichwoerter statt eines
+## Vergleichs. Diese Liste ist der Rueckfall, wenn Steam nicht laeuft.
+const PS_NAMEN := ["playstation", "dualshock", "dualsense", "ps3", "ps4", "ps5",
+	"wireless controller", "sony", "dual shock", "dual sense", "scuf", "nacon"]
 
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.
 signal screenshot_gespeichert(pfad: String)
@@ -338,6 +342,11 @@ func glyph_pfad(aktion: String) -> String:
 ## dessen eigene Tasten, bei einem PlayStation-Pad Kreuz/Kreis/Viereck/Dreieck,
 ## sonst Xbox — das ist die Belegung, die auch Windows meldet.
 func erkannter_stil() -> String:
+	# Steam weiss es am genauesten: Steam Input meldet ein PlayStation-Pad an das
+	# Spiel oft als Xbox, kennt den echten Typ aber selbst.
+	var von_steam := SteamDienst.pad_typ() if SteamDienst.aktiv else ""
+	if von_steam != "":
+		return von_steam
 	if auf_deck():
 		return "deck"
 	var name := pad_name().to_lower()
