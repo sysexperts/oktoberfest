@@ -90,14 +90,14 @@ Rettungskredit in elf Tagen.
 - [ ] Lohnkurve und Gästeandrang nachziehen *(Ich)*
 - [ ] Gegenprobe über 30 Tage *(Ich)*
 
-### A5 Das Spiel wird über eine lange Saison langsam *(Ich)*
+### A5 Das Spiel wird über eine lange Saison langsam *(Ich)* — Ursache war der Test-Bot (Lager-voll-Schleife), Spiel bleibt über 30 Tage bei ~1,45 GB
 
 Bei Tag 21 belegte der Prozess 3 GB statt 1,5 GB, ein Spieltag dauerte über 45
 Minuten statt zwei. Im Spiel gemessener Speicher wächst nur um 23 MB — der
 Zuwachs steckt außerhalb von Godots Zählung.
 
-- [ ] Ursache finden (`tools/speicher_messen.sh`, Messung war angefangen)
-- [ ] Beheben und über 30 Tage gegenprüfen
+- [x] Ursache finden (`tools/speicher_messen.sh`, Messung war angefangen)
+- [x] Beheben und über 30 Tage gegenprüfen
 
 **Warum das vor dem Upload muss:** Mit 8 GB Mindestanforderung wird das eng, und
 es trifft genau die Spieler, die das Spiel mögen — die lange spielen.

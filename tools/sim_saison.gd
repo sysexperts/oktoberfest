@@ -98,6 +98,8 @@ class Lauf extends Node:
 	## sieht man nicht, was sich aufstaut.
 	func _last() -> String:
 		var knoten := gm.get_tree().get_node_count()
+		if knoten > 120000:
+			_haeufigste()   # was sich staut, direkt im Log
 		var mb := float(OS.get_static_memory_usage()) / 1048576.0
 		# Waisen: aus dem Baum genommen, aber nie freigegeben. Der haeufigste
 		# Grund fuer wachsenden Speicher bei gleichbleibender Knotenzahl.
@@ -125,6 +127,7 @@ class Lauf extends Node:
 		# Bier: Bedarf von gestern + 30 %, abzüglich Bestand
 		var bier_bedarf := int(ceil(bedient * 0.75 * 1.3))
 		var packs := int(ceil(float(maxi(0, bier_bedarf - int(gm._stock[gm.WARE_BIER]))) / 10.0))
+		packs = mini(packs, (gm.lager_kapazitaet() - int(gm._stock[gm.WARE_BIER])) / 10)
 		if packs > 0:
 			gm.net_order_goods(1, clampi(packs, 1, 20))
 		if not gm._foods_avail().is_empty():
@@ -201,17 +204,28 @@ class Lauf extends Node:
 	## Lieferwagen abwarten und Pakete einräumen (Zeit läuft wie beim Spieler).
 	func _warten_auf_lieferung() -> void:
 		var sicherheit := 0
-		while (not gm._pending.is_empty() or gm._van_state != 0 or not gm._packages.is_empty()) and sicherheit < 5000:
+		while (not gm._pending.is_empty() or gm._van_state != 0 or _einraeumbar()) and sicherheit < 5000:
 			sicherheit += 1
 			if not gm._packages.is_empty():
 				_pakete_einraeumen()
 			await _schritt()
+
+	func _einraeumbar() -> bool:
+		for p in gm._packages.values():
+			var art := int(p.kind)
+			if not gm._stock.has(art) or int(gm._stock[art]) + int(p.amount) <= gm.lager_kapazitaet():
+				return true
+		return false
 
 	func _pakete_einraeumen() -> void:
 		for id in gm._packages.keys():
 			var p: Node = gm._packages[id]
 			var art := int(p.kind)
 			var menge := int(p.amount)
+			# Lager voll: liegen lassen. Sonst legt das Spiel das Paket zurück,
+			# der Bot hebt es wieder auf — zehntausendfach (Absturz an Tag 20).
+			if gm._stock.has(art) and int(gm._stock[art]) + menge > gm.lager_kapazitaet():
+				continue
 			_gehen(ABLAGE)
 			gm.net_pickup_package(id)
 			_gehen(LAGER)
@@ -315,6 +329,20 @@ class Lauf extends Node:
 			int(b.get("complaints", 0)), int(b.get("left", 0)), roundi(gm._popularity),
 			gm._tent_stage, gm._active_count, _anzahl(2), _anzahl(3), _anzahl(1), lic,
 			roundi(leerlauf), roundi(ohne_bier), gm._kredit_rest])
+
+	## Welche Knoten sich stauen: Elternpfad + Klasse, die zehn häufigsten
+	func _haeufigste() -> void:
+		var n := {}
+		var stapel: Array[Node] = [gm.get_tree().root]
+		while not stapel.is_empty():
+			var k: Node = stapel.pop_back()
+			var sch := "%s/%s" % [str(k.get_parent().get_path()) if k.get_parent() else "", k.get_class()]
+			n[sch] = int(n.get(sch, 0)) + 1
+			stapel.append_array(k.get_children())
+		var ks := n.keys()
+		ks.sort_custom(func(a, b): return n[a] > n[b])
+		for i in mini(10, ks.size()):
+			print("    %7d  %s" % [n[ks[i]], ks[i]])
 
 	func _speichern() -> void:
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://build"))
