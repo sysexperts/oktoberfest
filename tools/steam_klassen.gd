@@ -42,5 +42,24 @@ func _init() -> void:
 		if not da:
 			fehlt += 1
 		print("PEER     %-32s %s" % [f, "da" if da else "FEHLT"])
+	# App-ID: 480 ist Valves oeffentliche Test-App. Damit laufen Lobbys und
+	# Overlay zwar, aber Errungenschaften und Cloud gehen ins Leere — und beim
+	# Hochladen ins Depot faellt es erst auf, wenn Spieler sich beschweren.
+	var app_id := int(ProjectSettings.get_setting("steam/app_id", 0))
+	var eigene := app_id > 0 and app_id != 480
+	if not eigene:
+		fehlt += 1
+	print("APP-ID   %-32s %s" % [str(app_id), "eigene" if eigene else "FEHLT (Test-App 480)"])
+	# Die Datei neben der exe sagt Steam beim Entwickeln, welches Spiel laeuft.
+	# Sie gehoert NICHT ins Depot — Valve liest dort die echte App-ID.
+	var datei := "res://steam_appid.txt"
+	if FileAccess.file_exists(datei):
+		var inhalt := FileAccess.get_file_as_string(datei).strip_edges()
+		var passt := inhalt == str(app_id)
+		if not passt:
+			fehlt += 1
+		print("DATEI    %-32s %s" % ["steam_appid.txt: " + inhalt, "passt" if passt else "PASST NICHT"])
+	else:
+		print("DATEI    %-32s %s" % ["steam_appid.txt", "fehlt (nur fuers Testen noetig)"])
 	print("ERGEBNIS: %s" % ["BESTANDEN" if fehlt == 0 else "FEHLGESCHLAGEN (%d fehlen)" % fehlt])
 	quit(0 if fehlt == 0 else 1)

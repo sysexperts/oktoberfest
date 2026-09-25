@@ -41,16 +41,18 @@ Aufwand änderbar.
 - [x] ZIP-Namen und Werkzeuge umgestellt, Deploy-Skript erkennt beide Namen auf der Downloadseite *(v251)*
 - [x] Export geprüft: `build/steam/Sloptoberfest.exe`, ProductName und FileDescription stimmen
 
-### A2 ⚠️ Das Spiel läuft auf Steams Test-App 480 *(Du lieferst App-ID, ich baue ein)*
+### A2 ✅ App-ID eingetragen
 
-`project.godot` hat `[steam] app_id=480` — das ist Valves öffentliche Test-App
-„Spacewar". Damit funktionieren Lobbys und Overlay zwar zum Ausprobieren, aber:
-keine echten Errungenschaften, keine Cloud, kein Kauf, und `restartAppIfNecessary`
-ist bewusst abgeschaltet (`autoload/steam_dienst.gd:64`).
+Bis zum 25.09.2026 lief alles auf Valves Test-App „Spacewar" (480) — damit gab
+es keine echten Errungenschaften, keine Cloud und keinen Kauf. Jetzt steht die
+eigene ID **5327191** in `project.godot`.
 
-- [ ] Echte App-ID aus Steamworks *(Du)*
-- [ ] `app_id` eintragen, `steam_appid.txt` für lokale Tests anlegen (nicht ins Depot!) *(Ich)*
-- [ ] Prüfen, dass `restartAppIfNecessary` mit echter ID greift *(Ich)*
+- [x] Echte App-ID: **5327191** (25.09.2026)
+- [x] In `project.godot` eingetragen; `steam_appid.txt` im Projektordner angelegt
+- [x] `tools/steam_klassen.gd` prüft jetzt mit, dass keine Test-App drinsteht und die Datei zur App-ID passt
+- [x] `restartAppIfNecessary` greift ab jetzt — der Aufruf war an `app_id != 480` gekoppelt
+- [ ] **Beim Depot-Upload `steam_appid.txt` weglassen.** Der Export legt sie nicht in `build/steam/`, also passt es, solange du diesen Ordner hochlädst. Zum Testen der fertigen exe musst du sie von Hand danebenlegen *(Du)*
+- [ ] Jetzt möglich: Errungenschaften in Steamworks anlegen (B4) und Auto-Cloud einrichten (B6) *(Du)*
 
 ### A3 ⚠️ Die exe hat kein Icon
 
