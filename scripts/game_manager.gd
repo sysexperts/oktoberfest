@@ -2895,8 +2895,13 @@ func _staff_wage(role: int, level: int, eig := "normal") -> int:
 func _total_wages() -> int:
 	var w := 0
 	for s in _staff_sim.values():
-		w += roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * float(s.get("lohn", 1.0)))
+		w += _lohn_von(s)
 	return w
+
+## Tageslohn einer Person, mit Höchstsatz
+func _lohn_von(s: Dictionary) -> int:
+	var f := minf(float(s.get("lohn", 1.0)), LOHN_FAKTOR_MAX)
+	return mini(roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * f), LOHN_MAX)
 
 func _staff_tempo(s: Dictionary) -> float:
 	var t := float(EIGENSCHAFTEN.get(str(s.get("eig", "normal")), EIGENSCHAFTEN.normal).tempo)
@@ -6235,6 +6240,10 @@ const PERSONAL_NAMEN := ["Anna", "Thomas", "Julia", "Stefan", "Sabine", "Michael
 	"Andreas", "Lisa", "Florian", "Claudia", "Tobias", "Sandra", "Daniel", "Nina", "Martin", "Petra", "Jonas"]
 const LOHN_WUNSCH_AB := 4        # so viele Tage im Dienst, bevor jemand mehr will
 const LOHN_WUNSCH_CHANCE := 0.25
+## Höchstsatz: Lohnerhöhungen enden bei +50 %, und niemand kostet mehr als
+## 300 € pro Schicht — sonst frisst ein alter Kellner (1,15^n) den Tagesumsatz.
+const LOHN_FAKTOR_MAX := 1.5
+const LOHN_MAX := 300
 const LOHN_PLUS := 0.15          # +15 % beim Erhöhen
 const HALTEN_PLUS := 0.2         # +20 %, um ihn vor Huber zu halten
 const ABWERBEN_CHANCE := 0.2
@@ -6268,7 +6277,8 @@ func _personal_morgen() -> void:
 				continue
 		if tutorial_active():
 			continue
-		if _day - int(s.get("seit", _day)) >= LOHN_WUNSCH_AB and randf() < LOHN_WUNSCH_CHANCE:
+		# Wer am Höchstsatz ist, fragt nicht mehr
+		if _day - int(s.get("seit", _day)) >= LOHN_WUNSCH_AB and randf() < LOHN_WUNSCH_CHANCE 				and _lohn_plus(sid, LOHN_PLUS) > 0:
 			s.anliegen = "lohn"
 			s.seit_wunsch = _day
 			_melde("MSG_PERSONAL_LOHNWUNSCH", [str(s.get("name", "")), _eur(_lohn_plus(sid, LOHN_PLUS))], 0)
@@ -6286,7 +6296,9 @@ func _personal_morgen() -> void:
 ## Mehrkosten pro Tag, wenn der Lohn um anteil steigt
 func _lohn_plus(sid: int, anteil: float) -> int:
 	var s: Dictionary = _staff_sim[sid]
-	return roundi(float(_staff_wage(int(s.role), int(s.level), str(s.get("eig", "normal")))) * float(s.get("lohn", 1.0)) * anteil)
+	var neu := s.duplicate()
+	neu.lohn = minf(float(s.get("lohn", 1.0)) * (1.0 + anteil), LOHN_FAKTOR_MAX)
+	return _lohn_von(neu) - _lohn_von(s)
 
 ## Festbüro: Anliegen erfüllen (Lohn erhöhen bzw. vor Huber halten)
 @rpc("any_peer", "reliable", "call_local")
@@ -6297,7 +6309,7 @@ func net_personal_lohn(sid: int) -> void:
 	var anliegen := str(s.get("anliegen", ""))
 	if anliegen == "":
 		return
-	s.lohn = float(s.get("lohn", 1.0)) * (1.0 + (HALTEN_PLUS if anliegen == "huber" else LOHN_PLUS))
+	s.lohn = minf(float(s.get("lohn", 1.0)) * (1.0 + (HALTEN_PLUS if anliegen == "huber" else LOHN_PLUS)), LOHN_FAKTOR_MAX)
 	s.anliegen = ""
 	s.unzufrieden = false
 	_melde("MSG_PERSONAL_ZUFRIEDEN", [str(s.get("name", ""))], 2)
