@@ -379,6 +379,98 @@ text = "SET_INVERT_Y"
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="PadTrenner" type="HSeparator" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="PadZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_PAD_TITEL"
+
+[node name="PadName" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 2
+text = "SET_PAD_KEINER"
+
+[node name="PadSensZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadSensZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_PAD_SENS"
+
+[node name="PadSens" type="HSlider" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadSensZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(340, 0)
+size_flags_horizontal = 8
+size_flags_vertical = 4
+min_value = 0.2
+max_value = 3.0
+step = 0.01
+value = 1.0
+
+[node name="PadSensWert" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadSensZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="PadInvertZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadInvertZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_PAD_INVERT_Y"
+
+[node name="PadInvert" type="CheckButton" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadInvertZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="PadTotzoneZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadTotzoneZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_PAD_TOTZONE"
+
+[node name="PadTotzone" type="HSlider" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadTotzoneZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(340, 0)
+size_flags_horizontal = 8
+size_flags_vertical = 4
+min_value = 0.05
+max_value = 0.6
+step = 0.01
+value = 0.2
+
+[node name="PadTotzoneWert" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadTotzoneZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="PadGlyphZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadGlyphZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_PAD_GLYPHEN"
+
+[node name="PadGlyphen" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadGlyphZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+
 [node name="Trenner" type="HSeparator" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
 layout_mode = 2
 

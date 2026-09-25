@@ -24,6 +24,15 @@ const RENDERER_NAMEN := ["SET_RENDERER_QUALITY", "SET_RENDERER_PERFORMANCE"]
 @onready var _maus: HSlider = %Maus
 @onready var _maus_wert: Label = %MausWert
 @onready var _invert: CheckButton = %MausInvert
+@onready var _pad_name: Label = %PadName
+@onready var _pad_sens: HSlider = %PadSens
+@onready var _pad_sens_wert: Label = %PadSensWert
+@onready var _pad_invert: CheckButton = %PadInvert
+@onready var _pad_totzone: HSlider = %PadTotzone
+@onready var _pad_totzone_wert: Label = %PadTotzoneWert
+@onready var _pad_glyphen: OptionButton = %PadGlyphen
+## Gleiche Reihenfolge wie Einstellungen.GLYPH_STILE
+const GLYPH_NAMEN := ["SET_PAD_GLYPH_AUTO", "SET_PAD_GLYPH_XBOX", "SET_PAD_GLYPH_DECK"]
 @onready var _tasten_liste: GridContainer = %TastenListe
 @onready var _sprache: OptionButton = %SpracheWahl
 
@@ -75,6 +84,12 @@ func _ready() -> void:
 		%UiGroesseWert.text = "%d %%" % roundi(wert * 100.0))
 	_maus.value_changed.connect(_on_maus)
 	_invert.toggled.connect(_on_invert)
+	_pad_sens.value_changed.connect(_on_pad_sens)
+	_pad_invert.toggled.connect(func(an: bool) -> void: Einstellungen.pad_y_umkehren = an)
+	_pad_totzone.value_changed.connect(_on_pad_totzone)
+	_pad_glyphen.item_selected.connect(_on_glyphen)
+	# An- und Abstecken waehrend das Menue offen ist
+	Input.joy_connection_changed.connect(func(_i: int, _da: bool) -> void: _pad_anzeigen())
 	for bus: String in _regler:
 		(_regler[bus][0] as HSlider).value_changed.connect(_on_lautstaerke.bind(bus))
 	_sprache.item_selected.connect(_on_sprache)
@@ -90,6 +105,14 @@ func _werte_laden() -> void:
 	_aufloesung.set_value_no_signal(Einstellungen.aufloesung)
 	_maus.set_value_no_signal(Einstellungen.maus)
 	_invert.set_pressed_no_signal(Einstellungen.maus_y_umkehren)
+	_pad_sens.set_value_no_signal(Einstellungen.pad_empfindlichkeit)
+	_pad_invert.set_pressed_no_signal(Einstellungen.pad_y_umkehren)
+	_pad_totzone.set_value_no_signal(Einstellungen.pad_totzone)
+	_pad_glyphen.clear()
+	for i in GLYPH_NAMEN.size():
+		_pad_glyphen.add_item(tr(GLYPH_NAMEN[i]), i)
+	_pad_glyphen.select(maxi(0, Einstellungen.GLYPH_STILE.find(Einstellungen.glyph_stil)))
+	_pad_anzeigen()
 	for bus: String in _regler:
 		(_regler[bus][0] as HSlider).set_value_no_signal(float(Einstellungen.lautstaerke.get(bus, 1.0)))
 	_sprache.clear()
@@ -202,6 +225,29 @@ func _on_maus(wert: float) -> void:
 
 func _on_invert(an: bool) -> void:
 	Einstellungen.maus_y_umkehren = an
+
+## Steht ein Controller bereit? Ohne diese Zeile weiss niemand, ob das Spiel das
+## Geraet ueberhaupt sieht — und sucht den Fehler an der falschen Stelle.
+func _pad_anzeigen() -> void:
+	var name := Einstellungen.pad_name()
+	_pad_name.text = name if name != "" else tr("SET_PAD_KEINER")
+	_pad_sens_wert.text = "%.2f×" % Einstellungen.pad_empfindlichkeit
+	_pad_totzone_wert.text = "%.2f" % Einstellungen.pad_totzone
+
+func _on_pad_sens(wert: float) -> void:
+	Einstellungen.pad_empfindlichkeit = wert
+	_pad_sens_wert.text = "%.2f×" % wert
+
+## Die Totzone steckt in der Eingabekarte — die muss neu gesetzt werden.
+func _on_pad_totzone(wert: float) -> void:
+	Einstellungen.pad_totzone = wert
+	_pad_totzone_wert.text = "%.2f" % wert
+	Einstellungen.anwenden()
+
+func _on_glyphen(i: int) -> void:
+	Einstellungen.glyph_stil = Einstellungen.GLYPH_STILE[clampi(i, 0, Einstellungen.GLYPH_STILE.size() - 1)]
+	Einstellungen.speichern()
+	Einstellungen.geaendert.emit()
 
 ## Direkt auf den Bus — beim Ziehen feuert das dutzendfach, da soll nicht
 ## jedes Mal das ganze Menü neu aufgebaut werden.

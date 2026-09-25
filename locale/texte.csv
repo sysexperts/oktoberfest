@@ -85,6 +85,15 @@ SET_VOL_SFX,Effekte,Effects,Efektler
 SET_VOL_AMBIENT,Umgebung,Ambience,Ortam
 SET_MOUSE_SENS,Mausempfindlichkeit,Mouse sensitivity,Fare hassasiyeti
 SET_INVERT_Y,Maus Y-Achse umkehren,Invert mouse Y axis,Fare Y eksenini ters çevir
+SET_PAD_TITEL,Controller,Controller,Oyun kolu
+SET_PAD_KEINER,keiner verbunden,none connected,bağlı değil
+SET_PAD_SENS,Stick-Empfindlichkeit,Stick sensitivity,Çubuk hassasiyeti
+SET_PAD_INVERT_Y,Stick Y-Achse umkehren,Invert stick Y axis,Çubuk Y eksenini ters çevir
+SET_PAD_TOTZONE,Totzone,Dead zone,Ölü bölge
+SET_PAD_GLYPHEN,Knopfsymbole,Button icons,Tuş simgeleri
+SET_PAD_GLYPH_AUTO,Automatisch,Automatic,Otomatik
+SET_PAD_GLYPH_XBOX,Xbox,Xbox,Xbox
+SET_PAD_GLYPH_DECK,Steam Deck,Steam Deck,Steam Deck
 SET_KEYBINDS,Tastenbelegung,Key bindings,Tuş atamaları
 SET_PRESS_KEY,Taste drücken …,Press a key …,Bir tuşa bas …
 SET_RESET_KEYS,Standard wiederherstellen,Restore defaults,Varsayılana dön

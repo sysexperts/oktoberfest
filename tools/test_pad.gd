@@ -88,6 +88,55 @@ class Lauf extends Node:
 		Einstellungen.am_pad = false
 		_check("Belegungsmenü zeigt weiter die Taste", Einstellungen.tasten_name("interact") == "E")
 
+		print("-- Einstellungen merken sich den Controller")
+		var sicher := {
+			"sens": Einstellungen.pad_empfindlichkeit,
+			"invert": Einstellungen.pad_y_umkehren,
+			"totzone": Einstellungen.pad_totzone,
+			"stil": Einstellungen.glyph_stil,
+		}
+		Einstellungen.pad_empfindlichkeit = 2.25
+		Einstellungen.pad_y_umkehren = true
+		Einstellungen.pad_totzone = 0.35
+		Einstellungen.glyph_stil = "deck"
+		Einstellungen.speichern()
+		Einstellungen.pad_empfindlichkeit = 1.0
+		Einstellungen.pad_y_umkehren = false
+		Einstellungen.pad_totzone = 0.2
+		Einstellungen.glyph_stil = "auto"
+		Einstellungen._lade()
+		_check("Stick-Empfindlichkeit gemerkt", is_equal_approx(Einstellungen.pad_empfindlichkeit, 2.25),
+			str(Einstellungen.pad_empfindlichkeit))
+		_check("Stick Y-Umkehr gemerkt", Einstellungen.pad_y_umkehren)
+		_check("Totzone gemerkt", is_equal_approx(Einstellungen.pad_totzone, 0.35), str(Einstellungen.pad_totzone))
+		_check("Knopfsymbole gemerkt", Einstellungen.glyph_stil == "deck", Einstellungen.glyph_stil)
+		# Die Totzone muss auch wirklich in der Eingabekarte landen
+		Einstellungen.anwenden()
+		_check("Totzone steht in der Eingabekarte",
+			is_equal_approx(InputMap.action_get_deadzone("move_left"), 0.35),
+			str(InputMap.action_get_deadzone("move_left")))
+		# glyph_pfad liefert absichtlich nichts, solange mit Tastatur gespielt wird
+		Einstellungen.am_pad = true
+		_check("Deck-Glyph wird genommen", Einstellungen.glyph_pfad("interact").contains("/deck/"),
+			Einstellungen.glyph_pfad("interact"))
+		Einstellungen.glyph_stil = "xbox"
+		_check("Xbox-Glyph wird genommen", Einstellungen.glyph_pfad("interact").contains("/xbox/"),
+			Einstellungen.glyph_pfad("interact"))
+		Einstellungen.am_pad = false
+		_check("mit Tastatur kein Glyph", Einstellungen.glyph_pfad("interact") == "")
+		Einstellungen.glyph_stil = "deck"
+		# Unfug darf nicht durchrutschen
+		Einstellungen.glyph_stil = "quatsch"
+		Einstellungen.speichern()
+		Einstellungen._lade()
+		_check("unbekannter Stil faellt auf auto zurueck", Einstellungen.glyph_stil == "auto",
+			Einstellungen.glyph_stil)
+		for k: String in sicher:
+			Einstellungen.set("pad_empfindlichkeit" if k == "sens" else
+				("pad_y_umkehren" if k == "invert" else
+				("pad_totzone" if k == "totzone" else "glyph_stil")), sicher[k])
+		Einstellungen.speichern()
+
 		print("-- Menüführung")
 		for aktion in ["ui_accept", "ui_cancel", "ui_up", "ui_down", "ui_left", "ui_right"]:
 			_check("%s am Gamepad" % aktion, _hat(aktion, InputEventJoypadButton) \

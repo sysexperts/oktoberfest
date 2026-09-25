@@ -263,8 +263,8 @@ func _pad_blick(delta: float) -> void:
 	var neigung := Input.get_axis("blick_hoch", "blick_runter")
 	if absf(dreh) < 0.01 and absf(neigung) < 0.01:
 		return
-	var tempo := Einstellungen.PAD_BLICK_TEMPO * Einstellungen.maus * delta
-	var y_dir := -1.0 if Einstellungen.maus_y_umkehren else 1.0
+	var tempo := Einstellungen.PAD_BLICK_TEMPO * Einstellungen.pad_empfindlichkeit * delta
+	var y_dir := -1.0 if Einstellungen.pad_y_umkehren else 1.0
 	rotate_y(-dreh * tempo)
 	_pitch = clampf(_pitch - neigung * tempo * y_dir, -PITCH_LIMIT, PITCH_LIMIT)
 	_head.rotation.x = _pitch

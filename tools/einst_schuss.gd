@@ -4,6 +4,9 @@ extends Node
 ##   Godot.exe --path . res://tools/einst_schuss.tscn → user://einst_1/2.png
 func _ready() -> void:
 	get_window().size = Vector2i(1280, 800)
+	# Feste Sprache: sonst haengt das Bild an der Systemsprache des Rechners
+	Einstellungen.sprache = "de"
+	Einstellungen.anwenden()
 	add_child(load("res://scenes/ui/hauptmenue.tscn").instantiate())
 	await _warte(1.6)
 	var e: CanvasLayer = load("res://scenes/ui/einstellungen.tscn").instantiate()
@@ -15,6 +18,11 @@ func _ready() -> void:
 	(e.get_node("Rahmen/Spalte/Inhalt/Kategorien/Kat1") as Button).button_pressed = true
 	await _warte(0.5)
 	_schuss("einst_2")
+	# Steuerung: hier stehen die Controller-Zeilen
+	reiter.current_tab = 2
+	(e.get_node("Rahmen/Spalte/Inhalt/Kategorien/Kat2") as Button).button_pressed = true
+	await _warte(0.5)
+	_schuss("einst_steuerung")
 	get_tree().quit()
 
 func _schuss(name: String) -> void:

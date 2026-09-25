@@ -91,6 +91,16 @@ const GLYPH_DATEI := {
 ## Wurde zuletzt am Gamepad gespielt? Steuert die Hinweistexte, sonst nichts.
 var am_pad := false
 
+## Controller: eigene Werte, nicht die der Maus. Wer die Maus schnell eingestellt
+## hat, bekam sonst einen ueberdrehten Stick.
+var pad_empfindlichkeit := 1.0
+var pad_y_umkehren := false
+## Ab hier zaehlt ein Stickausschlag (Godots Vorgabe 0,5 ist fuers Laufen zu grob)
+var pad_totzone := 0.2
+## Welche Knopfbilder gezeigt werden: "auto" richtet sich nach dem Geraet.
+var glyph_stil := "auto"
+const GLYPH_STILE := ["auto", "xbox", "deck"]
+
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.
 signal screenshot_gespeichert(pfad: String)
 const FOTO_ORDNER := "user://screenshots"
@@ -156,7 +166,7 @@ func _process(delta: float) -> void:
 	var modus := Input.mouse_mode
 	if modus == Input.MOUSE_MODE_VISIBLE or modus == Input.MOUSE_MODE_CONFINED:
 		var fenster := Vector2(get_viewport().get_visible_rect().size)
-		var ziel := get_viewport().get_mouse_position() + richtung * ZEIGER_TEMPO * delta
+		var ziel := get_viewport().get_mouse_position() + richtung * ZEIGER_TEMPO * pad_empfindlichkeit * delta
 		_eigene_eingabe = true
 		Input.warp_mouse(ziel.clamp(Vector2.ZERO, fenster))
 		_eigene_eingabe = false
@@ -164,7 +174,9 @@ func _process(delta: float) -> void:
 		# Im Ego-Blick zielt man ueber die Mausbewegung. Der Wert muss klein
 		# bleiben: die Spiele rechnen ihn mit ihrer eigenen Empfindlichkeit hoch.
 		var ev := InputEventMouseMotion.new()
-		ev.relative = richtung * ZEIGER_TEMPO * delta * 0.35
+		ev.relative = richtung * ZEIGER_TEMPO * pad_empfindlichkeit * delta * 0.35
+		if pad_y_umkehren:
+			ev.relative.y = -ev.relative.y
 		ev.screen_relative = ev.relative
 		_senden(ev)
 
@@ -280,8 +292,18 @@ func glyph_pfad(aktion: String) -> String:
 	var datei: String = GLYPH_DATEI.get(int(PAD_KNOEPFE[aktion]), "")
 	if datei == "":
 		return ""
-	var pfad := "res://assets/ui/glyphen/%s/%s.svg" % ["deck" if auf_deck() else "xbox", datei]
+	var satz := glyph_stil
+	if satz == "auto":
+		satz = "deck" if auf_deck() else "xbox"
+	var pfad := "res://assets/ui/glyphen/%s/%s.svg" % [satz, datei]
 	return pfad if ResourceLoader.exists(pfad) else ""
+
+## Name des ersten angeschlossenen Controllers, "" wenn keiner da ist. Fuer die
+## Anzeige in den Einstellungen — ohne sie weiss niemand, ob das Spiel das Geraet
+## ueberhaupt sieht.
+func pad_name() -> String:
+	var pads := Input.get_connected_joypads()
+	return Input.get_joy_name(pads[0]) if not pads.is_empty() else ""
 
 ## Läuft das Spiel auf einem Steam Deck? Steam setzt dort diese Umgebungsvariable;
 ## GodotSteam hat dafür keine eigene Abfrage.
@@ -333,7 +355,7 @@ func _pad_anwenden() -> void:
 		_pad_achse(aktion, int(a[0]), float(a[1]))
 		# Godots Vorgabe ist 0,5 — damit müsste man den Stick halb durchdrücken,
 		# bevor sich die Figur bewegt.
-		InputMap.action_set_deadzone(aktion, STICK_TOTZONE)
+		InputMap.action_set_deadzone(aktion, pad_totzone)
 	# Menüführung: Godots eingebaute ui_accept/ui_cancel haben hier nur Tasten,
 	# keinen Knopf (geprüft mit tools/test_pad). Ohne diese zwei Zeilen käme man
 	# am Steam Deck in kein Menü hinein und aus keinem wieder heraus.
@@ -349,7 +371,7 @@ func _pad_anwenden() -> void:
 		InputMap.action_erase_events(aktion)
 		var a: Array = BLICK_ACHSEN[aktion]
 		_pad_achse(aktion, int(a[0]), float(a[1]))
-		InputMap.action_set_deadzone(aktion, STICK_TOTZONE)
+		InputMap.action_set_deadzone(aktion, pad_totzone)
 
 func _hat_pad_knopf(aktion: String) -> bool:
 	if not InputMap.has_action(aktion):
@@ -384,6 +406,10 @@ func speichern() -> void:
 		cfg.set_value("ton", bus, lautstaerke[bus])
 	cfg.set_value("steuerung", "maus", maus)
 	cfg.set_value("steuerung", "maus_y_umkehren", maus_y_umkehren)
+	cfg.set_value("steuerung", "pad_empfindlichkeit", pad_empfindlichkeit)
+	cfg.set_value("steuerung", "pad_y_umkehren", pad_y_umkehren)
+	cfg.set_value("steuerung", "pad_totzone", pad_totzone)
+	cfg.set_value("steuerung", "glyph_stil", glyph_stil)
 	for aktion: String in tasten:
 		cfg.set_value("tasten", aktion, tasten[aktion])
 	cfg.save(PFAD)
@@ -406,6 +432,12 @@ func _lade() -> void:
 		lautstaerke[bus] = float(cfg.get_value("ton", bus, lautstaerke[bus]))
 	maus = clampf(float(cfg.get_value("steuerung", "maus", maus)), 0.1, 3.0)
 	maus_y_umkehren = bool(cfg.get_value("steuerung", "maus_y_umkehren", maus_y_umkehren))
+	pad_empfindlichkeit = clampf(float(cfg.get_value("steuerung", "pad_empfindlichkeit", pad_empfindlichkeit)), 0.2, 3.0)
+	pad_y_umkehren = bool(cfg.get_value("steuerung", "pad_y_umkehren", pad_y_umkehren))
+	pad_totzone = clampf(float(cfg.get_value("steuerung", "pad_totzone", pad_totzone)), 0.05, 0.6)
+	glyph_stil = str(cfg.get_value("steuerung", "glyph_stil", glyph_stil))
+	if glyph_stil not in GLYPH_STILE:
+		glyph_stil = "auto"
 	if cfg.has_section("tasten"):
 		for aktion in cfg.get_section_keys("tasten"):
 			if STANDARD_TASTEN.has(aktion):
