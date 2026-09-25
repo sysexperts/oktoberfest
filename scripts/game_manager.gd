@@ -1141,6 +1141,9 @@ func _apply_daylight(clock: float) -> void:
 		return
 	_night_t = t
 	_regen_t = r
+	# Regen hoert man auch: der Klang laeuft, solange das Ereignis laeuft
+	if _sfx_node and _sfx_node.has_method("regen"):
+		_sfx_node.regen(r > 0.5)
 	if _sun:
 		# Nachts bleibt ein weiches, leicht blaues Mondlicht — dunkel genug, dass
 		# die bunten Kirmeslichter wirken, hell genug, dass man alles erkennt.

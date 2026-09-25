@@ -30,6 +30,10 @@ var _ok := false
 ## im Zelt gedämpft.
 var _music_player: AudioStreamPlayer3D
 var _crowd_player: AudioStreamPlayer
+var _draussen_player: AudioStreamPlayer
+## Stimmengewirr nur, solange die Wiesn offen ist (play_music bis Feierabend)
+var _wiesn_offen := false
+const MenueMusik := preload("res://scripts/ui/menue_musik.gd")
 const MUSIK_ORT := Vector3(0.0, 3.0, -2.0)
 ## Grundriss des Zelts (für die Kirmes-Geräusche)
 const ZELT_MIN := Vector2(-12.3, -14.3)
@@ -105,8 +109,15 @@ func _ready() -> void:
 	_crowd_player = AudioStreamPlayer.new()
 	_crowd_player.stream = _crowd_stream
 	_crowd_player.bus = "Ambiente"
-	_crowd_player.volume_db = -10.0
+	_crowd_player.volume_db = -60.0
 	add_child(_crowd_player)
+	# Draußen läuft die Hauptmusik aus dem Menü; je näher am Zelt, desto mehr
+	# übernimmt die Zeltmusik.
+	_draussen_player = AudioStreamPlayer.new()
+	_draussen_player.bus = "Musik"
+	_draussen_player.volume_db = -60.0
+	add_child(_draussen_player)
+	MenueMusik.starten(_draussen_player)
 	_ok = true
 
 ## Lädt <basis>.ogg / .wav / .mp3 — je nachdem, was da ist.
@@ -225,7 +236,10 @@ func play_music() -> void:
 	_music_player.volume_db = _musik_db
 	if not _music_player.playing and not _stille_bis_feierabend:
 		_music_player.play()
+	_wiesn_offen = true
 	if _crowd_stream != null and not _crowd_player.playing:
+		if _crowd_stream is AudioStreamOggVorbis:
+			(_crowd_stream as AudioStreamOggVorbis).loop = true
 		_crowd_player.play()
 
 func stop_music() -> void:
@@ -233,9 +247,11 @@ func stop_music() -> void:
 		return
 	_music_player.stop()
 	_crowd_player.stop()
+	_wiesn_offen = false
 
 ## Feierabend: Musik in dauer Sekunden leiser werden lassen, dann aus.
 func musik_ausblenden(dauer: float) -> void:
+	_wiesn_offen = false   # Stimmengewirr blendet in _process aus
 	if not _ok or not _music_player.playing or _musik_tween != null:
 		return
 	_musik_tween = create_tween()
@@ -245,17 +261,26 @@ func musik_ausblenden(dauer: float) -> void:
 		_music_player.volume_db = _musik_db
 		_musik_tween = null)
 
-## Kirmes-Geräusche: draußen voll, im Zelt gedämpft.
+## Draußen: Menümusik + dezentes Stimmengewirr (nur bei offener Wiesn).
+## Im Zelt beides aus — dort spielt die Zeltmusik.
 func _process(delta: float) -> void:
-	if not _ok or _crowd_stream == null:
+	if not _ok:
 		return
 	var kamera := get_viewport().get_camera_3d()
 	if kamera == null:
 		return
 	var p := kamera.global_position
 	var im_zelt := p.x > ZELT_MIN.x and p.x < ZELT_MAX.x and p.z > ZELT_MIN.y and p.z < ZELT_MAX.y
-	var ziel := -22.0 if im_zelt else -6.0
-	_crowd_player.volume_db = lerpf(_crowd_player.volume_db, ziel, clampf(delta * 2.0, 0.0, 1.0))
+	var k := clampf(delta * 1.5, 0.0, 1.0)
+	# 0 am Zelt, 1 ab ~35 m Abstand
+	var weg := clampf((Vector2(p.x, p.z).distance_to(Vector2(MUSIK_ORT.x, MUSIK_ORT.z)) - 14.0) / 21.0, 0.0, 1.0)
+	var musik_ziel := -60.0 if im_zelt else lerpf(-26.0, -10.0, weg)
+	_draussen_player.volume_db = lerpf(_draussen_player.volume_db, musik_ziel, k)
+	if _crowd_stream != null:
+		var menge_ziel := -18.0 if (_wiesn_offen and not im_zelt) else -60.0
+		_crowd_player.volume_db = lerpf(_crowd_player.volume_db, menge_ziel, k)
+		if not _wiesn_offen and _crowd_player.playing and _crowd_player.volume_db < -55.0:
+			_crowd_player.stop()
 
 func _music() -> AudioStreamWAV:
 	var rate := 22050
@@ -296,6 +321,88 @@ func play(name: String, vol_db := -6.0) -> void:
 	p.stream = _streams[name]
 	p.volume_db = vol_db
 	p.play()
+
+# ------------------------------------------------------------ Dauerklänge
+## Zapfen, Putzen, Grill: Klänge, die laufen, solange die Taste gehalten wird.
+##
+## Vorher hat der Spieler dafür alle 0,22 s play() aufgerufen. Das ging, solange
+## die Klänge Piepstöne von einer Zehntelsekunde waren. Die echten Aufnahmen sind
+## 30 und 50 Sekunden lang — da hätten sich in zehn Sekunden Putzen rund fünfzig
+## Kopien übereinandergelegt. Jetzt läuft eine einzige Schleife, bis sie jemand
+## abstellt.
+var _schleife: AudioStreamPlayer
+var _schleife_name := ""
+
+func schleife_an(name: String, vol_db := -8.0) -> void:
+	if not _ok or not _streams.has(name) or _schleife_name == name:
+		return
+	if _schleife == null:
+		_schleife = AudioStreamPlayer.new()
+		_schleife.bus = "SFX"
+		add_child(_schleife)
+	var strom: AudioStream = _streams[name]
+	# Godot schleift nur, wenn es der Datei gesagt wird — sonst hört es einmal auf
+	if strom is AudioStreamOggVorbis:
+		(strom as AudioStreamOggVorbis).loop = true
+	elif strom is AudioStreamWAV:
+		(strom as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+	_schleife.stream = strom
+	_schleife.volume_db = vol_db
+	_schleife.play()
+	_schleife_name = name
+
+## art: nur abstellen, wenn gerade dieser Klang läuft ("" = egal welcher)
+func schleife_aus(art := "") -> void:
+	if _schleife == null or _schleife_name == "":
+		return
+	if art != "" and _schleife_name != art:
+		return
+	_schleife.stop()
+	_schleife_name = ""
+
+func schleife_laeuft() -> String:
+	return _schleife_name
+
+# ------------------------------------------------------------ Regen
+## Eigener Dauerklang fuers Regen-Ereignis (GameManager._ereignis == "regen").
+## Laeuft auf dem Ambiente-Bus, damit ihn die Ambiente-Lautstaerke regelt, und
+## blendet weich ein und aus — ein harter Schnitt faellt bei Regen sofort auf.
+const REGEN_LEICHT := "res://assets/audio/ambiente/regen_leicht.ogg"
+const REGEN_STARK := "res://assets/audio/ambiente/regen_stark.ogg"
+const REGEN_DB := -14.0
+var _regen_player: AudioStreamPlayer
+var _regen_an := false
+var _regen_tween: Tween
+
+func regen(an: bool, stark := false) -> void:
+	if not _ok:
+		return
+	if an and _regen_player == null:
+		var pfad := REGEN_STARK if stark else REGEN_LEICHT
+		if not ResourceLoader.exists(pfad):
+			return
+		var strom := load(pfad) as AudioStream
+		if strom == null:
+			return
+		if strom is AudioStreamOggVorbis:
+			(strom as AudioStreamOggVorbis).loop = true
+		_regen_player = AudioStreamPlayer.new()
+		_regen_player.bus = "Ambiente"
+		_regen_player.stream = strom
+		_regen_player.volume_db = -60.0
+		add_child(_regen_player)
+	if _regen_player == null or an == _regen_an:
+		return
+	_regen_an = an
+	if _regen_tween and _regen_tween.is_valid():
+		_regen_tween.kill()
+	_regen_tween = create_tween()
+	if an:
+		_regen_player.play()
+		_regen_tween.tween_property(_regen_player, "volume_db", REGEN_DB, 2.0)
+	else:
+		_regen_tween.tween_property(_regen_player, "volume_db", -60.0, 2.0)
+		_regen_tween.tween_callback(_regen_player.stop)
 
 func _tone(freq: float, dur: float, kind: String, decay: float) -> AudioStreamWAV:
 	var rate := 22050

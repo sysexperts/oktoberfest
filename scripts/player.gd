@@ -137,11 +137,31 @@ func _sfx(name: String) -> void:
 	if _sfx_node:
 		_sfx_node.play(name)
 
+## Klang, der laeuft, solange die Taste gehalten wird (Zapfen, Putzen, Grill).
+## Frueher wurde er alle 0,22 s neu angestossen — mit den echten Aufnahmen (30 s
+## Zapfen, 50 s Putzen) haetten sich dabei Dutzende Kopien ueberlagert. Jetzt
+## laeuft eine Schleife, die _dauerklang_pruefen() wieder abstellt, sobald die
+## Aktion endet.
+var _dauerklang := ""
+var _dauerklang_bis := 0.0
+
 func _sfx_loop(name: String) -> void:
-	# sürekli aksiyonlarda kısılmış çalma
-	if _sfx_cd <= 0.0:
+	_dauerklang = name
+	_dauerklang_bis = Time.get_ticks_msec() / 1000.0 + 0.25
+	if _sfx_node and _sfx_node.has_method("schleife_an"):
+		_sfx_node.schleife_an(name)
+	elif _sfx_cd <= 0.0:
+		# Aeltere Fassung ohne Schleifen (Paket aelter als die exe)
 		_sfx_cd = 0.22
 		_sfx(name)
+
+## Laeuft je Bild: meldet sich die Aktion nicht mehr, geht der Klang aus.
+func _dauerklang_pruefen() -> void:
+	if _dauerklang == "" or Time.get_ticks_msec() / 1000.0 < _dauerklang_bis:
+		return
+	if _sfx_node and _sfx_node.has_method("schleife_aus"):
+		_sfx_node.schleife_aus(_dauerklang)
+	_dauerklang = ""
 
 func _make_highlight_ring() -> void:
 	_highlight_ring = MeshInstance3D.new()
@@ -272,6 +292,7 @@ func _pad_blick(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if _is_local:
 		_pad_blick(delta)
+		_dauerklang_pruefen()
 		_sfx_cd -= delta
 		if _kotz_t > 0.0:
 			_kotzen(delta)
