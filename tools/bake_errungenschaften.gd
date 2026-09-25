@@ -2,7 +2,7 @@ extends SceneTree
 ## Steam-Errungenschaften: 256×256-Abzeichen aus den eigenen Symbolen
 ## (assets/ui/symbole, selbst gezeichnet — keine Fremdlizenz).
 ## Aufruf: godot --headless --path . -s tools/bake_errungenschaften.gd
-## Ausgabe: build/errungenschaften/<API_NAME>.png und <API_NAME>_grau.png
+## Ausgabe: build/errungenschaften/<API_NAME>.png und <API_NAME>_OFF.png
 
 ## API-Name: [Symbol, Stufe 1–3 (Bronze/Silber/Gold)]
 const LISTE := {
@@ -40,7 +40,7 @@ func _init() -> void:
 	for api: String in LISTE:
 		var img := _abzeichen(LISTE[api][0], LISTE[api][1])
 		img.save_png(AUS + api + ".png")
-		_grau(img).save_png(AUS + api + "_grau.png")
+		_grau(img).save_png(AUS + api + "_OFF.png")
 		print("  ", api)
 	print("FERTIG")
 	quit()
