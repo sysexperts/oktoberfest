@@ -4,8 +4,6 @@
 [ext_resource type="Script" path="res://scripts/npc_festleiter.gd" id="74_chef"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="75_figur"]
 [ext_resource type="Script" path="res://scripts/rundgang_station.gd" id="76_station"]
-[ext_resource type="PackedScene" path="res://scenes/huber_zelt.tscn" id="77_huber"]
-[ext_resource type="Script" path="res://scripts/npc_huber.gd" id="78_huber_npc"]
 [ext_resource type="PackedScene" path="res://scenes/wettschleppen/wettschleppen.tscn" id="79_wettschleppen"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/aktenschrank.tscn" id="80_aktenschrank"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/ordnerregal.tscn" id="81_ordnerregal"]
@@ -284,26 +282,5 @@ springen = true
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 37.3, 0, 20.3)
 
 [node name="Model" parent="Festleiter" instance=ExtResource("75_figur")]
-
-[node name="HuberZelt" parent="." instance=ExtResource("77_huber")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 0, -14)
-
-[node name="Huber" type="Node3D" parent="."]
-transform = Transform3D(1.12, 0, 0, 0, 1.12, 0, 0, 0, 1.12, 44.2, 0, -2.6)
-script = ExtResource("78_huber_npc")
-
-[node name="Ausruf" type="Label3D" parent="Huber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
-visible = false
-billboard = 1
-fixed_size = true
-pixel_size = 0.0012
-modulate = Color(1, 0.35, 0.25, 1)
-outline_modulate = Color(0.25, 0.05, 0, 1)
-text = "!"
-font_size = 64
-outline_size = 16
-
-[node name="Model" parent="Huber" instance=ExtResource("75_figur")]
 
 [node name="Wettschleppen" parent="." instance=ExtResource("79_wettschleppen")]

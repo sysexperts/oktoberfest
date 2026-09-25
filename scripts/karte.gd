@@ -19,6 +19,10 @@ const PFLICHT_PLAETZE := [
 	{"p": WOHNWAGEN, "x": -22.0, "y": 0.0, "z": -47.0, "r": -0.175},
 ]
 
+## Hubers Zelt (samt Huber) ist ein normales Kartenteil, per F8 verschiebbar
+const HUBER_ZELT := "res://scenes/huber_zelt.tscn"
+const HUBER_PLATZ := {"p": HUBER_ZELT, "x": 43.0, "y": 0.0, "z": -14.0, "r": 0.0}
+
 const SPEICHER := "user://karte.json"
 const START := "res://daten/karte.json"
 const VORLAGE := "res://daten/karte_vorlage.json"
@@ -171,10 +175,17 @@ func _merken() -> void:
 
 ## Karte ohne Wohnwagen? Dann die Pflichtplätze anhängen (auch bei alten Karten).
 static func _mit_wohnwagen(liste: Array) -> Array:
+	var pfade := {}
 	for e in liste:
-		if e is Dictionary and str(e.get("p", "")) == WOHNWAGEN:
-			return liste
-	return liste + PFLICHT_PLAETZE.duplicate(true)
+		if e is Dictionary:
+			pfade[str(e.get("p", ""))] = true
+	var neu := liste.duplicate()
+	if not pfade.has(WOHNWAGEN):
+		neu += PFLICHT_PLAETZE.duplicate(true)
+	# Hubers Zelt gehört zur Geschichte — fehlt es, steht es wieder an der alten Stelle
+	if not pfade.has(HUBER_ZELT):
+		neu.append(HUBER_PLATZ.duplicate())
+	return neu
 
 func _alles_setzen(liste: Array) -> void:
 	for c in get_children():

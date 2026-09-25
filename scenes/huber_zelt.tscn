@@ -13,6 +13,8 @@
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="11_fraktur"]
 [ext_resource type="PackedScene" path="res://scenes/zelt/biergarten_tisch.tscn" id="12_tisch"]
 [ext_resource type="PackedScene" path="res://scenes/zelt/fass.tscn" id="13_fass"]
+[ext_resource type="Script" path="res://scripts/npc_huber.gd" id="14_npc"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="15_bean"]
 
 [node name="HuberZelt" type="Node3D"]
 script = ExtResource("1_huber")
@@ -74,3 +76,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9, 0, -7.6)
 
 [node name="Fass11" parent="Innen" instance=ExtResource("13_fass")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, -7.5)
+
+[node name="Huber" type="Node3D" parent="."]
+transform = Transform3D(1.12, 0, 0, 0, 1.12, 0, 0, 0, 1.12, 1.2, 0, 11.4)
+script = ExtResource("14_npc")
+
+[node name="Ausruf" type="Label3D" parent="Huber"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
+visible = false
+billboard = 1
+fixed_size = true
+pixel_size = 0.0012
+modulate = Color(1, 0.35, 0.25, 1)
+outline_modulate = Color(0.25, 0.05, 0, 1)
+text = "!"
+font_size = 64
+outline_size = 16
+
+[node name="Model" parent="Huber" instance=ExtResource("15_bean")]

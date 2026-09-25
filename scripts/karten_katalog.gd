@@ -4,6 +4,7 @@ extends RefCounted
 ## Ordner-Einträge (mit „/“ am Ende) werden beim Start durchsucht (.tscn/.fbx).
 
 const GRUPPEN := [
+	["Besonderes", ["res://scenes/huber_zelt.tscn"]],
 	["Spiele", [
 		"res://scenes/kirmes/schiessstand.tscn",
 		"res://scenes/kirmes/dosenwurf.tscn",
