@@ -108,7 +108,7 @@ Eingabe, Symbole für Xbox/PlayStation/Steam Deck und die Einstellungen stehen.
 Offen:
 
 - [ ] Menüs mit Controller durchspielen: Schieberegler, Auswahlfelder, Umbelegen
-- [ ] Automatisch pausieren, wenn der Controller ausgeht (Steam-Kriterium)
+- [x] Automatisch pausieren, wenn der Controller ausgeht (Steam-Kriterium)
 - [ ] Am echten Gerät testen *(Du)* — der Gerätename steht in den Einstellungen
 
 ### A7 Letzter Durchgang *(Du)*

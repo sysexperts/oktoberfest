@@ -24,6 +24,10 @@ func _ready() -> void:
 		var hilfe := get_parent().get_node_or_null("Hilfe")
 		if hilfe:
 			hilfe.oeffnen())
+	# Steam-Kriterium: Controller geht aus (Akku, Kabel) → Pausemenü auf
+	Input.joy_connection_changed.connect(func(_geraet: int, verbunden: bool) -> void:
+		if not verbunden:
+			oeffnen())
 
 func ist_offen() -> bool:
 	return visible
