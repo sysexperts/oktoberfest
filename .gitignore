@@ -22,3 +22,7 @@ Thumbs.db
 # Render-Ausgaben der Testwerkzeuge — nie committen, nie exportieren
 tools/*.png
 tools/*.png.import
+
+# Eingangsordner fuer neue Assets (siehe eingang/README.md)
+/eingang/
+!/eingang/README.md
