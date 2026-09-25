@@ -1,6 +1,6 @@
 # Steam-Ready: was bis zur Veröffentlichung fehlt
 
-Stand: 25.09.2026, v251. Steamworks ist genehmigt, App-ID **5327191**.
+Stand: 25.09.2026, v251. Steamworks ist genehmigt, App-ID **5327190**.
 
 Grundlage ist der geprüfte Zustand im Repo, nicht die ältere
 `docs/RELEASE_CHECKLISTE.md` — wo beide sich widersprechen, gilt diese Datei.
@@ -18,7 +18,7 @@ sollten parallel früh starten. C und D lassen sich bis zuletzt schieben.
 | Block | Thema | Stand |
 |---|---|---|
 | **A1** | Name Sloptoberfest | ✅ umgesetzt · offen: Markenfrage „Wiesn" im Spieltext *(Anwalt)* |
-| **A2** | Steam-App-ID | ✅ 5327191 eingetragen |
+| **A2** | Steam-App-ID | ✅ 5327190 eingetragen |
 | **A3** | Programmsymbol | ✅ gebaut und in der exe geprüft |
 | **A4** | **Ton** | ❌ 8 Kerngeräusche sind Pieptöne, Ambiente fehlt ganz *(Du)* |
 | **A5** | **Lizenznachweise** | ❌ 4 Belege fehlen *(Du)* |
@@ -88,9 +88,9 @@ alles andere liegen gelassen. Bei mir geprüft.
 
 Bis zum 25.09.2026 lief alles auf Valves Test-App „Spacewar" (480) — damit gab
 es keine echten Errungenschaften, keine Cloud und keinen Kauf. Jetzt steht die
-eigene ID **5327191** in `project.godot`.
+eigene ID **5327190** in `project.godot`.
 
-- [x] Echte App-ID: **5327191** (25.09.2026)
+- [x] Echte App-ID: **5327190** (25.09.2026)
 - [x] In `project.godot` eingetragen; `steam_appid.txt` im Projektordner angelegt
 - [x] `tools/steam_klassen.gd` prüft jetzt mit, dass keine Test-App drinsteht und die Datei zur App-ID passt
 - [x] `restartAppIfNecessary` greift ab jetzt — der Aufruf war an `app_id != 480` gekoppelt

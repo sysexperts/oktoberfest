@@ -1,6 +1,6 @@
 # Release-Plan: bis zum ersten Steam-Upload
 
-Stand 25.09.2026, v251. App-ID **5327191**.
+Stand 25.09.2026, v251. App-ID **5327190**.
 
 Das hier ist unsere Arbeitsliste. Wir gehen sie zusammen von oben nach unten
 durch. `docs/STEAM_READY.md` bleibt die vollständige Bestandsaufnahme — dieser
