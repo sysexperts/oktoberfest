@@ -50,10 +50,10 @@ Klänge**, alle für die Oberfläche. Diese acht sind Pieptöne aus `scripts/sfx
 Dazu fehlt **`assets/audio/ambiente/kirmes.ogg`** komplett — der Ordner ist leer,
 draußen ist es still.
 
-- [ ] Die acht Klänge besorgen *(Du)* — lizenzfrei, kommerziell nutzbar
-- [ ] Kirmes-Ambiente als nahtlose Schleife, 1–2 min *(Du)*
-- [ ] Einbauen, Lautstärken abgleichen, mit `tools/test_musik` prüfen *(Ich)*
-- [ ] Zweiter Durchgang: kasse, zapfen, prost, schritte, tuer, muenzen *(Du, danach)*
+- [x] Die acht Klänge besorgen *(Du)* — lizenzfrei, kommerziell nutzbar
+- [x] Kirmes-Ambiente als nahtlose Schleife, 1–2 min *(Du)*
+- [x] Einbauen, Lautstärken abgleichen, mit `tools/test_musik` prüfen *(Ich)*
+- [ ] Zweiter Durchgang: kasse, zapfen, prost, schritte, tuer, muenzen *(Du, danach)* — schritte + Regen da
 
 **Merke:** Sobald die Dateien unter `assets/audio/sfx/<name>.ogg` liegen, nimmt
 das Spiel sie automatisch statt der Pieptöne. Der Einbau ist also billig — das
