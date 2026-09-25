@@ -199,9 +199,9 @@ sehen Rezensenten.
 - [ ] Neu messen (`tools/sim_saison.tscn`), danach kürzen
 
 ### C3 Balancing-Lauf zum Schluss
-Der letzte dokumentierte Bot-Lauf ist von 09/2026 und lief in eine Todesspirale.
-Seitdem kamen Story, Personal, Braukeller, Minispiele dazu.
-- [ ] 30 Tage Bot laufen lassen, Kurve prüfen
+- [x] Bot gelaufen (25.09.2026). Die Todesspirale von damals gibt es nicht mehr — dafür zwei neue Befunde, Zahlen in `docs/BERICHT_2026-09-25.md` Abschnitt 11
+- [ ] **Ab Tag 7 kippt die Wirtschaft:** Löhne springen auf 581 €/Tag und bleiben, der Leerlauf fällt auf null, trotzdem gehen 70–85 Bestellungen daneben. Zweimal Rettungskredit in elf Tagen *(Du entscheidest die Richtung, ich setze um)*
+- [ ] **Speicher wächst rund 280 MB alle fünf Tage** — bei Tag 21 sind es 3 GB statt 1,5 GB beim Start, das Spiel kriecht dann. Knoten sind es nicht; was wächst, ist noch unklar *(Ich, eigene Sitzung)*
 - [ ] Schwierigkeitsgrade gegenprüfen
 
 ### C4 Fehlerbild im Betrieb
