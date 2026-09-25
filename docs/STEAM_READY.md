@@ -1,6 +1,6 @@
 # Steam-Ready: was bis zur Veröffentlichung fehlt
 
-Stand: 24.09.2026, v250. Steamworks ist genehmigt.
+Stand: 25.09.2026, v251. Steamworks ist genehmigt, App-ID **5327191**.
 
 Grundlage ist der geprüfte Zustand im Repo, nicht die ältere
 `docs/RELEASE_CHECKLISTE.md` — wo beide sich widersprechen, gilt diese Datei.
@@ -13,33 +13,76 @@ sollten parallel früh starten. C und D lassen sich bis zuletzt schieben.
 
 ---
 
+## Auf einen Blick
+
+| Block | Thema | Stand |
+|---|---|---|
+| **A1** | Name Sloptoberfest | ✅ umgesetzt · offen: Markenfrage „Wiesn" im Spieltext *(Anwalt)* |
+| **A2** | Steam-App-ID | ✅ 5327191 eingetragen |
+| **A3** | Programmsymbol | ✅ gebaut und in der exe geprüft |
+| **A4** | **Ton** | ❌ 8 Kerngeräusche sind Pieptöne, Ambiente fehlt ganz *(Du)* |
+| **A5** | **Lizenznachweise** | ❌ 4 Belege fehlen *(Du)* |
+| **A6** | **Alterseinstufung + KI-Angabe** | ❌ noch nicht ausgefüllt *(Du)* |
+| **B1–B8** | Steamworks-Backend | Texte fertig, Grafiken und Einträge fehlen *(Du)* |
+| **C1** | Steam Deck | Grundlage steht · offen: Minispiele und Baumodus hängen an der Maus |
+| **C2** | Erste zehn Minuten | ❌ 3,4 min bis zum ersten Gast, Ziel war 2 min |
+| **C3** | Balancing | gemessen · zwei Befunde: Wirtschaft kippt ab Tag 7, Speicher wächst |
+| **C4–C7** | Technik | grösstenteils erledigt |
+| **D1** | **Figuren** | ❌ vier Stück, eine kann nicht sitzen *(Du)* |
+| **D2–D4** | Modelle, Karte, Ladebildschirm | offen *(Du)* |
+| **E** | Recht und Serverbetrieb | offen *(Du)* |
+| **F** | Testen | offen — nichts davon kann ich für dich tun |
+
+**Die vier echten Blocker sind jetzt A4 (Ton), A5 (Lizenzen), A6 (Einstufung)
+und D1 (Figuren).** Alle vier hängen an Material oder Konten, die nur du hast.
+Was im Code zu tun war, ist zum grössten Teil erledigt.
+
+---
+
 ## A · Blocker — ohne das kein Release
 
-### A1 ⚠️ Der Name ist inkonsistent und markenrechtlich riskant *(Du entscheidest, ich setze um)*
+### A1 ✅ Name: Sloptoberfest — offen bleibt die Markenfrage
 
-Im Spiel heißen drei verschiedene Dinge unterschiedlich:
+Der Name stand an drei Stellen verschieden im Projekt (Fenstertitel und exe
+sagten „Oktoberfest Simulator", Sepps Brief und das Logo „Sloptoberfest"). Seit
+v251 heißt alles gleich:
 
-| Ort | Wert |
+| Ort | Jetzt |
 |---|---|
-| `project.godot` → `config/name` | Oktoberfest Simulator |
-| `export_presets.cfg` (beide Presets) → `product_name`, `file_description` | Oktoberfest Simulator |
-| `locale/texte.csv` → `GAME_TITLE` | Oktoberfest Simulator (alle drei Sprachen) |
-| Sepps Brief im Spiel (`texte.csv` Zeile 686 ff.) | Sloptoberfest |
-| Logo (`scripts/ui/logo_animiert.gd`, `assets/ui/ui_bogen.png`) | Sloptoberfest |
+| `project.godot` → `config/name` | Sloptoberfest |
+| `export_presets.cfg`, beide Presets | Sloptoberfest |
+| `locale/texte.csv` → `GAME_TITLE` (de/en/tr) | Sloptoberfest |
+| exe-Datei und ZIP beim Deploy | Sloptoberfest.exe, Sloptoberfest_vNNN.zip |
 
-„Oktoberfest" und „Wiesn" sind Marken der Landeshauptstadt München. Das steht
-seit der alten Checkliste als Pflichtpunkt drin und ist bis heute offen.
-Entscheidung nötig: heißt das Spiel überall **Sloptoberfest**, dann müssen
-Fenstertitel, exe-Metadaten und `GAME_TITLE` nachziehen — und der Store-Eintrag
-wird unter diesem Namen angelegt. Danach ist der Name auf Steam nur noch mit
-Aufwand änderbar.
+Geprüft an der fertigen exe (ProductName, FileDescription).
+
+**Der Datenordner ist mitgewandert.** Godot leitet ihn aus dem Projektnamen ab —
+ohne Übernahme wären alle Spielstände, Einstellungen und die gebaute Karte
+scheinbar weg gewesen. `Net._alten_datenordner_uebernehmen()` holt sie beim
+ersten Start herüber: kleine Dateien kopiert, die über 900 MB Pakete verschoben,
+alles andere liegen gelassen. Bei mir geprüft.
 
 - [x] Entscheidung: **Sloptoberfest** (25.09.2026)
-- [ ] Anwaltliche Einschätzung, ob „Oktoberfest" und „Wiesn" im Spiel und in den Texten auftauchen dürfen *(Du)* — im Spiel stehen noch Wiesenbüro, Wiesn-Kurier, Wiesn-Kalender
-- [x] `config/name`, beide Export-Presets, `GAME_TITLE` in drei Sprachen angeglichen *(v251)*
-- [x] Datenordner: Godot leitet ihn aus dem Projektnamen ab — ohne Übernahme wären alle Spielstände weg gewesen. `Net._alten_datenordner_uebernehmen` holt sie beim ersten Start herüber *(v251)*
-- [x] ZIP-Namen und Werkzeuge umgestellt, Deploy-Skript erkennt beide Namen auf der Downloadseite *(v251)*
-- [x] Export geprüft: `build/steam/Sloptoberfest.exe`, ProductName und FileDescription stimmen
+- [x] Überall angeglichen, Export geprüft
+- [x] Datenordner-Übernahme gebaut und getestet
+- [x] Deploy-Skript erkennt beide Namen auf der Downloadseite
+- [ ] ⚠️ **Anwaltliche Einschätzung** *(Du)* — der einzige offene Punkt aus A1.
+
+      „Oktoberfest" und „Wiesn" sind Marken der Stadt München. In den
+      Store-Texten habe ich beides vermieden. Im Spiel steht es noch drin, und
+      zwar öfter, als man denkt:
+
+      | Wort | Vorkommen in `locale/texte.csv` |
+      |---|---|
+      | Wiesn | 51 |
+      | Wiesen (Wiesenbüro, Wiesenchef) | 31 |
+      | Oktoberfest | 0 |
+
+      Betroffen sind **74 Textschlüssel** und **29 Dateien** in `scripts/` und
+      `scenes/`. Wenn das weg muss, ist das kein Suchen-und-Ersetzen: „Wiesn"
+      steckt in Eigennamen (Wiesn-Kurier, Wiesn-Kalender, Wiesenbüro,
+      Wiesenchef), die in drei Sprachen und in Szenennamen auftauchen.
+      Rechne mit einer eigenen Sitzung, sobald die Antwort da ist.
 
 ### A2 ✅ App-ID eingetragen
 
@@ -54,7 +97,7 @@ eigene ID **5327191** in `project.godot`.
 - [ ] **Beim Depot-Upload `steam_appid.txt` weglassen.** Der Export legt sie nicht in `build/steam/`, also passt es, solange du diesen Ordner hochlädst. Zum Testen der fertigen exe musst du sie von Hand danebenlegen *(Du)*
 - [ ] Jetzt möglich: Errungenschaften in Steamworks anlegen (B4) und Auto-Cloud einrichten (B6) *(Du)*
 
-### A3 ⚠️ Die exe hat kein Icon
+### A3 ✅ Programmsymbol
 
 Beide Export-Presets haben `application/icon=""`. Die exe zeigt damit Godots
 Standardsymbol — im Store, in der Taskleiste und in der Bibliothek.
@@ -164,7 +207,7 @@ Spielstände liegen in `user://saves/slot_1..3.json`, Einstellungen in
 
 ## C · Code und Technik *(Ich)*
 
-### C1 Steam Deck und Controller — fehlt komplett
+### C1 Steam Deck und Controller — Grundlage steht, Minispiele fehlen
 `project.godot` hat keinen `[input]`-Abschnitt; Tasten werden zur Laufzeit
 angelegt (`scripts/player.gd:103`, `autoload/einstellungen.gd`). Gamepad kommt
 nirgends vor. Damit ist das Spiel auf dem Steam Deck nicht spielbar und fällt
@@ -206,13 +249,13 @@ sehen Rezensenten.
 - [ ] **Speicher wächst rund 280 MB alle fünf Tage** — bei Tag 21 sind es 3 GB statt 1,5 GB beim Start, das Spiel kriecht dann. Knoten sind es nicht; was wächst, ist noch unklar *(Ich, eigene Sitzung)*
 - [ ] Schwierigkeitsgrade gegenprüfen
 
-### C4 Fehlerbild im Betrieb
+### C4 Fehlerbild im Betrieb — grösstenteils erledigt
 - [ ] Was passiert bei Verbindungsabbruch mitten in der Schicht? (Koop, Vermittler weg)
 - [x] Beschädigter Spielstand: wird als `slot_N.json.kaputt_<zeit>` beiseitegelegt statt beim nächsten Speichern überschrieben *(v251)*
 - [x] Logdateien gibt es bereits — Godot schreibt sie nach `user://logs/` (bis zu 5 Stück). Pfad: `%APPDATA%/Godot/app_userdata/Sloptoberfest/logs`
 - [ ] Einen Knopf „Logordner öffnen" in die Einstellungen, damit Spieler ihn im Supportfall finden *(Ich, klein)*
 
-### C5 Speicherformat einfrieren
+### C5 Speicherformat einfrieren — geprüft
 `Net.SAVE_FORMAT = 1`. Nach Release ändert sich das Format nicht mehr ohne
 Migration — sonst verlieren Käufer ihre Stände.
 - [x] Abgeglichen: 55 gespeicherte Felder, 55 geladene. Die einzigen Abweichungen sind `saved_at` (nur fürs Menü) und `rot` (steckt im Einrichtungs-Eintrag) — beides richtig so
@@ -223,7 +266,7 @@ Migration — sonst verlieren Käufer ihre Stände.
 - [ ] Messung auf schwacher Hardware (`tools/perf_messen`, Render-ms vergleichen — FPS im Testfenster ist unbrauchbar)
 - [ ] Mindestanforderungen danach korrigieren
 
-### C7 Aufräumen
+### C7 Aufräumen — erledigt bis auf CI
 - [x] `tools/` bleibt draußen: beide Presets haben `exclude_filter="tools/*"`
 - [x] Testschalter geprüft: `ALWAYS_NIGHT` steht auf `false`, sonst gibt es keine. Die 11 `print`-Ausgaben im Spielcode sind alle beschriftete Diagnose
 - [x] `bash tools/alle_tests.sh` lässt alle Testszenen nacheinander laufen und sammelt die Ergebnisse *(v251)*
