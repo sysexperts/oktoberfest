@@ -74,6 +74,20 @@ const PAD_NAMEN := {
 	JOY_BUTTON_DPAD_RIGHT: "→",
 }
 
+## Knopf -> Bilddatei in assets/ui/glyphen (ohne Endung).
+const GLYPH_DATEI := {
+	JOY_BUTTON_A: "pad_a",
+	JOY_BUTTON_B: "pad_b",
+	JOY_BUTTON_X: "pad_x",
+	JOY_BUTTON_Y: "pad_y",
+	JOY_BUTTON_LEFT_SHOULDER: "pad_lb",
+	JOY_BUTTON_RIGHT_SHOULDER: "pad_rb",
+	JOY_BUTTON_DPAD_UP: "pad_hoch",
+	JOY_BUTTON_DPAD_DOWN: "pad_runter",
+	JOY_BUTTON_DPAD_LEFT: "pad_links",
+	JOY_BUTTON_DPAD_RIGHT: "pad_rechts",
+}
+
 ## Wurde zuletzt am Gamepad gespielt? Steuert die Hinweistexte, sonst nichts.
 var am_pad := false
 
@@ -105,12 +119,84 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	_eingabeart_merken(event)
+	_pad_klick(event)
 	if event.is_action_pressed("screenshot") and not event.is_echo():
 		bildschirmfoto()
+
+# ------------------------------------------------------- Zeigen mit dem Stick
+## Steam verlangt fuer „Xbox-Controller-Unterstuetzung", dass sich alles ohne
+## Tastatur und Maus bedienen laesst — auch die Kirmesspiele und der Baumodus.
+## Die zeigen und klicken aber mit der Maus.
+##
+## Statt siebzehn Stellen einzeln umzubauen, uebersetzt dieses Autoload den
+## Controller in Mauseingaben:
+##
+##   sichtbarer Zeiger (Menues, Baumodus)  rechter Stick schiebt den echten
+##                                         Zeiger (Input.warp_mouse)
+##   gefangene Maus (Kirmesspiele im       rechter Stick erzeugt Mausbewegung,
+##   Ego-Blick)                            damit Zielen und Schwenken gehen
+##   A-Knopf                               wird zum Linksklick
+##
+## Der Klick entsteht nur, wenn kein Bedienelement den Fokus hat. In Menues
+## fuehrt A sonst zweimal etwas aus: einmal ueber den Fokus, einmal ueber den
+## Zeiger, der gerade woanders steht.
+const ZEIGER_TEMPO := 1100.0
+## Erzeugte Ereignisse laufen durch dieselbe Schleife wie echte. Ohne diese
+## Sperre wuerde die kuenstliche Mausbewegung am_pad sofort wieder auf false
+## setzen — der Stick haette sich selbst abgeschaltet.
+var _eigene_eingabe := false
+var _pad_maus_unten := false
+
+func _process(delta: float) -> void:
+	if not am_pad or DisplayServer.get_name() == "headless":
+		return
+	var richtung := Input.get_vector("blick_links", "blick_rechts", "blick_hoch", "blick_runter")
+	if richtung.length() < 0.01:
+		return
+	var modus := Input.mouse_mode
+	if modus == Input.MOUSE_MODE_VISIBLE or modus == Input.MOUSE_MODE_CONFINED:
+		var fenster := Vector2(get_viewport().get_visible_rect().size)
+		var ziel := get_viewport().get_mouse_position() + richtung * ZEIGER_TEMPO * delta
+		_eigene_eingabe = true
+		Input.warp_mouse(ziel.clamp(Vector2.ZERO, fenster))
+		_eigene_eingabe = false
+	elif modus == Input.MOUSE_MODE_CAPTURED:
+		# Im Ego-Blick zielt man ueber die Mausbewegung. Der Wert muss klein
+		# bleiben: die Spiele rechnen ihn mit ihrer eigenen Empfindlichkeit hoch.
+		var ev := InputEventMouseMotion.new()
+		ev.relative = richtung * ZEIGER_TEMPO * delta * 0.35
+		ev.screen_relative = ev.relative
+		_senden(ev)
+
+## A wird zum Linksklick — aber nur, wenn nichts den Fokus hat (siehe oben).
+func _pad_klick(event: InputEvent) -> void:
+	if _eigene_eingabe or not (event is InputEventJoypadButton):
+		return
+	var knopf := event as InputEventJoypadButton
+	if knopf.button_index != JOY_BUTTON_A:
+		return
+	if get_viewport().gui_get_focus_owner() != null:
+		return
+	if knopf.pressed == _pad_maus_unten:
+		return
+	_pad_maus_unten = knopf.pressed
+	var klick := InputEventMouseButton.new()
+	klick.button_index = MOUSE_BUTTON_LEFT
+	klick.pressed = knopf.pressed
+	klick.position = get_viewport().get_mouse_position()
+	klick.global_position = klick.position
+	_senden(klick)
+
+func _senden(ev: InputEvent) -> void:
+	_eigene_eingabe = true
+	Input.parse_input_event(ev)
+	_eigene_eingabe = false
 
 ## Woran wird gerade gespielt? Steuert, ob in Hinweisen „[E]" oder „[A]" steht.
 ## Ein Stick driftet im Ruhezustand leicht — darum erst ab halbem Ausschlag.
 func _eingabeart_merken(event: InputEvent) -> void:
+	if _eigene_eingabe:
+		return   # selbst erzeugte Maus zaehlt nicht als „spielt mit der Maus"
 	var vorher := am_pad
 	if event is InputEventJoypadButton:
 		am_pad = true
@@ -181,6 +267,17 @@ func taste(aktion: String) -> int:
 ## Belegungsmenü zeigt damit, was umbelegt wird.
 func tasten_name(aktion: String) -> String:
 	return OS.get_keycode_string(taste(aktion))
+
+## Bild des Knopfes für eine Aktion, "" wenn gerade mit Tastatur gespielt wird
+## oder es für die Aktion kein Bild gibt. Die Dateien baut tools/glyphen_bauen.gd.
+func glyph_pfad(aktion: String) -> String:
+	if not am_pad or not PAD_KNOEPFE.has(aktion):
+		return ""
+	var datei: String = GLYPH_DATEI.get(int(PAD_KNOEPFE[aktion]), "")
+	if datei == "":
+		return ""
+	var pfad := "res://assets/ui/glyphen/%s.png" % datei
+	return pfad if ResourceLoader.exists(pfad) else ""
 
 ## Was in Hinweisen steht („Krug nehmen [E]"). Wer zuletzt am Gamepad gedrückt
 ## hat, bekommt den Knopf gezeigt — sonst stünde am Steam Deck überall eine

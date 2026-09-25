@@ -168,7 +168,9 @@ class Lauf extends Node:
 		Einstellungen.sprache = "de"
 		Einstellungen.anwenden()
 		hud.set_hint("HINT_TAKE_MUG")
-		var hinweis: String = hud.get_node("%HinweisText").text
+		# Seit den Controller-Glyphen ist das ein RichTextLabel: .text enthaelt
+		# BBCode, geprueft wird der gesetzte Text ohne Auszeichnung.
+		var hinweis: String = hud.get_node("%HinweisText").get_parsed_text()
 		_check("Hinweistext mit Taste", hinweis == "[E] Krug nehmen" and hud.get_node("%Hinweis").visible, hinweis)
 		hud.set_hint("")
 		_check("Hinweis ausgeblendet", not hud.get_node("%Hinweis").visible, "")

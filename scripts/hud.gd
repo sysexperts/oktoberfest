@@ -193,10 +193,13 @@ func set_hint(key: String) -> void:
 	%Hinweis.visible = key != ""
 	if key == "":
 		return
-	var hinweis: Label = %HinweisText
-	hinweis.text = Texte.mit_tasten(key)
+	var hinweis: RichTextLabel = %HinweisText
+	# Mit Glyphen: am Gamepad steht hier das Knopfbild statt eines Buchstabens.
+	hinweis.text = "[center]%s[/center]" % Texte.mit_glyphen(key)
 	var handlung := tr(key).contains("{")
-	hinweis.add_theme_color_override("font_color", WEISS if handlung else Color(0.78, 0.73, 0.66))
+	# RichTextLabel nennt die Schriftfarbe "default_color" — ein font_color
+	# waere hier wirkungslos geblieben.
+	hinweis.add_theme_color_override("default_color", WEISS if handlung else Color(0.78, 0.73, 0.66))
 
 ## Bierzuschlag bei Lieferproblemen — Wert steht im GameManager
 func _gm_zuschlag() -> float:

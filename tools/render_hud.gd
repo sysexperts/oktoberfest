@@ -62,6 +62,15 @@ class Lauf extends Node:
 			hud.set_quest(5, 12)
 			hud.set_hint("HINT_TAP")
 			await _bild("hud_%s" % lang)
+		# Derselbe Hinweis am Gamepad: dort gehoert das Knopfbild hin, keine Taste
+		Einstellungen.sprache = "de"
+		Einstellungen.anwenden()
+		Einstellungen.am_pad = true
+		hud.set_hint("HINT_TAKE_MUG")
+		await _bild("hud_pad")
+		Einstellungen.am_pad = false
+		hud.set_hint("HINT_TAKE_MUG")
+		await _bild("hud_tastatur")
 		hud.set_time(-1.0)
 		hud.show_popup("📦 Erst Ware einkaufen!\n\nDu hast kein Bier im Lager.")
 		await _bild("hud_popup")

@@ -128,6 +128,23 @@ static func mit_tasten(schluessel: String) -> String:
 			t = t.replace(platzhalter, "[%s]" % Einstellungen.anzeige_name(aktion))
 	return t
 
+## Dasselbe fuer Felder, die BBCode koennen (RichTextLabel): am Gamepad steht
+## dort das Knopfbild statt eines Buchstabens. Steam verlangt fuer die
+## Xbox-Unterstuetzung, dass bei einer Aufforderung das richtige Symbol erscheint.
+## hoehe: Kantenlaenge des Bildes in Pixeln, passend zur Schriftgroesse.
+static func mit_glyphen(schluessel: String, hoehe := 22) -> String:
+	var t := TranslationServer.translate(schluessel)
+	for aktion: String in Einstellungen.STANDARD_TASTEN:
+		var platzhalter := "{%s}" % aktion
+		if not t.contains(platzhalter):
+			continue
+		var bild := Einstellungen.glyph_pfad(aktion)
+		if bild != "":
+			t = t.replace(platzhalter, "[img=%dx%d]%s[/img]" % [hoehe, hoehe, bild])
+		else:
+			t = t.replace(platzhalter, "[%s]" % Einstellungen.anzeige_name(aktion))
+	return t
+
 ## Tagesziel als Satz, z. B. „Bediene 43 Gäste" (GameManager._tagesziel_waehlen)
 static func tagesziel_text(ziel: Dictionary) -> String:
 	var typ := str(ziel.get("typ", ""))

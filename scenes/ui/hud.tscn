@@ -660,13 +660,16 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 10
 
-[node name="HinweisText" type="Label" parent="Hinweis/Rand"]
+[node name="HinweisText" type="RichTextLabel" parent="Hinweis/Rand"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
-text = "[E] Krug nehmen"
-horizontal_alignment = 1
+theme_override_font_sizes/normal_font_size = 19
+bbcode_enabled = true
+text = "[center][E] Krug nehmen[/center]"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 
 [node name="GrosserText" type="Label" parent="."]
 unique_name_in_owner = true
