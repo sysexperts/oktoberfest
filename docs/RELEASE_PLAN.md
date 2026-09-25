@@ -107,7 +107,7 @@ es trifft genau die Spieler, die das Spiel mögen — die lange spielen.
 Eingabe, Symbole für Xbox/PlayStation/Steam Deck und die Einstellungen stehen.
 Offen:
 
-- [ ] Menüs mit Controller durchspielen: Schieberegler, Auswahlfelder, Umbelegen
+- [ ] Menüs mit Controller durchspielen: Schieberegler, Auswahlfelder, Umbelegen — Fokus beim Öffnen: Festbüro, Zeltcomputer, Abstimmung erledigt
 - [x] Automatisch pausieren, wenn der Controller ausgeht (Steam-Kriterium)
 - [ ] Am echten Gerät testen *(Du)* — der Gerätename steht in den Einstellungen
 

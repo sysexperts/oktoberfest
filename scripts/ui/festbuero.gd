@@ -119,6 +119,7 @@ func oeffnen() -> void:
 	if TUTORIAL_ZIEL.has(_schritt):
 		_reiter.current_tab = TUTORIAL_ZIEL[_schritt][0]
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	_reiter.get_tab_bar().grab_focus.call_deferred()   # Controller: Reiter mit LB/RB bzw. Steuerkreuz
 
 func schliessen() -> void:
 	visible = false

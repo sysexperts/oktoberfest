@@ -6,6 +6,7 @@ extends Control
 ## es in _passen() als Ganzes gleichmäßig verkleinert, damit das Bild genau so
 ## aussieht wie entworfen und trotzdem überall hineinpasst.
 
+const Fokus := preload("res://scripts/ui/fokus.gd")
 const Texte := preload("res://scripts/ui/texte.gd")
 const Symbole := preload("res://scripts/ui/symbole.gd")
 const Wirtschaft := preload("res://scripts/wirtschaft.gd")
@@ -63,6 +64,7 @@ func oeffnen() -> void:
 	%LobbyOeffnen.visible = not Net.solo
 	_neu()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Fokus.erster(self)
 
 func schliessen() -> void:
 	visible = false

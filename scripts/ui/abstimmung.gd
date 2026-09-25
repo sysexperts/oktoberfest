@@ -25,6 +25,7 @@ func zeige(aktiv: bool, starter: String, ja: int, nein: int, gesamt: int, rest: 
 	if not visible:
 		visible = true
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		%Ja.grab_focus.call_deferred()
 	_abgestimmt = schon_gestimmt
 	%Text.text = tr("VOTE_TEXT") % starter
 	%Stand.text = tr("VOTE_COUNT") % [ja, nein, gesamt, rest]
