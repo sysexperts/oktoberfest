@@ -74,6 +74,39 @@ const PAD_NAMEN := {
 	JOY_BUTTON_DPAD_RIGHT: "→",
 }
 
+## Knopf -> Zeichen in der Glyphenschrift, je Geraetesatz. Kenney legt die
+## Glyphen in den Privatbereich von Unicode (U+E000 aufwaerts); welcher Knopf
+## auf welchem Zeichen sitzt, steht in den *_map.txt des Packs und ist je Satz
+## verschieden. Damit zeigt jedes Label das Symbol — auch die Schilder in der
+## Welt, wo ein Bild nicht ginge.
+const GLYPH_ZEICHEN := {
+	"xbox": {
+		JOY_BUTTON_A: "", JOY_BUTTON_B: "", JOY_BUTTON_X: "", JOY_BUTTON_Y: "",
+		JOY_BUTTON_LEFT_SHOULDER: "", JOY_BUTTON_RIGHT_SHOULDER: "",
+		JOY_BUTTON_DPAD_UP: "", JOY_BUTTON_DPAD_DOWN: "",
+		JOY_BUTTON_DPAD_LEFT: "", JOY_BUTTON_DPAD_RIGHT: "",
+	},
+	"playstation": {
+		JOY_BUTTON_A: "", JOY_BUTTON_B: "", JOY_BUTTON_X: "", JOY_BUTTON_Y: "",
+		JOY_BUTTON_LEFT_SHOULDER: "", JOY_BUTTON_RIGHT_SHOULDER: "",
+		JOY_BUTTON_DPAD_UP: "", JOY_BUTTON_DPAD_DOWN: "",
+		JOY_BUTTON_DPAD_LEFT: "", JOY_BUTTON_DPAD_RIGHT: "",
+	},
+	"deck": {
+		JOY_BUTTON_A: "", JOY_BUTTON_B: "", JOY_BUTTON_X: "", JOY_BUTTON_Y: "",
+		JOY_BUTTON_LEFT_SHOULDER: "", JOY_BUTTON_RIGHT_SHOULDER: "",
+		JOY_BUTTON_DPAD_UP: "", JOY_BUTTON_DPAD_DOWN: "",
+		JOY_BUTTON_DPAD_LEFT: "", JOY_BUTTON_DPAD_RIGHT: "",
+	},
+}
+## Die Schriften dazu (CC0, Kenney). Eine davon haengt als Ersatzschrift hinter
+## der normalen — sonst erschiene nur ein leeres Kaestchen.
+const GLYPH_SCHRIFT := {
+	"xbox": "res://assets/fonts/glyphen/xbox.ttf",
+	"playstation": "res://assets/fonts/glyphen/playstation.ttf",
+	"deck": "res://assets/fonts/glyphen/deck.ttf",
+}
+
 ## Knopf -> Bilddatei in assets/ui/glyphen (ohne Endung).
 const GLYPH_DATEI := {
 	JOY_BUTTON_A: "pad_a",
@@ -99,7 +132,10 @@ var pad_y_umkehren := false
 var pad_totzone := 0.2
 ## Welche Knopfbilder gezeigt werden: "auto" richtet sich nach dem Geraet.
 var glyph_stil := "auto"
-const GLYPH_STILE := ["auto", "xbox", "deck"]
+const GLYPH_STILE := ["auto", "xbox", "playstation", "deck"]
+## Woran ein PlayStation-Pad zu erkennen ist. Godot meldet je nach Treiber
+## unterschiedliche Namen — deshalb mehrere Stichwoerter statt eines Vergleichs.
+const PS_NAMEN := ["playstation", "dualshock", "dualsense", "ps3", "ps4", "ps5", "wireless controller"]
 
 ## F12: Bildschirmfoto nach user://screenshots — für Store-Bilder und Fehlerberichte.
 signal screenshot_gespeichert(pfad: String)
@@ -294,9 +330,21 @@ func glyph_pfad(aktion: String) -> String:
 		return ""
 	var satz := glyph_stil
 	if satz == "auto":
-		satz = "deck" if auf_deck() else "xbox"
+		satz = erkannter_stil()
 	var pfad := "res://assets/ui/glyphen/%s/%s.svg" % [satz, datei]
 	return pfad if ResourceLoader.exists(pfad) else ""
+
+## Welcher Satz Knopfbilder passt zum angeschlossenen Geraet? Auf dem Steam Deck
+## dessen eigene Tasten, bei einem PlayStation-Pad Kreuz/Kreis/Viereck/Dreieck,
+## sonst Xbox — das ist die Belegung, die auch Windows meldet.
+func erkannter_stil() -> String:
+	if auf_deck():
+		return "deck"
+	var name := pad_name().to_lower()
+	for wort: String in PS_NAMEN:
+		if name.contains(wort):
+			return "playstation"
+	return "xbox"
 
 ## Name des ersten angeschlossenen Controllers, "" wenn keiner da ist. Fuer die
 ## Anzeige in den Einstellungen — ohne sie weiss niemand, ob das Spiel das Geraet
@@ -317,9 +365,17 @@ func auf_deck() -> bool:
 ## hat, bekommt den Knopf gezeigt — sonst stünde am Steam Deck überall eine
 ## Taste, die es dort nicht gibt.
 func anzeige_name(aktion: String) -> String:
-	if am_pad and PAD_KNOEPFE.has(aktion):
-		return PAD_NAMEN.get(int(PAD_KNOEPFE[aktion]), tasten_name(aktion))
-	return tasten_name(aktion)
+	if not am_pad or not PAD_KNOEPFE.has(aktion):
+		return tasten_name(aktion)
+	var knopf := int(PAD_KNOEPFE[aktion])
+	var zeichen: String = GLYPH_ZEICHEN.get(aktiver_stil(), {}).get(knopf, "")
+	if zeichen != "" and _glyph_schrift_da:
+		return zeichen
+	return PAD_NAMEN.get(knopf, tasten_name(aktion))
+
+## Welcher Geraetesatz gerade gilt — Einstellung, sonst erkannt.
+func aktiver_stil() -> String:
+	return erkannter_stil() if glyph_stil == "auto" else glyph_stil
 
 func setze_taste(aktion: String, keycode: int) -> void:
 	tasten[aktion] = keycode
@@ -347,7 +403,38 @@ func _tasten_anwenden() -> void:
 ## Die Belegung ist nicht umbelegbar — wer am Deck spielt, kann sie über Steams
 ## eigene Controller-Einstellungen ändern, und ein zweiter Belegungsdialog im
 ## Spiel wäre doppelte Arbeit für denselben Zweck.
+## Haengt die Glyphenschrift als Ersatz hinter die normale Schrift. Ohne das
+## zeigt jedes Label nur ein leeres Kaestchen, wo ein Knopf stehen soll.
+var _glyph_schrift_da := false
+var _glyph_schrift_stil := ""
+
+func _glyph_schrift_setzen() -> void:
+	var stil := aktiver_stil()
+	if stil == _glyph_schrift_stil:
+		return
+	var pfad: String = GLYPH_SCHRIFT.get(stil, "")
+	if pfad == "" or not ResourceLoader.exists(pfad):
+		_glyph_schrift_da = false
+		return
+	var schrift := load(pfad) as Font
+	if schrift == null:
+		_glyph_schrift_da = false
+		return
+	# ThemeDB.fallback_font ist die Schrift, die alles nimmt, was keine eigene
+	# gesetzt hat — im Projekt ist das die gesamte Oberflaeche und die Welt.
+	var basis: Font = _grundschrift if _grundschrift != null else ThemeDB.fallback_font
+	_grundschrift = basis
+	var variante := FontVariation.new()
+	variante.base_font = basis
+	variante.fallbacks = [schrift]
+	ThemeDB.fallback_font = variante
+	_glyph_schrift_da = true
+	_glyph_schrift_stil = stil
+
+var _grundschrift: Font = null
+
 func _pad_anwenden() -> void:
+	_glyph_schrift_setzen()
 	for aktion: String in PAD_KNOEPFE:
 		_pad_knopf(aktion, int(PAD_KNOEPFE[aktion]))
 	for aktion: String in PAD_ACHSEN:

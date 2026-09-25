@@ -32,7 +32,7 @@ const RENDERER_NAMEN := ["SET_RENDERER_QUALITY", "SET_RENDERER_PERFORMANCE"]
 @onready var _pad_totzone_wert: Label = %PadTotzoneWert
 @onready var _pad_glyphen: OptionButton = %PadGlyphen
 ## Gleiche Reihenfolge wie Einstellungen.GLYPH_STILE
-const GLYPH_NAMEN := ["SET_PAD_GLYPH_AUTO", "SET_PAD_GLYPH_XBOX", "SET_PAD_GLYPH_DECK"]
+const GLYPH_NAMEN := ["SET_PAD_GLYPH_AUTO", "SET_PAD_GLYPH_XBOX", "SET_PAD_GLYPH_PS", "SET_PAD_GLYPH_DECK"]
 @onready var _tasten_liste: GridContainer = %TastenListe
 @onready var _sprache: OptionButton = %SpracheWahl
 

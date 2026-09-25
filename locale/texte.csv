@@ -93,6 +93,7 @@ SET_PAD_TOTZONE,Totzone,Dead zone,Ölü bölge
 SET_PAD_GLYPHEN,Knopfsymbole,Button icons,Tuş simgeleri
 SET_PAD_GLYPH_AUTO,Automatisch,Automatic,Otomatik
 SET_PAD_GLYPH_XBOX,Xbox,Xbox,Xbox
+SET_PAD_GLYPH_PS,PlayStation,PlayStation,PlayStation
 SET_PAD_GLYPH_DECK,Steam Deck,Steam Deck,Steam Deck
 SET_KEYBINDS,Tastenbelegung,Key bindings,Tuş atamaları
 SET_PRESS_KEY,Taste drücken …,Press a key …,Bir tuşa bas …

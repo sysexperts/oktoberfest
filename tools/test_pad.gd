@@ -66,13 +66,38 @@ class Lauf extends Node:
 		_check("zurückgesetzt auf E", Einstellungen.taste("interact") == KEY_E)
 		_check("Knopf immer noch da", _hat("interact", InputEventJoypadButton))
 
+		print("-- Glyphenschrift haengt an der Oberflaeche")
+		# Ohne Ersatzschrift zeigt jedes Label nur ein leeres Kaestchen. Godot
+		# beantwortet das direkt: kennt die Schrift das Zeichen?
+		Einstellungen.am_pad = true
+		for stil in ["xbox", "playstation", "deck"]:
+			Einstellungen.glyph_stil = stil
+			Einstellungen.anwenden()
+			var z := Einstellungen.anzeige_name("interact")
+			var schrift := ThemeDB.fallback_font
+			_check("%s: Schrift kennt das Zeichen" % stil,
+				schrift != null and z.length() == 1 and schrift.has_char(z.unicode_at(0)),
+				"0x%X" % z.unicode_at(0))
+		Einstellungen.glyph_stil = "auto"
+		Einstellungen.anwenden()
+
 		print("-- Hinweistexte")
 		Einstellungen.am_pad = false
 		_check("Tastatur: interact zeigt E", Einstellungen.anzeige_name("interact") == "E",
 			Einstellungen.anzeige_name("interact"))
 		Einstellungen.am_pad = true
-		_check("Gamepad: interact zeigt A", Einstellungen.anzeige_name("interact") == "A",
-			Einstellungen.anzeige_name("interact"))
+		# Am Gamepad steht das Zeichen aus der Glyphenschrift (Kenney legt sie in
+		# den Privatbereich ab U+E000), nicht der Buchstabe der Tastatur.
+		var am_pad_name := Einstellungen.anzeige_name("interact")
+		var ist_glyph := am_pad_name.length() == 1 and am_pad_name.unicode_at(0) >= 0xE000
+		_check("Gamepad: interact zeigt einen Knopf, keine Taste",
+			ist_glyph or am_pad_name == "A", "0x%X" % am_pad_name.unicode_at(0))
+		for stil in ["xbox", "playstation", "deck"]:
+			Einstellungen.glyph_stil = stil
+			var z := Einstellungen.anzeige_name("interact")
+			_check("%s hat ein eigenes Zeichen" % stil,
+				z.length() == 1 and z.unicode_at(0) >= 0xE000, "0x%X" % z.unicode_at(0))
+		Einstellungen.glyph_stil = "auto"
 		var satz := Texte.mit_tasten("HUD_HELP_HINT")
 		_check("Hinweissatz nutzt Knopfnamen", not satz.contains("[F1]"), satz)
 		# Schilder in der Welt hoeren auf dieses Signal — ohne es bliebe dort die

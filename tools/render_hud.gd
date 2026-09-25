@@ -66,6 +66,16 @@ class Lauf extends Node:
 		Einstellungen.sprache = "de"
 		Einstellungen.anwenden()
 		Einstellungen.am_pad = true
+		for stil in ["xbox", "playstation", "deck"]:
+			Einstellungen.glyph_stil = stil
+			Einstellungen.anwenden()
+			hud.set_hint("HINT_TAKE_MUG")
+			# Der Hilfehinweis unten laeuft ueber ein normales Label — dort zeigt
+			# sich, ob die Glyphenschrift wirklich greift
+			hud.call("_texte") if hud.has_method("_texte") else null
+			await _bild("hud_pad_%s" % stil)
+		Einstellungen.glyph_stil = "auto"
+		Einstellungen.anwenden()
 		hud.set_hint("HINT_TAKE_MUG")
 		await _bild("hud_pad")
 		Einstellungen.am_pad = false
