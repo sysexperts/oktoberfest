@@ -803,14 +803,9 @@ func net_paket_ablegen(kind: int, amount: int, pos: Vector3) -> void:
 # ================================================= Zelt eröffnen (Test 13.09.)
 ## Nach dem Aufstehen ist die Kirmes offen, das Festzelt noch zu. Ein Spieler sticht
 ## am Eingang das Fass an (scenes/zelt_eroeffnung.tscn), erst dann kommen Gäste.
-## Macht es niemand, öffnet das Zelt um AUTO_OEFFNEN_STUNDE von selbst.
-## Solange das Zelt zu ist, steht die Uhr — vorbereiten geht also ohne
-## Zeitdruck. Macht es niemand auf, öffnet es nach dieser Wartezeit von selbst.
-## 60 s entsprechen den früheren drei Spielstunden von 7 bis 10 Uhr, als die Uhr
-## beim Warten noch weiterlief.
-const AUTO_OEFFNEN_WARTEN := 60.0
+## Solange das Zelt zu ist, steht die Uhr — vorbereiten geht ohne Zeitdruck.
+## Geöffnet wird nur von Hand am Eingang, niemals automatisch (Wunsch Serdar).
 var _zelt_offen := true
-var _zelt_wartet := 0.0   # Sekunden seit dem Aufstehen, in denen das Zelt zu ist
 
 func _eroeffnung_anzeigen() -> void:
 	var bereit := _phase == Phase.SHIFT and not _zelt_offen and _tent_stage > 0
@@ -1103,7 +1098,8 @@ func _apply_crowd(clock: float) -> void:
 		return
 	var f := 0.0
 	if clock >= 0.0:
-		f = clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.15, 1.0)
+		# Morgens schon halb voll, abends ganz — vorher (15 %) wirkte die Kirmes leer
+		f = lerpf(0.5, 1.0, clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.0, 1.0))
 	if _ereignis == "regen":
 		f *= 0.25   # bei Regen ist draußen kaum jemand
 	_crowd.set_density(f)
@@ -4473,12 +4469,8 @@ func _process(delta: float) -> void:
 
 func _shift_process(delta: float) -> void:
 	# Popülerliğe + saate göre misafir çağır (sabah az, akşam çok; 08:00'den önce yok)
-	# Zelt noch nicht eröffnet: keine Gäste, und die Uhr steht — nach
-	# AUTO_OEFFNEN_WARTEN öffnet es von selbst
-	if not _zelt_offen:
-		_zelt_wartet += delta
-		if _zelt_wartet >= AUTO_OEFFNEN_WARTEN:
-			_zelt_eroeffnen("", true)
+	# Zelt noch nicht eröffnet: keine Gäste, und die Uhr steht. Es öffnet NUR,
+	# wenn ein Spieler es am Eingang eröffnet (net_zelt_eroeffnen) — nie von selbst.
 	_guest_spawn_timer -= delta
 	if _zelt_offen and _guest_spawn_timer <= 0.0:
 		_guest_spawn_timer = GUEST_SPAWN_INTERVAL
@@ -5019,7 +5011,6 @@ func _start_shift() -> void:
 		_staff_sim[sid] = st
 	# Kirmes offen, Zelt noch zu — ein Spieler eröffnet es am Eingang (net_zelt_eroeffnen)
 	_zelt_offen = _tent_stage == 0
-	_zelt_wartet = 0.0
 	_broadcast_meta()   # banner'ı net_sleep gönderir (gün başlangıcı mesajı)
 	_eroeffnung_anzeigen()
 	if not _zelt_offen:

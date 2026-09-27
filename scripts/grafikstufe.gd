@@ -11,7 +11,7 @@ extends Node
 ## Detail-Shader als zweiter Durchgang auf Kirmes-, Zelt- und Tischmaterialien.
 ## Werte messen: tools/grafik_messen.tscn. Liegt als Knoten in main.tscn.
 
-const BESUCHER := [120, 250, 400]
+const BESUCHER := [180, 350, 550]
 ## Ab dieser Entfernung blenden Kirmeslichter aus (0 = nie)
 const LICHT_AUSBLENDEN := [25.0, 45.0, 0.0]
 const DETAIL := preload("res://assets/shader/detail.gdshader")

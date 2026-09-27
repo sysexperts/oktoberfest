@@ -234,6 +234,9 @@ class Lauf extends Node:
 	func _schicht() -> void:
 		leerlauf = 0.0
 		ohne_bier = 0.0
+		# Das Zelt öffnet nur von Hand — der Bot sticht an
+		if not gm._zelt_offen:
+			gm.net_zelt_eroeffnen()
 		# Sicherheitsgrenze: ohne sie steht der Bot still, wenn die Schicht nicht
 		# endet — und man sieht dem Log nicht an, woran es lag. Ein Spieltag
 		# dauert SHIFT_TIME (300 s), bei DT 0,2 also 1500 Schritte; das Zehnfache
