@@ -278,33 +278,33 @@ class Lauf extends Node:
 	## liegt) und einer mit zufälligem Klick — zeigt, wie viel Können und Glück ausmacht.
 	func _gluecksrad(bude: Node, spieler: Node, gm: Node) -> void:
 		var dir := OS.get_environment("SHOT_DIR")
-		var zehn: int = bude.WERTE.find(10)
-		for modus: String in ["gezielt", "zufall"]:
-			var summe := 0
-			for runde in 6:
-				bude.spiel_starten(spieler)
-				var bild := false
-				var klick_in := randf_range(0.2, 1.5)
-				while bude.laeuft():
-					if bude._zustand == bude.DREHT and bude._uebrig > 0:
-						if modus == "gezielt":
-							var stop: float = bude._winkel + bude.bremsweg
-							var abstand := angle_difference(stop, zehn * bude.FELD)
-							if absf(abstand) < 0.06:
-								bude.anhalten()
-						else:
-							klick_in -= get_process_delta_time()
-							if klick_in <= 0.0:
-								bude.anhalten()
-								klick_in = randf_range(0.2, 1.5)
-					if not bild and bude._zustand == bude.ZEIGT and modus == "gezielt" and runde == 0:
-						bild = true
-						for i in 3:
-							await get_tree().process_frame
-						Schuss.speichern(get_viewport(), dir + "/spiel_gluecksrad_blick.png")
-					await get_tree().process_frame
-				summe += bude.punkte()
-			print("  %s: Schnitt %.1f Punkte" % [modus, summe / 6.0])
+		# Reines Glücksspiel: 2.000 Einsätze à 10 € über den Server — die Quote muss
+		# unter 100 % liegen, sonst lässt sich das Rad ausnutzen.
+		gm._schiessen_bezahlt[1] = gm.get_path_to(bude)
+		bude.spiel_starten(spieler)
+		Game.money = 100000
+		var vorher := Game.money
+		var n := 2000
+		for i in n:
+			gm._glueck_zuletzt.clear()
+			gm.net_gluecksrad_setzen(10)
+		var quote := 100.0 * float(Game.money - vorher + 10 * n) / float(10 * n)
+		print("  Auszahlungsquote nach %d Drehungen: %.1f %% (Soll 93,75 %%)" % [n, quote])
+		# Kein Geld: 1.000 € dürfen nicht gehen
+		Game.money = 500
+		gm._glueck_zuletzt.clear()
+		gm.net_gluecksrad_setzen(1000)
+		print("  Einsatz über Guthaben abgelehnt: %s" % str(Game.money == 500))
+		# Bild: eine echte Drehung mit Anzeige
+		Game.money = 4380
+		gm._glueck_zuletzt.clear()
+		gm.net_gluecksrad_setzen(100)
+		while bude._zustand != bude.ZEIGT:
+			await get_tree().process_frame
+		for i in 5:
+			await get_tree().process_frame
+		Schuss.speichern(get_viewport(), dir + "/spiel_gluecksrad_blick.png")
+		bude._beenden()
 		var kamera := Camera3D.new()
 		gm.add_child(kamera)
 		var stand := bude as Node3D

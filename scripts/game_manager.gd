@@ -2100,6 +2100,10 @@ func net_schiessen_ende(treffer: int) -> void:
 	_schiessen_bezahlt.erase(s)
 	if not bude.is_empty():
 		_net_bude_besetzt.rpc(bude, false)
+	# Glücksrad: abgerechnet wird je Drehung (net_gluecksrad_setzen), hier nur aufstehen
+	var stand_n := get_node_or_null(bude) if not bude.is_empty() else null
+	if stand_n and "glueckspiel" in stand_n:
+		return
 	treffer = clampi(treffer, 0, 10)
 	_stats.geschossen = int(_stats.get("geschossen", 0)) + 1
 	for gewinn: Array in SCHIESS_GEWINNE:
@@ -2109,6 +2113,57 @@ func net_schiessen_ende(treffer: int) -> void:
 			_schiess_meldung(s, "MSG_KIRMES_GEWINN", [treffer, str(gewinn[2]), _eur(int(gewinn[1]))], 2)
 			return
 	_schiess_meldung(s, "MSG_KIRMES_NIETE", [treffer], 0)
+
+# ================================================= Glücksrad (reines Glücksspiel)
+## Faktor je Feld — muss zu tools/bake_kirmes_spiele.gd (RAD_WERTE) und
+## scripts/kirmes/gluecksrad.gd (WERTE) passen. 9×0, 3×1, 2×2, 1×3, 1×5:
+## Erwartung 15/16 des Einsatzes, auf Dauer verliert der Spieler 6,25 %.
+const GLUECK_FELDER := [0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 5, 0, 1, 0, 0]
+const GLUECK_EINSAETZE := [1, 10, 100, 1000]
+## Mindestabstand zwischen zwei Drehungen je Spieler (so lange dreht das Rad)
+const GLUECK_PAUSE_MS := 3500
+var _glueck_zuletzt := {}   # peer -> Ticks der letzten Drehung
+
+## Ein Einsatz. Der Server zieht ihn ab, würfelt das Feld und bucht den Gewinn
+## sofort — das Rad beim Spieler dreht nur noch dorthin. Kein Timing, kein
+## Einfluss des Spielers, und wer mitten in der Drehung beendet, hat schon bezahlt.
+@rpc("any_peer", "reliable", "call_local")
+func net_gluecksrad_setzen(einsatz: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	if not _schiessen_bezahlt.has(s) or not GLUECK_EINSAETZE.has(einsatz):
+		return
+	var bude: NodePath = _schiessen_bezahlt[s]
+	var stand := get_node_or_null(bude) if not bude.is_empty() else null
+	if stand == null or not "glueckspiel" in stand:
+		return
+	var jetzt := Time.get_ticks_msec()
+	if jetzt - int(_glueck_zuletzt.get(s, -GLUECK_PAUSE_MS)) < GLUECK_PAUSE_MS:
+		return
+	# Nur mit echtem Guthaben — kein Zocken auf Dispo
+	if Game.money < einsatz:
+		_fehler("MSG_NO_MONEY", ["WORLD_KIRMES_SPIEL", _eur(einsatz)])
+		return
+	_glueck_zuletzt[s] = jetzt
+	var feld := randi() % GLUECK_FELDER.size()
+	var gewinn := einsatz * int(GLUECK_FELDER[feld])
+	Game.add_money(gewinn - einsatz)
+	_stats.gluecksrad_einsatz = int(_stats.get("gluecksrad_einsatz", 0)) + einsatz
+	_stats.gluecksrad_gewinn = int(_stats.get("gluecksrad_gewinn", 0)) + gewinn
+	_broadcast_meta()   # speichert sofort — Neuladen macht keinen Verlust rückgängig
+	if s == multiplayer.get_unique_id():
+		_net_gluecksrad_ergebnis(bude, feld, einsatz, gewinn)
+	else:
+		_net_gluecksrad_ergebnis.rpc_id(s, bude, feld, einsatz, gewinn)
+
+@rpc("authority", "reliable", "call_local")
+func _net_gluecksrad_ergebnis(bude: NodePath, feld: int, einsatz: int, gewinn: int) -> void:
+	var stand := get_node_or_null(bude)
+	if stand and stand.has_method("drehen_auf"):
+		stand.drehen_auf(feld, einsatz, gewinn)
 
 ## Bei allen: Budenbesitzer geht zur Kasse (an) oder zurück hinter die Theke.
 @rpc("authority", "reliable", "call_local")

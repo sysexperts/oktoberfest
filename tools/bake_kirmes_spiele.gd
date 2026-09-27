@@ -620,7 +620,9 @@ func _entenangeln() -> Node3D:
 
 # ------------------------------------------------------------------ Glücksrad
 ## Feldwerte im Uhrzeigersinn ab oben — muss zu scripts/kirmes/gluecksrad.gd (WERTE) passen
-const RAD_WERTE := [1, 2, 0, 1, 5, 0, 1, 2, 10, 0, 1, 3, 0, 2, 1, 0]
+## Glücksspiel: Faktor auf den Einsatz (0 = verloren, 1 = zurück). 9×0, 3×1, 2×2,
+## 1×3, 1×5 → im Schnitt 15/16 des Einsatzes zurück, die Bude gewinnt auf Dauer.
+const RAD_WERTE := [0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 5, 0, 1, 0, 0]
 
 ## Bude mit großem Rad an der Rückwand. Rad = Gruppe „Rad“ (dreht um lokal Z),
 ## Feld k liegt bei Winkel k·22,5° im Uhrzeigersinn von oben.
@@ -676,8 +678,8 @@ func _gluecksrad() -> Node3D:
 		var wert: int = RAD_WERTE[k]
 		_prisma(rad, "Feld%d" % k, Vector3(2.0 * radius * tan(feld / 2.0) + 0.01, radius, 0.03), d * radius * 0.5 + Vector3(0, 0, 0.045), farben[wert], Vector3(0, 0, rad_to_deg(PI - a)))
 		var l := Label3D.new()
-		l.text = str(wert)
-		l.font_size = 72
+		l.text = "0" if wert == 0 else "×%d" % wert
+		l.font_size = 64
 		l.pixel_size = 0.004
 		l.outline_size = 14
 		l.modulate = Color(0.1, 0.06, 0.02) if wert != 5 and wert != 10 else Color(1, 1, 1)
