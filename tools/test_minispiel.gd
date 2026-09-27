@@ -304,6 +304,24 @@ class Lauf extends Node:
 		for i in 5:
 			await get_tree().process_frame
 		Schuss.speichern(get_viewport(), dir + "/spiel_gluecksrad_blick.png")
+		# Show: ×5 erzwingen (nur Anzeige) und mitten in der Feier fotografieren
+		while bude._zustand != bude.WARTET:
+			await get_tree().process_frame
+		bude.drehen_auf(bude.WERTE.find(50), 100, 500)
+		while bude._zustand != bude.ZEIGT:
+			await get_tree().process_frame
+		for i in 25:
+			await get_tree().process_frame
+		Schuss.speichern(get_viewport(), dir + "/spiel_gluecksrad_jackpot.png")
+		# Beinahe-Treffer: Feld neben dem ×5 muss wackeln
+		while bude._zustand != bude.WARTET:
+			await get_tree().process_frame
+		bude.drehen_auf(bude.WERTE.find(50) + 1, 100, 0)
+		var gewackelt := false
+		while bude._zustand != bude.ZEIGT:
+			gewackelt = gewackelt or bude._zustand == bude.WACKELT
+			await get_tree().process_frame
+		print("  Beinahe-Treffer wackelt: %s, Feld danach: %d" % [str(gewackelt), bude.feld_oben()])
 		bude._beenden()
 		var kamera := Camera3D.new()
 		gm.add_child(kamera)

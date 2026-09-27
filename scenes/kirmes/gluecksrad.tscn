@@ -5,6 +5,7 @@
 [ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="3_theme"]
 [ext_resource type="Script" path="res://scripts/kirmes/budenbesitzer.gd" id="4_besitzer"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="5_figur"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/geld.svg" id="6_geld"]
 
 [sub_resource type="StyleBoxFlat" id="InfoFlaeche"]
 bg_color = Color(0.05, 0.04, 0.032, 0.82)
@@ -17,6 +18,19 @@ content_margin_top = 10.0
 content_margin_right = 18.0
 content_margin_bottom = 10.0
 
+[sub_resource type="StandardMaterial3D" id="KonfettiStoff"]
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="QuadMesh" id="KonfettiBlatt"]
+material = SubResource("KonfettiStoff")
+size = Vector2(0.11, 0.065)
+
+[sub_resource type="Gradient" id="KonfettiFarben"]
+offsets = PackedFloat32Array(0, 0.25, 0.5, 0.75, 1)
+colors = PackedColorArray(1, 0.84, 0.2, 1, 0.9, 0.2, 0.25, 1, 0.25, 0.55, 0.95, 1, 0.35, 0.8, 0.35, 1, 1, 1, 1, 1)
+
 [node name="Gluecksrad" type="Node3D"]
 script = ExtResource("1_spiel")
 
@@ -27,6 +41,26 @@ script = ExtResource("4_besitzer")
 figur_nr = 5
 
 [node name="Model" parent="Besitzer" instance=ExtResource("5_figur")]
+
+[node name="Konfetti" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 220
+lifetime = 2.2
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("KonfettiBlatt")
+emission_shape = 3
+emission_box_extents = Vector3(1.2, 0.3, 0.2)
+direction = Vector3(0, 1, 0.6)
+spread = 60.0
+initial_velocity_min = 2.5
+initial_velocity_max = 4.5
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+gravity = Vector3(0, -3, 0)
+damping_min = 0.6
+damping_max = 1.2
+color_initial_ramp = SubResource("KonfettiFarben")
 
 [node name="Anzeige" type="CanvasLayer" parent="."]
 layer = 5
@@ -109,3 +143,11 @@ custom_minimum_size = Vector2(140, 72)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "1.000 €"
+
+[node name="Muenze" type="TextureRect" parent="Anzeige"]
+visible = false
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("6_geld")
+expand_mode = 1
