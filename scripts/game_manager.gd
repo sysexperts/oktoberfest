@@ -1975,7 +1975,9 @@ func _spawn_artists() -> void:
 	# Künstler zur Publikumsseite drehen (Bühnen-Vorderseite = lokales +Z)
 	var fwd: Vector3 = (stages[0] as Node3D).global_transform.basis.z
 	var yaw := atan2(-fwd.x, -fwd.z)
-	# Ohne Buchung steht trotzdem einer auf der Bühne und tanzt
+	# Ohne Buchung bleibt die Bühne leer — erst ab dem Straßenmusiker steht jemand oben
+	if _artist_tier <= 0:
+		return
 	var n: int = mini(int(ARTIST_COUNT.get(_artist_tier, 1)), pts.size())
 	for i in n:
 		_add_artist.rpc(i, pts[i], _artist_tier, yaw)

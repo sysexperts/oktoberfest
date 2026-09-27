@@ -6,6 +6,24 @@
 [sub_resource type="BoxShape3D" id="PlatformCol"]
 size = Vector3(8, 0.8, 4)
 
+[sub_resource type="CylinderMesh" id="Kegel"]
+top_radius = 0.05
+bottom_radius = 0.75
+height = 10.0
+radial_segments = 20
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="StandardMaterial3D" id="KegelStoff"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+depth_draw_mode = 2
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.1)
+disable_receive_shadows = true
+
 [node name="Buehne" type="Node3D"]
 script = ExtResource("1_script")
 
@@ -60,3 +78,96 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0.42, 0.9)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("PlatformCol")
+
+[node name="Strahler" type="Node3D" parent="."]
+visible = false
+
+[node name="S1" type="Node3D" parent="Strahler"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -3.5, 4.4, -1.2)
+
+[node name="Licht" type="SpotLight3D" parent="Strahler/S1"]
+light_energy = 6.0
+shadow_enabled = false
+spot_range = 16.0
+spot_angle = 9.0
+
+[node name="Kegel" type="MeshInstance3D" parent="Strahler/S1"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+cast_shadow = 0
+mesh = SubResource("Kegel")
+surface_material_override/0 = SubResource("KegelStoff")
+
+[node name="S2" type="Node3D" parent="Strahler"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -2.1, 4.4, -1.2)
+
+[node name="Licht" type="SpotLight3D" parent="Strahler/S2"]
+light_energy = 6.0
+shadow_enabled = false
+spot_range = 16.0
+spot_angle = 9.0
+
+[node name="Kegel" type="MeshInstance3D" parent="Strahler/S2"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+cast_shadow = 0
+mesh = SubResource("Kegel")
+surface_material_override/0 = SubResource("KegelStoff")
+
+[node name="S3" type="Node3D" parent="Strahler"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -0.7, 4.4, -1.2)
+
+[node name="Licht" type="SpotLight3D" parent="Strahler/S3"]
+light_energy = 6.0
+shadow_enabled = false
+spot_range = 16.0
+spot_angle = 9.0
+
+[node name="Kegel" type="MeshInstance3D" parent="Strahler/S3"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+cast_shadow = 0
+mesh = SubResource("Kegel")
+surface_material_override/0 = SubResource("KegelStoff")
+
+[node name="S4" type="Node3D" parent="Strahler"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.7, 4.4, -1.2)
+
+[node name="Licht" type="SpotLight3D" parent="Strahler/S4"]
+light_energy = 6.0
+shadow_enabled = false
+spot_range = 16.0
+spot_angle = 9.0
+
+[node name="Kegel" type="MeshInstance3D" parent="Strahler/S4"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+cast_shadow = 0
+mesh = SubResource("Kegel")
+surface_material_override/0 = SubResource("KegelStoff")
+
+[node name="S5" type="Node3D" parent="Strahler"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.1, 4.4, -1.2)
+
+[node name="Licht" type="SpotLight3D" parent="Strahler/S5"]
+light_energy = 6.0
+shadow_enabled = false
+spot_range = 16.0
+spot_angle = 9.0
+
+[node name="Kegel" type="MeshInstance3D" parent="Strahler/S5"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+cast_shadow = 0
+mesh = SubResource("Kegel")
+surface_material_override/0 = SubResource("KegelStoff")
+
+[node name="S6" type="Node3D" parent="Strahler"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 3.5, 4.4, -1.2)
+
+[node name="Licht" type="SpotLight3D" parent="Strahler/S6"]
+light_energy = 6.0
+shadow_enabled = false
+spot_range = 16.0
+spot_angle = 9.0
+
+[node name="Kegel" type="MeshInstance3D" parent="Strahler/S6"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+cast_shadow = 0
+mesh = SubResource("Kegel")
+surface_material_override/0 = SubResource("KegelStoff")

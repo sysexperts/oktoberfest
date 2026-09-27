@@ -65,6 +65,9 @@ class Lauf extends Node:
 		{"name": "spiel_kueche", "ort": Vector3(3.4, 1.8, -9.2), "ziel": Vector3(5.6, 1.0, -12.2),
 			"uhr": 20.6, "fov": 55.0, "aufbau": "zelt_voll",
 			"personal": [[1, Vector3(5.0, 0.1, -11.9), PI, 1], [1, Vector3(6.4, 0.1, -11.8), PI * 1.1, 0]]},
+		# Bühne mit Konzertstrahlern
+		{"name": "buehne_show", "ort": Vector3(1.5, 2.0, 2.0), "ziel": Vector3(10.0, 2.6, 2.0),
+			"uhr": 21.2, "fov": 62.0, "aufbau": "zelt_voll"},
 		# Werbebild (Kapseln): Heldengruppe nah vor der Kamera, fliegende Krüge
 		{"name": "keyart", "ort": Vector3(0.0, 1.45, 5.6), "ziel": Vector3(0.0, 1.45, 2.8),
 			"uhr": 21.0, "fov": 54.0, "aufbau": "zelt_voll", "dof": true, "dof_ab": 7.0, "helden": true},
@@ -213,6 +216,8 @@ class Lauf extends Node:
 				gm._artist_tier = 3
 				gm._remove_artists()
 				gm._spawn_artists()
+				for b in get_tree().get_nodes_in_group("stage"):
+					b.set_active(true)
 				# Ohne Haengelaternen — die brauchen einen Balken ueber sich.
 				_deko_setzen(["lichtergirlande", "lichtergirlande", "kronleuchter", "kronleuchter",
 					"kronleuchter", "banner", "riesenbrezel"],

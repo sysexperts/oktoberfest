@@ -30,6 +30,8 @@ var _vor := Vector3.BACK
 var _links := Vector3.RIGHT
 var _grund_drehung := PI
 var _kinder := {}
+## Figur tanzt mit ihrer eigenen Animation (statt der gebauten Pose unten)
+var _anim_tanz := false
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -44,9 +46,21 @@ const GLIEDER := {
 
 func _ready() -> void:
 	add_to_group("artist")
-	_figur = Figuren.einsetzen(self, Figuren.fuer_id(String(name).hash()))
+	# Nur Figuren mit echter Tanzanimation auf die Bühne — der Reihe nach probieren
+	var start := posmod(String(name).hash(), Figuren.ALLE.size())
+	for k in Figuren.ALLE.size():
+		_figur = Figuren.einsetzen(self, Figuren.ALLE[(start + k) % Figuren.ALLE.size()])
+		if _figur.tanzen(randf_range(0.95, 1.05)):
+			_anim_tanz = true
+			break
 	_model = _figur
 	_saenger = String(name).ends_with("0")
+	if _anim_tanz:
+		# Die Tanzanimation bewegt die Hände frei — ein Mikrofon hinge in der Luft
+		_mikro.visible = false
+		# Figuren schauen im Modell nach +Z, der Künstlerplatz zeigt mit -Z zum Publikum
+		_figur.rotation.y = PI
+		return
 	_sk = _figur.skelett
 	if _sk == null:
 		if not _figur.tanzen(randf_range(0.9, 1.1)):
@@ -115,7 +129,7 @@ func _process(delta: float) -> void:
 	if _flieht:
 		_weglaufen(delta)
 		return
-	if _sk == null or _model == null:
+	if _anim_tanz or _sk == null or _model == null:
 		return
 	var schlag := float(Time.get_ticks_msec()) / 1000.0 * bpm / 60.0
 	var figur := int(schlag / float(schlaege_je_figur)) % 4
