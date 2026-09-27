@@ -620,9 +620,9 @@ func _entenangeln() -> Node3D:
 
 # ------------------------------------------------------------------ Glücksrad
 ## Feldwerte im Uhrzeigersinn ab oben — muss zu scripts/kirmes/gluecksrad.gd (WERTE) passen
-## Glücksspiel: Faktor auf den Einsatz (0 = verloren, 1 = zurück). 9×0, 3×1, 2×2,
-## 1×3, 1×5 → im Schnitt 15/16 des Einsatzes zurück, die Bude gewinnt auf Dauer.
-const RAD_WERTE := [0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 5, 0, 1, 0, 0]
+## Glücksspiel: Faktor ×10 auf den Einsatz (0 = verloren, 10 = zurück, 15 = ×1,5).
+## 7×0, 5×1, 1×1,5, 2×2, 1×5 → im Schnitt 96,9 % zurück, die Bude gewinnt knapp.
+const RAD_WERTE := [0, 20, 10, 0, 15, 10, 0, 50, 0, 10, 20, 0, 10, 0, 10, 0]
 
 ## Bude mit großem Rad an der Rückwand. Rad = Gruppe „Rad“ (dreht um lokal Z),
 ## Feld k liegt bei Winkel k·22,5° im Uhrzeigersinn von oben.
@@ -670,7 +670,7 @@ func _gluecksrad() -> Node3D:
 	_zyl(halter, "Achse", 0.06, 0.06, 0.25, Vector3(0, 0, 0.02), m.messing, Vector3(90, 0, 0), 12)
 	var rad := _gruppe(r, "Rad", mitte + Vector3(0, 0, 0.08))
 	_zyl(rad, "Scheibe", radius + 0.05, radius + 0.05, 0.06, Vector3.ZERO, m.holz_dunkel, Vector3(90, 0, 0), 32)
-	var farben := {0: m.weiss, 1: m.ente, 2: m.huegel, 3: m.orange_lack, 5: m.rot, 10: m.gold}
+	var farben := {0: m.weiss, 10: m.ente, 15: m.orange_lack, 20: m.huegel, 50: m.rot}
 	var feld := TAU / 16.0
 	for k in 16:
 		var a := k * feld
@@ -678,12 +678,12 @@ func _gluecksrad() -> Node3D:
 		var wert: int = RAD_WERTE[k]
 		_prisma(rad, "Feld%d" % k, Vector3(2.0 * radius * tan(feld / 2.0) + 0.01, radius, 0.03), d * radius * 0.5 + Vector3(0, 0, 0.045), farben[wert], Vector3(0, 0, rad_to_deg(PI - a)))
 		var l := Label3D.new()
-		l.text = "0" if wert == 0 else "×%d" % wert
-		l.font_size = 64
+		l.text = "0" if wert == 0 else ("×%d" % (wert / 10) if wert % 10 == 0 else "×%d,%d" % [wert / 10, wert % 10])
+		l.font_size = 64 if wert % 10 == 0 else 46
 		l.pixel_size = 0.004
 		l.outline_size = 14
-		l.modulate = Color(0.1, 0.06, 0.02) if wert != 5 and wert != 10 else Color(1, 1, 1)
-		l.outline_modulate = Color(1, 1, 1, 0.6) if wert != 5 and wert != 10 else Color(0.2, 0.05, 0.02)
+		l.modulate = Color(0.1, 0.06, 0.02) if wert != 50 else Color(1, 1, 1)
+		l.outline_modulate = Color(1, 1, 1, 0.6) if wert != 50 else Color(0.2, 0.05, 0.02)
 		l.position = d * radius * 0.78 + Vector3(0, 0, 0.07)
 		l.rotation.z = -a
 		_haengen(rad, l, "Zahl%d" % k)

@@ -20,9 +20,9 @@ const Texte := preload("res://scripts/ui/texte.gd")
 
 var glueckspiel := true
 
-## Faktor je Feld im Uhrzeigersinn ab oben (tools/bake_kirmes_spiele.gd, RAD_WERTE;
+## Faktor ×10 je Feld im Uhrzeigersinn ab oben (tools/bake_kirmes_spiele.gd, RAD_WERTE;
 ## GameManager.GLUECK_FELDER)
-const WERTE := [0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 5, 0, 1, 0, 0]
+const WERTE := [0, 20, 10, 0, 15, 10, 0, 50, 0, 10, 20, 0, 10, 0, 10, 0]
 const FELD := TAU / 16.0
 const EINSAETZE := [1, 10, 100, 1000]
 
@@ -145,7 +145,8 @@ func _ergebnis_zeigen() -> void:
 	_zeigen = 1.6
 	var faktor: int = WERTE[feld_oben()]
 	if _gewinn > _einsatz:
-		_ergebnis.text = tr("GLUECKSRAD_GEWINN") % [faktor, Texte.euro(_gewinn - _einsatz)]
+		var f := str(faktor / 10) if faktor % 10 == 0 else "%d,%d" % [faktor / 10, faktor % 10]
+		_ergebnis.text = tr("GLUECKSRAD_GEWINN") % [f, Texte.euro(_gewinn - _einsatz)]
 	elif _gewinn == _einsatz:
 		_ergebnis.text = tr("GLUECKSRAD_ZURUECK")
 	else:
@@ -154,7 +155,7 @@ func _ergebnis_zeigen() -> void:
 	_knoepfe_frei(true)
 	var sfx = get_tree().current_scene.get_node_or_null("Sfx")
 	if sfx:
-		if faktor >= 3:
+		if faktor >= 20:
 			sfx.play("ding")
 			sfx.play_oder("cheer", "pop", -6.0)
 		else:

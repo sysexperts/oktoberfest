@@ -289,7 +289,7 @@ class Lauf extends Node:
 			gm._glueck_zuletzt.clear()
 			gm.net_gluecksrad_setzen(10)
 		var quote := 100.0 * float(Game.money - vorher + 10 * n) / float(10 * n)
-		print("  Auszahlungsquote nach %d Drehungen: %.1f %% (Soll 93,75 %%)" % [n, quote])
+		print("  Auszahlungsquote nach %d Drehungen: %.1f %% (Soll 96,9 %%)" % [n, quote])
 		# Kein Geld: 1.000 € dürfen nicht gehen
 		Game.money = 500
 		gm._glueck_zuletzt.clear()

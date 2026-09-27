@@ -2115,10 +2115,11 @@ func net_schiessen_ende(treffer: int) -> void:
 	_schiess_meldung(s, "MSG_KIRMES_NIETE", [treffer], 0)
 
 # ================================================= Glücksrad (reines Glücksspiel)
-## Faktor je Feld — muss zu tools/bake_kirmes_spiele.gd (RAD_WERTE) und
-## scripts/kirmes/gluecksrad.gd (WERTE) passen. 9×0, 3×1, 2×2, 1×3, 1×5:
-## Erwartung 15/16 des Einsatzes, auf Dauer verliert der Spieler 6,25 %.
-const GLUECK_FELDER := [0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 5, 0, 1, 0, 0]
+## Faktor ×10 je Feld — muss zu tools/bake_kirmes_spiele.gd (RAD_WERTE) und
+## scripts/kirmes/gluecksrad.gd (WERTE) passen. 7×0, 5×1, 1×1,5, 2×2, 1×5:
+## Erwartung 96,9 % des Einsatzes. Gewinn wird abgerundet (1 € × 1,5 = 1 €),
+## sonst wäre der kleinste Einsatz ohne Verlust.
+const GLUECK_FELDER := [0, 20, 10, 0, 15, 10, 0, 50, 0, 10, 20, 0, 10, 0, 10, 0]
 const GLUECK_EINSAETZE := [1, 10, 100, 1000]
 ## Mindestabstand zwischen zwei Drehungen je Spieler (so lange dreht das Rad)
 const GLUECK_PAUSE_MS := 3500
@@ -2149,7 +2150,7 @@ func net_gluecksrad_setzen(einsatz: int) -> void:
 		return
 	_glueck_zuletzt[s] = jetzt
 	var feld := randi() % GLUECK_FELDER.size()
-	var gewinn := einsatz * int(GLUECK_FELDER[feld])
+	var gewinn := einsatz * int(GLUECK_FELDER[feld]) / 10
 	Game.add_money(gewinn - einsatz)
 	_stats.gluecksrad_einsatz = int(_stats.get("gluecksrad_einsatz", 0)) + einsatz
 	_stats.gluecksrad_gewinn = int(_stats.get("gluecksrad_gewinn", 0)) + gewinn
