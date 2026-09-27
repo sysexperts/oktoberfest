@@ -61,10 +61,12 @@ func _strahler_bewegen(delta: float) -> void:
 	_band_pruef -= delta
 	if _band_pruef <= 0.0:
 		_band_pruef = 0.5
-		_band_da = false
+		# Strahler laufen, solange das Zelt offen ist — nur nicht, wenn die Band
+		# gerade vor einer Schlägerei geflohen ist
+		_band_da = true
 		for a in get_tree().get_nodes_in_group("artist"):
-			if not a.has_method("flieht") or not a.flieht():
-				_band_da = true
+			if a.has_method("flieht") and a.flieht():
+				_band_da = false
 				break
 		($Strahler as Node3D).visible = _band_da and _active
 	if not _band_da:

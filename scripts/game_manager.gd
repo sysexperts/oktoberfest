@@ -4891,6 +4891,10 @@ func _update_tanz(delta: float) -> void:
 		var belegt: Dictionary = belegt_je_tisch.get(ti, {})
 		if belegt.size() >= tanz_max(ti) or randf() > 0.35 or ti >= _beertables.size():
 			continue
+		# Auf der Bühne tanzt nur die gebuchte Band — nie ein Gast auf einem Tisch,
+		# der (z. B. aus einem alten Spielstand) unter oder an der Bühne steht
+		if auf_buehne((_beertables[ti] as Node3D).global_position):
+			continue
 		var platz := -1
 		for i in mini(tanz_max(ti), TANZ_PLAETZE.size()):
 			if not belegt.has(i):
@@ -4932,6 +4936,14 @@ func _update_tanz(delta: float) -> void:
 				_guest_sim[id] = g
 				break
 
+## Liegt der Punkt auf der Bühnenfläche (mit etwas Rand)?
+func auf_buehne(p: Vector3) -> bool:
+	for b in get_tree().get_nodes_in_group("stage"):
+		var l: Vector3 = (b as Node3D).global_transform.affine_inverse() * p
+		if absf(l.x) < 4.6 and absf(l.z) < 2.8:
+			return true
+	return false
+
 ## Tanzplätze vor der Bühne (zwei Reihen), ohne die, an denen ein Tisch steht.
 func buehnen_tanzplaetze() -> Array:
 	var stages := get_tree().get_nodes_in_group("stage")
@@ -4966,7 +4978,7 @@ func buehnen_tanzplaetze() -> Array:
 				if d.length() < 1.9:
 					frei = false
 					break
-			if frei:
+			if frei and not auf_buehne(p):
 				out.append(Vector3(p.x, 0.1, p.z))
 	return out
 
