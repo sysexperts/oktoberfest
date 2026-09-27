@@ -663,7 +663,7 @@ ENTEN_ANZEIGE,"Enten: %d von %d · Punkte: %d · Zeit: %d s · Maus führt die A
 ENTEN_ZEIT,"Zeit — gelb 1, blau 2, rosa 3 Punkte","Time — yellow 1, blue 2, pink 3 points","Süre — sarı 1, mavi 2, pembe 3 puan"
 HINT_GLUECKSRAD,{interact} Glücksrad (Einsatz 1–1.000 €),{interact} Wheel of fortune (bet €1–1000),{interact} Şans çarkı (bahis 1–1.000 €)
 GLUECKSRAD_ANZEIGE,"Bestes Feld: %d · Drehungen: %d · Linksklick bremst — das Rad läuft noch gut eine Runde nach, Esc beendet","Best field: %d · Spins: %d · Left click brakes — the wheel still turns a good round, Esc quits","En iyi alan: %d · Çevirme: %d · Sol tık fren yapar — çark bir tur daha döner, Esc çıkış"
-GLUECKSRAD_SETZEN,"Einsatz wählen (1–4) · ×1,5, ×2 oder ×5 gewinnt, 0 verliert · Esc beendet","Pick your bet (1–4) · ×1.5, ×2 or ×5 wins, 0 loses · Esc quits","Bahsini seç (1–4) · ×1,5, ×2 veya ×5 kazanır, 0 kaybeder · Esc çıkış"
+GLUECKSRAD_SETZEN,"Einsatz wählen (1–4) · ×2 oder ×5 gewinnt, 0 verliert · Esc beendet","Pick your bet (1–4) · ×2 or ×5 wins, 0 loses · Esc quits","Bahsini seç (1–4) · ×2 veya ×5 kazanır, 0 kaybeder · Esc çıkış"
 GLUECKSRAD_GEWINN,×%s  +%s,×%s  +%s,×%s  +%s
 GLUECKSRAD_ZURUECK,Einsatz zurück,Bet returned,Bahis geri
 GLUECKSRAD_VERLOREN,Niete  −%s,No luck  −%s,Boş  −%s

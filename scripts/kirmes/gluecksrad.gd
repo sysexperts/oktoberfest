@@ -22,7 +22,7 @@ var glueckspiel := true
 
 ## Faktor ×10 je Feld im Uhrzeigersinn ab oben (tools/bake_kirmes_spiele.gd, RAD_WERTE;
 ## GameManager.GLUECK_FELDER)
-const WERTE := [0, 20, 10, 0, 15, 10, 0, 50, 0, 10, 20, 0, 10, 0, 10, 0]
+const WERTE := [0, 20, 0, 10, 0, 20, 0, 50, 0, 20, 0, 10, 0, 20, 0, 0]
 const FELD := TAU / 16.0
 const EINSAETZE := [1, 10, 100, 1000]
 

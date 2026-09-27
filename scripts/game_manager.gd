@@ -2116,10 +2116,9 @@ func net_schiessen_ende(treffer: int) -> void:
 
 # ================================================= Glücksrad (reines Glücksspiel)
 ## Faktor ×10 je Feld — muss zu tools/bake_kirmes_spiele.gd (RAD_WERTE) und
-## scripts/kirmes/gluecksrad.gd (WERTE) passen. 7×0, 5×1, 1×1,5, 2×2, 1×5:
-## Erwartung 96,9 % des Einsatzes. Gewinn wird abgerundet (1 € × 1,5 = 1 €),
-## sonst wäre der kleinste Einsatz ohne Verlust.
-const GLUECK_FELDER := [0, 20, 10, 0, 15, 10, 0, 50, 0, 10, 20, 0, 10, 0, 10, 0]
+## scripts/kirmes/gluecksrad.gd (WERTE) passen. 9×0, 2×1, 4×2, 1×5:
+## Erwartung 93,75 % des Einsatzes, fast jede dritte Drehung gewinnt.
+const GLUECK_FELDER := [0, 20, 0, 10, 0, 20, 0, 50, 0, 20, 0, 10, 0, 20, 0, 0]
 const GLUECK_EINSAETZE := [1, 10, 100, 1000]
 ## Mindestabstand zwischen zwei Drehungen je Spieler (so lange dreht das Rad)
 const GLUECK_PAUSE_MS := 3500

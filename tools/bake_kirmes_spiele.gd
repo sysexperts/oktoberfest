@@ -621,8 +621,8 @@ func _entenangeln() -> Node3D:
 # ------------------------------------------------------------------ Glücksrad
 ## Feldwerte im Uhrzeigersinn ab oben — muss zu scripts/kirmes/gluecksrad.gd (WERTE) passen
 ## Glücksspiel: Faktor ×10 auf den Einsatz (0 = verloren, 10 = zurück, 15 = ×1,5).
-## 7×0, 5×1, 1×1,5, 2×2, 1×5 → im Schnitt 96,9 % zurück, die Bude gewinnt knapp.
-const RAD_WERTE := [0, 20, 10, 0, 15, 10, 0, 50, 0, 10, 20, 0, 10, 0, 10, 0]
+## 9×0, 2×1, 4×2, 1×5 → im Schnitt 93,75 % zurück; oft ×2, damit man zwischendurch im Plus ist.
+const RAD_WERTE := [0, 20, 0, 10, 0, 20, 0, 50, 0, 20, 0, 10, 0, 20, 0, 0]
 
 ## Bude mit großem Rad an der Rückwand. Rad = Gruppe „Rad“ (dreht um lokal Z),
 ## Feld k liegt bei Winkel k·22,5° im Uhrzeigersinn von oben.
