@@ -2,27 +2,28 @@
 
 [ext_resource type="Script" path="res://scripts/stage.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/models/buehne.glb" id="3_modell"]
+[ext_resource type="Shader" path="res://assets/shader/lichtkegel.gdshader" id="4_kegel"]
 
 [sub_resource type="BoxShape3D" id="PlatformCol"]
 size = Vector3(8, 0.8, 4)
 
 [sub_resource type="CylinderMesh" id="Kegel"]
 top_radius = 0.05
-bottom_radius = 0.75
+bottom_radius = 0.9
 height = 10.0
 radial_segments = 20
-rings = 1
+rings = 8
 cap_top = false
 cap_bottom = false
 
-[sub_resource type="StandardMaterial3D" id="KegelStoff"]
-transparency = 1
-blend_mode = 1
-cull_mode = 2
-depth_draw_mode = 2
-shading_mode = 0
-albedo_color = Color(1, 1, 1, 0.1)
-disable_receive_shadows = true
+[sub_resource type="ShaderMaterial" id="KegelStoff"]
+render_priority = 1
+shader = ExtResource("4_kegel")
+shader_parameter/farbe = Color(1, 1, 1, 1)
+shader_parameter/staerke = 0.35
+shader_parameter/auslauf = 1.8
+shader_parameter/rand_weich = 2.2
+shader_parameter/boden_weich = 0.6
 
 [node name="Buehne" type="Node3D"]
 script = ExtResource("1_script")

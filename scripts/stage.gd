@@ -15,7 +15,7 @@ var _active := true
 ## Konzertstrahler (Knoten "Strahler"): Lichtkegel, die schwenken — nur solange
 ## jemand auf der Bühne steht
 var _strahler: Array[Node3D] = []
-var _kegel_stoff: Array[StandardMaterial3D] = []
+var _kegel_stoff: Array[ShaderMaterial] = []
 var _band_da := false
 var _band_pruef := 0.0
 
@@ -36,7 +36,7 @@ func _ready() -> void:
 			_strahler.append(c)
 			# Jeder Kegel bekommt ein eigenes Material, damit er eigene Farben hat
 			var kegel := c.get_node_or_null("Kegel") as MeshInstance3D
-			var stoff := (kegel.get_surface_override_material(0) as StandardMaterial3D).duplicate() as StandardMaterial3D
+			var stoff := (kegel.get_surface_override_material(0) as ShaderMaterial).duplicate() as ShaderMaterial
 			kegel.set_surface_override_material(0, stoff)
 			_kegel_stoff.append(stoff)
 
@@ -78,7 +78,7 @@ func _strahler_bewegen(delta: float) -> void:
 		var idx: int = int(phase) % COLORS.size()
 		var farbe := (COLORS[idx] as Color).lerp(COLORS[(idx + 1) % COLORS.size()] as Color, phase - floor(phase))
 		(s.get_node("Licht") as SpotLight3D).light_color = farbe
-		_kegel_stoff[i].albedo_color = Color(farbe.r, farbe.g, farbe.b, 0.05 + 0.025 * sin(_t * 6.0 + i))
+		_kegel_stoff[i].set_shader_parameter("farbe", Color(farbe.r, farbe.g, farbe.b, 0.8 + 0.2 * sin(_t * 6.0 + i)))
 
 ## Weltpositionen der Künstlerplätze.
 func artist_points() -> Array:
