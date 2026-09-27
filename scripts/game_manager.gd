@@ -646,6 +646,7 @@ func _ready() -> void:
 			_spawn_index_by_peer[1] = 0
 			_next_spawn = 1
 			_add_player(1, 0)
+		_schicht_fortsetzen()
 		_broadcast_meta()
 		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 		# Onkel Sepps Brief läuft nicht mehr als Einleitung am Kirmestor: die hing
@@ -655,6 +656,60 @@ func _ready() -> void:
 		# (scripts/npc_festleiter.gd).
 	else:
 		_anmelden_beim_server()
+
+# ================================================= Weiterspielen
+## Beim Laden gemerkt, nach dem Erzeugen der Spieler angewendet
+var _fortsetzen := {}
+var _fortsetzen_ort := {}
+
+## Laufende Schicht für den Spielstand. Leer außerhalb der Schicht.
+func _schicht_sichern() -> Dictionary:
+	if _phase != Phase.SHIFT:
+		return {}
+	return {"zeit": _phase_time, "zelt_offen": _zelt_offen, "ereignis": _ereignis,
+		"kuenstler": _artist_tier, "bedient": _served, "verpasst": _missed,
+		"einnahmen": _last_earn, "hygiene": _hygiene, "pop_verlust": _pop_verlust_heute}
+
+## Standort und Blickrichtung des Hosts (Solo: der Spieler selbst)
+func _host_standort() -> Dictionary:
+	var p: Node3D = _players_nodes.get(1)
+	if p == null or not is_instance_valid(p):
+		return {}
+	return {"x": p.global_position.x, "y": p.global_position.y, "z": p.global_position.z,
+		"r": p.rotation.y}
+
+## Nach dem Laden: mitten in der Schicht weitermachen statt am nächsten Morgen,
+## und dort stehen, wo man gespeichert hat. Die morgendlichen Abläufe
+## (_start_shift: Bankrate, Personal, Ereignis würfeln …) laufen dabei NICHT
+## noch einmal — die sind im Spielstand schon enthalten.
+func _schicht_fortsetzen() -> void:
+	if not _fortsetzen.is_empty():
+		_phase = Phase.SHIFT
+		_phase_time = clampf(float(_fortsetzen.get("zeit", SHIFT_TIME)), 1.0, SHIFT_TIME)
+		_zelt_offen = bool(_fortsetzen.get("zelt_offen", false))
+		_ereignis = str(_fortsetzen.get("ereignis", ""))
+		_artist_tier = int(_fortsetzen.get("kuenstler", 0))
+		_served = int(_fortsetzen.get("bedient", 0))
+		_missed = int(_fortsetzen.get("verpasst", 0))
+		_last_earn = int(_fortsetzen.get("einnahmen", 0))
+		_hygiene = float(_fortsetzen.get("hygiene", 100.0))
+		_pop_verlust_heute = float(_fortsetzen.get("pop_verlust", 0.0))
+		_did_shift = true
+		_guest_spawn_timer = randf_range(ERSTE_GAESTE_MIN * 0.4, ERSTE_GAESTE_MAX * 0.4)
+		_rebuild_seats()
+		_spawn_artists()
+		_eroeffnung_anzeigen()
+		_apply_daylight(_clock_hour())
+		_hud.set_phase(true)
+		_hud.set_time(_clock_hour())
+	if not _fortsetzen_ort.is_empty():
+		var p: Node3D = _players_nodes.get(1)
+		if p and is_instance_valid(p):
+			p.global_position = Vector3(float(_fortsetzen_ort.get("x", 0.0)),
+				float(_fortsetzen_ort.get("y", 0.1)) + 0.05, float(_fortsetzen_ort.get("z", 0.0)))
+			p.rotation.y = float(_fortsetzen_ort.get("r", 0.0))
+	_fortsetzen = {}
+	_fortsetzen_ort = {}
 
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
@@ -915,6 +970,10 @@ func _save_game() -> void:
 		"schwierigkeit": _schwierigkeit,
 		"format": Net.SAVE_FORMAT,
 		"saved_at": int(Time.get_unix_time_from_system()),
+		# Weiterspielen genau dort, wo man aufgehört hat: laufende Schicht und
+		# Standort des Hosts (Koop-Gäste starten wie gewohnt am Wohnwagen)
+		"schicht": _schicht_sichern(),
+		"spieler": _host_standort(),
 	}
 	# Gespeichert wird bei jeder Zustandsänderung (_broadcast_meta) — also auch
 	# beim Schlafen, wenn der neue Tag beginnt.
@@ -953,6 +1012,8 @@ func _load_game() -> bool:
 		_stand_beiseite(pfad, "kaputt")
 		return false
 	var d: Dictionary = parsed
+	_fortsetzen = d.get("schicht", {}) if d.get("schicht", {}) is Dictionary else {}
+	_fortsetzen_ort = d.get("spieler", {}) if d.get("spieler", {}) is Dictionary else {}
 	if int(d.get("format", 0)) > Net.SAVE_FORMAT:
 		push_warning("Spielstand %s stammt aus einer neueren Version — nicht geladen." % pfad)
 		return false
@@ -4887,7 +4948,8 @@ func buehnen_tanzplaetze() -> Array:
 	# Versetzt statt in Reih und Glied: jede Reihe ist um eine halbe Lücke
 	# verschoben, dazu ein fester kleiner Versatz je Platz. Fest gerechnet und
 	# nicht gewürfelt, damit ein Platz beim nächsten Durchlauf derselbe bleibt.
-	var reihen := [2.7, 3.6, 4.6]
+	# Bühne ist 4 m tief (Kante 2 m vor der Mitte) plus Stufen — erste Reihe klar davor
+	var reihen := [3.6, 4.5, 5.5]
 	for r in reihen.size():
 		var reihe: float = reihen[r]
 		var schritt := 1.5

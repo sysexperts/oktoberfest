@@ -302,6 +302,28 @@ class Lauf extends Node:
 		_check("Zähler und Meilensteine im Spielstand", gespeichert is Dictionary
 			and (gespeichert.get("meilensteine", []) as Array).has("MASS_100")
 			and int(gespeichert.get("stats", {}).get("served", 0)) == 100, "")
+		print("  -- Weiterspielen mitten in der Schicht")
+		var phase_vorher = gm._phase
+		var zeit_vorher: float = gm._phase_time
+		var ich: Node3D = gm._players_nodes.get(1)
+		var ort_vorher := ich.global_position
+		gm._phase = gm.Phase.SHIFT
+		gm._phase_time = 123.0
+		gm._zelt_offen = true
+		ich.global_position = Vector3(3.0, 0.1, -4.0)
+		gm._save_game()
+		gm._phase = gm.Phase.INTERMISSION
+		gm._phase_time = 999.0
+		ich.global_position = Vector3(0, 0.1, 30)
+		gm._load_game()
+		gm._schicht_fortsetzen()
+		_check("Schicht und Uhrzeit zurück", gm._phase == gm.Phase.SHIFT and is_equal_approx(gm._phase_time, 123.0) and gm._zelt_offen,
+			"%s %.1f" % [str(gm._phase), gm._phase_time])
+		_check("Standort zurück", ich.global_position.distance_to(Vector3(3.0, 0.15, -4.0)) < 0.1, str(ich.global_position))
+		gm._phase = phase_vorher
+		gm._phase_time = zeit_vorher
+		ich.global_position = ort_vorher
+		gm._save_game()
 		hud.set_buero(gm._buero_state())
 		var ziele: Node = hud.get_node("%Festbuero").get_node("%ZieleListe")
 		_check("Reiter Ziele listet alle", ziele.get_child_count() == gm.Meilensteine.LISTE.size(), str(ziele.get_child_count()))
@@ -568,7 +590,6 @@ class Lauf extends Node:
 		_check("Zelt eröffnet, Fass verschwindet", gm._zelt_offen and eroeffnung != null and not eroeffnung.visible, "")
 		# Die Uhr läuft erst ab der Eröffnung: vorher darf sie nicht weiterlaufen
 		gm._zelt_offen = false
-		gm._zelt_wartet = 0.0
 		gm._phase_time = gm.SHIFT_TIME
 		var uhr_vorher: float = gm._clock_hour()
 		for i in 20:
@@ -580,10 +601,10 @@ class Lauf extends Node:
 		_check("nach der Eröffnung läuft die Uhr", gm._clock_hour() > uhr_vorher, "%.3f Uhr" % gm._clock_hour())
 		gm._zelt_offen = false
 		gm._nachts_geschlossen = true
-		gm._zelt_wartet = gm.AUTO_OEFFNEN_WARTEN
-		gm._shift_process(0.01)
-		_check("nach der Wartezeit öffnet das Zelt von selbst", gm._zelt_offen, "%.2f Uhr" % gm._clock_hour())
-		gm._zelt_wartet = 0.0
+		for i in 50:
+			gm._shift_process(5.0)
+		_check("das Zelt öffnet NIE von selbst (auch nach 250 s)", not gm._zelt_offen, "")
+		gm._zelt_offen = true
 		gm._phase_time = gm.SHIFT_TIME
 
 		print("  -- Ausgabe je Sorte, Bestellungen, Umriss, Lagerregale, Zelt-Etage (Test 13.09.)")
@@ -1450,7 +1471,7 @@ class Lauf extends Node:
 			Einstellungen.grafik = 0
 			Einstellungen.anwenden()
 			await _frames(2)
-			_check("Niedrig: 120 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 120
+			_check("Niedrig: 180 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 180
 				and not umgebung.ssao_enabled and not umgebung.glow_enabled, "")
 			_check("Niedrig: ein Drittel der Kirmeslichter", grafik.sichtbare_lichter() <= ceili(alle / 3.0),
 				"%d von %d" % [grafik.sichtbare_lichter(), alle])
