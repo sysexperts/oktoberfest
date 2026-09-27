@@ -5134,7 +5134,10 @@ func _end_shift(reason := 0) -> void:
 	Game.add_money(-rent - wages)
 	var goods := _goods_cost      # schon beim Bestellen bezahlt, hier nur ausgewiesen
 	var net_profit := _last_earn - rent - wages - goods - _interest_paid - _kredit_heute
-	net_report.rpc({
+	# Der Bericht geht erst ganz am Ende raus: Tagesziel, Huber-Wette und Bankrate
+	# werden danach noch gebucht und gehören mit in die Rechnung (Test 27.09.:
+	# 1.100 € nach Feierabend, am Ende 40 € — die Bankrate stand nirgends).
+	var bericht := {
 		"reason": reason, "closed_at": int(closed_at), "pop_penalty": pop_penalty, "day": _day,
 		"earn": _last_earn, "tips": _clean_tips, "rent": rent, "wages": wages, "goods": goods,
 		"interest": _interest_paid, "net": net_profit, "served": _served, "missed": _missed,
@@ -5145,7 +5148,7 @@ func _end_shift(reason := 0) -> void:
 		# für die Tipps in der Bilanz (Texte.tipps)
 		"toilet": _has_toilet, "kellner": _has_staff(ROLE_KELLNER), "zapfer": _has_staff(ROLE_ZAPFER),
 		"reinigung": _has_staff(ROLE_REINIGUNG), "ohne_ware": roundi(_ohne_ware_s), "pop": roundi(_popularity),
-	})
+	}
 	match reason:
 		1:
 			_melde("REPORT_END_COMPLAINTS", [], 1)
@@ -5173,14 +5176,22 @@ func _end_shift(reason := 0) -> void:
 	_rausgeworfen = 0
 	_complaints = 0
 	_left_guests = 0
+	var geld := Game.money
 	_tagesziel_auswerten()
+	bericht.ziel = Game.money - geld
+	geld = Game.money
 	_huber_abrechnen()
+	bericht.wette = Game.money - geld
 	if not _saboteur.is_empty():
 		_saboteur = {}
 		_net_saboteur_weg.rpc()
 	for e: Array in _auszeichnungen():
 		_melde("MSG_EHRE_" + str(e[0]).to_upper(), [str(e[1]), int(e[2])], 2)
+	geld = Game.money
 	_bank_abbuchen()
+	bericht.bank = geld - Game.money
+	bericht.kasse = Game.money
+	net_report.rpc(bericht)
 	_pruefe_pleite()   # nach Miete und Löhnen — erst dann steht fest, ob es reicht
 	_broadcast_meta()
 

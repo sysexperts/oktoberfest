@@ -371,6 +371,10 @@ REPORT_WAGES,Löhne,Wages,Maaşlar
 REPORT_GOODS,Ware,Supplies,Malzeme
 REPORT_INTEREST,Zinsen,Interest,Faiz
 REPORT_NET,Netto,Net,Net
+REPORT_ZIEL,Tagesziel,Daily goal,Günlük hedef
+REPORT_WETTE,Wette mit Huber,Bet with Huber,Huber ile bahis
+REPORT_BANK,Bankrate (Sepps Schulden),Bank instalment (Sepp's debt),Banka taksiti (Sepp'in borcu)
+REPORT_KASSE,Kontostand jetzt,Balance now,Şu anki bakiye
 REPORT_SERVED,Serviert %d · Verpasst %d,Served %d · Missed %d,Servis %d · Kaçırılan %d
 REPORT_MESS,Pfützen %d · Beschwerden %d · Gäste gegangen %d,Puddles %d · Complaints %d · Guests who left %d,Birikinti %d · Şikâyet %d · Giden misafir %d
 MSG_NO_MONEY,Zu wenig Geld für %s (%s),Not enough money for %s (%s),%s için para yetmiyor (%s)

@@ -87,6 +87,19 @@ static func bilanz(b: Dictionary) -> String:
 	# Kredittilgung direkt unter den Zinsen, nur wenn es sie gab
 	if int(b.get("loan", 0)) > 0:
 		zeilen.insert(9, "%s: %s" % [_t("REPORT_LOAN"), euro(-int(b.get("loan", 0)))])
+	# Was nach dem Tagesergebnis noch gebucht wurde, und was am Ende auf dem Konto ist
+	var nach := zeilen.find("%s: %s%s" % [_t("REPORT_NET"), "+" if netto > 0 else "", euro(netto)]) + 1
+	var extra := []
+	if int(b.get("ziel", 0)) != 0:
+		extra.append("%s: +%s" % [_t("REPORT_ZIEL"), euro(int(b.ziel))])
+	if int(b.get("wette", 0)) != 0:
+		extra.append("%s: %s%s" % [_t("REPORT_WETTE"), "+" if int(b.wette) > 0 else "", euro(int(b.wette))])
+	if int(b.get("bank", 0)) != 0:
+		extra.append("%s: %s" % [_t("REPORT_BANK"), euro(-int(b.bank))])
+	if b.has("kasse"):
+		extra.append("%s: %s" % [_t("REPORT_KASSE"), euro(int(b.kasse))])
+	for i in extra.size():
+		zeilen.insert(nach + i, extra[i])
 	var tipp_liste := tipps(b)
 	if not tipp_liste.is_empty():
 		zeilen.append("")
