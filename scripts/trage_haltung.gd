@@ -1,3 +1,4 @@
+@tool
 class_name TrageHaltung
 extends Resource
 ## Wie ein Fass oder Karton getragen wird — eingestellt in scenes/werkzeuge/trage_haltung.tscn,

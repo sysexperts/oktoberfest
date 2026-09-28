@@ -13,7 +13,7 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 anim_tanzen = ["Dance"]
 
 [node name="FassMitspieler" parent="." unique_id=1280019338 instance=ExtResource("3")]
-transform = Transform3D(0.28338358, -0.05697941, 0.19735019, 0, 0.33626488, 0.0970872, -0.20541115, -0.07860834, 0.27226272, 0.011602223, 0.7171125, -0.4006314)
+transform = Transform3D(0.28338358, -0.05697941, 0.19735019, 0, 0.33626488, 0.0970872, -0.20541115, -0.07860834, 0.27226272, 0.011602223, 0.7171125, -1.0453539)
 visible = false
 
 [node name="Schild" type="Label3D" parent="FassMitspieler" unique_id=1796741924]
@@ -24,10 +24,10 @@ modulate = Color(1, 0.85, 0.3, 1)
 text = "Fass für Mitspieler"
 font_size = 28
 
-[node name="KartonMitspieler" parent="." instance=ExtResource("4")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.55, -0.35)
+[node name="KartonMitspieler" parent="." unique_id=411764841 instance=ExtResource("4")]
+transform = Transform3D(0.59999996, 0, 0, 0, 0.5781685, 0.16037807, 0, -0.16037807, 0.5781685, 0, 0.44888163, -0.41891193)
 
-[node name="Schild" type="Label3D" parent="KartonMitspieler"]
+[node name="Schild" type="Label3D" parent="KartonMitspieler" unique_id=598192040]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.1, 0)
 billboard = 1
 no_depth_test = true
@@ -50,10 +50,10 @@ modulate = Color(0.5, 0.85, 1, 1)
 text = "Fass Ich-Sicht (Kamera: Vorschau)"
 font_size = 28
 
-[node name="KartonIchSicht" parent="IchSicht" instance=ExtResource("4")]
+[node name="KartonIchSicht" parent="IchSicht" unique_id=148901680 instance=ExtResource("4")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.55, -0.6)
 
-[node name="Schild" type="Label3D" parent="IchSicht/KartonIchSicht"]
+[node name="Schild" type="Label3D" parent="IchSicht/KartonIchSicht" unique_id=1706602304]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.1, 0)
 billboard = 1
 no_depth_test = true
