@@ -59,10 +59,6 @@ func zeigen() -> void:
 		var extras: Array[String] = []
 		if raten.has(tag):
 			extras.append(tr("KALENDER_BANK") % Texte.euro(int(raten[tag])))
-		if tag >= 3 and tag % 3 == 0:
-			extras.append(tr("KALENDER_WETTE"))
-		if tag == 16:
-			extras.append(tr("KALENDER_DUELL"))
 		zelle.get_node("Inhalt/Extras").text = "\n".join(extras)
 		zelle.add_theme_stylebox_override("panel", _heute if tag == tag_heute else zelle_normal)
 		zelle.modulate.a = 0.45 if tag < tag_heute else 1.0

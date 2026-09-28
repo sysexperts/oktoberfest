@@ -300,7 +300,7 @@ func set_time(clock: float, night: bool = false) -> void:
 	_night = night
 	# Eine Zeile unter dem Betrag: „Tag 3/16 · 18:30", bei geschlossenem Zelt
 	# steht dort der Hinweis darauf.
-	var tag := tr("HUD_DAY_SAISON") % [Wirtschaft.saison_tag(_day), Wirtschaft.SAISON_TAGE]
+	var tag := tr("HUD_DAY") % _day   # endlos: nur der Zähler, keine Saison
 	if clock < 0.0:
 		_zeit.text = "%s · %s" % [tag, tr("HUD_CLOSED")]
 		_zeit.add_theme_color_override("font_color", Color(0.78, 0.75, 0.71))

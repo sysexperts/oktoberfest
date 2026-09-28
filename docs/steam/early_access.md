@@ -53,7 +53,7 @@ Geplant sind unter anderem:
 - neue und tiefere Spielmechaniken rund ums Zelt
 - mehr Gäste- und Personalfiguren, damit das volle Zelt abwechslungsreicher aussieht
 - überarbeitete Animationen und Figuren
-- Feinschliff an Balance und Wirtschaft, vor allem in der zweiten Saisonhälfte
+- Feinschliff an Balance und Wirtschaft, vor allem beim großen Zelt
 - volle Controller-Unterstützung
 Was genau kommt und in welcher Reihenfolge, richte ich nach den Rückmeldungen der Spieler.
 ```
@@ -65,7 +65,7 @@ Plans include:
 - new and deeper gameplay mechanics around the tent
 - more guest and staff characters so a full tent looks more varied
 - reworked animations and characters
-- balance and economy polish, especially in the second half of the season
+- balance and economy polish, especially with the big tent
 - full controller support
 What exactly comes, and in which order, will depend on player feedback.
 ```
@@ -77,7 +77,7 @@ Planlananlar arasında:
 - çadır etrafında yeni ve daha derin oyun mekanikleri
 - dolu bir çadır daha çeşitli görünsün diye daha fazla misafir ve personel karakteri
 - elden geçirilmiş animasyonlar ve karakterler
-- özellikle sezonun ikinci yarısında denge ve ekonomi iyileştirmeleri
+- özellikle büyük çadırda denge ve ekonomi iyileştirmeleri
 - tam kontrolcü desteği
 Tam olarak neyin, hangi sırayla geleceğini oyuncuların geri bildirimlerine göre belirleyeceğim.
 ```
@@ -89,7 +89,7 @@ Tam olarak neyin, hangi sırayla geleceğini oyuncuların geri bildirimlerine g�
 **Deutsch**
 ```
 Die Early-Access-Version ist vollständig spielbar:
-- eine ganze Saison mit Geschichte und Ende
+- endlos spielbar: Tag für Tag vom kleinen Zelt bis zum großen Festzelt
 - Zapfen, Kochen, Servieren, Putzen, Lieferungen und Abrechnung
 - Personal einstellen, Zelt in mehreren Stufen ausbauen, Deko und Bühne mit Musikern
 - eigene Brauerei im Keller
@@ -102,7 +102,7 @@ Maus und Tastatur werden voll unterstützt, Controller teilweise. Es wird noch F
 **English**
 ```
 The Early Access version is fully playable:
-- a whole season with a story and an ending
+- endless play: day after day from a small tent to a huge festival hall
 - pouring, cooking, serving, cleaning, deliveries and the daily balance sheet
 - hiring staff, expanding the tent in several stages, decorations and a stage with musicians
 - your own brewery in the cellar
@@ -115,7 +115,7 @@ Mouse and keyboard are fully supported, controllers partially. Expect some bugs 
 **Türkçe**
 ```
 Early Access sürümü tamamen oynanabilir:
-- hikâyesi ve sonu olan tam bir sezon
+- sonsuz oynanış: küçük çadırdan dev festival çadırına gün gün
 - bira doldurma, yemek pişirme, servis, temizlik, teslimatlar ve günlük hesap
 - personel alma, çadırı birkaç aşamada büyütme, dekorasyon ve müzisyenli sahne
 - mahzende kendi bira fabrikan

@@ -274,11 +274,11 @@ class Lauf extends Node:
 		gm._phase = gm.Phase.INTERMISSION
 		gm._zelt_offen = false
 		gm._nachts_geschlossen = true
-		_check("HUD zeigt Tag 1/16 der neuen Fest",
-			String(hud.get_node("%Zeit").text).begins_with(tr("HUD_DAY_SAISON") % [1, 16]),
+		# Endlos (28.09.): kein Finale, der Tag zählt einfach weiter
+		_check("HUD zeigt einfach Tag 17",
+			String(hud.get_node("%Zeit").text).begins_with(tr("HUD_DAY") % 17),
 			hud.get_node("%Zeit").text)
-		_check("Fest nach dem Finale bewertet", gm._saison_nr >= 2 and int(gm._stats.saisons) >= 1
-			and hud.is_popup_open(), "Fest %d" % gm._saison_nr)
+		_check("kein Saisonfinale mehr", not gm.ist_finale(), "")
 		_check("Bewertung 1–5", gm.saison_wertung({"tage": 16, "netto": 16000, "pop_summe": 1500, "bedient": 900, "verpasst": 30}) == 5
 			and gm.saison_wertung({"tage": 16, "netto": -500, "pop_summe": 300, "bedient": 100, "verpasst": 100}) == 1, "")
 		_check("Nach Feierabend bleibt es Nacht bis zum Schlafen", gm._daylight_factor(-1.0) >= 1.0, "")
@@ -341,7 +341,7 @@ class Lauf extends Node:
 		_check("Schonfrist: bis Tag 7 kein Beliebtheitsverlust", w.beliebtheit_verlust(7) == 0.0
 			and w.beliebtheit_verlust(8) > 0.0, "")
 		gm._saison_nr = 1   # Fest-Aufschlag separat geprüft
-		_check("Miete im Spiel folgt dem Tag", gm._daily_rent() ==w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._day),
+		_check("Miete folgt der Zeltstufe, nicht dem Tag", gm._daily_rent() == w.miete(int(gm.TENT_RENT[gm._tent_stage]), gm._stufen_tag()),
 			"Tag %d, Miete %d" % [gm._day, gm._daily_rent()])
 
 		print("  -- Bierpreis")
@@ -775,13 +775,15 @@ class Lauf extends Node:
 		gm._despawn_guest(rid)
 
 		print("  -- Massenschlägerei")
-		gm._day = 4
+		var stufe_schlaegerei: int = gm._tent_stage
+		gm._tent_stage = 0
 		var geplant_frueh := false
 		for k in 40:
 			gm._schlaegerei_planen()
 			if gm._schlaegerei_uhr >= 0.0:
 				geplant_frueh = true
-		_check("Vor Tag 5 keine Schlägerei", not geplant_frueh, "")
+		_check("Ohne Zelt keine Schlägerei", not geplant_frueh, "")
+		gm._tent_stage = maxi(stufe_schlaegerei, 1)
 		gm._day = 5
 		gm._massen_gehabt = false
 		var immer := true

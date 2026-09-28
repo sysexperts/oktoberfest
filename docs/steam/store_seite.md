@@ -16,7 +16,7 @@ Der Aufbau folgt der Reihenfolge in Steamworks. Was hier steht, ist einfügefert
 **Deutsch** (220 Zeichen)
 
 ```
-Onkel Sepp hinterlässt dir sein Festzelt und seine Schulden. Zapfen, kochen,
+Onkel Sepp hinterlässt dir sein Festzelt. Zapfen, kochen,
 servieren, putzen — und abends abrechnen. Allein oder mit drei Freunden, bis
 die Bänke wackeln und der Wirt von nebenan dir die Gäste wegnimmt.
 ```
@@ -24,7 +24,7 @@ die Bänke wackeln und der Wirt von nebenan dir die Gäste wegnimmt.
 **English** (215 Zeichen)
 
 ```
-Uncle Sepp left you his beer tent and his debts. Pour, cook, serve, clean — and
+Uncle Sepp left you his beer tent. Pour, cook, serve, clean — and
 count what's left at closing time. Alone or with three friends, until the
 benches wobble and the landlord next door steals your guests.
 ```
@@ -32,7 +32,7 @@ benches wobble and the landlord next door steals your guests.
 **Türkçe** (215 Zeichen)
 
 ```
-Sepp Amca sana çadırını ve borçlarını bıraktı. Bira doldur, yemek pişir, servis
+Sepp Amca sana çadırını bıraktı. Bira doldur, yemek pişir, servis
 yap, temizle — akşam da hesabı çıkar. Tek başına ya da üç arkadaşınla, sıralar
 sallanana ve yandaki rakibin müşterilerini çalana kadar.
 ```
@@ -45,7 +45,7 @@ sallanana ve yandaki rakibin müşterilerini çalana kadar.
 
 ```
 [h2]Sloptoberfest[/h2]
-Onkel Sepp hat den letzten Ausschank hinter sich. Was er dir hinterlässt: ein kleines Zelt mit vier Tischen, eine Zapfanlage, ein Klo, das noch keins ist, und die Raten bei der Bank.
+Onkel Sepp hat den letzten Ausschank hinter sich. Was er dir hinterlässt: ein kleines Zelt mit vier Tischen, eine Zapfanlage und ein Klo, das noch keins ist.
 
 [h2]Ein Tag im Zelt[/h2]
 Morgens ist Ruhe. Du bestellst Bier, Brezn und Würstl, stellst Tische auf, entscheidest, was das Maß heute kosten soll. Dann sperrst du auf und die Uhr läuft.
@@ -57,7 +57,7 @@ Wer vier Maß intus hat, hält sie nicht immer bei sich. Das liegt dann auf dem 
 Ab sieben wird es voll und alle werden ungeduldiger. Wer zu lang wartet, beschwert sich und geht. Das spricht sich rum — am nächsten Tag kommen weniger.
 
 [h2]Zwischen den Tagen[/h2]
-Abends rechnest du ab: Einnahmen gegen Miete, Wareneinsatz und Bankrate. Was übrig bleibt, geht in ein größeres Zelt, mehr Tische, ein richtiges Klo, Deko, Werbung. Oder in Personal — Koch, Kellner, Reinigung, die dir Arbeit abnehmen, aber jeden Tag Lohn kosten.
+Abends rechnest du ab: Einnahmen gegen Miete, Wareneinsatz und Löhne. Was übrig bleibt, geht in ein größeres Zelt, mehr Tische, ein richtiges Klo, Deko, Werbung. Oder in Personal — Koch, Kellner, Reinigung, die dir Arbeit abnehmen, aber jeden Tag Lohn kosten.
 
 Auf die Bühne kannst du einen Straßenmusiker stellen. Oder eine Blaskapelle. Oder, wenn das Geld reicht, einen Star.
 
@@ -70,14 +70,14 @@ Du machst einen Einladungscode auf, drei Leute kommen dazu, auch mitten in der S
 Vor dem Zelt ist Kirmes: Schießbude, Entenangeln, Drehscheibe. Spielt man zwischen zwei Tagen.
 
 [h2]Und Huber[/h2]
-Drei Zelte weiter steht die Konkurrenz und macht es besser als du. Es gibt eine Geschichte, mit Stammgästen, die noch Sepp kannten, und einem Ende — irgendwann steht die Sache mit Huber an.
+Drei Zelte weiter steht die Konkurrenz und macht es besser als du. Dazu Stammgäste, die noch Sepp kannten — und kein Ende: gespielt wird, so lange du willst.
 ```
 
 ### English
 
 ```
 [h2]Sloptoberfest[/h2]
-Uncle Sepp has poured his last one. What he left you: a small tent with four tables, a tap system, a toilet that isn't one yet, and the payments due at the bank.
+Uncle Sepp has poured his last one. What he left you: a small tent with four tables, a tap system and a toilet that isn't one yet.
 
 [h2]A day in the tent[/h2]
 Mornings are quiet. You order beer, pretzels and sausages, put out tables, decide what a litre costs today. Then you open up and the clock starts.
@@ -89,7 +89,7 @@ Four litres in, not everyone keeps them down. That ends up on the floor and has 
 From seven it gets crowded and everyone's patience gets shorter. Wait too long and they complain and leave. Word gets around — fewer show up tomorrow.
 
 [h2]Between days[/h2]
-In the evening you count up: takings against rent, supplies and the bank. What's left goes into a bigger tent, more tables, a proper toilet, decorations, advertising. Or staff — cook, waiter, cleaner, who take work off your hands and cost wages every single day.
+In the evening you count up: takings against rent, supplies and wages. What's left goes into a bigger tent, more tables, a proper toilet, decorations, advertising. Or staff — cook, waiter, cleaner, who take work off your hands and cost wages every single day.
 
 You can put a busker on the stage. Or a brass band. Or, if the money's there, a star act.
 
@@ -102,14 +102,14 @@ You open an invite code, three people join, even mid-shift. Everyone takes a dep
 There's a fairground in front of the tent: shooting gallery, duck pond, spinning wheel. For between days.
 
 [h2]And Huber[/h2]
-Three tents down the competition is doing it better than you. There's a story, with regulars who still remember Sepp, and an ending — sooner or later there's the business with Huber.
+Three tents down the competition is doing it better than you. Plus regulars who still remember Sepp — and no ending: play as long as you like.
 ```
 
 ### Türkçe
 
 ```
 [h2]Sloptoberfest[/h2]
-Sepp Amca son birasını da doldurdu. Sana bıraktıkları: dört masalı küçük bir çadır, bir bira musluğu, henüz tuvalet sayılmayan bir tuvalet ve bankaya olan taksitler.
+Sepp Amca son birasını da doldurdu. Sana bıraktıkları: dört masalı küçük bir çadır, bir bira musluğu ve henüz tuvalet sayılmayan bir tuvalet.
 
 [h2]Çadırda bir gün[/h2]
 Sabahlar sakindir. Bira, simit ve sosis sipariş edersin, masaları dizersin, biranın bugün kaça satılacağına karar verirsin. Sonra kapıyı açarsın ve saat işlemeye başlar.
@@ -121,7 +121,7 @@ Dört bira içen herkes onu içeride tutamaz. O da yere gider ve temizlenmesi ge
 Yediden sonra kalabalıklaşır ve herkesin sabrı azalır. Çok bekleyen şikâyet eder ve gider. Bu duyulur — ertesi gün daha azı gelir.
 
 [h2]Günler arasında[/h2]
-Akşam hesabı çıkarırsın: gelir karşısında kira, mal masrafı ve banka taksiti. Kalan para daha büyük bir çadıra, daha çok masaya, düzgün bir tuvalete, dekora, reklama gider. Ya da personele — aşçı, garson, temizlikçi; işini hafifletirler ama her gün maaş isterler.
+Akşam hesabı çıkarırsın: gelir karşısında kira, mal masrafı ve maaşlar. Kalan para daha büyük bir çadıra, daha çok masaya, düzgün bir tuvalete, dekora, reklama gider. Ya da personele — aşçı, garson, temizlikçi; işini hafifletirler ama her gün maaş isterler.
 
 Sahneye bir sokak müzisyeni çıkarabilirsin. Ya da bir bando. Ya da para yetiyorsa bir yıldız.
 
@@ -134,7 +134,7 @@ Bir davet kodu açarsın, üç kişi katılır, vardiyanın ortasında bile. Her
 Çadırın önünde panayır var: atış standı, ördek avı, çarkıfelek. İki gün arasında oynanır.
 
 [h2]Ve Huber[/h2]
-Üç çadır ötede rakibin var ve senden iyi iş çıkarıyor. Bir hikâye var, Sepp'i hâlâ hatırlayan müdavimlerle, ve bir sonu var — er ya da geç Huber meselesi gelir.
+Üç çadır ötede rakibin var ve senden iyi iş çıkarıyor. Sepp'i hâlâ hatırlayan müdavimler de var — ve son yok: istediğin kadar oyna.
 ```
 
 ---

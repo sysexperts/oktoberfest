@@ -1245,7 +1245,7 @@ func _apply_daylight(clock: float) -> void:
 	ALTSTADT_MAT.set_shader_parameter("nacht", t)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
-	var g := Wirtschaft.geduld(ORDER_PATIENCE, _day) * float(GEDULD_FAKTOR[_schwierigkeit]) \
+	var g := Wirtschaft.geduld(ORDER_PATIENCE, _stufen_tag()) * float(GEDULD_FAKTOR[_schwierigkeit]) \
 		* maxf(0.7, 1.0 - SAISON_GEDULD * float(_saison_nr - 1))
 	if _ereignis == "familie":
 		g *= 1.2   # Familien warten geduldiger
@@ -1253,7 +1253,7 @@ func _geduld() -> float:
 	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
-	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _day)) * float(MIETE_FAKTOR[_schwierigkeit])
+	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _stufen_tag())) * float(MIETE_FAKTOR[_schwierigkeit])
 		* (1.0 + SAISON_MIETE * float(_saison_nr - 1)))
 
 ## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
@@ -2293,7 +2293,7 @@ var _schlaegerei_knoten: Node3D
 func _schlaegerei_planen() -> void:
 	_schlaegerei_uhr = -1.0
 	_einzel_uhren = []
-	if _day < SCHLAEGEREI_AB_TAG or _tent_stage == 0:
+	if _stufen_tag() < SCHLAEGEREI_AB_TAG or _tent_stage == 0:
 		return
 	if not _massen_gehabt or randf() < MASSEN_CHANCE:
 		_schlaegerei_uhr = randf_range(SCHLAEGEREI_UHR.x, SCHLAEGEREI_UHR.y)
@@ -2704,7 +2704,7 @@ func net_order_goods(kind: int, packs: int) -> void:
 	if kind == WARE_BIER and _lieferproblem:
 		_popup_to_sender("POPUP_LIEFERPROBLEM")
 		return
-	var cost: int = Wirtschaft.paketpreis(int(PACK_COST[kind]), _day) * packs
+	var cost: int = Wirtschaft.paketpreis(int(PACK_COST[kind]), _stufen_tag()) * packs
 	if not _afford(cost):
 		_fehler("MSG_NO_MONEY", [WARE_KEYS[kind], _eur(cost)])
 		return
@@ -4468,12 +4468,12 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 func _reward_for(okind: int, otype := 1) -> int:
 	var sorte := float(PREIS_FAKTOR_SORTE.get("%d_%d" % [okind, otype], 1.0))
 	if okind == 2:
-		return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _day)) * sorte * _essenpreis)
+		return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.ESSEN_BASIS, _stufen_tag())) * sorte * _essenpreis)
 	# Bier: Tagespreis × selbst gewählter Bierpreis
 	var happy := 0.7 if _happy_hour() else 1.0
 	# Lieferprobleme: das Bier ist knapp und kostet die Gäste mehr
 	var knapp := LIEFERPROBLEM_ZUSCHLAG if _lieferproblem else 1.0
-	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _day)) * _bierpreis * happy * sorte * knapp)
+	return roundi(float(Wirtschaft.verkaufspreis(Wirtschaft.BIER_BASIS, _stufen_tag())) * _bierpreis * happy * sorte * knapp)
 
 func CustomerReward() -> int:
 	return 15
@@ -4695,8 +4695,16 @@ func _typ_pop(g: Dictionary) -> float:
 	return float(TYP_POP.get(str(g.get("typ", "")), 1.0))
 
 ## Ist heute der letzte Festtag?
+## Seit 28.09. endlos: kein Saisonfinale mehr (Wunsch Serdar) — der Tag ist nur
+## noch eine Anzeige, wie lange man schon spielt.
 func ist_finale() -> bool:
-	return Wirtschaft.saison_tag(_day) == Wirtschaft.SAISON_TAGE
+	return false
+
+## Stufe des Spiels für Preise, Miete, Geduld und Tagesziele. Früher hing das am
+## Tag (Wirtschaft.*(…, tag)); jetzt am Zeltausbau — der Tageszähler hat keine
+## Auswirkung mehr. Die Werte entsprechen den alten Tagen 1/6/11/16/21.
+func _stufen_tag() -> int:
+	return int({0: 1, 1: 6, 2: 11, 3: 16, 4: 21}.get(_tent_stage, 1))
 
 ## Bewertung 1–5 Maßkrüge aus Gewinn, Beliebtheit und verpassten Bestellungen.
 func saison_wertung(s: Dictionary) -> int:
@@ -5135,7 +5143,7 @@ func _end_shift(reason := 0) -> void:
 		_popularity = maxf(POP_MIN, _popularity - pop_penalty)
 
 	# Endlos: nach der Schonfrist bröckelt die Beliebtheit jede Nacht etwas
-	_popularity = maxf(POP_MIN, _popularity - Wirtschaft.beliebtheit_verlust(_day))
+	_popularity = maxf(POP_MIN, _popularity - Wirtschaft.beliebtheit_verlust(_stufen_tag()))
 	# Über Nacht erholt sich eine schlechte Beliebtheit ein Stück — sonst bleibt
 	# ein überlastetes Zelt für immer bei der Untergrenze (Spielbot, 30 Tage).
 	if _popularity < POP_ERHOLUNG_ZIEL:
@@ -5933,12 +5941,15 @@ var _ziel_takt := 0.0
 func _bank_betrag(i: int) -> int:
 	return roundi(float(Wirtschaft.BANK_RATEN[i][1]) * float(Wirtschaft.BANK_FAKTOR[_schwierigkeit]) / 100.0) * 100
 
+## Sepps Schulden gibt es nicht mehr (28.09.) — keine Raten, keine Mahnung.
 func bank_naechste() -> Array:
+	return []
 	if _bank_bezahlt >= Wirtschaft.BANK_RATEN.size():
 		return []
 	return [int(Wirtschaft.BANK_RATEN[_bank_bezahlt][0]), _bank_betrag(_bank_bezahlt)]
 
 func bank_rest() -> int:
+	return 0
 	var r := 0
 	for i in range(_bank_bezahlt, Wirtschaft.BANK_RATEN.size()):
 		r += _bank_betrag(i)
@@ -5949,7 +5960,7 @@ func _tagesziel_waehlen() -> void:
 	_tagesziel = {}
 	if tutorial_active():
 		return
-	var d := _day
+	var d := _stufen_tag()
 	var arten := [
 		{"typ": "bedienen", "ziel": 15 + 7 * d},
 		{"typ": "umsatz", "ziel": (500 + 180 * d) / 50 * 50},
@@ -6172,6 +6183,8 @@ var _leck_t := 0.0
 func _huber_morgen() -> void:
 	_huber_wette = {}
 	_sabotage_t = -1.0
+	# Die Huber-Geschichte (Wette, Saboteur, Abwerben, Duell) ist raus (28.09.)
+	return
 	if tutorial_active():
 		return
 	var d := _day
@@ -6420,9 +6433,8 @@ func _personal_morgen() -> void:
 			_melde("MSG_PERSONAL_LOHNWUNSCH", [str(s.get("name", "")), _eur(_lohn_plus(sid, LOHN_PLUS))], 0)
 	for sid in weg:
 		_personal_weg(sid)
-	# Huber wirbt ab (Akt 2) — höchstens einen am Tag
-	var tag := Wirtschaft.saison_tag(_day)
-	if not tutorial_active() and tag >= 5 and tag <= 10 and randf() < ABWERBEN_CHANCE:
+	# Huber wirbt nicht mehr ab (Geschichte raus, 28.09.)
+	if false:
 		var kandidaten := _staff_sim.keys().filter(func(k: int) -> bool: return str(_staff_sim[k].get("anliegen", "")) == "")
 		if not kandidaten.is_empty():
 			var sid: int = kandidaten.pick_random()
