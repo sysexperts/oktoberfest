@@ -50,6 +50,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		return
+	_sichtbar()
 	if $FassMitspieler.transform != HALTUNG.fass:
 		_h().fass = $FassMitspieler.transform
 		_merken()
