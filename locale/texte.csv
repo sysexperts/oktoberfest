@@ -610,7 +610,7 @@ KOOP_BACK,Zurück,Back,Geri
 KOOP_FIG_0,Otto,Otto,Otto
 KOOP_FIG_1,Wilhelm,Wilhelm,Wilhelm
 KOOP_FIG_2,Lisa,Lisa,Lisa
-KOOP_FIG_3,Heinrich,Heinrich,Heinrich
+KOOP_FIG_3,Alex,Alex,Alex
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
 LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).
