@@ -37,6 +37,13 @@ func _refresh() -> void:
 		s.visible = sack
 	if label:
 		label.text = Texte.mit_tasten("WORLD_MUELLSACK") if sack else Texte.mit_tasten("WORLD_PACKAGE_%d" % clampi(kind, 1, 2)) % amount
-		label.visible = not sack   # Hinweis am Fadenkreuz reicht
+		# Kein Schild über jedem Paket — nur das Tastensymbol, wenn anvisiert
+		label.visible = false
 	if sack:
 		return
+
+## Vom Spieler: dieses Paket ist anvisiert (Umriss an) — Tastensymbol zeigen
+func ziel_markieren(an: bool) -> void:
+	var t := get_node_or_null("TasteHinweis")
+	if t:
+		t.zeigen(an)

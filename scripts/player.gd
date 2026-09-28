@@ -812,6 +812,8 @@ func _update_highlight() -> void:
 func _umriss_setzen(ziel, an: bool) -> void:
 	if ziel == null or not is_instance_valid(ziel):
 		return
+	if ziel.has_method("ziel_markieren"):
+		ziel.ziel_markieren(an)
 	for mi in ziel.find_children("*", "MeshInstance3D", true, false):
 		(mi as MeshInstance3D).material_overlay = UMRISS if an else null
 

@@ -110,6 +110,11 @@ class Lauf extends Node:
 		ich.get_node("Head").rotation.x = deg_to_rad(-28.0)
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png(ziel % "6_abgeladen")
+		# Ein Paket anvisiert: Umriss + Tastensymbol
+		ich._current_target = gm._packages.values()[2]
+		ich._update_highlight()
+		await _frames(10)
+		get_viewport().get_texture().get_image().save_png(ziel % "6b_anvisiert")
 		# Regal voller Fässer
 		var regal: Node3D = null
 		for n in gm.find_children("*", "Node3D", true, false):

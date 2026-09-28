@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/taste_hinweis.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/taste_rund.svg" id="2"]
+
+[node name="TasteHinweis" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Kreis" type="Sprite3D" parent="."]
+pixel_size = 0.0007
+billboard = 1
+fixed_size = true
+no_depth_test = true
+render_priority = 8
+texture = ExtResource("2")
+
+[node name="Taste" type="Label3D" parent="."]
+pixel_size = 0.0014
+billboard = 1
+fixed_size = true
+no_depth_test = true
+render_priority = 9
+outline_render_priority = 8
+modulate = Color(0.949, 0.757, 0.29, 1)
+text = "E"
+font_size = 32
+outline_size = 0
+
+[node name="Knopf" type="Sprite3D" parent="."]
+visible = false
+pixel_size = 0.0014
+billboard = 1
+fixed_size = true
+no_depth_test = true
+render_priority = 8
