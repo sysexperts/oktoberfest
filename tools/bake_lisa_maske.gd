@@ -12,7 +12,9 @@ const GROESSE := 1024
 const KOPF_UNTEN := 1.13
 ## Gesicht: vorn (+z) unterhalb der Haarlinie bleibt Haut
 const GESICHT_Z := 0.07
-const HAARLINIE := 1.42
+const HAARLINIE := 1.36
+## halbe Gesichtsbreite: weiter außen sind vorn schon Haare
+const GESICHT_BREITE := 0.15
 
 func _init() -> void:
 	var n: Node = load("res://assets/character/character3/character3.glb").instantiate()
@@ -33,7 +35,9 @@ func _init() -> void:
 			continue
 		# Grün = ganzer Kopf (dort kein Kleid umfärben — Augen, Mund)
 		var farbe := Color(0, 1, 0)
-		if not (m.z > GESICHT_Z and m.y < HAARLINIE):
+		# Gesicht = vorn, unter der Haarlinie und nicht an den Seiten (dort hängen Strähnen)
+		var gesicht := m.z > GESICHT_Z and m.y < HAARLINIE and absf(m.x) < GESICHT_BREITE
+		if not gesicht:
 			farbe = Color(1, 1, 0)   # Rot = Haare
 			anzahl += 1
 		_dreieck(bild, uv[idx[t]], uv[idx[t + 1]], uv[idx[t + 2]], farbe)
