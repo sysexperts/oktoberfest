@@ -256,8 +256,6 @@ func _buero() -> Node3D:
 	_box(tuer, "RahmenL", Vector3(0.14, 2.6, 0.36), Vector3(-0.97, 1.3, 0), m.holz_dunkel)
 	_box(tuer, "RahmenR", Vector3(0.14, 2.6, 0.36), Vector3(0.97, 1.3, 0), m.holz_dunkel)
 	_box(tuer, "Sturz", Vector3(2.1, 0.18, 0.36), Vector3(0, 2.6, 0), m.holz_dunkel)
-	_box(tuer, "Blatt", Vector3(0.85, 2.4, 0.06), Vector3(-0.45, 1.2, -0.3), m.blau, Vector3(0, -70, 0))
-	_box(tuer, "Fuellung", Vector3(0.6, 0.9, 0.02), Vector3(-0.66, 1.5, -0.62), m.rauten_fein, Vector3(0, -70, 0))
 	for x in [-3.0, 3.0]:
 		_instanz(r, SZ + "fenster.tscn", "FensterVorn_%s" % String.num(x), Transform3D(_rot(Vector3(0, 180, 0)), Vector3(x, 1.7, -hd)))
 		_instanz(r, SZ + "blumenkasten.tscn", "Blumen_%s" % String.num(x), Transform3D(_rot(Vector3(0, 180, 0)), Vector3(x, 0.9, -hd - 0.3)))

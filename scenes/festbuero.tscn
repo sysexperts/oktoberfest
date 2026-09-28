@@ -582,16 +582,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
 material_override = ExtResource("5_37uxg")
 mesh = SubResource("BoxMesh_ahopx")
 
-[node name="Blatt" type="MeshInstance3D" parent="Tuer" unique_id=1770539560]
-transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, -0.45, 1.2, -0.3)
-material_override = ExtResource("6_5umaa")
-mesh = SubResource("BoxMesh_yecjx")
-
-[node name="Fuellung" type="MeshInstance3D" parent="Tuer" unique_id=247934989]
-transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, -0.66, 1.5, -0.62)
-material_override = ExtResource("7_lvchs")
-mesh = SubResource("BoxMesh_gffec")
-
 [node name="FensterVorn_-3_0" type="Node3D" parent="." unique_id=1122241778 instance=ExtResource("8_he53l")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3, 1.7, -4)
 
