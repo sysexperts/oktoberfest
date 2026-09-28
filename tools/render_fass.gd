@@ -91,6 +91,14 @@ class Lauf extends Node:
 			await _frames(9)
 			get_viewport().get_texture().get_image().save_png(ziel % ("5_mitspieler_gehen_%d" % (k + 1)))
 
+		# Mitspieler mit Karton
+		mit.carry_pkg_kind = 2
+		mit._update_carry_visual()
+		await _frames(20)
+		get_viewport().get_texture().get_image().save_png(ziel % "5k_mitspieler_karton")
+		mit.carry_pkg_kind = 1
+		mit._update_carry_visual()
+
 		# Abgeladene Lieferung: Fässer und Kisten im Raster
 		gm._players_nodes.erase(2)
 		mit.queue_free()

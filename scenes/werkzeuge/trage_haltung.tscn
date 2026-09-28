@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c7hwj61da1lq4" path="res://scripts/werkzeuge/trage_haltung_editor.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
 [ext_resource type="PackedScene" uid="uid://dw1wtbpv8pibo" path="res://assets/models/fass_mit_zapfhahn.glb" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/karton.tscn" id="4"]
 
 [node name="TrageHaltung" type="Node3D" unique_id=645250750]
 script = ExtResource("1")
@@ -25,6 +26,18 @@ modulate = Color(1, 0.85, 0.3, 1)
 text = "Fass für Mitspieler"
 font_size = 28
 
+[node name="KartonMitspieler" parent="." instance=ExtResource("4")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.55, -0.35)
+visible = false
+
+[node name="Schild" type="Label3D" parent="KartonMitspieler"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.1, 0)
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.85, 0.3, 1)
+text = "Karton für Mitspieler"
+font_size = 28
+
 [node name="IchSicht" type="Camera3D" parent="." unique_id=1791179988]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.35, 0)
 
@@ -37,6 +50,18 @@ billboard = 1
 no_depth_test = true
 modulate = Color(0.5, 0.85, 1, 1)
 text = "Fass Ich-Sicht (Kamera: Vorschau)"
+font_size = 28
+
+[node name="KartonIchSicht" parent="IchSicht" instance=ExtResource("4")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.55, -0.6)
+visible = false
+
+[node name="Schild" type="Label3D" parent="IchSicht/KartonIchSicht"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.1, 0)
+billboard = 1
+no_depth_test = true
+modulate = Color(0.5, 0.85, 1, 1)
+text = "Karton Ich-Sicht (Kamera: Vorschau)"
 font_size = 28
 
 [node name="Licht" type="DirectionalLight3D" parent="." unique_id=2008635694]

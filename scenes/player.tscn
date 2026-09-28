@@ -83,10 +83,6 @@ visible = false
 mesh = SubResource("Food")
 material_override = SubResource("MatFood")
 
-[node name="CarryKarton" parent="Head/HoldPoint" instance=ExtResource("9_karton")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.35, 0)
-visible = false
-
 [node name="CarrySack" type="MeshInstance3D" parent="Head/HoldPoint"]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, -0.45, -0.1)
 visible = false
@@ -98,6 +94,14 @@ visible = false
 
 [node name="CarryFassPov" parent="Head" instance=ExtResource("8_fass")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.5, -0.75)
+visible = false
+
+[node name="CarryKarton" parent="." instance=ExtResource("9_karton")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.55, -0.35)
+visible = false
+
+[node name="CarryKartonPov" parent="Head" instance=ExtResource("9_karton")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.55, -0.6)
 visible = false
 
 [node name="Kotzstrahl" parent="." instance=ExtResource("7_kotz")]

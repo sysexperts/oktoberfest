@@ -69,8 +69,10 @@ var _net_yaw: float
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
 @onready var _carry_teller: EssenTeller = $Head/HoldPoint/CarryTeller
 @onready var _carry_sack: Node3D = get_node_or_null("Head/HoldPoint/CarrySack")
-## Zutaten-Karton — dieselbe Szene wie abgeladen und im Regal (scenes/karton.tscn)
-@onready var _carry_karton: Node3D = get_node_or_null("Head/HoldPoint/CarryKarton")
+## Zutaten-Karton — dieselbe Szene wie abgeladen und im Regal (scenes/karton.tscn),
+## am Körper für die Mitspieler und vor der Kamera für die Ich-Sicht
+@onready var _carry_karton: Node3D = get_node_or_null("CarryKarton")
+@onready var _carry_karton_pov: Node3D = get_node_or_null("Head/CarryKartonPov")
 ## Bierfass vor der Brust (Lieferung Bier)
 @onready var _carry_fass: Node3D = get_node_or_null("CarryFass")
 ## Dasselbe Fass für die eigene Ich-Sicht — hängt an der Kamera, damit man es
@@ -94,6 +96,10 @@ func _ready() -> void:
 		_carry_fass.transform = TRAGE_HALTUNG.fass
 	if _carry_fass_pov:
 		_carry_fass_pov.transform = TRAGE_HALTUNG.pov
+	if _carry_karton:
+		_carry_karton.transform = TRAGE_HALTUNG.karton
+	if _carry_karton_pov:
+		_carry_karton_pov.transform = TRAGE_HALTUNG.karton_pov
 	_fass_anheften.call_deferred()
 	_world = get_tree().current_scene
 	# Authority'yi düğüm adından türet (ad = peer_id). Zamanlamadan bağımsız.
@@ -1215,11 +1221,11 @@ func _carry_kind() -> int:
 func _has_ready() -> bool:
 	return carry_state != 0 and carry_fill >= 0.999
 
-## Fass am Oberkörper-Knochen der Figur festmachen: so wippt es beim Gehen mit
-## dem Körper, und die Arme (TragePose, ebenfalls am Oberkörper) bleiben am Fass.
-## Die Lage aus assets/trage_haltung.tres gilt für die Ruhelage der Figur.
+## Fass und Karton am Oberkörper-Knochen der Figur festmachen: so wippen sie
+## beim Gehen mit dem Körper, und die Arme (TragePose, ebenfalls am Oberkörper)
+## bleiben dran. Die Lage aus assets/trage_haltung.tres gilt für die Ruhelage.
 func _fass_anheften() -> void:
-	if _carry_fass == null or not is_inside_tree():
+	if not is_inside_tree():
 		return
 	var fig := _model as Figur
 	if fig == null or fig.skelett == null:
@@ -1233,33 +1239,49 @@ func _fass_anheften() -> void:
 	if b < 0:
 		return
 	var halter := BoneAttachment3D.new()
-	halter.name = "FassHalter"
+	halter.name = "TrageHalter"
 	sk.add_child(halter)
 	halter.bone_name = sk.get_bone_name(b)
 	var knochen := (global_transform.affine_inverse() * sk.global_transform) * sk.get_bone_global_rest(b)
-	_carry_fass.reparent(halter, false)
-	_carry_fass.transform = knochen.affine_inverse() * TRAGE_HALTUNG.fass
+	for paar: Array in _getragene():
+		var n := paar[0] as Node3D
+		n.reparent(halter, false)
+		n.transform = knochen.affine_inverse() * (paar[1] as Transform3D)
 
 func _fass_loesen() -> void:
-	if _carry_fass and _carry_fass.get_parent() != self:
-		_carry_fass.reparent(self, false)
-		_carry_fass.transform = TRAGE_HALTUNG.fass
+	for paar: Array in _getragene():
+		var n := paar[0] as Node3D
+		if n.get_parent() != self:
+			n.reparent(self, false)
+			n.transform = paar[1]
+
+## [Knoten, Lage am Körper] für alles, was mit beiden Händen getragen wird
+func _getragene() -> Array:
+	var aus := []
+	if _carry_fass:
+		aus.append([_carry_fass, TRAGE_HALTUNG.fass])
+	if _carry_karton:
+		aus.append([_carry_karton, TRAGE_HALTUNG.karton])
+	return aus
 
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1
 	var has_food := carry_state == 2
 	# Fass mit beiden Händen vor der Brust — sieht man selbst und die anderen
 	var fass := carry_state == 3 and carry_pkg_kind == 1
-	if _carry_karton:
-		_carry_karton.visible = carry_state == 3 and carry_pkg_kind == 2
 	var ich_sicht := _is_local and not _kamera_draussen
 	if _carry_fass:
 		_carry_fass.visible = fass and not ich_sicht
 	if _carry_fass_pov:
 		_carry_fass_pov.visible = fass and ich_sicht
+	var karton := carry_state == 3 and carry_pkg_kind == 2
+	if _carry_karton:
+		_carry_karton.visible = karton and not ich_sicht
+	if _carry_karton_pov:
+		_carry_karton_pov.visible = karton and ich_sicht
 	var figur := _model as Figur
 	if figur:
-		figur.trage_pose(fass)
+		figur.trage_pose(fass or karton)
 	# Zusätzliche volle Krüge neben dem in der Hand
 	for i in _extra_nodes.size():
 		var n := _extra_nodes[i]

@@ -1,6 +1,6 @@
 class_name TrageHaltung
 extends Resource
-## Wie ein Fass getragen wird — eingestellt in scenes/werkzeuge/trage_haltung.tscn,
+## Wie ein Fass oder Karton getragen wird — eingestellt in scenes/werkzeuge/trage_haltung.tscn,
 ## gespeichert in assets/trage_haltung.tres, gelesen von TragePose (Arme) und
 ## player.gd (Lage des Fasses am Körper und in der Ich-Sicht).
 
@@ -13,3 +13,6 @@ extends Resource
 @export var fass := Transform3D(Basis().scaled(Vector3.ONE * 0.26), Vector3(0, 0.66, -0.3))
 ## Fass in der eigenen Ich-Sicht (relativ zur Kamera)
 @export var pov := Transform3D(Basis().scaled(Vector3.ONE * 0.2), Vector3(0, -0.5, -0.75))
+## Karton am Körper (Mitspieler) und in der Ich-Sicht — Arme wie beim Fass
+@export var karton := Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 0.55, -0.35))
+@export var karton_pov := Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, -0.55, -0.6))
