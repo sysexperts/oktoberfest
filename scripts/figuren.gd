@@ -9,11 +9,6 @@ const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter2.tscn"),
 	preload("res://scenes/figuren/charakter3.tscn"),
 	preload("res://scenes/figuren/alex.tscn"),
-	# Farbvarianten von Lisa (Haare/Kleid über assets/shader/figur_farbe.gdshader)
-	preload("res://scenes/figuren/lisa_blond_blau.tscn"),
-	preload("res://scenes/figuren/lisa_schwarz_gruen.tscn"),
-	preload("res://scenes/figuren/lisa_braun_lila.tscn"),
-	preload("res://scenes/figuren/lisa_kupfer_schwarz.tscn"),
 ]
 ## Figuren, die auf der Bank sitzen. Lisa (charakter3) sitzt mit einer
 ## Sitzkorrektur gegen den Rock (assets/sitz_lisa.tres, scenes/werkzeuge/sitz_haltung.tscn).
@@ -22,20 +17,11 @@ const GAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter2.tscn"),
 	preload("res://scenes/figuren/charakter3.tscn"),
 	preload("res://scenes/figuren/alex.tscn"),
-	# Farbvarianten von Lisa (Haare/Kleid über assets/shader/figur_farbe.gdshader)
-	preload("res://scenes/figuren/lisa_blond_blau.tscn"),
-	preload("res://scenes/figuren/lisa_schwarz_gruen.tscn"),
-	preload("res://scenes/figuren/lisa_braun_lila.tscn"),
-	preload("res://scenes/figuren/lisa_kupfer_schwarz.tscn"),
 ]
 ## Stehende Gäste: stehen hinter der Bank am Tisch statt zu sitzen, bestellen,
-## trinken und tanzen sonst wie alle. Lisa in allen Farben.
+## trinken und tanzen sonst wie alle.
 const STEHGAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter3.tscn"),
-	preload("res://scenes/figuren/lisa_blond_blau.tscn"),
-	preload("res://scenes/figuren/lisa_schwarz_gruen.tscn"),
-	preload("res://scenes/figuren/lisa_braun_lila.tscn"),
-	preload("res://scenes/figuren/lisa_kupfer_schwarz.tscn"),
 ]
 ## Steht dieser Gast? Etwa jeder dritte. Aus der ID, damit Server (Platz hinter
 ## der Bank) und alle Mitspieler (Figur, kein Hinsetzen) dasselbe entscheiden.
