@@ -1,8 +1,16 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" uid="uid://dvi72mx42mkbl" path="res://assets/kirmes/Models/Shops/WC.fbx" id="1_wc"]
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 [ext_resource type="Script" path="res://scripts/klo_container.gd" id="3_klo"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="m_holz_dunkel"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="m_holz_hell"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/creme_lack.tres" id="m_creme_lack"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rauten.tres" id="m_rauten"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="m_gold"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schindel.tres" id="m_schindel"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/messing.tres" id="m_messing"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schwarz_lack.tres" id="m_schwarz_lack"]
 
 [sub_resource type="BoxShape3D" id="Kollision"]
 size = Vector3(3.4, 2.3, 2.35)
@@ -20,10 +28,350 @@ emission_enabled = true
 emission = Color(0.2, 1, 0.3, 1)
 emission_energy_multiplier = 3.0
 
+[sub_resource type="BoxMesh" id="box_3.500_0.160_2.450"]
+size = Vector3(3.5, 0.16, 2.45)
+
+[sub_resource type="BoxMesh" id="box_3.300_2.100_2.250"]
+size = Vector3(3.3, 2.1, 2.25)
+
+[sub_resource type="BoxMesh" id="box_0.040_2.100_0.090"]
+size = Vector3(0.04, 2.1, 0.09)
+
+[sub_resource type="BoxMesh" id="box_0.040_0.090_2.250"]
+size = Vector3(0.04, 0.09, 2.25)
+
+[sub_resource type="BoxMesh" id="box_0.090_2.100_0.040"]
+size = Vector3(0.09, 2.1, 0.04)
+
+[sub_resource type="BoxMesh" id="box_3.300_0.090_0.040"]
+size = Vector3(3.3, 0.09, 0.04)
+
+[sub_resource type="BoxMesh" id="box_1.824_0.070_0.040"]
+size = Vector3(1.8239037803568476, 0.07, 0.04)
+
+[sub_resource type="BoxMesh" id="box_0.060_1.750_0.820"]
+size = Vector3(0.06, 1.75, 0.82)
+
+[sub_resource type="BoxMesh" id="box_0.030_0.080_0.840"]
+size = Vector3(0.03, 0.08, 0.84)
+
+[sub_resource type="BoxMesh" id="box_0.050_0.050_0.120"]
+size = Vector3(0.05, 0.05, 0.12)
+
+[sub_resource type="BoxMesh" id="box_0.030_0.200_0.620"]
+size = Vector3(0.03, 0.2, 0.62)
+
+[sub_resource type="PrismMesh" id="prisma_2.750_0.500_3.700"]
+size = Vector3(2.75, 0.5, 3.6999999999999997)
+
+[sub_resource type="BoxMesh" id="box_3.740_0.080_2.790"]
+size = Vector3(3.7399999999999998, 0.08, 2.79)
+
+[sub_resource type="BoxMesh" id="box_3.800_0.100_0.100"]
+size = Vector3(3.8, 0.1, 0.1)
+
+[sub_resource type="PrismMesh" id="prisma_2.650_0.450_0.050"]
+size = Vector3(2.65, 0.45, 0.05)
+
 [node name="KloContainer" type="Node3D"]
 script = ExtResource("3_klo")
 
-[node name="WC" parent="." instance=ExtResource("1_wc")]
+[node name="Haeusl" type="Node3D" parent="."]
+
+[node name="Sockel" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.08, 0.4)
+mesh = SubResource("box_3.500_0.160_2.450")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Waende" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.21, 0.4)
+mesh = SubResource("box_3.300_2.100_2.250")
+surface_material_override/0 = ExtResource("m_creme_lack")
+
+[node name="VornPfosten0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64, 1.21, -0.68)
+mesh = SubResource("box_0.040_2.100_0.090")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="VornPfosten1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64, 1.21, 0.4)
+mesh = SubResource("box_0.040_2.100_0.090")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="VornPfosten2" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64, 1.21, 1.48)
+mesh = SubResource("box_0.040_2.100_0.090")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="VornRiegel0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64, 0.205, 0.4)
+mesh = SubResource("box_0.040_0.090_2.250")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="VornRiegel1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64, 2.215, 0.4)
+mesh = SubResource("box_0.040_0.090_2.250")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="HintenPfosten0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 1.21, -0.68)
+mesh = SubResource("box_0.040_2.100_0.090")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="HintenPfosten1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 1.21, 0.4)
+mesh = SubResource("box_0.040_2.100_0.090")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="HintenPfosten2" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 1.21, 1.48)
+mesh = SubResource("box_0.040_2.100_0.090")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="HintenRiegel0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 0.205, 0.4)
+mesh = SubResource("box_0.040_0.090_2.250")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="HintenRiegel1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68, 2.215, 0.4)
+mesh = SubResource("box_0.040_0.090_2.250")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksPfosten0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.585, 1.21, -0.735)
+mesh = SubResource("box_0.090_2.100_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksPfosten1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.21, -0.735)
+mesh = SubResource("box_0.090_2.100_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksPfosten2" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.625, 1.21, -0.735)
+mesh = SubResource("box_0.090_2.100_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksRiegel0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.205, -0.735)
+mesh = SubResource("box_3.300_0.090_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksRiegel1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.315, -0.735)
+mesh = SubResource("box_3.300_0.090_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksRiegel2" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 2.215, -0.735)
+mesh = SubResource("box_3.300_0.090_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksStrebe00" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, -0.5181, 0, 0.5181, 0.8553, 0, 0, 0, 1, -0.805, 1.788, -0.735)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksStrebe01" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, 0.5181, 0, -0.5181, 0.8553, 0, 0, 0, 1, -0.805, 1.788, -0.735)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksStrebe10" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, -0.5181, 0, 0.5181, 0.8553, 0, 0, 0, 1, 0.845, 1.788, -0.735)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="LinksStrebe11" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, 0.5181, 0, -0.5181, 0.8553, 0, 0, 0, 1, 0.845, 1.788, -0.735)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsPfosten0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.585, 1.21, 1.535)
+mesh = SubResource("box_0.090_2.100_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsPfosten1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.21, 1.535)
+mesh = SubResource("box_0.090_2.100_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsPfosten2" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.625, 1.21, 1.535)
+mesh = SubResource("box_0.090_2.100_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsRiegel0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.205, 1.535)
+mesh = SubResource("box_3.300_0.090_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsRiegel1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.315, 1.535)
+mesh = SubResource("box_3.300_0.090_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsRiegel2" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 2.215, 1.535)
+mesh = SubResource("box_3.300_0.090_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsStrebe00" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, -0.5181, 0, 0.5181, 0.8553, 0, 0, 0, 1, -0.805, 1.788, 1.535)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsStrebe01" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, 0.5181, 0, -0.5181, 0.8553, 0, 0, 0, 1, -0.805, 1.788, 1.535)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsStrebe10" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, -0.5181, 0, 0.5181, 0.8553, 0, 0, 0, 1, 0.845, 1.788, 1.535)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="RechtsStrebe11" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(0.8553, 0.5181, 0, -0.5181, 0.8553, 0, 0, 0, 1, 0.845, 1.788, 1.535)
+mesh = SubResource("box_1.824_0.070_0.040")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="TuerDamen" type="Node3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.66, 0.16, -0.12)
+
+[node name="Blatt" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.925, 0)
+mesh = SubResource("box_0.060_1.750_0.820")
+surface_material_override/0 = ExtResource("m_holz_hell")
+
+[node name="Leiste0" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0.35, 0)
+mesh = SubResource("box_0.030_0.080_0.840")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Leiste1" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 1, 0)
+mesh = SubResource("box_0.030_0.080_0.840")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Leiste2" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 1.6, 0)
+mesh = SubResource("box_0.030_0.080_0.840")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Griff" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0.95, 0.28)
+mesh = SubResource("box_0.050_0.050_0.120")
+surface_material_override/0 = ExtResource("m_messing")
+
+[node name="Herz" type="Label3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, -0.045, 1.35, 0)
+pixel_size = 0.004
+modulate = Color(0.16, 0.08, 0.04, 1)
+outline_size = 0
+font_size = 64
+text = "♥"
+
+[node name="Schild" type="Label3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, -0.06, 1.98, 0)
+pixel_size = 0.0045
+modulate = Color(0.98, 0.9, 0.7, 1)
+outline_modulate = Color(0.2, 0.1, 0.04, 1)
+outline_size = 10
+font = ExtResource("4_fraktur")
+font_size = 56
+text = "Damen"
+
+[node name="Schildbrett" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035, 1.98, 0)
+mesh = SubResource("box_0.030_0.200_0.620")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="TuerHerren" type="Node3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.66, 0.16, 0.92)
+
+[node name="Blatt" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.925, 0)
+mesh = SubResource("box_0.060_1.750_0.820")
+surface_material_override/0 = ExtResource("m_holz_hell")
+
+[node name="Leiste0" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0.35, 0)
+mesh = SubResource("box_0.030_0.080_0.840")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Leiste1" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 1, 0)
+mesh = SubResource("box_0.030_0.080_0.840")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Leiste2" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 1.6, 0)
+mesh = SubResource("box_0.030_0.080_0.840")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Griff" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0.95, -0.28)
+mesh = SubResource("box_0.050_0.050_0.120")
+surface_material_override/0 = ExtResource("m_messing")
+
+[node name="Herz" type="Label3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, -0.045, 1.35, 0)
+pixel_size = 0.004
+modulate = Color(0.16, 0.08, 0.04, 1)
+outline_size = 0
+font_size = 64
+text = "♥"
+
+[node name="Schild" type="Label3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, -0.06, 1.98, 0)
+pixel_size = 0.0045
+modulate = Color(0.98, 0.9, 0.7, 1)
+outline_modulate = Color(0.2, 0.1, 0.04, 1)
+outline_size = 10
+font = ExtResource("4_fraktur")
+font_size = 56
+text = "Herren"
+
+[node name="Schildbrett" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035, 1.98, 0)
+mesh = SubResource("box_0.030_0.200_0.620")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Dach" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(6.123e-17, 0, 1, 0, 1, 0, -1, 0, 6.123e-17, 0.02, 2.51, 0.4)
+mesh = SubResource("prisma_2.750_0.500_3.700")
+surface_material_override/0 = ExtResource("m_rauten")
+
+[node name="Traufe" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 2.3, 0.4)
+mesh = SubResource("box_3.740_0.080_2.790")
+surface_material_override/0 = ExtResource("m_gold")
+
+[node name="First" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 2.78, 0.4)
+mesh = SubResource("box_3.800_0.100_0.100")
+surface_material_override/0 = ExtResource("m_gold")
+
+[node name="Giebel0" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(6.123e-17, 0, 1, 0, 1, 0, -1, 0, 6.123e-17, -1.81, 2.485, 0.4)
+mesh = SubResource("prisma_2.650_0.450_0.050")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="Giebel1" type="MeshInstance3D" parent="Haeusl"]
+transform = Transform3D(6.123e-17, 0, 1, 0, 1, 0, -1, 0, 6.123e-17, 1.85, 2.485, 0.4)
+mesh = SubResource("prisma_2.650_0.450_0.050")
+surface_material_override/0 = ExtResource("m_holz_dunkel")
+
+[node name="GiebelHerz" type="Label3D" parent="Haeusl"]
+transform = Transform3D(6.123e-17, 0, -1, 0, 1, 0, 1, 0, 6.123e-17, -1.84, 2.58, 0.4)
+pixel_size = 0.004
+modulate = Color(1, 0.85, 0.45, 1)
+outline_size = 0
+font_size = 72
+text = "♥"
 
 [node name="Body" type="StaticBody3D" parent="."]
 
@@ -32,7 +380,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 1.15, 0.4)
 shape = SubResource("Kollision")
 
 [node name="Schild" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.55, 0.4)
 billboard = 1
 pixel_size = 0.01
 font_size = 48
@@ -42,12 +390,12 @@ script = ExtResource("2_wt")
 schluessel = "WORLD_TOILET"
 
 [node name="Lampe" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.76, 2.1, -0.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.76, 2.1, 0.4)
 mesh = SubResource("LampeMesh")
 material_override = SubResource("LampeMat")
 
 [node name="LampenLicht" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 2.1, -0.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 2.1, 0.4)
 light_color = Color(0.2, 1, 0.3, 1)
 light_energy = 1.2
 omni_range = 2.5

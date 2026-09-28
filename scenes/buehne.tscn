@@ -93,7 +93,7 @@ spot_range = 16.0
 spot_angle = 9.0
 
 [node name="Kegel" type="MeshInstance3D" parent="Strahler/S1"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -5)
 cast_shadow = 0
 mesh = SubResource("Kegel")
 surface_material_override/0 = SubResource("KegelStoff")
@@ -108,7 +108,7 @@ spot_range = 16.0
 spot_angle = 9.0
 
 [node name="Kegel" type="MeshInstance3D" parent="Strahler/S2"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -5)
 cast_shadow = 0
 mesh = SubResource("Kegel")
 surface_material_override/0 = SubResource("KegelStoff")
@@ -123,7 +123,7 @@ spot_range = 16.0
 spot_angle = 9.0
 
 [node name="Kegel" type="MeshInstance3D" parent="Strahler/S3"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -5)
 cast_shadow = 0
 mesh = SubResource("Kegel")
 surface_material_override/0 = SubResource("KegelStoff")
@@ -138,7 +138,7 @@ spot_range = 16.0
 spot_angle = 9.0
 
 [node name="Kegel" type="MeshInstance3D" parent="Strahler/S4"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -5)
 cast_shadow = 0
 mesh = SubResource("Kegel")
 surface_material_override/0 = SubResource("KegelStoff")
@@ -153,7 +153,7 @@ spot_range = 16.0
 spot_angle = 9.0
 
 [node name="Kegel" type="MeshInstance3D" parent="Strahler/S5"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -5)
 cast_shadow = 0
 mesh = SubResource("Kegel")
 surface_material_override/0 = SubResource("KegelStoff")
@@ -168,7 +168,7 @@ spot_range = 16.0
 spot_angle = 9.0
 
 [node name="Kegel" type="MeshInstance3D" parent="Strahler/S6"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -5)
 cast_shadow = 0
 mesh = SubResource("Kegel")
 surface_material_override/0 = SubResource("KegelStoff")
