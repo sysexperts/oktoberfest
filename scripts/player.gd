@@ -92,6 +92,7 @@ func _ready() -> void:
 		_carry_fass.transform = TRAGE_HALTUNG.fass
 	if _carry_fass_pov:
 		_carry_fass_pov.transform = TRAGE_HALTUNG.pov
+	_fass_anheften.call_deferred()
 	_world = get_tree().current_scene
 	# Authority'yi düğüm adından türet (ad = peer_id). Zamanlamadan bağımsız.
 	var auth := name.to_int()
@@ -342,10 +343,15 @@ func _physics_process(delta: float) -> void:
 ## Figur aus dem Warteraum einsetzen (scripts/figuren.gd), Animationen neu starten.
 func _figur_setzen(nr: int) -> void:
 	var szene: PackedScene = Figuren.ALLE[posmod(nr, Figuren.ALLE.size())]
+	# Das Fass hängt am Skelett der alten Figur — vorher zurückholen, sonst
+	# verschwindet es mit ihr
+	_fass_loesen()
 	var neu := Figuren.einsetzen(self, szene)
 	if neu == _model:
+		_fass_anheften()
 		return
 	_model = neu
+	_fass_anheften()
 	_model.visible = not _is_local
 	_cur_anim = ""
 
@@ -1201,6 +1207,36 @@ func _carry_kind() -> int:
 
 func _has_ready() -> bool:
 	return carry_state != 0 and carry_fill >= 0.999
+
+## Fass am Oberkörper-Knochen der Figur festmachen: so wippt es beim Gehen mit
+## dem Körper, und die Arme (TragePose, ebenfalls am Oberkörper) bleiben am Fass.
+## Die Lage aus assets/trage_haltung.tres gilt für die Ruhelage der Figur.
+func _fass_anheften() -> void:
+	if _carry_fass == null or _is_local or not is_inside_tree():
+		return
+	var fig := _model as Figur
+	if fig == null or fig.skelett == null:
+		return
+	var sk := fig.skelett
+	var b := -1
+	for n: String in Figur.KNOCHEN_NAMEN["wirbel_oben"]:
+		b = sk.find_bone(n)
+		if b >= 0:
+			break
+	if b < 0:
+		return
+	var halter := BoneAttachment3D.new()
+	halter.name = "FassHalter"
+	sk.add_child(halter)
+	halter.bone_name = sk.get_bone_name(b)
+	var knochen := (global_transform.affine_inverse() * sk.global_transform) * sk.get_bone_global_rest(b)
+	_carry_fass.reparent(halter, false)
+	_carry_fass.transform = knochen.affine_inverse() * TRAGE_HALTUNG.fass
+
+func _fass_loesen() -> void:
+	if _carry_fass and _carry_fass.get_parent() != self:
+		_carry_fass.reparent(self, false)
+		_carry_fass.transform = TRAGE_HALTUNG.fass
 
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1

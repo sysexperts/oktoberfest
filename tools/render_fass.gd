@@ -71,15 +71,17 @@ class Lauf extends Node:
 		ich.get_node("Head").rotation.x = deg_to_rad(-8.0)
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png(ziel % "3_mitspieler_vorn")
-		mit.rotate_y(deg_to_rad(70.0))
+		mit.rotate_y(deg_to_rad(80.0))
 		await _frames(20)
 		get_viewport().get_texture().get_image().save_png(ziel % "4_mitspieler_seite")
 		# Beim Gehen: Laufanimation mit Tragehaltung
 		var figur := mit.get_node("Model") as Figur
 		if figur:
 			figur.gehen(1.0)
-		await _frames(25)
-		get_viewport().get_texture().get_image().save_png(ziel % "5_mitspieler_gehen")
+		# Drei Momente aus dem Gehen — Fass und Hände sollen zusammen wippen
+		for k in 3:
+			await _frames(9)
+			get_viewport().get_texture().get_image().save_png(ziel % ("5_mitspieler_gehen_%d" % (k + 1)))
 
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)
