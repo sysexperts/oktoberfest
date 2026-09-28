@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bw1u8087fbrmh" path="res://scripts/ausgabe.gd" id="1_a"]
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="2_krug"]
 [ext_resource type="PackedScene" path="res://scenes/essen_teller.tscn" id="3_teller"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_uebers"]
 
 [sub_resource type="BoxMesh" id="Tablett"]
 size = Vector3(3.5, 0.03, 0.55)
@@ -77,6 +78,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_HELLES"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_HELLES"
 
 [node name="Bild" parent="Plaetze/Bier1/Aufsteller" unique_id=964278031 instance=ExtResource("2_krug")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
@@ -151,6 +154,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_WEIZEN"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_WEIZEN"
 
 [node name="Bild" parent="Plaetze/Bier2/Aufsteller" unique_id=607899295 instance=ExtResource("2_krug")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
@@ -226,6 +231,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_RADLER"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_RADLER"
 
 [node name="Bild" parent="Plaetze/Bier3/Aufsteller" unique_id=1546427572 instance=ExtResource("2_krug")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
@@ -301,6 +308,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_FESTBIER"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_FESTBIER"
 
 [node name="Bild" parent="Plaetze/Bier4/Aufsteller" unique_id=676293448 instance=ExtResource("2_krug")]
 transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, -0.12, -0.075, 0.03)
@@ -376,6 +385,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_BREZN"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_BREZN"
 
 [node name="Bild" parent="Plaetze/Essen1/Aufsteller" unique_id=2039317197 instance=ExtResource("3_teller")]
 transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)
@@ -450,6 +461,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_WUERSTL"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_WUERSTL"
 
 [node name="Bild" parent="Plaetze/Essen2/Aufsteller" unique_id=398437873 instance=ExtResource("3_teller")]
 transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)
@@ -525,6 +538,8 @@ modulate = Color(0.2, 0.12, 0.05, 1)
 text = "SIGN_HENDL"
 font_size = 56
 outline_size = 0
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_HENDL"
 
 [node name="Bild" parent="Plaetze/Essen3/Aufsteller" unique_id=2039250373 instance=ExtResource("3_teller")]
 transform = Transform3D(0.5, 0, 0, 0, 0, -0.5, 0, 0.5, 0, -0.12, -0.02, 0.03)

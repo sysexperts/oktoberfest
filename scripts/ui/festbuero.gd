@@ -248,7 +248,7 @@ func _reiter_lizenzen() -> void:
 			_erledigt(z, "DONE_OWNED")
 		else:
 			# Gleiche Regel wie GameManager.spaetlizenz_frei
-			var frei := int(_z.get("stage", 0)) >= 3 or int(_z.get("saison_nr", 1)) >= 2
+			var frei := int(_z.get("stage", 0)) >= 3
 			_einzelkauf(z, "BTN_BUY", int(_gm.LIC_COST[key]), "" if frei or not spaet else tr("WHY_LIC_LATE"))
 
 func _reiter_personal() -> void:

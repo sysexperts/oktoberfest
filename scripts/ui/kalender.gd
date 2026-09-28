@@ -43,7 +43,7 @@ func zeigen() -> void:
 			if offen.is_empty() or int(r[0]) < int(offen[0]):
 				continue   # schon bezahlt
 			raten[int(r[0])] = roundi(float(r[1]) * faktor / 100.0) * 100
-	%Titel.text = tr("KALENDER_TITEL") % int(z.get("saison_nr", 1))
+	%Titel.text = tr("KALENDER_TITEL")
 	%Legende.text = tr("KALENDER_LEGENDE")
 	for i in 16:
 		var tag := i + 1

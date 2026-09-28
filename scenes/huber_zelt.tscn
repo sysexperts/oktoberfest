@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/zelt/fass.tscn" id="13_fass"]
 [ext_resource type="Script" path="res://scripts/npc_huber.gd" id="14_npc"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="15_bean"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_uebers"]
 
 [node name="HuberZelt" type="Node3D"]
 script = ExtResource("1_huber")
@@ -38,6 +39,8 @@ text = "SIGN_HUBER_ZELT"
 font = ExtResource("11_fraktur")
 font_size = 96
 outline_size = 24
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_HUBER_ZELT"
 
 [node name="Innen" type="Node3D" parent="."]
 

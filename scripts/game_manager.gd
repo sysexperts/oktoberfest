@@ -1282,7 +1282,7 @@ func _foods_avail() -> Array:
 
 ## Spätlizenzen kaufbar? (Zeltstufe 3 oder ab dem 2. Fest)
 func spaetlizenz_frei() -> bool:
-	return _tent_stage >= 3 or _saison_nr >= 2
+	return _tent_stage >= 3
 
 ## Node adındaki sayıyı çıkar (BeerTable10 -> 10) — doğal sıralama için.
 func _tbl_num(n: String) -> int:

@@ -1,6 +1,7 @@
 [gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/models/theke.glb" id="1_theke"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_uebers"]
 
 [sub_resource type="BoxShape3D" id="Box"]
 size = Vector3(2.85, 2.49, 2.42)
@@ -35,6 +36,8 @@ pixel_size = 0.008
 font_size = 48
 outline_size = 16
 text = "SIGN_STAND"
+script = ExtResource("wt_uebers")
+schluessel = "SIGN_STAND"
 
 [node name="Body" type="StaticBody3D" parent="."]
 

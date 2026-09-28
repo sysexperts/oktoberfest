@@ -283,6 +283,8 @@ outline_size = 10
 font = ExtResource("4_fraktur")
 font_size = 56
 text = "SIGN_DAMEN"
+script = ExtResource("2_wt")
+schluessel = "SIGN_DAMEN"
 
 [node name="Schildbrett" type="MeshInstance3D" parent="Haeusl/TuerDamen"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035, 1.98, 0)
@@ -334,6 +336,8 @@ outline_size = 10
 font = ExtResource("4_fraktur")
 font_size = 56
 text = "SIGN_HERREN"
+script = ExtResource("2_wt")
+schluessel = "SIGN_HERREN"
 
 [node name="Schildbrett" type="MeshInstance3D" parent="Haeusl/TuerHerren"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035, 1.98, 0)

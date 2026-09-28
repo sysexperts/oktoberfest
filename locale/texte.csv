@@ -300,7 +300,7 @@ LIC_INFO,Danach bestellen Gäste auch das.,Guests will order it too.,Misafirler 
 LIC_FESTBIER,Festbier-Lizenz,Festival beer license,Festival birası lisansı
 LIC_HENDL,Hendl-Lizenz,Roast chicken license,Tavuk lisansı
 LIC_INFO_LATE,Premium: Gäste zahlen deutlich mehr dafür.,Premium: guests pay a lot more for it.,Premium: misafirler bunun için çok daha fazla öder.
-WHY_LIC_LATE,Erst ab Zeltstufe 3 oder dem 2. Fest,Only from tent level 3 or the 2nd season,Ancak çadır seviyesi 3 veya 2. sezondan itibaren
+WHY_LIC_LATE,Erst ab Zeltstufe 3,Only from tent level 3,Ancak çadır seviyesi 3'ten itibaren
 STAFF_COOK,Koch,Cook,Aşçı
 STAFF_WAITER,Kellner,Waiter,Garson
 STAFF_CLEANER,Reinigungskraft,Cleaner,Temizlikçi
@@ -977,7 +977,7 @@ ZEITUNG_M_HUBER_2,Alois Huber im Interview: „Sepps Zelt? Das hält keine Woche
 ZEITUNG_M_HUBER_3,Gerücht: Huber soll nachts um fremde Zelte schleichen.,Rumour: Huber is said to sneak around other tents at night.,Söylenti: Huber'in geceleri başka çadırların etrafında dolaştığı söyleniyor.
 ZEITUNG_M_HUBER_4,Huber verlost Freibier — aber nur für Stammgäste.,Huber raffles free beer — regulars only.,Huber bedava bira çekilişi yapıyor — sadece müdavimlere.
 ACTION_KALENDER,Kalender,Calendar,Takvim
-KALENDER_TITEL,Festkalender · Saison %d,Fair calendar · season %d,Fuar takvimi · sezon %d
+KALENDER_TITEL,Festkalender,Fair calendar,Fuar takvimi
 KALENDER_LEGENDE,"Heute ist hervorgehoben. Bankrate am Abend · Huber bietet eine Wette an · Duell um Sepps Ehre · K oder Esc schließt","Today is highlighted. bank instalment in the evening · Huber offers a bet · duel for Sepp's honour · K or Esc closes","Bugün vurgulandı. akşam banka taksiti · Huber bahis teklif ediyor · Sepp'in onuru için düello · K veya Esc kapatır"
 KALENDER_ERSTER,Erster Festtag,First day of the fair,Fuarın ilk günü
 KALENDER_BANK,%s,%s,%s
