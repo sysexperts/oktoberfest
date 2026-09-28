@@ -646,7 +646,7 @@ class Lauf extends Node:
 		gm._phase = gm.Phase.SHIFT
 		var zelt := gm.get_node("Tent")
 		_check("Zelt hat Dielenboden, Galerie und hohes Dach",
-			zelt.has_node("Boden/DielenNord") and zelt.has_node("Boden/DielenWest")
+			zelt.has_node("Boden/DielenNord") and zelt.has_node("Boden/DielenOst")
 				and zelt.has_node("Galerie/EmporeWest") and zelt.has_node("Dach/Plane/PlaneOst"),
 			"%d Teile" % zelt.find_children("*", "Node3D", true, false).size())
 

@@ -18,23 +18,26 @@ extends SceneTree
 
 const ZIEL := "res://assets/braukeller/"
 
-# Muss zu tools/bake_zelt.gd passen (Loch im Dielenboden)
-const SCHACHT_X0 := -11.8
-const SCHACHT_X1 := -8.8
-const SCHACHT_Z0 := -14.0
-const SCHACHT_Z1 := -8.4
-# Keller: Boden und Decke
+# Muss zu tools/bake_zelt.gd passen (Loch im Dielenboden). Seit 28.09. liegt der
+# Eingang unter der Emporentreppe West (x -12 … -10.7, z 0 … 6.5): man steigt am
+# hohen Ende der Treppe ein und geht Richtung Zeltrückwand hinunter.
+const SCHACHT_X0 := -12.0
+const SCHACHT_X1 := -10.4
+const SCHACHT_Z0 := 0.9
+const SCHACHT_Z1 := 5.3
+# Keller: Boden und Decke — hoch genug, dass es nach Brauerei aussieht
 const BODEN_Y := -3.4
-const DECKE_Y := -1.0
-# Brauraum östlich der Treppe
-const RAUM_X0 := -8.8
-const RAUM_X1 := -3.6
-const RAUM_Z0 := -14.2
-const RAUM_Z1 := -5.6
-# Treppe: oben an der Zeltkante, unten auf dem Kellerboden
-const TREPPE_Z_OBEN := -8.6
-const TREPPE_Z_UNTEN := -13.4
-const TUER_Z := -11.5
+const DECKE_Y := -0.35
+# Brauhalle unter dem hinteren Zeltteil (groß: 16 × 14,5 m)
+const RAUM_X0 := -12.0
+const RAUM_X1 := 4.0
+const RAUM_Z0 := -13.8
+const RAUM_Z1 := 0.2
+# Treppe: oben am Zeltboden (Nordende des Schachts), unten im Treppengang
+const TREPPE_Z_OBEN := 5.2
+const TREPPE_Z_UNTEN := 0.8
+# Tür am Fuß der Treppe, in der Wand zwischen Treppengang und Halle
+const TUER_X := -11.2
 const TUER_B := 1.2
 const TUER_H := 2.05
 
@@ -145,52 +148,56 @@ func _keller() -> void:
 	_kellermats()
 	var hoehe := DECKE_Y - BODEN_Y
 
-	# Boden: Steinplatten über Treppenschacht und Brauraum
-	_add("stein", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.4, 0.2, SCHACHT_Z1 - SCHACHT_Z0 + 0.4)),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, BODEN_Y - 0.1, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	# Boden: Steinplatten in Halle und Treppengang
 	_add("stein", _box(Vector3(RAUM_X1 - RAUM_X0 + 0.4, 0.2, RAUM_Z1 - RAUM_Z0 + 0.4)),
 		_at((RAUM_X0 + RAUM_X1) / 2.0, BODEN_Y - 0.1, (RAUM_Z0 + RAUM_Z1) / 2.0))
-	# Plattenfugen: ein Raster heller Mörtelstreifen, damit der Boden nicht leer wirkt
+	_add("stein", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.3, 0.2, SCHACHT_Z1 - RAUM_Z1 + 0.3)),
+		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, BODEN_Y - 0.1, (RAUM_Z1 + SCHACHT_Z1) / 2.0))
+	# Plattenfugen
 	var fx := RAUM_X0
 	while fx <= RAUM_X1:
-		_add("moertel", _box(Vector3(0.04, 0.01, RAUM_Z1 - RAUM_Z0)),
-			_at(fx, BODEN_Y + 0.005, (RAUM_Z0 + RAUM_Z1) / 2.0))
-		fx += 1.3
+		_add("moertel", _box(Vector3(0.04, 0.01, RAUM_Z1 - RAUM_Z0)), _at(fx, BODEN_Y + 0.005, (RAUM_Z0 + RAUM_Z1) / 2.0))
+		fx += 1.4
 	var fz := RAUM_Z0
 	while fz <= RAUM_Z1:
-		_add("moertel", _box(Vector3(RAUM_X1 - RAUM_X0, 0.01, 0.04)),
-			_at((RAUM_X0 + RAUM_X1) / 2.0, BODEN_Y + 0.005, fz))
-		fz += 1.3
+		_add("moertel", _box(Vector3(RAUM_X1 - RAUM_X0, 0.01, 0.04)), _at((RAUM_X0 + RAUM_X1) / 2.0, BODEN_Y + 0.005, fz))
+		fz += 1.4
 
-	# Ziegelwände rings um beide Räume, mit Aussparung für die Tür
-	_wand_x(SCHACHT_X0 - 0.15, SCHACHT_Z0, SCHACHT_Z1, hoehe)          # Treppe West
-	_wand_z(SCHACHT_Z0 - 0.15, SCHACHT_X0, SCHACHT_X1, hoehe)          # Treppe Süd
-	_wand_z(SCHACHT_Z1 + 0.15, SCHACHT_X0, SCHACHT_X1, hoehe, 0.3)     # Treppe Nord (nur Sockel, oben offen)
-	_wand_z(RAUM_Z0 - 0.15, RAUM_X0, RAUM_X1, hoehe)                   # Brauraum Süd
-	_wand_z(RAUM_Z1 + 0.15, RAUM_X0, RAUM_X1, hoehe)                   # Brauraum Nord
-	_wand_x(RAUM_X1 + 0.15, RAUM_Z0, RAUM_Z1, hoehe)                   # Brauraum Ost
-	# Trennwand mit Türöffnung zwischen Treppe und Brauraum
-	_wand_x(RAUM_X0, RAUM_Z0, TUER_Z - TUER_B / 2.0, hoehe)
-	_wand_x(RAUM_X0, TUER_Z + TUER_B / 2.0, RAUM_Z1, hoehe)
-	# Sturz über der Tür
-	_add("ziegel", _box(Vector3(0.3, hoehe - TUER_H, TUER_B)),
-		_at(RAUM_X0, BODEN_Y + TUER_H + (hoehe - TUER_H) / 2.0, TUER_Z))
-	# Türrahmen aus Balken
-	for dz: float in [TUER_Z - TUER_B / 2.0, TUER_Z + TUER_B / 2.0]:
-		_add("holz_dunkel", _box(Vector3(0.36, TUER_H, 0.12)), _at(RAUM_X0, BODEN_Y + TUER_H / 2.0, dz))
-	_add("holz_dunkel", _box(Vector3(0.36, 0.14, TUER_B + 0.24)), _at(RAUM_X0, BODEN_Y + TUER_H, TUER_Z))
+	# Halle: Ziegelwände rundum; Nordwand mit Öffnung zum Treppengang (Tür)
+	_wand_x(RAUM_X0 - 0.15, RAUM_Z0, SCHACHT_Z1, hoehe)                 # West (auch Treppengang)
+	_wand_x(RAUM_X1 + 0.15, RAUM_Z0, RAUM_Z1, hoehe)                   # Ost
+	_wand_z(RAUM_Z0 - 0.15, RAUM_X0, RAUM_X1, hoehe)                   # Süd
+	_wand_z(RAUM_Z1 + 0.15, SCHACHT_X1 + 0.3, RAUM_X1, hoehe)          # Nord (ohne Treppengang)
+	# Treppengang: Ostwand und Stirnwand hinter der Treppe
+	_wand_x(SCHACHT_X1 + 0.15, RAUM_Z1, SCHACHT_Z1, hoehe)
+	_wand_z(SCHACHT_Z1 + 0.15, SCHACHT_X0, SCHACHT_X1 + 0.3, hoehe)
+	# Türwand quer im Treppengang, mit Öffnung, Sturz und Balkenrahmen
+	var z := RAUM_Z1 + 0.15
+	_wand_z(z, SCHACHT_X0, TUER_X - TUER_B / 2.0, hoehe)
+	_wand_z(z, TUER_X + TUER_B / 2.0, SCHACHT_X1 + 0.3, hoehe)
+	_add("ziegel", _box(Vector3(TUER_B, hoehe - TUER_H, 0.3)), _at(TUER_X, BODEN_Y + TUER_H + (hoehe - TUER_H) / 2.0, z))
+	for dx: float in [TUER_X - TUER_B / 2.0, TUER_X + TUER_B / 2.0]:
+		_add("holz_dunkel", _box(Vector3(0.12, TUER_H, 0.36)), _at(dx, BODEN_Y + TUER_H / 2.0, z))
+	_add("holz_dunkel", _box(Vector3(TUER_B + 0.24, 0.14, 0.36)), _at(TUER_X, BODEN_Y + TUER_H, z))
 
-	# Decke: Balkenlage über beiden Räumen, dazwischen Bretter
+	# Decke der Halle: Bretter, Unterzüge längs, Balken quer, Holzstützen
 	_add("holz_dunkel", _box(Vector3(RAUM_X1 - RAUM_X0 + 0.4, 0.12, RAUM_Z1 - RAUM_Z0 + 0.4)),
 		_at((RAUM_X0 + RAUM_X1) / 2.0, DECKE_Y + 0.06, (RAUM_Z0 + RAUM_Z1) / 2.0))
 	var bz := RAUM_Z0 + 0.6
 	while bz <= RAUM_Z1 - 0.3:
-		_add("holz", _box(Vector3(RAUM_X1 - RAUM_X0, 0.22, 0.2)),
-			_at((RAUM_X0 + RAUM_X1) / 2.0, DECKE_Y - 0.11, bz))
+		_add("holz", _box(Vector3(RAUM_X1 - RAUM_X0, 0.2, 0.18)), _at((RAUM_X0 + RAUM_X1) / 2.0, DECKE_Y - 0.1, bz))
 		bz += 1.2
-	# Über der Treppe nur der Streifen neben dem Schacht
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.4, 0.12, 0.6)),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, DECKE_Y + 0.06, SCHACHT_Z0 + 0.3))
+	for ux: float in STUETZEN_X:
+		_add("holz_dunkel", _box(Vector3(0.34, 0.34, RAUM_Z1 - RAUM_Z0)), _at(ux, DECKE_Y - 0.37, (RAUM_Z0 + RAUM_Z1) / 2.0))
+		for uz: float in STUETZEN_Z:
+			_add("holz_dunkel", _box(Vector3(0.3, hoehe - 0.5, 0.3)), _at(ux, BODEN_Y + (hoehe - 0.5) / 2.0, uz))
+			# Kopfbänder
+			for sgn: float in [-1.0, 1.0]:
+				_add("holz_dunkel", _box(Vector3(0.14, 0.9, 0.14)),
+					Transform3D(Basis(Vector3.RIGHT, sgn * 0.7), Vector3(ux, DECKE_Y - 0.75, uz + sgn * 0.3)))
+	# Decke über dem Treppengang (nur hinten, wo man schon tief unten ist)
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.4, 0.12, 1.2)),
+		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, DECKE_Y + 0.06, RAUM_Z1 + 0.6))
 
 	_schachtkragen()
 	_treppe()
@@ -198,13 +205,16 @@ func _keller() -> void:
 	_kellerdeko()
 	_speichern("keller")
 
+## Holzstützen in der Halle (x-Reihen, z-Positionen)
+const STUETZEN_X := [-6.0, 0.0]
+const STUETZEN_Z := [-9.0, -4.0]
+
 ## Ziegelwand entlang z bei festem x
 func _wand_x(x: float, z0: float, z1: float, hoehe: float, anteil := 1.0) -> void:
 	if z1 - z0 < 0.05:
 		return
 	var h := hoehe * anteil
 	_add("ziegel", _box(Vector3(0.3, h, z1 - z0)), _at(x, BODEN_Y + h / 2.0, (z0 + z1) / 2.0))
-	# Zwei Mörtelbänder als Lagerfugen — billige Struktur, große Wirkung
 	for f: float in [0.33, 0.66]:
 		_add("moertel", _box(Vector3(0.32, 0.03, z1 - z0)), _at(x, BODEN_Y + h * f, (z0 + z1) / 2.0))
 
@@ -217,92 +227,92 @@ func _wand_z(z: float, x0: float, x1: float, hoehe: float, anteil := 1.0) -> voi
 	for f: float in [0.33, 0.66]:
 		_add("moertel", _box(Vector3(x1 - x0, 0.03, 0.32)), _at((x0 + x1) / 2.0, BODEN_Y + h * f, z))
 
-## Kragen zwischen Kellerdecke (y = DECKE_Y) und Zeltboden (y = 0): ohne ihn
-## schaut man durch das Loch im Dielenboden seitlich ins Freie, weil dort
-## zwischen Decke und Boden nichts steht. Nach Norden bleibt es offen — dort
-## steigt man ein.
+## Zwischen Kellerdecke und Zeltboden rings um das Loch: Ziegel an den Seiten,
+## Balkenkranz unter der Schnittkante. Nach Norden offen — dort steigt man ein.
 func _schachtkragen() -> void:
 	var h := -DECKE_Y
 	var y := DECKE_Y + h / 2.0
-	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)),
-		_at(SCHACHT_X0 - 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
-	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)),
-		_at(SCHACHT_X1 + 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
-	_add("ziegel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.6, h, 0.3)),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, y, SCHACHT_Z0 - 0.15))
-	# Unter dem Dielenboden rings um den Schacht ein Balkenkranz, damit die
-	# Schnittkante des Bodens nicht in der Luft hängt
-	for sx: float in [SCHACHT_X0 - 0.06, SCHACHT_X1 + 0.06]:
-		_add("holz_dunkel", _box(Vector3(0.12, 0.2, SCHACHT_Z1 - SCHACHT_Z0)),
-			_at(sx, -0.14, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.2, 0.12)),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.14, SCHACHT_Z0 - 0.06))
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.2, 0.12)),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.14, SCHACHT_Z1 + 0.06))
+	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	_add("ziegel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.3, h, 0.3)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, y, SCHACHT_Z0 - 0.15))
+	_add("holz_dunkel", _box(Vector3(0.12, 0.2, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.06, -0.14, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.2, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.14, SCHACHT_Z0 - 0.06))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.2, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.14, SCHACHT_Z1 + 0.06))
+	# Geländer oben an der offenen Seite (zur Halle) und am tiefen Ende
+	var gh := 0.95
+	_add("holz_dunkel", _box(Vector3(0.07, 0.07, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.05, 0.07 + gh, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0, 0.07, 0.07)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, 0.07 + gh, SCHACHT_Z0 + 0.03))
+	var gz := SCHACHT_Z0 + 0.03
+	while gz <= SCHACHT_Z1:
+		_add("holz_dunkel", _box(Vector3(0.06, gh, 0.06)), _at(SCHACHT_X1 + 0.05, 0.07 + gh / 2.0, gz))
+		gz += 0.85
 
-## Treppe vom Zeltboden herunter: Stufen, Wangen, Handlauf.
-## Die Kollision ist eine Rampe (scenes/braukeller.tscn) — genau wie bei den
-## Emporentreppen im Zelt, weil Stufen als Kollision den Spieler hängen lassen.
+## Treppe vom Zeltboden herunter (Richtung -z): Stufen, Wangen, Handlauf.
+## Die Kollision ist eine Rampe (scenes/braukeller.tscn).
 func _treppe() -> void:
 	var lauf := TREPPE_Z_OBEN - TREPPE_Z_UNTEN
-	var n := 17
-	var breite := SCHACHT_X1 - SCHACHT_X0 - 0.5
+	var n := 18
+	var breite := SCHACHT_X1 - SCHACHT_X0 - 0.2
 	var mx := (SCHACHT_X0 + SCHACHT_X1) / 2.0
 	var steigung := -BODEN_Y / float(n)
 	var tritt := lauf / float(n)
 	for i in n:
 		var y := BODEN_Y + steigung * float(i + 1)
-		var z := TREPPE_Z_UNTEN + tritt * (float(i) + 0.5)
-		_add("holz", _box(Vector3(breite, 0.07, tritt + 0.05)), _at(mx, y - 0.035, z))
-		_add("holz_dunkel", _box(Vector3(breite, steigung - 0.07, 0.05)), _at(mx, y - steigung / 2.0 - 0.02, z - tritt / 2.0))
+		var zz := TREPPE_Z_UNTEN + tritt * (float(i) + 0.5)
+		_add("holz", _box(Vector3(breite, 0.07, tritt + 0.05)), _at(mx, y - 0.035, zz))
+		_add("holz_dunkel", _box(Vector3(breite, steigung - 0.07, 0.05)), _at(mx, y - steigung / 2.0 - 0.02, zz - tritt / 2.0))
 	var winkel := atan2(-BODEN_Y, lauf)
 	var schraeg := sqrt(BODEN_Y * BODEN_Y + lauf * lauf)
 	var neigung := Basis(Vector3.RIGHT, -winkel)
 	var mitte := Vector3(mx, BODEN_Y / 2.0, (TREPPE_Z_OBEN + TREPPE_Z_UNTEN) / 2.0)
 	for sx: float in [-1.0, 1.0]:
-		_add("holz_dunkel", _box(Vector3(0.08, 0.36, schraeg)),
-			Transform3D(neigung, Vector3(mx + sx * (breite / 2.0 + 0.04), mitte.y - 0.1, mitte.z)))
-		_add("holz_dunkel", _box(Vector3(0.06, 0.06, schraeg)),
-			Transform3D(neigung, Vector3(mx + sx * (breite / 2.0 + 0.04), mitte.y + 0.95, mitte.z)))
-		for i in range(1, n, 4):
-			var y := BODEN_Y + steigung * float(i + 1)
-			var z := TREPPE_Z_UNTEN + tritt * (float(i) + 0.5)
-			_add("holz_dunkel", _box(Vector3(0.05, 0.9, 0.05)),
-				_at(mx + sx * (breite / 2.0 + 0.04), y + 0.45, z))
-	# Podest unten
-	_add("stein", _box(Vector3(breite + 0.3, 0.06, 1.0)), _at(mx, BODEN_Y + 0.03, TREPPE_Z_UNTEN - 0.5))
+		_add("holz_dunkel", _box(Vector3(0.08, 0.36, schraeg)), Transform3D(neigung, Vector3(mx + sx * (breite / 2.0 + 0.04), mitte.y - 0.1, mitte.z)))
+	_add("holz_dunkel", _box(Vector3(0.06, 0.06, schraeg)), Transform3D(neigung, Vector3(SCHACHT_X1 - 0.08, mitte.y + 0.95, mitte.z)))
+	# Podest unten vor der Tür
+	_add("stein", _box(Vector3(breite + 0.2, 0.06, TREPPE_Z_UNTEN - RAUM_Z1)), _at(mx, BODEN_Y + 0.03, (TREPPE_Z_UNTEN + RAUM_Z1) / 2.0))
 
-## Drei Lampen unter der Decke — gebacken ist nur der Körper, das Licht selbst
-## steckt als OmniLight3D in scenes/braukeller.tscn.
+## Lampen unter der Decke — gebacken ist der Körper, das Licht steckt als
+## OmniLight3D in scenes/braukeller.tscn (LAMPEN, gleiche Orte).
+const LAMPEN := [Vector2(-9.0, -10.5), Vector2(-3.0, -10.5), Vector2(2.0, -10.5),
+	Vector2(-9.0, -2.5), Vector2(-3.0, -2.5), Vector2(2.0, -2.5)]
 func _lampen() -> void:
-	for lz: float in [RAUM_Z0 + 1.6, (RAUM_Z0 + RAUM_Z1) / 2.0, RAUM_Z1 - 1.6]:
-		var lx := (RAUM_X0 + RAUM_X1) / 2.0
-		_add("eisen", _box(Vector3(0.04, 0.35, 0.04)), _at(lx, DECKE_Y - 0.35, lz))
-		_add("eisen", _zyl(0.22, 0.1, 0.16, 14), _at(lx, DECKE_Y - 0.6, lz))
-		_add("licht", _kugel(0.09, 12, 6), _at(lx, DECKE_Y - 0.74, lz))
-	_add("eisen", _box(Vector3(0.04, 0.3, 0.04)),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, DECKE_Y - 0.3, TREPPE_Z_UNTEN - 0.4))
-	_add("licht", _kugel(0.08, 12, 6),
-		_at((SCHACHT_X0 + SCHACHT_X1) / 2.0, DECKE_Y - 0.6, TREPPE_Z_UNTEN - 0.4))
-	# Wandlampe neben der Tür — ohne sie steht man im Dunkeln vor dem Schloss
-	_add("eisen", _box(Vector3(0.22, 0.05, 0.05)), _at(RAUM_X0 - 0.28, BODEN_Y + 1.95, TUER_Z - 0.95))
-	_add("eisen", _zyl(0.13, 0.07, 0.12, 12), _at(RAUM_X0 - 0.42, BODEN_Y + 1.88, TUER_Z - 0.95))
-	_add("licht", _kugel(0.07, 12, 6), _at(RAUM_X0 - 0.42, BODEN_Y + 1.76, TUER_Z - 0.95))
+	for l: Vector2 in LAMPEN:
+		_add("eisen", _box(Vector3(0.04, 0.35, 0.04)), _at(l.x, DECKE_Y - 0.35, l.y))
+		_add("eisen", _zyl(0.24, 0.1, 0.18, 14), _at(l.x, DECKE_Y - 0.6, l.y))
+		_add("licht", _kugel(0.1, 12, 6), _at(l.x, DECKE_Y - 0.75, l.y))
+	# Lampe im Treppengang
+	var mx := (SCHACHT_X0 + SCHACHT_X1) / 2.0
+	_add("eisen", _box(Vector3(0.04, 0.3, 0.04)), _at(mx, DECKE_Y - 0.3, RAUM_Z1 + 0.4))
+	_add("licht", _kugel(0.08, 12, 6), _at(mx, DECKE_Y - 0.55, RAUM_Z1 + 0.4))
 
-## Kleinzeug, damit der Keller bewohnt wirkt: Malzsäcke, Kiste, Schaufel, Eimer
+## Kleinzeug, damit der Keller bewohnt wirkt: Malzsäcke, Kisten, Schaufel, Eimer,
+## Fassstapel an der Ostwand
 func _kellerdeko() -> void:
 	_mat("sack", Color(0.72, 0.62, 0.42), 0.95)
 	_mat("blech", Color(0.55, 0.56, 0.58), 0.5, 0.6)
-	var sx := RAUM_X1 - 0.6
-	for i in 3:
-		var sz := RAUM_Z1 - 1.0 - float(i) * 0.55
-		_add("sack", _zyl(0.22, 0.26, 0.6, 10), _at(sx, BODEN_Y + 0.3, sz))
-		_add("sack", _box(Vector3(0.3, 0.06, 0.16)), _at(sx, BODEN_Y + 0.62, sz))
-	_add("sack", _zyl(0.24, 0.26, 0.5, 10), Transform3D(Basis(Vector3.FORWARD, 1.4), Vector3(sx - 0.5, BODEN_Y + 0.2, RAUM_Z1 - 2.4)))
-	_add("holz", _box(Vector3(0.7, 0.5, 0.5)), _at(RAUM_X0 + 0.6, BODEN_Y + 0.25, RAUM_Z1 - 0.7))
-	_add("holz_dunkel", _box(Vector3(0.74, 0.05, 0.54)), _at(RAUM_X0 + 0.6, BODEN_Y + 0.52, RAUM_Z1 - 0.7))
+	# Malzsäcke in zwei Reihen an der Westwand
+	for r in 2:
+		for i in 5:
+			var sz := -8.0 + float(i) * 0.6
+			_add("sack", _zyl(0.22, 0.26, 0.6, 10), _at(RAUM_X0 + 0.45 + r * 0.55, BODEN_Y + 0.3, sz))
+			_add("sack", _box(Vector3(0.3, 0.06, 0.16)), _at(RAUM_X0 + 0.45 + r * 0.55, BODEN_Y + 0.62, sz))
+	_add("sack", _zyl(0.24, 0.26, 0.5, 10), Transform3D(Basis(Vector3.FORWARD, 1.4), Vector3(RAUM_X0 + 1.6, BODEN_Y + 0.2, -6.0)))
+	# Kistenstapel
+	for k: Vector3 in [Vector3(RAUM_X1 - 0.6, 0, RAUM_Z1 - 0.8), Vector3(RAUM_X1 - 1.4, 0, RAUM_Z1 - 0.8), Vector3(RAUM_X1 - 0.6, 0.5, RAUM_Z1 - 0.8)]:
+		_add("holz", _box(Vector3(0.7, 0.5, 0.5)), _at(k.x, BODEN_Y + 0.25 + k.y, k.z))
+		_add("holz_dunkel", _box(Vector3(0.74, 0.05, 0.54)), _at(k.x, BODEN_Y + 0.52 + k.y, k.z))
+	# Liegende Fässer an der Ostwand, zwei Lagen
+	for lage in 2:
+		for i in 6:
+			var z := -12.5 + float(i) * 0.9 + (0.45 if lage == 1 else 0.0)
+			if lage == 1 and i == 5:
+				continue
+			var fy := BODEN_Y + 0.4 + float(lage) * 0.72
+			_add("holz", _zyl(0.38, 0.38, 0.9, 16), Transform3D(Basis(Vector3.FORWARD, PI / 2.0), Vector3(RAUM_X1 - 0.55, fy, z)))
+			for rx: float in [-0.3, 0.3]:
+				_add("eisen", _zyl(0.395, 0.395, 0.05, 16), Transform3D(Basis(Vector3.FORWARD, PI / 2.0), Vector3(RAUM_X1 - 0.55 + rx, fy, z)))
+	# Eimer und Schaufel
 	_add("blech", _zyl(0.16, 0.12, 0.3, 12), _at(RAUM_X0 + 0.5, BODEN_Y + 0.15, RAUM_Z0 + 0.8))
-	_add("eisen", _box(Vector3(0.05, 1.2, 0.05)), Transform3D(Basis(Vector3.FORWARD, 0.18), Vector3(RAUM_X1 - 0.25, BODEN_Y + 0.6, RAUM_Z0 + 0.7)))
+	_add("eisen", _box(Vector3(0.05, 1.2, 0.05)), Transform3D(Basis(Vector3.FORWARD, 0.18), Vector3(RAUM_X0 + 0.3, BODEN_Y + 0.6, RAUM_Z0 + 1.3)))
 	_add("blech", _box(Vector3(0.22, 0.3, 0.03)), _at(RAUM_X1 - 0.35, BODEN_Y + 0.08, RAUM_Z0 + 0.72))
 
 # ------------------------------------------------------------ Maischbottich

@@ -79,16 +79,16 @@ adjustment_saturation = 1.08
 adjustment_color_correction = ExtResource("103_lut")
 
 [sub_resource type="BoxShape3D" id="BodenSued"]
-size = Vector3(240, 0.4, 106)
+size = Vector3(240, 0.4, 120.9)
 
 [sub_resource type="BoxShape3D" id="BodenNord"]
-size = Vector3(240, 0.4, 128.4)
+size = Vector3(240, 0.4, 114.7)
 
 [sub_resource type="BoxShape3D" id="BodenWest"]
-size = Vector3(108.2, 0.4, 5.6)
+size = Vector3(108, 0.4, 4.4)
 
 [sub_resource type="BoxShape3D" id="BodenOst"]
-size = Vector3(128.8, 0.4, 5.6)
+size = Vector3(130.4, 0.4, 4.4)
 
 [sub_resource type="BoxShape3D" id="WallX"]
 size = Vector3(26, 8, 0.6)
@@ -114,19 +114,19 @@ shadow_enabled = true
 [node name="Floor" type="StaticBody3D" parent="." unique_id=2098207416]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=803608313]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -67)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -59.55)
 shape = SubResource("BodenSued")
 
 [node name="BodenNord" type="CollisionShape3D" parent="Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 55.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 62.65)
 shape = SubResource("BodenNord")
 
 [node name="BodenWest" type="CollisionShape3D" parent="Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.9, -0.2, -11.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, -0.2, 3.1)
 shape = SubResource("BodenWest")
 
 [node name="BodenOst" type="CollisionShape3D" parent="Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.6, -0.2, -11.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.8, -0.2, 3.1)
 shape = SubResource("BodenOst")
 
 [node name="Walls" type="Node3D" parent="." unique_id=1116608952]

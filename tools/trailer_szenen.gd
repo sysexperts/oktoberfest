@@ -68,6 +68,11 @@ class Lauf extends Node:
 		# Essensausgabe vom Kochfeld aus gesehen
 		{"name": "kueche_ausgabe", "ort": Vector3(5.6, 1.75, -7.4), "ziel": Vector3(5.6, 1.1, -9.0),
 			"uhr": 20.6, "fov": 60.0, "aufbau": "zelt_voll"},
+		# Braukeller: Einstieg unter der Emporentreppe und die Halle
+		{"name": "keller_einstieg", "ort": Vector3(-9.6, 1.8, 6.4), "ziel": Vector3(-11.2, -1.2, 3.0),
+			"uhr": 19.0, "fov": 65.0, "aufbau": "zelt_voll"},
+		{"name": "keller_halle", "ort": Vector3(-10.6, -1.4, -0.6), "ziel": Vector3(-2.0, -2.8, -8.0),
+			"uhr": 19.0, "fov": 75.0, "aufbau": "zelt_voll"},
 		# Toilettenhäusl
 		{"name": "klo", "ort": Vector3(6.6, 1.6, 9.9), "ziel": Vector3(10.4, 1.5, 10.0),
 			"uhr": 19.0, "fov": 60.0, "aufbau": "zelt_voll", "klo": true},

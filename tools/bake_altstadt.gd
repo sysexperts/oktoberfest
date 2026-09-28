@@ -322,8 +322,26 @@ func _bodenpunkt(a: float, r: float) -> Vector3:
 		p.y += laerm.get_noise_2d(p.x, p.z) * 16.0 * smoothstep(250.0, 420.0, r)
 	return p
 
+## Loch in der Wiese für die Kellertreppe unter der Emporentreppe West
+## (tools/bake_braukeller.gd, SCHACHT_*). Die Wiese liegt knapp unter dem
+## Zeltboden und würde sonst den Treppenschacht zudecken.
+const KELLER_LOCH := Rect2(-12.2, 0.7, 2.0, 4.8)
+
 func _boden() -> void:
-	var ringe: Array[float] = [0.0, 60.0, 88.0, 93.5, 98.0, 104.0]
+	# Innen (r < 60) als Raster, damit das Kellerloch ausgespart werden kann;
+	# der Ring ab 58 m überlappt das Raster und schließt die Kante.
+	var z := -60.0
+	while z < 60.0:
+		var x := -60.0
+		while x < 60.0:
+			var zelle := Rect2(MITTE.x + x, MITTE.z + z, 1.0, 1.0)
+			if Vector2(x + 0.5, z + 0.5).length() < 59.0 and not zelle.intersects(KELLER_LOCH):
+				var y := -0.08
+				var p0 := Vector3(zelle.position.x, y, zelle.position.y)
+				_quad(p0, p0 + Vector3(1, 0, 0), p0 + Vector3(1, 0, 1), p0 + Vector3(0, 0, 1), WIESE, 7, Vector3.UP)
+			x += 1.0
+		z += 1.0
+	var ringe: Array[float] = [58.0, 60.0, 88.0, 93.5, 98.0, 104.0]
 	var r := 104.0
 	while r < 290.0:
 		r += 12.0

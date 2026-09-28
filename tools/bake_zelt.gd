@@ -804,10 +804,10 @@ func _aussen(g: Node3D) -> void:
 
 ## Loch im Dielenboden für die Kellertreppe (scenes/braukeller.tscn). Der Boden
 ## ist deshalb in vier Streifen geteilt statt einer Platte.
-const SCHACHT_X0 := -11.8
-const SCHACHT_X1 := -8.8
-const SCHACHT_Z0 := -14.0
-const SCHACHT_Z1 := -8.4
+const SCHACHT_X0 := -12.0
+const SCHACHT_X1 := -10.4
+const SCHACHT_Z0 := 0.9
+const SCHACHT_Z1 := 5.3
 
 func _boden(g: Node3D) -> void:
 	# Oberkante 0.07 — knapp über dem Kirmes-Gelände (Terrain y 0.056)
