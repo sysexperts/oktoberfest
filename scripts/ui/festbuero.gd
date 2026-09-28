@@ -63,6 +63,14 @@ func _ready() -> void:
 	Symbole.setze(%SymbolTitel, "bank")
 	Symbole.setze(%SymbolGeld, "geld")
 	%Schliessen.pressed.connect(schliessen)
+	# Seitenleiste statt Reiterleiste: Klick oder Controller-Fokus wählt den Bereich
+	for i in _nav_knoepfe().size():
+		var k := _nav_knoepfe()[i]
+		k.pressed.connect(func() -> void: _reiter.current_tab = i)
+		k.focus_entered.connect(func() -> void:
+			if _reiter.current_tab != i:
+				_reiter.current_tab = i)
+	_reiter.tab_changed.connect(_nav_markieren)
 	_verbinde("ZeltMieten", func(_i: int) -> void:
 		# Erst den Zeltnamen abfragen, gemietet wird im Dialog
 		schliessen()
@@ -119,7 +127,9 @@ func oeffnen() -> void:
 	if TUTORIAL_ZIEL.has(_schritt):
 		_reiter.current_tab = TUTORIAL_ZIEL[_schritt][0]
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	_reiter.get_tab_bar().grab_focus.call_deferred()   # Controller: Reiter mit LB/RB bzw. Steuerkreuz
+	_nav_markieren(_reiter.current_tab)
+	# Controller: in der Seitenleiste mit dem Steuerkreuz hoch/runter
+	_nav_knoepfe()[_reiter.current_tab].grab_focus.call_deferred()
 
 func schliessen() -> void:
 	visible = false
@@ -128,13 +138,26 @@ func schliessen() -> void:
 func ist_offen() -> bool:
 	return visible
 
+func _nav_knoepfe() -> Array[Button]:
+	var aus: Array[Button] = []
+	for i in REITER_TITEL.size():
+		aus.append(get_node("%%Nav%d" % i) as Button)
+	return aus
+
+func _nav_markieren(tab: int) -> void:
+	var k := _nav_knoepfe()
+	for i in k.size():
+		k[i].set_pressed_no_signal(i == tab)
+
 # ------------------------------------------------------------ Anzeige
 func _neu() -> void:
 	if _gm == null:
 		return
 	for i in mini(REITER_TITEL.size(), _reiter.get_tab_count()):
 		_reiter.set_tab_title(i, tr(REITER_TITEL[i]))
-		_reiter.set_tab_icon(i, Symbole.bild(REITER_SYMBOLE[i]))
+		var k := _nav_knoepfe()[i]
+		k.text = tr(REITER_TITEL[i])
+		k.icon = Symbole.bild(REITER_SYMBOLE[i])
 	%Geld.text = Texte.euro(_geld)
 	%Geld.add_theme_color_override("font_color", Color(1, 0.42, 0.35) if _geld < 0 else Color(0.949, 0.933, 0.902))
 	%Status.text = Texte.buero_status(_z)

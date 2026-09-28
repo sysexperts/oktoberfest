@@ -3,36 +3,33 @@
 [ext_resource type="Script" path="res://scripts/ui/angebot.gd" id="1_ang"]
 
 [sub_resource type="StyleBoxFlat" id="Zeile"]
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 10.0
-content_margin_bottom = 8.0
-bg_color = Color(0.155, 0.118, 0.085, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 1, 1, 0.045)
 border_width_bottom = 1
-border_color = Color(0.32, 0.225, 0.13, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+border_color = Color(1, 1, 1, 0.06)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="ZeileHervor"]
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 10.0
-content_margin_bottom = 8.0
-bg_color = Color(0.225, 0.165, 0.115, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 0.84, 0.35, 0.12)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 border_color = Color(1, 0.839, 0.349, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Angebot" type="PanelContainer"]
 custom_minimum_size = Vector2(0, 66)
@@ -48,7 +45,7 @@ theme_override_constants/separation = 14
 [node name="Symbol" type="TextureRect" parent="Zeile"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(28, 28)
+custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
@@ -65,7 +62,7 @@ theme_override_constants/separation = 1
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 18
 text = "Titel"
 
 [node name="Info" type="Label" parent="Zeile/Texte"]
