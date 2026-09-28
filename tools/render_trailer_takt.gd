@@ -180,7 +180,7 @@ class Lauf extends Node:
 	func _beschriftungen_aus() -> void:
 		for l in gm.find_children("*", "Label3D", true, false):
 			var lab := l as Label3D
-			if lab.is_in_group("zeltname") or lab.name == "Namensschild" or lab.name == "Bubble":
+			if lab.is_in_group("zeltname") or lab.name == "Bubble":
 				continue
 			var p := lab.get_parent()
 			if p and (p is ZeltVermietung or p.has_method("ist_eroeffnung")):
@@ -266,8 +266,8 @@ class Lauf extends Node:
 		schwarz.color.a = 0.0
 		var intro := INTRO.instantiate()
 		add_child(intro)
-		_fahrt(Vector3(-40.0, 26.0, 74.0), Vector3(0.0, 2.0, 10.0),
-			Vector3(-14.0, 9.0, 38.0), Vector3(2.0, 2.5, 13.0), _schlaege(10))
+		_fahrt(Vector3(0.0, 16.0, 46.0), Vector3(0.0, 3.0, 10.0),
+			Vector3(0.0, 9.0, 30.0), Vector3(0.0, 3.5, 10.0), _schlaege(10))
 		await _bis(10)
 
 		# ---- Teil A: je 4 Schläge — ranschaffen, tragen, zapfen, servieren
@@ -284,8 +284,8 @@ class Lauf extends Node:
 		await _bis(20)
 		# 3 Ich-Sicht mit Fass ins Zelt
 		var pov := _ich_sicht(FASS.instantiate(), TRAGE.pov)
-		_fahrt(Vector3(0.3, 1.45, 10.5), Vector3(0.0, 1.2, 4.0),
-			Vector3(0.0, 1.45, 5.5), Vector3(-0.8, 1.1, -2.0), _schlaege(4))
+		_fahrt(Vector3(0.8, 1.45, 11.0), Vector3(0.8, 1.2, 4.0),
+			Vector3(0.8, 1.45, 6.0), Vector3(0.6, 1.1, -2.0), _schlaege(4))
 		await _bis(24)
 		pov.queue_free()
 		# 4 Zapfen: Krüge füllen sich an der Ausgabe
@@ -302,21 +302,21 @@ class Lauf extends Node:
 		# 5 Kellner mit Tablett durchs Zelt
 		attribute.dof_blur_far_distance = 10.0
 		attribute.dof_blur_far_transition = 8.0
-		var kellner := _kellner(Vector3(-6.0, 0.1, -6.8), Vector3(-6.0, 0.1, 5.0), _schlaege(8))
+		var kellner := _kellner(Vector3(-6.4, 0.1, -6.8), Vector3(-6.4, 0.1, 5.0), _schlaege(8))
 		if kellner:
 			_folgen(kellner, Vector3(2.2, 1.9, 2.6), _schlaege(4))
 		_titel_takt("Kassieren!", 28)
 		await _bis(32)
 		# 6 Koop-Spieler mit drei Krügen je Hand
-		_spieler_laufen(2, Vector3(-3.0, 0.1, -8.0), Vector3(-0.8, 0.1, 2.0), _schlaege(6), true)
-		_spieler_laufen(1, Vector3(3.0, 0.1, -7.6), Vector3(1.4, 0.1, 2.4), _schlaege(6), true)
+		_spieler_laufen(2, Vector3(-2.8, 0.1, -8.0), Vector3(-2.8, 0.1, 1.7), _schlaege(6), true)
+		_spieler_laufen(1, Vector3(0.8, 0.1, -7.6), Vector3(0.8, 0.1, 2.4), _schlaege(6), true)
 		_fahrt(Vector3(-4.5, 1.8, 5.0), Vector3(0.0, 1.0, -3.0),
 			Vector3(3.2, 2.0, 4.6), Vector3(0.0, 1.0, -3.0), _schlaege(4))
 		await _bis(36)
 		# 7 Ich-Sicht mit Karton durch die Reihen
 		var pov2 := _ich_sicht(KARTON.instantiate(), TRAGE.karton_pov)
-		_fahrt(Vector3(0.0, 1.45, 3.0), Vector3(-1.0, 1.2, -5.0),
-			Vector3(-0.3, 1.45, -2.5), Vector3(-1.5, 1.1, -9.0), _schlaege(4))
+		_fahrt(Vector3(-2.8, 1.45, 4.5), Vector3(-2.8, 1.2, -3.0),
+			Vector3(-2.8, 1.45, -1.5), Vector3(-2.8, 1.1, -8.0), _schlaege(4))
 		await _bis(40)
 		pov2.queue_free()
 		# 8 Schweinerei: Kotze und Urin zum Wegputzen
@@ -363,7 +363,7 @@ class Lauf extends Node:
 		await _bis(58)
 		_gaeste_tanzen()
 		for p in spieler:
-			p._net_pos = Vector3(randf_range(3.0, 7.0), 0.1, randf_range(-1.0, 5.0))
+			p._net_pos = Vector3(randf_range(1.5, 6.5), 0.1, 1.7)   # im Gang, nicht im Tisch
 			p.global_position = p._net_pos
 			p.carry_state = 1
 			p.carry_fill = 1.0
@@ -389,14 +389,15 @@ class Lauf extends Node:
 		attribute.dof_blur_far_enabled = true
 		attribute.dof_blur_far_distance = 8.0
 		attribute.dof_blur_far_transition = 6.0
-		_fahrt(RAUF_MITTE + Vector3(-2.8, 1.5, 2.6), raufbolde[0].global_position + Vector3(0.6, 1.0, 0),
-			RAUF_MITTE + Vector3(-1.6, 1.3, 2.2), raufbolde[0].global_position + Vector3(0.6, 1.0, 0), _schlaege(4))
+		# Von innen aufs Getümmel, mit Abstand — sonst steht ein Raufbold direkt vor der Linse
+		_fahrt(RAUF_MITTE + Vector3(4.0, 2.6, -5.0), RAUF_MITTE + Vector3(0, 1.0, 0),
+			RAUF_MITTE + Vector3(3.0, 2.2, -4.2), RAUF_MITTE + Vector3(0, 1.0, 0), _schlaege(4))
 		await _bis(74)
 		var masse := MASSENSCHLAEGEREI.instantiate()
 		masse.dauer = 14.0
 		gm.add_child(masse)
 		masse.starten(raufbolde, RAUF_MITTE, raufbolde.size())
-		_kreisfahrt(RAUF_MITTE, 4.2, 2.4, deg_to_rad(200.0), deg_to_rad(110.0), _schlaege(4))
+		_kreisfahrt(RAUF_MITTE, 4.2, 2.4, deg_to_rad(300.0), deg_to_rad(240.0), _schlaege(4))
 		await _bis(78)
 		_kreisfahrt(RAUF_MITTE, 3.6, 1.6, deg_to_rad(20.0), deg_to_rad(-60.0), _schlaege(4))
 		await _bis(82)
@@ -405,6 +406,10 @@ class Lauf extends Node:
 		for pid in gm._packages.keys():
 			gm._remove_package(pid)
 		var opfer := raufbolde[2]
+		# Übrige Raufbolde weg — sonst stehen sie nach der Flucht herum
+		for r in raufbolde:
+			if r != opfer and is_instance_valid(r):
+				r.queue_free()
 		opfer.packen()
 		opfer.global_position = Vector3(0.0, 0.5, 8.6)
 		attribute.dof_blur_far_enabled = false
@@ -422,17 +427,28 @@ class Lauf extends Node:
 		_kamera_auf(Vector3(0.0, 6.5, 8.0), Vector3(0.0, 3.0, -6.0))
 		untertitel.anchor_top = 0.54
 		untertitel.add_theme_font_size_override("font_size", 46)
-		untertitel.text = "Das Festzelt-Chaos für 1–4 Spieler\nJetzt auf die Wunschliste!"
+		untertitel.text = ""
 		studio_zeile.anchor_top = 0.86
 		studio_zeile.add_theme_font_size_override("font_size", 30)
-		studio_zeile.text = "vapur studios"
+		studio_zeile.text = ""
+		var vapur := TextureRect.new()
+		vapur.texture = load("res://assets/ui/vapur.png")
+		vapur.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		vapur.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		vapur.set_anchors_preset(Control.PRESET_FULL_RECT)
+		vapur.anchor_left = 0.38
+		vapur.anchor_right = 0.62
+		vapur.anchor_top = 0.78
+		vapur.anchor_bottom = 0.9
+		vapur.modulate.a = 0.0
+		ebene.add_child(vapur)
 		logo.pivot_offset = get_viewport().get_visible_rect().size * Vector2(0.5, 0.31)
 		logo.scale = Vector2(0.9, 0.9)
 		var tw := create_tween().set_parallel()
 		tw.tween_property(logo, "modulate:a", 1.0, _schlaege(2))
 		tw.tween_property(logo, "scale", Vector2.ONE, _schlaege(3)).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		tw.tween_property(untertitel, "modulate:a", 1.0, _schlaege(2)).set_delay(_schlaege(2))
-		tw.tween_property(studio_zeile, "modulate:a", 1.0, _schlaege(2)).set_delay(_schlaege(4))
+		tw.tween_property(vapur, "modulate:a", 1.0, _schlaege(2)).set_delay(_schlaege(4))
 		_fahrt(Vector3(0.0, 6.5, 8.0), Vector3(0.0, 3.0, -6.0),
 			Vector3(0.0, 5.5, 4.0), Vector3(0.0, 3.2, -8.0), _schlaege(16))
 		await _bis(102)
@@ -440,7 +456,10 @@ class Lauf extends Node:
 		await _bis(105)
 
 	## Kurzer Titel, der genau auf einem Schlag einsetzt und 2 Schläge steht
-	func _titel_takt(text: String, _schlag: float) -> void:
+	func _titel_takt(_text: String, _schlag: float) -> void:
+		return   # Fassung ohne Text: nur Logos
+
+	func _titel_takt_mit_text(text: String, _schlag: float) -> void:
 		titel.text = text
 		titel.modulate.a = 1.0
 		titel.pivot_offset = Vector2(titel.size.x * 0.5, 60.0)

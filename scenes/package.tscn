@@ -10,6 +10,7 @@
 script = ExtResource("1_script")
 
 [node name="Karton" parent="." instance=ExtResource("4_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
 
 [node name="Sack" type="MeshInstance3D" parent="." unique_id=654909876]
 visible = false
