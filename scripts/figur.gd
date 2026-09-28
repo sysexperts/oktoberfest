@@ -195,9 +195,31 @@ func extra() -> bool:
 func kann_sitzen() -> bool:
 	return hat(anim_sitzen)
 
+## Korrektur fürs Sitzen (z. B. Rock bei Lisa), eingestellt in
+## scenes/werkzeuge/sitz_haltung.tscn. Leer = Sitzanimation unverändert.
+@export var sitz_korrektur: SitzHaltung
+var _sitz_mod: SitzKorrektur
+
 func sitzen() -> void:
 	if hat(anim_sitzen):
 		_spiele(anim_sitzen, 1.0)
+	_sitz_korrektur_an(true)
+
+func _sitz_korrektur_an(an: bool) -> void:
+	if sitz_korrektur == null or skelett == null:
+		return
+	if _sitz_mod == null:
+		if not an:
+			return
+		_sitz_mod = SitzKorrektur.new()
+		_sitz_mod.name = "SitzKorrektur"
+		_sitz_mod.haltung = sitz_korrektur
+		skelett.add_child(_sitz_mod)
+	_sitz_mod.active = an
+
+## Höhe beim Sitzen: Grundwert der Figur plus Korrektur
+func sitz_hoehe_gesamt() -> float:
+	return sitz_hoehe + (sitz_korrektur.hoehe if sitz_korrektur else 0.0)
 
 func braucht_idle_bewegung() -> bool:
 	return idle_ist_standbild
@@ -213,6 +235,8 @@ func _zufaellig_aus(liste: PackedStringArray, tempo: float) -> bool:
 ## zufälligen Stelle, damit nicht alle Figuren im Gleichschritt gehen.
 func _spiele(name: String, tempo: float) -> void:
 	anim.active = true
+	if name != anim_sitzen:
+		_sitz_korrektur_an(false)
 	if anim.current_animation != name:
 		# Tänze mit eingebauter Hüftbewegung (Bean-"Dance" wandert 1,26 m) würden
 		# die Figur verschieben — Tänzer liefen über den Tisch. Die Hüftspur wird

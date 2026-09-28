@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ejnj0fx7w1v8"]
 
-[ext_resource type="Script" path="res://scripts/werkzeuge/tablett_haltung_editor.gd" id="1"]
+[ext_resource type="Script" uid="uid://bhxbgysf4pbyv" path="res://scripts/werkzeuge/tablett_haltung_editor.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3"]
 
@@ -16,37 +16,38 @@ albedo_color = Color(0.62, 0.63, 0.66, 1)
 metallic = 0.7
 roughness = 0.3
 
-[node name="TablettHaltung" type="Node3D"]
+[node name="TablettHaltung" type="Node3D" unique_id=1618113746]
 script = ExtResource("1")
 
-[node name="Figur" parent="." instance=ExtResource("2")]
+[node name="Figur" parent="." unique_id=1793869755 instance=ExtResource("2")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+anim_tanzen = ["Dance"]
 
-[node name="Tablett" type="MeshInstance3D" parent="."]
+[node name="Tablett" type="MeshInstance3D" parent="." unique_id=1632490813]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.4)
 mesh = SubResource("TablettMesh")
 surface_material_override/0 = SubResource("MatTablett")
 
-[node name="Krug1" parent="Tablett" instance=ExtResource("3")]
+[node name="Krug1" parent="Tablett" unique_id=1730768152 instance=ExtResource("3")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -0.1, 0.01, -0.08)
 
-[node name="Krug2" parent="Tablett" instance=ExtResource("3")]
+[node name="Krug2" parent="Tablett" unique_id=1642600003 instance=ExtResource("3")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.1, 0.01, -0.08)
 
-[node name="Krug3" parent="Tablett" instance=ExtResource("3")]
+[node name="Krug3" parent="Tablett" unique_id=1266096888 instance=ExtResource("3")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -0.1, 0.01, 0.1)
 
-[node name="Krug4" parent="Tablett" instance=ExtResource("3")]
+[node name="Krug4" parent="Tablett" unique_id=1701550031 instance=ExtResource("3")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.1, 0.01, 0.1)
 
-[node name="Schild" type="Label3D" parent="Tablett"]
+[node name="Schild" type="Label3D" parent="Tablett" unique_id=2143137195]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+pixel_size = 0.003
 billboard = 1
 no_depth_test = true
 modulate = Color(1, 0.85, 0.3, 1)
-pixel_size = 0.003
 text = "Tablett (Kellner/Koch)"
 font_size = 28
 
-[node name="Licht" type="DirectionalLight3D" parent="."]
+[node name="Licht" type="DirectionalLight3D" parent="." unique_id=939302507]
 transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 3, 0)

@@ -270,7 +270,7 @@ func _process(delta: float) -> void:
 		_torkelt = torkelt
 	# Otururken bankta biraz alçal + hafif sarhoş sallanma
 	if _model:
-		var target_y := _figur.sitz_hoehe if _seated else 0.0
+		var target_y := _figur.sitz_hoehe_gesamt() if _seated else 0.0
 		_model.position.y = lerpf(_model.position.y, target_y, clampf(delta * 6.0, 0.0, 1.0))
 		var schwanken := 0.06 + 0.05 * float(rausch_stufe)
 		if _seated:
