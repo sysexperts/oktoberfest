@@ -42,8 +42,12 @@ func _ready() -> void:
 	# Einladungscode, keine IP, nichts über den eigenen Server
 	if OS.has_feature("steam"):
 		%Koop.pressed.connect(_zeige.bind(_koop_panel))
-		for n: Control in [%ServerBeitreten, %Hosten, %IpEingabe, %IpBeitreten, $Mitte/KoopPanel/Rand/Spalte/Trenner]:
+		for n: Control in [%ServerBeitreten, %Hosten, %IpEingabe, %IpBeitreten]:
 			n.visible = false
+		%CodeEingabe.visible = true
+		%CodeBeitreten.visible = true
+		%CodeBeitreten.pressed.connect(_on_code_beitreten)
+		%CodeEingabe.text_submitted.connect(func(_t: String) -> void: _on_code_beitreten())
 	else:
 		%Koop.pressed.connect(func() -> void: get_tree().change_scene_to_file(KOOP_LOBBY_SZENE))
 	_einst.pressed.connect(_on_einstellungen)
@@ -220,6 +224,16 @@ func _verbinde(ip: String) -> void:
 	_status.text = tr("STATUS_CONNECTING") % ip
 	if Net.join_game(ip) != OK:
 		_status.text = tr("STATUS_CONNECT_FAILED")
+
+## Spiel eines Freundes per Code suchen (Steam-Lobbysuche) und beitreten.
+func _on_code_beitreten() -> void:
+	var code := (%CodeEingabe.text as String).strip_edges()
+	if code.is_empty():
+		_status.text = tr("STATUS_ENTER_CODE")
+		return
+	_status.text = tr("STATUS_STEAM_JOINING")
+	if not SteamDienst.lobby_per_code(code):
+		_status.text = tr("NET_CODE_UNKNOWN")
 
 ## Freundes-Lobby erstellen — das Spiel startet, sobald Steam sie bestätigt.
 func _on_steam_lobby() -> void:

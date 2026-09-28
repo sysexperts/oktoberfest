@@ -35,6 +35,12 @@ var grund := ""
 var lobby_id := 0
 ## Lobby aus dem Startbefehl (+connect_lobby) — das Hauptmenü tritt ihr bei.
 var start_lobby := 0
+## Beitrittscode der eigenen Lobby (z. B. "BREZN-57"), "" ohne Lobby. Liegt als
+## Lobbydaten "code" bei Steam — wer ihn eingibt, findet die Lobby über Steams
+## Lobbysuche, ganz ohne eigenen Server.
+var lobby_code := ""
+
+const CODE_WOERTER := ["BREZN", "KRUG", "ZELT", "GAUDI", "PROST", "DIRNDL", "MASS", "HENDL", "WIESN", "RADI"]
 
 var _steam: Object
 
@@ -76,6 +82,7 @@ func starten() -> bool:
 	_steam.connect("lobby_created", _on_lobby_created)
 	_steam.connect("lobby_joined", _on_lobby_joined)
 	_steam.connect("join_requested", _on_join_requested)
+	_steam.connect("lobby_match_list", _on_lobby_match_list)
 	start_lobby = lobby_aus_argumenten(OS.get_cmdline_args())
 	# Sprache wie in Steam eingestellt (bei "auto" in den Spieleinstellungen)
 	var sp := str(_steam.call("getCurrentGameLanguage"))
@@ -175,9 +182,41 @@ func errungenschaft(id: String) -> bool:
 func lobby_erstellen() -> bool:
 	if not aktiv:
 		return false
-	var nur_freunde := ClassDB.class_get_integer_constant("Steam", "LOBBY_TYPE_FRIENDS_ONLY")
-	_steam.call("createLobby", nur_freunde, Net.MAX_PLAYERS)
+	# Öffentlich, damit die Codesuche sie findet. In keiner Liste sichtbar,
+	# denn das Spiel sucht nur mit exaktem Code.
+	var oeffentlich := ClassDB.class_get_integer_constant("Steam", "LOBBY_TYPE_PUBLIC")
+	_steam.call("createLobby", oeffentlich, Net.MAX_PLAYERS)
 	return true
+
+## "brezn 57", "BREZN-57" → "BREZN57" (so steht er in den Lobbydaten)
+static func code_normal(code: String) -> String:
+	var aus := ""
+	for z in code.to_upper():
+		if (z >= "A" and z <= "Z") or (z >= "0" and z <= "9"):
+			aus += z
+	return aus
+
+static func code_neu() -> String:
+	return "%s-%02d" % [CODE_WOERTER[randi() % CODE_WOERTER.size()], randi() % 100]
+
+## Lobby per Code suchen und beitreten. Fehler kommen über lobby_fehler.
+func lobby_per_code(code: String) -> bool:
+	var c := code_normal(code)
+	if not aktiv or c.length() < 3:
+		return false
+	_steam.call("addRequestLobbyListStringFilter", "code", c,
+		ClassDB.class_get_integer_constant("Steam", "LOBBY_COMPARISON_EQUAL"))
+	_steam.call("addRequestLobbyListDistanceFilter",
+		ClassDB.class_get_integer_constant("Steam", "LOBBY_DISTANCE_FILTER_WORLDWIDE"))
+	_steam.call("addRequestLobbyListResultCountFilter", 1)
+	_steam.call("requestLobbyList")
+	return true
+
+func _on_lobby_match_list(lobbies: Array) -> void:
+	if lobbies.is_empty():
+		lobby_fehler.emit("NET_CODE_UNKNOWN", [])
+		return
+	lobby_beitreten(int(lobbies[0]))
 
 func lobby_beitreten(id: int) -> bool:
 	if not aktiv or id <= 0:
@@ -196,6 +235,7 @@ func lobby_verlassen() -> void:
 	_steam.call("leaveLobby", lobby_id)
 	_steam.call("setRichPresence", "connect", "")
 	lobby_id = 0
+	lobby_code = ""
 
 func _on_lobby_created(ergebnis: int, id: int) -> void:
 	if ergebnis != ERGEBNIS_OK or id == 0:
@@ -205,6 +245,8 @@ func _on_lobby_created(ergebnis: int, id: int) -> void:
 	_steam.call("setLobbyJoinable", id, true)
 	# Der Gast prüft das vor dem Verbinden — andere Stände verstehen sich nicht
 	_steam.call("setLobbyData", id, "version", Net.version_text())
+	lobby_code = code_neu()
+	_steam.call("setLobbyData", id, "code", code_normal(lobby_code))
 	_mitspielen_ermoeglichen()
 	if Net.host_steam(id) != OK:
 		lobby_verlassen()

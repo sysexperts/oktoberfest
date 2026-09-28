@@ -60,6 +60,14 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 19
 text = "PAUSE_HELP"
 
+[node name="CodeAnzeige" type="Button" parent="Mitte/Spalte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+tooltip_text = "PAUSE_CODE_COPY"
+
 [node name="Einladen" type="Button" parent="Mitte/Spalte"]
 unique_name_in_owner = true
 visible = false

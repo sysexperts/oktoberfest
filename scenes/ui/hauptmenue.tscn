@@ -161,6 +161,24 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 21
 text = "COOP_STEAM_FRIENDS"
 
+[node name="CodeEingabe" type="LineEdit" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+placeholder_text = "KOOP_CODE_PLACEHOLDER"
+alignment = 1
+max_length = 12
+
+[node name="CodeBeitreten" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "COOP_JOIN_CODE"
+
 [node name="ServerBeitreten" type="Button" parent="Mitte/KoopPanel/Rand/Spalte"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 54)

@@ -20,6 +20,10 @@ func _ready() -> void:
 	%Beenden.pressed.connect(_on_beenden)
 	%TutorialSkip.pressed.connect(_on_tutorial_skip)
 	%Einladen.pressed.connect(SteamDienst.freunde_einladen)
+	# Klick kopiert den Code, zum Weitergeben per Discord und Co.
+	%CodeAnzeige.pressed.connect(func() -> void:
+		DisplayServer.clipboard_set(SteamDienst.lobby_code)
+		%CodeAnzeige.text = tr("PAUSE_CODE_COPIED"))
 	%Hilfe.pressed.connect(func() -> void:
 		var hilfe := get_parent().get_node_or_null("Hilfe")
 		if hilfe:
@@ -42,6 +46,8 @@ func oeffnen() -> void:
 	%TutorialSkip.visible = gm != null and gm.has_method("tutorial_active") and gm.tutorial_active()
 	# Freunde einladen nur in einem Steam-Koop-Spiel
 	%Einladen.visible = SteamDienst.aktiv and SteamDienst.lobby_id != 0
+	%CodeAnzeige.visible = %Einladen.visible and SteamDienst.lobby_code != ""
+	%CodeAnzeige.text = tr("PAUSE_CODE") % SteamDienst.lobby_code
 	# Wer den Spielstand hält (Solo oder Host), speichert beim Verlassen.
 	_zum_menue.text = "PAUSE_SAVE_MENU" if multiplayer.is_server() else "PAUSE_LEAVE_MENU"
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
