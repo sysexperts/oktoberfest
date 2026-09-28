@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/lager.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://assets/models/fass_mit_zapfhahn.glb" id="2_fass"]
+[ext_resource type="PackedScene" path="res://scenes/karton.tscn" id="3_karton"]
 
 [sub_resource type="BoxMesh" id="ShelfMesh"]
 size = Vector3(2.4, 0.12, 0.8)
@@ -78,41 +79,29 @@ visible = false
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.35, 1.96, 0)
 visible = false
 
-[node name="Essen1" type="MeshInstance3D" parent="Kisten"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0.36, 0)
+[node name="Essen1" parent="Kisten" instance=ExtResource("3_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.35, 0.16, 0)
 visible = false
-mesh = SubResource("KisteMesh")
-material_override = SubResource("MatEssen")
 
-[node name="Essen2" type="MeshInstance3D" parent="Kisten"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.36, 0)
+[node name="Essen2" parent="Kisten" instance=ExtResource("3_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.85, 0.16, 0)
 visible = false
-mesh = SubResource("KisteMesh")
-material_override = SubResource("MatEssen")
 
-[node name="Essen3" type="MeshInstance3D" parent="Kisten"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.16, 0)
+[node name="Essen3" parent="Kisten" instance=ExtResource("3_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.35, 0.96, 0)
 visible = false
-mesh = SubResource("KisteMesh")
-material_override = SubResource("MatEssen")
 
-[node name="Essen4" type="MeshInstance3D" parent="Kisten"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 1.16, 0)
+[node name="Essen4" parent="Kisten" instance=ExtResource("3_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.85, 0.96, 0)
 visible = false
-mesh = SubResource("KisteMesh")
-material_override = SubResource("MatEssen")
 
-[node name="Essen5" type="MeshInstance3D" parent="Kisten"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.96, 0)
+[node name="Essen5" parent="Kisten" instance=ExtResource("3_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.35, 1.76, 0)
 visible = false
-mesh = SubResource("KisteMesh")
-material_override = SubResource("MatEssen")
 
-[node name="Essen6" type="MeshInstance3D" parent="Kisten"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 1.96, 0)
+[node name="Essen6" parent="Kisten" instance=ExtResource("3_karton")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.85, 1.76, 0)
 visible = false
-mesh = SubResource("KisteMesh")
-material_override = SubResource("MatEssen")
 
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)

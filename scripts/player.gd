@@ -69,6 +69,8 @@ var _net_yaw: float
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
 @onready var _carry_teller: EssenTeller = $Head/HoldPoint/CarryTeller
 @onready var _carry_sack: Node3D = get_node_or_null("Head/HoldPoint/CarrySack")
+## Zutaten-Karton — dieselbe Szene wie abgeladen und im Regal (scenes/karton.tscn)
+@onready var _carry_karton: Node3D = get_node_or_null("Head/HoldPoint/CarryKarton")
 ## Bierfass vor der Brust (Lieferung Bier)
 @onready var _carry_fass: Node3D = get_node_or_null("CarryFass")
 ## Dasselbe Fass für die eigene Ich-Sicht — hängt an der Kamera, damit man es
@@ -1248,6 +1250,8 @@ func _update_carry_visual() -> void:
 	var has_food := carry_state == 2
 	# Fass mit beiden Händen vor der Brust — sieht man selbst und die anderen
 	var fass := carry_state == 3 and carry_pkg_kind == 1
+	if _carry_karton:
+		_carry_karton.visible = carry_state == 3 and carry_pkg_kind == 2
 	var ich_sicht := _is_local and not _kamera_draussen
 	if _carry_fass:
 		_carry_fass.visible = fass and not ich_sicht
@@ -1280,11 +1284,7 @@ func _update_carry_visual() -> void:
 		return
 	if carry_state == 3:
 		_carry_teller.visible = false
-		_carry_food.visible = true
-		_carry_food.scale = Vector3(2.2, 2.2, 2.2)
-		var pm := _carry_food.material_override as StandardMaterial3D
-		if pm:
-			pm.albedo_color = Color(0.75, 0.55, 0.35) if carry_pkg_kind == 1 else Color(0.6, 0.45, 0.3)
+		_carry_food.visible = false
 		return
 	_carry_food.visible = false
 	_carry_teller.visible = has_food

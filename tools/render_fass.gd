@@ -53,6 +53,14 @@ class Lauf extends Node:
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png(ziel % "2_pov")
 
+		# 2b) Ich-Sicht: Karton tragen
+		ich.carry_pkg_kind = 2
+		ich._update_carry_visual()
+		await _frames(20)
+		get_viewport().get_texture().get_image().save_png(ziel % "2b_pov_karton")
+		ich.carry_pkg_kind = 1
+		ich._update_carry_visual()
+
 		# 3) Mitspieler mit Fass — von vorn und schräg
 		gm._add_player(2, 1)
 		await _frames(10)

@@ -5,7 +5,6 @@ extends Node3D
 
 const Texte := preload("res://scripts/ui/texte.gd")
 ## Beschriftung je Sorte: WORLD_PACKAGE_1 (Bier), WORLD_PACKAGE_2 (Zutaten) in texte.csv
-const KIND_COLORS := {1: Color(0.75, 0.55, 0.2), 2: Color(0.6, 0.45, 0.3)}
 
 var pkg_id := -1
 var kind := 1
@@ -27,10 +26,9 @@ func _refresh() -> void:
 	var sack := kind == 3
 	# Bier kommt als Fass, Zutaten im Karton
 	var fass := kind == 1
-	for n in ["Box", "Tape"]:
-		var k := get_node_or_null(n) as Node3D
-		if k:
-			k.visible = not sack and not fass
+	var k := get_node_or_null("Karton") as Node3D
+	if k:
+		k.visible = not sack and not fass
 	var f := get_node_or_null("Fass") as Node3D
 	if f:
 		f.visible = fass
@@ -42,8 +40,3 @@ func _refresh() -> void:
 		label.visible = not sack   # Hinweis am Fadenkreuz reicht
 	if sack:
 		return
-	var mesh := get_node_or_null("Box") as MeshInstance3D
-	if mesh and mesh.material_override is StandardMaterial3D:
-		var m := (mesh.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
-		m.albedo_color = KIND_COLORS.get(kind, Color(0.6, 0.5, 0.4))
-		mesh.material_override = m
