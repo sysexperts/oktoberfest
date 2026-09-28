@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://baihkaoi3anex" path="res://scripts/package.gd" id="1_script"]
 [ext_resource type="ArrayMesh" uid="uid://bskqk7t6ubeo0" path="res://assets/dreck/muellsack.tres" id="2_sack"]
+[ext_resource type="PackedScene" path="res://assets/models/fass_mit_zapfhahn.glb" id="3_fass"]
 
 [sub_resource type="StandardMaterial3D" id="MatBox"]
 albedo_color = Color(0.7, 0.55, 0.35, 1)
@@ -36,6 +37,10 @@ mesh = SubResource("TapeMesh")
 [node name="Sack" type="MeshInstance3D" parent="." unique_id=654909876]
 visible = false
 mesh = ExtResource("2_sack")
+
+[node name="Fass" parent="." instance=ExtResource("3_fass")]
+transform = Transform3D(0.32, 0, 0, 0, 0.32, 0, 0, 0, 0.32, 0, 0.32, 0)
+visible = false
 
 [node name="Label" type="Label3D" parent="." unique_id=637664721]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)

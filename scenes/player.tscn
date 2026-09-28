@@ -7,6 +7,7 @@
 [ext_resource type="ArrayMesh" path="res://assets/dreck/besen.tres" id="5_besen"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/muellsack.tres" id="6_sack"]
 [ext_resource type="PackedScene" path="res://scenes/effekte/kotzstrahl.tscn" id="7_kotz"]
+[ext_resource type="PackedScene" path="res://assets/models/fass_mit_zapfhahn.glb" id="8_fass"]
 
 [sub_resource type="CapsuleShape3D" id="Cap"]
 radius = 0.35
@@ -85,6 +86,14 @@ material_override = SubResource("MatFood")
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, -0.45, -0.1)
 visible = false
 mesh = ExtResource("6_sack")
+
+[node name="CarryFass" parent="." instance=ExtResource("8_fass")]
+transform = Transform3D(0.26, 0, 0, 0, 0.26, 0, 0, 0, 0.26, 0, 0.66, -0.3)
+visible = false
+
+[node name="CarryFassPov" parent="Head" instance=ExtResource("8_fass")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.5, -0.75)
+visible = false
 
 [node name="Kotzstrahl" parent="." instance=ExtResource("7_kotz")]
 unique_name_in_owner = true

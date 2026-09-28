@@ -69,6 +69,11 @@ var _net_yaw: float
 @onready var _carry_food: MeshInstance3D = $Head/HoldPoint/CarryFood
 @onready var _carry_teller: EssenTeller = $Head/HoldPoint/CarryTeller
 @onready var _carry_sack: Node3D = get_node_or_null("Head/HoldPoint/CarrySack")
+## Bierfass vor der Brust (Lieferung Bier)
+@onready var _carry_fass: Node3D = get_node_or_null("CarryFass")
+## Dasselbe Fass für die eigene Ich-Sicht — hängt an der Kamera, damit man es
+## vor sich sieht, egal wohin man schaut (die eigene Figur ist unsichtbar)
+@onready var _carry_fass_pov: Node3D = get_node_or_null("Head/CarryFassPov")
 @onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _emote_label: Label3D = $Emote
 @onready var _namensschild: Label3D = $Namensschild
@@ -1194,6 +1199,15 @@ func _has_ready() -> bool:
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1
 	var has_food := carry_state == 2
+	# Fass mit beiden Händen vor der Brust — sieht man selbst und die anderen
+	var fass := carry_state == 3 and carry_pkg_kind == 1
+	if _carry_fass:
+		_carry_fass.visible = fass and not _is_local
+	if _carry_fass_pov:
+		_carry_fass_pov.visible = fass and _is_local
+	var figur := _model as Figur
+	if figur:
+		figur.trage_pose(fass)
 	# Zusätzliche volle Krüge neben dem in der Hand
 	for i in _extra_nodes.size():
 		var n := _extra_nodes[i]
@@ -1212,6 +1226,10 @@ func _update_carry_visual() -> void:
 		_carry_food.visible = false
 		return
 	# Paket wird als große Kiste in der Hand gezeigt
+	if fass:
+		_carry_teller.visible = false
+		_carry_food.visible = false
+		return
 	if carry_state == 3:
 		_carry_teller.visible = false
 		_carry_food.visible = true

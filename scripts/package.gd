@@ -25,10 +25,15 @@ func set_info(k: int, amt: int) -> void:
 func _refresh() -> void:
 	var label := get_node_or_null("Label") as Label3D
 	var sack := kind == 3
+	# Bier kommt als Fass, Zutaten im Karton
+	var fass := kind == 1
 	for n in ["Box", "Tape"]:
 		var k := get_node_or_null(n) as Node3D
 		if k:
-			k.visible = not sack
+			k.visible = not sack and not fass
+	var f := get_node_or_null("Fass") as Node3D
+	if f:
+		f.visible = fass
 	var s := get_node_or_null("Sack") as Node3D
 	if s:
 		s.visible = sack

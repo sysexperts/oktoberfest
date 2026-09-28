@@ -374,6 +374,21 @@ func sitz_pose() -> void:
 	_knochen("arm_l", -0.25)
 	_knochen("arm_r", -0.25)
 
+## Tragehaltung (Fass/Karton vor der Brust) an- oder ausschalten. Liegt als
+## SkeletonModifier3D über der Animation — die Beine laufen dabei weiter.
+var _trage: TragePose
+
+func trage_pose(an: bool) -> void:
+	if skelett == null:
+		return
+	if _trage == null:
+		if not an:
+			return
+		_trage = TragePose.new()
+		_trage.name = "TragePose"
+		skelett.add_child(_trage)
+	_trage.active = an
+
 ## Alle gestellten Knochen zurück in die Ruhelage.
 func pose_loesen() -> void:
 	if skelett == null:
