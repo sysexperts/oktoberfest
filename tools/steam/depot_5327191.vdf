@@ -1,0 +1,11 @@
+"DepotBuild"
+{
+	"DepotID" "5327191"
+	"FileMapping"
+	{
+		"LocalPath" "*"
+		"DepotPath" "."
+		"Recursive" "1"
+	}
+	"FileExclusion" "*.pdb"
+}

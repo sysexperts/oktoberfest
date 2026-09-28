@@ -1,0 +1,12 @@
+"AppBuild"
+{
+	"AppID" "5327190"
+	"Desc" "BESCHREIBUNG"
+	"ContentRoot" "../../build/steam/"
+	"BuildOutput" "../../build/steam_ausgabe/"
+	"SetLive" ""
+	"Depots"
+	{
+		"5327191" "depot_5327191.vdf"
+	}
+}
