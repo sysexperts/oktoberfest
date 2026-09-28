@@ -65,8 +65,16 @@ static var _angepasst := {}
 var anim: AnimationPlayer
 var skelett: Skeleton3D
 
+## Farbvarianten (Alpha 0 = Originalfarbe). Haare brauchen eine Haarmaske.
+@export var farbe_haar := Color(0, 0, 0, 0)
+@export var farbe_kleid := Color(0, 0, 0, 0)
+@export var haar_maske: Texture2D
+const FARB_SHADER := preload("res://assets/shader/figur_farbe.gdshader")
+
 func _ready() -> void:
-	if metall_ignorieren or eigenleuchten >= 0.0 or helligkeit != 1.0:
+	if farbe_haar.a > 0.0 or farbe_kleid.a > 0.0:
+		_farbe_anpassen()
+	elif metall_ignorieren or eigenleuchten >= 0.0 or helligkeit != 1.0:
 		_material_anpassen()
 	var aps := find_children("*", "AnimationPlayer", true, false)
 	if not aps.is_empty():
@@ -141,6 +149,26 @@ func _material_anpassen() -> void:
 					kopie.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
 					kopie.emission_energy_multiplier = eigenleuchten
 				_angepasst[schluessel] = kopie
+			mi.set_surface_override_material(s, _angepasst[schluessel])
+
+## Umgefärbte Variante: ein Shader-Material je Farbkombination, von allen
+## Figuren dieser Variante geteilt.
+func _farbe_anpassen() -> void:
+	for mi: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):
+		for s in mi.mesh.get_surface_count():
+			var original := mi.get_active_material(s) as BaseMaterial3D
+			if original == null or original.albedo_texture == null:
+				continue
+			var schluessel := [original, farbe_haar, farbe_kleid, eigenleuchten]
+			if not _angepasst.has(schluessel):
+				var m := ShaderMaterial.new()
+				m.shader = FARB_SHADER
+				m.set_shader_parameter("textur", original.albedo_texture)
+				m.set_shader_parameter("haar_maske", haar_maske)
+				m.set_shader_parameter("haar_farbe", farbe_haar)
+				m.set_shader_parameter("kleid_farbe", farbe_kleid)
+				m.set_shader_parameter("eigenleuchten", maxf(eigenleuchten, 0.0))
+				_angepasst[schluessel] = m
 			mi.set_surface_override_material(s, _angepasst[schluessel])
 
 func hat(name: String) -> bool:

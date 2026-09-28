@@ -1531,8 +1531,8 @@ class Lauf extends Node:
 		_check("Alex: Knochen der Würge-Pose gefunden", alex.skelett != null
 			and alex.skelett.find_bone("mixamorig_Head") >= 0, "")
 		alex.queue_free()
-		# Sitzende Gäste nur aus GAESTE (charakter3 spreizt beim Sitzen den Rock)
-		_check("Gäste ohne charakter3", not figuren.GAESTE.has(preload("res://scenes/figuren/charakter3.tscn"))
+		# Lisa sitzt seit der Sitzkorrektur mit (assets/sitz_lisa.tres)
+		_check("Lisa sitzt mit Sitzkorrektur", figuren.GAESTE.has(preload("res://scenes/figuren/charakter3.tscn"))
 			and figuren.GAESTE.size() >= 2, str(figuren.GAESTE.size()))
 		# Stehgäste (charakter3, Alex) — etwa jeder dritte, und immer aus STEHGAESTE
 		var stehend := 0
