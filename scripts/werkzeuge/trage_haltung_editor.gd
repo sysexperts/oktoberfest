@@ -1,9 +1,9 @@
 @tool
 extends Node3D
 ## Tragehaltung im Editor einstellen:
-##  - „Fass" mit dem Verschiebe-/Skalier-Werkzeug an die Hände setzen
+##  - „FassMitspieler" mit dem Verschiebe-/Skalier-Werkzeug an die Hände setzen
 ##    (so sehen es die Mitspieler)
-##  - „IchSicht/Fass" verschieben; Kamera „IchSicht" auswählen und oben im
+##  - „IchSicht/FassIchSicht" verschieben; Kamera „IchSicht" auswählen und oben im
 ##    3D-Fenster „Vorschau" anklicken, um durch die Augen des Spielers zu sehen
 ##  - Arme mit den Reglern hier im Inspektor
 ## Alles wird sofort in assets/trage_haltung.tres gespeichert — das Spiel liest
@@ -25,8 +25,8 @@ var _speichern_in := -1.0
 
 func _ready() -> void:
 	# Aktuelle Werte an die Knoten, Arme in Tragehaltung
-	$Fass.transform = HALTUNG.fass
-	$IchSicht/Fass.transform = HALTUNG.pov
+	$FassMitspieler.transform = HALTUNG.fass
+	$IchSicht/FassIchSicht.transform = HALTUNG.pov
 	var sks := $Figur.find_children("*", "Skeleton3D", true, false)
 	if not sks.is_empty() and (sks[0] as Node).get_node_or_null("TragePose") == null:
 		var tp := TragePose.new()
@@ -36,11 +36,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		return
-	if $Fass.transform != HALTUNG.fass:
-		_h().fass = $Fass.transform
+	if $FassMitspieler.transform != HALTUNG.fass:
+		_h().fass = $FassMitspieler.transform
 		_merken()
-	if $IchSicht/Fass.transform != HALTUNG.pov:
-		_h().pov = $IchSicht/Fass.transform
+	if $IchSicht/FassIchSicht.transform != HALTUNG.pov:
+		_h().pov = $IchSicht/FassIchSicht.transform
 		_merken()
 	if _speichern_in > 0.0:
 		_speichern_in -= delta

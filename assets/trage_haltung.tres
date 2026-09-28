@@ -1,11 +1,8 @@
-[gd_resource type="Resource" script_class="TrageHaltung" format=3]
+[gd_resource type="Resource" script_class="TrageHaltung" format=3 uid="uid://51s03ghkvrbe"]
 
-[ext_resource type="Script" path="res://scripts/trage_haltung.gd" id="1"]
+[ext_resource type="Script" uid="uid://ca7luebuxqyo3" path="res://scripts/trage_haltung.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-oberarm_vor = -0.9
-oberarm_innen = -0.85
-unterarm = 0.9
-fass = Transform3D(0.26, 0, 0, 0, 0.26, 0, 0, 0, 0.26, 0, 0.66, -0.3)
+fass = Transform3D(0.26, 0, 0, 0, 0.26, 0, 0, 0, 0.26, 0, 0.9686131, -0.3)
 pov = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.5, -0.75)
