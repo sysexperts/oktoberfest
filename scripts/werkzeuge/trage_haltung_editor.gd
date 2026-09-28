@@ -11,12 +11,16 @@ extends Node3D
 
 const HALTUNG := preload("res://assets/trage_haltung.tres")
 
+@export_group("Arme")
+## Oberarm nach vorn (−) oder hinten (+) schwenken
 @export_range(-3.2, 3.2, 0.01) var oberarm_vor := 0.0:
 	get: return HALTUNG.oberarm_vor
 	set(w): _h().oberarm_vor = w; _merken()
+## Oberarm senken (−) oder heben (+) — aus der T-Pose heraus
 @export_range(-3.2, 3.2, 0.01) var oberarm_innen := 0.0:
 	get: return HALTUNG.oberarm_innen
 	set(w): _h().oberarm_innen = w; _merken()
+## Ellbogen beugen
 @export_range(-3.2, 3.2, 0.01) var unterarm := 0.0:
 	get: return HALTUNG.unterarm
 	set(w): _h().unterarm = w; _merken()

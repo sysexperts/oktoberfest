@@ -1,19 +1,23 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dmxifmu6cpup5"]
 
-[ext_resource type="Script" path="res://scripts/werkzeuge/trage_haltung_editor.gd" id="1"]
+[ext_resource type="Script" uid="uid://c7hwj61da1lq4" path="res://scripts/werkzeuge/trage_haltung_editor.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
-[ext_resource type="PackedScene" path="res://assets/models/fass_mit_zapfhahn.glb" id="3"]
+[ext_resource type="PackedScene" uid="uid://dw1wtbpv8pibo" path="res://assets/models/fass_mit_zapfhahn.glb" id="3"]
 
-[node name="TrageHaltung" type="Node3D"]
+[node name="TrageHaltung" type="Node3D" unique_id=645250750]
 script = ExtResource("1")
+oberarm_vor = -0.9
+oberarm_innen = -0.85
+unterarm = 0.9
 
-[node name="Figur" parent="." instance=ExtResource("2")]
+[node name="Figur" parent="." unique_id=1563933508 instance=ExtResource("2")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+anim_tanzen = ["Dance"]
 
-[node name="FassMitspieler" parent="." instance=ExtResource("3")]
-transform = Transform3D(0.26, 0, 0, 0, 0.26, 0, 0, 0, 0.26, 0, 0.66, -0.3)
+[node name="FassMitspieler" parent="." unique_id=1280019338 instance=ExtResource("3")]
+transform = Transform3D(0.21051352, -0.042327564, 0.14660297, 0, 0.24979676, 0.07212192, -0.15259114, -0.058394767, 0.2022523, 0, 0.7171125, -0.5242637)
 
-[node name="Schild" type="Label3D" parent="FassMitspieler"]
+[node name="Schild" type="Label3D" parent="FassMitspieler" unique_id=1796741924]
 transform = Transform3D(3.85, 0, 0, 0, 3.85, 0, 0, 0, 3.85, 0, 1.6, 0)
 billboard = 1
 no_depth_test = true
@@ -21,13 +25,13 @@ modulate = Color(1, 0.85, 0.3, 1)
 text = "Fass für Mitspieler"
 font_size = 28
 
-[node name="IchSicht" type="Camera3D" parent="."]
+[node name="IchSicht" type="Camera3D" parent="." unique_id=1791179988]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.35, 0)
 
-[node name="FassIchSicht" parent="IchSicht" instance=ExtResource("3")]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.5, -0.75)
+[node name="FassIchSicht" parent="IchSicht" unique_id=1803308815 instance=ExtResource("3")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, -0.26737893, -0.3844696)
 
-[node name="Schild" type="Label3D" parent="IchSicht/FassIchSicht"]
+[node name="Schild" type="Label3D" parent="IchSicht/FassIchSicht" unique_id=69601269]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 1.6, 0)
 billboard = 1
 no_depth_test = true
@@ -35,5 +39,5 @@ modulate = Color(0.5, 0.85, 1, 1)
 text = "Fass Ich-Sicht (Kamera: Vorschau)"
 font_size = 28
 
-[node name="Licht" type="DirectionalLight3D" parent="."]
+[node name="Licht" type="DirectionalLight3D" parent="." unique_id=2008635694]
 transform = Transform3D(0.866, -0.25, 0.433, 0, 0.866, 0.5, -0.5, -0.433, 0.75, 0, 3, 0)
