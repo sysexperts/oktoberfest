@@ -5,10 +5,10 @@ extends Resource
 ## player.gd (Lage des Fasses am Körper und in der Ich-Sicht).
 
 ## Oberarm aus der T-Pose: vor/zurück und nach unten/oben (Bogenmaß)
-@export_range(-3.2, 3.2, 0.01) var oberarm_vor := -0.9
-@export_range(-3.2, 3.2, 0.01) var oberarm_innen := -0.85
+@export_range(-3.2, 3.2, 0.01) var oberarm_vor := 0.34
+@export_range(-3.2, 3.2, 0.01) var oberarm_innen := -1.09
 ## Unterarm beugen
-@export_range(-3.2, 3.2, 0.01) var unterarm := 0.9
+@export_range(-3.2, 3.2, 0.01) var unterarm := 0.43
 ## Fass am Körper (relativ zur Spielerfigur) — das sehen die Mitspieler
 @export var fass := Transform3D(Basis().scaled(Vector3.ONE * 0.26), Vector3(0, 0.66, -0.3))
 ## Fass in der eigenen Ich-Sicht (relativ zur Kamera)
