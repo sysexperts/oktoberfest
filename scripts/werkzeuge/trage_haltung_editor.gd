@@ -1,38 +1,47 @@
 @tool
 extends Node3D
-## Tragehaltung im Editor einstellen (oben im Inspektor „Zeigen": Fass oder Karton):
-##  - „FassMitspieler" mit dem Verschiebe-/Skalier-Werkzeug an die Hände setzen
-##    (so sehen es die Mitspieler)
-##  - „IchSicht/FassIchSicht" verschieben; Kamera „IchSicht" auswählen und oben im
-##    3D-Fenster „Vorschau" anklicken, um durch die Augen des Spielers zu sehen
-##  - Arme mit den Reglern hier im Inspektor
+## Tragehaltung im Editor einstellen (ein-/ausblenden über das Auge im Szenenbaum):
+##  - „FassMitspieler" / „KartonMitspieler" mit dem Verschiebe-/Skalier-Werkzeug
+##    an die Hände setzen (so sehen es die Mitspieler)
+##  - „IchSicht/FassIchSicht" / „IchSicht/KartonIchSicht" verschieben; Kamera
+##    „IchSicht" auswählen und oben im 3D-Fenster „Vorschau" anklicken, um durch
+##    die Augen des Spielers zu sehen
+##  - Arme mit den Reglern hier im Inspektor (gelten für Fass und Karton)
 ## Alles wird sofort in assets/trage_haltung.tres gespeichert — das Spiel liest
-## es beim nächsten Start.
+## es beim nächsten Start. Die Regler selbst werden NICHT in dieser Szene
+## gespeichert: sonst schrieb das Öffnen der Szene alte Werte in die .tres zurück.
 
 const HALTUNG := preload("res://assets/trage_haltung.tres")
-
-## Was gerade eingestellt wird — Fass oder Karton (die Arme gelten für beide)
-@export_enum("Fass", "Karton") var zeigen := 0:
-	set(w):
-		zeigen = w
-		if is_inside_tree():
-			_sichtbar()
+const REGLER := ["oberarm_vor", "oberarm_innen", "unterarm"]
 
 @export_group("Arme")
 ## Oberarm nach vorn (−) oder hinten (+) schwenken
 @export_range(-3.2, 3.2, 0.01) var oberarm_vor := 0.0:
 	get: return HALTUNG.oberarm_vor
-	set(w): _h().oberarm_vor = w; _merken()
+	set(w): _regler_setzen("oberarm_vor", w)
 ## Oberarm senken (−) oder heben (+) — aus der T-Pose heraus
 @export_range(-3.2, 3.2, 0.01) var oberarm_innen := 0.0:
 	get: return HALTUNG.oberarm_innen
-	set(w): _h().oberarm_innen = w; _merken()
+	set(w): _regler_setzen("oberarm_innen", w)
 ## Ellbogen beugen
 @export_range(-3.2, 3.2, 0.01) var unterarm := 0.0:
 	get: return HALTUNG.unterarm
-	set(w): _h().unterarm = w; _merken()
+	set(w): _regler_setzen("unterarm", w)
 
 var _speichern_in := -1.0
+
+## Regler im Inspektor zeigen, aber nicht in die Szene schreiben
+func _validate_property(p: Dictionary) -> void:
+	if p.name in REGLER:
+		p.usage &= ~PROPERTY_USAGE_STORAGE
+
+## Nur echte Änderungen im Inspektor übernehmen — nie Werte, die beim Laden
+## der Szene gesetzt werden
+func _regler_setzen(name: String, wert: float) -> void:
+	if not is_node_ready():
+		return
+	_h().set(name, wert)
+	_merken()
 
 func _ready() -> void:
 	# Aktuelle Werte an die Knoten, Arme in Tragehaltung
@@ -40,7 +49,6 @@ func _ready() -> void:
 	$IchSicht/FassIchSicht.transform = HALTUNG.pov
 	$KartonMitspieler.transform = HALTUNG.karton
 	$IchSicht/KartonIchSicht.transform = HALTUNG.karton_pov
-	_sichtbar()
 	var sks := $Figur.find_children("*", "Skeleton3D", true, false)
 	if not sks.is_empty() and (sks[0] as Node).get_node_or_null("TragePose") == null:
 		var tp := TragePose.new()
@@ -50,7 +58,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		return
-	_sichtbar()
 	if $FassMitspieler.transform != HALTUNG.fass:
 		_h().fass = $FassMitspieler.transform
 		_merken()
@@ -75,9 +82,3 @@ func _merken() -> void:
 ## Konstante lässt sich nicht beschreiben, ihr Inhalt schon — über eine Variable
 func _h() -> TrageHaltung:
 	return HALTUNG
-
-func _sichtbar() -> void:
-	$FassMitspieler.visible = zeigen == 0
-	$IchSicht/FassIchSicht.visible = zeigen == 0
-	$KartonMitspieler.visible = zeigen == 1
-	$IchSicht/KartonIchSicht.visible = zeigen == 1
