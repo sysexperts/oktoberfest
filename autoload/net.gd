@@ -107,12 +107,45 @@ func host_game(port: int = DEFAULT_PORT, bind_ip: String = "*") -> Error:
 	if err != OK:
 		return err
 	multiplayer.multiplayer_peer = peer
+	if not multiplayer.peer_connected.is_connected(_geduld_fuer_peer):
+		multiplayer.peer_connected.connect(_geduld_fuer_peer)
 	get_tree().change_scene_to_file(GAME_SCENE)
 	return OK
+
+# ------------------------------------------------------------ Geduld beim Laden
+## ENet trennt einen Peer, der 5–30 s nicht antwortet. Ein Client, der gerade die
+## Welt lädt oder Shader übersetzt, hängt aber genau so lange — dann flog er mit
+## „Host hat das Spiel verlassen" zurück ins Menü (7 von 10 Koop-Starts). Darum
+## bekommen beide Seiten mehr Geduld: frühestens nach 30 s, spätestens nach 90 s.
+const GEDULD_MIN_MS := 30000
+const GEDULD_MAX_MS := 90000
+
+func _geduld(pkt: ENetPacketPeer) -> void:
+	if pkt != null:
+		pkt.set_timeout(64, GEDULD_MIN_MS, GEDULD_MAX_MS)
+
+## Nach dem Laden wieder die ENet-Standardwerte — sonst fiele ein abgestürzter
+## Host erst nach 30 s auf.
+func geduld_normal(id: int) -> void:
+	var peer := multiplayer.multiplayer_peer as ENetMultiplayerPeer
+	if peer != null and peer.get_peer(id) != null:
+		peer.get_peer(id).set_timeout(32, 5000, 30000)
+
+func _geduld_fuer_peer(id: int) -> void:
+	var peer := multiplayer.multiplayer_peer as ENetMultiplayerPeer
+	if peer != null:
+		_geduld(peer.get_peer(id))
+
+## Die Spielwelt schon im Hintergrund laden, während die Verbindung aufgebaut
+## wird — so hängt der Client nach dem Verbinden nicht sekundenlang fest.
+func spiel_vorladen() -> void:
+	if ResourceLoader.load_threaded_get_status(GAME_SCENE) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		ResourceLoader.load_threaded_request(GAME_SCENE)
 
 func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	solo = false
 	neues_spiel = false
+	spiel_vorladen()
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_client(address, port)
 	if err != OK:
@@ -150,6 +183,7 @@ func join_steam(lobby_id: int) -> Error:
 		return ERR_UNAVAILABLE
 	solo = false
 	neues_spiel = false
+	spiel_vorladen()
 	var peer: MultiplayerPeer = ClassDB.instantiate("SteamMultiplayerPeer")
 	var err: Error = peer.call("connect_to_lobby", lobby_id)
 	if err != OK:
@@ -181,7 +215,21 @@ func _beitritt_beobachten(peer: MultiplayerPeer, zeitlimit: float) -> void:
 
 func _on_connected() -> void:
 	_beitritt_versuch += 1
-	get_tree().change_scene_to_file(GAME_SCENE)
+	var peer := multiplayer.multiplayer_peer
+	if peer is ENetMultiplayerPeer:
+		_geduld((peer as ENetMultiplayerPeer).get_peer(1))
+	# Auf die im Hintergrund geladene Welt warten — dabei läuft die Hauptschleife
+	# weiter und die Verbindung bleibt am Leben.
+	spiel_vorladen()
+	while ResourceLoader.load_threaded_get_status(GAME_SCENE) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+		if multiplayer.multiplayer_peer != peer:
+			return   # inzwischen abgebrochen
+	var szene := ResourceLoader.load_threaded_get(GAME_SCENE) as PackedScene
+	if szene != null:
+		get_tree().change_scene_to_packed(szene)
+	else:
+		get_tree().change_scene_to_file(GAME_SCENE)
 
 func _on_connection_failed() -> void:
 	_beitritt_versuch += 1

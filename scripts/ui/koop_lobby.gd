@@ -32,6 +32,9 @@ func _ready() -> void:
 	# Eigene Szene: die Musik des Hauptmenüs endet beim Szenenwechsel, hier
 	# läuft dasselbe Stück weiter.
 	MenueMusik.starten(%MenueMusik)
+	# Welt schon im Warteraum laden — nach „Los" geht es dann ohne Hänger ins Spiel
+	if Net.has_method("spiel_vorladen"):
+		Net.spiel_vorladen()
 	%Erstellen.pressed.connect(_erstellen)
 	%Beitreten.pressed.connect(_beitreten)
 	%CodeEingabe.text_submitted.connect(func(_t: String) -> void: _beitreten())
