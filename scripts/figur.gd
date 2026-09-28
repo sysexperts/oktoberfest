@@ -163,14 +163,26 @@ func _zubehoer_anlegen() -> void:
 	halter.name = "Zubehoer"
 	skelett.add_child(halter)
 	halter.bone_name = skelett.get_bone_name(b)
-	var rest := skelett.get_bone_global_rest(b)
+	# Wie die Haut selbst rechnen (Pose × Bindungsmatrix): die Bindung weicht bei
+	# manchen Modellen von der Ruhelage ab — dann säße der Hut in Animationen daneben
+	var bindung := skelett.get_bone_global_rest(b).affine_inverse()
+	for mi: MeshInstance3D in skelett.find_children("*", "MeshInstance3D", false, false):
+		if mi.skin == null:
+			continue
+		for i in mi.skin.get_bind_count():
+			var bn := mi.skin.get_bind_name(i)
+			var idx := mi.skin.get_bind_bone(i) if bn == "" else skelett.find_bone(bn)
+			if idx == b:
+				bindung = mi.skin.get_bind_pose(i) * mi.transform.affine_inverse()
+				break
+		break
 	for szene: PackedScene in zubehoer:
 		if szene == null:
 			continue
 		var teil: Node3D = szene.instantiate()
 		var lage: Transform3D = teil.get_meta("lage", Transform3D())
 		halter.add_child(teil)
-		teil.transform = rest.affine_inverse() * lage
+		teil.transform = bindung * lage
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)
