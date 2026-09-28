@@ -38,7 +38,14 @@ func _ready() -> void:
 	_laden.pressed.connect(_zeige_spielstaende.bind(false))
 	_neu.pressed.connect(_zeige_spielstaende.bind(true))
 	# Koop: Warteraum mit Einladungscode; offizieller Server / IP im alten Koop-Feld
-	%Koop.pressed.connect(func() -> void: get_tree().change_scene_to_file(KOOP_LOBBY_SZENE))
+	# Steam-Version: Koop nur über Steam-Freunde (Lobby, Einladung) — kein
+	# Einladungscode, keine IP, nichts über den eigenen Server
+	if OS.has_feature("steam"):
+		%Koop.pressed.connect(_zeige.bind(_koop_panel))
+		for n: Control in [%ServerBeitreten, %Hosten, %IpEingabe, %IpBeitreten, $Mitte/KoopPanel/Rand/Spalte/Trenner]:
+			n.visible = false
+	else:
+		%Koop.pressed.connect(func() -> void: get_tree().change_scene_to_file(KOOP_LOBBY_SZENE))
 	_einst.pressed.connect(_on_einstellungen)
 	%Credits.pressed.connect(_zeige.bind(_credits_panel))
 	%Beenden.pressed.connect(func() -> void: get_tree().quit())

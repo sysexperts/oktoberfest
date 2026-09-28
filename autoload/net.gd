@@ -136,16 +136,9 @@ func _geduld_fuer_peer(id: int) -> void:
 	if peer != null:
 		_geduld(peer.get_peer(id))
 
-## Die Spielwelt schon im Hintergrund laden, während die Verbindung aufgebaut
-## wird — so hängt der Client nach dem Verbinden nicht sekundenlang fest.
-func spiel_vorladen() -> void:
-	if ResourceLoader.load_threaded_get_status(GAME_SCENE) == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-		ResourceLoader.load_threaded_request(GAME_SCENE)
-
 func join_game(address: String, port: int = DEFAULT_PORT) -> Error:
 	solo = false
 	neues_spiel = false
-	spiel_vorladen()
 	var peer := ENetMultiplayerPeer.new()
 	var err := peer.create_client(address, port)
 	if err != OK:
@@ -183,7 +176,6 @@ func join_steam(lobby_id: int) -> Error:
 		return ERR_UNAVAILABLE
 	solo = false
 	neues_spiel = false
-	spiel_vorladen()
 	var peer: MultiplayerPeer = ClassDB.instantiate("SteamMultiplayerPeer")
 	var err: Error = peer.call("connect_to_lobby", lobby_id)
 	if err != OK:
@@ -218,18 +210,11 @@ func _on_connected() -> void:
 	var peer := multiplayer.multiplayer_peer
 	if peer is ENetMultiplayerPeer:
 		_geduld((peer as ENetMultiplayerPeer).get_peer(1))
-	# Auf die im Hintergrund geladene Welt warten — dabei läuft die Hauptschleife
-	# weiter und die Verbindung bleibt am Leben.
-	spiel_vorladen()
-	while ResourceLoader.load_threaded_get_status(GAME_SCENE) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
-		await get_tree().process_frame
-		if multiplayer.multiplayer_peer != peer:
-			return   # inzwischen abgebrochen
-	var szene := ResourceLoader.load_threaded_get(GAME_SCENE) as PackedScene
-	if szene != null:
-		get_tree().change_scene_to_packed(szene)
-	else:
-		get_tree().change_scene_to_file(GAME_SCENE)
+	# Bewusst blockierend wechseln: Pakete, die während des Ladens kommen, bleiben
+	# liegen, bis die Spielszene steht. Würde die Hauptschleife dabei weiterlaufen,
+	# kämen Nachrichten an eine noch fehlende Szene und die Pfadzuordnung ginge
+	# kaputt. Dass der Server so lange wartet, regelt _geduld_fuer_peer.
+	get_tree().change_scene_to_file(GAME_SCENE)
 
 func _on_connection_failed() -> void:
 	_beitritt_versuch += 1

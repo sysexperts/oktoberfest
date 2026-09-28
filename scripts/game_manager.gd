@@ -1382,9 +1382,10 @@ func _client_ready(version: String) -> void:
 	# Wer schon angemeldet ist, darf kein zweites Mal eingesetzt werden.
 	if _spawn_index_by_peer.has(sender):
 		return
-	# Der Client hat fertig geladen — ab jetzt normale Geduld (Net._geduld_fuer_peer)
+	# Der Client hat fertig geladen; die ersten Bilder (Shader) können noch hängen.
+	# Danach wieder normale Geduld (Net._geduld_fuer_peer)
 	if Net.has_method("geduld_normal"):
-		Net.geduld_normal(sender)
+		get_tree().create_timer(60.0).timeout.connect(Net.geduld_normal.bind(sender))
 	# Unterschiedliche Stände verstehen ihre Nachrichten nicht — sauber ablehnen,
 	# statt den Spieler in einer halb synchronen Welt stehen zu lassen.
 	if version != KoopDaten.version():
@@ -1435,8 +1436,6 @@ func _client_ready(version: String) -> void:
 func _add_player(peer_id: int, spawn_index: int) -> void:
 	if _players_nodes.has(peer_id):
 		return
-	if peer_id == multiplayer.get_unique_id() and not multiplayer.is_server() 			and Net.has_method("geduld_normal"):
-		Net.geduld_normal(1)   # eigener Spieler steht — Laden vorbei
 	var p := PLAYER_SCENE.instantiate()
 	p.name = str(peer_id)
 	p.set_multiplayer_authority(peer_id)
