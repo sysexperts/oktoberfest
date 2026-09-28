@@ -41,6 +41,9 @@ extends Node3D
 ## Grundfarbe aufhellen (1 = unverändert) — für Modelle, bei denen Eigenleuchten
 ## die Textur nicht übernimmt und die Figur nur weiß färben würde (character2).
 @export var helligkeit := 1.0
+## Andere Farbtextur für eine Kleidungs-Variante (tools/bake_kleidung.gd backt
+## sie aus der Originaltextur). Leer = Textur des Modells.
+@export var textur: Texture2D
 ## Animationen eines anderen Modells mitbenutzen — nur sinnvoll bei gleichem
 ## Skelett (gleiche Knochennamen, Pfad Armature/Skeleton3D). Die geliehenen
 ## Animationen heißen dann "geliehen/<Name>".
@@ -66,7 +69,7 @@ var anim: AnimationPlayer
 var skelett: Skeleton3D
 
 func _ready() -> void:
-	if metall_ignorieren or eigenleuchten >= 0.0 or helligkeit != 1.0:
+	if metall_ignorieren or eigenleuchten >= 0.0 or helligkeit != 1.0 or textur:
 		_material_anpassen()
 	var aps := find_children("*", "AnimationPlayer", true, false)
 	if not aps.is_empty():
@@ -120,9 +123,11 @@ func _material_anpassen() -> void:
 			var original := mi.get_active_material(s) as BaseMaterial3D
 			if original == null:
 				continue
-			var schluessel := [original, metall_ignorieren, eigenleuchten, helligkeit]
+			var schluessel := [original, metall_ignorieren, eigenleuchten, helligkeit, textur]
 			if not _angepasst.has(schluessel):
 				var kopie := original.duplicate() as BaseMaterial3D
+				if textur:
+					kopie.albedo_texture = textur
 				if helligkeit != 1.0:
 					var c := kopie.albedo_color
 					kopie.albedo_color = Color(c.r * helligkeit, c.g * helligkeit, c.b * helligkeit, c.a)
@@ -148,6 +153,10 @@ func _material_anpassen() -> void:
 ## jede Bewegung mit. Die Lage steht als metadata/lage in der Zubehör-Szene
 ## (in Modellkoordinaten: y = Höhe, +z = vorn) — im Editor verschiebbar.
 @export var zubehoer: Array[PackedScene] = []
+## Das Zubehör ist auf den Kopf von character2 zugeschnitten. Andere Köpfe
+## (größer, tiefer, weiter vorn) passen es hiermit an: wirkt auf jedes Teil
+## vor dessen eigener Lage.
+@export var zubehoer_anpassung := Transform3D()
 
 func _zubehoer_anlegen() -> void:
 	if zubehoer.is_empty() or skelett == null:
@@ -182,7 +191,7 @@ func _zubehoer_anlegen() -> void:
 		var teil: Node3D = szene.instantiate()
 		var lage: Transform3D = teil.get_meta("lage", Transform3D())
 		halter.add_child(teil)
-		teil.transform = bindung * lage
+		teil.transform = bindung * zubehoer_anpassung * lage
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)

@@ -6,6 +6,9 @@ extends SceneTree
 ##                      Kordel, Feder und Gamsbart
 ##   vollbart.tres    — Vollbart, der der Kopfform folgt, mit Strähnen und
 ##                      gewelltem Rand, dazu ein gezwirbelter Schnurrbart
+##   *_schwarz.tres   — dieselben Teile in Schwarz (schwarzer Filz, Silberkordel)
+##   brille.tres      — runde Nickelbrille mit klaren Gläsern
+##   sonnenbrille.tres — breite Sonnenbrille mit dunklen, spiegelnden Gläsern
 ## Oberflächen je Material (Filz, Band, Kordel, Feder, Gamsbart / Bart,
 ## Schnurrbart) — in den Zubehör-Szenen per Material umfärbbar.
 ## Aufruf: godot --headless --path . --script res://tools/bake_zubehoer.gd
@@ -18,9 +21,14 @@ var _rng := RandomNumberGenerator.new()
 
 func _init() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(ZIEL))
-	_rng.seed = 1234
-	_hut()
-	_bart()
+	# Filz, Filz dunkel, Band, Kordel
+	_hut("tirolerhut", [Color(0.22, 0.33, 0.19), Color(0.17, 0.27, 0.15), Color(0.33, 0.19, 0.09), Color(0.85, 0.72, 0.4)])
+	_hut("tirolerhut_schwarz", [Color(0.035, 0.035, 0.04), Color(0.022, 0.022, 0.026), Color(0.012, 0.012, 0.014), Color(0.72, 0.72, 0.74)])
+	# Bart, Rand, Schnurrbart
+	_bart("vollbart", [Color(0.34, 0.2, 0.1), Color(0.24, 0.13, 0.06), Color(0.3, 0.17, 0.08)])
+	_bart("vollbart_schwarz", [Color(0.05, 0.045, 0.045), Color(0.025, 0.022, 0.022), Color(0.04, 0.036, 0.036)])
+	_brille("brille", Color(0.7, 0.68, 0.62), Color(0.85, 0.92, 1.0, 0.18), false)
+	_brille("sonnenbrille", Color(0.03, 0.03, 0.03), Color(0.02, 0.025, 0.03, 0.9), true)
 	print("Zubehör gebacken.")
 	quit()
 
@@ -89,7 +97,13 @@ func _fertig(am: ArrayMesh, st: SurfaceTool, name: String, rauh: float) -> void:
 	m.vertex_color_use_as_albedo = true
 	m.roughness = rauh
 	m.resource_name = name
-	m.cull_mode = BaseMaterial3D.CULL_DISABLED if name in ["Filz", "Feder"] else BaseMaterial3D.CULL_BACK
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED if name in ["Filz", "Feder", "Glas"] else BaseMaterial3D.CULL_BACK
+	if name == "Glas":
+		# durchsichtig über das Alpha der Vertexfarbe, glänzend
+		m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		m.metallic_specular = 1.0
+	elif name == "Rahmen":
+		m.metallic = 0.6
 	am.surface_set_material(am.get_surface_count() - 1, m)
 	am.surface_set_name(am.get_surface_count() - 1, name)
 
@@ -106,10 +120,12 @@ func _krone_r(w: float, h: float) -> float:
 	# leicht oval: vorn-hinten länger
 	return r * (1.0 + 0.05 * absf(cos(w)))
 
-func _hut() -> void:
+func _hut(datei: String, farben: Array) -> void:
 	var am := ArrayMesh.new()
-	var filz := Color(0.22, 0.33, 0.19)
-	var filz_d := Color(0.17, 0.27, 0.15)
+	# gleiche Zufallsfolge je Hut, damit der Gamsbart in jeder Farbe gleich aussieht
+	_rng.seed = 1234
+	var filz: Color = farben[0]
+	var filz_d: Color = farben[1]
 	# Krone: Mantel
 	var st := _neu()
 	_flaeche(st, SEG, 14, func(u: float, v: float) -> Array:
@@ -145,7 +161,7 @@ func _hut() -> void:
 
 	# Hutband + Kordel
 	st = _neu()
-	var band := Color(0.33, 0.19, 0.09)
+	var band: Color = farben[2]
 	_flaeche(st, SEG, 3, func(u: float, v: float) -> Array:
 		var w := u * TAU
 		var h := v * 0.26
@@ -160,7 +176,7 @@ func _hut() -> void:
 		var r := _krone_r(w, 0.27) + 0.007
 		kordel.append(Vector3(sin(w) * r, HUT_Y + 0.27 * KRONE_H + 0.002 * sin(w * 24.0), cos(w) * r))
 		kr.append(0.0045)
-	_roehre(st, kordel, kr, Color(0.85, 0.72, 0.4), 8)
+	_roehre(st, kordel, kr, farben[3], 8)
 	_fertig(am, st, "Kordel", 0.6)
 
 	# Feder: gebogene, spitz zulaufende Fahne mit Kiel, links hinten im Band
@@ -214,8 +230,8 @@ func _hut() -> void:
 		kn_r.append([0.011, 0.014, 0.009][k])
 	_roehre(st, knoten, kn_r, Color(0.7, 0.62, 0.35), 10)
 	_fertig(am, st, "Gamsbart", 0.9)
-	ResourceSaver.save(am, ZIEL + "tirolerhut.tres")
-	print("  tirolerhut: ", am.get_surface_count(), " Oberflächen")
+	ResourceSaver.save(am, ZIEL + datei + ".tres")
+	print("  ", datei, ": ", am.get_surface_count(), " Oberflächen")
 
 # ------------------------------------------------------------ Vollbart
 const BART_W := 1.62          # halber Winkel (rad) bis zu den Koteletten
@@ -239,7 +255,7 @@ func _dicke(w: float, v: float) -> float:
 	var a := absf(w)
 	return (0.012 + 0.04 * pow(v, 0.8)) * lerpf(1.0, 0.45, smoothstep(0.5, BART_W, a))
 
-func _bart_punkt(u: float, v: float, aussen: bool) -> Array:
+func _bart_punkt(u: float, v: float, aussen: bool, farbe: Color) -> Array:
 	var w := lerpf(-BART_W, BART_W, u)
 	var y := lerpf(_bart_oben(w), _bart_unten(w), v)
 	var r := _innen_r(y) + 0.002
@@ -253,20 +269,21 @@ func _bart_punkt(u: float, v: float, aussen: bool) -> Array:
 	# Spitze leicht nach vorn-unten
 	p.z += 0.03 * pow(v, 2.0) * pow(cos(w), 4.0) if aussen else 0.0
 	var dunkel := 0.25 * (0.5 + 0.5 * sin(w * 46.0 + v * 3.0)) + 0.15 * v
-	return [p, Color(0.34, 0.2, 0.1).darkened(dunkel)]
+	return [p, farbe.darkened(dunkel)]
 
-func _bart() -> void:
+func _bart(datei: String, farben: Array) -> void:
 	var am := ArrayMesh.new()
 	var st := _neu()
 	var nu := 90
 	var nv := 24
-	_flaeche(st, nu, nv, func(u: float, v: float) -> Array: return _bart_punkt(u, v, true))
-	_flaeche(st, nu, nv, func(u: float, v: float) -> Array: return _bart_punkt(u, v, false), true)
+	var farbe: Color = farben[0]
+	_flaeche(st, nu, nv, func(u: float, v: float) -> Array: return _bart_punkt(u, v, true, farbe))
+	_flaeche(st, nu, nv, func(u: float, v: float) -> Array: return _bart_punkt(u, v, false, farbe), true)
 	# Unterkante schließen (gewellter Rand)
 	_flaeche(st, nu, 1, func(u: float, v: float) -> Array:
-		var a: Array = _bart_punkt(u, 1.0, true)
-		var b: Array = _bart_punkt(u, 1.0, false)
-		return [(a[0] as Vector3).lerp(b[0], v), Color(0.24, 0.13, 0.06)], true)
+		var a: Array = _bart_punkt(u, 1.0, true, farbe)
+		var b: Array = _bart_punkt(u, 1.0, false, farbe)
+		return [(a[0] as Vector3).lerp(b[0], v), farben[1]], true)
 	_fertig(am, st, "Bart", 0.95)
 
 	# Schnurrbart: zwei gezwirbelte Hälften, in der Mitte dick, Spitzen nach oben gedreht
@@ -284,7 +301,93 @@ func _bart() -> void:
 			p += Vector3(float(seite) * -0.012, 0.0, 0.0) * smoothstep(0.85, 1.0, t)
 			pts.append(p)
 			rad.append(lerpf(0.019, 0.0035, pow(t, 0.8)) * (1.0 + 0.25 * sin(t * PI * 0.8)))
-		_roehre(st, pts, rad, Color(0.3, 0.17, 0.08), 14)
+		_roehre(st, pts, rad, farben[2], 14)
 	_fertig(am, st, "Schnurrbart", 0.9)
-	ResourceSaver.save(am, ZIEL + "vollbart.tres")
-	print("  vollbart: ", am.get_surface_count(), " Oberflächen")
+	ResourceSaver.save(am, ZIEL + datei + ".tres")
+	print("  ", datei, ": ", am.get_surface_count(), " Oberflächen")
+
+# ------------------------------------------------------------ Brillen
+## Augen von character2 (tools/kopf_messen.gd): Mitte x ±0,075, y 1,395,
+## vorderster Punkt z 0,20 (Pupillen stehen weiter vor, daher Gläser bei 0,25). Kopf an den Schläfen halb 0,18 breit.
+const AUGE_X := 0.077
+const AUGE_Y := 1.397
+const GLAS_Z := 0.252
+
+## Glas etwas nach hinten biegen, wie der Kopf: außen weiter hinten
+func _glas_z(x: float) -> float:
+	return GLAS_Z - 0.03 * pow(absf(x) / 0.14, 2.0)
+
+## Umriss eines Glases: rund (Nickelbrille) oder breit mit fast geradem
+## Oberrand (Sonnenbrille). t 0..1 einmal herum.
+func _glas_rand(t: float, seite: float, sonne: bool) -> Vector3:
+	var w := t * TAU
+	var x := cos(w)
+	var y := sin(w)
+	var p: Vector2
+	if sonne:
+		# oben flach, unten tropfenförmig zur Wange hin
+		var ry := 0.044 if y < 0.0 else 0.03
+		p = Vector2(x * 0.058 * (1.0 + 0.12 * maxf(0.0, -y) * x * seite), y * ry + 0.008)
+	else:
+		p = Vector2(x, y) * 0.048
+	var gx := seite * (AUGE_X + (0.006 if sonne else 0.0)) + p.x
+	return Vector3(gx, AUGE_Y + p.y, _glas_z(gx))
+
+func _brille(datei: String, rahmen: Color, glas: Color, sonne: bool) -> void:
+	var am := ArrayMesh.new()
+	var st := _neu()
+	var n := 48
+	var dicke := 0.0055 if sonne else 0.0028
+	for seite: float in [-1.0, 1.0]:
+		# Fassung: geschlossener Ring ums Glas
+		var ring := []
+		var rr := []
+		for i in n + 1:
+			ring.append(_glas_rand(float(i) / n, seite, sonne))
+			rr.append(dicke)
+		_roehre(st, ring, rr, rahmen, 8)
+		# Bügel: vom äußeren Rand an der Schläfe entlang nach hinten, hinterm Ohr abwärts
+		var start := _glas_rand(0.0 if seite > 0.0 else 0.5, seite, sonne) + Vector3(0, 0.012 if sonne else 0.0, 0)
+		var buegel := []
+		var br := []
+		for i in 13:
+			var t := i / 12.0
+			var x := seite * lerpf(absf(start.x) + 0.004, 0.196, smoothstep(0.0, 0.35, t))
+			var z := lerpf(start.z, -0.07, t)
+			var y := lerpf(start.y, AUGE_Y + 0.004, t) - 0.03 * smoothstep(0.8, 1.0, t)
+			buegel.append(Vector3(x, y, z))
+			br.append(dicke * lerpf(1.0, 0.8, t))
+		_roehre(st, buegel, br, rahmen, 8)
+	# Steg über der Nase: kleiner Bogen zwischen den Gläsern
+	var innen := _glas_rand(0.5, 1.0, sonne)
+	var steg := []
+	var sr := []
+	for i in 9:
+		var t := i / 8.0
+		var x := lerpf(-innen.x, innen.x, t)
+		steg.append(Vector3(x, AUGE_Y + (0.02 if sonne else 0.006) + 0.01 * sin(t * PI), _glas_z(x) + 0.003))
+		sr.append(dicke * 0.9)
+	_roehre(st, steg, sr, rahmen, 8)
+	if sonne:
+		# Oberkante als durchgehende, kräftige Leiste
+		var leiste := []
+		var lr := []
+		var aussen := absf(_glas_rand(0.0, 1.0, true).x) + 0.004
+		for i in 25:
+			var x := lerpf(-aussen, aussen, i / 24.0)
+			leiste.append(Vector3(x, AUGE_Y + 0.038, _glas_z(x) + 0.002))
+			lr.append(0.0065)
+		_roehre(st, leiste, lr, rahmen, 8)
+	_fertig(am, st, "Rahmen", 0.35)
+	# Gläser: Fächer aus der Mitte zum Rand
+	st = _neu()
+	for seite: float in [-1.0, 1.0]:
+		var mx := seite * (AUGE_X + (0.006 if sonne else 0.0))
+		var mitte := Vector3(mx, AUGE_Y + (0.004 if sonne else 0.0), _glas_z(mx) + 0.003)
+		for i in n:
+			for v in [mitte, _glas_rand(float(i) / n, seite, sonne), _glas_rand(float(i + 1) / n, seite, sonne)]:
+				st.set_color(glas)
+				st.add_vertex(v)
+	_fertig(am, st, "Glas", 0.05)
+	ResourceSaver.save(am, ZIEL + datei + ".tres")
+	print("  ", datei, ": ", am.get_surface_count(), " Oberflächen")

@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter2.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/zubehoer/brille.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/zubehoer/vollbart.tscn" id="3"]
+
+[node name="Charakter2" instance=ExtResource("1")]
+zubehoer = Array[PackedScene]([ExtResource("2"), ExtResource("3")])
