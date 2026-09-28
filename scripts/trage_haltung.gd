@@ -21,3 +21,8 @@ extends Resource
 @export_range(-3.2, 3.2, 0.01) var karton_oberarm_vor := 0.34
 @export_range(-3.2, 3.2, 0.01) var karton_oberarm_innen := -1.09
 @export_range(-3.2, 3.2, 0.01) var karton_unterarm := 0.43
+## Kellner/Koch: Tablett am Körper (relativ zum Angestellten) und eigene Armhaltung
+@export var tablett := Transform3D(Basis(), Vector3(0, 0.88, -0.4))
+@export_range(-3.2, 3.2, 0.01) var tablett_oberarm_vor := 0.34
+@export_range(-3.2, 3.2, 0.01) var tablett_oberarm_innen := -1.09
+@export_range(-3.2, 3.2, 0.01) var tablett_unterarm := 0.43

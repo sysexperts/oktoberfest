@@ -50,6 +50,7 @@ func _ready() -> void:
 	_model_base_y = _model.position.y
 	_set_standing()
 	_collect_mugs()
+	_tablett_anheften()
 	if _figur.braucht_idle_bewegung():
 		_setup_idle_motion()
 	_refresh_label()
@@ -66,6 +67,32 @@ func _set_walking() -> void:
 		return
 	_figur.gehen()
 	_walking = true
+
+const TRAGE_HALTUNG := preload("res://assets/trage_haltung.tres")
+
+## Tablett am Oberkörper-Knochen festmachen (wie das Fass beim Spieler): es wippt
+## beim Gehen mit, statt vor dem Bauch zu schweben. Lage aus trage_haltung.tres,
+## eingestellt in scenes/werkzeuge/tablett_haltung.tscn.
+func _tablett_anheften() -> void:
+	var tablett := get_node_or_null("Tablett") as Node3D
+	if tablett == null or _figur == null or _figur.skelett == null:
+		return
+	var sk := _figur.skelett
+	var b := -1
+	for n: String in Figur.KNOCHEN_NAMEN["wirbel_oben"]:
+		b = sk.find_bone(n)
+		if b >= 0:
+			break
+	if b < 0:
+		tablett.transform = TRAGE_HALTUNG.tablett
+		return
+	var halter := BoneAttachment3D.new()
+	halter.name = "TablettHalter"
+	sk.add_child(halter)
+	halter.bone_name = sk.get_bone_name(b)
+	var knochen := (global_transform.affine_inverse() * sk.global_transform) * sk.get_bone_global_rest(b)
+	tablett.reparent(halter, false)
+	tablett.transform = knochen.affine_inverse() * TRAGE_HALTUNG.tablett
 
 ## Die Maßkrüge stehen als echte Knoten auf dem Tablett in staff.tscn.
 func _collect_mugs() -> void:
@@ -92,7 +119,9 @@ func set_carrying(n: int) -> void:
 	carrying = n
 	# Tablett vor dem Körper: Kellner mit Krügen, Koch mit einem Teller
 	var koch := role == 1
-	var tablett := get_node_or_null("Tablett") as Node3D
+	var tablett := find_child("Tablett", true, false) as Node3D
+	if _figur:
+		_figur.trage_pose(n > 0, 2)
 	if tablett:
 		tablett.visible = n > 0
 		(tablett.get_node("Teller") as Node3D).visible = koch and n > 0

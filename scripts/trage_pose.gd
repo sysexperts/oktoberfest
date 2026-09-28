@@ -9,7 +9,7 @@ extends SkeletonModifier3D
 
 const HALTUNG := preload("res://assets/trage_haltung.tres")
 
-## Was getragen wird: 0 = Fass, 1 = Karton — jedes hat eigene Armwinkel
+## Was getragen wird: 0 = Fass, 1 = Karton, 2 = Tablett — jedes hat eigene Armwinkel
 @export var art := 0
 
 ## Schulter bis Hand: die Gehanimation bewegt auch diese Knochen — dann säßen
@@ -25,9 +25,17 @@ func _process_modification() -> void:
 	for namen: Array in KETTE:
 		_ruhe(sk, _knochen(sk, namen))
 	var h: TrageHaltung = HALTUNG
-	var vor := h.karton_oberarm_vor if art == 1 else h.oberarm_vor
-	var innen := h.karton_oberarm_innen if art == 1 else h.oberarm_innen
-	var unten := h.karton_unterarm if art == 1 else h.unterarm
+	var vor := h.oberarm_vor
+	var innen := h.oberarm_innen
+	var unten := h.unterarm
+	if art == 1:
+		vor = h.karton_oberarm_vor
+		innen = h.karton_oberarm_innen
+		unten = h.karton_unterarm
+	elif art == 2:
+		vor = h.tablett_oberarm_vor
+		innen = h.tablett_oberarm_innen
+		unten = h.tablett_unterarm
 	_setze(sk, "arm_l", vor, innen)
 	_setze(sk, "arm_r", vor, -innen)
 	_setze(sk, "unterarm_l", unten, 0.0)

@@ -14,3 +14,7 @@ karton_pov = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.55, -0.6)
 karton_oberarm_vor = 0.8099999999999996
 karton_oberarm_innen = -1.2100000000000002
 karton_unterarm = 0.36999999999999966
+tablett = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.4)
+tablett_oberarm_vor = 0.34
+tablett_oberarm_innen = -1.09
+tablett_unterarm = 0.43
