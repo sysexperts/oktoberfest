@@ -209,6 +209,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if minispiel != null and is_instance_valid(minispiel):
 		minispiel.eingabe(event)
 		return
+	# F5: Schulterkamera an/aus — sich selbst von außen sehen
+	if event is InputEventKey and event.pressed and not event.echo 			and (event as InputEventKey).physical_keycode == KEY_F5:
+		_schulterkamera = not _schulterkamera
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mm := event as InputEventMouseMotion
 		var sens := MOUSE_SENS * Einstellungen.maus
@@ -330,7 +335,7 @@ func _physics_process(delta: float) -> void:
 				emote = emote_wahl
 		else:
 			emote = 0
-		_kamera_aussen(emote != 0, delta)
+		_kamera_aussen(emote != 0 or _schulterkamera, delta)
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume, PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
@@ -1212,7 +1217,7 @@ func _has_ready() -> bool:
 ## dem Körper, und die Arme (TragePose, ebenfalls am Oberkörper) bleiben am Fass.
 ## Die Lage aus assets/trage_haltung.tres gilt für die Ruhelage der Figur.
 func _fass_anheften() -> void:
-	if _carry_fass == null or _is_local or not is_inside_tree():
+	if _carry_fass == null or not is_inside_tree():
 		return
 	var fig := _model as Figur
 	if fig == null or fig.skelett == null:
@@ -1243,10 +1248,11 @@ func _update_carry_visual() -> void:
 	var has_food := carry_state == 2
 	# Fass mit beiden Händen vor der Brust — sieht man selbst und die anderen
 	var fass := carry_state == 3 and carry_pkg_kind == 1
+	var ich_sicht := _is_local and not _kamera_draussen
 	if _carry_fass:
-		_carry_fass.visible = fass and not _is_local
+		_carry_fass.visible = fass and not ich_sicht
 	if _carry_fass_pov:
-		_carry_fass_pov.visible = fass and _is_local
+		_carry_fass_pov.visible = fass and ich_sicht
 	var figur := _model as Figur
 	if figur:
 		figur.trage_pose(fass)
@@ -1423,6 +1429,10 @@ const KAMERA_HOCH := 0.65
 ## nicht die halbe Sicht
 const KAMERA_SEITE := 0.6
 var _kam_ruhe := Vector3.INF
+## F5: Kamera hinter der Schulter statt Ich-Sicht
+var _schulterkamera := false
+## Kamera gerade draußen (Emote oder F5) — dann Fass am Körper statt vor der Kamera
+var _kamera_draussen := false
 
 func _kamera_aussen(an: bool, delta: float) -> void:
 	if _kam_ruhe == Vector3.INF:
@@ -1444,6 +1454,7 @@ func _kamera_aussen(an: bool, delta: float) -> void:
 	_cam.position = _cam.position.lerp(ziel, clampf(delta * 8.0, 0.0, 1.0))
 	# Figur einblenden, solange die Kamera draußen ist
 	var draussen := an or _cam.position.distance_to(_kam_ruhe) > 0.25
+	_kamera_draussen = draussen
 	if _is_local:
 		_model.visible = draussen
 
