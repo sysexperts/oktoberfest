@@ -57,7 +57,7 @@ surface_material_override/0 = SubResource("MatTafel")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0.03)
 pixel_size = 0.004
 modulate = Color(1, 0.86, 0.45, 1)
-text = "Menü"
+text = "SIGN_MENUE"
 font = ExtResource("1_fraktur")
 font_size = 64
 
@@ -69,7 +69,7 @@ surface_material_override/0 = SubResource("MatHelles")
 [node name="Helles" type="Label3D" parent="." unique_id=1777326472]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.28, 0.03)
 pixel_size = 0.003
-text = "🍺 Helles"
+text = "POSTER_HELLES"
 font_size = 48
 horizontal_alignment = 0
 
@@ -81,7 +81,7 @@ surface_material_override/0 = SubResource("MatWeizen")
 [node name="Weizen" type="Label3D" parent="." unique_id=896455202]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.06, 0.03)
 pixel_size = 0.003
-text = "🍺 Weizen"
+text = "POSTER_WEIZEN"
 font_size = 48
 horizontal_alignment = 0
 
@@ -93,7 +93,7 @@ surface_material_override/0 = SubResource("MatRadler")
 [node name="Radler" type="Label3D" parent="." unique_id=1330283320]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.16, 0.03)
 pixel_size = 0.003
-text = "🍺 Radler"
+text = "POSTER_RADLER"
 font_size = 48
 horizontal_alignment = 0
 
@@ -105,7 +105,7 @@ surface_material_override/0 = SubResource("MatFestbier")
 [node name="Festbier" type="Label3D" parent="." unique_id=350177816]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.38, 0.03)
 pixel_size = 0.003
-text = "🍺 Festbier"
+text = "POSTER_FESTBIER"
 font_size = 48
 horizontal_alignment = 0
 
@@ -113,7 +113,5 @@ horizontal_alignment = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6052374, 0.10400158, 0.03)
 pixel_size = 0.003
 modulate = Color(0.95, 0.85, 0.7, 1)
-text = "🥨 Brezn
-🌭 Würstl
-🍗 Hendl"
+text = "POSTER_ESSEN"
 font_size = 44

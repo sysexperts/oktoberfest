@@ -34,7 +34,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 1)
 pixel_size = 0.008
 font_size = 48
 outline_size = 16
-text = "Stand"
+text = "SIGN_STAND"
 
 [node name="Body" type="StaticBody3D" parent="."]
 

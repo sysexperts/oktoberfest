@@ -74,7 +74,7 @@ surface_material_override/0 = SubResource("MatHelles")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Helles"
+text = "SIGN_HELLES"
 font_size = 56
 outline_size = 0
 
@@ -148,7 +148,7 @@ surface_material_override/0 = SubResource("MatWeizen")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Weizen"
+text = "SIGN_WEIZEN"
 font_size = 56
 outline_size = 0
 
@@ -223,7 +223,7 @@ surface_material_override/0 = SubResource("MatRadler")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Radler"
+text = "SIGN_RADLER"
 font_size = 56
 outline_size = 0
 
@@ -298,7 +298,7 @@ surface_material_override/0 = SubResource("MatFestbier")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Festbier"
+text = "SIGN_FESTBIER"
 font_size = 56
 outline_size = 0
 
@@ -373,7 +373,7 @@ surface_material_override/0 = SubResource("MatEssen")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Brezel"
+text = "SIGN_BREZN"
 font_size = 56
 outline_size = 0
 
@@ -447,7 +447,7 @@ surface_material_override/0 = SubResource("MatEssen")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Würstl"
+text = "SIGN_WUERSTL"
 font_size = 56
 outline_size = 0
 
@@ -522,7 +522,7 @@ surface_material_override/0 = SubResource("MatEssen")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.02, 0.013)
 pixel_size = 0.001
 modulate = Color(0.2, 0.12, 0.05, 1)
-text = "Hendl"
+text = "SIGN_HENDL"
 font_size = 56
 outline_size = 0
 

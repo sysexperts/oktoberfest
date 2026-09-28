@@ -1098,3 +1098,26 @@ SET_MONITOR,Bildschirm,Monitor,Ekran
 SET_MONITOR_N,Bildschirm %d (%d × %d),Monitor %d (%d × %d),Ekran %d (%d × %d)
 SET_FPS_LIMIT,Bildrate begrenzen,Frame rate limit,Kare hızı sınırı
 SET_FPS_UNLIMITED,Unbegrenzt,Unlimited,Sınırsız
+SIGN_DAMEN,Damen,Ladies,Kadın
+SIGN_HERREN,Herren,Gents,Erkek
+SIGN_MENUE,Menü,Menu,Menü
+SIGN_HELLES,Helles,Helles,Helles
+SIGN_WEIZEN,Weizen,Wheat beer,Buğday birası
+SIGN_RADLER,Radler,Shandy,Radler
+SIGN_FESTBIER,Festbier,Festival beer,Festival birası
+SIGN_BREZN,Brezn,Pretzel,Brezel
+SIGN_WUERSTL,Würstl,Sausage,Sosis
+SIGN_HENDL,Hendl,Chicken,Tavuk
+POSTER_HELLES,🍺 Helles,🍺 Helles,🍺 Helles
+POSTER_WEIZEN,🍺 Weizen,🍺 Wheat beer,🍺 Buğday birası
+POSTER_RADLER,🍺 Radler,🍺 Shandy,🍺 Radler
+POSTER_FESTBIER,🍺 Festbier,🍺 Festival beer,🍺 Festival birası
+POSTER_ESSEN,"🥨 Brezn
+🌭 Würstl
+🍗 Hendl","🥨 Pretzel
+🌭 Sausage
+🍗 Chicken","🥨 Brezel
+🌭 Sosis
+🍗 Tavuk"
+SIGN_HUBER_ZELT,Huber-Zelt,Huber's Tent,Huber Çadırı
+SIGN_STAND,Stand,Stall,Tezgah

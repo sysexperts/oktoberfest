@@ -8,7 +8,9 @@ class Lauf extends Node:
 	func _ready() -> void:
 		if await Spielstart.starten(self) == null:
 			return
-		TranslationServer.set_locale("de")
+		TranslationServer.set_locale(OS.get_environment("SPRACHE") if OS.get_environment("SPRACHE") != "" else "de")
+		Einstellungen.sprache = TranslationServer.get_locale()
+		Einstellungen.anwenden()
 		for i in 40: await get_tree().process_frame
 		var gm := get_tree().current_scene
 		var kino = gm.get_node_or_null("Kino")
