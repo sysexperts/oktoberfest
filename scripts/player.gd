@@ -884,7 +884,7 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
 		elif _current_target is Ausgabe and _has_ready() and carry_state in [1, 2] \
-				and not (carry_state == 1 and carry_type == WASSER) and hinter_der_theke(_current_target):
+				and not (carry_state == 1 and carry_type == WASSER) and hinter_der_theke(_current_target) 				and int((_current_target as Ausgabe).nur_art) in [0, carry_state]:
 			# Von hinten (Fassseite): vollen Krug oder fertige Portion für die
 			# Kellner abstellen. Essen ging vorher gar nicht — es landete als
 			# Bier auf der Ausgabe und war nirgends zu sehen.
@@ -895,7 +895,7 @@ func _handle_interaction(delta: float) -> void:
 			if (_current_target as Ausgabe).hat_fertiges():
 				if carry_state != 0:
 					_krug_weglegen()
-				_world.net_take_ausgabe.rpc_id(1)
+				_world.net_take_ausgabe.rpc_id(1, int((_current_target as Ausgabe).nur_art))
 				_sfx("pop")
 		elif _current_target is MugDispenser and (carry_state == 0 or kann_weiteren_krug()):
 			if carry_state != 0:

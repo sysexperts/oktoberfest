@@ -12,6 +12,10 @@ const Texte := preload("res://scripts/ui/texte.gd")
 ## Farben wie beim Spieler (player.gd BEER_COLORS)
 const BIER_FARBEN := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08)}
 
+## Was hier abgestellt wird: 0 = alles, 1 = nur Bier, 2 = nur Essen. Die Theke hat
+## zwei Ausgaben — Bier an den Zapfsäulen, Essen gegenüber den Kochstellen.
+@export var nur_art := 0
+
 ## "kind_typ" -> Anzahl, z. B. {"1_1": 3, "2_1": 1}
 var inhalt := {}
 ## "art_typ" -> Platz-Knoten
@@ -21,7 +25,11 @@ func _ready() -> void:
 	add_to_group("interactable")
 	add_to_group("ausgabe")
 	for platz in $Plaetze.get_children():
-		_plaetze["%d_%d" % [int(platz.get_meta("art", 1)), int(platz.get_meta("typ", 1))]] = platz
+		var art := int(platz.get_meta("art", 1))
+		if nur_art != 0 and art != nur_art:
+			platz.queue_free()
+			continue
+		_plaetze["%d_%d" % [art, int(platz.get_meta("typ", 1))]] = platz
 	Einstellungen.geaendert.connect(_beschriften)
 	set_inhalt({})
 
@@ -70,9 +78,15 @@ func anzahl(art: int) -> int:
 	return n
 
 func hat_fertiges() -> bool:
+	if nur_art != 0:
+		return anzahl(nur_art) > 0
 	return anzahl(1) + anzahl(2) > 0
 
 func _beschriften() -> void:
 	var label := get_node_or_null("Label") as Label3D
 	if label:
 		label.text = Texte.mit_tasten("WORLD_AUSGABE") % [anzahl(1), anzahl(2)]
+		if nur_art == 1:
+			label.text = Texte.mit_tasten("WORLD_AUSGABE_BIER") % anzahl(1)
+		elif nur_art == 2:
+			label.text = Texte.mit_tasten("WORLD_AUSGABE_ESSEN") % anzahl(2)

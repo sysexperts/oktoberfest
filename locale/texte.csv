@@ -311,6 +311,8 @@ STAFF_INFO_TAPSTER,"Zapft laufend Bier vor und stellt volle Krüge auf die Ausga
 HINT_AUSGABE_TAKE,{interact} Fertiges von der Ausgabe nehmen,{interact} Take from the pass,{interact} Servis yerinden al
 HINT_AUSGABE_EMPTY,Ausgabe — Zapfer und Koch stellen hier Fertiges ab,Pass — bartender and cook put finished items here,Servis yeri — barmen ve aşçı hazırları buraya koyar
 WORLD_AUSGABE,%d · %d fertig,%d · %d ready,%d · %d hazır
+WORLD_AUSGABE_BIER,%d Bier fertig,%d beer ready,%d bira hazır
+WORLD_AUSGABE_ESSEN,%d Essen fertig,%d food ready,%d yemek hazır
 STAFF_INFO_CLEANER,Putzt Erbrochenes und Pfützen weg.,Cleans up vomit and puddles.,Kusmuk ve birikintileri temizler.
 STAFF_WAGE,Lohn %s pro Schicht,Wage %s per shift,Vardiya başı maaş %s
 STAFF_EMPLOYED,Im Dienst: %s,Employed: %s,Çalışan: %s

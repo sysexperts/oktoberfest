@@ -13,13 +13,13 @@ subs = []
 nodes = []
 mesh_id = {}
 def box(size):
-    k = 'box_%.3f_%.3f_%.3f' % size
+    k = ('box_%.3f_%.3f_%.3f' % size).replace('.', 'p').replace('-', 'm')
     if k not in mesh_id:
         mesh_id[k] = k
         subs.append(f'[sub_resource type="BoxMesh" id="{k}"]\nsize = Vector3({size[0]}, {size[1]}, {size[2]})\n')
     return k
 def prisma(size):
-    k = 'prisma_%.3f_%.3f_%.3f' % size
+    k = ('prisma_%.3f_%.3f_%.3f' % size).replace('.', 'p').replace('-', 'm')
     if k not in mesh_id:
         mesh_id[k] = k
         subs.append(f'[sub_resource type="PrismMesh" id="{k}"]\nsize = Vector3({size[0]}, {size[1]}, {size[2]})\n')

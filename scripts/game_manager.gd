@@ -308,7 +308,7 @@ const TABLE_AVOID_RADIUS := 1.6   # Mitarbeiter halten Abstand zu Tischen (grö�
 const BAR_POINT := Vector3(-2.0, 0.1, -8.0)    # Kellner holt hier ab (vor der Ausgabe)
 const KITCHEN_POINT := Vector3(5.0, 0.1, -12.2) # Koch steht vor der Kochtheke an der Rückwand
 const ZAPFER_POINT := Vector3(-4.2, 0.1, -12.6) # Zapfer steht hinten an den Fässern am Rückwandregal
-const KOCH_ABLAGE := Vector3(-0.8, 0.1, -10.4)  # hier stellt der Koch die Portion auf die Ausgabe
+const KOCH_ABLAGE := Vector3(5.7, 0.1, -10.4)   # Essensausgabe gegenüber den Kochstellen
 ## Zapfer und Koch stellen Fertiges auf die Ausgabe (scenes/ausgabe.tscn).
 const ZAPF_ZEIT := 2.2        # Sekunden pro Krug auf Stufe 1
 const KOCH_ZEIT := 4.5        # Sekunden pro Portion auf Stufe 1
@@ -3338,7 +3338,7 @@ func _net_ausgabe(inhalt: Dictionary) -> void:
 
 ## Spieler nimmt an der Ausgabe das, was die wartenden Gäste am meisten brauchen.
 @rpc("any_peer", "reliable", "call_local")
-func net_take_ausgabe() -> void:
+func net_take_ausgabe(nur_art: int = 0) -> void:
 	if not multiplayer.is_server() or _phase != Phase.SHIFT:
 		return
 	var s := multiplayer.get_remote_sender_id()
@@ -3348,6 +3348,9 @@ func net_take_ausgabe() -> void:
 	var bester_wert := -1
 	for schluessel: String in _ausgabe:
 		var t := schluessel.split("_")
+		# An der Essensausgabe gibt es nur Essen, an der Bierausgabe nur Bier
+		if nur_art != 0 and int(t[0]) != nur_art:
+			continue
 		var offen := 0
 		for g: Dictionary in _guest_sim.values():
 			if int(g.ostate) == 1 and int(g.okind) == int(t[0]) and int(g.otype) == int(t[1]):

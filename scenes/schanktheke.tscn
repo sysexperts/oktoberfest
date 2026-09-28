@@ -744,3 +744,8 @@ shape = SubResource("BoxShape3D_p6fku")
 
 [node name="Ausgabe" type="Node3D" parent="." unique_id=413765486 instance=ExtResource("14_q3qwx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.09, 0.3)
+nur_art = 1
+
+[node name="Essensausgabe" type="Node3D" parent="." instance=ExtResource("14_q3qwx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 1.09, 0.3)
+nur_art = 2

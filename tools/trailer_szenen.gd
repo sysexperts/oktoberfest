@@ -66,7 +66,7 @@ class Lauf extends Node:
 			"uhr": 20.6, "fov": 55.0, "aufbau": "zelt_voll",
 			"personal": [[1, Vector3(5.0, 0.1, -11.9), PI, 1], [1, Vector3(6.4, 0.1, -11.8), PI * 1.1, 0]]},
 		# Essensausgabe vom Kochfeld aus gesehen
-		{"name": "kueche_ausgabe", "ort": Vector3(4.2, 1.9, -6.6), "ziel": Vector3(5.2, 1.1, -9.0),
+		{"name": "kueche_ausgabe", "ort": Vector3(5.6, 1.75, -7.4), "ziel": Vector3(5.6, 1.1, -9.0),
 			"uhr": 20.6, "fov": 60.0, "aufbau": "zelt_voll"},
 		# Toilettenhäusl
 		{"name": "klo", "ort": Vector3(6.6, 1.6, 9.9), "ziel": Vector3(10.4, 1.5, 10.0),
@@ -390,6 +390,10 @@ class Lauf extends Node:
 			_personal(int(p[0]), p[1], float(p[2]), int(p[3]))
 		if s.has("personal"):
 			_beschriftungen_aus()
+		# Alle Lizenzen, damit jede Sorte an der Theke steht
+		for k in gm._lic.keys():
+			gm._lic[k] = true
+		gm._theke_anzeigen(gm._lic)
 		if bool(s.get("klo", false)):
 			gm.get_node("KloContainer").visible = true
 			# Gäste vor dem Häusl aus dem Bild
