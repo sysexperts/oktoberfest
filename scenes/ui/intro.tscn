@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/intro.gd" id="1_intro"]
+[ext_resource type="Shader" path="res://assets/shader/intro_blur.gdshader" id="2_blur"]
+[ext_resource type="Texture2D" path="res://assets/ui/vapur.png" id="3_logo"]
+
+[sub_resource type="ShaderMaterial" id="BlurMat"]
+shader = ExtResource("2_blur")
+shader_parameter/staerke = 1.0
+
+[node name="Intro" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_intro")
+
+[node name="Blur" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("BlurMat")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Schwarz" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Logo" type="TextureRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -120.0
+offset_right = 450.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(450, 120)
+mouse_filter = 2
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5

@@ -6,6 +6,7 @@
 [ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="4_mtheme"]
 [ext_resource type="Texture2D" path="res://assets/ui/fest/symbol_zahnrad.svg" id="5_zahn"]
 [ext_resource type="Texture2D" path="res://assets/ui/fest/symbol_tuer.svg" id="6_tuer"]
+[ext_resource type="PackedScene" path="res://scenes/ui/intro.tscn" id="7_intro"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -442,3 +443,5 @@ visible = false
 ok_button_text = "NEWGAME_CONFIRM_YES"
 dialog_text = "NEWGAME_CONFIRM_TEXT"
 cancel_button_text = "NEWGAME_CONFIRM_NO"
+
+[node name="Intro" parent="." instance=ExtResource("7_intro")]

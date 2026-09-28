@@ -77,6 +77,10 @@ func starten() -> bool:
 	_steam.connect("lobby_joined", _on_lobby_joined)
 	_steam.connect("join_requested", _on_join_requested)
 	start_lobby = lobby_aus_argumenten(OS.get_cmdline_args())
+	# Sprache wie in Steam eingestellt (bei "auto" in den Spieleinstellungen)
+	var sp := str(_steam.call("getCurrentGameLanguage"))
+	Einstellungen.steam_sprache = {"german": "de", "turkish": "tr"}.get(sp, "en")
+	Einstellungen.anwenden()
 	var name := spielername()
 	if name != "":
 		Net.player_name = name

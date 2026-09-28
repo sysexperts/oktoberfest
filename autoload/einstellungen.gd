@@ -146,7 +146,7 @@ signal screenshot_gespeichert(pfad: String)
 const FOTO_ORDNER := "user://screenshots"
 
 var sprache := "auto"
-var vollbild := false
+var vollbild := true
 var vsync := true
 ## 0 Niedrig, 1 Mittel, 2 Hoch — was das bewirkt, steht in scripts/grafikstufe.gd
 var grafik := 2
@@ -305,10 +305,16 @@ func _bus_anwenden(bus: String) -> void:
 	AudioServer.set_bus_mute(idx, v <= 0.001)
 	AudioServer.set_bus_volume_db(idx, linear_to_db(maxf(v, 0.0001)))
 
-## "auto" wird zur Systemsprache aufgelöst — Deutsch, Türkisch, sonst Englisch.
+## Spielsprache aus Steam (Eigenschaften → Sprache), "" ohne Steam. Setzt SteamDienst.
+var steam_sprache := ""
+
+## "auto" wird zur Steam-Sprache aufgelöst, ohne Steam zur Systemsprache —
+## Deutsch, Türkisch, sonst Englisch.
 func aktive_sprache() -> String:
 	if sprache != "auto":
 		return sprache
+	if steam_sprache != "":
+		return steam_sprache
 	var sys := OS.get_locale_language()
 	return sys if sys in ["de", "tr", "en"] else "en"
 
