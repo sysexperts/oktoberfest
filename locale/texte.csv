@@ -374,7 +374,7 @@ REPORT_GOODS,Ware,Supplies,Malzeme
 REPORT_INTEREST,Zinsen,Interest,Faiz
 REPORT_NET,Netto,Net,Net
 REPORT_ZIEL,Tagesziel,Daily goal,Günlük hedef
-REPORT_WETTE,Wette mit Huber,Bet with Huber,Huber ile bahis
+REPORT_WETTE,Wette mit Konrad,Bet with Konrad,Konrad ile bahis
 REPORT_BANK,Bankrate (Sepps Schulden),Bank instalment (Sepp's debt),Banka taksiti (Sepp'in borcu)
 REPORT_KASSE,Kontostand jetzt,Balance now,Şu anki bakiye
 REPORT_SERVED,Serviert %d · Verpasst %d,Served %d · Missed %d,Servis %d · Kaçırılan %d
@@ -607,9 +607,10 @@ KOOP_STARTING,Das Zelt wird aufgebaut … (bis zu 30 Sekunden),Setting up the te
 KOOP_CONNECTING,Verbinde mit dem Spiel …,Connecting to the game …,Oyuna bağlanılıyor …
 KOOP_LEAVE,Verlassen,Leave,Ayrıl
 KOOP_BACK,Zurück,Back,Geri
-KOOP_FIG_0,Bohnen-Bartl,Bean Bartl,Fasulye Bartl
-KOOP_FIG_1,Bier-Wastl,Beer Wastl,Bira Wastl
-KOOP_FIG_2,Dirndl-Resi,Dirndl Resi,Dirndl Resi
+KOOP_FIG_0,Otto,Otto,Otto
+KOOP_FIG_1,Wilhelm,Wilhelm,Wilhelm
+KOOP_FIG_2,Lisa,Lisa,Lisa
+KOOP_FIG_3,Heinrich,Heinrich,Heinrich
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
 LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).
@@ -715,8 +716,8 @@ wenn ihr diesen Brief lest, hat mich die letzte Maß erwischt. Vierzig Jahre hab
 if you are reading this, the last beer got me. Forty years I poured at the Sloptoberfest — and now I leave my beer tent to you all.","Sevgili vaftiz çocuğum — ve yanında getirdiğin o deliler,
 
 bu mektubu okuyorsanız son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi festival çadırımı size bırakıyorum."
-BRIEF_2_DU,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Huber vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Huber from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Huber pes etmeni bekliyor. Ona bu iyiliği yapma."
-BRIEF_2_IHR,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Huber vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Huber from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Huber pes etmenizi bekliyor. Ona bu iyiliği yapmayın."
+BRIEF_2_DU,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Konrad pes etmeni bekliyor. Ona bu iyiliği yapma."
+BRIEF_2_IHR,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Konrad pes etmenizi bekliyor. Ona bu iyiliği yapmayın."
 BRIEF_3_DU,"Der Festleiter erwartet dich in seinem Festbüro, ganz im Osten der Kirmes. Such ihn auf, er zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat di,
@@ -741,8 +742,8 @@ CHEF_4_DU,"Da wär's — Sepps Festzelt. Vierzig Jahre hat er hier ausgeschenkt,
 CHEF_4_IHR,"Da wär's — Sepps Festzelt. Vierzig Jahre hat er hier ausgeschenkt, die Leute haben ihn geliebt.","Here it is — Sepp's beer tent. Forty years he poured here, people loved him.","İşte — Sepp'in bira çadırı. Kırk yıl burada bira doldurdu, insanlar onu severdi."
 CHEF_5_DU,"Nur mit dem Rechnen hatte er's nicht so. Die Bank wartet nicht ewig auf ihr Geld.","He was just not great with numbers. The bank will not wait forever for its money.","Sadece hesapla arası pek iyi değildi. Banka parasını sonsuza kadar beklemez."
 CHEF_5_IHR,"Nur mit dem Rechnen hatte er's nicht so. Die Bank wartet nicht ewig auf ihr Geld.","He was just not great with numbers. The bank will not wait forever for its money.","Sadece hesapla arası pek iyi değildi. Banka parasını sonsuza kadar beklemez."
-CHEF_6_DU,"Und der Huber vom Nachbarzelt reibt sich schon die Hände …","And Huber from the tent next door is already rubbing his hands …","Yan çadırdaki Huber de şimdiden ellerini ovuşturuyor …"
-CHEF_6_IHR,"Und der Huber vom Nachbarzelt reibt sich schon die Hände …","And Huber from the tent next door is already rubbing his hands …","Yan çadırdaki Huber de şimdiden ellerini ovuşturuyor …"
+CHEF_6_DU,"Und der Konrad vom Nachbarzelt reibt sich schon die Hände …","And Konrad from the tent next door is already rubbing his hands …","Yan çadırdaki Konrad de şimdiden ellerini ovuşturuyor …"
+CHEF_6_IHR,"Und der Konrad vom Nachbarzelt reibt sich schon die Hände …","And Konrad from the tent next door is already rubbing his hands …","Yan çadırdaki Konrad de şimdiden ellerini ovuşturuyor …"
 CHEF_8_DU,"Du schaffst das. Der Sepp wäre stolz auf dich.","You can do it. Sepp would be proud of you.","Bunu başarırsın. Sepp seninle gurur duyardı."
 CHEF_8_IHR,"Ihr schafft das. Der Sepp wäre stolz auf euch.","You can do it. Sepp would be proud of you.","Bunu başarırsınız. Sepp sizinle gurur duyardı."
 HINT_FESTLEITER,{interact} Mit dem Festleiter reden,{interact} Talk to the fair manager,{interact} Fuar müdürüyle konuş
@@ -811,9 +812,9 @@ CHEF_BANK_DU,"Und denk an Sepps Schulden: %s bucht die Bank am Abend von Tag %d 
 CHEF_BANK_IHR,"Und denkt an Sepps Schulden: %s bucht die Bank am Abend von Tag %d ab. Insgesamt noch %s.","And remember Sepp's debts: the bank collects %s on the evening of day %d. %s left in total.","Sepp'in borçlarını da unutmayın: banka %s tutarını %d. günün akşamı çekecek. Toplam %s kaldı."
 CHEF_BANK_FREI_DU,"Schuldenfrei — der Sepp wäre stolz auf dich!","Debt free — Sepp would be proud of you!","Borçsuzsun — Sepp seninle gurur duyardı!"
 CHEF_BANK_FREI_IHR,"Schuldenfrei — der Sepp wäre stolz auf euch!","Debt free — Sepp would be proud of you!","Borçsuzsunuz — Sepp sizinle gurur duyardı!"
-MSG_PLEITE_HUBER,Der Huber vom Nachbarzelt hat's schon gehört — und grinst,Huber from the tent next door has already heard — and he is grinning,Yan çadırdaki Huber çoktan duymuş — ve sırıtıyor
-CHEF_KREDIT_DU,"Und die Brauerei will noch %s von dir. Der Huber erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeig's ihm!","And the brewery still wants %s from you. Huber is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası senden hâlâ %s istiyor. Huber herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü göster!"
-CHEF_KREDIT_IHR,"Und die Brauerei will noch %s von euch. Der Huber erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeigt's ihm!","And the brewery still wants %s from you. Huber is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası sizden hâlâ %s istiyor. Huber herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü gösterin!"
+MSG_PLEITE_HUBER,Der Konrad vom Nachbarzelt hat's schon gehört — und grinst,Konrad from the tent next door has already heard — and he is grinning,Yan çadırdaki Konrad çoktan duymuş — ve sırıtıyor
+CHEF_KREDIT_DU,"Und die Brauerei will noch %s von dir. Der Konrad erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeig's ihm!","And the brewery still wants %s from you. Konrad is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası senden hâlâ %s istiyor. Konrad herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü göster!"
+CHEF_KREDIT_IHR,"Und die Brauerei will noch %s von euch. Der Konrad erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeigt's ihm!","And the brewery still wants %s from you. Konrad is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası sizden hâlâ %s istiyor. Konrad herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü gösterin!"
 QUEST_1_TITLE,Übernimm Sepps Zelt,Take over Sepp's tent,Sepp'in çadırını devral
 QUEST_1_TEXT,"Folge dem Festleiter zum Festzelt. Am Eingang steht das rote Schild — dort mit {interact} unterschreiben und dem Zelt einen Namen geben (500 € Gebühr, die ersten 5 Tage ohne Miete).","Follow the fair manager to the beer tent. The red board is at the entrance — sign there with {interact} and name the tent (500 € fee, the first 5 days rent-free).","Fuar müdürünü bira çadırına kadar takip et. Girişte kırmızı tabela var — orada {interact} ile imzala ve çadıra bir isim ver (500 € ücret, ilk 5 gün kira yok)."
 QUEST_2_TITLE,Putze das Zelt,Clean the tent,Çadırı temizle
@@ -847,12 +848,12 @@ HINT_FEGEN,{interact} halten: fegen,Hold {interact}: sweep,{interact} basılı t
 HINT_MUELL_ABSTELLEN,{interact} Müllsack abstellen,{interact} Drop off rubbish bag,{interact} Çöp torbasını bırak
 HINT_MUELL_NICHT_LAGER,Müll gehört raus zum Müllplatz,Rubbish goes out to the bin area,Çöp dışarıdaki çöp yerine gider
 WORLD_MUELLSACK,Müllsack,Rubbish bag,Çöp torbası
-CHEF_HUBER_DU,"Der Huber vom Nachbarzelt will Sepps Zelt schon ewig — es ist viel größer als seins. Aber der Sepp konnte ihn nicht ausstehen. Dem Huber hätte er's nie gegeben.","Huber from the tent next door has wanted Sepp's tent forever — it is much bigger than his. But Sepp could not stand him. He would never have let Huber have it.","Yan çadırdaki Huber, Sepp'in çadırını yıllardır istiyor — onunkinden çok daha büyük. Ama Sepp ona hiç katlanamazdı. Çadırı asla Huber'e vermezdi."
-CHEF_HUBER_IHR,"Der Huber vom Nachbarzelt will Sepps Zelt schon ewig — es ist viel größer als seins. Aber der Sepp konnte ihn nicht ausstehen. Dem Huber hätte er's nie gegeben.","Huber from the tent next door has wanted Sepp's tent forever — it is much bigger than his. But Sepp could not stand him. He would never have let Huber have it.","Yan çadırdaki Huber, Sepp'in çadırını yıllardır istiyor — onunkinden çok daha büyük. Ama Sepp ona hiç katlanamazdı. Çadırı asla Huber'e vermezdi."
-CHEF_NEIN_1_DU,"Schade … Dann bekommt's wohl der Huber, der hat schon dreimal gefragt. Der Sepp würde sich im Grab umdrehen.","What a shame … Then Huber will probably get it, he has asked three times already. Sepp would turn in his grave.","Ne yazık … O zaman büyük ihtimalle Huber alacak, üç kez sordu bile. Sepp mezarında ters dönerdi."
-CHEF_NEIN_1_IHR,"Schade … Dann bekommt's wohl der Huber, der hat schon dreimal gefragt. Der Sepp würde sich im Grab umdrehen.","What a shame … Then Huber will probably get it, he has asked three times already. Sepp would turn in his grave.","Ne yazık … O zaman büyük ihtimalle Huber alacak, üç kez sordu bile. Sepp mezarında ters dönerdi."
-HUBER_NAME,Alois Huber,Alois Huber,Alois Huber
-HINT_HUBER,{interact} Mit Huber reden,{interact} Talk to Huber,{interact} Huber ile konuş
+CHEF_HUBER_DU,"Der Konrad vom Nachbarzelt will Sepps Zelt schon ewig — es ist viel größer als seins. Aber der Sepp konnte ihn nicht ausstehen. Dem Konrad hätte er's nie gegeben.","Konrad from the tent next door has wanted Sepp's tent forever — it is much bigger than his. But Sepp could not stand him. He would never have let Konrad have it.","Yan çadırdaki Konrad, Sepp'in çadırını yıllardır istiyor — onunkinden çok daha büyük. Ama Sepp ona hiç katlanamazdı. Çadırı asla Konrad'a vermezdi."
+CHEF_HUBER_IHR,"Der Konrad vom Nachbarzelt will Sepps Zelt schon ewig — es ist viel größer als seins. Aber der Sepp konnte ihn nicht ausstehen. Dem Konrad hätte er's nie gegeben.","Konrad from the tent next door has wanted Sepp's tent forever — it is much bigger than his. But Sepp could not stand him. He would never have let Konrad have it.","Yan çadırdaki Konrad, Sepp'in çadırını yıllardır istiyor — onunkinden çok daha büyük. Ama Sepp ona hiç katlanamazdı. Çadırı asla Konrad'a vermezdi."
+CHEF_NEIN_1_DU,"Schade … Dann bekommt's wohl der Konrad, der hat schon dreimal gefragt. Der Sepp würde sich im Grab umdrehen.","What a shame … Then Konrad will probably get it, he has asked three times already. Sepp would turn in his grave.","Ne yazık … O zaman büyük ihtimalle Konrad alacak, üç kez sordu bile. Sepp mezarında ters dönerdi."
+CHEF_NEIN_1_IHR,"Schade … Dann bekommt's wohl der Konrad, der hat schon dreimal gefragt. Der Sepp würde sich im Grab umdrehen.","What a shame … Then Konrad will probably get it, he has asked three times already. Sepp would turn in his grave.","Ne yazık … O zaman büyük ihtimalle Konrad alacak, üç kez sordu bile. Sepp mezarında ters dönerdi."
+HUBER_NAME,Konrad,Konrad,Konrad
+HINT_HUBER,{interact} Mit Konrad reden,{interact} Talk to Konrad,{interact} Konrad ile konuş
 HUBER_SPOTT_1_DU,"Ah, Sepps Patenkind. Hast du überhaupt schon mal eine Maß gezapft? Ich geb dir zwei Wochen.","Ah, Sepp's godchild. Have you ever even poured a stein? I give you two weeks.","Ah, Sepp'in vaftiz çocuğu. Hiç bira doldurdun mu ki? Sana iki hafta veriyorum."
 HUBER_SPOTT_1_IHR,"Ah, Sepps Erben. Habt ihr überhaupt schon mal eine Maß gezapft? Ich geb euch zwei Wochen.","Ah, Sepp's heirs. Have you ever even poured a stein? I give you two weeks.","Ah, Sepp'in varisleri. Hiç bira doldurdunuz mu ki? Size iki hafta veriyorum."
 HUBER_SPOTT_2_DU,"Der Sepp hat vierzig Jahre gebraucht, um pleite zu gehen. Du schaffst das schneller, wetten?","Sepp took forty years to go broke. You will do it faster, I bet.","Sepp'in iflas etmesi kırk yıl sürdü. Sen daha hızlı yaparsın, bahse girerim."
@@ -886,22 +887,22 @@ HUBER_JA_DU,"Hehe. Heut Abend zahlst du. Schreib's dir auf.","Hehe. Tonight you 
 HUBER_JA_IHR,"Hehe. Heut Abend zahlt ihr. Schreibt's euch auf.","Hehe. Tonight you pay. Write it down.","Hehe. Bu akşam siz ödüyorsunuz. Not alın."
 HUBER_NEIN_DU,"Feigling. Der Sepp hätte wenigstens gewettet.","Coward. Sepp would at least have taken the bet.","Korkak. Sepp en azından bahse girerdi."
 HUBER_NEIN_IHR,"Feiglinge. Der Sepp hätte wenigstens gewettet.","Cowards. Sepp would at least have taken the bet.","Korkaklar. Sepp en azından bahse girerdi."
-MSG_HUBER_WETTE,Huber hat eine Wette für euch — sprecht ihn vor seinem Zelt an,Huber has a bet for you — talk to him outside his tent,Huber'in size bir bahsi var — çadırının önünde onunla konuşun
-MSG_HUBER_WETTE_AN,Wette mit Huber angenommen — Einsatz %s,Bet with Huber accepted — stake %s,Huber ile bahis kabul edildi — bahis %s
-MSG_HUBER_WETTE_GEWONNEN,Wette gewonnen! Huber zahlt zähneknirschend %s,Bet won! Huber grudgingly pays %s,Bahis kazanıldı! Huber dişlerini sıkarak %s ödüyor
-MSG_HUBER_WETTE_VERLOREN,Wette verloren — Huber kassiert grinsend %s,Bet lost — Huber collects %s with a grin,Bahis kaybedildi — Huber sırıtarak %s alıyor
-MSG_SABOTAGE_FASS,Ein Fass läuft aus! Schnell aufwischen — jede Sekunde kostet Bier. Das war doch der Huber …,A keg is leaking! Mop it up fast — every second costs beer. That was Huber …,Bir fıçı sızdırıyor! Hemen sil — her saniye biraya mal oluyor. Bu Huber'di …
-MSG_SABOTAGE_STINK,Stinkbombe im Zelt! Putzen — die Gäste rümpfen schon die Nase. Huber lässt grüßen …,Stink bomb in the tent! Clean up — guests are wrinkling their noses. Regards from Huber …,Çadırda koku bombası! Temizleyin — misafirler burun kıvırıyor. Huber'den selamlar …
+MSG_HUBER_WETTE,Konrad hat eine Wette für euch — sprecht ihn vor seinem Zelt an,Konrad has a bet for you — talk to him outside his tent,Konrad'ın size bir bahsi var — çadırının önünde onunla konuşun
+MSG_HUBER_WETTE_AN,Wette mit Konrad angenommen — Einsatz %s,Bet with Konrad accepted — stake %s,Konrad ile bahis kabul edildi — bahis %s
+MSG_HUBER_WETTE_GEWONNEN,Wette gewonnen! Konrad zahlt zähneknirschend %s,Bet won! Konrad grudgingly pays %s,Bahis kazanıldı! Konrad dişlerini sıkarak %s ödüyor
+MSG_HUBER_WETTE_VERLOREN,Wette verloren — Konrad kassiert grinsend %s,Bet lost — Konrad collects %s with a grin,Bahis kaybedildi — Konrad sırıtarak %s alıyor
+MSG_SABOTAGE_FASS,Ein Fass läuft aus! Schnell aufwischen — jede Sekunde kostet Bier. Das war doch der Konrad …,A keg is leaking! Mop it up fast — every second costs beer. That was Konrad …,Bir fıçı sızdırıyor! Hemen sil — her saniye biraya mal oluyor. Bu Konrad'dı …
+MSG_SABOTAGE_STINK,Stinkbombe im Zelt! Putzen — die Gäste rümpfen schon die Nase. Konrad lässt grüßen …,Stink bomb in the tent! Clean up — guests are wrinkling their noses. Regards from Konrad …,Çadırda koku bombası! Temizleyin — misafirler burun kıvırıyor. Konrad'dan selamlar …
 WORLD_LECK,Leck! ({interact} halten),Leak! (hold {interact}),Sızıntı! ({interact} basılı tut)
-HUD_HUBER_WETTE,Wette mit Huber: %s (Einsatz %s),Bet with Huber: %s (stake %s),Huber ile bahis: %s (bahis %s)
-HUD_HUBER_ANGEBOT,Huber bietet eine Wette an — sprich ihn an,Huber is offering a bet — talk to him,Huber bahis teklif ediyor — onunla konuş
+HUD_HUBER_WETTE,Wette mit Konrad: %s (Einsatz %s),Bet with Konrad: %s (stake %s),Konrad ile bahis: %s (bahis %s)
+HUD_HUBER_ANGEBOT,Konrad bietet eine Wette an — sprich ihn an,Konrad is offering a bet — talk to him,Konrad bahis teklif ediyor — onunla konuş
 DUELL_TITEL,Maß-Wettschleppen,Stein-Carrying Race,Kupa Taşıma Yarışı
 DUELL_START_ZIEL,Start · Ziel,Start · Finish,Başlangıç · Bitiş
 DUELL_LOS,Los!,Go!,Başla!
-DUELL_HUBER_TOR,Huber: Tor %d,Huber: gate %d,Huber: kapı %d
-DUELL_HUBER_FERTIG,Huber: %.1f s,Huber: %.1f s,Huber: %.1f sn
+DUELL_HUBER_TOR,Konrad: Tor %d,Konrad: gate %d,Konrad: kapı %d
+DUELL_HUBER_FERTIG,Konrad: %.1f s,Konrad: %.1f s,Konrad: %.1f sn
 DUELL_HINWEIS,"Durch alle %d Tore und zurück ins Ziel. Nicht rennen, nicht scharf lenken — sonst schwappt's über (+2,5 s je Maß).","Through all %d gates and back to the finish. Don't run, don't turn sharply — or it spills (+2.5 s per stein).","%d kapının hepsinden geçip bitişe dön. Koşma, sert dönme — yoksa taşar (kupa başına +2,5 sn)."
-MSG_DUELL_ERGEBNIS,"Wettschleppen: %.1f s (%d verschüttet) — Huber %.1f s","Stein race: %.1f s (%d spilled) — Huber %.1f s","Kupa yarışı: %.1f sn (%d döküldü) — Huber %.1f sn"
+MSG_DUELL_ERGEBNIS,"Wettschleppen: %.1f s (%d verschüttet) — Konrad %.1f s","Stein race: %.1f s (%d spilled) — Konrad %.1f s","Kupa yarışı: %.1f sn (%d döküldü) — Konrad %.1f sn"
 HUBER_DUELL_1_DU,"Heut ist der letzte Festtag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
 HUBER_DUELL_1_IHR,"Heut ist der letzte Festtag. Zeit, dass wir das klären.","Today is the last day of the fair. Time to settle this.","Bugün fuarın son günü. Bunu halletme zamanı."
 HUBER_DUELL_2_DU,"Zehn Maß, einmal durch alle Tore und zurück. Wer schneller ist und weniger verschüttet, gewinnt. Verlierst du, gibst du zu, dass der Sepp ein Stümper war.","Ten steins, once through all the gates and back. Whoever is faster and spills less wins. If you lose, you admit Sepp was a bungler.","On kupa, bütün kapılardan geçip geri. Kim daha hızlı olur ve daha az dökerse kazanır. Kaybedersen Sepp'in beceriksiz olduğunu kabul edersin."
@@ -926,8 +927,8 @@ HUBER_NACH_SIEG_DU,"Jaja, schon gut. Nächstes Jahr krieg ich dich. Prost.","Yea
 HUBER_NACH_SIEG_IHR,"Jaja, schon gut. Nächstes Jahr krieg ich euch. Prost.","Yeah, yeah, fine. Next year I'll get you. Cheers.","Tamam tamam. Seneye sizi yakalayacağım. Şerefe."
 BRIEF_ENDE_TITEL,Ein letzter Brief von Onkel Sepp,One last letter from Uncle Sepp,Sepp Amca'dan son bir mektup
 BRIEF_SCHLIESSEN,Linksklick: schließen,Left click: close,Sol tık: kapat
-BRIEF_ENDE_1_DU,"Der Festleiter hat mir versprochen, dir das hier erst zu geben, wenn du den Huber geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu sana ancak Huber'i yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
-BRIEF_ENDE_1_IHR,"Der Festleiter hat mir versprochen, euch das hier erst zu geben, wenn ihr den Huber geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Huber. If you are reading this: I always knew it.","Fuar müdürü bunu size ancak Huber'i yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
+BRIEF_ENDE_1_DU,"Der Festleiter hat mir versprochen, dir das hier erst zu geben, wenn du den Konrad geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Konrad. If you are reading this: I always knew it.","Fuar müdürü bunu sana ancak Konrad'ı yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
+BRIEF_ENDE_1_IHR,"Der Festleiter hat mir versprochen, euch das hier erst zu geben, wenn ihr den Konrad geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Konrad. If you are reading this: I always knew it.","Fuar müdürü bunu size ancak Konrad'ı yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
 BRIEF_ENDE_2_DU,"Das Zelt gehört jetzt wirklich dir. Mach's besser als ich, und vergiss nie: Eine kalte Maß und ein freundliches Wort — mehr braucht's nicht.
 
 Prost, mein Patenkind.
@@ -961,7 +962,7 @@ ZEITUNG_PFUETZEN_UNTER,"%d Pfützen in einer Schicht. Leser fragen: Gibt es dort
 ZEITUNG_GEGANGEN,%d Gäste gehen durstig heim,%d guests go home thirsty,%d misafir susuz eve gitti
 ZEITUNG_GEGANGEN_UNTER,"Lange Wartezeiten im Zelt „%s“ — die Geduld der Festbesucher ist endlich.","Long waits at „%s“ — fairgoers' patience has limits.","%s'da uzun bekleme — ziyaretçilerin sabrı sınırlı."
 ZEITUNG_VERLUST,Rote Zahlen im Zelt „%s“,In the red at „%s“,%s zararda
-ZEITUNG_VERLUST_UNTER,Der Tag hat mehr gekostet als eingebracht. Huber lacht sich ins Fäustchen.,The day cost more than it brought in. Huber is laughing up his sleeve.,Gün getirdiğinden fazlasına mal oldu. Huber bıyık altından gülüyor.
+ZEITUNG_VERLUST_UNTER,Der Tag hat mehr gekostet als eingebracht. Konrad lacht sich ins Fäustchen.,The day cost more than it brought in. Konrad is laughing up his sleeve.,Gün getirdiğinden fazlasına mal oldu. Konrad bıyık altından gülüyor.
 ZEITUNG_REKORD,Rekord! %d Gäste an einem Tag,Record! %d guests in one day,Rekor! Bir günde %d misafir
 ZEITUNG_REKORD_UNTER,"Im Zelt „%s“ fließt das Bier wie zu Sepps besten Zeiten.","At „%s“ the beer flows like in Sepp's best days.","%s'da bira Sepp'in en iyi günlerindeki gibi akıyor."
 ZEITUNG_BELIEBT,„%s“ — bald das beliebteste Zelt des Fests?,%s — soon the most popular tent of the fair?,%s — yakında fuarın en sevilen çadırı mı?
@@ -972,17 +973,17 @@ ZEITUNG_M_KREDIT,Brauerei bestätigt: Sepps Erben stehen in der Kreide.,Brewery 
 ZEITUNG_M_BANK,Bank erinnert: Rate fällig am Abend von Tag %d (%s).,Bank reminds: instalment due on the evening of day %d (%s).,Banka hatırlatıyor: taksit %d. günün akşamı (%s).
 ZEITUNG_M_KLO,Leserbrief: „Warum hat das Festzelt kein Klo?“,Letter to the editor: “Why doesn't the tent have a toilet?”,Okur mektubu: “Çadırda neden tuvalet yok?”
 ZEITUNG_M_KELLNER,Gäste klagen über lange Wartezeiten — fehlt es an Kellnern?,Guests complain about long waits — not enough waiters?,Misafirler uzun beklemeden şikayetçi — garson mu eksik?
-ZEITUNG_M_HUBER_1,Huber-Zelt kündigt „die kälteste Maß des Fests“ an.,Huber's tent promises “the coldest stein of the fair”.,Huber'in çadırı “fuarın en soğuk birası” sözü veriyor.
-ZEITUNG_M_HUBER_2,Alois Huber im Interview: „Sepps Zelt? Das hält keine Woche.“,Alois Huber in an interview: “Sepp's tent? Won't last a week.”,Alois Huber röportajda: “Sepp'in çadırı mı? Bir hafta dayanmaz.”
-ZEITUNG_M_HUBER_3,Gerücht: Huber soll nachts um fremde Zelte schleichen.,Rumour: Huber is said to sneak around other tents at night.,Söylenti: Huber'in geceleri başka çadırların etrafında dolaştığı söyleniyor.
-ZEITUNG_M_HUBER_4,Huber verlost Freibier — aber nur für Stammgäste.,Huber raffles free beer — regulars only.,Huber bedava bira çekilişi yapıyor — sadece müdavimlere.
+ZEITUNG_M_HUBER_1,Konrad-Zelt kündigt „die kälteste Maß des Fests“ an.,The Konrad-Zelt promises “the coldest stein of the fair”.,Konrad-Zelt “fuarın en soğuk birası” sözü veriyor.
+ZEITUNG_M_HUBER_2,Alois Konrad im Interview: „Sepps Zelt? Das hält keine Woche.“,Alois Konrad in an interview: “Sepp's tent? Won't last a week.”,Alois Konrad röportajda: “Sepp'in çadırı mı? Bir hafta dayanmaz.”
+ZEITUNG_M_HUBER_3,Gerücht: Konrad soll nachts um fremde Zelte schleichen.,Rumour: Konrad is said to sneak around other tents at night.,Söylenti: Konrad'ın geceleri başka çadırların etrafında dolaştığı söyleniyor.
+ZEITUNG_M_HUBER_4,Konrad verlost Freibier — aber nur für Stammgäste.,Konrad raffles free beer — regulars only.,Konrad bedava bira çekilişi yapıyor — sadece müdavimlere.
 ACTION_KALENDER,Kalender,Calendar,Takvim
 KALENDER_TITEL,Festkalender,Fair calendar,Fuar takvimi
-KALENDER_LEGENDE,"Heute ist hervorgehoben. Bankrate am Abend · Huber bietet eine Wette an · Duell um Sepps Ehre · K oder Esc schließt","Today is highlighted. bank instalment in the evening · Huber offers a bet · duel for Sepp's honour · K or Esc closes","Bugün vurgulandı. akşam banka taksiti · Huber bahis teklif ediyor · Sepp'in onuru için düello · K veya Esc kapatır"
+KALENDER_LEGENDE,"Heute ist hervorgehoben. Bankrate am Abend · Konrad bietet eine Wette an · Duell um Sepps Ehre · K oder Esc schließt","Today is highlighted. bank instalment in the evening · Konrad offers a bet · duel for Sepp's honour · K or Esc closes","Bugün vurgulandı. akşam banka taksiti · Konrad bahis teklif ediyor · Sepp'in onuru için düello · K veya Esc kapatır"
 KALENDER_ERSTER,Erster Festtag,First day of the fair,Fuarın ilk günü
 KALENDER_BANK,%s,%s,%s
-KALENDER_WETTE,Huber-Wette,Huber bet,Huber bahsi
-KALENDER_DUELL,Duell mit Huber,Duel with Huber,Huber ile düello
+KALENDER_WETTE,Konrad-Wette,Konrad bet,Konrad bahsi
+KALENDER_DUELL,Duell mit Konrad,Duel with Konrad,Konrad ile düello
 EREIGNIS_ANSTICH_TITEL,Anstich — O'zapft is!,Tapping — O'zapft is!,Fıçı açılışı — O'zapft is!
 EREIGNIS_ANSTICH_START,"Anstich! Der erste Festtag lockt viele Neugierige ins Zelt.","Tapping day! The first day of the fair draws plenty of curious visitors.","Fıçı açılışı! Fuarın ilk günü çok sayıda meraklı çekiyor."
 EREIGNIS_TRACHT_TITEL,Trachtenumzug,Costume parade,Geleneksel kıyafet alayı
@@ -1020,22 +1021,22 @@ TEAM_LOHN,Lohn erhöhen,Raise wage,Maaşı artır
 TEAM_HALTEN,Halten (mehr Lohn),Keep (higher wage),Tut (daha fazla maaş)
 TEAM_ENTLASSEN,Entlassen,Dismiss,İşten çıkar
 TEAM_ANLIEGEN_LOHN,"Möchte mehr Lohn (+15 %). Ignoriert: erst unzufrieden, dann Kündigung.","Wants a raise (+15 %). Ignored: first unhappy, then quits.","Zam istiyor (+%15). Görmezden gelinirse: önce memnuniyetsiz, sonra istifa."
-TEAM_ANLIEGEN_HUBER,"Huber will abwerben! Nur mit mehr Lohn (+20 %) bleibt er — sonst ist er morgen weg.","Huber wants to poach them! They only stay for a higher wage (+20 %) — otherwise gone tomorrow.","Huber ayartmak istiyor! Sadece daha yüksek maaşla (+%20) kalır — yoksa yarın gider."
+TEAM_ANLIEGEN_HUBER,"Konrad will abwerben! Nur mit mehr Lohn (+20 %) bleibt er — sonst ist er morgen weg.","Konrad wants to poach them! They only stay for a higher wage (+20 %) — otherwise gone tomorrow.","Konrad ayartmak istiyor! Sadece daha yüksek maaşla (+%20) kalır — yoksa yarın gider."
 MSG_PERSONAL_LOHNWUNSCH,%s möchte mehr Lohn (+%s pro Tag) — Festbüro · Personal,%s wants a raise (+%s per day) — fair office · staff,%s zam istiyor (günlük +%s) — fuar ofisi · personel
 MSG_PERSONAL_UNZUFRIEDEN,%s ist unzufrieden und arbeitet langsamer. Morgen kündigt sie/er!,%s is unhappy and works slower. Will quit tomorrow!,%s memnun değil ve daha yavaş çalışıyor. Yarın istifa edecek!
 MSG_PERSONAL_KUENDIGT,%s hat gekündigt.,%s has quit.,%s istifa etti.
-MSG_PERSONAL_HUBER,Huber will %s abwerben! Halten kostet +%s pro Tag — Festbüro · Personal,Huber wants to poach %s! Keeping them costs +%s per day — fair office · staff,Huber %s'yi ayartmak istiyor! Tutmak günlük +%s — fuar ofisi · personel
-MSG_PERSONAL_ABGEWORBEN,%s (%s) ist zu Huber gewechselt.,%s (%s) has switched to Huber.,%s (%s) Huber'e geçti.
+MSG_PERSONAL_HUBER,Konrad will %s abwerben! Halten kostet +%s pro Tag — Festbüro · Personal,Konrad wants to poach %s! Keeping them costs +%s per day — fair office · staff,Konrad %s'yi ayartmak istiyor! Tutmak günlük +%s — fuar ofisi · personel
+MSG_PERSONAL_ABGEWORBEN,%s (%s) ist zu Konrad gewechselt.,%s (%s) has switched to Konrad.,%s (%s) Konrad'a geçti.
 MSG_PERSONAL_ZUFRIEDEN,%s ist zufrieden und bleibt.,%s is happy and stays.,%s memnun ve kalıyor.
 MSG_PERSONAL_ENTLASSEN,%s wurde entlassen.,%s has been dismissed.,%s işten çıkarıldı.
-CHEF_ENDE_3_DU,"Ein Tipp noch: Im Festkalender (Taste K) siehst du, was dich erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
-CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Festkalender (Taste K) seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Huber zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Huber calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Huber'in düelloya ne zaman çağıracağı."
+CHEF_ENDE_3_DU,"Ein Tipp noch: Im Festkalender (Taste K) siehst du, was dich erwartet — Sondertage, Bankraten und wann der Konrad zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Konrad calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Konrad'ın düelloya ne zaman çağıracağı."
+CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Festkalender (Taste K) seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Konrad zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Konrad calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Konrad'ın düelloya ne zaman çağıracağı."
 MSG_EHRE_BEDIENT,Bester Kellner heute: %s (%d Gäste bedient),Best waiter today: %s (%d guests served),Bugünün en iyi garsonu: %s (%d misafir)
 MSG_EHRE_GEZAPFT,Schnellster Zapfer heute: %s (%d Maß gezapft),Fastest tapster today: %s (%d steins poured),Bugünün en hızlı fıçıcısı: %s (%d kupa)
 MSG_EHRE_GEPUTZT,Putzteufel des Tages: %s (%d Flecken weg),Cleaning champion of the day: %s (%d messes gone),Günün temizlik şampiyonu: %s (%d leke)
 ZEITUNG_M_EHRE,Auszeichnung: %s,Award: %s,Ödül: %s
-MSG_SABOTEUR_DA,Da schleicht jemand Fremdes ins Zelt … ob das einer vom Huber ist?,A stranger is sneaking into the tent … one of Huber's men?,Çadıra bir yabancı sızıyor … Huber'in adamı mı?
-MSG_SABOTEUR_ERWISCHT,Saboteur erwischt! Huber ist blamiert — die Gäste spendieren %s,Saboteur caught! Huber is embarrassed — the guests chip in %s,Sabotajcı yakalandı! Huber rezil oldu — misafirler %s bahşiş veriyor
+MSG_SABOTEUR_DA,Da schleicht jemand Fremdes ins Zelt … ob das einer vom Konrad ist?,A stranger is sneaking into the tent … one of Konrad's men?,Çadıra bir yabancı sızıyor … Konrad'ın adamı mı?
+MSG_SABOTEUR_ERWISCHT,Saboteur erwischt! Konrad ist blamiert — die Gäste spendieren %s,Saboteur caught! Konrad is embarrassed — the guests chip in %s,Sabotajcı yakalandı! Konrad rezil oldu — misafirler %s bahşiş veriyor
 HINT_SABOTEUR,{interact} Erwischt! Saboteur rauswerfen,{interact} Gotcha! Throw the saboteur out,{interact} Yakaladım! Sabotajcıyı dışarı at
 STAMM_NAME_ALOIS,Opa Alois,Grandpa Alois,Alois Dede
 STAMM_NAME_VRONI,Vroni vom Trachtenverein,Vroni from the costume club,Kıyafet kulübünden Vroni
@@ -1119,5 +1120,5 @@ POSTER_ESSEN,"🥨 Brezn
 🍗 Chicken","🥨 Brezel
 🌭 Sosis
 🍗 Tavuk"
-SIGN_HUBER_ZELT,Huber-Zelt,Huber's Tent,Huber Çadırı
+SIGN_HUBER_ZELT,Konrad-Zelt,Konrad-Zelt,Konrad-Zelt
 SIGN_STAND,Stand,Stall,Tezgah
