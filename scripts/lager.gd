@@ -49,6 +49,6 @@ func _show_kisten(prefix: String, units: int) -> void:
 		return
 	var n: int = clampi(int(ceil(float(units) / float(UNITS_PER_KISTE))), 0, MAX_KISTEN)
 	for i in range(1, MAX_KISTEN + 1):
-		var m := kisten.get_node_or_null("%s%d" % [prefix, i]) as MeshInstance3D
+		var m := kisten.get_node_or_null("%s%d" % [prefix, i]) as Node3D   # Bier: Fass, Essen: Kiste
 		if m:
 			m.visible = i <= n

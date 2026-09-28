@@ -83,6 +83,32 @@ class Lauf extends Node:
 			await _frames(9)
 			get_viewport().get_texture().get_image().save_png(ziel % ("5_mitspieler_gehen_%d" % (k + 1)))
 
+		# Abgeladene Lieferung: Fässer und Kisten im Raster
+		gm._players_nodes.erase(2)
+		mit.queue_free()
+		gm._van_cargo = [{"kind": 1, "packs": 6}, {"kind": 2, "packs": 3}]
+		gm._drop_cargo()
+		ich.global_position = gm.DROP_POINT + Vector3(0, 0, -4.0)
+		ich.look_at(gm.DROP_POINT, Vector3.UP)
+		ich.rotation.x = 0.0
+		ich.get_node("Head").rotation.x = deg_to_rad(-28.0)
+		await _frames(30)
+		get_viewport().get_texture().get_image().save_png(ziel % "6_abgeladen")
+		# Regal voller Fässer
+		var regal: Node3D = null
+		for n in gm.find_children("*", "Node3D", true, false):
+			if n.has_method("set_stock"):
+				regal = n
+				break
+		if regal:
+			regal.set_stock(60, 60)
+			ich.global_position = regal.global_position - regal.global_transform.basis.z * 2.2
+			ich.look_at(regal.global_position + Vector3(0, 1.0, 0), Vector3.UP)
+			ich.rotation.x = 0.0
+			ich.get_node("Head").rotation.x = deg_to_rad(-10.0)
+			await _frames(30)
+			get_viewport().get_texture().get_image().save_png(ziel % "7_regal")
+
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)
 			if _gab_es[pfad]:

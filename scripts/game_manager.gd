@@ -2786,14 +2786,31 @@ func _van_fahren(delta: float) -> bool:
 	_van_yaw = lerp_angle(_van_yaw, blick, clampf(delta * 3.0, 0.0, 1.0))
 	return false
 
+## Abladeplatz im Raster neben dem Lieferwagen — Fässer und Kisten stehen
+## nebeneinander statt ineinander, auch wenn dort noch Ware von früher liegt.
+const ABLADE_ABSTAND := 0.8
+const ABLADE_SPALTEN := 5
+
+func _freier_ablageplatz() -> Vector3:
+	for i in 60:
+		var p := DROP_POINT + Vector3((i % ABLADE_SPALTEN - (ABLADE_SPALTEN - 1) * 0.5) * ABLADE_ABSTAND,
+			0.0, (i / ABLADE_SPALTEN) * ABLADE_ABSTAND - 0.4)
+		var frei := true
+		for pk in _packages.values():
+			if is_instance_valid(pk) and Vector2((pk as Node3D).position.x - p.x, (pk as Node3D).position.z - p.z).length() < ABLADE_ABSTAND * 0.7:
+				frei = false
+				break
+		if frei:
+			return p
+	return DROP_POINT + Vector3(randf_range(-1.4, 1.4), 0.0, randf_range(-0.7, 0.7))
+
 func _drop_cargo() -> void:
 	var n := 0
 	for c in _van_cargo:
 		for p in int(c.packs):
 			var id := _pkg_next
 			_pkg_next += 1
-			var off := Vector3(randf_range(-1.4, 1.4), 0.0, randf_range(-0.7, 0.7))
-			_add_package.rpc(id, DROP_POINT + off, int(c.kind), PACK_UNITS)
+			_add_package.rpc(id, _freier_ablageplatz(), int(c.kind), PACK_UNITS)
 			n += 1
 	_van_cargo = []
 	_melde("MSG_GOODS_DELIVERED", [n])
