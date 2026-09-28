@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" path="res://scenes/figuren/charakter3.tscn" id="1"]
 [ext_resource type="Texture2D" path="res://assets/character/character3/haar_maske.png" id="2"]
+[ext_resource type="ArrayMesh" path="res://assets/character/character3/haare_bob.tres" id="3"]
 
 [node name="Charakter3" instance=ExtResource("1")]
 farbe_haar = Color(0.72, 0.32, 0.12, 1)
 farbe_kleid = Color(0.13, 0.12, 0.14, 1)
 haar_maske = ExtResource("2")
+haar_modell = ExtResource("3")

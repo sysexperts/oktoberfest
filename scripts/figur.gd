@@ -69,6 +69,9 @@ var skelett: Skeleton3D
 @export var farbe_haar := Color(0, 0, 0, 0)
 @export var farbe_kleid := Color(0, 0, 0, 0)
 @export var haar_maske: Texture2D
+## Eigenes Haarmodell (tools/bake_lisa_haare.gd): liegt über der Originalfrisur,
+## mit denselben Knochengewichten — bekommt farbe_haar als Farbe.
+@export var haar_modell: Mesh
 const FARB_SHADER := preload("res://assets/shader/figur_farbe.gdshader")
 
 func _ready() -> void:
@@ -82,6 +85,7 @@ func _ready() -> void:
 	var sks := find_children("*", "Skeleton3D", true, false)
 	if not sks.is_empty():
 		skelett = sks[0]
+	_haare_aufsetzen()
 	if anim == null:
 		return
 	if leih_animationen or not leih_animationen_mehr.is_empty() or leih_bibliothek:
@@ -165,11 +169,43 @@ func _farbe_anpassen() -> void:
 				m.shader = FARB_SHADER
 				m.set_shader_parameter("textur", original.albedo_texture)
 				m.set_shader_parameter("haar_maske", haar_maske)
+				# Haare kommen als eigenes Modell — nur ohne es über die Maske färben
+				# Mit Haarmodell färbt der Shader nur noch den sicheren Kern der Maske
+				# (Unterseiten, die die Haarschale nicht ganz verdeckt)
 				m.set_shader_parameter("haar_farbe", farbe_haar)
+				m.set_shader_parameter("nur_kern", haar_modell != null)
 				m.set_shader_parameter("kleid_farbe", farbe_kleid)
 				m.set_shader_parameter("eigenleuchten", maxf(eigenleuchten, 0.0))
 				_angepasst[schluessel] = m
 			mi.set_surface_override_material(s, _angepasst[schluessel])
+
+## Haarmodell ans Skelett hängen, mit dem Skin des Körpers (gleiche Knochen)
+static var _haar_mat := {}
+func _haare_aufsetzen() -> void:
+	if haar_modell == null or skelett == null:
+		return
+	var koerper: MeshInstance3D = null
+	for mi: MeshInstance3D in skelett.find_children("*", "MeshInstance3D", false, false):
+		koerper = mi
+		break
+	if koerper == null:
+		return
+	var h := MeshInstance3D.new()
+	h.name = "Haare"
+	h.mesh = haar_modell
+	h.skin = koerper.skin
+	h.transform = koerper.transform
+	skelett.add_child(h)
+	h.skeleton = h.get_path_to(skelett)
+	if not _haar_mat.has(farbe_haar):
+		var m := StandardMaterial3D.new()
+		m.albedo_color = farbe_haar
+		m.roughness = 0.62
+		m.metallic_specular = 0.35
+		m.emission_enabled = eigenleuchten > 0.0
+		m.emission = farbe_haar * maxf(eigenleuchten, 0.0) * 0.45
+		_haar_mat[farbe_haar] = m
+	h.material_override = _haar_mat[farbe_haar]
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)

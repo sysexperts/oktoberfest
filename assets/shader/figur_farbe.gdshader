@@ -9,6 +9,7 @@ uniform sampler2D haar_maske : hint_default_black, filter_linear;
 uniform vec4 haar_farbe : source_color = vec4(0.0);
 uniform vec4 kleid_farbe : source_color = vec4(0.0);
 uniform float eigenleuchten = 0.35;
+uniform bool nur_kern = false;
 
 float hell(vec3 c) { return dot(c, vec3(0.299, 0.587, 0.114)); }
 
@@ -26,7 +27,7 @@ void fragment() {
 		c = mix(c, neu, rot);
 	}
 	// Haare: nur in der Maske, Schattierung aus der Originalhelligkeit
-	float haar = maske.r;
+	float haar = nur_kern ? step(0.98, maske.r) : maske.r;
 	if (haar_farbe.a > 0.0 && haar > 0.0 && rot < 0.5) {
 		vec3 neu = haar_farbe.rgb * clamp(hell(c) / 0.52, 0.4, 1.5);
 		c = mix(c, neu, haar);
