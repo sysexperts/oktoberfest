@@ -74,6 +74,8 @@ var _net_yaw: float
 ## Dasselbe Fass für die eigene Ich-Sicht — hängt an der Kamera, damit man es
 ## vor sich sieht, egal wohin man schaut (die eigene Figur ist unsichtbar)
 @onready var _carry_fass_pov: Node3D = get_node_or_null("Head/CarryFassPov")
+## Lage beider Fässer, eingestellt in scenes/werkzeuge/trage_haltung.tscn
+const TRAGE_HALTUNG := preload("res://assets/trage_haltung.tres")
 @onready var _extra_nodes: Array[Krug] = [$Head/HoldPoint/ExtraKrug1, $Head/HoldPoint/ExtraKrug2]
 @onready var _emote_label: Label3D = $Emote
 @onready var _namensschild: Label3D = $Namensschild
@@ -86,6 +88,10 @@ var _fegt_bis := 0.0
 
 func _ready() -> void:
 	add_to_group("player")
+	if _carry_fass:
+		_carry_fass.transform = TRAGE_HALTUNG.fass
+	if _carry_fass_pov:
+		_carry_fass_pov.transform = TRAGE_HALTUNG.pov
 	_world = get_tree().current_scene
 	# Authority'yi düğüm adından türet (ad = peer_id). Zamanlamadan bağımsız.
 	var auth := name.to_int()
