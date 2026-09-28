@@ -482,6 +482,8 @@ var _staff_sim := {}
 var _staff_next := 0
 var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
 var _wages_last := 0
+const CLEAN_TIP_MIN := 6      # Trinkgeld fürs Saubermachen (nur Öffnungszeit)
+const CLEAN_TIP_MAX := 12
 var _clean_tips := 0
 var _interest_paid := 0
 var _last_report := {}   # Zahlen der letzten Tagesbilanz (siehe _end_shift)
@@ -3432,8 +3434,13 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 		var rate: float = 0.2 + 0.06 * float(s.level)
 		_mess_clean[best] = float(_mess_clean.get(best, 0.0)) + rate * delta
 		if float(_mess_clean[best]) >= 1.0:
-			# Kein Geld fürs Putzen — auch nicht für die Reinigungskraft (28.09.)
+			# Trinkgeld gibt es auch, wenn die Reinigungskraft putzt
+			var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+			_add_income(tip)
+			_last_earn += tip
+			_clean_tips += tip
 			_stats.cleaned += 1
+			_net_betrag.rpc(mn.global_position, tip, true)
 			_remove_mess.rpc(best)
 
 ## Mitarbeiter serviert: volle Bezahlung, aber kein Trinkgeld (das bekommt nur der Chef).
@@ -5539,12 +5546,18 @@ func net_clean(id: int) -> void:
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
 		var art_dreck := int(_mess_kind.get(id, 0))
-		# Fürs Saubermachen gibt es kein Geld (28.09.): Geld kommt nur von Gästen.
-		# Gezählt wird es trotzdem (Meilenstein, Leistung). Planen abziehen ist
-		# kein Putzen.
+		# Trinkgeld fürs Saubermachen — nur während der Öffnungszeit (Zelt offen,
+		# Gäste da). Wer vor der Eröffnung oder nach Feierabend putzt, bekommt nichts
+		# (28.09.). Planen abziehen ist kein Putzen.
 		if art_dreck < Mess.DECKE or art_dreck >= Mess.SABOTAGE:
 			_stats.cleaned += 1
 			_leistung(putzer, "geputzt")
+			if _phase == Phase.SHIFT and _zelt_offen:
+				var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+				_add_income(tip)
+				_last_earn += tip
+				_clean_tips += tip
+				_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
 		if art_dreck >= Mess.DRECK and art_dreck < Mess.DECKE:
 			_muellsack_hinlegen((_messes[id] as Node3D).global_position)
 		_remove_mess.rpc(id)

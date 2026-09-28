@@ -73,6 +73,7 @@ static func bilanz(b: Dictionary) -> String:
 		"",
 		_t("HUD_DAY") % int(b.get("day", 1)),
 		"%s: %s" % [_t("REPORT_REVENUE"), euro(int(b.get("earn", 0)))],
+		"      " + _t("REPORT_TIPS") % euro(int(b.get("tips", 0))),
 		"%s: %s" % [_t("REPORT_RENT"), euro(-int(b.get("rent", 0)))],
 		"%s: %s" % [_t("REPORT_WAGES"), euro(-int(b.get("wages", 0)))],
 		"%s: %s" % [_t("REPORT_GOODS"), euro(-int(b.get("goods", 0)))],
@@ -85,7 +86,7 @@ static func bilanz(b: Dictionary) -> String:
 	]
 	# Kredittilgung direkt unter den Zinsen, nur wenn es sie gab
 	if int(b.get("loan", 0)) > 0:
-		zeilen.insert(8, "%s: %s" % [_t("REPORT_LOAN"), euro(-int(b.get("loan", 0)))])
+		zeilen.insert(9, "%s: %s" % [_t("REPORT_LOAN"), euro(-int(b.get("loan", 0)))])
 	# Was nach dem Tagesergebnis noch gebucht wurde, und was am Ende auf dem Konto ist
 	var nach := zeilen.find("%s: %s%s" % [_t("REPORT_NET"), "+" if netto > 0 else "", euro(netto)]) + 1
 	var extra := []
