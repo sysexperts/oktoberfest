@@ -571,6 +571,9 @@ func _schritte(delta: float) -> void:
 		if _sfx_node:
 			_sfx_node.play("schritte", -14.0)
 
+## Unterhalb dieser Höhe beginnt der Braukeller (Decke bei -0,2, Boden bei -3,6)
+const KELLER_GRENZE := -1.2
+
 func _update_target() -> void:
 	var best: Node3D = null
 	var best_score := -1.0
@@ -588,6 +591,10 @@ func _update_target() -> void:
 		if n3 == null or not n3.is_visible_in_tree():
 			continue
 		if _world.has_method("im_zelt") and _world.im_zelt(n3.global_position) != ich_drin:
+			continue
+		# Braukeller unter dem Zelt (Boden ~ -3,5 m): nichts durch die Decke hindurch
+		# bedienen — wer oben steht, erreicht keine Kellergeräte und umgekehrt
+		if (global_position.y < KELLER_GRENZE) != (n3.global_position.y < KELLER_GRENZE):
 			continue
 		# Emporen: nichts durch den Emporenboden hindurch (oben ↔ unten)
 		if ich_drin and (global_position.y > 1.8) != (n3.global_position.y > 3.3 and absf(n3.global_position.x) > 7.7):
