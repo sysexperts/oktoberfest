@@ -1,20 +1,27 @@
 extends SceneTree
-## Haar- und Kopfmaske für Lisa (character3, Rot = Haare, Grün = Kopf): Haare und Haut haben in der Textur dieselbe
-## Farbe, darum werden die Haar-Dreiecke über ihre Lage im Modell bestimmt
-## (Kopf oberhalb des Halses, ohne das Gesicht vorn) und in UV-Koordinaten in
-## eine Maske gemalt. Der Farbshader (assets/shader/figur_farbe.gdshader) färbt
-## dann nur dort die Haare um.
+## Haar- und Kopfmaske für Lisa (character3). Rot = Haare, Grün = Kopf.
+## Haare und Haut haben in der Textur dieselbe Farbe — darum wird jeder
+## Texturpunkt über seine Lage am Modell (Ruhelage) eingeordnet: Für jeden
+## Bildpunkt im UV-Dreieck wird die 3D-Position interpoliert und geprüft.
+## Das Gesicht ist eine Ellipse vorn am Kopf, Hals und Dekolleté vorn bleiben
+## Haut. So entstehen weiche, runde Ränder statt Dreieckskanten.
+## Der Farbshader (assets/shader/figur_farbe.gdshader) liest die Maske.
 ## Aufruf: godot --headless --path . --script res://tools/bake_lisa_maske.gd
 
 const ZIEL := "res://assets/character/character3/haar_maske.png"
-const GROESSE := 1024
-## Kopfbereich (Ruhelage, Meter): ab Halsansatz aufwärts
-const KOPF_UNTEN := 1.13
-## Gesicht: vorn (+z) unterhalb der Haarlinie bleibt Haut
-const GESICHT_Z := 0.07
-const HAARLINIE := 1.36
-## halbe Gesichtsbreite: weiter außen sind vorn schon Haare
-const GESICHT_BREITE := 0.15
+const GROESSE := 2048
+## Ab hier aufwärts gehört alles zum Kopf (Meter, Ruhelage)
+const KOPF_UNTEN := 1.15
+## Gesicht: Ellipse vorn (z > GESICHT_Z), Mitte und Halbachsen
+const GESICHT_Z := 0.02
+const GESICHT_MITTE := Vector2(0.008, 1.26)   # x, y
+const GESICHT_HALB := Vector2(0.155, 0.135)   # Breite, Höhe
+## Weicher Übergang am Gesichtsrand (Anteil der Halbachse)
+const RAND := 0.12
+## Vorn unterhalb dieser Höhe: Hals, keine Haare
+const HALS_OBEN := 1.2
+## halbe Halsbreite vorn
+const HALS_HALB := 0.09
 
 func _init() -> void:
 	var n: Node = load("res://assets/character/character3/character3.glb").instantiate()
@@ -25,46 +32,54 @@ func _init() -> void:
 	var idx: PackedInt32Array = arr[Mesh.ARRAY_INDEX]
 	var bild := Image.create(GROESSE, GROESSE, false, Image.FORMAT_RGB8)
 	bild.fill(Color.BLACK)
-	var anzahl := 0
 	for t in range(0, idx.size(), 3):
 		var a := pos[idx[t]]
 		var b := pos[idx[t + 1]]
 		var c := pos[idx[t + 2]]
-		var m := (a + b + c) / 3.0
-		if m.y < KOPF_UNTEN:
+		if maxf(a.y, maxf(b.y, c.y)) < KOPF_UNTEN - 0.02:
 			continue
-		# Grün = ganzer Kopf (dort kein Kleid umfärben — Augen, Mund)
-		var farbe := Color(0, 1, 0)
-		# Gesicht = vorn, unter der Haarlinie und nicht an den Seiten (dort hängen Strähnen)
-		var gesicht := m.z > GESICHT_Z and m.y < HAARLINIE and absf(m.x) < GESICHT_BREITE
-		if not gesicht:
-			farbe = Color(1, 1, 0)   # Rot = Haare
-			anzahl += 1
-		_dreieck(bild, uv[idx[t]], uv[idx[t + 1]], uv[idx[t + 2]], farbe)
+		_dreieck(bild, [uv[idx[t]], uv[idx[t + 1]], uv[idx[t + 2]]], [a, b, c])
 	bild.save_png(ProjectSettings.globalize_path(ZIEL))
-	print("Haarmaske: %d Dreiecke -> %s" % [anzahl, ZIEL])
+	print("Maske gespeichert: ", ZIEL)
 	n.free()
 	quit()
 
-func _dreieck(bild: Image, a: Vector2, b: Vector2, c: Vector2, farbe: Color) -> void:
-	var p := [a * GROESSE, b * GROESSE, c * GROESSE]
+## Anteil Haar (0..1) an einer Stelle des Kopfes
+func _haar(p: Vector3) -> float:
+	if p.y < KOPF_UNTEN:
+		return 0.0
+	# Haarspitzen laufen weich aus, statt an den Schultern einen Saum zu malen
+	var unten := smoothstep(KOPF_UNTEN, KOPF_UNTEN + 0.04, p.y)
+	if p.z > GESICHT_Z:
+		if p.y < HALS_OBEN and absf(p.x) < HALS_HALB:
+			return 0.0   # vorn am Hals (seitlich hängen dort die Haarspitzen)
+		var d := Vector2((p.x - GESICHT_MITTE.x) / GESICHT_HALB.x, (p.y - GESICHT_MITTE.y) / GESICHT_HALB.y).length()
+		return smoothstep(1.0 - RAND, 1.0 + RAND, d) * unten
+	return unten
+
+func _dreieck(bild: Image, t_uv: Array, t_pos: Array) -> void:
+	var p: Array = [t_uv[0] * GROESSE, t_uv[1] * GROESSE, t_uv[2] * GROESSE]
+	var flaeche := _kante(p[0], p[1], p[2])
+	if absf(flaeche) < 0.0001:
+		return
 	var minx := int(floor(minf(p[0].x, minf(p[1].x, p[2].x)))) - 1
 	var maxx := int(ceil(maxf(p[0].x, maxf(p[1].x, p[2].x)))) + 1
 	var miny := int(floor(minf(p[0].y, minf(p[1].y, p[2].y)))) - 1
 	var maxy := int(ceil(maxf(p[0].y, maxf(p[1].y, p[2].y)))) + 1
-	var flaeche := _kante(p[0], p[1], p[2])
-	if absf(flaeche) < 0.0001:
-		return
 	for y in range(maxi(0, miny), mini(GROESSE, maxy + 1)):
 		for x in range(maxi(0, minx), mini(GROESSE, maxx + 1)):
 			var q := Vector2(x + 0.5, y + 0.5)
 			var w0 := _kante(p[1], p[2], q) / flaeche
 			var w1 := _kante(p[2], p[0], q) / flaeche
 			var w2 := _kante(p[0], p[1], q) / flaeche
-			# etwas großzügig, damit an den UV-Rändern keine Haut-Säume bleiben
-			if w0 >= -0.08 and w1 >= -0.08 and w2 >= -0.08:
-				var alt := bild.get_pixel(x, y)
-				bild.set_pixel(x, y, Color(maxf(alt.r, farbe.r), maxf(alt.g, farbe.g), 0))
+			# ein Pixel Rand dazu, damit an UV-Nähten keine Säume bleiben
+			if w0 < -0.02 or w1 < -0.02 or w2 < -0.02:
+				continue
+			var p3: Vector3 = t_pos[0] * w0 + t_pos[1] * w1 + t_pos[2] * w2
+			var h := _haar(p3)
+			var kopf := 1.0 if p3.y >= KOPF_UNTEN + 0.03 else 0.0
+			var alt := bild.get_pixel(x, y)
+			bild.set_pixel(x, y, Color(maxf(alt.r, h), maxf(alt.g, kopf), 0))
 
 func _kante(a: Vector2, b: Vector2, c: Vector2) -> float:
 	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
