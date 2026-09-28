@@ -1249,7 +1249,8 @@ func geste(jubel := false) -> void:
 	_cur_anim = "geste"
 	_geste_bis = Time.get_ticks_msec() / 1000.0 + 2.6
 
-## Besen: sichtbar, solange man putzt; kehrt vor den Füßen hin und her
+## Besen: sichtbar, solange man putzt; kehrt vor den Füßen vor und zurück
+## (von einem weg und wieder her), mit leichtem Kippen wie beim echten Fegen
 func _besen_zeigen() -> void:
 	if _besen == null:
 		return
@@ -1258,8 +1259,8 @@ func _besen_zeigen() -> void:
 	_besen.visible = an
 	if an:
 		var s := sin(t * 9.0)
-		_besen.position = Vector3(0.3 + s * 0.18, 0.02, -1.0)
-		_besen.rotation.y = s * 0.35
+		_besen.position = Vector3(0.3, 0.02, -1.0 + s * 0.22)
+		_besen.rotation = Vector3(-s * 0.18, 0.0, 0.0)
 
 # ------------------------------------------------------------ Umgefahren
 ## Vom Lieferwagen erwischt (scripts/lieferwagen.gd, nur beim eigenen Spieler):
