@@ -16,3 +16,7 @@ extends Resource
 ## Karton am Körper (Mitspieler) und in der Ich-Sicht — Arme wie beim Fass
 @export var karton := Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, 0.55, -0.35))
 @export var karton_pov := Transform3D(Basis().scaled(Vector3.ONE * 0.5), Vector3(0, -0.55, -0.6))
+## Eigene Armhaltung für den Karton (Startwerte = wie beim Fass)
+@export_range(-3.2, 3.2, 0.01) var karton_oberarm_vor := 0.34
+@export_range(-3.2, 3.2, 0.01) var karton_oberarm_innen := -1.09
+@export_range(-3.2, 3.2, 0.01) var karton_unterarm := 0.43

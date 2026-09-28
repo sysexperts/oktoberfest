@@ -378,7 +378,8 @@ func sitz_pose() -> void:
 ## SkeletonModifier3D über der Animation — die Beine laufen dabei weiter.
 var _trage: TragePose
 
-func trage_pose(an: bool) -> void:
+## art: 0 = Fass, 1 = Karton (eigene Armwinkel, siehe TragePose)
+func trage_pose(an: bool, art := 0) -> void:
 	if skelett == null:
 		return
 	if _trage == null:
@@ -388,6 +389,7 @@ func trage_pose(an: bool) -> void:
 		_trage.name = "TragePose"
 		skelett.add_child(_trage)
 	_trage.active = an
+	_trage.art = art
 
 ## Alle gestellten Knochen zurück in die Ruhelage.
 func pose_loesen() -> void:

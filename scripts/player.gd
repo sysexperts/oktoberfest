@@ -1281,7 +1281,7 @@ func _update_carry_visual() -> void:
 		_carry_karton_pov.visible = karton and ich_sicht
 	var figur := _model as Figur
 	if figur:
-		figur.trage_pose(fass or karton)
+		figur.trage_pose(fass or karton, 1 if karton else 0)
 	# Zusätzliche volle Krüge neben dem in der Hand
 	for i in _extra_nodes.size():
 		var n := _extra_nodes[i]

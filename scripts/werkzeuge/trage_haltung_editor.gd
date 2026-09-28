@@ -12,9 +12,18 @@ extends Node3D
 ## gespeichert: sonst schrieb das Öffnen der Szene alte Werte in die .tres zurück.
 
 const HALTUNG := preload("res://assets/trage_haltung.tres")
-const REGLER := ["oberarm_vor", "oberarm_innen", "unterarm"]
+const REGLER := ["oberarm_vor", "oberarm_innen", "unterarm",
+	"karton_oberarm_vor", "karton_oberarm_innen", "karton_unterarm"]
 
-@export_group("Arme")
+## Vorschau-Arme: aus = Fass-Haltung, an = Karton-Haltung
+@export var arme_fuer_karton := true:
+	set(w):
+		arme_fuer_karton = w
+		var tp := _trage_pose()
+		if tp:
+			tp.art = 1 if w else 0
+
+@export_group("Arme Fass")
 ## Oberarm nach vorn (−) oder hinten (+) schwenken
 @export_range(-3.2, 3.2, 0.01) var oberarm_vor := 0.0:
 	get: return HALTUNG.oberarm_vor
@@ -28,7 +37,27 @@ const REGLER := ["oberarm_vor", "oberarm_innen", "unterarm"]
 	get: return HALTUNG.unterarm
 	set(w): _regler_setzen("unterarm", w)
 
+@export_group("Arme Karton")
+## Oberarm nach vorn (−) oder hinten (+) schwenken
+@export_range(-3.2, 3.2, 0.01) var karton_oberarm_vor := 0.0:
+	get: return HALTUNG.karton_oberarm_vor
+	set(w): _regler_setzen("karton_oberarm_vor", w)
+## Oberarm senken (−) oder heben (+)
+@export_range(-3.2, 3.2, 0.01) var karton_oberarm_innen := 0.0:
+	get: return HALTUNG.karton_oberarm_innen
+	set(w): _regler_setzen("karton_oberarm_innen", w)
+## Ellbogen beugen
+@export_range(-3.2, 3.2, 0.01) var karton_unterarm := 0.0:
+	get: return HALTUNG.karton_unterarm
+	set(w): _regler_setzen("karton_unterarm", w)
+
 var _speichern_in := -1.0
+
+func _trage_pose() -> TragePose:
+	if not is_inside_tree():
+		return null
+	var sks := $Figur.find_children("*", "Skeleton3D", true, false)
+	return null if sks.is_empty() else (sks[0] as Node).get_node_or_null("TragePose") as TragePose
 
 ## Regler im Inspektor zeigen, aber nicht in die Szene schreiben
 func _validate_property(p: Dictionary) -> void:
@@ -53,6 +82,7 @@ func _ready() -> void:
 	if not sks.is_empty() and (sks[0] as Node).get_node_or_null("TragePose") == null:
 		var tp := TragePose.new()
 		tp.name = "TragePose"
+		tp.art = 1 if arme_fuer_karton else 0
 		(sks[0] as Node).add_child(tp)   # ohne owner: wird nicht in die Szene gespeichert
 
 func _process(delta: float) -> void:
