@@ -69,7 +69,7 @@ Du machst einen Einladungscode auf, drei Leute kommen dazu, auch mitten in der S
 [h2]Draußen[/h2]
 Vor dem Zelt ist Kirmes: Schießbude, Entenangeln, Drehscheibe. Spielt man zwischen zwei Tagen.
 
-[h2]Und Huber[/h2]
+[h2]Und Konrad[/h2]
 Drei Zelte weiter steht die Konkurrenz und macht es besser als du. Dazu Stammgäste, die noch Sepp kannten — und kein Ende: gespielt wird, so lange du willst.
 ```
 
@@ -101,7 +101,7 @@ You open an invite code, three people join, even mid-shift. Everyone takes a dep
 [h2]Outside[/h2]
 There's a fairground in front of the tent: shooting gallery, duck pond, spinning wheel. For between days.
 
-[h2]And Huber[/h2]
+[h2]And Konrad[/h2]
 Three tents down the competition is doing it better than you. Plus regulars who still remember Sepp — and no ending: play as long as you like.
 ```
 
@@ -133,7 +133,7 @@ Bir davet kodu açarsın, üç kişi katılır, vardiyanın ortasında bile. Her
 [h2]Dışarısı[/h2]
 Çadırın önünde panayır var: atış standı, ördek avı, çarkıfelek. İki gün arasında oynanır.
 
-[h2]Ve Huber[/h2]
+[h2]Ve Konrad[/h2]
 Üç çadır ötede rakibin var ve senden iyi iş çıkarıyor. Sepp'i hâlâ hatırlayan müdavimler de var — ve son yok: istediğin kadar oyna.
 ```
 
