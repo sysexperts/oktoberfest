@@ -194,8 +194,6 @@ const CLEAN_PER_CALL := 0.05
 const DRECK_TEMPO := 0.1
 ## Paketsorte für Müllsäcke (Package.kind)
 const MUELL := 3
-const CLEAN_TIP_MIN := 6      # Trinkgeld fürs Saubermachen
-const CLEAN_TIP_MAX := 12
 const HYGIENE_DRAIN := 0.4   # je Fleck pro Sekunde (1.2 hielt die Sauberkeit dauerhaft bei 0)
 ## Anteil der Einnahmen, der auch im dreckigsten Zelt bleibt (vorher 40 %)
 const HYGIENE_MIN_ANTEIL := 0.7
@@ -3434,13 +3432,8 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 		var rate: float = 0.2 + 0.06 * float(s.level)
 		_mess_clean[best] = float(_mess_clean.get(best, 0.0)) + rate * delta
 		if float(_mess_clean[best]) >= 1.0:
-			# Trinkgeld gibt es auch, wenn die Reinigungskraft putzt
-			var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
-			_add_income(tip)
-			_last_earn += tip
-			_clean_tips += tip
+			# Kein Geld fürs Putzen — auch nicht für die Reinigungskraft (28.09.)
 			_stats.cleaned += 1
-			_net_betrag.rpc(mn.global_position, tip, true)
 			_remove_mess.rpc(best)
 
 ## Mitarbeiter serviert: volle Bezahlung, aber kein Trinkgeld (das bekommt nur der Chef).
@@ -5546,16 +5539,12 @@ func net_clean(id: int) -> void:
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
 		var art_dreck := int(_mess_kind.get(id, 0))
-		# Trinkgeld fürs Saubermachen — nur wenn ein Spieler selbst putzt.
-		# Planen abziehen ist kein Putzen: dafür gibt es nichts.
+		# Fürs Saubermachen gibt es kein Geld (28.09.): Geld kommt nur von Gästen.
+		# Gezählt wird es trotzdem (Meilenstein, Leistung). Planen abziehen ist
+		# kein Putzen.
 		if art_dreck < Mess.DECKE or art_dreck >= Mess.SABOTAGE:
-			var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
-			_add_income(tip)
-			_last_earn += tip
-			_clean_tips += tip
 			_stats.cleaned += 1
 			_leistung(putzer, "geputzt")
-			_net_betrag.rpc((_messes[id] as Node3D).global_position, tip, true)
 		if art_dreck >= Mess.DRECK and art_dreck < Mess.DECKE:
 			_muellsack_hinlegen((_messes[id] as Node3D).global_position)
 		_remove_mess.rpc(id)
