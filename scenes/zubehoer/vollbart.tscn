@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Haar"]
+albedo_color = Color(0.3, 0.17, 0.08, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="Kinn"]
+radius = 0.12
+height = 0.2
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CapsuleMesh" id="Schnurr"]
+radius = 0.025
+height = 0.2
+
+[node name="Vollbart" type="Node3D"]
+metadata/lage = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.12)
+
+[node name="Kinn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.05, 0, 0, 0, 0.8, 0, 0, 0, 0.6, 0, -0.02, 0)
+material_override = SubResource("Haar")
+mesh = SubResource("Kinn")
+
+[node name="Schnurrbart" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.07, 0.06)
+material_override = SubResource("Haar")
+mesh = SubResource("Schnurr")

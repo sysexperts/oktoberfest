@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="Filz"]
+albedo_color = Color(0.2, 0.3, 0.17, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Band"]
+albedo_color = Color(0.36, 0.2, 0.1, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Feder"]
+albedo_color = Color(0.92, 0.9, 0.82, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="Krone"]
+top_radius = 0.1
+bottom_radius = 0.135
+height = 0.15
+radial_segments = 28
+
+[sub_resource type="CylinderMesh" id="Krempe"]
+top_radius = 0.21
+bottom_radius = 0.215
+height = 0.018
+radial_segments = 36
+
+[sub_resource type="CylinderMesh" id="Hutband"]
+top_radius = 0.133
+bottom_radius = 0.137
+height = 0.035
+radial_segments = 28
+
+[sub_resource type="CapsuleMesh" id="FederMesh"]
+radius = 0.018
+height = 0.2
+
+[node name="Tirolerhut" type="Node3D"]
+metadata/lage = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.01)
+
+[node name="Krempe" type="MeshInstance3D" parent="."]
+material_override = SubResource("Filz")
+mesh = SubResource("Krempe")
+
+[node name="Krone" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material_override = SubResource("Filz")
+mesh = SubResource("Krone")
+
+[node name="Hutband" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+material_override = SubResource("Band")
+mesh = SubResource("Hutband")
+
+[node name="Feder" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, -0.34, 0, 0.34, 0.94, 0, 0, 0, 1, -0.14, 0.1, -0.03)
+material_override = SubResource("Feder")
+mesh = SubResource("FederMesh")

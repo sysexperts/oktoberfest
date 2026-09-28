@@ -74,6 +74,7 @@ func _ready() -> void:
 	var sks := find_children("*", "Skeleton3D", true, false)
 	if not sks.is_empty():
 		skelett = sks[0]
+	_zubehoer_anlegen()
 	if anim == null:
 		return
 	if leih_animationen or not leih_animationen_mehr.is_empty() or leih_bibliothek:
@@ -142,6 +143,34 @@ func _material_anpassen() -> void:
 					kopie.emission_energy_multiplier = eigenleuchten
 				_angepasst[schluessel] = kopie
 			mi.set_surface_override_material(s, _angepasst[schluessel])
+
+## Hut, Bart & Co. (scenes/zubehoer/*.tscn): hängen am Kopfknochen und machen
+## jede Bewegung mit. Die Lage steht als metadata/lage in der Zubehör-Szene
+## (in Modellkoordinaten: y = Höhe, +z = vorn) — im Editor verschiebbar.
+@export var zubehoer: Array[PackedScene] = []
+
+func _zubehoer_anlegen() -> void:
+	if zubehoer.is_empty() or skelett == null:
+		return
+	var b := -1
+	for name: String in KNOCHEN_NAMEN["kopf"]:
+		b = skelett.find_bone(name)
+		if b >= 0:
+			break
+	if b < 0:
+		return
+	var halter := BoneAttachment3D.new()
+	halter.name = "Zubehoer"
+	skelett.add_child(halter)
+	halter.bone_name = skelett.get_bone_name(b)
+	var rest := skelett.get_bone_global_rest(b)
+	for szene: PackedScene in zubehoer:
+		if szene == null:
+			continue
+		var teil: Node3D = szene.instantiate()
+		var lage: Transform3D = teil.get_meta("lage", Transform3D())
+		halter.add_child(teil)
+		teil.transform = rest.affine_inverse() * lage
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)
