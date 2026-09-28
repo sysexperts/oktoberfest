@@ -80,6 +80,38 @@ corner_radius_top_right = 9
 corner_radius_bottom_right = 9
 corner_radius_bottom_left = 9
 
+[sub_resource type="StyleBoxFlat" id="ZuNormal"]
+content_margin_left = 20.0
+content_margin_top = 6.0
+content_margin_right = 20.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.14)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="ZuHover"]
+content_margin_left = 20.0
+content_margin_top = 6.0
+content_margin_right = 20.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 1, 1, 0.12)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.3)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
 [sub_resource type="ButtonGroup" id="NavGruppe"]
 
 [sub_resource type="StyleBoxEmpty" id="Leer"]
@@ -754,6 +786,13 @@ alignment = 2
 
 [node name="Schliessen" type="Button" parent="Mitte/Panel/Spalte/Unten" unique_id=1706113704]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 44)
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.8, 0.72, 1)
+theme_override_colors/font_hover_color = Color(1, 0.97, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("ZuNormal")
+theme_override_styles/hover = SubResource("ZuHover")
+theme_override_styles/pressed = SubResource("ZuHover")
+theme_override_styles/focus = SubResource("NavFokus")
 text = "OFFICE_CLOSE"
