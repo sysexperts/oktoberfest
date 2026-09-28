@@ -1,6 +1,11 @@
-[gd_resource type="Resource" script_class="SitzHaltung" format=3]
+[gd_resource type="Resource" script_class="SitzHaltung" format=3 uid="uid://covh6tlyqt74r"]
 
-[ext_resource type="Script" path="res://scripts/sitz_haltung.gd" id="1"]
+[ext_resource type="Script" uid="uid://d3e4k0lqrj6nl" path="res://scripts/sitz_haltung.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
+oberschenkel_vor = 0.6299999999999999
+beine_zusammen = -0.78
+unterschenkel = -2.0
+oberkoerper = -1.0
+hoehe = -0.16500000000000004

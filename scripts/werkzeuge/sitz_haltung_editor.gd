@@ -23,7 +23,11 @@ const REGLER := ["oberschenkel_vor", "beine_zusammen", "unterschenkel", "oberkoe
 	set(w): _setzen("oberkoerper", w)
 @export_range(-0.4, 0.4, 0.005) var hoehe := 0.0:
 	get: return HALTUNG.hoehe
-	set(w): _setzen("hoehe", w)
+	set(w):
+		_setzen("hoehe", w)
+		var lisa := get_node_or_null("Sitzplatz/Lisa") as Node3D
+		if lisa and is_node_ready():
+			lisa.position.y = GRUND_HOEHE + w
 
 var _speichern_in := -1.0
 
@@ -60,6 +64,7 @@ func _ready() -> void:
 	if ap.has_animation(SITZ_ANIM):
 		ap.get_animation(SITZ_ANIM).loop_mode = Animation.LOOP_LINEAR
 		ap.play(SITZ_ANIM)
+	lisa.position.y = GRUND_HOEHE + (HALTUNG as SitzHaltung).hoehe
 	var sk := sks[0] as Node
 	if sk.get_node_or_null("SitzKorrektur") == null:
 		var m := SitzKorrektur.new()
@@ -68,11 +73,14 @@ func _ready() -> void:
 		sk.add_child(m)   # ohne owner: wird nicht gespeichert
 
 func _process(delta: float) -> void:
-	var lisa := get_node_or_null("Sitzplatz/Lisa") as Node3D
-	if lisa:
-		lisa.position.y = GRUND_HOEHE + (HALTUNG as SitzHaltung).hoehe
 	if not Engine.is_editor_hint():
 		return
+	# Höhe: Lisa einfach mit dem Verschiebe-Werkzeug (W) hoch/runter ziehen
+	var lisa := get_node_or_null("Sitzplatz/Lisa") as Node3D
+	var h: SitzHaltung = HALTUNG
+	if lisa and not is_equal_approx(lisa.position.y - GRUND_HOEHE, h.hoehe):
+		h.hoehe = lisa.position.y - GRUND_HOEHE
+		_speichern_in = 0.4
 	if _speichern_in > 0.0:
 		_speichern_in -= delta
 		if _speichern_in <= 0.0:
