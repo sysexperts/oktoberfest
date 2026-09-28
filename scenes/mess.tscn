@@ -8,6 +8,8 @@
 [ext_resource type="ArrayMesh" uid="uid://twh5n68p0ks8" path="res://assets/dreck/stroh.tres" id="6_stroh"]
 [ext_resource type="ArrayMesh" uid="uid://rusy86fn6jx3" path="res://assets/dreck/staub.tres" id="7_staub"]
 [ext_resource type="ArrayMesh" uid="uid://dw8f17636ys17" path="res://assets/dreck/plane.tres" id="8_plane"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/kotze.tres" id="9_kotze"]
+[ext_resource type="ArrayMesh" path="res://assets/dreck/urin.tres" id="10_urin"]
 
 [sub_resource type="StandardMaterial3D" id="Mat"]
 resource_local_to_scene = true
@@ -25,6 +27,16 @@ script = ExtResource("1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
 material_override = SubResource("Mat")
 mesh = SubResource("Disc")
+
+[node name="Kotze" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.005, 0)
+visible = false
+mesh = ExtResource("9_kotze")
+
+[node name="Urin" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.005, 0)
+visible = false
+mesh = ExtResource("10_urin")
 
 [node name="Label" type="Label3D" parent="." unique_id=2093245507]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)

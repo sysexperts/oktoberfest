@@ -36,6 +36,8 @@ var _liegt := 0.0
 var _pruef := 0.0
 
 @onready var _disc: MeshInstance3D = $Disc
+@onready var _kotze: MeshInstance3D = $Kotze
+@onready var _urin: MeshInstance3D = $Urin
 @onready var _dreck: Node3D = $Dreck
 @onready var _label: Label3D = $Label
 @onready var _plane: MeshInstance3D = $Plane
@@ -161,14 +163,14 @@ func _apply_kind() -> void:
 		# Kein Schild über jedem Haufen — der Hinweis am Fadenkreuz reicht
 		_label.visible = false
 		return
-	var m := _disc.material_override as StandardMaterial3D
-	if m == null:
-		return
-	var dup := m.duplicate() as StandardMaterial3D
-	if kind == 1:
-		dup.albedo_color = Color(0.85, 0.82, 0.35, 0.9)   # Urin: gelblich
-		_disc.scale = Vector3(1.3, 1.0, 1.3)
-	_disc.material_override = dup
+	# Erbrochenes (grüner Klecks mit Brocken) bzw. Urin (gelbe Lache mit Rinnsal)
+	_disc.visible = false
+	var form := _form()
+	form.visible = true
+	form.rotation.y = float(mess_id) * 2.4
+
+func _form() -> MeshInstance3D:
+	return _urin if kind == 1 else _kotze
 
 ## Temizlik ilerlemesi (0=temiz değil .. 1=temiz) -> görsel küçülür/solar.
 func apply_progress(p: float) -> void:
@@ -189,10 +191,15 @@ func apply_progress(p: float) -> void:
 	if _disc == null:
 		return
 	var s := lerpf(1.0, 0.25, clampf(p, 0.0, 1.0))
-	_disc.scale = Vector3(s, 1.0, s)
-	var m := _disc.material_override as StandardMaterial3D
-	if m:
-		m.albedo_color.a = lerpf(0.95, 0.3, clampf(p, 0.0, 1.0))
+	if ist_sabotage():
+		_disc.scale = Vector3(s, 1.0, s)
+		var m := _disc.material_override as StandardMaterial3D
+		if m:
+			m.albedo_color.a = lerpf(0.95, 0.3, clampf(p, 0.0, 1.0))
+		return
+	var f := _form() as MeshInstance3D
+	f.scale = Vector3(s, 1.0, s) * 1.25
+	f.transparency = lerpf(0.0, 0.6, clampf(p, 0.0, 1.0))
 
 ## Weggeräumt (GameManager._remove_mess): die Plane fällt vorn als Stoffhaufen
 ## zu Boden und verschwindet dann; alles andere sofort weg.
