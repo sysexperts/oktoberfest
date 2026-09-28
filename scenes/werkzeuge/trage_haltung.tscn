@@ -15,7 +15,7 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 anim_tanzen = ["Dance"]
 
 [node name="FassMitspieler" parent="." unique_id=1280019338 instance=ExtResource("3")]
-transform = Transform3D(0.21051352, -0.042327564, 0.14660297, 0, 0.24979676, 0.07212192, -0.15259114, -0.058394767, 0.2022523, 0, 0.7171125, -0.5242637)
+transform = Transform3D(0.28338358, -0.05697941, 0.19735019, 0, 0.33626488, 0.0970872, -0.20541115, -0.07860834, 0.27226272, 0.011602223, 0.7171125, -0.4006314)
 
 [node name="Schild" type="Label3D" parent="FassMitspieler" unique_id=1796741924]
 transform = Transform3D(3.85, 0, 0, 0, 3.85, 0, 0, 0, 3.85, 0, 1.6, 0)
