@@ -69,7 +69,7 @@ SET_TAB_CONTROLS,Steuerung,Controls,Kontroller
 SET_TAB_LANGUAGE,Sprache,Language,Dil
 SET_FULLSCREEN,Vollbild,Fullscreen,Tam ekran
 SET_VSYNC,VSync,VSync,VSync
-SET_RESOLUTION,Auflösung,Resolution,Çözünürlük
+SET_RESOLUTION,Render-Auflösung,Render resolution,Görüntü işleme çözünürlüğü
 SET_QUALITY,Grafikqualität,Graphics quality,Grafik kalitesi
 SET_QUALITY_LOW,Niedrig,Low,Düşük
 SET_QUALITY_MEDIUM,Mittel,Medium,Orta
@@ -1089,3 +1089,12 @@ PAUSE_CODE_COPIED,Code kopiert!,Code copied!,Kod kopyalandı!
 PAUSE_CODE_COPY,Code in die Zwischenablage kopieren,Copy code to clipboard,Kodu panoya kopyala
 STATUS_ENTER_CODE,Gib den Code deines Freundes ein.,Enter your friend's code.,Arkadaşının kodunu gir.
 NET_CODE_UNKNOWN,Kein Spiel mit diesem Code gefunden.,No game found with this code.,Bu kodla oyun bulunamadı.
+SET_DISPLAY_MODE,Anzeigemodus,Display mode,Görüntü modu
+SET_MODE_BORDERLESS,Vollbild (randlos),Fullscreen (borderless),Tam ekran (kenarsız)
+SET_MODE_EXCLUSIVE,Vollbild (exklusiv),Fullscreen (exclusive),Tam ekran (özel)
+SET_MODE_WINDOW,Fenster,Windowed,Pencere
+SET_WINDOW_SIZE,Fenstergröße,Window size,Pencere boyutu
+SET_MONITOR,Bildschirm,Monitor,Ekran
+SET_MONITOR_N,Bildschirm %d (%d × %d),Monitor %d (%d × %d),Ekran %d (%d × %d)
+SET_FPS_LIMIT,Bildrate begrenzen,Frame rate limit,Kare hızı sınırı
+SET_FPS_UNLIMITED,Unbegrenzt,Unlimited,Sınırsız

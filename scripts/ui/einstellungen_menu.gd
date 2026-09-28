@@ -11,7 +11,11 @@ const SPRACH_NAMEN := ["SET_LANG_AUTO", "Deutsch", "English", "Türkçe"]
 const REITER_TITEL := ["SET_TAB_GRAPHICS", "SET_TAB_AUDIO", "SET_TAB_CONTROLS", "SET_TAB_LANGUAGE"]
 
 @onready var _reiter: TabContainer = %Reiter
-@onready var _vollbild: CheckButton = %Vollbild
+@onready var _modus: OptionButton = %Modus
+@onready var _fenster: OptionButton = %FensterGroesse
+@onready var _monitor: OptionButton = %Monitor
+@onready var _fps: OptionButton = %FpsGrenze
+const MODUS_NAMEN := ["SET_MODE_BORDERLESS", "SET_MODE_EXCLUSIVE", "SET_MODE_WINDOW"]
 @onready var _vsync: CheckButton = %Vsync
 @onready var _qualitaet: OptionButton = %Qualitaet
 @onready var _aufloesung: HSlider = %Aufloesung
@@ -65,7 +69,10 @@ func _ready() -> void:
 		var kat := %Kategorien.get_node_or_null("Kat%d" % i) as Button
 		if kat != null:
 			kat.pressed.connect(func() -> void: _reiter.current_tab = i)
-	_vollbild.toggled.connect(_on_vollbild)
+	_modus.item_selected.connect(_on_modus)
+	_fenster.item_selected.connect(_on_fenster)
+	_monitor.item_selected.connect(_on_monitor)
+	_fps.item_selected.connect(_on_fps)
 	_vsync.toggled.connect(_on_vsync)
 	_qualitaet.item_selected.connect(_on_qualitaet)
 	_renderer.item_selected.connect(_on_renderer)
@@ -100,7 +107,6 @@ func _ready() -> void:
 	%Schliessen.grab_focus()
 
 func _werte_laden() -> void:
-	_vollbild.set_pressed_no_signal(Einstellungen.vollbild)
 	_vsync.set_pressed_no_signal(Einstellungen.vsync)
 	_aufloesung.set_value_no_signal(Einstellungen.aufloesung)
 	_maus.set_value_no_signal(Einstellungen.maus)
@@ -141,6 +147,33 @@ func _texte() -> void:
 		_renderer.add_item(tr(RENDERER_NAMEN[i]), i)
 	_renderer.select(maxi(0, Einstellungen.RENDERER.find(Einstellungen.renderer)))
 	_renderer_hinweis()
+	_anzeige_listen()
+
+## Anzeigemodus, Fenstergröße, Bildschirm und Bildrate beschriften und wählen.
+func _anzeige_listen() -> void:
+	_modus.clear()
+	for i in MODUS_NAMEN.size():
+		_modus.add_item(tr(MODUS_NAMEN[i]), i)
+	_modus.select(maxi(0, Einstellungen.MODI.find(Einstellungen.modus)))
+	_fenster.clear()
+	var groessen := Einstellungen.fenster_groessen()
+	for i in groessen.size():
+		_fenster.add_item("%d × %d" % [groessen[i].x, groessen[i].y], i)
+		if groessen[i] == Einstellungen.fenster_groesse:
+			_fenster.select(i)
+	# Die Fenstergröße gilt nur im Fenster — im Vollbild zählt der Bildschirm
+	_fenster.disabled = Einstellungen.modus != "fenster"
+	_monitor.clear()
+	for i in DisplayServer.get_screen_count():
+		var g := DisplayServer.screen_get_size(i)
+		_monitor.add_item(tr("SET_MONITOR_N") % [i + 1, g.x, g.y], i)
+	_monitor.select(DisplayServer.window_get_current_screen())
+	_monitor.disabled = DisplayServer.get_screen_count() < 2
+	_fps.clear()
+	for i in Einstellungen.FPS_GRENZEN.size():
+		var f: int = Einstellungen.FPS_GRENZEN[i]
+		_fps.add_item(tr("SET_FPS_UNLIMITED") if f == 0 else str(f), i)
+	_fps.select(maxi(0, Einstellungen.FPS_GRENZEN.find(Einstellungen.fps_grenze)))
 
 ## Hinweis, wenn die gewählte Darstellung erst nach einem Neustart gilt.
 func _renderer_hinweis() -> void:
@@ -195,9 +228,25 @@ func schliessen() -> void:
 	geschlossen.emit()
 	queue_free()
 
-func _on_vollbild(an: bool) -> void:
-	Einstellungen.vollbild = an
+func _on_modus(index: int) -> void:
+	Einstellungen.modus = Einstellungen.MODI[index]
 	Einstellungen.anwenden()
+	_anzeige_listen()
+
+func _on_fenster(index: int) -> void:
+	var groessen := Einstellungen.fenster_groessen()
+	if index < groessen.size():
+		Einstellungen.fenster_groesse = groessen[index]
+		Einstellungen.anwenden()
+
+func _on_monitor(index: int) -> void:
+	Einstellungen.monitor = index
+	Einstellungen.anwenden()
+	_anzeige_listen()
+
+func _on_fps(index: int) -> void:
+	Einstellungen.fps_grenze = Einstellungen.FPS_GRENZEN[index]
+	Engine.max_fps = Einstellungen.fps_grenze
 
 func _on_vsync(an: bool) -> void:
 	Einstellungen.vsync = an

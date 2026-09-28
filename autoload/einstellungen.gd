@@ -147,6 +147,17 @@ const FOTO_ORDNER := "user://screenshots"
 
 var sprache := "auto"
 var vollbild := true
+## Anzeigemodus: randloses Vollbild, exklusives Vollbild oder Fenster.
+## vollbild bleibt als Kurzform (alles außer Fenster) für ältere Stellen.
+const MODI := ["vollbild", "exklusiv", "fenster"]
+var modus := "vollbild"
+## Fenstergröße im Fenstermodus
+var fenster_groesse := Vector2i(1600, 900)
+## Bildschirm (Index), -1 = der, auf dem das Spiel gerade ist
+var monitor := -1
+## Bildrate begrenzen, 0 = unbegrenzt
+const FPS_GRENZEN := [0, 30, 60, 120, 144, 165, 240]
+var fps_grenze := 0
 var vsync := true
 ## 0 Niedrig, 1 Mittel, 2 Hoch — was das bewirkt, steht in scripts/grafikstufe.gd
 var grafik := 2
@@ -282,15 +293,52 @@ func bildschirmfoto() -> String:
 func anwenden() -> void:
 	TranslationServer.set_locale(aktive_sprache())
 	if DisplayServer.get_name() != "headless":
-		DisplayServer.window_set_mode(
-			DisplayServer.WINDOW_MODE_FULLSCREEN if vollbild else DisplayServer.WINDOW_MODE_WINDOWED)
+		_anzeige_anwenden()
 		DisplayServer.window_set_vsync_mode(
 			DisplayServer.VSYNC_ENABLED if vsync else DisplayServer.VSYNC_DISABLED)
 	get_tree().root.scaling_3d_scale = aufloesung
+	Engine.max_fps = fps_grenze
 	for bus: String in lautstaerke:
 		_bus_anwenden(bus)
 	_tasten_anwenden()
 	geaendert.emit()
+
+## Bildschirm, Modus und Fenstergröße setzen. Reihenfolge zählt: erst auf den
+## richtigen Bildschirm, dann Modus, im Fenster dann Größe und Mitte.
+func _anzeige_anwenden() -> void:
+	vollbild = modus != "fenster"
+	var anzahl := DisplayServer.get_screen_count()
+	var ziel := monitor if monitor >= 0 and monitor < anzahl else DisplayServer.window_get_current_screen()
+	var soll := DisplayServer.WINDOW_MODE_WINDOWED
+	if modus == "vollbild":
+		soll = DisplayServer.WINDOW_MODE_FULLSCREEN
+	elif modus == "exklusiv":
+		soll = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+	if DisplayServer.window_get_current_screen() != ziel:
+		# Bildschirm wechseln geht nur im Fenster sauber
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_current_screen(ziel)
+	if DisplayServer.window_get_mode() != soll:
+		DisplayServer.window_set_mode(soll)
+	if soll == DisplayServer.WINDOW_MODE_WINDOWED:
+		var bild := DisplayServer.screen_get_usable_rect(ziel)
+		var g := Vector2i(mini(fenster_groesse.x, bild.size.x), mini(fenster_groesse.y, bild.size.y))
+		DisplayServer.window_set_size(g)
+		DisplayServer.window_set_position(bild.position + (bild.size - g) / 2)
+
+## Gängige Fenstergrößen, die auf den Bildschirm passen (größte zuerst).
+func fenster_groessen() -> Array[Vector2i]:
+	const ALLE := [Vector2i(3840, 2160), Vector2i(2560, 1440), Vector2i(1920, 1080),
+		Vector2i(1600, 900), Vector2i(1366, 768), Vector2i(1280, 720), Vector2i(1024, 576)]
+	var scr := DisplayServer.window_get_current_screen()
+	var max_g := DisplayServer.screen_get_size(scr)
+	var aus: Array[Vector2i] = []
+	for g: Vector2i in ALLE:
+		if g.x <= max_g.x and g.y <= max_g.y:
+			aus.append(g)
+	if not fenster_groesse in aus:
+		aus.append(fenster_groesse)
+	return aus
 
 ## Einzelnen Regler setzen, ohne das ganze Menü neu aufzubauen.
 func setze_lautstaerke(bus: String, wert: float) -> void:
@@ -499,7 +547,11 @@ func _pad_achse(aktion: String, achse: int, richtung: float) -> void:
 func speichern() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("allgemein", "sprache", sprache)
-	cfg.set_value("grafik", "vollbild", vollbild)
+	cfg.set_value("grafik", "vollbild", modus != "fenster")
+	cfg.set_value("grafik", "modus", modus)
+	cfg.set_value("grafik", "fenster_groesse", fenster_groesse)
+	cfg.set_value("grafik", "monitor", monitor)
+	cfg.set_value("grafik", "fps_grenze", fps_grenze)
 	cfg.set_value("grafik", "vollbild_seit_v276", true)
 	cfg.set_value("grafik", "vsync", vsync)
 	cfg.set_value("grafik", "qualitaet", grafik)
@@ -527,6 +579,16 @@ func _lade() -> void:
 	# Seit v276 ist Vollbild Standard: ältere Einstellungen einmalig umstellen
 	if cfg.has_section_key("grafik", "vollbild_seit_v276"):
 		vollbild = bool(cfg.get_value("grafik", "vollbild", vollbild))
+	modus = str(cfg.get_value("grafik", "modus", "vollbild" if vollbild else "fenster"))
+	if not modus in MODI:
+		modus = "vollbild"
+	var fg: Variant = cfg.get_value("grafik", "fenster_groesse", fenster_groesse)
+	if fg is Vector2i:
+		fenster_groesse = fg
+	monitor = int(cfg.get_value("grafik", "monitor", monitor))
+	fps_grenze = int(cfg.get_value("grafik", "fps_grenze", fps_grenze))
+	if not fps_grenze in FPS_GRENZEN:
+		fps_grenze = 0
 	vsync = bool(cfg.get_value("grafik", "vsync", vsync))
 	grafik = clampi(int(cfg.get_value("grafik", "qualitaet", grafik)), 0, 2)
 	aufloesung = clampf(float(cfg.get_value("grafik", "aufloesung", aufloesung)), 0.5, 1.0)

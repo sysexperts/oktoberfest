@@ -109,16 +109,56 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="VollbildZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+[node name="ModusZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
 layout_mode = 2
 
-[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/VollbildZeile"]
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/ModusZeile"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "SET_FULLSCREEN"
+text = "SET_DISPLAY_MODE"
 
-[node name="Vollbild" type="CheckButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/VollbildZeile"]
+[node name="Modus" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/ModusZeile"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+
+[node name="FensterZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/FensterZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_WINDOW_SIZE"
+
+[node name="FensterGroesse" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/FensterZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+
+[node name="MonitorZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/MonitorZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_MONITOR"
+
+[node name="Monitor" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/MonitorZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+
+[node name="FpsZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/FpsZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FPS_LIMIT"
+
+[node name="FpsGrenze" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/FpsZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 
 [node name="VsyncZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
