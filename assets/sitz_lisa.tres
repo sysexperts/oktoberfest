@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-oberschenkel_vor = 0.6299999999999999
-beine_zusammen = -0.78
-unterschenkel = -2.0
-oberkoerper = -1.0
-hoehe = -0.16500000000000004
+oberschenkel_vor = 0.7000000000000002
+beine_zusammen = -0.41000000000000003
+unterschenkel = -0.21999999999999997
+oberkoerper = -0.69
+hoehe = 0.19999999999999996

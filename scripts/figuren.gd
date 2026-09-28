@@ -10,12 +10,12 @@ const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/charakter3.tscn"),
 	preload("res://scenes/figuren/alex.tscn"),
 ]
-## Figuren, die sauber auf der Bank sitzen. charakter3 fehlt: ihr Rock ist an
-## die Beine gewichtet und spreizt sich beim Sitzen zur roten Scheibe — sie
-## bleibt Besucherin, Personal und Künstlerin, bis das Modell Rock-Knochen hat.
+## Figuren, die auf der Bank sitzen. Lisa (charakter3) sitzt mit einer
+## Sitzkorrektur gegen den Rock (assets/sitz_lisa.tres, scenes/werkzeuge/sitz_haltung.tscn).
 const GAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/bean.tscn"),
 	preload("res://scenes/figuren/charakter2.tscn"),
+	preload("res://scenes/figuren/charakter3.tscn"),
 	preload("res://scenes/figuren/alex.tscn"),
 ]
 ## Stehende Gäste: stehen hinter der Bank am Tisch statt zu sitzen, bestellen,
