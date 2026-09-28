@@ -500,6 +500,7 @@ func speichern() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("allgemein", "sprache", sprache)
 	cfg.set_value("grafik", "vollbild", vollbild)
+	cfg.set_value("grafik", "vollbild_seit_v276", true)
 	cfg.set_value("grafik", "vsync", vsync)
 	cfg.set_value("grafik", "qualitaet", grafik)
 	cfg.set_value("grafik", "aufloesung", aufloesung)
@@ -523,7 +524,9 @@ func _lade() -> void:
 	sprache = str(cfg.get_value("allgemein", "sprache", sprache))
 	if not sprache in SPRACHEN:
 		sprache = "auto"
-	vollbild = bool(cfg.get_value("grafik", "vollbild", vollbild))
+	# Seit v276 ist Vollbild Standard: ältere Einstellungen einmalig umstellen
+	if cfg.has_section_key("grafik", "vollbild_seit_v276"):
+		vollbild = bool(cfg.get_value("grafik", "vollbild", vollbild))
 	vsync = bool(cfg.get_value("grafik", "vsync", vsync))
 	grafik = clampi(int(cfg.get_value("grafik", "qualitaet", grafik)), 0, 2)
 	aufloesung = clampf(float(cfg.get_value("grafik", "aufloesung", aufloesung)), 0.5, 1.0)
