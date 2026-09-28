@@ -1,44 +1,250 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/office_desk.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/character/character/bavarian_bean.glb" id="2_npc"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2_npc"]
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="3_wt"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="4_holz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="5_hell"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/messing.tres" id="6_messing"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gruen_samt.tres" id="7_samt"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/papier.tres" id="8_papier"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schwarz_lack.tres" id="9_schwarz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="10_gold"]
 
-[sub_resource type="BoxMesh" id="DeskMesh"]
-size = Vector3(2.6, 0.9, 0.9)
+[sub_resource type="BoxMesh" id="Platte"]
+size = Vector3(2.7, 0.07, 1.05)
 
-[sub_resource type="StandardMaterial3D" id="MatDesk"]
-albedo_color = Color(0.38, 0.25, 0.15, 1)
+[sub_resource type="BoxMesh" id="Kante"]
+size = Vector3(2.76, 0.03, 1.11)
 
-[sub_resource type="BoxMesh" id="PaperMesh"]
-size = Vector3(0.4, 0.02, 0.3)
+[sub_resource type="BoxMesh" id="Block"]
+size = Vector3(0.6, 0.72, 0.95)
 
-[sub_resource type="StandardMaterial3D" id="MatPaper"]
-albedo_color = Color(0.95, 0.94, 0.9, 1)
+[sub_resource type="BoxMesh" id="Blende"]
+size = Vector3(1.4, 0.55, 0.04)
+
+[sub_resource type="BoxMesh" id="Lade"]
+size = Vector3(0.5, 0.2, 0.02)
+
+[sub_resource type="BoxMesh" id="Griff"]
+size = Vector3(0.14, 0.025, 0.03)
+
+[sub_resource type="BoxMesh" id="Sockel"]
+size = Vector3(2.6, 0.06, 0.95)
+
+[sub_resource type="BoxMesh" id="Unterlage"]
+size = Vector3(1.1, 0.01, 0.55)
+
+[sub_resource type="BoxMesh" id="Blatt"]
+size = Vector3(0.3, 0.012, 0.42)
+
+[sub_resource type="CylinderMesh" id="StempelGriff"]
+top_radius = 0.022
+bottom_radius = 0.03
+height = 0.1
+radial_segments = 12
+rings = 1
+
+[sub_resource type="BoxMesh" id="StempelFuss"]
+size = Vector3(0.09, 0.03, 0.06)
+
+[sub_resource type="CylinderMesh" id="Tintenfass"]
+top_radius = 0.04
+bottom_radius = 0.05
+height = 0.07
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="LampenFuss"]
+top_radius = 0.07
+bottom_radius = 0.09
+height = 0.03
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CylinderMesh" id="LampenStiel"]
+top_radius = 0.012
+bottom_radius = 0.012
+height = 0.34
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="LampenSchirm"]
+top_radius = 0.07
+bottom_radius = 0.13
+height = 0.12
+radial_segments = 16
+rings = 1
+
+[sub_resource type="BoxMesh" id="Namensschild"]
+size = Vector3(0.36, 0.1, 0.04)
 
 [sub_resource type="BoxShape3D" id="DeskCol"]
-size = Vector3(2.6, 0.9, 0.9)
+size = Vector3(2.7, 0.9, 1.05)
 
 [node name="OfficeDesk" type="Node3D"]
 script = ExtResource("1_script")
 
-[node name="Desk" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
-mesh = SubResource("DeskMesh")
-material_override = SubResource("MatDesk")
+[node name="Tisch" type="Node3D" parent="."]
 
-[node name="Papiere" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.91, 0)
-mesh = SubResource("PaperMesh")
-material_override = SubResource("MatPaper")
+[node name="Sockel" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+mesh = SubResource("Sockel")
+surface_material_override/0 = ExtResource("4_holz")
 
-[node name="Stempel" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.3, 0, 0, 0, 3, 0, 0, 0, 0.3, 0.7, 0.94, 0)
-mesh = SubResource("PaperMesh")
-material_override = SubResource("MatDesk")
+[node name="BlockLinks" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.42, 0)
+mesh = SubResource("Block")
+surface_material_override/0 = ExtResource("5_hell")
+
+[node name="BlockRechts" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.42, 0)
+mesh = SubResource("Block")
+surface_material_override/0 = ExtResource("5_hell")
+
+[node name="Blende" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.4)
+mesh = SubResource("Blende")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="Platte" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.815, 0)
+mesh = SubResource("Platte")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="Kante" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.775, 0)
+mesh = SubResource("Kante")
+surface_material_override/0 = ExtResource("10_gold")
+
+[node name="LadeL1" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.62, 0.48)
+mesh = SubResource("Lade")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="LadeL2" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.38, 0.48)
+mesh = SubResource("Lade")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="LadeL3" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.16, 0.48)
+mesh = SubResource("Lade")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="LadeR1" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.62, 0.48)
+mesh = SubResource("Lade")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="LadeR2" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.38, 0.48)
+mesh = SubResource("Lade")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="LadeR3" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.16, 0.48)
+mesh = SubResource("Lade")
+surface_material_override/0 = ExtResource("4_holz")
+
+[node name="GriffL1" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.62, 0.5)
+mesh = SubResource("Griff")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="GriffL2" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.38, 0.5)
+mesh = SubResource("Griff")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="GriffL3" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.16, 0.5)
+mesh = SubResource("Griff")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="GriffR1" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.62, 0.5)
+mesh = SubResource("Griff")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="GriffR2" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.38, 0.5)
+mesh = SubResource("Griff")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="GriffR3" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.16, 0.5)
+mesh = SubResource("Griff")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="Unterlage" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.855, 0.12)
+mesh = SubResource("Unterlage")
+surface_material_override/0 = ExtResource("7_samt")
+
+[node name="Akten1" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(0.97, 0, 0.24, 0, 1, 0, -0.24, 0, 0.97, -0.85, 0.86, 0.15)
+mesh = SubResource("Blatt")
+surface_material_override/0 = ExtResource("8_papier")
+
+[node name="Akten2" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, -0.1, 0, 1, 0, 0.1, 0, 1, -0.84, 0.875, 0.14)
+mesh = SubResource("Blatt")
+surface_material_override/0 = ExtResource("8_papier")
+
+[node name="Akten3" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(0.99, 0, 0.14, 0, 1, 0, -0.14, 0, 0.99, -0.86, 0.89, 0.16)
+mesh = SubResource("Blatt")
+surface_material_override/0 = ExtResource("8_papier")
+
+[node name="Formular" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(0.98, 0, -0.2, 0, 1, 0, 0.2, 0, 0.98, 0.05, 0.867, 0.1)
+mesh = SubResource("Blatt")
+surface_material_override/0 = ExtResource("8_papier")
+
+[node name="StempelFuss" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.867, 0.2)
+mesh = SubResource("StempelFuss")
+surface_material_override/0 = ExtResource("9_schwarz")
+
+[node name="StempelGriff" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.93, 0.2)
+mesh = SubResource("StempelGriff")
+surface_material_override/0 = ExtResource("5_hell")
+
+[node name="Tintenfass" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.885, 0.32)
+mesh = SubResource("Tintenfass")
+surface_material_override/0 = ExtResource("9_schwarz")
+
+[node name="LampenFuss" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.865, 0.3)
+mesh = SubResource("LampenFuss")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="LampenStiel" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 1.03, 0.3)
+mesh = SubResource("LampenStiel")
+surface_material_override/0 = ExtResource("6_messing")
+
+[node name="LampenSchirm" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 0.94, -0.34, 0, 0.34, 0.94, 1.05, 1.2, 0.24)
+mesh = SubResource("LampenSchirm")
+surface_material_override/0 = ExtResource("7_samt")
+
+[node name="LampenLicht" type="OmniLight3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 1.1, 0.15)
+light_color = Color(1, 0.86, 0.6, 1)
+light_energy = 0.8
+omni_range = 1.8
+
+[node name="Namensschild" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 0.94, 0.34, 0, -0.34, 0.94, -0.3, 0.9, -0.32)
+mesh = SubResource("Namensschild")
+surface_material_override/0 = ExtResource("10_gold")
 
 [node name="Beamter" parent="." instance=ExtResource("2_npc")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1.1)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1.0)
 
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)

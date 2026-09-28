@@ -68,6 +68,13 @@ class Lauf extends Node:
 		# Essensausgabe vom Kochfeld aus gesehen
 		{"name": "kueche_ausgabe", "ort": Vector3(5.6, 1.75, -7.4), "ziel": Vector3(5.6, 1.1, -9.0),
 			"uhr": 20.6, "fov": 60.0, "aufbau": "zelt_voll"},
+		# Wiesenbüro (Festbüro auf der Kirmes)
+		{"name": "buero_aussen", "ort": Vector3(30.5, 2.4, 16.0), "ziel": Vector3(41.5, 1.8, 18.4),
+			"uhr": 13.0, "fov": 60.0, "aufbau": "draussen"},
+		{"name": "buero_innen", "ort": Vector3(38.3, 1.75, 22.8), "ziel": Vector3(44.5, 1.0, 16.0),
+			"uhr": 13.0, "fov": 75.0, "aufbau": "draussen"},
+		{"name": "buero_tisch", "ort": Vector3(42.1, 1.65, 17.6), "ziel": Vector3(44.1, 0.95, 18.4),
+			"uhr": 13.0, "fov": 60.0, "aufbau": "draussen"},
 		# Braukeller: Einstieg unter der Emporentreppe und die Halle
 		{"name": "keller_einstieg", "ort": Vector3(-9.6, 1.8, 6.4), "ziel": Vector3(-11.2, -1.2, 3.0),
 			"uhr": 19.0, "fov": 65.0, "aufbau": "zelt_voll"},

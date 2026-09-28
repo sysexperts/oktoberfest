@@ -240,18 +240,18 @@ func _buero() -> Node3D:
 	for i in lagen:
 		var y := sockel + (i + 0.5) * lage_h
 		var mat: Material = m.holz_hell if i % 2 == 0 else m.vertaefelung
-		_box(w, "Hinten%d" % i, Vector3(10.2, lage_h - 0.02, 0.3), Vector3(0, y, hd), mat)
-		_box(w, "Links%d" % i, Vector3(0.3, lage_h - 0.02, 8.2), Vector3(-hw, y, 0), mat)
-		_box(w, "Rechts%d" % i, Vector3(0.3, lage_h - 0.02, 8.2), Vector3(hw, y, 0), mat)
+		_box(w, "Hinten%d" % i, Vector3(10.2, lage_h + 0.01, 0.3), Vector3(0, y, hd), mat)
+		_box(w, "Links%d" % i, Vector3(0.3, lage_h + 0.01, 8.2), Vector3(-hw, y, 0), mat)
+		_box(w, "Rechts%d" % i, Vector3(0.3, lage_h + 0.01, 8.2), Vector3(hw, y, 0), mat)
 		if y < sockel + 2.5:
-			_box(w, "VorneL%d" % i, Vector3(4.1, lage_h - 0.02, 0.3), Vector3(-2.95, y, -hd), mat)
-			_box(w, "VorneR%d" % i, Vector3(4.1, lage_h - 0.02, 0.3), Vector3(2.95, y, -hd), mat)
+			_box(w, "VorneL%d" % i, Vector3(4.1, lage_h + 0.01, 0.3), Vector3(-2.95, y, -hd), mat)
+			_box(w, "VorneR%d" % i, Vector3(4.1, lage_h + 0.01, 0.3), Vector3(2.95, y, -hd), mat)
 		else:
-			_box(w, "Vorne%d" % i, Vector3(10.2, lage_h - 0.02, 0.3), Vector3(0, y, -hd), mat)
+			_box(w, "Vorne%d" % i, Vector3(10.2, lage_h + 0.01, 0.3), Vector3(0, y, -hd), mat)
 	for sx: float in [-1.0, 1.0]:
 		for sz: float in [-1.0, 1.0]:
 			for i in lagen:
-				_box(w, "Kopf_%s_%s_%d" % [sx, sz, i], Vector3(0.36, lage_h - 0.03, 0.36), Vector3(sx * (hw + 0.1), sockel + (i + 0.5) * lage_h, sz * (hd + 0.1)), m.holz_dunkel)
+				_box(w, "Kopf_%s_%s_%d" % [sx, sz, i], Vector3(0.36, lage_h + 0.01, 0.36), Vector3(sx * (hw + 0.1), sockel + (i + 0.5) * lage_h, sz * (hd + 0.1)), m.holz_dunkel)
 	var tuer := _gruppe(r, "Tuer", Vector3(0, sockel, -hd - 0.02))
 	_box(tuer, "RahmenL", Vector3(0.14, 2.6, 0.36), Vector3(-0.97, 1.3, 0), m.holz_dunkel)
 	_box(tuer, "RahmenR", Vector3(0.14, 2.6, 0.36), Vector3(0.97, 1.3, 0), m.holz_dunkel)
@@ -279,7 +279,7 @@ func _buero() -> Node3D:
 			_box(dach, "Schindelreihe_%s_%d" % [sz, k], Vector3(11.44, 0.05, 0.12), Vector3(0, first - 2.2 * t * tiefe / (hd + 0.2) + 0.18, sz * tiefe * t), m.holz_dunkel, Vector3(sz * neigung, 0, 0))
 	_box(dach, "First", Vector3(11.5, 0.2, 0.3), Vector3(0, first + 0.12, 0), m.holz_dunkel)
 	for sx: float in [-1.0, 1.0]:
-		_prisma(dach, "Giebel" + ("Links" if sx < 0 else "Rechts"), Vector3(8.4, 2.2, 0.3), Transform3D(_rot(Vector3(0, 90, 0)), Vector3(sx * hw, traufe + 1.1, 0)), m.stoff)
+		_prisma(dach, "Giebel" + ("Links" if sx < 0 else "Rechts"), Vector3(8.4, 2.2, 0.3), Transform3D(_rot(Vector3(0, 90, 0)), Vector3(sx * hw, traufe + 1.1, 0)), m.holz_hell)
 	_instanz(dach, SZ + "fahne.tscn", "FirstFahne", Transform3D(Basis(), Vector3(3.8, first + 0.2, 0)))
 	for i in 2:
 		_instanz(dach, SZ + "lambrequin_2.tscn", "Volant%d" % (i + 1), Transform3D(Basis().scaled(Vector3(2.8, 1, 1)), Vector3(-2.8 + i * 5.6, traufe - 0.2, -hd - 0.95)))
