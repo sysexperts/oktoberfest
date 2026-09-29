@@ -1,4 +1,5 @@
 extends Node
+const Figuren := preload("res://scripts/figuren.gd")
 ## Trailer: Zelt voll ausgebaut — alle Tische, Gäste auf allen Plätzen, Band
 ## spielt. Nur Darstellung, das Spiel läuft dafür nicht (Uhr steht).
 
@@ -8,6 +9,9 @@ extends Node
 @export var gaeste := 160
 ## Anteil der Gäste, die auf den Tischen tanzen (0 = keiner)
 @export_range(0.0, 1.0, 0.05) var tanzen := 0.0
+## Stehgäste (stehen hinter der Bank, also im Gang) ausblenden — sonst laufen
+## Kellner und Spieler im Trailer durch sie hindurch
+@export var ohne_stehgaeste := true
 ## Tische/Plätze auf der Konsole ausgeben (zum Planen der Kamerafahrt)
 @export var plan_ausgeben := false
 
@@ -36,6 +40,8 @@ func aufstellen() -> void:
 		g.tgt = platz
 		(gm._guests[id] as Node3D).position = platz
 		gm._guests[id].set_net(platz, float(gm._seats[int(g.seat)].yaw))
+		if ohne_stehgaeste and Figuren.ist_stehgast(id):
+			(gm._guests[id] as Node3D).visible = false
 	if tanzen > 0.0:
 		for k in int(16 * tanzen):
 			gm._tanz_timer = 0.0

@@ -71,7 +71,7 @@ curve = SubResource("weg_sepp")
 metadata/name = "Sepp"
 metadata/figur = 0
 metadata/farbe = 0
-metadata/last = "kruege"
+metadata/last = "tablett"
 metadata/dauer = 3.2
 metadata/verzug = 0.3
 
@@ -80,14 +80,14 @@ curve = SubResource("weg_resi")
 metadata/name = "Resi"
 metadata/figur = 2
 metadata/farbe = 2
-metadata/last = "kruege"
+metadata/last = "tablett"
 metadata/dauer = 3.4
 metadata/verzug = 1.6
 
 [node name="Toni" type="Path3D" parent="SpielerWege"]
 curve = SubResource("weg_toni")
 metadata/name = "Toni"
-metadata/figur = 1
+metadata/figur = 0
 metadata/farbe = 1
 metadata/last = "fass"
 metadata/dauer = 4.2
