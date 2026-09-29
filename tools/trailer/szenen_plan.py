@@ -64,23 +64,33 @@ SZENEN = {
                punkte=[(8, 3.8, 10), (4, 3.8, 10.5), (-4, 3.8, 10.5)], blick=(0, 1.2, -4),
                werte=dict(dauer=7, uhr=21, besucher=0, sichtfeld=65, unscharf_ab=22, dunst=0.004),
                zelt=dict(tanzen=0.5)),
-    "15": dict(titel="Morgen: Drohne über die Stadtmauer auf die Kirmes",
-               punkte=[(0, 45, 160), (0, 35, 120), (0, 24, 85)], blick=(0, 4, 10),
-               werte=dict(dauer=8, uhr=8, besucher=0.2, sichtfeld=55, unscharf_ab=0, dunst=0.014)),
-    "16": dict(titel="Ansturm von der Seite, Kamera über den Dächern",
-               punkte=[(12, 11, 68), (12, 11, 55), (12, 11, 42)], blick=(0, 1, 60),
-               werte=dict(dauer=7, uhr=17.5, besucher=0, sichtfeld=55, unscharf_ab=0, dunst=0.006),
-               ansturm=dict(z=78, anzahl=120, tempo_min=3.6, tempo_max=4.4), blick_folgt=True),
-    "17": dict(titel="Nacht: Festzelt leuchtet, langsamer Push-in",
-               punkte=[(0, 3, 46), (0, 3.2, 40), (0, 3.4, 34)], blick=(0, 5, 10),
-               werte=dict(dauer=7, uhr=22.5, besucher=0.4, sichtfeld=50, unscharf_ab=0, dunst=0.012)),
-    "18": dict(titel="Schiffschaukel und Biergarten, Schwenk",
-               punkte=kreis((10, -68), 24, 8, 330, 260), blick=(10, 5, -68),
-               werte=dict(dauer=7, uhr=16.5, besucher=0.7, sichtfeld=55, unscharf_ab=50, dunst=0.008)),
-    "19": dict(titel="Karussell nachts, Orbit mit Lichtern",
-               punkte=kreis((-51.5, 23.5), 16, 6, 60, 150, steigen=2), blick=(-51.5, 3, 23.5),
-               werte=dict(dauer=7, uhr=21.5, besucher=0.5, sichtfeld=55, unscharf_ab=40, dunst=0.01)),
-    "20": dict(titel="Finale: nachts steil nach oben, ganze Kirmes im Bild",
+    "15": dict(titel="Lieferwagen rast durch die Gasse, Besucher fliegen (von der Seite)",
+               punkte=[(1.8, 7.5, 60), (1.8, 7.5, 53), (1.8, 7.5, 46)], blick=(-0.5, 1.0, 62),
+               werte=dict(dauer=7, uhr=15, besucher=0.3, sichtfeld=62, unscharf_ab=45, dunst=0.006),
+               ereignis=dict(art="lieferwagen", anzahl=30, verzug=0.3, tempo=11,
+                             fahrt=[(-0.5, 0, 92), (-0.5, 0, 60), (-0.5, 0, 30)])),
+    "16": dict(titel="Lieferwagen frontal: Besucher fliegen auf die Kamera zu",
+               punkte=[(2.6, 1.3, 30), (2.6, 1.4, 29.5), (2.6, 1.5, 29)], blick=(-0.5, 1.5, 60),
+               werte=dict(dauer=6, uhr=16, besucher=0.2, sichtfeld=70, unscharf_ab=0, dunst=0.006),
+               ereignis=dict(art="lieferwagen", anzahl=28, verzug=0.2, tempo=12,
+                             fahrt=[(-0.5, 0, 88), (-0.5, 0, 60), (-0.5, 0, 38)])),
+    "17": dict(titel="Massenschlägerei im Zelt, Kamera kreist darüber",
+               punkte=kreis((-2.8, 1.7), 6.5, 3.6, 200, 290), blick=(-2.8, 0.8, 1.7),
+               werte=dict(dauer=7, uhr=21, besucher=0, sichtfeld=62, unscharf_ab=18, dunst=0.004),
+               zelt=dict(tanzen=0.0), ereignis=dict(art="schlaegerei", anzahl=18, verzug=0.2, ort=(-2.8, 0, 1.7))),
+    "18": dict(titel="Massenschlägerei weit: das ganze Zelt schaut zu",
+               punkte=[(9, 3.7, 11), (6, 3.7, 11.2), (3, 3.7, 11.4)], blick=(2.6, 0.8, -1.3),
+               werte=dict(dauer=7, uhr=21, besucher=0, sichtfeld=68, unscharf_ab=25, dunst=0.004),
+               zelt=dict(tanzen=0.0), ereignis=dict(art="schlaegerei", anzahl=24, verzug=0.2, ort=(2.6, 0, -1.3))),
+    "19": dict(titel="Bierleichen: eine Tischreihe kotzt nacheinander",
+               punkte=[(-6.4, 3.2, 6.5), (-6.4, 3.2, 3), (-6.4, 3.2, -0.5)], blick=(-4.6, 0.8, -1),
+               werte=dict(dauer=7, uhr=22, besucher=0, sichtfeld=60, unscharf_ab=14, dunst=0.004),
+               zelt=dict(tanzen=0.0), ereignis=dict(art="kotzen", anzahl=10, verzug=0.3, takt=0.6, ort=(-4.6, 0, 1.7))),
+    "20": dict(titel="Tanz auf allen Tischen, Orbit",
+               punkte=kreis((-1, 0.5), 7, 3.6, 150, 250), blick=(-1, 1.6, 0.5),
+               werte=dict(dauer=7, uhr=21.5, besucher=0, sichtfeld=62, unscharf_ab=18, dunst=0.004),
+               zelt=dict(tanzen=1.0)),
+    "21": dict(titel="Finale: nachts steil nach oben, ganze Kirmes im Bild",
                punkte=[(0, 4, 30), (0, 20, 45), (0, 55, 70)], blick=(0, 0, 0),
                werte=dict(dauer=8, uhr=22, besucher=0.6, sichtfeld=60, unscharf_ab=0, dunst=0.01)),
 }
@@ -111,6 +121,8 @@ def tscn(nr, s, hoeher=0.0):
         erw.append('[ext_resource type="Script" path="res://tools/trailer/ansturm.gd" id="4_ansturm"]')
     if "zelt" in s:
         erw.append('[ext_resource type="Script" path="res://tools/trailer/zelt_voll.gd" id="5_zelt"]')
+    if "ereignis" in s:
+        erw.append('[ext_resource type="Script" path="res://tools/trailer/ereignis.gd" id="6_ereignis"]')
     werte = "\n".join("%s = %s" % (k, ("%.3f" % v).rstrip("0").rstrip(".") if isinstance(v, float) else v) for k, v in w.items())
     p0 = punkte[0]
     teile = ['[gd_scene format=3]', '', "\n".join(erw), '',
@@ -140,6 +152,20 @@ def tscn(nr, s, hoeher=0.0):
     if "zelt" in s:
         teile += ['[node name="ZeltVoll" type="Node" parent="."]', 'script = ExtResource("5_zelt")',
                   'tanzen = %g' % s["zelt"].get("tanzen", 0.0), '']
+    if "ereignis" in s:
+        e = s["ereignis"]
+        ort = e.get("ort", (0, 0, 0))
+        teile += ['[node name="Ereignis" type="Node3D" parent="."]',
+                  'transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, %g, %g, %g)' % tuple(ort),
+                  'script = ExtResource("6_ereignis")', 'art = "%s"' % e["art"],
+                  'anzahl = %d' % e.get("anzahl", 14), 'verzug = %g' % e.get("verzug", 0.5),
+                  'takt = %g' % e.get("takt", 0.8), 'tempo = %g' % e.get("tempo", 11), '']
+        if "fahrt" in e:
+            fd, fn = kurve([(p[0] - ort[0], p[1] - ort[1], p[2] - ort[2]) for p in e["fahrt"]])
+            teile.insert(teile.index('[node name="Szene%s" type="Node3D"]' % nr) - 1,
+                         '[sub_resource type="Curve3D" id="wagenfahrt"]\n_data = {\n"points": PackedVector3Array(%s),\n'
+                         '"tilts": PackedFloat32Array(%s)\n}\npoint_count = %d\n' % (fd, ", ".join(["0"] * fn), fn))
+            teile += ['[node name="Fahrt" type="Path3D" parent="Ereignis"]', 'curve = SubResource("wagenfahrt")', '']
     teile += ['[node name="Vorschau" type="Node3D" parent="."]', 'script = ExtResource("3_vorschau")', '']
     # Titel als Kommentar ist in .tscn nicht erlaubt — als Metadaten ablegen
     text = "\n".join(teile).replace('; %s' % s["titel"], 'metadata/titel = "%s"' % s["titel"])

@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/trailer/trailer_szene.gd" id="1_szene"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
+
+[sub_resource type="Curve3D" id="fahrt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, -1.282, 0, 0.575, -19.837, 18, -56.502, 2.466, -0, -1.33, -2.466, 0, 1.33, -27.527, 18, -53.052, 2.248, -0, -1.673, -2.248, 0, 1.673, -34.635, 18, -48.523, 1.981, -0, -1.981, -1.981, 0, 1.981, -41.012, 18, -43.012, 1.673, -0, -2.248, -1.673, 0, 2.248, -46.523, 18, -36.635, 1.33, -0, -2.466, -1.33, 0, 2.466, -51.052, 18, -29.527, 0.575, -0, -1.282, 0, 0, 0, -54.502, 18, -21.837),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 7
+
+[node name="Szene11" type="Node3D"]
+metadata/titel = "Flug über die Ringstraße am Abend, voller Betrieb"
+script = ExtResource("1_szene")
+dauer = 8
+uhr = 19
+besucher = 0.9
+sichtfeld = 60
+unscharf_ab = 70
+dunst = 0.01
+
+[node name="Kamerafahrt" type="Path3D" parent="."]
+curve = SubResource("fahrt")
+
+[node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.8372, 18, -56.5022)
+rotation_mode = 0
+loop = false
+
+[node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
+fov = 60
+script = ExtResource("2_kamera")
+ziel = NodePath("../../../Blickziel")
+
+[node name="Blickziel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+gizmo_extents = 2.0
+
+[node name="Vorschau" type="Node3D" parent="."]
+script = ExtResource("3_vorschau")

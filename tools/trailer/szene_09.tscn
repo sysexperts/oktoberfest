@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/trailer/trailer_szene.gd" id="1_szene"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
+
+[sub_resource type="Curve3D" id="fahrt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0.772, 0, -0.402, -30.16, 13, -3.706, -1.413, -0, 0.99, 1.413, 0, -0.99, -25.528, 13, -6.117, -1.109, -0, 1.322, 1.109, 0, -1.322, -21.679, 13, -9.644, -0.729, -0, 1.564, 0.729, 0, -1.564, -18.874, 13, -14.048, -0.3, -0, 1.699, 0.3, 0, -1.699, -17.304, 13, -19.027, 0.15, -0, 1.719, -0.15, 0, -1.719, -17.076, 13, -24.243, 0.188, -0, 0.85, 0, 0, 0, -18.206, 13, -29.34),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 7
+
+[node name="Szene09" type="Node3D"]
+metadata/titel = "Top Spin am Nachmittag, halber Orbit"
+script = ExtResource("1_szene")
+dauer = 7
+uhr = 15
+besucher = 0.7
+sichtfeld = 55
+unscharf_ab = 50
+dunst = 0.008
+
+[node name="Kamerafahrt" type="Path3D" parent="."]
+curve = SubResource("fahrt")
+
+[node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.1596, 13, -3.70615)
+rotation_mode = 0
+loop = false
+
+[node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
+fov = 55
+script = ExtResource("2_kamera")
+ziel = NodePath("../../../Blickziel")
+
+[node name="Blickziel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 4, -22.5)
+gizmo_extents = 2.0
+
+[node name="Vorschau" type="Node3D" parent="."]
+script = ExtResource("3_vorschau")

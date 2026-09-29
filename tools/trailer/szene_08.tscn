@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/trailer/trailer_szene.gd" id="1_szene"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
+[ext_resource type="Script" path="res://tools/trailer/ansturm.gd" id="4_ansturm"]
+
+[sub_resource type="Curve3D" id="fahrt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0.033, 0.033, -0.25, -3.6, 8.2, 44, -0.067, -0.067, 0.5, 0.067, 0.067, -0.5, -3.4, 8.4, 42.5, -0.033, -0.033, 0.25, 0, 0, 0, -3.2, 8.6, 41),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="Szene08" type="Node3D"]
+metadata/titel = "Ansturm: Kamera steht am Rand, Horde rauscht vorbei"
+script = ExtResource("1_szene")
+dauer = 7
+uhr = 17
+besucher = 0
+sichtfeld = 70
+unscharf_ab = 35
+dunst = 0.006
+
+[node name="Kamerafahrt" type="Path3D" parent="."]
+curve = SubResource("fahrt")
+
+[node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 8.2, 44)
+rotation_mode = 0
+loop = false
+
+[node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
+fov = 70
+script = ExtResource("2_kamera")
+ziel = NodePath("../../../Blickziel")
+
+[node name="Blickziel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 55)
+gizmo_extents = 2.0
+
+[node name="Zelttor" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
+
+[node name="Ansturm" type="Node3D" parent="." node_paths=PackedStringArray("ziel", "blickziel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 74)
+script = ExtResource("4_ansturm")
+anzahl = 110
+tempo_min = 3.8
+tempo_max = 4.6
+ziel = NodePath("../Zelttor")
+blickziel = NodePath("../Blickziel")
+
+[node name="Vorschau" type="Node3D" parent="."]
+script = ExtResource("3_vorschau")

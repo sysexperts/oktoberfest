@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/trailer/trailer_szene.gd" id="1_szene"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
+[ext_resource type="Script" path="res://tools/trailer/zelt_voll.gd" id="5_zelt"]
+[ext_resource type="Script" path="res://tools/trailer/ereignis.gd" id="6_ereignis"]
+
+[sub_resource type="Curve3D" id="fahrt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, -0.583, -6.4, 3.2, 6.5, -0, -0, 1.167, 0, 0, -1.167, -6.4, 3.2, 3, -0, -0, 0.583, 0, 0, 0, -6.4, 3.2, -0.5),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="Szene19" type="Node3D"]
+metadata/titel = "Bierleichen: eine Tischreihe kotzt nacheinander"
+script = ExtResource("1_szene")
+dauer = 7
+uhr = 22
+besucher = 0
+sichtfeld = 60
+unscharf_ab = 14
+dunst = 0.004
+
+[node name="Kamerafahrt" type="Path3D" parent="."]
+curve = SubResource("fahrt")
+
+[node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 3.2, 6.5)
+rotation_mode = 0
+loop = false
+
+[node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
+fov = 60
+script = ExtResource("2_kamera")
+ziel = NodePath("../../../Blickziel")
+
+[node name="Blickziel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.8, -1)
+gizmo_extents = 2.0
+
+[node name="ZeltVoll" type="Node" parent="."]
+script = ExtResource("5_zelt")
+tanzen = 0
+
+[node name="Ereignis" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, 1.7)
+script = ExtResource("6_ereignis")
+art = "kotzen"
+anzahl = 10
+verzug = 0.3
+takt = 0.6
+tempo = 11
+
+[node name="Vorschau" type="Node3D" parent="."]
+script = ExtResource("3_vorschau")
