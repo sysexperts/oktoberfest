@@ -64,7 +64,6 @@ script = ExtResource("4_zelt")
 plan_ausgeben = false
 
 [node name="SpielerWege" type="Node3D" parent="."]
-script = ExtResource("5_spieler")
 
 [node name="Sepp" type="Path3D" parent="SpielerWege"]
 curve = SubResource("weg_sepp")
