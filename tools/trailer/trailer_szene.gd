@@ -30,6 +30,8 @@ const ZELTNAME := "Sloptoberfest"
 @export var weich := true
 ## Uhrzeit fürs Licht (8 = Morgen, 13 = Mittag, 20 = Abend, 22 = Nacht)
 @export_range(6.0, 23.5, 0.25) var uhr := 8.0
+## Zeitraffer: Uhrzeit am Ende der Fahrt (-1 = Uhr steht)
+@export var uhr_ende := -1.0
 ## Besucher draußen (0 = leer, 1 = voll)
 @export_range(0.0, 1.0, 0.05) var besucher := 0.0
 ## So viele Besucher sind „voll“ (im Spiel je nach Grafikstufe 150–450)
@@ -48,7 +50,7 @@ const ZELTNAME := "Sloptoberfest"
 
 func _ready() -> void:
 	var lauf := Lauf.new()
-	lauf.einstellungen = {"dauer": dauer, "weich": weich, "uhr": uhr, "besucher": besucher, "max_besucher": max_besucher, "vorlauf": vorlauf,
+	lauf.einstellungen = {"dauer": dauer, "weich": weich, "uhr": uhr, "uhr_ende": uhr_ende, "besucher": besucher, "max_besucher": max_besucher, "vorlauf": vorlauf,
 		"sichtfeld": sichtfeld, "unscharf_ab": unscharf_ab, "unschaerfe": unschaerfe, "dunst": dunst,
 		"name": String(scene_file_path.get_file().get_basename())}
 	# Alles außer der Editor-Vorschau (Fahrt, Blickziel, Ansturm …) überlebt
@@ -76,6 +78,7 @@ class Lauf extends Node:
 	## So nah darf die Kamera an keine Figur (m)
 	const MIN_ABSTAND := 3.0
 	var _schwarz: ColorRect
+	var _gm: Node
 
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
@@ -95,6 +98,7 @@ class Lauf extends Node:
 			_zuruecksichern()
 			get_tree().quit(1)
 			return
+		_gm = gm
 		var kamera := get_node("Kamerafahrt/Wagen/Kamera") as Camera3D
 		_aufbauen(gm, kamera)
 		var ablaeufe := find_children("*", "", false, false).filter(func(n: Node) -> bool: return n.has_method("aufstellen"))
@@ -134,6 +138,8 @@ class Lauf extends Node:
 		while t < dauer:
 			var a := t / dauer
 			wagen.progress_ratio = smoothstep(0.0, 1.0, a) if einstellungen.weich else a
+			if float(einstellungen.uhr_ende) >= 0.0:
+				_gm._apply_daylight(lerpf(float(einstellungen.uhr), float(einstellungen.uhr_ende), a))
 			kamera.look_at((get_node("Blickziel") as Node3D).global_position, Vector3.UP)
 			if _pruefen:
 				_kamera_pruefen(kamera, t)
@@ -291,7 +297,8 @@ class Lauf extends Node:
 			var art := ""
 			if box.grow(0.4).has_point(pos):
 				art = "Kamera steckt in"
-			elif box.intersects_segment(pos, ende):
+			elif box.intersects_segment(pos, ende) and not box.grow(1.0).has_point(ziel):
+				# (worauf die Kamera schaut, verdeckt nicht die Sicht)
 				art = "Sicht verdeckt durch"
 			if art == "":
 				continue
