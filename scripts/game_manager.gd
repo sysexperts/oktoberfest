@@ -1153,14 +1153,15 @@ func _apply_stage(on: bool) -> void:
 		if s.has_method("set_active"):
 			s.set_active(on)
 
-## E7: Besucherdichte draußen aus der Uhrzeit ableiten (geschlossen = leer).
+## E7: Besucherdichte draußen aus der Uhrzeit ableiten (zwischen den Tagen 70 %).
 func _apply_crowd(clock: float) -> void:
 	if _crowd == null:
 		return
-	var f := 0.0
+	# Zwischen den Tagen (Uhr steht, Zelt zu) ist die Kirmes trotzdem belebt — früher
+	# war sie da leer. Morgens gut voll, abends ganz.
+	var f := 0.7
 	if clock >= 0.0:
-		# Morgens schon halb voll, abends ganz — vorher (15 %) wirkte die Kirmes leer
-		f = lerpf(0.5, 1.0, clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.0, 1.0))
+		f = lerpf(0.7, 1.0, clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.0, 1.0))
 	if _ereignis == "regen":
 		f *= 0.25   # bei Regen ist draußen kaum jemand
 	_crowd.set_density(f)

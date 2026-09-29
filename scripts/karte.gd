@@ -1,8 +1,8 @@
 extends Node3D
-## Die frei gebaute Kirmes-Aufstellung (Baumodus, F8).
-## Der Server hält die Karte und speichert sie in user://karte.json — wer
-## beitritt, bekommt sie geschickt; jede Änderung geht über den Server an alle.
-## Ohne gespeicherte Karte startet der Server mit res://daten/karte.json.
+## Die Kirmes-Aufstellung. Sie ist fest: der Server lädt immer
+## res://daten/karte.json (gebaut mit dem früheren Baumodus) und schickt sie
+## jedem, der beitritt. Frühere, lokal gespeicherte Karten (user://karte.json)
+## zählen nicht mehr — sonst sähe jeder Spieler seine alte Aufstellung.
 ## Einträge: {p: Szenenpfad, x, y, z, r: Drehung (rad), s: Größe, sx: Breite}
 
 const Sichtweite := preload("res://scripts/sichtweite.gd")
@@ -23,7 +23,6 @@ const PFLICHT_PLAETZE := [
 const HUBER_ZELT := "res://scenes/huber_zelt.tscn"
 const HUBER_PLATZ := {"p": HUBER_ZELT, "x": 43.0, "y": 0.0, "z": -14.0, "r": 0.0}
 
-const SPEICHER := "user://karte.json"
 const START := "res://daten/karte.json"
 const VORLAGE := "res://daten/karte_vorlage.json"
 
@@ -33,26 +32,12 @@ signal gesetzt(n: int, von: int)
 
 var eintraege := {}   # Nummer -> Eintrag
 var _naechste := 1
-var _speichern_in := -1.0
 
 func _ready() -> void:
 	if multiplayer.is_server():
-		var daten := _lesen(SPEICHER)
-		if daten.is_empty():
-			daten = _lesen(START)
-		_alles_setzen(_mit_wohnwagen(daten))
+		_alles_setzen(_mit_wohnwagen(_lesen(START)))
 	else:
 		net_holen.rpc_id(1)
-
-func _process(delta: float) -> void:
-	if _speichern_in < 0.0:
-		return
-	_speichern_in -= delta
-	if _speichern_in < 0.0:
-		var f := FileAccess.open(SPEICHER, FileAccess.WRITE)
-		if f:
-			f.store_string(als_text())
-			f.close()
 
 static func _lesen(pfad: String) -> Array:
 	if not FileAccess.file_exists(pfad):
@@ -189,8 +174,6 @@ func _net_loeschen(n: int) -> void:
 
 # ------------------------------------------------------------------ Aufbau
 func _merken() -> void:
-	if multiplayer.is_server():
-		_speichern_in = 1.0
 	geaendert.emit()
 
 ## Karte ohne Wohnwagen? Dann die Pflichtplätze anhängen (auch bei alten Karten).

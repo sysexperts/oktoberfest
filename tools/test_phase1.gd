@@ -1473,7 +1473,7 @@ class Lauf extends Node:
 			Einstellungen.grafik = 0
 			Einstellungen.anwenden()
 			await _frames(2)
-			_check("Niedrig: 180 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 180
+			_check("Niedrig: 250 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 250
 				and not umgebung.ssao_enabled and not umgebung.glow_enabled, "")
 			_check("Niedrig: ein Drittel der Kirmeslichter", grafik.sichtbare_lichter() <= ceili(alle / 3.0),
 				"%d von %d" % [grafik.sichtbare_lichter(), alle])
