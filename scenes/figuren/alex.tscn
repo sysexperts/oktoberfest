@@ -14,7 +14,6 @@ anim_gehen = "Walking"
 anim_rennen = "geliehen2/Running"
 anim_tanzen = PackedStringArray("geliehen/Hip_Hop_Dance", "geliehen/ymca_dance")
 anim_sitzen = "geliehen/Sit_and_Drink"
-anim_extras = PackedStringArray("geliehen/Confused_Scratch")
 anim_betrunken = "geliehen4/Unsteady_Walk"
 metall_ignorieren = true
 eigenleuchten = 0.35
