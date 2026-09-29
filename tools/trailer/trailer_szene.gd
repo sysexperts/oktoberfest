@@ -298,4 +298,4 @@ class Lauf extends Node:
 			var schluessel := art + " " + str(h[1])
 			if not _meldungen.has(schluessel):
 				_meldungen[schluessel] = t
-				print("  t=%.2f s: %s %s" % [t, art, h[1]])
+				print("  t=%.2f s: %s %s (Kasten %s bis %s, Kamera %s)" % [t, art, h[1], box.position.snapped(Vector3.ONE * 0.1), box.end.snapped(Vector3.ONE * 0.1), pos.snapped(Vector3.ONE * 0.1)])

@@ -7,7 +7,7 @@
 
 [sub_resource type="Curve3D" id="fahrt"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0.4, -3, 0, 3, 57, 0, -0.5, 3, 0, 0.6, -3, 0, 4, 49, 0.3, -0.8, 3, -0.3, 0.8, -3, -0.8, 6, 42, 0.2, -0.8, 2.5, 0, 0, 0, -1.2, 8.5, 37),
+"points": PackedVector3Array(0, 0, 0, -1, -1.5, -5, 0.5, 17, 76, 1.5, 2.5, 5, -1, -2.5, -5, -1.2, 10.5, 63, -0.5, 2.5, 5, 0.3, -1.5, -4, -0.3, 4.5, 50, 0.3, 1.2, 4, 0, 0, 0, 0, 0.9, 36),
 "tilts": PackedFloat32Array(0, 0, 0, 0)
 }
 point_count = 4
@@ -17,12 +17,13 @@ size = Vector3(6, 0.1, 26)
 
 [node name="Szene02" type="Node3D"]
 script = ExtResource("1_szene")
-dauer = 6.5
+dauer = 9.0
+weich = true
 uhr = 17.0
 besucher = 0.0
 max_besucher = 300
 vorlauf = 3.0
-sichtfeld = 62.0
+sichtfeld = 74.0
 unscharf_ab = 38.0
 unschaerfe = 0.12
 dunst = 0.008
@@ -31,12 +32,12 @@ dunst = 0.008
 curve = SubResource("fahrt")
 
 [node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 57)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 17, 74)
 rotation_mode = 0
 loop = false
 
 [node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
-fov = 62.0
+fov = 74.0
 script = ExtResource("2_kamera")
 ziel = NodePath("../../../Blickziel")
 
@@ -49,11 +50,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
 gizmo_extents = 1.5
 
 [node name="Ansturm" type="Node3D" parent="." node_paths=PackedStringArray("ziel", "blickziel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 83)
 script = ExtResource("4_ansturm")
 anzahl = 110
-tempo_min = 3.4
-tempo_max = 4.2
+tempo_min = 2.6
+tempo_max = 3.2
 ziel = NodePath("../Zelttor")
 blickziel = NodePath("../Blickziel")
 

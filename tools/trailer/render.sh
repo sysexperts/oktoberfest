@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Rendert eine Trailer-Szene (tools/trailer/szene_NN.tscn) als eigenes Video
 # zum Schneiden: 1920x1080, 60 fps, ohne Musik (Spielgeräusche bleiben drin).
-#   bash tools/trailer/render.sh 01      → build/trailer/clips/szene_01.mp4 (alle Clips gesammelt)
+#   bash tools/trailer/render.sh 01      → build/trailer/clips/szene_01_vN.mp4
+# Jeder Render wird eine neue Version (v1, v2, …) — nichts wird überschrieben.
 # Die Aufnahme läuft langsamer als Echtzeit (--write-movie), das Video nicht.
 set -uo pipefail
 cd "$(dirname "$0")/../.."
@@ -28,9 +29,12 @@ grep -E "SCRIPT ERROR" "$LOG" | head -5
 START="$(sed -nE 's/^SZENE_START ([0-9]+).*/\1/p' "$LOG" | head -1)"
 ENDE="$(sed -nE 's/^SZENE_ENDE ([0-9]+).*/\1/p' "$LOG" | head -1)"
 [ -s "$ROH" ] && [ -n "$START" ] && [ -n "$ENDE" ] || { echo "Aufnahme fehlgeschlagen, siehe $LOG"; exit 1; }
+V=1
+while [ -e "build/trailer/clips/szene_${NR}_v${V}.mp4" ]; do V=$((V+1)); done
+ZIEL="build/trailer/clips/szene_${NR}_v${V}.mp4"
 AB="$(awk "BEGIN{print $START / $FPS}")"
 LANG="$(awk "BEGIN{print ($ENDE - $START) / $FPS}")"
 "$FF" -y -loglevel error -ss "$AB" -t "$LANG" -i "$ROH" -c:v libx264 -preset slow -crf 14 -pix_fmt yuv420p \
-	-c:a aac -b:a 192k "build/trailer/clips/szene_${NR}.mp4"
+	-c:a aac -b:a 192k "$ZIEL"
 rm -f "$ROH"
-echo "Fertig: build/trailer/clips/szene_${NR}.mp4 (${LANG} s)"
+echo "Fertig: $ZIEL (${LANG} s)"
