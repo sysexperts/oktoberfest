@@ -8,36 +8,36 @@
 
 [sub_resource type="Curve3D" id="fahrt"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, -0.251, 0, 0.131, -5.023, 9.6, -4.408, 0.459, -0, -0.322, -0.459, 0, 0.322, -6.528, 9.6, -3.624, 0.36, -0, -0.43, -0.36, 0, 0.43, -7.779, 9.6, -2.478, 0.237, -0, -0.508, -0.237, 0, 0.508, -8.691, 9.6, -1.047, 0.097, -0, -0.552, -0.097, 0, 0.552, -9.201, 9.6, 0.571, -0.049, -0, -0.559, 0.049, 0, 0.559, -9.275, 9.6, 2.267, -0.061, -0, -0.276, 0, 0, 0, -8.908, 9.6, 3.923),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, -0.5, 0, 0.033, 9, 6.7, 11, 1, -0, -0.067, -1, 0, 0.067, 6, 6.7, 11.2, 0.5, -0, -0.033, 0, 0, 0, 3, 6.7, 11.4),
+"tilts": PackedFloat32Array(0, 0, 0)
 }
-point_count = 7
+point_count = 3
 
-[node name="Szene17" type="Node3D"]
-metadata/titel = "Massenschlägerei im Zelt, Kamera kreist darüber"
+[node name="Szene18" type="Node3D"]
+metadata/titel = "Massenschlägerei weit: das ganze Zelt schaut zu"
 script = ExtResource("1_szene")
 dauer = 7
 uhr = 21
 besucher = 0
-sichtfeld = 62
-unscharf_ab = 18
+sichtfeld = 68
+unscharf_ab = 25
 dunst = 0.004
 
 [node name="Kamerafahrt" type="Path3D" parent="."]
 curve = SubResource("fahrt")
 
 [node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02313, 9.6, -4.408)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 6.7, 11)
 rotation_mode = 0
 loop = false
 
 [node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
-fov = 62
+fov = 68
 script = ExtResource("2_kamera")
 ziel = NodePath("../../../Blickziel")
 
 [node name="Blickziel" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.8, 1.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0.8, -1.3)
 gizmo_extents = 2.0
 
 [node name="ZeltVoll" type="Node" parent="."]
@@ -45,10 +45,10 @@ script = ExtResource("5_zelt")
 tanzen = 0
 
 [node name="Ereignis" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0, 1.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, -1.3)
 script = ExtResource("6_ereignis")
 art = "schlaegerei"
-anzahl = 18
+anzahl = 24
 verzug = 0.2
 takt = 0.8
 tempo = 11
