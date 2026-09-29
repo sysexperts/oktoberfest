@@ -5,6 +5,7 @@ extends Node3D
 ## Jeder Besucher bekommt zufällig eine Figur aus scripts/figuren.gd.
 
 const Figuren := preload("res://scripts/figuren.gd")
+const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
 const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
 const TURN_SPEED := 6.0
 ## So viele Besucher feiern beim Stehenbleiben statt nur dazustehen.
@@ -205,7 +206,7 @@ func _steckt_fest() -> bool:
 		_eng.collide_with_areas = false
 	_eng.transform = Transform3D(Basis.IDENTITY,
 		global_position + Vector3(0, 0.15 + KOERPER_HOEHE * 0.5, 0))
-	return not raum.intersect_shape(_eng, 1).is_empty()
+	return not raum.intersect_shape(_eng, 1).is_empty() or BesucherSperre.gesperrt(raum, _eng)
 
 ## Erste Richtung, in der wieder Platz ist (Vector3.ZERO = ringsum zu).
 func _raus() -> Vector3:
@@ -229,7 +230,8 @@ func _platz(dir: Vector3) -> bool:
 		_probe.collide_with_areas = false
 	var ziel := global_position + dir * SICHT + Vector3(0, 0.15 + KOERPER_HOEHE * 0.5, 0)
 	_probe.transform = Transform3D(Basis.IDENTITY, ziel)
-	return raum.intersect_shape(_probe, 1).is_empty()
+	# Sperrflächen (Zelte, im Baumodus markiert) wie eine Wand behandeln
+	return raum.intersect_shape(_probe, 1).is_empty() and not BesucherSperre.gesperrt(raum, _probe)
 
 ## Richtung an der getroffenen Fläche entlang (Vector3.ZERO = nichts getroffen)
 func _entlang(dir: Vector3) -> Vector3:

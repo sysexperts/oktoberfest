@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://scenes/zelt/kistenstapel.tscn" id="29_cy54u"]
 [ext_resource type="PackedScene" path="res://scenes/zelt/biergarten_tisch.tscn" id="30_jc7qw"]
 [ext_resource type="PackedScene" path="res://scenes/zelt/speisetafel.tscn" id="31_vevrx"]
+[ext_resource type="PackedScene" path="res://scenes/karte/besucher_sperre_zelt.tscn" id="sperre_besucher"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ha4ax"]
 size = Vector3(22.4, 0.1, 4.4)
@@ -2671,3 +2672,5 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10.2
 
 [node name="Speisetafel" type="Node3D" parent="Aussen" unique_id=22323811 instance=ExtResource("31_vevrx")]
 transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 5.7, 0, 12.5)
+
+[node name="BesucherSperre" parent="." instance=ExtResource("sperre_besucher")]

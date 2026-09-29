@@ -44,6 +44,9 @@ var _yaw := 0.0
 var _pitch := -0.9
 var _hoehe := 30.0
 
+## Besucher-Sperren sind nur im Baumodus zu sehen
+const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
+
 func _ready() -> void:
 	visible = false
 	_markierung.visible = false
@@ -88,6 +91,7 @@ func starten() -> void:
 		return
 	aktiv = true
 	visible = true
+	BesucherSperre.alle_anzeigen(get_tree(), true)
 	_spieler.minispiel = self
 	var start: Vector3 = (_spieler as Node3D).global_position
 	_kamera.global_position = start + Vector3(0, _hoehe, 18.0)
@@ -102,6 +106,7 @@ func beenden() -> void:
 		return
 	aktiv = false
 	visible = false
+	BesucherSperre.alle_anzeigen(get_tree(), false)
 	_geist_weg()
 	_waehlen(-1)
 	if _spieler and is_instance_valid(_spieler):

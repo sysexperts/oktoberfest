@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/besucher_sperre.gd" id="1"]
+[ext_resource type="Material" path="res://assets/materialien/besucher_sperre.tres" id="2"]
+
+[sub_resource type="BoxShape3D" id="form"]
+size = Vector3(27, 2, 29)
+
+[sub_resource type="BoxMesh" id="kasten"]
+material = ExtResource("2")
+size = Vector3(27, 2, 29)
+
+[node name="BesucherSperreZelt" type="Area3D"]
+script = ExtResource("1")
+
+[node name="Form" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.5)
+shape = SubResource("form")
+
+[node name="Anzeige" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.5)
+cast_shadow = 0
+mesh = SubResource("kasten")

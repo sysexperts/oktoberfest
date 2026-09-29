@@ -27,8 +27,9 @@ const NAH_AN_STAENDEN := 10.0
 ## So dick und hoch ist ein Besucher (Probe auf Platz)
 const FREI_RADIUS := 0.45
 const FREI_HOEHE := 1.5
-## Festzelt: da gehören die Kirmes-Besucher nicht hinein (Gäste macht der Server)
-const ZELT := Rect2(-13.5, -16.0, 27.0, 29.0)
+## Zelte und im Baumodus markierte Flächen: da gehören die Kirmes-Besucher
+## nicht hin (scripts/besucher_sperre.gd, steckt auch in scenes/tent.tscn)
+const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
 ## Fällt die Suche aus (Menühintergrund ohne Karte): altes Ringraster
 const RING_Z := [19.0, -22.0]
 
@@ -76,8 +77,6 @@ func _build_points() -> void:
 		while z <= max_z + RASTER:
 			var p := Vector2(x, z)
 			z += RASTER
-			if ZELT.has_point(p):
-				continue
 			if not _nah_an_gebautem(raster, p):
 				continue
 			if not _frei(p):
@@ -111,7 +110,7 @@ func _frei(p: Vector2) -> bool:
 		_probe.shape = form
 		_probe.collide_with_areas = false
 	_probe.transform = Transform3D(Basis.IDENTITY, Vector3(p.x, 0.15 + FREI_HOEHE * 0.5, p.y))
-	return raum.intersect_shape(_probe, 1).is_empty()
+	return raum.intersect_shape(_probe, 1).is_empty() and not BesucherSperre.gesperrt(raum, _probe)
 
 ## Wo steht etwas Gebautes? Kartenteile (Buden, Bänke, Zäune, Bäume) und die
 ## von Hand gesetzten Besucherpunkte auf den Straßen.

@@ -5,6 +5,8 @@ extends RefCounted
 
 const GRUPPEN := [
 	["Besonderes", ["res://scenes/huber_zelt.tscn"]],
+	# Unsichtbar im Spiel: Kirmes-Besucher laufen hier nicht durch (nur im Baumodus zu sehen)
+	["Besucher-Sperren", ["res://scenes/karte/besucher_sperre_klein.tscn", "res://scenes/karte/besucher_sperre_streifen.tscn", "res://scenes/karte/besucher_sperre_gross.tscn"]],
 	["Spiele", [
 		"res://scenes/kirmes/schiessstand.tscn",
 		"res://scenes/kirmes/dosenwurf.tscn",

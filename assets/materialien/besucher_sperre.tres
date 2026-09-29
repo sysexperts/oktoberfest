@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "BesucherSperre"
+transparency = 1
+shading_mode = 0
+cull_mode = 2
+no_depth_test = false
+albedo_color = Color(0.9, 0.15, 0.1, 0.35)
