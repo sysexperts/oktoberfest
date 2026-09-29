@@ -20,7 +20,7 @@ extends Node3D
 const VISITOR := preload("res://scenes/visitor.tscn")
 
 ## Bei Rucklern hier runterdrehen.
-@export var max_visitors := 800
+@export var max_visitors := 450
 
 ## Abstand der Probepunkte
 const RASTER := 2.5
