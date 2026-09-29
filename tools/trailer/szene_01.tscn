@@ -16,6 +16,7 @@ script = ExtResource("1_szene")
 dauer = 6.0
 uhr = 8.0
 dunst = 0.012
+unscharf_ab = 55.0
 
 [node name="Kamerafahrt" type="Path3D" parent="."]
 curve = SubResource("fahrt")

@@ -10,6 +10,8 @@ const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
 ## Noch weiter weg: gar nicht zeichnen. Dazwischen stehen Buden und Bäume,
 ## zu sehen sind so ferne Besucher kaum — gezeichnet wurden sie trotzdem.
 const SICHTBAR_BIS := 65.0
+## Veränderbar für Aufnahmen (Trailer zeichnet alle)
+static var sichtbar_bis := SICHTBAR_BIS
 const TURN_SPEED := 6.0
 ## An einem Wegpunkt überhaupt stehen bleiben (sonst geht er einfach weiter)
 const HALT_CHANCE := 0.06
@@ -325,7 +327,7 @@ func _update_lod(delta: float) -> void:
 	if cam == null:
 		return
 	var abstand := global_position.distance_to(cam.global_position)
-	_model.visible = abstand < SICHTBAR_BIS
+	_model.visible = abstand < sichtbar_bis
 	var far := abstand > LOD_DIST
 	if far == _far:
 		return

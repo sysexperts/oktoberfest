@@ -17,6 +17,9 @@ extends Node3D
 ## zurückgeschrieben — die Szene startet ein neues Spiel.
 
 const Spielstart := preload("res://tools/spielstart.gd")
+const Besucher := preload("res://scripts/visitor.gd")
+## So heißt das Zelt im Trailer
+const ZELTNAME := "Sloptoberfest"
 
 ## Länge der Fahrt in Sekunden
 @export var dauer := 6.0
@@ -29,14 +32,16 @@ const Spielstart := preload("res://tools/spielstart.gd")
 ## Brennweite: kleiner = weiter Blick
 @export_range(20.0, 90.0, 1.0) var sichtfeld := 55.0
 ## Schärfentiefe: ab dieser Entfernung wird es unscharf (0 = aus)
-@export var unscharf_ab := 0.0
+@export var unscharf_ab := 45.0
+## Wie stark es dahinter verschwimmt
+@export_range(0.0, 0.3, 0.005) var unschaerfe := 0.12
 ## Dunst in der Luft (Morgennebel)
 @export_range(0.0, 0.05, 0.001) var dunst := 0.01
 
 func _ready() -> void:
 	var lauf := Lauf.new()
 	lauf.einstellungen = {"dauer": dauer, "weich": weich, "uhr": uhr, "besucher": besucher,
-		"sichtfeld": sichtfeld, "unscharf_ab": unscharf_ab, "dunst": dunst,
+		"sichtfeld": sichtfeld, "unscharf_ab": unscharf_ab, "unschaerfe": unschaerfe, "dunst": dunst,
 		"name": String(scene_file_path.get_file().get_basename())}
 	# Fahrt und Blickziel überleben den Szenenwechsel beim Spielstart
 	for n in ["Kamerafahrt", "Blickziel"]:
@@ -119,6 +124,21 @@ class Lauf extends Node:
 				(l as Label3D).visible = false
 		kamera.current = true
 		kamera.fov = float(einstellungen.sichtfeld)
+		# Zeltname am Eingang und über der Theke
+		gm._zelt_name = ZELTNAME
+		gm._zeltname_anzeigen()
+		for l in gm.get_tree().get_nodes_in_group("zeltname"):
+			(l as Label3D).visible = true
+		# Keine Sichtweite: im Spiel werden ferne Teile, Lichter und Besucher
+		# ausgeblendet (Leistung) — die Aufnahme darf sich Zeit lassen
+		for g in gm.find_children("*", "GeometryInstance3D", true, false):
+			(g as GeometryInstance3D).visibility_range_end = 0.0
+		for l in gm.find_children("*", "Light3D", true, false):
+			(l as Light3D).distance_fade_enabled = false
+		Besucher.sichtbar_bis = INF
+		var sonne := gm.find_children("*", "DirectionalLight3D", true, false)
+		for s in sonne:
+			(s as DirectionalLight3D).directional_shadow_max_distance = 250.0
 		# Licht und Besucher
 		gm._night_t = -1.0
 		gm._apply_daylight(float(einstellungen.uhr))
@@ -135,9 +155,14 @@ class Lauf extends Node:
 		env.ssil_enabled = true
 		env.ssil_intensity = 0.8
 		env.adjustment_enabled = true
+		env.adjustment_saturation = 1.15
+		env.adjustment_contrast = 1.06
 		env.glow_enabled = true
-		env.glow_intensity = 0.7
-		env.glow_bloom = 0.06
+		env.glow_intensity = 1.0
+		env.glow_strength = 1.1
+		env.glow_bloom = 0.18
+		env.glow_hdr_threshold = 0.85
+		env.glow_blend_mode = Environment.GLOW_BLEND_MODE_SOFTLIGHT
 		env.volumetric_fog_enabled = float(einstellungen.dunst) > 0.0
 		env.volumetric_fog_density = float(einstellungen.dunst)
 		env.volumetric_fog_albedo = Color(1.0, 0.86, 0.7)
@@ -146,7 +171,7 @@ class Lauf extends Node:
 		attr.dof_blur_far_enabled = float(einstellungen.unscharf_ab) > 0.0
 		attr.dof_blur_far_distance = float(einstellungen.unscharf_ab)
 		attr.dof_blur_far_transition = float(einstellungen.unscharf_ab) * 0.6
-		attr.dof_blur_amount = 0.06
+		attr.dof_blur_amount = float(einstellungen.unschaerfe)
 		kamera.attributes = attr
 
 	func _unhandled_input(event: InputEvent) -> void:
