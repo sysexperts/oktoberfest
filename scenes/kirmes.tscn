@@ -191,7 +191,7 @@ visible = false
 material_override = SubResource("MatGround")
 mesh = SubResource("GroundMesh")
 
-[node name="Wege" type="Node3D" parent="." unique_id=389970740]
+[node name="Wege" type="Node3D" parent="." unique_id=389970740 groups=["pflaster"]]
 
 [node name="PathNorth" type="MeshInstance3D" parent="Wege" unique_id=214295319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19)

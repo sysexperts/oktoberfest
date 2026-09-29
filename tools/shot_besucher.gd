@@ -23,6 +23,20 @@ class Lauf extends Node:
 			if n.is_empty():
 				ohne += 1
 		print("Punkte ohne Nachbarn: ", ohne)
+		var innen := 0
+		for q: Vector3 in menge._points:
+			if absf(q.x) < 22 and q.z > -22 and q.z < 20:
+				innen += 1
+		var zellen := 0
+		for x in range(-22, 22):
+			for z in range(-22, 20):
+				if menge._gepflastert(Vector2(x, z)):
+					zellen += 1
+		var leute := 0
+		for v in menge._visitors:
+			if absf(v.position.x) < 22 and v.position.z > -22 and v.position.z < 20:
+				leute += 1
+		print("Innen: Punkte ", innen, "  Pflasterzellen ", zellen, "  Besucher ", leute)
 		gm.get_node("HUD").visible = false
 		var cam := Camera3D.new()
 		gm.add_child(cam)
