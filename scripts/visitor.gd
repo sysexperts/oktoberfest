@@ -9,6 +9,11 @@ const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
 const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
 const TURN_SPEED := 6.0
 ## So viele Besucher feiern beim Stehenbleiben statt nur dazustehen.
+## An einem Wegpunkt überhaupt stehen bleiben (sonst geht er einfach weiter)
+const HALT_CHANCE := 0.06
+## Abstand zur Wegmitte nach rechts (m) — eigene Spur, damit Gegenverkehr entsteht
+const SPUR_MIN := 0.5
+const SPUR_MAX := 1.8
 const DANCE_CHANCE := 0.08
 ## So viele machen stattdessen eine Extra-Bewegung (Kopf kratzen …), wenn die Figur eine hat.
 const EXTRA_CHANCE := 0.12
@@ -51,6 +56,10 @@ var _blick_t := 0.0     # nächste Hindernisabfrage
 var _weiche := Vector3.ZERO   # Ausweichrichtung (leer = geradeaus)
 var _weiche_t := 0.0
 var _fest := 0.0        # wie lange er schon gegen etwas drückt
+var _knoten := -1       # Wegpunkt, auf den er gerade zugeht (crowd.gd)
+var _richtung := Vector3.FORWARD
+var _spur := 1.0
+var _netz := -1         # Version des Wegenetzes, auf die sich _knoten bezieht
 var _probe: PhysicsShapeQueryParameters3D = null
 var _eng: PhysicsShapeQueryParameters3D = null
 
@@ -71,12 +80,26 @@ func _ready() -> void:
 
 func setup(crowd: Node) -> void:
 	_crowd = crowd
-	position = crowd.random_start()
-	_tgt = crowd.next_point(position)
+	_spur = randf_range(SPUR_MIN, SPUR_MAX)
+	_knoten = crowd.weg_start()
+	_netz = crowd.netz_version()
+	_richtung = Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
+	position = crowd.punkt(_knoten) + Vector3(randf_range(-0.6, 0.6), 0.0, randf_range(-0.6, 0.6))
+	_weiter()
 	var d := _tgt - position
 	d.y = 0
 	if d.length() > 0.01:
 		rotation.y = atan2(-d.x, -d.z)
+
+## Nächsten Wegpunkt wählen und auf der eigenen Spur ansteuern.
+func _weiter() -> void:
+	var neu: int = _crowd.weiter(_knoten, _richtung)
+	var d: Vector3 = _crowd.punkt(neu) - _crowd.punkt(_knoten)
+	d.y = 0.0
+	if d.length() > 0.01:
+		_richtung = d.normalized()
+	_knoten = neu
+	_tgt = _crowd.spur_punkt(_knoten, _richtung, _spur)
 
 func _go_walk() -> void:
 	if _state == "walk":
@@ -115,19 +138,27 @@ func _process(delta: float) -> void:
 		_pause -= delta
 		_idle_look(delta)
 		return
+	if _netz != _crowd.netz_version():
+		# Karte geändert: Wegenetz neu — von vorn anfangen
+		_netz = _crowd.netz_version()
+		_knoten = _crowd.weg_start()
+		_weiter()
 	var to := _tgt - position
 	to.y = 0
-	if to.length() < 0.7:
-		_pause = randf_range(1.5, 6.0)
-		var wurf := randf()
-		if wurf < DANCE_CHANCE:
-			_go_dance()
-		elif wurf < DANCE_CHANCE + EXTRA_CHANCE:
-			_go_extra()
-		else:
-			_go_stand()
-		_tgt = _crowd.next_point(position)
-		return
+	if to.length() < 1.0:
+		_weiter()
+		if randf() < HALT_CHANCE:
+			_pause = randf_range(1.5, 6.0)
+			var wurf := randf()
+			if wurf < DANCE_CHANCE:
+				_go_dance()
+			elif wurf < DANCE_CHANCE + EXTRA_CHANCE:
+				_go_extra()
+			else:
+				_go_stand()
+			return
+		to = _tgt - position
+		to.y = 0
 	var dir := _laufrichtung(to.normalized(), delta)
 	var want := atan2(-dir.x, -dir.z)
 	rotation.y = lerp_angle(rotation.y, want, clampf(delta * TURN_SPEED, 0.0, 1.0))
@@ -174,7 +205,9 @@ func _laufrichtung(zum_ziel: Vector3, delta: float) -> Vector3:
 				# Steckt in einer Ecke: neues Ziel, sonst schiebt er dort ewig
 				_fest = 0.0
 				if _crowd:
-					_tgt = _crowd.next_point(position)
+					# Gasse zu: umkehren
+					_richtung = -_richtung
+					_weiter()
 	if _weiche_t > 0.0 and _weiche != Vector3.ZERO:
 		return _weiche
 	return zum_ziel

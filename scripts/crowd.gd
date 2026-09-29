@@ -3,9 +3,11 @@ extends Node3D
 ## Kirmes-Besucher draußen. Läuft rein lokal auf jedem Client (kein Netz-Traffic),
 ## die Menge hat keinen Einfluss aufs Spiel.
 ##
-## Die Besucher bummeln zwischen Wegpunkten in den Gassen zwischen den Ständen.
-## Sie suchen sich immer ein Ziel in der Nähe — dadurch wirkt es wie ein Gedränge
-## und nicht wie eine Prozession in Reih und Glied.
+## Die Besucher gehen auf einem Wegenetz durch die Gassen zwischen den Ständen:
+## geradeaus weiter, an Kreuzungen biegen manche ab, am Ende einer Gasse kehren
+## sie um. Jeder hält sich rechts seiner Laufrichtung (eigene Spur je Besucher)
+## — so entsteht Gegenverkehr wie auf einer echten Kirmes statt eines
+## Zickzacks zu Zufallszielen.
 ##
 ## Woher die Wegpunkte kommen: früher stand hier ein festes Raster aus der alten,
 ## fest gebauten Kirmes. Seit der Baumodus die Karte bestimmt (scripts/karte.gd)
@@ -32,11 +34,28 @@ const FREI_HOEHE := 1.5
 const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
 ## Fällt die Suche aus (Menühintergrund ohne Karte): altes Ringraster
 const RING_Z := [19.0, -22.0]
+## Wegenetz: so weit auseinander dürfen verbundene Punkte liegen — Raster
+## (Nachbarn samt Diagonale) und die von Hand gesetzten Straßenpunkte
+const NACHBAR_RASTER := 3.6
+const NACHBAR_STRASSE := 13.0
+## Pflaster-Maske: Zellgröße (m). Wege gibt es nur auf dem Pflaster der
+## Straßen (Gruppe „pflaster“, scenes/kulisse/strassen.tscn) — nicht auf der
+## Wiese zwischen Bäumen und Buden.
+const PFLASTER_ZELLE := 1.0
+## Chance, an einer Kreuzung abzubiegen statt geradeaus zu gehen
+const ABBIEGEN := 0.18
 
 var _visitors := []
 var _target := 0
 var _points: Array = []
+## Wegenetz: Nachbarn je Punkt (Index in _points)
+var _nachbarn: Array[PackedInt32Array] = []
+## Punkte, die von Hand gesetzt sind (Straßen) — dürfen weiter verbinden
+var _strasse := {}
+## Zellen, die gepflastert sind (leer = keine Straßen, dann wie früher)
+var _pflaster := {}
 var _neu_bauen := -1.0   # Karte geändert: nach kurzer Ruhe neu suchen
+var _version := 0         # zählt hoch, wenn das Netz neu gebaut wurde
 var _probe: PhysicsShapeQueryParameters3D = null
 
 func _ready() -> void:
@@ -57,11 +76,15 @@ func _karte_geaendert() -> void:
 
 func _build_points() -> void:
 	_points.clear()
+	_nachbarn.clear()
+	_strasse.clear()
+	_version += 1
 	var gebaut := _gebaute_orte()
 	if gebaut.is_empty():
 		_ringraster()
 		return
 	var raster := _ortsraster(gebaut)
+	_pflaster_lesen()
 	var min_x := INF
 	var max_x := -INF
 	var min_z := INF
@@ -77,7 +100,10 @@ func _build_points() -> void:
 		while z <= max_z + RASTER:
 			var p := Vector2(x, z)
 			z += RASTER
-			if not _nah_an_gebautem(raster, p):
+			if _pflaster.is_empty():
+				if not _nah_an_gebautem(raster, p):
+					continue
+			elif not _gepflastert(p):
 				continue
 			if not _frei(p):
 				continue
@@ -88,9 +114,12 @@ func _build_points() -> void:
 	for m in get_tree().get_nodes_in_group("besucher_punkt"):
 		var g: Vector3 = (m as Node3D).global_position
 		if _frei(Vector2(g.x, g.z)):
+			_strasse[_points.size()] = true
 			_points.append(g)
 	if _points.is_empty():
 		_ringraster()
+		return
+	_netz_bauen()
 
 ## Hat dort eine Figur wirklich Platz? Gefragt wird dieselbe Kollision, an der
 ## auch der Spieler hängen bleibt — damit zählt alles Gebaute mit, auch später
@@ -145,6 +174,78 @@ func _nah_an_gebautem(raster: Dictionary, p: Vector2) -> bool:
 					return true
 	return false
 
+## Pflaster-Flächen in Zellen einteilen (Dreiecke der Straßen-Meshes von oben)
+func _pflaster_lesen() -> void:
+	_pflaster.clear()
+	for gruppe in get_tree().get_nodes_in_group("pflaster"):
+		for mi: MeshInstance3D in gruppe.find_children("*", "MeshInstance3D", true, false):
+			if mi.mesh == null:
+				continue
+			var xf := mi.global_transform
+			var ecken := mi.mesh.get_faces()
+			for t in range(0, ecken.size(), 3):
+				_dreieck_eintragen(xf * ecken[t], xf * ecken[t + 1], xf * ecken[t + 2])
+
+func _dreieck_eintragen(a3: Vector3, b3: Vector3, c3: Vector3) -> void:
+	var a := Vector2(a3.x, a3.z) / PFLASTER_ZELLE
+	var b := Vector2(b3.x, b3.z) / PFLASTER_ZELLE
+	var c := Vector2(c3.x, c3.z) / PFLASTER_ZELLE
+	var flaeche := (b - a).cross(c - a)
+	if absf(flaeche) < 0.0001:
+		return
+	for x in range(int(floor(minf(a.x, minf(b.x, c.x)))), int(ceil(maxf(a.x, maxf(b.x, c.x)))) + 1):
+		for y in range(int(floor(minf(a.y, minf(b.y, c.y)))), int(ceil(maxf(a.y, maxf(b.y, c.y)))) + 1):
+			var q := Vector2(x + 0.5, y + 0.5)
+			var w0 := (c - b).cross(q - b) / flaeche
+			var w1 := (a - c).cross(q - c) / flaeche
+			var w2 := (b - a).cross(q - a) / flaeche
+			if w0 >= -0.05 and w1 >= -0.05 and w2 >= -0.05:
+				_pflaster[Vector2i(x, y)] = true
+
+func _gepflastert(p: Vector2) -> bool:
+	return _pflaster.has(Vector2i(int(floor(p.x / PFLASTER_ZELLE)), int(floor(p.y / PFLASTER_ZELLE))))
+
+## Verbindet benachbarte Punkte, wenn der Weg dazwischen frei ist.
+func _netz_bauen(ohne_probe := false) -> void:
+	_nachbarn.clear()
+	_nachbarn.resize(_points.size())
+	var zelle := NACHBAR_STRASSE
+	var raster := {}
+	for i in _points.size():
+		var p: Vector3 = _points[i]
+		var k := Vector2i(int(floor(p.x / zelle)), int(floor(p.z / zelle)))
+		if not raster.has(k):
+			raster[k] = []
+		raster[k].append(i)
+	for i in _points.size():
+		_nachbarn[i] = PackedInt32Array()
+	for i in _points.size():
+		var p: Vector3 = _points[i]
+		var k := Vector2i(int(floor(p.x / zelle)), int(floor(p.z / zelle)))
+		for dx in [-1, 0, 1]:
+			for dz in [-1, 0, 1]:
+				for j: int in raster.get(Vector2i(k.x + dx, k.y + dz), []):
+					if j <= i:
+						continue
+					var q: Vector3 = _points[j]
+					var weit := NACHBAR_STRASSE if (_strasse.has(i) or _strasse.has(j)) else NACHBAR_RASTER
+					var d := Vector2(p.x - q.x, p.z - q.z).length()
+					if d < 0.5 or d > weit:
+						continue
+					if not ohne_probe and not _weg_frei(p, q):
+						continue
+					_nachbarn[i].append(j)
+					_nachbarn[j].append(i)
+
+## Ist die Strecke zwischen zwei Punkten begehbar? Alle ~1,2 m nachsehen.
+func _weg_frei(a: Vector3, b: Vector3) -> bool:
+	var schritte := maxi(1, int(Vector2(a.x - b.x, a.z - b.z).length() / 1.2))
+	for s in range(1, schritte):
+		var t := float(s) / schritte
+		if not _frei(Vector2(lerpf(a.x, b.x, t), lerpf(a.z, b.z, t))):
+			return false
+	return true
+
 ## Notfall: das alte feste Ringraster der ursprünglichen Kirmes.
 func _ringraster() -> void:
 	for x in [-28.0, -21.0, -14.0, -7.0, 0.0, 7.0, 14.0, 21.0, 28.0]:
@@ -153,24 +254,68 @@ func _ringraster() -> void:
 	for z in [-16.0, -9.0, -2.0, 5.0, 12.0]:
 		_points.append(Vector3(22.0, 0.1, z))
 		_points.append(Vector3(-22.0, 0.1, z))
+	# Ohne Karte gibt es nichts, woran man stoßen könnte: großzügig verbinden
+	for i in _points.size():
+		_strasse[i] = true
+	_netz_bauen(true)
 
-## Ein Ziel in der Nähe — so bummeln sie von Stand zu Stand statt im Kreis zu marschieren.
-func next_point(from: Vector3) -> Vector3:
+# ------------------------------------------------------------ Wegenetz
+## Startpunkt: ein Punkt mit Nachbarn (sonst irgendeiner)
+func weg_start() -> int:
 	if _points.is_empty():
 		_build_points()
-	var near := []
-	for p in _points:
-		var d: float = from.distance_to(p)
-		if d > 4.0 and d < 18.0:
-			near.append(p)
-	var base: Vector3 = (near.pick_random() if not near.is_empty() else _points.pick_random()) as Vector3
-	# leichter Zufallsversatz, damit nicht alle exakt denselben Punkt anlaufen
-	return base + Vector3(randf_range(-0.8, 0.8), 0.0, randf_range(-0.8, 0.8))
+	for versuch in 20:
+		var i := randi() % _points.size()
+		if _nachbarn.size() > i and not _nachbarn[i].is_empty():
+			return i
+	return randi() % _points.size()
 
-func random_start() -> Vector3:
-	if _points.is_empty():
-		_build_points()
-	return (_points.pick_random() as Vector3) + Vector3(randf_range(-0.8, 0.8), 0.0, randf_range(-0.8, 0.8))
+func punkt(i: int) -> Vector3:
+	return _points[i] if i >= 0 and i < _points.size() else Vector3.ZERO
+
+func netz_version() -> int:
+	return _version
+
+## Nächster Punkt auf dem Weg: möglichst geradeaus, manchmal abbiegen,
+## umkehren nur am Ende einer Gasse.
+func weiter(i: int, richtung: Vector3) -> int:
+	if i < 0 or i >= _nachbarn.size() or _nachbarn[i].is_empty():
+		return weg_start()
+	var von: Vector3 = _points[i]
+	var bester := -1
+	var bester_wert := -INF
+	var seiten: Array[int] = []
+	var zurueck := -1
+	for j in _nachbarn[i]:
+		var d: Vector3 = _points[j] - von
+		d.y = 0.0
+		var gerade := d.normalized().dot(richtung)
+		if gerade > 0.6:
+			# leichter Zufall, damit parallele Reihen nicht exakt gleich laufen
+			var wert := gerade + randf() * 0.15
+			if wert > bester_wert:
+				bester_wert = wert
+				bester = j
+		elif gerade > -0.3:
+			seiten.append(j)
+		else:
+			zurueck = j
+	if not seiten.is_empty() and (bester < 0 or randf() < ABBIEGEN):
+		return seiten.pick_random()
+	if bester >= 0:
+		return bester
+	return zurueck if zurueck >= 0 else _nachbarn[i][0]
+
+## Ziel auf der eigenen Spur: um „spur" Meter rechts der Laufrichtung versetzt,
+## wenn dort Platz ist — so gehen Hin- und Rückweg nebeneinander.
+func spur_punkt(i: int, richtung: Vector3, spur: float) -> Vector3:
+	var p: Vector3 = _points[i]
+	var rechts := Vector3(-richtung.z, 0.0, richtung.x)
+	for anteil in [1.0, 0.5, 0.0]:
+		var q: Vector3 = p + rechts * spur * float(anteil)
+		if anteil == 0.0 or _frei(Vector2(q.x, q.z)):
+			return q
+	return p
 
 ## f: 0.0 = leer, 1.0 = volle Kirmes.
 func set_density(f: float) -> void:

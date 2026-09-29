@@ -213,7 +213,7 @@ size = Vector3(11.612236, 8, 1)
 
 [node name="Strassen" type="Node3D" unique_id=1765885603]
 
-[node name="Pflaster" type="Node3D" parent="." unique_id=372176579]
+[node name="Pflaster" type="Node3D" parent="." unique_id=372176579 groups=["pflaster"]]
 
 [node name="Ringstrasse" type="MeshInstance3D" parent="Pflaster" unique_id=729412295]
 mesh = ExtResource("1_q668i")
