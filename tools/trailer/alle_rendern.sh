@@ -14,6 +14,8 @@ for NR in $NRN; do
 		ERG="$(bash tools/trailer/pruefen.sh "$NR")"
 		if echo "$ERG" | grep -q "PRUEFUNG: SAUBER"; then OK=1; break; fi
 		echo "szene_$NR (+${HOEHER} m): $(echo "$ERG" | grep -c '^  t=') Stellen"
+		# Im Zelt nicht höher legen — dort sind Dach, Emporen und Girlanden
+		if grep -q "zelt_voll.gd" "tools/trailer/szene_$NR.tscn"; then break; fi
 		HOEHER=$(awk "BEGIN{print $HOEHER + 1.5}")
 	done
 	if [ "$OK" = 1 ]; then

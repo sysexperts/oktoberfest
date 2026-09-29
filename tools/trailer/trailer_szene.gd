@@ -143,6 +143,12 @@ class Lauf extends Node:
 			kamera.look_at((get_node("Blickziel") as Node3D).global_position, Vector3.UP)
 			if _pruefen:
 				_kamera_pruefen(kamera, t)
+			# Schilder, die unterwegs entstehen (Putzen, Pakete …), gleich ausblenden
+			if Engine.get_process_frames() % 10 == 0:
+				for l in _gm.find_children("*", "Label3D", true, false):
+					var lab := l as Label3D
+					if lab.visible and not lab.is_in_group("zeltname") and lab.name != "Namensschild":
+						lab.visible = false
 			await get_tree().process_frame
 			# Bei der Aufnahme läuft die Zeit in festen Schritten (--write-movie)
 			t += get_process_delta_time()

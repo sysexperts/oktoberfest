@@ -4,20 +4,19 @@
 [ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
 [ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
 [ext_resource type="Script" path="res://tools/trailer/zelt_voll.gd" id="5_zelt"]
-[ext_resource type="Script" path="res://tools/trailer/ereignis.gd" id="6_ereignis"]
 
 [sub_resource type="Curve3D" id="fahrt"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, -0.149, 0, -0.064, -0.7, 3.5, -1.937, 0.309, -0, 0.093, -0.309, 0, -0.093, -1.595, 3.5, -2.324, 0.322, -0, 0.019, -0.322, 0, -0.019, -2.556, 3.5, -2.493, 0.318, -0, -0.056, -0.318, 0, 0.056, -3.529, 3.5, -2.436, 0.296, -0, -0.128, -0.296, 0, 0.128, -4.464, 3.5, -2.157, 0.259, -0, -0.193, -0.259, 0, 0.193, -5.308, 3.5, -1.669, 0.118, -0, -0.112, 0, 0, 0, -6.017, 3.5, -1),
+"points": PackedVector3Array(0, 0, 0, -0.16, 0, -0.069, 1.25, 3.5, -3.397, 0.331, -0, 0.099, -0.331, 0, -0.099, 0.291, 3.5, -3.811, 0.345, -0, 0.02, -0.345, 0, -0.02, -0.738, 3.5, -3.992, 0.341, -0, -0.06, -0.341, 0, 0.06, -1.781, 3.5, -3.932, 0.318, -0, -0.137, -0.318, 0, 0.137, -2.782, 3.5, -3.632, 0.277, -0, -0.207, -0.277, 0, 0.207, -3.687, 3.5, -3.11, 0.127, -0, -0.12, 0, 0, 0, -4.447, 3.5, -2.393),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 7
 
-[node name="Szene17" type="Node3D"]
-metadata/titel = "Massenschlägerei im Zelt, Kamera kreist darüber"
+[node name="Szene20" type="Node3D"]
+metadata/titel = "Tanz auf allen Tischen, Orbit"
 script = ExtResource("1_szene")
 dauer = 7
-uhr = 21
+uhr = 21.5
 besucher = 0
 sichtfeld = 62
 unscharf_ab = 18
@@ -27,7 +26,7 @@ dunst = 0.004
 curve = SubResource("fahrt")
 
 [node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 3.5, -1.93731)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 3.5, -3.39711)
 rotation_mode = 0
 loop = false
 
@@ -37,21 +36,12 @@ script = ExtResource("2_kamera")
 ziel = NodePath("../../../Blickziel")
 
 [node name="Blickziel" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.8, 1.7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.6, 0.5)
 gizmo_extents = 2.0
 
 [node name="ZeltVoll" type="Node" parent="."]
 script = ExtResource("5_zelt")
-tanzen = 0
-
-[node name="Ereignis" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0, 1.7)
-script = ExtResource("6_ereignis")
-art = "schlaegerei"
-anzahl = 18
-verzug = 0.2
-takt = 0.8
-tempo = 11
+tanzen = 1
 
 [node name="Vorschau" type="Node3D" parent="."]
 script = ExtResource("3_vorschau")

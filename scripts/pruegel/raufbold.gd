@@ -111,7 +111,12 @@ func _setze(neu: Zustand) -> void:
 	zustand = neu
 	_t = 0.0
 
+## Spielzeit in ms für Schwanken/Wippen — nicht die Rechneruhr: bei der
+## Trailer-Aufnahme (--write-movie, langsamer als Echtzeit) zappelten sie sonst
+var _uhr_ms := 0.0
+
 func _process(delta: float) -> void:
+	_uhr_ms += delta * 1000.0
 	_t += delta
 	match zustand:
 		Zustand.RUHIG:
@@ -426,4 +431,4 @@ func _beim_traeger(delta: float) -> void:
 	global_position = global_position.lerp(ziel, clampf(delta * 14.0, 0.0, 1.0))
 	# Schaut den Träger an und rudert dabei
 	_blick(-vorn, delta)
-	_kipper.rotation.z = sin(float(Time.get_ticks_msec()) * 0.012) * 0.25
+	_kipper.rotation.z = sin(_uhr_ms * 0.012) * 0.25

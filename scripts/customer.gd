@@ -161,7 +161,7 @@ func _update_vomit(delta: float) -> void:
 				_bubble.modulate = Color(0.6, 0.9, 0.4)
 		if _skel:
 			# öne eğil (model 180 baked → negatif RIGHT ileri)
-			var wob := sin(float(Time.get_ticks_msec()) * 0.02) * 0.12
+			var wob := sin(_uhr_ms * 0.02) * 0.12
 			_pose(_skel.find_bone("Spine"), Vector3.RIGHT, -0.85 + wob)
 			_pose(_skel.find_bone("Head"), Vector3.RIGHT, -0.5)
 	elif _vomit_active:
@@ -229,7 +229,12 @@ func _update_bubble() -> void:
 ## Strg gedrückt: Blasen zeigen Gästetyp und Bestellung als Text (sonst nur Icons)
 var _details := false
 
+## Spielzeit in ms für Schwanken/Wippen — nicht die Rechneruhr: bei der
+## Trailer-Aufnahme (--write-movie, langsamer als Echtzeit) zappelten sie sonst
+var _uhr_ms := 0.0
+
 func _process(delta: float) -> void:
+	_uhr_ms += delta * 1000.0
 	var details := Input.is_physical_key_pressed(KEY_CTRL)
 	if details != _details:
 		_details = details
@@ -243,7 +248,7 @@ func _process(delta: float) -> void:
 	if _tanzt:
 		if _model:
 			_model.position.y = lerpf(_model.position.y, _tanz_hoehe, clampf(delta * 5.0, 0.0, 1.0))
-			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.004 + float(cust_id)) * 0.08
+			_model.rotation.z = sin(_uhr_ms * 0.004 + float(cust_id)) * 0.08
 		_update_vomit(delta)
 		return
 	var want := "Walk" if spd > 0.4 else "Idle"
@@ -274,10 +279,10 @@ func _process(delta: float) -> void:
 		_model.position.y = lerpf(_model.position.y, target_y, clampf(delta * 6.0, 0.0, 1.0))
 		var schwanken := 0.06 + 0.05 * float(rausch_stufe)
 		if _seated:
-			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.003 + float(cust_id)) * schwanken
+			_model.rotation.z = sin(_uhr_ms * 0.003 + float(cust_id)) * schwanken
 		elif rausch_stufe >= 2:
 			# Betrunken torkeln
-			_model.rotation.z = sin(float(Time.get_ticks_msec()) * 0.006 + float(cust_id)) * 0.16
+			_model.rotation.z = sin(_uhr_ms * 0.006 + float(cust_id)) * 0.16
 		else:
 			_model.rotation.z = 0.0
 	# C3: kusma pozu (kutlamayı bastırır)
@@ -289,7 +294,7 @@ func _process(delta: float) -> void:
 	# Otururken kutlama: kol kaldır-indir (içme/Prost) — nur ohne Sitzanimation,
 	# die bringt das Trinken selbst mit
 	if _seated and _skel and not _vomit_active and not _figur.kann_sitzen():
-		var tt := float(Time.get_ticks_msec()) * 0.004 + float(cust_id)
+		var tt := _uhr_ms * 0.004 + float(cust_id)
 		var fore := _skel.find_bone("RightForeArm")
 		if fore >= 0:
 			var rest := _skel.get_bone_rest(fore).basis.get_rotation_quaternion()

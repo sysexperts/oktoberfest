@@ -8,7 +8,7 @@
 
 [sub_resource type="Curve3D" id="fahrt"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, -0.5, 0, 0.033, 9, 6.7, 11, 1, -0, -0.067, -1, 0, 0.067, 6, 6.7, 11.2, 0.5, -0, -0.033, 0, 0, 0, 3, 6.7, 11.4),
+"points": PackedVector3Array(0, 0, 0, -0.5, 0, 0.033, 9, 9.7, 11, 1, -0, -0.067, -1, 0, 0.067, 6, 9.7, 11.2, 0.5, -0, -0.033, 0, 0, 0, 3, 9.7, 11.4),
 "tilts": PackedFloat32Array(0, 0, 0)
 }
 point_count = 3
@@ -27,7 +27,7 @@ dunst = 0.004
 curve = SubResource("fahrt")
 
 [node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 6.7, 11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 9.7, 11)
 rotation_mode = 0
 loop = false
 

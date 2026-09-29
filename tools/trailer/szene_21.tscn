@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/trailer/trailer_szene.gd" id="1_szene"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
+
+[sub_resource type="Curve3D" id="fahrt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 2.667, 2.5, 0, 10, 30, -0, -8.5, -6.667, 0, 8.5, 6.667, 0, 26, 45, -0, -5.833, -4.167, 0, 0, 0, 0, 61, 70),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="Szene21" type="Node3D"]
+metadata/titel = "Finale: nachts steil nach oben, ganze Kirmes im Bild"
+script = ExtResource("1_szene")
+dauer = 8
+uhr = 22
+besucher = 0.6
+sichtfeld = 60
+unscharf_ab = 0
+dunst = 0.01
+
+[node name="Kamerafahrt" type="Path3D" parent="."]
+curve = SubResource("fahrt")
+
+[node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 30)
+rotation_mode = 0
+loop = false
+
+[node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
+fov = 60
+script = ExtResource("2_kamera")
+ziel = NodePath("../../../Blickziel")
+
+[node name="Blickziel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+gizmo_extents = 2.0
+
+[node name="Vorschau" type="Node3D" parent="."]
+script = ExtResource("3_vorschau")

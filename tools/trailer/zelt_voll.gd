@@ -43,9 +43,7 @@ func aufstellen() -> void:
 		if ohne_stehgaeste and Figuren.ist_stehgast(id):
 			(gm._guests[id] as Node3D).visible = false
 	if tanzen > 0.0:
-		for k in int(16 * tanzen):
-			gm._tanz_timer = 0.0
-			gm._update_tanz(0.1)
+		_tische_tanzen()
 	if plan_ausgeben:
 		for t in gm._all_tables:
 			print("  Tisch %s bei %s" % [t.name, (t as Node3D).global_position.snapped(Vector3.ONE * 0.1)])
@@ -56,3 +54,39 @@ func starten() -> void:
 
 func zuruecksetzen() -> void:
 	pass
+
+## Auf jeden Tisch so viele Tänzer, wie das Spiel erlaubt (tanz_max), an die
+## Tanzplätze aus dem Spiel (TANZ_PLAETZE) — direkt, ohne Simulation.
+## tanzen = Anteil der Tische.
+func _tische_tanzen() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 21
+	var frei := {}   # Tisch -> Gäste an diesem Tisch
+	for id in gm._guest_sim.keys():
+		var knoten = gm._guests.get(id)
+		if knoten == null or not (knoten as Node3D).visible:
+			continue
+		var ti := int(gm._seats[int(gm._guest_sim[id].seat)].table)
+		if not frei.has(ti):
+			frei[ti] = []
+		frei[ti].append(id)
+	for ti: int in frei:
+		if ti >= gm._beertables.size() or rng.randf() > tanzen:
+			continue
+		var bt := gm._beertables[ti] as Node3D
+		if gm.auf_buehne(bt.global_position):
+			continue
+		var gaeste_hier: Array = frei[ti]
+		for platz in mini(mini(gm.tanz_max(ti), gm.TANZ_PLAETZE.size()), gaeste_hier.size()):
+			var id: int = gaeste_hier[platz]
+			var versatz: Vector2 = gm.TANZ_PLAETZE[platz]
+			var ziel: Vector3 = bt.global_position + bt.global_transform.basis.x * versatz.x + bt.global_transform.basis.z * versatz.y
+			ziel.y = bt.global_position.y + 0.1
+			var g: Dictionary = gm._guest_sim[id]
+			g.mode = 5
+			g.pos = ziel
+			g.tgt = ziel
+			var k: Node3D = gm._guests[id]
+			k.position = ziel
+			k.set_net(ziel, rng.randf() * TAU)
+			k.set_tanz(true)
