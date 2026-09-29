@@ -7,10 +7,13 @@ extends Node3D
 ##       Kamera             — schaut immer auf das Blickziel
 ##   Blickziel (Marker3D)   — dorthin schaut die Kamera
 ##   Vorschau               — Spielwelt als Kulisse, nur im Editor
+##   (optional) Ansturm     — tools/trailer/ansturm.gd: rennende Horde
 ##
 ## Anschauen im Editor: Kamera auswählen, oben im 3D-Fenster „Vorschau“
 ## anhaken, dann am Wagen den Regler progress_ratio ziehen.
 ## Abspielen in Echtzeit: Szene offen, F6 (läuft in Schleife, Esc beendet).
+## Prüfen (vor dem Rendern!): bash tools/trailer/pruefen.sh 01 — meldet, wo die
+##   Kamera in Bäumen/Buden steckt oder die Sicht aufs Blickziel verdeckt ist.
 ## Rendern: bash tools/trailer/render.sh 01
 ##
 ## Spielstände und Einstellungen werden vorher gesichert und danach
@@ -29,6 +32,11 @@ const ZELTNAME := "Sloptoberfest"
 @export_range(6.0, 23.5, 0.25) var uhr := 8.0
 ## Besucher draußen (0 = leer, 1 = voll)
 @export_range(0.0, 1.0, 0.05) var besucher := 0.0
+## So viele Besucher sind „voll“ (im Spiel je nach Grafikstufe 150–450)
+@export var max_besucher := 700
+## Vorlauf in Sekunden, bevor die Aufnahme beginnt — Besucher erscheinen und
+## verteilen sich, damit niemand im Bild auftaucht
+@export var vorlauf := 1.0
 ## Brennweite: kleiner = weiter Blick
 @export_range(20.0, 90.0, 1.0) var sichtfeld := 55.0
 ## Schärfentiefe: ab dieser Entfernung wird es unscharf (0 = aus)
@@ -40,17 +48,18 @@ const ZELTNAME := "Sloptoberfest"
 
 func _ready() -> void:
 	var lauf := Lauf.new()
-	lauf.einstellungen = {"dauer": dauer, "weich": weich, "uhr": uhr, "besucher": besucher,
+	lauf.einstellungen = {"dauer": dauer, "weich": weich, "uhr": uhr, "besucher": besucher, "max_besucher": max_besucher, "vorlauf": vorlauf,
 		"sichtfeld": sichtfeld, "unscharf_ab": unscharf_ab, "unschaerfe": unschaerfe, "dunst": dunst,
 		"name": String(scene_file_path.get_file().get_basename())}
-	# Fahrt und Blickziel überleben den Szenenwechsel beim Spielstart
-	for n in ["Kamerafahrt", "Blickziel"]:
-		var k := get_node(n) as Node3D
-		var t := k.global_transform
+	# Alles außer der Editor-Vorschau (Fahrt, Blickziel, Ansturm …) überlebt
+	# den Szenenwechsel beim Spielstart
+	get_node("Vorschau").free()
+	for k in get_children():
+		var t := (k as Node3D).global_transform if k is Node3D else Transform3D()
 		remove_child(k)
 		lauf.add_child(k)
-		k.transform = t
-	get_node("Vorschau").queue_free()
+		if k is Node3D:
+			(k as Node3D).transform = t
 	get_tree().root.add_child.call_deferred(lauf)
 
 
@@ -61,11 +70,17 @@ class Lauf extends Node:
 	var einstellungen := {}
 	var _gesichert := {}
 	var _aufnahme := false
+	var _pruefen := false
+	var _hindernisse: Array = []   # [AABB, Name]
+	var _meldungen := {}
+	## So nah darf die Kamera an keine Figur (m)
+	const MIN_ABSTAND := 3.0
 	var _schwarz: ColorRect
 
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		_aufnahme = "--aufnahme" in OS.get_cmdline_user_args()
+		_aufnahme = "--aufnahme" in OS.get_cmdline_user_args() or "--pruefen" in OS.get_cmdline_user_args()
+		_pruefen = "--pruefen" in OS.get_cmdline_user_args()
 		var ebene := CanvasLayer.new()
 		ebene.layer = 100
 		add_child(ebene)
@@ -82,16 +97,31 @@ class Lauf extends Node:
 			return
 		var kamera := get_node("Kamerafahrt/Wagen/Kamera") as Camera3D
 		_aufbauen(gm, kamera)
-		for i in 30:
-			await get_tree().process_frame
+		var ablaeufe := find_children("*", "", false, false).filter(func(n: Node) -> bool: return n.has_method("aufstellen"))
+		for a in ablaeufe:
+			a.aufstellen()
+		# Vorlauf: bei der Aufnahme in Bildern (feste 60 fps), sonst in echter Zeit
+		if _aufnahme:
+			for i in 30 + int(float(einstellungen.vorlauf) * 60.0):
+				await get_tree().process_frame
+		else:
+			await get_tree().create_timer(0.5 + float(einstellungen.vorlauf)).timeout
 		_schwarz.visible = false
 		var wagen := get_node("Kamerafahrt/Wagen") as PathFollow3D
+		var erste := true
 		while true:
+			for a in ablaeufe:
+				if not erste:
+					a.zuruecksetzen()
+				a.starten()
+			erste = false
 			if _aufnahme:
 				print("SZENE_START %d" % Engine.get_frames_drawn())
 			await _fahren(wagen, kamera)
 			if _aufnahme:
 				print("SZENE_ENDE %d" % Engine.get_frames_drawn())
+				if _pruefen:
+					print("PRUEFUNG: %s" % ("SAUBER" if _meldungen.is_empty() else "%d Stellen" % _meldungen.size()))
 				break
 			# Vorschau: kurz stehen bleiben, dann von vorn
 			await get_tree().create_timer(1.0).timeout
@@ -105,6 +135,8 @@ class Lauf extends Node:
 			var a := t / dauer
 			wagen.progress_ratio = smoothstep(0.0, 1.0, a) if einstellungen.weich else a
 			kamera.look_at((get_node("Blickziel") as Node3D).global_position, Vector3.UP)
+			if _pruefen:
+				_kamera_pruefen(kamera, t)
 			await get_tree().process_frame
 			# Bei der Aufnahme läuft die Zeit in festen Schritten (--write-movie)
 			t += get_process_delta_time()
@@ -142,7 +174,9 @@ class Lauf extends Node:
 		# Licht und Besucher
 		gm._night_t = -1.0
 		gm._apply_daylight(float(einstellungen.uhr))
-		gm.get_node("Crowd").set_density(float(einstellungen.besucher))
+		var menge := gm.get_node("Crowd")
+		menge.max_visitors = int(einstellungen.max_besucher)
+		menge.set_density(float(einstellungen.besucher))
 		# Film-Look (verändert das Spiel nicht)
 		var vp := get_viewport()
 		vp.msaa_3d = Viewport.MSAA_4X
@@ -200,3 +234,68 @@ class Lauf extends Node:
 					d.store_buffer(_gesichert[f])
 					d.close()
 		_gesichert.clear()
+
+	# ------------------------------------------------------------ Prüfung
+	## Alle sichtbaren Teile als Kästen sammeln — Boden, Straßen, Stadt und die
+	## Figuren (Besucher, Horde) zählen nicht. Kästen sind großzügig: eine
+	## Baumkrone füllt ihren Kasten nicht ganz, aber lieber zu vorsichtig.
+	func _hindernisse_sammeln(gm: Node) -> void:
+		_hindernisse.clear()
+		for g in gm.find_children("*", "GeometryInstance3D", true, false):
+			var gi := g as GeometryInstance3D
+			if not gi.is_visible_in_tree() or _ist_figur(gi):
+				continue
+			var box := gi.global_transform * gi.get_aabb()
+			if box.size.y < 0.5 or box.size.x > 45.0 or box.size.z > 45.0 or box.position.y > 40.0:
+				continue
+			_hindernisse.append([box, _name(gi)])
+
+	func _ist_figur(n: Node) -> bool:
+		var p := n.get_parent()
+		while p != null:
+			if p is Figur or p.name == "Crowd":
+				return true
+			p = p.get_parent()
+		return false
+
+	func _name(n: Node) -> String:
+		# Kartenteile heißen K123 — den Szenennamen dazu, damit man weiß, was es ist
+		var p := n
+		while p != null and not String(p.name).begins_with("K"):
+			p = p.get_parent()
+		if p and p.scene_file_path != "":
+			return "%s (%s)" % [p.scene_file_path.get_file().get_basename(), p.name]
+		return String(n.name)
+
+	func _kamera_pruefen(kamera: Camera3D, t: float) -> void:
+		if _hindernisse.is_empty():
+			_hindernisse_sammeln(get_tree().current_scene)
+			print("  (%d Hindernisse erfasst)" % _hindernisse.size())
+		var pos := kamera.global_position
+		var ziel := (get_node("Blickziel") as Node3D).global_position
+		var weg := ziel - pos
+		# die letzten 3 m vor dem Blickziel stehen die Figuren selbst
+		var ende := pos + weg * maxf(0.0, 1.0 - 3.0 / maxf(weg.length(), 0.01))
+		# Nicht zu nah an Figuren: Animationen halten keine Nahaufnahme aus
+		for f in find_children("*", "Node3D", true, false):
+			if f is Figur and (f as Figur).visible:
+				var d := (f as Figur).global_position + Vector3(0, 1.0, 0)
+				if d.distance_to(pos) < MIN_ABSTAND:
+					var sch := "zu nah %d" % int(t)
+					if not _meldungen.has(sch):
+						_meldungen[sch] = t
+						print("  t=%.2f s: Kamera nur %.1f m von einer Figur" % [t, d.distance_to(pos)])
+					break
+		for h in _hindernisse:
+			var box: AABB = h[0]
+			var art := ""
+			if box.grow(0.4).has_point(pos):
+				art = "Kamera steckt in"
+			elif box.intersects_segment(pos, ende):
+				art = "Sicht verdeckt durch"
+			if art == "":
+				continue
+			var schluessel := art + " " + str(h[1])
+			if not _meldungen.has(schluessel):
+				_meldungen[schluessel] = t
+				print("  t=%.2f s: %s %s" % [t, art, h[1]])

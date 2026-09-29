@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Rendert eine Trailer-Szene (tools/trailer/szene_NN.tscn) als eigenes Video
 # zum Schneiden: 1920x1080, 60 fps, ohne Musik (Spielgeräusche bleiben drin).
-#   bash tools/trailer/render.sh 01      → build/trailer/szene_01.mp4
+#   bash tools/trailer/render.sh 01      → build/trailer/clips/szene_01.mp4 (alle Clips gesammelt)
 # Die Aufnahme läuft langsamer als Echtzeit (--write-movie), das Video nicht.
 set -uo pipefail
 cd "$(dirname "$0")/../.."
@@ -31,6 +31,6 @@ ENDE="$(sed -nE 's/^SZENE_ENDE ([0-9]+).*/\1/p' "$LOG" | head -1)"
 AB="$(awk "BEGIN{print $START / $FPS}")"
 LANG="$(awk "BEGIN{print ($ENDE - $START) / $FPS}")"
 "$FF" -y -loglevel error -ss "$AB" -t "$LANG" -i "$ROH" -c:v libx264 -preset slow -crf 14 -pix_fmt yuv420p \
-	-c:a aac -b:a 192k "build/trailer/szene_${NR}.mp4"
+	-c:a aac -b:a 192k "build/trailer/clips/szene_${NR}.mp4"
 rm -f "$ROH"
-echo "Fertig: build/trailer/szene_${NR}.mp4 (${LANG} s)"
+echo "Fertig: build/trailer/clips/szene_${NR}.mp4 (${LANG} s)"
