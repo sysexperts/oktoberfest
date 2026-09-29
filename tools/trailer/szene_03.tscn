@@ -1,0 +1,97 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/trailer/trailer_szene.gd" id="1_szene"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_kamera.gd" id="2_kamera"]
+[ext_resource type="Script" path="res://tools/trailer/trailer_vorschau.gd" id="3_vorschau"]
+[ext_resource type="Script" path="res://tools/trailer/zelt_voll.gd" id="4_zelt"]
+[ext_resource type="Script" path="res://tools/trailer/spieler_wege.gd" id="5_spieler"]
+
+[sub_resource type="Curve3D" id="weg_sepp"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.6, 0.1, -8.5, 0, 0, 0, 0, 0, 0, 0.6, 0.1, 5),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="weg_resi"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 1.1, 0.1, -9, 0, 0, 0, 0, 0, 0, 1.1, 0.1, 3.5),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="weg_toni"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.3, 0.1, -9.5, 0, 0, 0, 0, 0, 0, 0.3, 0.1, 2),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="fahrt"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 3, 0.8, 3.6, -2, 0, 0, -3, 0, 0, 0, 0.8, 3.4, 9.5),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Szene03" type="Node3D"]
+script = ExtResource("1_szene")
+dauer = 8.0
+uhr = 19.0
+sichtfeld = 60.0
+unscharf_ab = 25.0
+dunst = 0.004
+
+[node name="Kamerafahrt" type="Path3D" parent="."]
+curve = SubResource("fahrt")
+
+[node name="Wagen" type="PathFollow3D" parent="Kamerafahrt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 3.6, -2)
+rotation_mode = 0
+loop = false
+
+[node name="Kamera" type="Camera3D" parent="Kamerafahrt/Wagen" node_paths=PackedStringArray("ziel")]
+fov = 60.0
+script = ExtResource("2_kamera")
+ziel = NodePath("../../../Blickziel")
+
+[node name="Blickziel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.2, -9)
+gizmo_extents = 2.0
+
+[node name="ZeltVoll" type="Node" parent="."]
+script = ExtResource("4_zelt")
+plan_ausgeben = false
+
+[node name="SpielerWege" type="Node3D" parent="."]
+script = ExtResource("5_spieler")
+
+[node name="Sepp" type="Path3D" parent="SpielerWege"]
+curve = SubResource("weg_sepp")
+metadata/name = "Sepp"
+metadata/figur = 0
+metadata/farbe = 0
+metadata/last = "kruege"
+metadata/dauer = 3.2
+metadata/verzug = 0.3
+
+[node name="Resi" type="Path3D" parent="SpielerWege"]
+curve = SubResource("weg_resi")
+metadata/name = "Resi"
+metadata/figur = 2
+metadata/farbe = 2
+metadata/last = "kruege"
+metadata/dauer = 3.4
+metadata/verzug = 1.6
+
+[node name="Toni" type="Path3D" parent="SpielerWege"]
+curve = SubResource("weg_toni")
+metadata/name = "Toni"
+metadata/figur = 1
+metadata/farbe = 1
+metadata/last = "fass"
+metadata/dauer = 4.2
+metadata/verzug = 2.8
+
+[node name="Vorschau" type="Node3D" parent="."]
+script = ExtResource("3_vorschau")
