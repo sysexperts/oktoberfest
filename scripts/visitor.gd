@@ -7,13 +7,16 @@ extends Node3D
 const Figuren := preload("res://scripts/figuren.gd")
 const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
 const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
+## Noch weiter weg: gar nicht zeichnen. Dazwischen stehen Buden und Bäume,
+## zu sehen sind so ferne Besucher kaum — gezeichnet wurden sie trotzdem.
+const SICHTBAR_BIS := 65.0
 const TURN_SPEED := 6.0
-## So viele Besucher feiern beim Stehenbleiben statt nur dazustehen.
 ## An einem Wegpunkt überhaupt stehen bleiben (sonst geht er einfach weiter)
 const HALT_CHANCE := 0.06
 ## Abstand zur Wegmitte nach rechts (m) — eigene Spur, damit Gegenverkehr entsteht
 const SPUR_MIN := 0.5
 const SPUR_MAX := 1.8
+## So viele Besucher feiern beim Stehenbleiben statt nur dazustehen.
 const DANCE_CHANCE := 0.08
 ## So viele machen stattdessen eine Extra-Bewegung (Kopf kratzen …), wenn die Figur eine hat.
 const EXTRA_CHANCE := 0.12
@@ -70,6 +73,10 @@ func _ready() -> void:
 	# Draußen läuft alles nur lokal — Zufall reicht, niemand muss dieselbe Figur sehen
 	_figur = Figuren.einsetzen(self, Figuren.zufaellig())
 	_model = _figur
+	# Keine Schatten: jeder Besucher würde sonst in jeder Schattenstufe noch
+	# einmal mit Skelett gezeichnet — bei Hunderten der größte Posten
+	for mi: MeshInstance3D in _figur.find_children("*", "MeshInstance3D", true, false):
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	speed = randf_range(1.1, 2.0)
 	_walk_speed = randf_range(0.85, 1.15)
 	_model.rotation.y = deg_to_rad(model_yaw_offset)
@@ -317,7 +324,9 @@ func _update_lod(delta: float) -> void:
 	var cam := get_viewport().get_camera_3d()
 	if cam == null:
 		return
-	var far := global_position.distance_to(cam.global_position) > LOD_DIST
+	var abstand := global_position.distance_to(cam.global_position)
+	_model.visible = abstand < SICHTBAR_BIS
+	var far := abstand > LOD_DIST
 	if far == _far:
 		return
 	_far = far
