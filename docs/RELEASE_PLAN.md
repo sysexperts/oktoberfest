@@ -78,7 +78,7 @@ Serdar von Hand nachgezogen.
 
 - [x] 4–6 weitere Gästefiguren
 - [x] Dirndl-Figur sitzt (Sitzkorrektur statt Rock-Knochen)
-- [ ] Eigene Figur für Konrad (früher Huber; heute Bean, nur größer) *(Du, kein Blocker)*
+- [x] Eigene Figur für Konrad (30.09.2026): character2 in Weinrot mit hohem Zylinderhut (Goldschnalle, Feder), zornigen Brauen, Zwirbelbart und Spitzbart — `scenes/figuren/konrad.tscn`, gebacken mit `tools/bake_zubehoer.gd` und `tools/bake_kleidung.gd`, Sichtprobe `tools/render_konrad.tscn`
 - [x] Einbauen und mit `tools/render_gaeste` prüfen
 
 **Untergrenze für den Upload:** 6 sitzfähige Figuren. Darunter fällt es auf.

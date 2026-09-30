@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/zubehoer/konrad_hut.tres" id="1"]
+
+[node name="konrad_hut" type="Node3D"]
+metadata/lage = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Modell" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1")

@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter2.tscn" id="1"]
+[ext_resource type="Texture2D" path="res://assets/character/character2/varianten/konrad.png" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/zubehoer/konrad_hut.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/zubehoer/konrad_bart.tscn" id="4"]
+
+[node name="Charakter2" instance=ExtResource("1")]
+textur = ExtResource("2")
+zubehoer = Array[PackedScene]([ExtResource("3"), ExtResource("4")])

@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/zelt/fass.tscn" id="13_fass"]
 [ext_resource type="Script" path="res://scripts/npc_huber.gd" id="14_npc"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="15_bean"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/konrad.tscn" id="16_konrad"]
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_uebers"]
 
 [node name="HuberZelt" type="Node3D"]
@@ -83,6 +84,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, -7.5)
 [node name="Huber" type="Node3D" parent="."]
 transform = Transform3D(1.12, 0, 0, 0, 1.12, 0, 0, 0, 1.12, 1.2, 0, 11.4)
 script = ExtResource("14_npc")
+figur_szene = ExtResource("16_konrad")
 
 [node name="Ausruf" type="Label3D" parent="Huber"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)

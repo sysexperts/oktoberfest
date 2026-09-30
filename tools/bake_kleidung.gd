@@ -17,6 +17,10 @@ const VARIANTEN := {
 	"res://assets/character/character2/varianten/schwarz.png": [C2, [
 		{"ton": 50.0, "breite": 16.0, "saett": 0.15, "hell_max": 0.52, "bezug": 0.38, "farbe": Color(0.085, 0.08, 0.08)},
 	]],
+	# Konrad, der Rivale: dunkles Weinrot wie sein Zelt
+	"res://assets/character/character2/varianten/konrad.png": [C2, [
+		{"ton": 50.0, "breite": 16.0, "saett": 0.15, "hell_max": 0.52, "bezug": 0.38, "farbe": Color(0.3, 0.035, 0.055)},
+	]],
 	"res://assets/character/character4/varianten/rot_braun.png": [ALEX, [
 		{"ton": 206.0, "breite": 22.0, "saett": 0.12, "hell_max": 0.62, "bezug": 0.37, "farbe": Color(0.55, 0.1, 0.1)},
 		{"ton": 92.0, "breite": 26.0, "saett": 0.15, "hell_max": 0.5, "bezug": 0.24, "farbe": Color(0.3, 0.19, 0.1)},

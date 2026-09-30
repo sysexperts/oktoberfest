@@ -10,6 +10,9 @@ extends Node3D
 const Figuren := preload("res://scripts/figuren.gd")
 
 @export var figur_nr := 0
+## Eigene Figur statt Nummer aus Figuren.ALLE — Konrad ist keine Gastfigur
+## (scenes/figuren/konrad.tscn: Zylinderhut, Zwirbelbart, Weinrot).
+@export var figur_szene: PackedScene
 
 @onready var _ausruf: Label3D = get_node_or_null("Ausruf")
 
@@ -20,7 +23,7 @@ var _blick := 0.0
 func _ready() -> void:
 	add_to_group("huber")
 	add_to_group("interactable")
-	_figur = Figuren.einsetzen(self, Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
+	_figur = Figuren.einsetzen(self, figur_szene if figur_szene else Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
 	_figur.stehen()
 	_blick = rotation.y
 
