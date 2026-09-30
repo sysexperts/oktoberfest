@@ -47,7 +47,7 @@ size = Vector3(1.500, 0.300, 5.561)
 size = Vector3(0.100, 1.000, 4.400)
 
 [sub_resource type="BoxShape3D" id="KolGelSued"]
-size = Vector3(1.600, 1.000, 0.100)
+size = Vector3(0.300, 1.000, 0.100)
 
 [node name="Braukeller" type="Node3D"]
 
@@ -109,7 +109,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.350, 0.570, 3.100)
 shape = SubResource("KolGelOst")
 
 [node name="GelaenderSued" type="CollisionShape3D" parent="Kollision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.200, 0.570, 0.930)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.550, 0.570, 0.930)
 shape = SubResource("KolGelSued")
 
 [node name="Maischbottich" parent="." instance=ExtResource("2_maisch")]

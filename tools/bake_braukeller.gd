@@ -248,10 +248,15 @@ func _schachtkragen() -> void:
 	_add("holz_dunkel", _box(Vector3(0.12, 0.26, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.06, -0.08, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
 	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z0 - 0.06))
 	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z1 + 0.06))
-	# Geländer oben an der offenen Seite (zur Halle) und am tiefen Ende
+	# Geländer oben an der offenen Seite (zur Halle) und am tiefen Ende. Am tiefen Ende
+	# nur das Stück neben der Emporentreppe (x -10,7 … -10,4): die Emporentreppe
+	# (tools/bake_zelt.gd) steigt genau über dem Schacht auf, ihr Fuß liegt bei z = 0.
+	# Ein Querholm über die ganze Schachtbreite lief quer durch ihre unteren Stufen und
+	# versperrte sie (auch die Kollision in scenes/braukeller.tscn, GelaenderSued).
 	var gh := 0.95
+	var sued_x0 := -10.7
 	_add("holz_dunkel", _box(Vector3(0.07, 0.07, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.05, 0.07 + gh, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0, 0.07, 0.07)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, 0.07 + gh, SCHACHT_Z0 + 0.03))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - sued_x0, 0.07, 0.07)), _at((SCHACHT_X1 + sued_x0) / 2.0, 0.07 + gh, SCHACHT_Z0 + 0.03))
 	var gz := SCHACHT_Z0 + 0.03
 	while gz <= SCHACHT_Z1:
 		_add("holz_dunkel", _box(Vector3(0.06, gh, 0.06)), _at(SCHACHT_X1 + 0.05, 0.07 + gh / 2.0, gz))

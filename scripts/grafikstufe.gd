@@ -5,6 +5,9 @@ extends Node
 ##   Mittel:  250 Besucher, zwei von drei Lichtern, Glow, Nebel, Farbkorrektur,
 ##            weiche Schatten, Detail-Shader und Bildfilter, kein SSAO
 ##   Hoch:    alles, wie gebaut, dazu SSIL
+## Kantenglättung: Niedrig keine, Mittel FXAA (rund 5 % GPU), Hoch MSAA 2× plus FXAA
+## (rund 19 %). Ohne sie flimmern Kanten, an denen zwei Objekte zusammentreffen
+## (Geländer an der Zeltwand, Treppenwangen), sobald sich die Kamera bewegt.
 ## Lichter blenden auf Niedrig/Mittel in der Ferne aus. Die Zeltbeleuchtung
 ## bleibt immer an — dort wird gespielt.
 ## Look „Stil“ (tools/look_test.tscn, Variante C): Farb-LUT in main.tscn,
@@ -67,6 +70,10 @@ func anwenden() -> void:
 		# Farbkorrektur kostet einen ganzen Nachbearbeitungsschritt — gemessen
 		# ~13 ms pro Bild auf integrierter Grafik, mehr als Glow und Nebel zusammen
 		we.environment.adjustment_enabled = stufe >= 1
+	# Kantenglättung: MSAA glättet Geometriekanten und Schnittlinien, FXAA den Rest
+	var vp := get_viewport()
+	vp.msaa_3d = Viewport.MSAA_2X if stufe >= 2 else Viewport.MSAA_DISABLED
+	vp.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA if stufe >= 1 else Viewport.SCREEN_SPACE_AA_DISABLED
 	var s := get_node_or_null(sonne) as DirectionalLight3D
 	if s:
 		s.light_angular_distance = SONNE_WINKEL if stufe >= 1 else 0.0
