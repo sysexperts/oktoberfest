@@ -830,7 +830,7 @@ func _hint_for(t: Node3D) -> String:
 
 ## Anvisiertes Objekt: dünner Umriss statt des gelben Bodenrings (Test 13.09.:
 ## der Ring nervte). assets/shader/umriss.tres als Overlay auf alle Meshes des Ziels.
-const UMRISS := preload("res://assets/shader/umriss.tres")
+const UMRISS := preload("res://assets/shader/umriss_schreiber.tres")
 var _umriss_ziel: Node3D
 
 func _update_highlight() -> void:
