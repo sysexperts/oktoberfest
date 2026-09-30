@@ -81,6 +81,7 @@ func spiel_starten(spieler: Node) -> void:
 	if _spieler != null:
 		return
 	_spieler = spieler
+	($Anzeige/Luft/LuftText as Label).text = "SCHIESS_LUFT_PAD" if Einstellungen.am_pad else "SCHIESS_LUFT"
 	_treffer = 0
 	_uebrig = schuss
 	_rest = zeit
@@ -127,7 +128,8 @@ func _process(delta: float) -> void:
 ## Blick und Gewehr schwenken, Atemwackeln drauf. Leertaste halten beruhigt,
 ## bis die Luft ausgeht.
 func _zielen(delta: float) -> void:
-	var halten := Input.is_action_pressed("springen") and _ausser_atem <= 0.0 and _luft > 0.0
+	# Am Controller der linke Abzug: B (Springen) verlässt die Bude
+	var halten := (Input.is_action_pressed("springen") or Input.is_action_pressed(Einstellungen.PAD_HALTEN)) and _ausser_atem <= 0.0 and _luft > 0.0
 	var ziel_faktor := 1.0
 	if halten:
 		_luft = maxf(0.0, _luft - delta / luft_dauer)

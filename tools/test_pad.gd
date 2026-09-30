@@ -188,5 +188,28 @@ class Lauf extends Node:
 			_check("%s am Gamepad" % aktion, _hat(aktion, InputEventJoypadButton) \
 				or _hat(aktion, InputEventJoypadMotion))
 
+		print("-- Abzüge")
+		var rt := false
+		for ev in InputMap.action_get_events("interact"):
+			if ev is InputEventJoypadMotion and (ev as InputEventJoypadMotion).axis == JOY_AXIS_TRIGGER_RIGHT:
+				rt = true
+		_check("Benutzen liegt auch auf RT", rt)
+		_check("LT zum Halten vorhanden", _hat(Einstellungen.PAD_HALTEN, InputEventJoypadMotion))
+		var abzug := InputEventJoypadMotion.new()
+		abzug.axis = JOY_AXIS_TRIGGER_RIGHT
+		abzug.axis_value = 1.0
+		_check("RT ganz gedrückt löst Benutzen aus", abzug.is_action_pressed("interact"))
+		abzug.axis_value = 0.1
+		_check("RT leicht berührt löst nichts aus", not abzug.is_action_pressed("interact"))
+		var stick := InputEventJoypadMotion.new()
+		stick.axis = JOY_AXIS_LEFT_X
+		stick.axis_value = 1.0
+		_check("Stick löst Benutzen nicht aus", not stick.is_action_pressed("interact"))
+		# B ist Springen und „Abbrechen": Pause darf nur auf Start liegen
+		var start := InputEventJoypadButton.new()
+		start.button_index = JOY_BUTTON_START
+		start.pressed = true
+		_check("Start ist nicht Abbrechen", not start.is_action_pressed("ui_cancel"))
+
 		print("ERGEBNIS: ", "BESTANDEN" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit(1 if fehler > 0 else 0)

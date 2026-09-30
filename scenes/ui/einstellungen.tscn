@@ -523,6 +523,7 @@ text = "SET_KEYBINDS"
 custom_minimum_size = Vector2(0, 230)
 layout_mode = 2
 size_flags_vertical = 3
+follow_focus = true
 horizontal_scroll_mode = 0
 
 [node name="TastenListe" type="GridContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/Rollen"]
@@ -568,6 +569,17 @@ layout_mode = 2
 [node name="Unten" type="HBoxContainer" parent="Rahmen/Spalte"]
 layout_mode = 2
 alignment = 2
+
+[node name="LogOrdner" type="Button" parent="Rahmen/Spalte/Unten"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "SET_OPEN_LOGS"
+
+[node name="Abstand" type="Control" parent="Rahmen/Spalte/Unten"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="Schliessen" type="Button" parent="Rahmen/Spalte/Unten"]
 unique_name_in_owner = true

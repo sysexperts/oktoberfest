@@ -98,7 +98,10 @@ func _input(event: InputEvent) -> void:
 	if not _offen:
 		return
 	if event is InputEventMouseMotion:
-		_wahl_aus_zeiger((event as InputEventMouseMotion).position)
+		# Solange der Stick zeigt, bestimmt er die Wahl — der mitgeschobene
+		# Zeiger steckt anfangs noch in der Nabe und würde sie wieder löschen.
+		if _stick().length() < STICK_AB:
+			_wahl_aus_zeiger((event as InputEventMouseMotion).position)
 	elif event is InputEventMouseButton and (event as InputEventMouseButton).pressed \
 			and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		schliessen(true)
@@ -108,11 +111,36 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("ui_left") or event.is_action_pressed("ui_up"):
 		_weiter(-1)
+		# Das Steuerkreuz liegt auch auf Hilfe, Kalender und Kostüm
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("ui_right") or event.is_action_pressed("ui_down"):
 		_weiter(1)
+		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("ui_accept"):
 		schliessen(true)
 		get_viewport().set_input_as_handled()
+
+## Am Controller: der rechte Stick zeigt direkt auf ein Stück.
+const STICK_AB := 0.5
+
+func _stick() -> Vector2:
+	if not InputMap.has_action("blick_links"):
+		return Vector2.ZERO
+	return Input.get_vector("blick_links", "blick_rechts", "blick_hoch", "blick_runter")
+
+func _process(_delta: float) -> void:
+	if not _offen:
+		return
+	var s := _stick()
+	if s.length() < STICK_AB:
+		return
+	# 0 = oben, dann im Uhrzeigersinn — wie _wahl_aus_zeiger
+	var winkel := fposmod(atan2(s.x, -s.y), TAU)
+	var i := int(winkel / (TAU / float(STUECKE.size())) + 0.5) % STUECKE.size()
+	var neu := int(STUECKE[i]["emote"])
+	if neu != _wahl:
+		_wahl = neu
+		queue_redraw()
 
 func _weiter(richtung: int) -> void:
 	var i := _stueck_index(_wahl)

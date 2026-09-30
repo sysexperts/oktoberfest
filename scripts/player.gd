@@ -222,6 +222,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_schulterkamera = not _schulterkamera
 		get_viewport().set_input_as_handled()
 		return
+	# Am Controller: rechten Stick eindrücken
+	if event is InputEventJoypadButton and event.pressed 			and (event as InputEventJoypadButton).button_index == JOY_BUTTON_RIGHT_STICK:
+		_schulterkamera = not _schulterkamera
+		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var mm := event as InputEventMouseMotion
 		var sens := MOUSE_SENS * Einstellungen.maus
@@ -229,7 +233,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_y(-mm.relative.x * sens)
 		_pitch = clampf(_pitch - mm.relative.y * sens * y_dir, -PITCH_LIMIT, PITCH_LIMIT)
 		_head.rotation.x = _pitch
-	if event.is_action_pressed("ui_cancel"):
+	# Am Controller liegt B auf Springen UND auf ui_cancel: B schliesst Fenster,
+	# das Pausemenue oeffnet nur Start — sonst pausiert jeder Sprung das Spiel.
+	var pad_start: bool = event is InputEventJoypadButton and event.pressed 			and (event as InputEventJoypadButton).button_index == JOY_BUTTON_START
+	if event.is_action_pressed("ui_cancel") or pad_start:
 		var hud := _world.get_node_or_null("HUD")
 		if hud and hud.has_method("is_rent_open") and hud.is_rent_open():
 			hud.close_rent()
@@ -243,13 +250,18 @@ func _unhandled_input(event: InputEvent) -> void:
 			hud.close_popup()
 		elif hud and hud.has_method("is_booking_open") and hud.is_booking_open():
 			hud.close_booking()
-		else:
+		elif pad_start or not (event is InputEventJoypadButton):
 			# Nichts anderes offen — Pausemenue. Ist es offen, faengt es ESC selbst ab.
 			var pause := _world.get_node_or_null("PauseMenu")
 			if pause and pause.has_method("oeffnen"):
 				pause.oeffnen()
 			else:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			# B am Controller und nichts war offen: das ist ein Sprung. Hat B
+			# gerade ein Fenster geschlossen, kommt man hier nicht an — sonst
+			# hüpfte die Figur bei jedem Schliessen.
+			_sprung_pad = true
 	# Beim Tippen des Zeltnamens sind Q, C, R … Buchstaben
 	if _tippt():
 		return
@@ -329,7 +341,7 @@ func _physics_process(delta: float) -> void:
 			_current_target = null
 		_update_hint()
 		_update_krug_anzeige()
-		if not _tippt() and _kotz_t <= 0.0:
+		if not _tippt() and not _pad_im_fenster() and _kotz_t <= 0.0:
 			_handle_interaction(delta)
 		_trinken(delta)
 		if _kotz_t > 0.0:
@@ -498,6 +510,19 @@ func _apply_costume() -> void:
 
 ## Tippt der Spieler gerade in ein Textfeld (Zeltname)? Dann zählen W/A/S/D, E, Q …
 ## als Buchstaben, nicht als Steuerung — Input liest die Tasten sonst trotzdem.
+## Am Controller steuern Stick und A in einem offenen Fenster (Festbüro,
+## Zeltcomputer, Pause im Koop …) die Knöpfe. Die Figur darf davon nicht
+## loslaufen oder noch einmal „Benutzen" auslösen.
+var _sprung_pad := false
+func _pad_b_unten() -> bool:
+	for geraet in 8:
+		if Input.is_joy_button_pressed(geraet, JOY_BUTTON_B):
+			return true
+	return false
+
+func _pad_im_fenster() -> bool:
+	return Einstellungen.am_pad and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE
+
 func _tippt() -> bool:
 	if minispiel != null and is_instance_valid(minispiel):
 		return true   # Schießbude: nicht laufen, nichts anderes anfassen
@@ -527,7 +552,7 @@ func _handle_movement(delta: float) -> void:
 			velocity.y = 0.0
 		move_and_slide()
 		return
-	var input_dir := Vector2.ZERO if _tippt() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var input_dir := Vector2.ZERO if _tippt() or _pad_im_fenster() else Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var dir := (transform.basis.x * input_dir.x) + (transform.basis.z * input_dir.y)
 	dir.y = 0
 	dir = dir.normalized() if dir.length() > 0.01 else Vector3.ZERO
@@ -535,7 +560,11 @@ func _handle_movement(delta: float) -> void:
 	if promille > 0.05 and dir != Vector3.ZERO:
 		dir = dir.rotated(Vector3.UP, sin(_rausch_t * 0.8) * 0.22 * promille)
 	# Springen (Leertaste) — nur vom Boden aus
-	if not _tippt() and InputMap.has_action("springen") and Input.is_action_just_pressed("springen") and is_on_floor():
+	# Tastatur: abfragen wie bisher. Controller: nur der in _unhandled_input
+	# erkannte Sprung zählt — B schliesst dort auch Fenster und die Pause.
+	var will_springen := _sprung_pad or (InputMap.has_action("springen") 			and Input.is_action_just_pressed("springen") and not _pad_b_unten())
+	_sprung_pad = false
+	if not _tippt() and not _pad_im_fenster() and will_springen and is_on_floor():
 		# Ohne Klang — der Piepston beim Springen nervte im Koop (v210)
 		velocity.y = SPRUNG_TEMPO
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED

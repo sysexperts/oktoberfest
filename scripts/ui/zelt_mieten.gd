@@ -14,6 +14,8 @@ func _ready() -> void:
 	%Mieten.pressed.connect(_bestaetigen)
 	%Abbrechen.pressed.connect(schliessen)
 	%Name.text_submitted.connect(func(_t: String) -> void: _bestaetigen())
+	# Steam Deck: Bildschirmtastatur über dem Namensfeld
+	%Name.focus_entered.connect(func() -> void: SteamDienst.tastatur_zeigen(%Name))
 	Einstellungen.geaendert.connect(_beschriften)
 
 func einrichten(gm: Node) -> void:

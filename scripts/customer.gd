@@ -235,7 +235,7 @@ var _uhr_ms := 0.0
 
 func _process(delta: float) -> void:
 	_uhr_ms += delta * 1000.0
-	var details := Input.is_physical_key_pressed(KEY_CTRL)
+	var details := Input.is_physical_key_pressed(KEY_CTRL) or Input.is_action_pressed(Einstellungen.PAD_HALTEN)
 	if details != _details:
 		_details = details
 		_update_bubble()

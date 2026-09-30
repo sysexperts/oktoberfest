@@ -75,7 +75,9 @@ func eingabe(event: InputEvent) -> void:
 		beenden()
 		return
 	var mb := event as InputEventMouseButton
-	if (mb and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT) or event.is_action_pressed("ui_accept"):
+	# Am Controller wird A zusätzlich zum Linksklick (Einstellungen._pad_klick) —
+	# ohne diese Ausnahme blätterte ein Druck zwei Seiten weiter.
+	if (mb and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT) 			or (event.is_action_pressed("ui_accept") and not event is InputEventJoypadButton):
 		_weiter()
 
 func _weiter() -> void:

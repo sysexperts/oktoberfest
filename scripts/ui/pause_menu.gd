@@ -63,7 +63,8 @@ func schliessen() -> void:
 ## Liegt in main.tscn hinter den Spielern, bekommt ESC also zuerst.
 ## Solange das Einstellungsmenü offen ist, schließt ESC nur das.
 func _unhandled_input(event: InputEvent) -> void:
-	if visible and not _einstellungen_offen and event.is_action_pressed("ui_cancel"):
+	var pad_start: bool = event is InputEventJoypadButton and event.pressed 			and (event as InputEventJoypadButton).button_index == JOY_BUTTON_START
+	if visible and not _einstellungen_offen and (event.is_action_pressed("ui_cancel") or pad_start):
 		get_viewport().set_input_as_handled()
 		schliessen()
 

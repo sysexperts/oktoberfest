@@ -47,6 +47,8 @@ const PAD_ACHSEN := {
 	"move_forward": [JOY_AXIS_LEFT_Y, -1.0],
 	"move_back": [JOY_AXIS_LEFT_Y, 1.0],
 }
+## Linker Abzug gehalten (nur Controller) — siehe _pad_anwenden.
+const PAD_HALTEN := "pad_halten"
 ## Umschauen mit dem rechten Stick.
 const BLICK_ACHSEN := {
 	"blick_links": [JOY_AXIS_RIGHT_X, -1.0],
@@ -206,6 +208,22 @@ const ZEIGER_TEMPO := 1100.0
 ## Sperre wuerde die kuenstliche Mausbewegung am_pad sofort wieder auf false
 ## setzen — der Stick haette sich selbst abgeschaltet.
 var _eigene_eingabe := false
+## Die Sperre allein reicht nicht: Godot stellt erzeugte Ereignisse erst im
+## nächsten Bild zu, und der verschobene Zeiger meldet sich als echte
+## Mausbewegung vom Betriebssystem. Beides kam als „Maus" an, schaltete am_pad
+## ab, und der Stick blieb stehen, bis er sich wieder rührte — bei vollem
+## Ausschlag also gar nicht (gemessen: 3°/s statt 48°/s beim Zielen).
+## Darum tragen erzeugte Ereignisse die Gerätenummer für Nachgebildetes, und
+## Mausbewegung zählt kurz nach dem Schieben nicht als Wechsel zur Maus.
+var _pad_maus_bis := 0
+## Wo der Stick den Zeiger zuletzt hingeschoben hat (Bildkoordinaten). Von hier
+## geht es weiter und hier landet der Klick — das Betriebssystem meldet die neue
+## Stelle erst ein Bild später, bei schnellem Schieben also die falsche.
+## INF = der Stick führt den Zeiger gerade nicht (echte Maus bewegt).
+var _zeiger := Vector2.INF
+
+func _zeiger_ort() -> Vector2:
+	return _zeiger if _zeiger.is_finite() else get_viewport().get_mouse_position()
 var _pad_maus_unten := false
 
 func _process(delta: float) -> void:
@@ -214,43 +232,61 @@ func _process(delta: float) -> void:
 	var richtung := Input.get_vector("blick_links", "blick_rechts", "blick_hoch", "blick_runter")
 	if richtung.length() < 0.01:
 		return
+	_pad_maus_bis = Time.get_ticks_msec() + 250
 	var modus := Input.mouse_mode
 	if modus == Input.MOUSE_MODE_VISIBLE or modus == Input.MOUSE_MODE_CONFINED:
 		var fenster := Vector2(get_viewport().get_visible_rect().size)
-		var ziel := get_viewport().get_mouse_position() + richtung * ZEIGER_TEMPO * pad_empfindlichkeit * delta
+		var ziel := (_zeiger_ort() + richtung * ZEIGER_TEMPO * pad_empfindlichkeit * delta).clamp(Vector2.ZERO, fenster)
+		_zeiger = ziel
 		_eigene_eingabe = true
-		Input.warp_mouse(ziel.clamp(Vector2.ZERO, fenster))
+		# Über das Bild, nicht über Input: die Stelle ist in Bildkoordinaten
+		# gerechnet. Input.warp_mouse nimmt Fensterpixel — bei jeder Auflösung
+		# ausser der Grundgrösse sprang der Zeiger damit an die falsche Stelle.
+		get_viewport().warp_mouse(ziel.clamp(Vector2.ZERO, fenster))
 		_eigene_eingabe = false
 	elif modus == Input.MOUSE_MODE_CAPTURED:
 		# Im Ego-Blick zielt man ueber die Mausbewegung. Der Wert muss klein
 		# bleiben: die Spiele rechnen ihn mit ihrer eigenen Empfindlichkeit hoch.
 		var ev := InputEventMouseMotion.new()
 		ev.relative = richtung * ZEIGER_TEMPO * pad_empfindlichkeit * delta * 0.35
+		# Godot rechnet eingespeiste Mausbewegung von Fensterpixeln auf das Bild
+		# um. Ohne Ausgleich zielte der Stick auf einem 4K-Bildschirm halb so
+		# schnell wie auf Full HD und am Steam Deck schneller als beides.
+		ev.relative *= get_viewport().get_final_transform().get_scale().x
 		if pad_y_umkehren:
 			ev.relative.y = -ev.relative.y
 		ev.screen_relative = ev.relative
 		_senden(ev)
 
-## A wird zum Linksklick — aber nur, wenn nichts den Fokus hat (siehe oben).
+## A und der rechte Abzug werden zum Linksklick — aber nur, wenn nichts den
+## Fokus hat (siehe oben).
 func _pad_klick(event: InputEvent) -> void:
-	if _eigene_eingabe or not (event is InputEventJoypadButton):
+	if _eigene_eingabe or event.device == InputEvent.DEVICE_ID_EMULATION:
 		return
-	var knopf := event as InputEventJoypadButton
-	if knopf.button_index != JOY_BUTTON_A:
+	var unten := false
+	if event is InputEventJoypadButton and (event as InputEventJoypadButton).button_index == JOY_BUTTON_A:
+		unten = (event as InputEventJoypadButton).pressed
+	elif event is InputEventJoypadMotion and (event as InputEventJoypadMotion).axis == JOY_AXIS_TRIGGER_RIGHT:
+		unten = (event as InputEventJoypadMotion).axis_value > 0.5
+	else:
 		return
 	if get_viewport().gui_get_focus_owner() != null:
 		return
-	if knopf.pressed == _pad_maus_unten:
+	if unten == _pad_maus_unten:
 		return
-	_pad_maus_unten = knopf.pressed
+	_pad_maus_unten = unten
 	var klick := InputEventMouseButton.new()
 	klick.button_index = MOUSE_BUTTON_LEFT
-	klick.pressed = knopf.pressed
-	klick.position = get_viewport().get_mouse_position()
+	klick.pressed = unten
+	# Eingespeiste Ereignisse erwartet Godot in Fensterpixeln und rechnet sie
+	# selbst aufs Bild um — mit Bildkoordinaten landete der Klick bei jeder
+	# Auflösung ausser der Grundgrösse daneben (Maulwurf: falsches Loch).
+	klick.position = get_viewport().get_final_transform() * _zeiger_ort()
 	klick.global_position = klick.position
 	_senden(klick)
 
 func _senden(ev: InputEvent) -> void:
+	ev.device = InputEvent.DEVICE_ID_EMULATION
 	_eigene_eingabe = true
 	Input.parse_input_event(ev)
 	_eigene_eingabe = false
@@ -258,8 +294,12 @@ func _senden(ev: InputEvent) -> void:
 ## Woran wird gerade gespielt? Steuert, ob in Hinweisen „[E]" oder „[A]" steht.
 ## Ein Stick driftet im Ruhezustand leicht — darum erst ab halbem Ausschlag.
 func _eingabeart_merken(event: InputEvent) -> void:
-	if _eigene_eingabe:
+	if _eigene_eingabe or event.device == InputEvent.DEVICE_ID_EMULATION:
 		return   # selbst erzeugte Maus zaehlt nicht als „spielt mit der Maus"
+	if event is InputEventMouseMotion and Time.get_ticks_msec() < _pad_maus_bis:
+		return   # der vom Stick geschobene Zeiger
+	if event is InputEventMouseMotion:
+		_zeiger = Vector2.INF   # echte Maus: ab jetzt gilt wieder ihr Ort
 	var vorher := am_pad
 	if event is InputEventJoypadButton:
 		am_pad = true
@@ -513,6 +553,15 @@ func _pad_anwenden() -> void:
 		_pad_knopf("ui_accept", JOY_BUTTON_A)
 	if not _hat_pad_knopf("ui_cancel"):
 		_pad_knopf("ui_cancel", JOY_BUTTON_B)
+	# Rechter Abzug = zweites „Benutzen": der Daumen bleibt dabei am rechten
+	# Stick. Mit A allein kann man nicht gleichzeitig zielen und auslösen.
+	_pad_achse("interact", JOY_AXIS_TRIGGER_RIGHT, 1.0)
+	# Linker Abzug zum Halten: Bestellungen als Text (Strg), Luft anhalten an der
+	# Schießbude (Leertaste — am Controller liegt dort B, und B verlässt die Bude).
+	if not InputMap.has_action(PAD_HALTEN):
+		InputMap.add_action(PAD_HALTEN, 0.5)
+	InputMap.action_erase_events(PAD_HALTEN)
+	_pad_achse(PAD_HALTEN, JOY_AXIS_TRIGGER_LEFT, 1.0)
 	# Blick mit dem rechten Stick — als eigene Aktionen, damit player.gd sie wie
 	# die Maus auswerten kann.
 	for aktion: String in BLICK_ACHSEN:

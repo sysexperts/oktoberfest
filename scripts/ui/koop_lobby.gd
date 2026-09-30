@@ -35,6 +35,7 @@ func _ready() -> void:
 	%Erstellen.pressed.connect(_erstellen)
 	%Beitreten.pressed.connect(_beitreten)
 	%CodeEingabe.text_submitted.connect(func(_t: String) -> void: _beitreten())
+	%CodeEingabe.focus_entered.connect(func() -> void: SteamDienst.tastatur_zeigen(%CodeEingabe))
 	%Zurueck.pressed.connect(_zum_menue)
 	%Mehr.pressed.connect(func() -> void:
 		KoopDaten.menue_koop = true

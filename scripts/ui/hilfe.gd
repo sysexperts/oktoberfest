@@ -56,10 +56,24 @@ func _neu() -> void:
 	for c in _liste.get_children():
 		_liste.remove_child(c)
 		c.queue_free()
+	if Einstellungen.am_pad:
+		_neu_pad()
+		return
 	_zeile(tr("ACTION_LOOK"), tr("HELP_MOUSE"))
 	for aktion: String in Einstellungen.STANDARD_TASTEN:
 		_zeile(tr("ACTION_" + aktion.to_upper()), Einstellungen.anzeige_name(aktion))
 	_zeile(tr("ACTION_PAUSE"), "Esc")
+
+## Am Controller: Sticks, Abzüge und Start stehen in keiner Tastenliste.
+func _neu_pad() -> void:
+	_zeile(tr("ACTION_MOVE"), tr("HELP_STICK_L"))
+	_zeile(tr("ACTION_LOOK"), tr("HELP_STICK_R"))
+	for aktion: String in Einstellungen.PAD_KNOEPFE:
+		var knopf := Einstellungen.anzeige_name(aktion)
+		_zeile(tr("ACTION_" + aktion.to_upper()), knopf + " / RT" if aktion == "interact" else knopf)
+	_zeile(tr("ACTION_DETAILS"), "LT")
+	_zeile(tr("ACTION_CAMERA"), "R3")
+	_zeile(tr("ACTION_PAUSE"), "Start")
 
 func _zeile(aktion: String, taste: String) -> void:
 	var name_label := Label.new()

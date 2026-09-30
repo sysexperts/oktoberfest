@@ -63,7 +63,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
 	var k := event as InputEventKey
-	if k and k.pressed and not k.echo and k.keycode in [KEY_ENTER, KEY_KP_ENTER]:
+	# Am Controller schliesst A oder B
+	var pad := event is InputEventJoypadButton and (event.is_action_pressed("ui_accept") 			or event.is_action_pressed("ui_cancel"))
+	if pad or (k and k.pressed and not k.echo and k.keycode in [KEY_ENTER, KEY_KP_ENTER]):
 		schliessen()
 		get_viewport().set_input_as_handled()
 
@@ -72,4 +74,4 @@ func _texte() -> void:
 		var l := get_node("%" + zeile) as Label
 		l.text = Texte.mit_tasten(ZEILEN[zeile])
 		l.add_theme_color_override("font_color", NORMAL)
-	%Schliessen.text = Texte.mit_tasten("INTRO_CLOSE")
+	%Schliessen.text = Texte.mit_tasten("INTRO_CLOSE_PAD" if Einstellungen.am_pad else "INTRO_CLOSE")

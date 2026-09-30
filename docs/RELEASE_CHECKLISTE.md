@@ -1,5 +1,7 @@
 # Release-Checkliste
 
+> **Veraltet (Stand v188).** Der aktuelle Stand steht in `docs/RELEASE_PLAN.md`.
+
 Stand: 18.09.2026 (v188). ⚠️ = Pflicht vor der Veröffentlichung.
 **Du** = Nutzer liefert/erledigt · **Ich** = Code.
 
