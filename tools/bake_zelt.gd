@@ -988,9 +988,19 @@ func _galerie(g: Node3D) -> void:
 		var n := 18
 		var steigung := ey / n
 		var tritt := lauf / n
+		# Tritt mit Nase, dazu Setzstufe — Aufbau wie tools/bake_treppen.gd und die
+		# Kellertreppe in tools/bake_braukeller.gd (lose, dünne Bretter ohne Setzstufen
+		# ließen Licht durch und flackerten)
 		for i in n:
-			_box(tr, "Stufe%d" % (i + 1), Vector3(wand_b - 0.06, 0.07, tritt + 0.04),
-				Vector3(qx, steigung * (i + 1) - 0.035, zu + tritt * (i + 0.5)), m.dielen)
+			var zi := zu + tritt * i
+			var yi := steigung * (i + 1)
+			var z0 := zi - 0.03
+			var z1 := zi + tritt + 0.03
+			if i == n - 1:
+				z1 = zi + tritt   # endet genau an der Emporenkante
+			_box(tr, "Tritt%d" % (i + 1), Vector3(wand_b - 0.06, 0.05, z1 - z0), Vector3(qx, yi - 0.025, (z0 + z1) / 2.0), m.dielen)
+			_box(tr, "Setzstufe%d" % (i + 1), Vector3(wand_b - 0.06, steigung - 0.05 + 0.004, 0.03),
+				Vector3(qx, (steigung * i + yi - 0.05) / 2.0, zi + 0.015), m.holz_dunkel)
 		var winkel := atan2(ey, lauf)
 		var schraeg := sqrt(ey * ey + lauf * lauf)
 		var neigung := Vector3(-rad_to_deg(winkel), 0, 0)

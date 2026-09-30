@@ -363,6 +363,43 @@ func schleife_aus(art := "") -> void:
 func schleife_laeuft() -> String:
 	return _schleife_name
 
+## Ein Klang, der einmal läuft, sich aber vorzeitig abstellen lässt: der Zapfhahn.
+## Die Aufnahme ist rund 6 s lang und endet mit Schaum, das Füllen dauert nur 1,7 s
+## — ohne Abstellen zischte der Schaum noch lange nach dem vollen Krug weiter.
+var _einzel: AudioStreamPlayer
+var _einzel_name := ""
+var _einzel_tween: Tween
+
+func einzel_an(name: String, vol_db := -6.0) -> void:
+	if not _ok or not _streams.has(name):
+		return
+	if _einzel == null:
+		_einzel = AudioStreamPlayer.new()
+		_einzel.bus = "SFX"
+		add_child(_einzel)
+	if _einzel_tween:
+		_einzel_tween.kill()
+	_einzel.stream = _streams[name]
+	_einzel.volume_db = vol_db
+	_einzel.play()
+	_einzel_name = name
+
+## Blendet kurz aus (ein harter Schnitt knackt). name: nur diesen Klang abstellen.
+func einzel_aus(name := "") -> void:
+	if _einzel == null or _einzel_name == "":
+		return
+	if name != "" and _einzel_name != name:
+		return
+	_einzel_name = ""
+	if _einzel_tween:
+		_einzel_tween.kill()
+	_einzel_tween = create_tween()
+	_einzel_tween.tween_property(_einzel, "volume_db", -60.0, 0.12)
+	_einzel_tween.tween_callback(_einzel.stop)
+
+func einzel_laeuft() -> String:
+	return _einzel_name
+
 # ------------------------------------------------------------ Regen
 ## Eigener Dauerklang fuers Regen-Ereignis (GameManager._ereignis == "regen").
 ## Laeuft auf dem Ambiente-Bus, damit ihn die Ambiente-Lautstaerke regelt, und

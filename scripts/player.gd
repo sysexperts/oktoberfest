@@ -175,8 +175,30 @@ func _sfx_loop(name: String) -> void:
 		_sfx_cd = 0.22
 		_sfx(name)
 
+## Zapfhahn-Aufnahme: laeuft nur, solange gezapft wird. Sie ist laenger als das
+## Fuellen und endet mit Schaum — der soll nicht nach dem vollen Krug weiterzischen.
+var _zapf_laeuft := false
+var _zapf_bis := 0.0
+
+func _zapfen_an() -> void:
+	_zapf_laeuft = true
+	_zapf_bis = Time.get_ticks_msec() / 1000.0 + 0.25
+	if _sfx_node and _sfx_node.has_method("einzel_an"):
+		_sfx_node.einzel_an("zapfen")
+	else:
+		_sfx("zapfen")   # aeltere Fassung ohne abstellbaren Klang
+
+func _zapfen_aus() -> void:
+	if not _zapf_laeuft:
+		return
+	_zapf_laeuft = false
+	if _sfx_node and _sfx_node.has_method("einzel_aus"):
+		_sfx_node.einzel_aus("zapfen")
+
 ## Laeuft je Bild: meldet sich die Aktion nicht mehr, geht der Klang aus.
 func _dauerklang_pruefen() -> void:
+	if _zapf_laeuft and Time.get_ticks_msec() / 1000.0 >= _zapf_bis:
+		_zapfen_aus()
 	if _dauerklang == "" or Time.get_ticks_msec() / 1000.0 < _dauerklang_bis:
 		return
 	if _sfx_node and _sfx_node.has_method("schleife_aus"):
@@ -1043,10 +1065,14 @@ func _handle_interaction(delta: float) -> void:
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
 			if carry_fill <= 0.0:
-				_sfx("zapfen")   # Zapfhahn auf — nur mit Datei
+				_zapfen_an()   # Zapfhahn auf — nur mit Datei
 			carry_type = (_current_target as KegStation).beer_type
 			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
-			_sfx_loop("glug")
+			if carry_fill >= 1.0:
+				_zapfen_aus()   # voll: Schaum-Ende der Aufnahme nicht mehr abspielen
+			else:
+				_zapf_bis = Time.get_ticks_msec() / 1000.0 + 0.25
+				_sfx_loop("glug")
 	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
 	if Input.is_action_pressed("interact") and _current_target is FoodStation:
 		var ft := (_current_target as FoodStation).food_type

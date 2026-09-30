@@ -134,6 +134,10 @@ func _kellermats() -> void:
 	_mat("moertel", Color(0.55, 0.52, 0.47), 0.95)
 	_mat("holz", Color(0.46, 0.3, 0.17), 0.8)
 	_mat("holz_dunkel", Color(0.27, 0.17, 0.1), 0.8)
+	# Die Kellertreppe hat dasselbe Holz wie die Emporentreppen im Zelt (Dielen für
+	# die Tritte, dunkles Holz für Setzstufen, Wangen und Geländer)
+	_mats["treppe_tritt"] = load("res://assets/zelt/materialien/dielen.tres")
+	_mats["treppe_holz"] = load("res://assets/zelt/materialien/holz_dunkel.tres")
 	# Metallwert niedrig halten: bei 0.7 spiegelten die Fassreifen den Himmel und
 	# waren im Keller blau statt dunkelgrau.
 	_mat("eisen", Color(0.22, 0.21, 0.22), 0.65, 0.25)
@@ -229,14 +233,17 @@ func _wand_z(z: float, x0: float, x1: float, hoehe: float, anteil := 1.0) -> voi
 
 ## Zwischen Kellerdecke und Zeltboden rings um das Loch: Ziegel an den Seiten,
 ## Balkenkranz unter der Schnittkante. Nach Norden offen — dort steigt man ein.
+## Der Kranz reicht bis 5 cm unter die Dielenoberkante (Boden 0,1 m dick, Oberseite
+## bei 0,07): mit Oberkante bei -0,04 blieb eine Fuge unter dem Boden, durch die
+## Licht in einem hellen Streifen in den Keller fiel.
 func _schachtkragen() -> void:
 	var h := -DECKE_Y
 	var y := DECKE_Y + h / 2.0
 	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
 	_add("ziegel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.3, h, 0.3)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, y, SCHACHT_Z0 - 0.15))
-	_add("holz_dunkel", _box(Vector3(0.12, 0.2, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.06, -0.14, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.2, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.14, SCHACHT_Z0 - 0.06))
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.2, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.14, SCHACHT_Z1 + 0.06))
+	_add("holz_dunkel", _box(Vector3(0.12, 0.26, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.06, -0.08, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z0 - 0.06))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z1 + 0.06))
 	# Geländer oben an der offenen Seite (zur Halle) und am tiefen Ende
 	var gh := 0.95
 	_add("holz_dunkel", _box(Vector3(0.07, 0.07, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.05, 0.07 + gh, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
@@ -246,7 +253,12 @@ func _schachtkragen() -> void:
 		_add("holz_dunkel", _box(Vector3(0.06, gh, 0.06)), _at(SCHACHT_X1 + 0.05, 0.07 + gh / 2.0, gz))
 		gz += 0.85
 
-## Treppe vom Zeltboden herunter (Richtung -z): Stufen, Wangen, Handlauf.
+## Treppe vom Zeltboden herunter (Richtung -z): Tritte, Setzstufen, Wangen, Handlauf.
+## Gleicher Aufbau wie die Emporentreppen (tools/bake_treppen.gd):
+##   Trittbrett  5 cm dick, 3 cm Nase vorn, reicht hinten unter die nächste Setzstufe
+##   Setzstufe   steht auf dem Tritt davor; Vorderseite 3 cm hinter der Nase — nie in
+##               einer Ebene mit dem Tritt (das flackerte vorher: beide Vorderseiten
+##               lagen bündig)
 ## Die Kollision ist eine Rampe (scenes/braukeller.tscn).
 func _treppe() -> void:
 	var lauf := TREPPE_Z_OBEN - TREPPE_Z_UNTEN
@@ -255,18 +267,26 @@ func _treppe() -> void:
 	var mx := (SCHACHT_X0 + SCHACHT_X1) / 2.0
 	var steigung := -BODEN_Y / float(n)
 	var tritt := lauf / float(n)
+	var dick := 0.05
+	var nase := 0.03
+	var setz := 0.03
 	for i in n:
-		var y := BODEN_Y + steigung * float(i + 1)
-		var zz := TREPPE_Z_UNTEN + tritt * (float(i) + 0.5)
-		_add("holz", _box(Vector3(breite, 0.07, tritt + 0.05)), _at(mx, y - 0.035, zz))
-		_add("holz_dunkel", _box(Vector3(breite, steigung - 0.07, 0.05)), _at(mx, y - steigung / 2.0 - 0.02, zz - tritt / 2.0))
+		var zi := TREPPE_Z_UNTEN + tritt * float(i)
+		var yi := BODEN_Y + steigung * float(i + 1)
+		var y_davor := yi - steigung
+		var z0 := zi - nase
+		var z1 := zi + tritt + setz
+		if i == n - 1:
+			z1 = TREPPE_Z_OBEN   # oben genau an der Schachtkante
+		_add("treppe_tritt", _box(Vector3(breite, dick, z1 - z0)), _at(mx, yi - dick / 2.0, (z0 + z1) / 2.0))
+		_add("treppe_holz", _box(Vector3(breite, steigung - dick + 0.004, setz)), _at(mx, (y_davor + yi - dick) / 2.0, zi + setz / 2.0))
 	var winkel := atan2(-BODEN_Y, lauf)
 	var schraeg := sqrt(BODEN_Y * BODEN_Y + lauf * lauf)
 	var neigung := Basis(Vector3.RIGHT, -winkel)
 	var mitte := Vector3(mx, BODEN_Y / 2.0, (TREPPE_Z_OBEN + TREPPE_Z_UNTEN) / 2.0)
 	for sx: float in [-1.0, 1.0]:
-		_add("holz_dunkel", _box(Vector3(0.08, 0.36, schraeg)), Transform3D(neigung, Vector3(mx + sx * (breite / 2.0 + 0.04), mitte.y - 0.1, mitte.z)))
-	_add("holz_dunkel", _box(Vector3(0.06, 0.06, schraeg)), Transform3D(neigung, Vector3(SCHACHT_X1 - 0.08, mitte.y + 0.95, mitte.z)))
+		_add("treppe_holz", _box(Vector3(0.08, 0.36, schraeg)), Transform3D(neigung, Vector3(mx + sx * (breite / 2.0 + 0.04), mitte.y - 0.1, mitte.z)))
+	_add("treppe_holz", _box(Vector3(0.06, 0.06, schraeg)), Transform3D(neigung, Vector3(SCHACHT_X1 - 0.08, mitte.y + 0.95, mitte.z)))
 	# Podest unten vor der Tür
 	_add("stein", _box(Vector3(breite + 0.2, 0.06, TREPPE_Z_UNTEN - RAUM_Z1)), _at(mx, BODEN_Y + 0.03, (TREPPE_Z_UNTEN + RAUM_Z1) / 2.0))
 
