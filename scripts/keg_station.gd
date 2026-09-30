@@ -19,10 +19,21 @@ func _ready() -> void:
 		label.modulate = BEER_COLORS.get(beer_type, Color.WHITE)
 		Einstellungen.geaendert.connect(_beschriften)
 		_beschriften()
+		# Der Name steht erst da, wenn man das Fass anvisiert (ziel_markieren)
+		label.visible = false
 	# Fass-Modell (assets/models/fass_mit_zapfhahn.glb) — die Sorte zeigt das Schild
 	var fass := get_node_or_null("Fass")
 	if fass:
 		Modell.ohne_metall(fass)
+
+## Vom Spieler: dieses Fass ist anvisiert (Umriss an) — Name und Tastensymbol zeigen
+func ziel_markieren(an: bool) -> void:
+	var label := get_node_or_null("Label") as Label3D
+	if label:
+		label.visible = an
+	var t := get_node_or_null("TasteHinweis")
+	if t:
+		t.zeigen(an)
 
 ## Name der Sorte in der Spielsprache, mit der aktuell belegten Taste.
 func _beschriften() -> void:

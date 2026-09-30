@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/mug_dispenser.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 [ext_resource type="PackedScene" path="res://scenes/krug.tscn" id="3_krug"]
+[ext_resource type="PackedScene" path="res://scenes/ui/taste_hinweis.tscn" id="4_taste"]
 
 [node name="MugDispenser" type="Node3D"]
 script = ExtResource("1")
@@ -42,10 +43,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0.205, -0.01)
 fuellung = 0.0
 
 [node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 0)
 billboard = 1
-pixel_size = 0.006
+no_depth_test = true
+pixel_size = 0.0045
 font_size = 48
 text = "WORLD_MUGS"
 script = ExtResource("2_wt")
 schluessel = "WORLD_MUGS"
+
+[node name="TasteHinweis" parent="." instance=ExtResource("4_taste")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63, 0)
