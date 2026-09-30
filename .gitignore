@@ -26,3 +26,7 @@ tools/*.png.import
 # Eingangsordner fuer neue Assets (siehe eingang/README.md)
 /eingang/
 !/eingang/README.md
+
+# Python-Zwischenablage
+__pycache__/
+*.pyc
