@@ -240,6 +240,10 @@ func _schachtkragen() -> void:
 	var h := -DECKE_Y
 	var y := DECKE_Y + h / 2.0
 	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	# Westseite: unter dem Zeltboden endet die Kellerwand bei y = -1 — ohne diese Wand
+	# blickt man aus der Halle schräg durchs Loch unter dem Boden hinaus, und ein heller
+	# Streifen Tageslicht fällt in den Schacht.
+	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X0 - 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
 	_add("ziegel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.3, h, 0.3)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, y, SCHACHT_Z0 - 0.15))
 	_add("holz_dunkel", _box(Vector3(0.12, 0.26, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.06, -0.08, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
 	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z0 - 0.06))
@@ -275,7 +279,7 @@ func _treppe() -> void:
 		var yi := BODEN_Y + steigung * float(i + 1)
 		var y_davor := yi - steigung
 		var z0 := zi - nase
-		var z1 := zi + tritt + setz
+		var z1 := zi + tritt + setz - 0.006   # hinten 6 mm kürzer als die Setzstufe: nie bündig
 		if i == n - 1:
 			z1 = TREPPE_Z_OBEN   # oben genau an der Schachtkante
 		_add("treppe_tritt", _box(Vector3(breite, dick, z1 - z0)), _at(mx, yi - dick / 2.0, (z0 + z1) / 2.0))

@@ -995,7 +995,7 @@ func _galerie(g: Node3D) -> void:
 			var zi := zu + tritt * i
 			var yi := steigung * (i + 1)
 			var z0 := zi - 0.03
-			var z1 := zi + tritt + 0.03
+			var z1 := zi + tritt + 0.03 - 0.006   # hinten 6 mm kürzer als die Setzstufe: nie bündig
 			if i == n - 1:
 				z1 = zi + tritt   # endet genau an der Emporenkante
 			_box(tr, "Tritt%d" % (i + 1), Vector3(wand_b - 0.06, 0.05, z1 - z0), Vector3(qx, yi - 0.025, (z0 + z1) / 2.0), m.dielen)

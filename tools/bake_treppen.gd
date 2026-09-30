@@ -69,14 +69,22 @@ func _neu(root: Node, eltern: Node, name: String, g: Vector3, pos: Vector3, mat:
 	mi.owner = root
 
 func _bauen(root: Node, tr: Node) -> int:
-	var stufen: Array[MeshInstance3D] = []
+	var stufen: Array[MeshInstance3D] = []   # alte Bretter (Stufe1 …) oder schon gebaute Tritte
+	var setz: Array[MeshInstance3D] = []
 	var wange: MeshInstance3D = null
+	var alt_form := true
 	for c in tr.get_children():
-		if c.name.begins_with("Stufe") and c is MeshInstance3D:
+		if not c is MeshInstance3D:
+			continue
+		if c.name.begins_with("Stufe"):
 			stufen.append(c)
+		elif c.name.begins_with("Tritt"):
+			stufen.append(c)
+			alt_form = false
+		elif c.name.begins_with("Setzstufe"):
+			setz.append(c)
 		elif c.name.begins_with("Wange") and wange == null:
 			wange = c
-	# schon umgebaut? Dann nichts tun
 	if stufen.is_empty():
 		return 0
 	var s1 := stufen[0]
@@ -84,12 +92,27 @@ func _bauen(root: Node, tr: Node) -> int:
 	var alt := s1.mesh as BoxMesh
 	var mat_tritt := s1.material_override
 	var mat_holz: Material = wange.material_override if wange else mat_tritt
+	if not setz.is_empty():
+		mat_holz = setz[0].material_override
 	var breite := alt.size.x
-	var tritt := alt.size.z - 0.04
-	var steigung := s1.position.y + 0.035
+	var tritt: float
+	var steigung: float
 	var qx := s1.position.x
-	var zu := s1.position.z - tritt * 0.5
+	var zu: float
+	if alt_form:
+		# lose Bretter: Mitte bei zu + tritt * (i + 0,5), Dicke 7 cm, Länge tritt + 4 cm
+		tritt = alt.size.z - 0.04
+		steigung = s1.position.y + 0.035
+		zu = s1.position.z - tritt * 0.5
+	else:
+		# schon gebaute Tritte: erste Kante = Mitte - halbe Länge + Nase, Abstand der Mitten = tritt
+		tritt = stufen[1].position.z - s1.position.z
+		steigung = s1.position.y + DICK / 2.0
+		zu = s1.position.z - alt.size.z / 2.0 + NASE
 	for st in stufen:
+		tr.remove_child(st)
+		st.free()
+	for st in setz:
 		tr.remove_child(st)
 		st.free()
 	for i in n:
@@ -97,7 +120,7 @@ func _bauen(root: Node, tr: Node) -> int:
 		var yi := steigung * (i + 1)
 		var y_davor := steigung * i
 		var z0 := zi - NASE
-		var z1 := zi + tritt + SETZ
+		var z1 := zi + tritt + SETZ - 0.006   # hinten 6 mm kürzer als die Setzstufe: nie bündig
 		if i == n - 1:
 			z1 = zi + tritt   # endet genau an der Emporenkante
 		_neu(root, tr, "Tritt%d" % (i + 1), Vector3(breite, DICK, z1 - z0), Vector3(qx, yi - DICK / 2.0, (z0 + z1) / 2.0), mat_tritt)
