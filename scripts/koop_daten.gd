@@ -27,7 +27,9 @@ static var menue_koop := false
 ## die Projekteinstellung.
 static func version() -> String:
 	var eingebaut := str(ProjectSettings.get_setting("application/config/version", "dev"))
-	if not OS.has_feature("template") or not FileAccess.file_exists(PAKET_DATEI):
+	# Steam-Build lädt nie Pakete nach (boot.gd) — eine alte spiel.txt aus dem
+	# Direkt-Build darf die Version nicht verfälschen
+	if OS.has_feature("steam") or not OS.has_feature("template") or not FileAccess.file_exists(PAKET_DATEI):
 		return eingebaut
 	var f := FileAccess.open(VERSION_DATEI, FileAccess.READ)
 	if f == null:

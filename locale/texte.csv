@@ -618,6 +618,15 @@ KOOP_FIG_0,Otto,Otto,Otto
 KOOP_FIG_1,Wilhelm,Wilhelm,Wilhelm
 KOOP_FIG_2,Lisa,Lisa,Lisa
 KOOP_FIG_3,Alex,Alex,Alex
+KOOP_FIG_4,Wilhelm Hut,Wilhelm hat,Wilhelm Şapka
+KOOP_FIG_5,Wilhelm Schwarz,Wilhelm black,Wilhelm Siyah
+KOOP_FIG_6,Wilhelm Brille,Wilhelm glasses,Wilhelm Gözlük
+KOOP_FIG_7,Alex Rot,Alex red,Alex Kırmızı
+KOOP_FIG_8,Alex Grün,Alex green,Alex Yeşil
+KOOP_FIG_9,Alex Grau,Alex grey,Alex Gri
+LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
+LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
+LOBBY_FIGURE_DONE,Fertig,Done,Tamam
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
 LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).

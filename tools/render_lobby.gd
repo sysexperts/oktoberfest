@@ -43,6 +43,10 @@ class Lauf extends Node:
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png("res://tools/lobby.png")
 		print("  gespeichert: lobby")
+		lobby._wahl_oeffnen()
+		await _frames(30)
+		get_viewport().get_texture().get_image().save_png("res://tools/lobby_figurenwahl.png")
+		print("  gespeichert: lobby_figurenwahl")
 		for pfad: String in DATEIEN:
 			var echt := ProjectSettings.globalize_path(pfad)
 			if _gab_es[pfad]:
