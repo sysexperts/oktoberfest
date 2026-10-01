@@ -6,6 +6,7 @@ MENU_COOP,Koop spielen,Play Co-op,Birlikte Oyna
 MENU_SETTINGS,Einstellungen,Settings,Ayarlar
 MENU_CREDITS,Mitwirkende,Credits,Emeği Geçenler
 MENU_QUIT,Beenden,Quit,Çıkış
+MENU_QUIT_GAME,Spiel beenden,Quit game,Oyunu kapat
 MENU_LOAD,Spielstand laden,Load game,Oyun yükle
 SLOTS_TITLE_NEW,Neues Spiel — Platz wählen,New game — choose a slot,Yeni oyun — yuva seç
 SLOTS_TITLE_LOAD,Spielstand laden,Load game,Oyun yükle

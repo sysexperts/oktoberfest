@@ -107,9 +107,19 @@ theme_override_constants/margin_bottom = 16
 
 [node name="Inhalt" type="VBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 6
+
+[node name="SeitenTitel" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 28
+text = "SET_TAB_GRAPHICS"
+
+[node name="SeitenLinie" type="HSeparator" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+layout_mode = 2
 
 [node name="ModusZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/ModusZeile"]
@@ -123,6 +133,7 @@ custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 
 [node name="FensterZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/FensterZeile"]
@@ -136,6 +147,7 @@ custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 
 [node name="MonitorZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/MonitorZeile"]
@@ -149,6 +161,7 @@ custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 
 [node name="FpsZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/FpsZeile"]
@@ -162,6 +175,7 @@ custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 
 [node name="VsyncZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/VsyncZeile"]
@@ -174,6 +188,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="QualitaetZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/QualitaetZeile"]
@@ -187,6 +202,7 @@ custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 
 [node name="AufloesungZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/AufloesungZeile"]
@@ -212,6 +228,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="UiGroesseZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/UiGroesseZeile"]
@@ -237,6 +254,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="RendererZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Inhalt/RendererZeile"]
@@ -276,9 +294,19 @@ theme_override_constants/margin_bottom = 16
 
 [node name="Inhalt" type="VBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Ton"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 8
+
+[node name="SeitenTitel" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 28
+text = "SET_TAB_AUDIO"
+
+[node name="SeitenLinie" type="HSeparator" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt"]
+layout_mode = 2
 
 [node name="MasterZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt/MasterZeile"]
@@ -302,6 +330,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="MusikZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt/MusikZeile"]
@@ -325,6 +354,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="SfxZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt/SfxZeile"]
@@ -348,6 +378,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="AmbienteZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Ton/Inhalt/AmbienteZeile"]
@@ -380,9 +411,19 @@ theme_override_constants/margin_bottom = 16
 
 [node name="Inhalt" type="VBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 6
+
+[node name="SeitenTitel" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 28
+text = "SET_TAB_CONTROLS"
+
+[node name="SeitenLinie" type="HSeparator" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+layout_mode = 2
 
 [node name="MausZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/MausZeile"]
@@ -408,6 +449,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="InvertZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/InvertZeile"]
@@ -423,6 +465,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PadZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadZeile"]
@@ -437,6 +480,7 @@ horizontal_alignment = 2
 text = "SET_PAD_KEINER"
 
 [node name="PadSensZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadSensZeile"]
@@ -462,6 +506,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="PadInvertZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadInvertZeile"]
@@ -474,6 +519,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="PadTotzoneZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadTotzoneZeile"]
@@ -499,6 +545,7 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="PadGlyphZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt/PadGlyphZeile"]
@@ -520,7 +567,7 @@ theme_override_font_sizes/font_size = 18
 text = "SET_KEYBINDS"
 
 [node name="Rollen" type="ScrollContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Steuerung/Inhalt"]
-custom_minimum_size = Vector2(0, 230)
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_vertical = 3
 follow_focus = true
@@ -551,9 +598,19 @@ theme_override_constants/margin_bottom = 16
 
 [node name="Inhalt" type="VBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Sprache"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 8
+
+[node name="SeitenTitel" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Sprache/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 28
+text = "SET_TAB_LANGUAGE"
+
+[node name="SeitenLinie" type="HSeparator" parent="Rahmen/Spalte/Inhalt/Reiter/Sprache/Inhalt"]
+layout_mode = 2
 
 [node name="SpracheZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Sprache/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 
 [node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Sprache/Inhalt/SpracheZeile"]

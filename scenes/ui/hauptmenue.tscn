@@ -123,12 +123,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "MENU_COOP"
 
-[node name="Credits" type="Button" parent="Mitte/Hauptspalte/Reihe2"]
+[node name="Beenden" type="Button" parent="Mitte/Hauptspalte/Reihe2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "MENU_CREDITS"
+text = "MENU_QUIT_GAME"
 
 [node name="KoopPanel" type="PanelContainer" parent="Mitte"]
 unique_name_in_owner = true
@@ -382,16 +382,18 @@ text = "MENU_BACK"
 [node name="Ecke" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -148.0
-offset_top = 16.0
+anchor_bottom = 1.0
+offset_left = -76.0
+offset_top = -112.0
 offset_right = -16.0
-offset_bottom = 76.0
+offset_bottom = -52.0
 grow_horizontal = 0
+grow_vertical = 0
 theme = ExtResource("4_mtheme")
-theme_override_constants/separation = 12
 
 [node name="Einstellungen" type="Button" parent="Ecke"]
 unique_name_in_owner = true
@@ -402,14 +404,19 @@ theme_type_variation = &"EckKnopf"
 icon = ExtResource("5_zahn")
 expand_icon = true
 
-[node name="Beenden" type="Button" parent="Ecke"]
+[node name="Credits" type="Button" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-tooltip_text = "MENU_QUIT"
-theme_type_variation = &"EckKnopf"
-icon = ExtResource("6_tuer")
-expand_icon = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -64.0
+offset_right = 216.0
+offset_bottom = -16.0
+grow_vertical = 0
+theme = ExtResource("4_mtheme")
+text = "MENU_CREDITS"
 
 [node name="MenueMusik" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
