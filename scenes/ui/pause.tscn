@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_p"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
@@ -106,3 +107,6 @@ theme_override_colors/font_color = Color(0.75, 0.71, 0.65, 1)
 theme_override_font_sizes/font_size = 15
 text = "PAUSE_COOP_HINT"
 horizontal_alignment = 1
+
+[node name="Passend" type="Node" parent="Mitte/Spalte"]
+script = ExtResource("passend_s")

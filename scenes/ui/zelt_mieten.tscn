@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://co5wqunmdxted"]
 
 [ext_resource type="Script" uid="uid://fatuuem0kvhn" path="res://scripts/ui/zelt_mieten.gd" id="1_mieten"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [node name="ZeltMieten" type="Control" unique_id=2139784819]
 visible = false
@@ -86,3 +87,6 @@ auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Passend" type="Node" parent="Mitte/Panel"]
+script = ExtResource("passend_s")

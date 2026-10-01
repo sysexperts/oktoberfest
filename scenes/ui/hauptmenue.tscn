@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/fest/symbol_zahnrad.svg" id="5_zahn"]
 [ext_resource type="Texture2D" path="res://assets/ui/fest/symbol_tuer.svg" id="6_tuer"]
 [ext_resource type="PackedScene" path="res://scenes/ui/intro.tscn" id="7_intro"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -470,3 +471,15 @@ dialog_text = "NEWGAME_CONFIRM_TEXT"
 cancel_button_text = "NEWGAME_CONFIRM_NO"
 
 [node name="Intro" parent="." instance=ExtResource("7_intro")]
+
+[node name="Passend" type="Node" parent="Mitte/Hauptspalte"]
+script = ExtResource("passend_s")
+
+[node name="Passend" type="Node" parent="Mitte/KoopPanel"]
+script = ExtResource("passend_s")
+
+[node name="Passend" type="Node" parent="Mitte/CreditsPanel"]
+script = ExtResource("passend_s")
+
+[node name="Passend" type="Node" parent="Mitte/SpielstandPanel"]
+script = ExtResource("passend_s")

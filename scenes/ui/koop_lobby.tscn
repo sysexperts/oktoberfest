@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/ausgang.svg" id="10_ausgang"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/abspielen.svg" id="11_abspielen"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/haken.svg" id="13_haken"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="RaumStil"]
 content_margin_left = 34.0
@@ -1009,3 +1010,6 @@ theme_override_styles/normal = SubResource("StartKnopf")
 theme_override_styles/pressed = SubResource("StartKnopf")
 text = "KOOP_START"
 icon = ExtResource("11_abspielen")
+
+[node name="Passend" type="Node" parent="Start/Panel"]
+script = ExtResource("passend_s")

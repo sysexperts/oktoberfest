@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_7.png" id="av7"]
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_8.png" id="av8"]
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_9.png" id="av9"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="FensterStil"]
 content_margin_left = 40.0
@@ -503,3 +504,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "LOBBY_FIGURE_DONE"
+
+[node name="Passend" type="Node" parent="Mitte/Panel"]
+script = ExtResource("passend_s")

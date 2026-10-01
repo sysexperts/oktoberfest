@@ -55,15 +55,12 @@ func _ready() -> void:
 	_aktualisieren()
 
 # ------------------------------------------------------------ Bewegung
-## Das Fenster blendet sich ein und wächst dabei von ganz leicht kleiner auf Größe.
+## Das Fenster blendet sich ein.
 func _eingang_animieren() -> void:
 	var fenster: Control = %Fenster
+	# Die Größe regelt Passend (scripts/ui/passend.gd) — hier nur einblenden
 	fenster.modulate.a = 0.0
-	fenster.scale = Vector2(0.96, 0.96)
-	fenster.pivot_offset = fenster.size / 2.0
-	var t := create_tween().set_parallel(true)
-	t.tween_property(fenster, "modulate:a", 1.0, 0.4)
-	t.tween_property(fenster, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	create_tween().tween_property(fenster, "modulate:a", 1.0, 0.4)
 
 ## Der Startknopf atmet leicht, damit er als Hauptknopf auffällt
 func _start_pulsieren() -> void:

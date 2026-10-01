@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c3kwk8oi4eby4" path="res://scripts/ui/festbuero.gd" id="1_buero"]
 [ext_resource type="PackedScene" path="res://scenes/ui/angebot.tscn" id="2_ang"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="PanelGlas"]
 content_margin_left = 28.0
@@ -796,3 +797,6 @@ theme_override_styles/hover = SubResource("ZuHover")
 theme_override_styles/pressed = SubResource("ZuHover")
 theme_override_styles/focus = SubResource("NavFokus")
 text = "OFFICE_CLOSE"
+
+[node name="Passend" type="Node" parent="Mitte/Panel"]
+script = ExtResource("passend_s")

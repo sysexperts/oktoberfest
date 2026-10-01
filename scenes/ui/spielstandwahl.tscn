@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/spielstandwahl.gd" id="1_s"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="FensterStil"]
 content_margin_left = 40.0
@@ -304,3 +305,6 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "SW_WORLD_CANCEL"
+
+[node name="Passend" type="Node" parent="Mitte/Panel"]
+script = ExtResource("passend_s")

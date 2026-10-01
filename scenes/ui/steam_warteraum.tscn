@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/figurenwahl.tscn" id="5_wahl"]
 [ext_resource type="PackedScene" path="res://scenes/ui/spielstandwahl.tscn" id="7_welt"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/abspielen.svg" id="6_play"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="FensterStil"]
 content_margin_left = 40.0
@@ -343,3 +344,6 @@ layout_mode = 1
 unique_name_in_owner = true
 wait_time = 3.0
 autostart = true
+
+[node name="Passend" type="Node" parent="Mitte/Fenster"]
+script = ExtResource("passend_s")

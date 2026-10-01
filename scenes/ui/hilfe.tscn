@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hilfe.gd" id="1_hilfe"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [node name="Hilfe" type="CanvasLayer"]
 process_mode = 3
@@ -105,3 +106,6 @@ auto_translate_mode = 2
 custom_minimum_size = Vector2(220, 44)
 layout_mode = 2
 text = "Schließen [F1]"
+
+[node name="Passend" type="Node" parent="Mitte/Panel"]
+script = ExtResource("passend_s")

@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://c6fjgycer1u4e" path="res://assets/ui/symbole/papier.svg" id="9_papier"]
 [ext_resource type="Texture2D" uid="uid://c5h7m3s1h2hst" path="res://assets/ui/symbole/pfeil_rechts.svg" id="10_pfeil"]
 [ext_resource type="Texture2D" uid="uid://c0gkqpww4mp31" path="res://assets/ui/symbole/ein_aus.svg" id="11_einaus"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="Fenster"]
 content_margin_left = 30.0
@@ -867,3 +868,6 @@ size_flags_vertical = 4
 texture = ExtResource("4_aehre")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="Passend" type="Node" parent="Panel"]
+script = ExtResource("passend_s")
