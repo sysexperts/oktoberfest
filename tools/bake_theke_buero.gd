@@ -253,8 +253,10 @@ func _buero() -> Node3D:
 			for i in lagen:
 				_box(w, "Kopf_%s_%s_%d" % [sx, sz, i], Vector3(0.36, lage_h + 0.01, 0.36), Vector3(sx * (hw + 0.1), sockel + (i + 0.5) * lage_h, sz * (hd + 0.1)), m.holz_dunkel)
 	var tuer := _gruppe(r, "Tuer", Vector3(0, sockel, -hd - 0.02))
-	_box(tuer, "RahmenL", Vector3(0.14, 2.6, 0.36), Vector3(-0.97, 1.3, 0), m.holz_dunkel)
-	_box(tuer, "RahmenR", Vector3(0.14, 2.6, 0.36), Vector3(0.97, 1.3, 0), m.holz_dunkel)
+	# 1 cm weiter in die Öffnung: bei -0.97 lag die Innenfläche des Rahmens genau auf der
+	# Stirnfläche der Wandbretter (x = ±0.9) — Z-Fighting, die Tür flackerte
+	_box(tuer, "RahmenL", Vector3(0.14, 2.6, 0.36), Vector3(-0.96, 1.3, 0), m.holz_dunkel)
+	_box(tuer, "RahmenR", Vector3(0.14, 2.6, 0.36), Vector3(0.96, 1.3, 0), m.holz_dunkel)
 	_box(tuer, "Sturz", Vector3(2.1, 0.18, 0.36), Vector3(0, 2.6, 0), m.holz_dunkel)
 	for x in [-3.0, 3.0]:
 		_instanz(r, SZ + "fenster.tscn", "FensterVorn_%s" % String.num(x), Transform3D(_rot(Vector3(0, 180, 0)), Vector3(x, 1.7, -hd)))

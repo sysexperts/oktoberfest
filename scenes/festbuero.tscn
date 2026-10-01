@@ -568,12 +568,12 @@ mesh = SubResource("BoxMesh_m0klk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, -4.02)
 
 [node name="RahmenL" type="MeshInstance3D" parent="Tuer" unique_id=834156526]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.97, 1.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 1.3, 0)
 material_override = ExtResource("5_37uxg")
 mesh = SubResource("BoxMesh_2tu1m")
 
 [node name="RahmenR" type="MeshInstance3D" parent="Tuer" unique_id=634706508]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97, 1.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 1.3, 0)
 material_override = ExtResource("5_37uxg")
 mesh = SubResource("BoxMesh_2tu1m")
 
