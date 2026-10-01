@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/verlauf_knopf_start.svg" id="3_start"]
 [ext_resource type="PackedScene" path="res://scenes/ui/steam_spielerkarte.tscn" id="4_karte"]
 [ext_resource type="PackedScene" path="res://scenes/ui/figurenwahl.tscn" id="5_wahl"]
+[ext_resource type="PackedScene" path="res://scenes/ui/spielstandwahl.tscn" id="7_welt"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/abspielen.svg" id="6_play"]
 
 [sub_resource type="StyleBoxFlat" id="FensterStil"]
@@ -246,6 +247,42 @@ layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
 
+[node name="WeltKarte" type="PanelContainer" parent="Mitte/Fenster/Alles/Unten/Rechts"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("FlaecheStil")
+
+[node name="Welt" type="VBoxContainer" parent="Mitte/Fenster/Alles/Unten/Rechts/WeltKarte"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="WeltTitel" type="Label" parent="Mitte/Fenster/Alles/Unten/Rechts/WeltKarte/Welt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "SW_WORLD"
+
+[node name="WeltHaupt" type="Label" parent="Mitte/Fenster/Alles/Unten/Rechts/WeltKarte/Welt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 23
+
+[node name="WeltSub" type="Label" parent="Mitte/Fenster/Alles/Unten/Rechts/WeltKarte/Welt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
+theme_override_font_sizes/font_size = 15
+autowrap_mode = 3
+
+[node name="WeltAendern" type="Button" parent="Mitte/Fenster/Alles/Unten/Rechts/WeltKarte/Welt"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "SW_WORLD_CHANGE"
+
 [node name="Status" type="Label" parent="Mitte/Fenster/Alles/Unten/Rechts"]
 unique_name_in_owner = true
 auto_translate_mode = 2
@@ -293,6 +330,11 @@ theme_override_font_sizes/font_size = 19
 text = "SW_LEAVE"
 
 [node name="Wahl" parent="." instance=ExtResource("5_wahl")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Welt" parent="." instance=ExtResource("7_welt")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

@@ -154,14 +154,16 @@ const STEAM_ZEITLIMIT := 25.0
 ## Host einer Steam-Lobby. Wird von SteamDienst aufgerufen, sobald die Lobby steht.
 ## SteamMultiplayerPeer nur über ClassDB — der Direkt-Build hat die Klasse nicht,
 ## ein Klassenname im Code würde dort dieses Autoload unladbar machen.
-func host_steam(lobby_id: int) -> Error:
+## platz: welcher Spielstand-Platz läuft (0 = zuletzt benutzter), neu: Welt neu
+## beginnen — der Host wählt das im Warteraum.
+func host_steam(lobby_id: int, platz: int = 0, neu: bool = false) -> Error:
 	# Ohne laufendes Steam würde der Peer ins Leere greifen — gar nicht erst versuchen
 	if not SteamDienst.aktiv or not ClassDB.class_exists("SteamMultiplayerPeer"):
 		return ERR_UNAVAILABLE
 	solo = false
-	neues_spiel = false
+	neues_spiel = neu
 	meldung = ""
-	slot = maxi(1, letzter_slot())
+	slot = platz if platz > 0 else maxi(1, letzter_slot())
 	var peer: MultiplayerPeer = ClassDB.instantiate("SteamMultiplayerPeer")
 	var err: Error = peer.call("host_with_lobby", lobby_id)
 	if err != OK:
@@ -279,6 +281,14 @@ func speicherstand_info(platz: int = 0) -> Dictionary:
 		"saved_at": int(stand.get("saved_at", 0)),
 		"zu_neu": int(stand.get("format", 0)) > SAVE_FORMAT,
 	}
+
+## Speicherzeit in Ortszeit, z. B. "10.09. 21:30".
+func zeit_text(unix: int) -> String:
+	if unix <= 0:
+		return "—"
+	var bias := int(Time.get_time_zone_from_system().get("bias", 0)) * 60
+	var d := Time.get_datetime_dict_from_unix_time(unix + bias)
+	return "%02d.%02d. %02d:%02d" % [d.day, d.month, d.hour, d.minute]
 
 ## Zuletzt gespeicherter ladbarer Platz — für „Weiterspielen". 0 = keiner.
 func letzter_slot() -> int:

@@ -652,6 +652,18 @@ SW_RUNNING,Das Spiel läuft schon — steig ein.,The game is already running —
 SW_ST_PLAYING,Spielt Sloptoberfest,Playing Sloptoberfest,Sloptoberfest oynuyor
 SW_ST_ONLINE,Online,Online,Çevrimiçi
 SW_ST_AWAY,Abwesend,Away,Uzakta
+SW_WORLD,Spielstand,Save game,Oyun kaydı
+SW_WORLD_LOAD,Platz %d · Tag %d,Slot %d · Day %d,Yuva %d · %d. Gün
+SW_WORLD_NEW,Neues Spiel · Platz %d,New game · Slot %d,Yeni oyun · Yuva %d
+SW_WORLD_DIFF,Schwierigkeit: %s,Difficulty: %s,Zorluk: %s
+SW_WORLD_CHANGE,Ändern,Change,Değiştir
+SW_WORLD_HOST_PICKS,Der Host wählt den Spielstand.,The host chooses the save game.,Kaydı ev sahibi seçer.
+SW_WORLD_TITLE,Welche Welt soll es sein?,Which world do you want?,Hangi dünya olsun?
+SW_WORLD_HINT,Mit »Weiterspielen« geht es mit dem gespeicherten Stand weiter. Mit »Neu beginnen« startet ihr frisch — der alte Stand auf diesem Platz geht dabei verloren.,"»Continue« resumes the saved game. »Start new« begins fresh — the old save in that slot is lost.","»Devam et« kayıtlı oyundan sürdürür. »Yeni başla« sıfırdan başlatır — o yuvadaki eski kayıt kaybolur."
+SW_WORLD_LOAD_BTN,Weiterspielen,Continue,Devam et
+SW_WORLD_NEW_BTN,Neu beginnen,Start new,Yeni başla
+SW_WORLD_OVERWRITE,Überschreiben?,Overwrite?,Üzerine yazılsın mı?
+SW_WORLD_CANCEL,Abbrechen,Cancel,İptal
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
 LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).

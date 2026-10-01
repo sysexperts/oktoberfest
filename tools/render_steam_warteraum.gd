@@ -8,8 +8,9 @@ class Ersatz extends RefCounted:
 	var lobby_id := 4711
 	var lobby_code := "BREZN-57"
 	var figuren := {1: 1, 2: 2}
+	var welt := ""
 	func lobby_wert(schluessel: String) -> String:
-		return {"code_text": "BREZN-57"}.get(schluessel, "")
+		return {"code_text": "BREZN-57", "welt": welt}.get(schluessel, "")
 	func lobby_mitglieder() -> Array:
 		return [
 			{"id": 1, "name": "Serdar", "ich": true, "host": true, "figur": figuren.get(1, -1), "bereit": true},
@@ -32,8 +33,9 @@ class Ersatz extends RefCounted:
 	func mitglied_setzen(schluessel: String, wert: String) -> void:
 		if schluessel == "figur":
 			figuren[1] = int(wert)
-	func lobby_setzen(_a: String, _b: String) -> void:
-		pass
+	func lobby_setzen(schluessel: String, wert: String) -> void:
+		if schluessel == "welt":
+			welt = wert
 	func bin_lobby_host() -> bool:
 		return true
 	func lobby_verlassen() -> void:
@@ -54,5 +56,10 @@ func _ready() -> void:
 	for i in 20:
 		await get_tree().process_frame
 	get_viewport().get_texture().get_image().save_png("res://tools/steam_warteraum_wahl.png")
+	raum.get_node("%Wahl").schliessen()
+	raum.get_node("%Welt").zeigen(2, 1)
+	for i in 20:
+		await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png("res://tools/steam_warteraum_welt.png")
 	print("RENDER FERTIG")
 	get_tree().quit()

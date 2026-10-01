@@ -1,0 +1,306 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/spielstandwahl.gd" id="1_s"]
+
+[sub_resource type="StyleBoxFlat" id="FensterStil"]
+content_margin_left = 40.0
+content_margin_top = 32.0
+content_margin_right = 40.0
+content_margin_bottom = 32.0
+bg_color = Color(0.082, 0.064, 0.052, 0.98)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 26
+
+[sub_resource type="StyleBoxFlat" id="PlatzStil"]
+content_margin_left = 20.0
+content_margin_top = 14.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(1, 0.94, 0.86, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.94, 0.86, 0.1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="PlatzAktuell"]
+content_margin_left = 20.0
+content_margin_top = 14.0
+content_margin_right = 16.0
+content_margin_bottom = 14.0
+bg_color = Color(1, 0.839, 0.349, 0.08)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 0.85)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="NeuRuhe"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.94, 0.86, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.94, 0.86, 0.3)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="LadenRuhe"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.96, 0.76, 0.42, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.96, 0.76, 0.42, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.96, 0.76, 0.42, 0.38)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.88, 0.55, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.96, 0.76, 0.42, 0.35)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="Gefahr"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.75, 0.22, 0.18, 0.55)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.5, 0.4, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="Spielstandwahl" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s")
+stil_platz = SubResource("PlatzStil")
+stil_aktuell = SubResource("PlatzAktuell")
+stil_gefahr = SubResource("Gefahr")
+stil_neu = SubResource("NeuRuhe")
+
+[node name="Dunkel" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.024, 0.02, 0.78)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("FensterStil")
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "SW_WORLD_TITLE"
+horizontal_alignment = 1
+
+[node name="Hinweis" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 16
+text = "SW_WORLD_HINT"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Plaetze" type="VBoxContainer" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Platz0" type="PanelContainer" parent="Mitte/Panel/Spalte/Plaetze"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("PlatzStil")
+
+[node name="Zeile" type="HBoxContainer" parent="Mitte/Panel/Spalte/Plaetze/Platz0"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Plaetze/Platz0/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Laden" type="Button" parent="Mitte/Panel/Spalte/Plaetze/Platz0/Zeile"]
+custom_minimum_size = Vector2(150, 46)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Hover")
+theme_override_styles/normal = SubResource("LadenRuhe")
+text = "SW_WORLD_LOAD_BTN"
+
+[node name="Neu" type="Button" parent="Mitte/Panel/Spalte/Plaetze/Platz0/Zeile"]
+custom_minimum_size = Vector2(190, 46)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Hover")
+theme_override_styles/normal = SubResource("NeuRuhe")
+text = "SW_WORLD_NEW_BTN"
+
+[node name="Platz1" type="PanelContainer" parent="Mitte/Panel/Spalte/Plaetze"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("PlatzStil")
+
+[node name="Zeile" type="HBoxContainer" parent="Mitte/Panel/Spalte/Plaetze/Platz1"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Plaetze/Platz1/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Laden" type="Button" parent="Mitte/Panel/Spalte/Plaetze/Platz1/Zeile"]
+custom_minimum_size = Vector2(150, 46)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Hover")
+theme_override_styles/normal = SubResource("LadenRuhe")
+text = "SW_WORLD_LOAD_BTN"
+
+[node name="Neu" type="Button" parent="Mitte/Panel/Spalte/Plaetze/Platz1/Zeile"]
+custom_minimum_size = Vector2(190, 46)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Hover")
+theme_override_styles/normal = SubResource("NeuRuhe")
+text = "SW_WORLD_NEW_BTN"
+
+[node name="Platz2" type="PanelContainer" parent="Mitte/Panel/Spalte/Plaetze"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("PlatzStil")
+
+[node name="Zeile" type="HBoxContainer" parent="Mitte/Panel/Spalte/Plaetze/Platz2"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Info" type="Label" parent="Mitte/Panel/Spalte/Plaetze/Platz2/Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Laden" type="Button" parent="Mitte/Panel/Spalte/Plaetze/Platz2/Zeile"]
+custom_minimum_size = Vector2(150, 46)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Hover")
+theme_override_styles/normal = SubResource("LadenRuhe")
+text = "SW_WORLD_LOAD_BTN"
+
+[node name="Neu" type="Button" parent="Mitte/Panel/Spalte/Plaetze/Platz2/Zeile"]
+custom_minimum_size = Vector2(190, 46)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 18
+theme_override_styles/hover = SubResource("Hover")
+theme_override_styles/pressed = SubResource("Hover")
+theme_override_styles/normal = SubResource("NeuRuhe")
+text = "SW_WORLD_NEW_BTN"
+
+[node name="SchwierigkeitZeile" type="HBoxContainer" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="SchwierigkeitTitel" type="Label" parent="Mitte/Panel/Spalte/SchwierigkeitZeile"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 17
+text = "DIFF_LABEL"
+
+[node name="Schwierigkeit" type="OptionButton" parent="Mitte/Panel/Spalte/SchwierigkeitZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+
+[node name="Zu" type="Button" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "SW_WORLD_CANCEL"

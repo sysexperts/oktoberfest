@@ -7,6 +7,7 @@ extends Control
 
 const KoopDaten := preload("res://scripts/koop_daten.gd")
 const Figuren := preload("res://scripts/figuren.gd")
+const Texte := preload("res://scripts/ui/texte.gd")
 const FreundZeile := preload("res://scenes/ui/steam_freund_zeile.tscn")
 const HAUPTMENUE := "res://scenes/ui/hauptmenue.tscn"
 const EINSTELLUNGS_DATEI := "user://koop.cfg"
@@ -22,6 +23,8 @@ var _start_war_schon_da := false
 var _beitritt_laeuft := false
 var _freunde_stand := ""
 var _eingeladen := {}
+## Welt, mit der der Host startet: Platz, neu beginnen?, Schwierigkeit (bei neu)
+var _welt := {"platz": 1, "neu": false, "schwierigkeit": 1}
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -31,6 +34,9 @@ func _ready() -> void:
 		karte.figur_waehlen.connect(_wahl_oeffnen)
 		karte.einladen.connect(_overlay_einladen)
 	%Wahl.gewaehlt.connect(_figur_gewaehlt)
+	%WeltAendern.pressed.connect(_welt_oeffnen)
+	%Welt.gewaehlt.connect(_welt_gewaehlt)
+	%Welt.geschlossen.connect(func() -> void: %WeltAendern.grab_focus())
 	%Wahl.geschlossen.connect(func() -> void: %Bereit.grab_focus())
 	%Kopieren.pressed.connect(_kopieren)
 	%Bereit.toggled.connect(_bereit_gesetzt)
@@ -45,6 +51,7 @@ func _ready() -> void:
 	_start_pulsieren()
 	_start_war_schon_da = quelle.lobby_wert("start") == "1"
 	_figur = _gemerkte_figur()
+	_welt_vorbelegen()
 	_aktualisieren()
 
 # ------------------------------------------------------------ Bewegung
@@ -93,6 +100,7 @@ func _aktualisieren() -> void:
 		else:
 			karte.leer()
 	_start_zeigen(mitglieder, ich)
+	_welt_zeigen(ich.get("host", false))
 	_freunde_zeigen(mitglieder)
 
 func _eigener_eintrag(mitglieder: Array) -> Dictionary:
@@ -165,6 +173,46 @@ func _freunde_zeigen(mitglieder: Array) -> void:
 			zeile.als_eingeladen()
 		zeile.einladen.connect(_freund_einladen)
 
+# ------------------------------------------------------------ Welt (Spielstand)
+## Wer hostet, spielt zuerst mit dem zuletzt benutzten Stand weiter — oder beginnt
+## neu, wenn es noch keinen gibt. Ändern lässt es sich bis zum Start.
+func _welt_vorbelegen() -> void:
+	var platz := Net.letzter_slot()
+	_welt = {"platz": maxi(platz, 1), "neu": platz == 0, "schwierigkeit": Net.schwierigkeit}
+
+## Kurzfassung für die Lobbydaten, damit die Gäste sehen, was gespielt wird:
+## "L|platz|tag|geld|zeit" (weiterspielen) oder "N|platz|schwierigkeit" (neu)
+func _welt_code() -> String:
+	var platz: int = _welt["platz"]
+	if _welt["neu"]:
+		return "N|%d|%d" % [platz, _welt["schwierigkeit"]]
+	var info := Net.speicherstand_info(platz)
+	return "L|%d|%d|%d|%d" % [platz, int(info.get("day", 1)), int(info.get("money", 0)), int(info.get("saved_at", 0))]
+
+func _welt_zeigen(bin_host: bool) -> void:
+	if bin_host:
+		var code := _welt_code()
+		if quelle.lobby_wert("welt") != code:
+			quelle.lobby_setzen("welt", code)
+	var teile := (_welt_code() if bin_host else str(quelle.lobby_wert("welt"))).split("|")
+	%WeltAendern.visible = bin_host and quelle.lobby_wert("start") != "1"
+	if teile.size() >= 3 and teile[0] == "N":
+		%WeltHaupt.text = tr("SW_WORLD_NEW") % int(teile[1])
+		%WeltSub.text = tr("SW_WORLD_DIFF") % tr("DIFF_%d" % clampi(int(teile[2]), 0, 2))
+	elif teile.size() >= 5 and teile[0] == "L":
+		%WeltHaupt.text = tr("SW_WORLD_LOAD") % [int(teile[1]), int(teile[2])]
+		%WeltSub.text = "%s · %s" % [Texte.euro(int(teile[3])), Net.zeit_text(int(teile[4]))]
+	else:
+		%WeltHaupt.text = "…"
+		%WeltSub.text = tr("SW_WORLD_HOST_PICKS")
+
+func _welt_oeffnen() -> void:
+	%Welt.zeigen(_welt["platz"], _welt["schwierigkeit"])
+
+func _welt_gewaehlt(platz: int, neu: bool, schwierigkeit: int) -> void:
+	_welt = {"platz": platz, "neu": neu, "schwierigkeit": schwierigkeit}
+	_aktualisieren()
+
 # ------------------------------------------------------------ Figur
 func _belegt(mitglieder: Array) -> Dictionary:
 	var belegt := {}
@@ -233,7 +281,9 @@ func _los() -> void:
 	_wahl_fuer_das_spiel()
 	if quelle.bin_lobby_host():
 		quelle.lobby_setzen("start", "1")
-		if Net.host_steam(quelle.lobby_id) != OK:
+		if _welt["neu"]:
+			Net.schwierigkeit = _welt["schwierigkeit"]
+		if Net.host_steam(quelle.lobby_id, _welt["platz"], _welt["neu"]) != OK:
 			quelle.lobby_setzen("start", "0")
 			KoopDaten.lobby_wahl = {}
 			%Status.text = tr("NET_STEAM_LOBBY_FAILED")
