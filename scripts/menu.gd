@@ -7,6 +7,7 @@ const KoopDaten := preload("res://scripts/koop_daten.gd")
 const EINSTELLUNGEN_SZENE := "res://scenes/ui/einstellungen.tscn"
 const SERVER_IP := "185.248.140.225"
 const KOOP_LOBBY_SZENE := "res://scenes/ui/koop_lobby.tscn"
+const STEAM_WARTERAUM := "res://scenes/ui/steam_warteraum.tscn"
 const Texte := preload("res://scripts/ui/texte.gd")
 const MenueMusik := preload("res://scripts/ui/menue_musik.gd")
 
@@ -66,6 +67,7 @@ func _ready() -> void:
 	%KoopZurueck.pressed.connect(_zeige.bind(_haupt))
 	%SteamLobby.pressed.connect(_on_steam_lobby)
 	SteamDienst.lobby_fehler.connect(_on_steam_fehler)
+	SteamDienst.lobby_betreten.connect(_on_steam_lobby_betreten)
 	%CreditsZurueck.pressed.connect(_zeige.bind(_haupt))
 	_bestaetigen.confirmed.connect(func() -> void: Net.start_solo(true, _gewaehlter_platz))
 
@@ -240,6 +242,10 @@ func _on_steam_lobby() -> void:
 	_status.text = tr("STATUS_STEAM_LOBBY")
 	if not SteamDienst.lobby_erstellen():
 		_on_steam_fehler("NET_STEAM_LOBBY_FAILED", [])
+
+## Lobby steht (erstellt oder beigetreten): weiter in den Warteraum
+func _on_steam_lobby_betreten(_id: int) -> void:
+	get_tree().change_scene_to_file(STEAM_WARTERAUM)
 
 func _on_steam_fehler(schluessel: String, werte: Array) -> void:
 	Net.meldung = schluessel

@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/steam_freund_zeile.gd" id="1_z"]
+
+[sub_resource type="StyleBoxFlat" id="BildRahmen"]
+bg_color = Color(0.2, 0.15, 0.11, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="FreundZeile" type="HBoxContainer"]
+theme_override_constants/separation = 12
+script = ExtResource("1_z")
+
+[node name="Rahmen" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+theme_override_styles/panel = SubResource("BildRahmen")
+
+[node name="Profilbild" type="TextureRect" parent="Rahmen"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Anfangsbuchstabe" type="Label" parent="Rahmen"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Name" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 19
+text_overrun_behavior = 3
+
+[node name="Status" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+
+[node name="Einladen" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "SW_INVITE"

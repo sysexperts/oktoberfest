@@ -627,6 +627,31 @@ KOOP_FIG_9,Alex Grau,Alex grey,Alex Gri
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam
+SW_TITLE,Warteraum,Waiting room,Bekleme odası
+SW_SUB,Steam-Lobby · %d von %d Plätzen belegt,Steam lobby · %d of %d seats taken,Steam lobisi · %d / %d yer dolu
+SW_CODE,Beitrittscode,Join code,Katılım kodu
+SW_COPY,Kopieren,Copy,Kopyala
+SW_COPIED,Kopiert,Copied,Kopyalandı
+SW_FRIENDS,Steam-Freunde online,Steam friends online,Çevrimiçi Steam arkadaşları
+SW_NO_FRIENDS,Gerade ist kein Freund online.,No friends are online right now.,Şu an çevrimiçi arkadaş yok.
+SW_INVITE,Einladen,Invite,Davet et
+SW_INVITED,Eingeladen,Invited,Davet edildi
+SW_INVITE_SLOT,Freund einladen,Invite a friend,Arkadaş davet et
+SW_INVITE_SLOT_SUB,öffnet das Steam-Overlay,opens the Steam overlay,Steam arayüzünü açar
+SW_HOST,Host,Host,Ev sahibi
+SW_YOU,Du,You,Sen
+SW_READY,Bereit,Ready,Hazır
+SW_SET_READY,Ich bin bereit,I'm ready,Hazırım
+SW_NO_FIGURE,Wählt Figur …,Choosing …,Seçiyor …
+SW_START,Spiel starten,Start game,Oyunu başlat
+SW_JOIN,Spiel beitreten,Join game,Oyuna katıl
+SW_LEAVE,Lobby verlassen,Leave lobby,Lobiden ayrıl
+SW_WAIT_HOST,Warte auf %s …,Waiting for %s …,%s bekleniyor …
+SW_STARTING,Das Spiel startet …,The game is starting …,Oyun başlıyor …
+SW_RUNNING,Das Spiel läuft schon — steig ein.,The game is already running — jump in.,Oyun zaten başladı — katıl.
+SW_ST_PLAYING,Spielt Sloptoberfest,Playing Sloptoberfest,Sloptoberfest oynuyor
+SW_ST_ONLINE,Online,Online,Çevrimiçi
+SW_ST_AWAY,Abwesend,Away,Uzakta
 LOBBY_ERR_VERSION,"Es gibt eine neue Version — starte das Spiel neu, dann wird aktualisiert.",A new version is out — restart the game to update.,Yeni sürüm var — güncellemek için oyunu yeniden başlat.
 LOBBY_ERR_CODE,Diesen Code gibt es nicht. Vertippt?,That code does not exist. Typo?,Böyle bir kod yok. Yanlış mı yazdın?
 LOBBY_ERR_ROOM_FULL,Das Spiel ist voll (4 Spieler).,The game is full (4 players).,Oyun dolu (4 oyuncu).

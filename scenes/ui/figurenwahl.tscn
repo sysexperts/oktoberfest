@@ -1,0 +1,505 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/figurenwahl.gd" id="1_fw"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_0.png" id="av0"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_1.png" id="av1"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_2.png" id="av2"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_3.png" id="av3"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_4.png" id="av4"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_5.png" id="av5"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_6.png" id="av6"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_7.png" id="av7"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_8.png" id="av8"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_9.png" id="av9"]
+
+[sub_resource type="StyleBoxFlat" id="FensterStil"]
+content_margin_left = 40.0
+content_margin_top = 32.0
+content_margin_right = 40.0
+content_margin_bottom = 32.0
+bg_color = Color(0.082, 0.064, 0.052, 0.98)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 26
+
+[sub_resource type="StyleBoxFlat" id="KarteRuhe"]
+bg_color = Color(1, 0.94, 0.86, 0.05)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="KarteHover"]
+bg_color = Color(1, 0.94, 0.86, 0.1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="KarteGewaehlt"]
+bg_color = Color(1, 0.839, 0.349, 0.1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 0.9)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Figurenwahl" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fw")
+
+[node name="Dunkel" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.024, 0.02, 0.75)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("FensterStil")
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "LOBBY_PICK_FIGURE"
+horizontal_alignment = 1
+
+[node name="Hinweis" type="Label" parent="Mitte/Panel/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 16
+text = "LOBBY_FIGURE_TAKEN"
+horizontal_alignment = 1
+
+[node name="Raster" type="GridContainer" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 5
+
+[node name="Figur0" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur0/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur0/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_0"
+horizontal_alignment = 1
+
+[node name="Figur1" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur1/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur1/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_1"
+horizontal_alignment = 1
+
+[node name="Figur2" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur2/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur2/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_2"
+horizontal_alignment = 1
+
+[node name="Figur3" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur3/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur3/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_3"
+horizontal_alignment = 1
+
+[node name="Figur4" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur4/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur4/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_4"
+horizontal_alignment = 1
+
+[node name="Figur5" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur5/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur5/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_5"
+horizontal_alignment = 1
+
+[node name="Figur6" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur6/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur6/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_6"
+horizontal_alignment = 1
+
+[node name="Figur7" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur7/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur7/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_7"
+horizontal_alignment = 1
+
+[node name="Figur8" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur8/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur8/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_8"
+horizontal_alignment = 1
+
+[node name="Figur9" type="Button" parent="Mitte/Panel/Spalte/Raster"]
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Mitte/Panel/Spalte/Raster/Figur9"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Mitte/Panel/Spalte/Raster/Figur9/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av9")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Mitte/Panel/Spalte/Raster/Figur9/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_9"
+horizontal_alignment = 1
+
+[node name="Zu" type="Button" parent="Mitte/Panel/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "LOBBY_FIGURE_DONE"

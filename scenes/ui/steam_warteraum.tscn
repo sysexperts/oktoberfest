@@ -1,0 +1,276 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/steam_warteraum.gd" id="1_w"]
+[ext_resource type="Texture2D" path="res://assets/ui/main_background.jpg" id="2_hg"]
+[ext_resource type="Texture2D" path="res://assets/ui/verlauf_knopf_start.svg" id="3_start"]
+[ext_resource type="PackedScene" path="res://scenes/ui/steam_spielerkarte.tscn" id="4_karte"]
+[ext_resource type="PackedScene" path="res://scenes/ui/figurenwahl.tscn" id="5_wahl"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/abspielen.svg" id="6_play"]
+
+[sub_resource type="StyleBoxFlat" id="FensterStil"]
+content_margin_left = 40.0
+content_margin_top = 32.0
+content_margin_right = 40.0
+content_margin_bottom = 32.0
+bg_color = Color(0.082, 0.064, 0.052, 0.96)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 28
+
+[sub_resource type="StyleBoxFlat" id="FlaecheStil"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.94, 0.86, 0.05)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="CodeStil"]
+content_margin_left = 18.0
+content_margin_top = 6.0
+content_margin_right = 18.0
+content_margin_bottom = 6.0
+bg_color = Color(1, 0.839, 0.349, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.5)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxTexture" id="StartKnopf"]
+content_margin_left = 32.0
+content_margin_top = 16.0
+content_margin_right = 36.0
+content_margin_bottom = 16.0
+texture = ExtResource("3_start")
+texture_margin_left = 26.0
+texture_margin_right = 26.0
+
+[node name="SteamWarteraum" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w")
+
+[node name="Hintergrund" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_hg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Abdunkeln" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.03, 0.024, 0.02, 0.6)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fenster" type="PanelContainer" parent="Mitte"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("FensterStil")
+
+[node name="Alles" type="VBoxContainer" parent="Mitte/Fenster"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Kopf" type="HBoxContainer" parent="Mitte/Fenster/Alles"]
+layout_mode = 2
+
+[node name="Titel" type="VBoxContainer" parent="Mitte/Fenster/Alles/Kopf"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Ueberschrift" type="Label" parent="Mitte/Fenster/Alles/Kopf/Titel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "SW_TITLE"
+
+[node name="Untertitel" type="Label" parent="Mitte/Fenster/Alles/Kopf/Titel"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
+theme_override_font_sizes/font_size = 18
+
+[node name="CodeBlock" type="VBoxContainer" parent="Mitte/Fenster/Alles/Kopf"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CodeTitel" type="Label" parent="Mitte/Fenster/Alles/Kopf/CodeBlock"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "SW_CODE"
+horizontal_alignment = 2
+
+[node name="CodeZeile" type="HBoxContainer" parent="Mitte/Fenster/Alles/Kopf/CodeBlock"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="CodeFeld" type="PanelContainer" parent="Mitte/Fenster/Alles/Kopf/CodeBlock/CodeZeile"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("CodeStil")
+
+[node name="Code" type="Label" parent="Mitte/Fenster/Alles/Kopf/CodeBlock/CodeZeile/CodeFeld"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 34
+text = "-"
+
+[node name="Kopieren" type="Button" parent="Mitte/Fenster/Alles/Kopf/CodeBlock/CodeZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "SW_COPY"
+
+[node name="Karten" type="HBoxContainer" parent="Mitte/Fenster/Alles"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Karte0" parent="Mitte/Fenster/Alles/Karten" instance=ExtResource("4_karte")]
+layout_mode = 2
+
+[node name="Karte1" parent="Mitte/Fenster/Alles/Karten" instance=ExtResource("4_karte")]
+layout_mode = 2
+
+[node name="Karte2" parent="Mitte/Fenster/Alles/Karten" instance=ExtResource("4_karte")]
+layout_mode = 2
+
+[node name="Karte3" parent="Mitte/Fenster/Alles/Karten" instance=ExtResource("4_karte")]
+layout_mode = 2
+
+[node name="Unten" type="HBoxContainer" parent="Mitte/Fenster/Alles"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Freunde" type="PanelContainer" parent="Mitte/Fenster/Alles/Unten"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("FlaecheStil")
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Fenster/Alles/Unten/Freunde"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FreundeTitel" type="Label" parent="Mitte/Fenster/Alles/Unten/Freunde/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 16
+text = "SW_FRIENDS"
+
+[node name="Scroll" type="ScrollContainer" parent="Mitte/Fenster/Alles/Unten/Freunde/Spalte"]
+custom_minimum_size = Vector2(0, 168)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="FreundeListe" type="VBoxContainer" parent="Mitte/Fenster/Alles/Unten/Freunde/Spalte/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="FreundeLeer" type="Label" parent="Mitte/Fenster/Alles/Unten/Freunde/Spalte/Scroll/FreundeListe"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 17
+text = "SW_NO_FRIENDS"
+
+[node name="Rechts" type="VBoxContainer" parent="Mitte/Fenster/Alles/Unten"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Status" type="Label" parent="Mitte/Fenster/Alles/Unten/Rechts"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Bereit" type="Button" parent="Mitte/Fenster/Alles/Unten/Rechts"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+toggle_mode = true
+text = "SW_SET_READY"
+
+[node name="Los" type="Button" parent="Mitte/Fenster/Alles/Unten/Rechts"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_focus_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.2, 0.12, 0.02, 0.5)
+theme_override_colors/icon_normal_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/icon_hover_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_colors/icon_pressed_color = Color(0.2, 0.12, 0.02, 1)
+theme_override_constants/h_separation = 14
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StartKnopf")
+theme_override_styles/hover = SubResource("StartKnopf")
+theme_override_styles/normal = SubResource("StartKnopf")
+theme_override_styles/pressed = SubResource("StartKnopf")
+theme_override_styles/disabled = SubResource("StartKnopf")
+text = "SW_START"
+icon = ExtResource("6_play")
+
+[node name="Verlassen" type="Button" parent="Mitte/Fenster/Alles/Unten/Rechts"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+text = "SW_LEAVE"
+
+[node name="Wahl" parent="." instance=ExtResource("5_wahl")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Takt" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 3.0
+autostart = true

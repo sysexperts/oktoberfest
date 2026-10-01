@@ -9,16 +9,24 @@ extends Node
 ## nicht — ein "Steam." im Code würde dort das ganze Skript unladbar machen.
 ##
 ## Ablauf Koop über Steam:
-##   Host:  lobby_erstellen() → lobby_created → Net.host_steam(lobby)
+##   Warteraum (scenes/ui/steam_warteraum.tscn) öffnet sich bei lobby_betreten;
+##   erst dort startet der Host das Spiel (Net.host_steam), die Gäste folgen
+##   (Net.join_steam), sobald die Lobbydaten "start" = 1 zeigen.
+##   Host:  lobby_erstellen() → lobby_created → Warteraum
 ##   Gast:  Einladung im Overlay annehmen (join_requested) oder Spiel per
 ##          "+connect_lobby <id>" starten lassen → lobby_beitreten() →
-##          lobby_joined → Net.join_steam(lobby)
+##          lobby_joined → Warteraum
 ## Die Statustexte (#Status_…) liegen in docs/steam/ und müssen in Steamworks
 ## hochgeladen werden, bevor Steam sie anzeigt.
 
 signal bereit
 ## Beim Erstellen oder Beitreten ging etwas schief — schluessel ist ein Übersetzungsschlüssel.
 signal lobby_fehler(schluessel: String, werte: Array)
+## Wir sind in einer Lobby (erstellt oder beigetreten) — der Warteraum öffnet sich.
+## Das Spiel selbst startet erst, wenn der Host dort „Spiel starten" drückt.
+signal lobby_betreten(id: int)
+## Mitglieder, Lobbydaten, Profilbilder oder Freundesstatus haben sich geändert.
+signal lobby_aktualisiert
 
 ## Steams öffentliche Test-App „Spacewar" — gilt, bis die eigene App-ID in den
 ## Projekteinstellungen unter steam/app_id steht.
@@ -83,6 +91,9 @@ func starten() -> bool:
 	_steam.connect("lobby_joined", _on_lobby_joined)
 	_steam.connect("join_requested", _on_join_requested)
 	_steam.connect("lobby_match_list", _on_lobby_match_list)
+	for signal_name: String in ["lobby_data_update", "lobby_chat_update", "avatar_loaded", "persona_state_change"]:
+		if _steam.has_signal(signal_name):
+			_steam.connect(signal_name, _on_lobby_geaendert)
 	start_lobby = lobby_aus_argumenten(OS.get_cmdline_args())
 	# Sprache wie in Steam eingestellt (bei "auto" in den Spieleinstellungen)
 	var sp := str(_steam.call("getCurrentGameLanguage"))
@@ -247,10 +258,10 @@ func _on_lobby_created(ergebnis: int, id: int) -> void:
 	_steam.call("setLobbyData", id, "version", Net.version_text())
 	lobby_code = code_neu()
 	_steam.call("setLobbyData", id, "code", code_normal(lobby_code))
+	# Mit Bindestrich, so zeigt ihn der Warteraum auch den Gästen
+	_steam.call("setLobbyData", id, "code_text", lobby_code)
 	_mitspielen_ermoeglichen()
-	if Net.host_steam(id) != OK:
-		lobby_verlassen()
-		lobby_fehler.emit("NET_STEAM_LOBBY_FAILED", [])
+	lobby_betreten.emit(id)
 
 func _on_lobby_joined(id: int, _rechte: int, _gesperrt: bool, antwort: int) -> void:
 	if antwort != BETRETEN_OK:
@@ -266,9 +277,109 @@ func _on_lobby_joined(id: int, _rechte: int, _gesperrt: bool, antwort: int) -> v
 		lobby_fehler.emit("NET_VERSION_MISMATCH", [host_version, Net.version_text()])
 		return
 	_mitspielen_ermoeglichen()
-	if Net.join_steam(id) != OK:
-		lobby_verlassen()
-		lobby_fehler.emit("NET_STEAM_JOIN_FAILED", [])
+	lobby_betreten.emit(id)
+
+# ------------------------------------------------------------ Warteraum
+## Alles, was der Warteraum (scripts/ui/steam_warteraum.gd) von Steam braucht.
+## Ohne Steam liefern die Funktionen leere Werte.
+const FREUND_FLAG_DIREKT := 4 ## k_EFriendFlagImmediate: echte Freunde, keine Gruppen
+var _avatare := {}
+var _avatar_angefragt := {}
+
+func _on_lobby_geaendert(_a: Variant = null, _b: Variant = null, _c: Variant = null, _d: Variant = null) -> void:
+	lobby_aktualisiert.emit()
+
+func eigene_id() -> int:
+	return int(_steam.call("getSteamID")) if aktiv else 0
+
+func lobby_host_id() -> int:
+	return int(_steam.call("getLobbyOwner", lobby_id)) if aktiv and lobby_id != 0 else 0
+
+func bin_lobby_host() -> bool:
+	return aktiv and lobby_id != 0 and lobby_host_id() == eigene_id()
+
+## Wer in der Lobby ist: [{id, name, ich, host, figur (-1 = noch keine), bereit}]
+func lobby_mitglieder() -> Array:
+	var liste: Array = []
+	if not aktiv or lobby_id == 0:
+		return liste
+	var host := lobby_host_id()
+	var ich := eigene_id()
+	for i in int(_steam.call("getNumLobbyMembers", lobby_id)):
+		var sid := int(_steam.call("getLobbyMemberByIndex", lobby_id, i))
+		var figur := str(_steam.call("getLobbyMemberData", lobby_id, sid, "figur"))
+		liste.append({
+			"id": sid,
+			"name": str(_steam.call("getFriendPersonaName", sid)),
+			"ich": sid == ich,
+			"host": sid == host,
+			"figur": int(figur) if figur != "" else -1,
+			"bereit": str(_steam.call("getLobbyMemberData", lobby_id, sid, "bereit")) == "1",
+		})
+	return liste
+
+func mitglied_setzen(schluessel: String, wert: String) -> void:
+	if aktiv and lobby_id != 0:
+		_steam.call("setLobbyMemberData", lobby_id, schluessel, wert)
+
+func lobby_wert(schluessel: String) -> String:
+	return str(_steam.call("getLobbyData", lobby_id, schluessel)) if aktiv and lobby_id != 0 else ""
+
+## Nur der Host darf Lobbydaten setzen.
+func lobby_setzen(schluessel: String, wert: String) -> void:
+	if aktiv and lobby_id != 0:
+		_steam.call("setLobbyData", lobby_id, schluessel, wert)
+
+## Steam-Profilbild als Textur, null solange Steam es noch lädt (dann kommt
+## lobby_aktualisiert). Der Aufrufer zeigt bis dahin den Anfangsbuchstaben.
+func avatar_textur(sid: int) -> Texture2D:
+	if _avatare.has(sid):
+		return _avatare[sid]
+	if not aktiv or not _steam.has_method("getMediumFriendAvatar"):
+		return null
+	var handle := int(_steam.call("getMediumFriendAvatar", sid))
+	if handle <= 0:
+		# Fremde Profile erst anfordern; Steam meldet sich mit avatar_loaded
+		if not _avatar_angefragt.has(sid) and _steam.has_method("requestUserInformation"):
+			_avatar_angefragt[sid] = true
+			_steam.call("requestUserInformation", sid, false)
+		return null
+	var groesse: Variant = _steam.call("getImageSize", handle)
+	var rgba: Variant = _steam.call("getImageRGBA", handle)
+	if not (groesse is Dictionary) or not (rgba is Dictionary):
+		return null
+	var b := int((groesse as Dictionary).get("width", 0))
+	var h := int((groesse as Dictionary).get("height", 0))
+	var daten: PackedByteArray = (rgba as Dictionary).get("buffer", PackedByteArray())
+	if b <= 0 or h <= 0 or daten.size() != b * h * 4:
+		return null
+	var tex := ImageTexture.create_from_image(Image.create_from_data(b, h, false, Image.FORMAT_RGBA8, daten))
+	_avatare[sid] = tex
+	return tex
+
+## Freunde, die gerade erreichbar sind: [{id, name, status, im_spiel}]. status:
+## "spielt" (dieses Spiel), "online", "abwesend". Offline-Freunde fehlen.
+func freunde() -> Array:
+	var liste: Array = []
+	if not aktiv:
+		return liste
+	for i in int(_steam.call("getFriendCount", FREUND_FLAG_DIREKT)):
+		var sid := int(_steam.call("getFriendByIndex", i, FREUND_FLAG_DIREKT))
+		var zustand := int(_steam.call("getFriendPersonaState", sid))
+		if zustand == 0:
+			continue
+		var spiel: Variant = _steam.call("getFriendGamePlayed", sid)
+		var spielt := spiel is Dictionary and int((spiel as Dictionary).get("id", 0)) == app_id
+		var status := "spielt" if spielt else ("online" if zustand == 1 or zustand >= 5 else "abwesend")
+		liste.append({"id": sid, "name": str(_steam.call("getFriendPersonaName", sid)), "status": status})
+	var rang := {"spielt": 0, "online": 1, "abwesend": 2}
+	liste.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return rang[a["status"]] < rang[b["status"]] or (rang[a["status"]] == rang[b["status"]] and str(a["name"]) < str(b["name"])))
+	return liste
+
+func freund_einladen(sid: int) -> void:
+	if aktiv and lobby_id != 0:
+		_steam.call("inviteUserToLobby", lobby_id, sid)
 
 ## Einladung im Overlay angenommen, während das Spiel läuft. Aus einem laufenden
 ## Spiel erst ins Hauptmenü (speichert als Host), das tritt dann bei.

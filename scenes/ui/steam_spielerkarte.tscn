@@ -1,0 +1,216 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/steam_spielerkarte.gd" id="1_k"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/plus.svg" id="2_plus"]
+
+[sub_resource type="StyleBoxFlat" id="KarteStil"]
+content_margin_left = 14.0
+content_margin_top = 18.0
+content_margin_right = 14.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.94, 0.86, 0.06)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.94, 0.86, 0.12)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="KarteIch"]
+content_margin_left = 14.0
+content_margin_top = 18.0
+content_margin_right = 14.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.839, 0.349, 0.08)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.839, 0.349, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="KarteLeer"]
+content_margin_left = 14.0
+content_margin_top = 18.0
+content_margin_right = 14.0
+content_margin_bottom = 16.0
+bg_color = Color(1, 0.94, 0.86, 0.025)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.94, 0.86, 0.1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="BildRahmen"]
+bg_color = Color(0.2, 0.15, 0.11, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.34, 0.8, 0.87, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="Punkt"]
+bg_color = Color(0.34, 0.8, 0.87, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.16, 0.12, 0.09, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Marke"]
+content_margin_left = 12.0
+content_margin_top = 3.0
+content_margin_right = 12.0
+content_margin_bottom = 3.0
+bg_color = Color(0.31, 0.48, 0.23, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Spielerkarte" type="PanelContainer"]
+custom_minimum_size = Vector2(250, 300)
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("KarteStil")
+script = ExtResource("1_k")
+stil_normal = SubResource("KarteStil")
+stil_ich = SubResource("KarteIch")
+stil_leer = SubResource("KarteLeer")
+
+[node name="Spieler" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BildZeile" type="CenterContainer" parent="Spieler"]
+layout_mode = 2
+
+[node name="Rahmen" type="PanelContainer" parent="Spieler/BildZeile"]
+custom_minimum_size = Vector2(92, 92)
+layout_mode = 2
+theme_override_styles/panel = SubResource("BildRahmen")
+
+[node name="Profilbild" type="TextureRect" parent="Spieler/BildZeile/Rahmen"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Anfangsbuchstabe" type="Label" parent="Spieler/BildZeile/Rahmen"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Punkt" type="Panel" parent="Spieler/BildZeile/Rahmen"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Punkt")
+
+[node name="Name" type="Label" parent="Spieler"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Rolle" type="Label" parent="Spieler"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="FigurZeile" type="HBoxContainer" parent="Spieler"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="FigurBild" type="TextureRect" parent="Spieler/FigurZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(54, 54)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FigurName" type="Label" parent="Spieler/FigurZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.75, 0.68, 1)
+theme_override_font_sizes/font_size = 18
+vertical_alignment = 1
+
+[node name="Waehlen" type="Button" parent="Spieler"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "LOBBY_PICK_FIGURE"
+
+[node name="MarkeZeile" type="CenterContainer" parent="Spieler"]
+layout_mode = 2
+
+[node name="Marke" type="PanelContainer" parent="Spieler/MarkeZeile"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("Marke")
+
+[node name="MarkeText" type="Label" parent="Spieler/MarkeZeile/Marke"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.98, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "SW_READY"
+
+[node name="Leer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Plus" type="TextureRect" parent="Leer"]
+self_modulate = Color(1, 0.94, 0.86, 0.5)
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("2_plus")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Einladen" type="Button" parent="Leer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "SW_INVITE_SLOT"
+
+[node name="Hinweis" type="Label" parent="Leer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "SW_INVITE_SLOT_SUB"
+horizontal_alignment = 1
+autowrap_mode = 3
