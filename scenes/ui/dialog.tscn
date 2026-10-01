@@ -1,98 +1,129 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/dialog.gd" id="1_dialog"]
-[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="3_bogen"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="2_theme"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
 
-[sub_resource type="AtlasTexture" id="Pergament"]
-atlas = ExtResource("3_bogen")
-region = Rect2(664, 516, 484, 320)
+[sub_resource type="StyleBoxFlat" id="Kasten"]
+content_margin_left = 40.0
+content_margin_top = 34.0
+content_margin_right = 40.0
+content_margin_bottom = 16.0
+bg_color = Color(0.082, 0.062, 0.048, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.93, 0.74, 0.34, 0.85)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 26
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="NamensSchild"]
+content_margin_left = 22.0
+content_margin_top = 4.0
+content_margin_right = 22.0
+content_margin_bottom = 6.0
+bg_color = Color(0.93, 0.74, 0.34, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
 
 [node name="Dialog" type="CanvasLayer"]
 layer = 25
 script = ExtResource("1_dialog")
 
-[node name="Kasten" type="NinePatchRect" parent="."]
+[node name="Kasten" type="Control" parent="."]
 unique_name_in_owner = true
+layout_mode = 3
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -500.0
-offset_top = -290.0
-offset_right = 500.0
-offset_bottom = -24.0
+offset_left = -480.0
+offset_top = -250.0
+offset_right = 480.0
+offset_bottom = -34.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-texture = SubResource("Pergament")
-patch_margin_left = 60
-patch_margin_top = 60
-patch_margin_right = 60
-patch_margin_bottom = 60
+theme = ExtResource("2_theme")
 
-[node name="Rand" type="MarginContainer" parent="Kasten"]
+[node name="Flaeche" type="PanelContainer" parent="Kasten"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 70
-theme_override_constants/margin_top = 62
-theme_override_constants/margin_right = 70
-theme_override_constants/margin_bottom = 34
+theme_override_styles/panel = SubResource("Kasten")
 
-[node name="Spalte" type="VBoxContainer" parent="Kasten/Rand"]
+[node name="Spalte" type="VBoxContainer" parent="Kasten/Flaeche"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 8
 
-[node name="Sprecher" type="Label" parent="Kasten/Rand/Spalte"]
-theme_type_variation = &"PapierText"
+[node name="Text" type="Label" parent="Kasten/Flaeche/Spalte"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-
-[node name="Text" type="Label" parent="Kasten/Rand/Spalte"]
-theme_type_variation = &"PapierText"
-unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_font_sizes/font_size = 23
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_colors/font_color = Color(0.97, 0.94, 0.88, 1)
+theme_override_font_sizes/font_size = 25
 autowrap_mode = 3
 vertical_alignment = 1
 
-[node name="Auswahl" type="HBoxContainer" parent="Kasten/Rand/Spalte"]
+[node name="Auswahl" type="HBoxContainer" parent="Kasten/Flaeche/Spalte"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 24
 
-[node name="Ja" type="Button" parent="Kasten/Rand/Spalte/Auswahl"]
+[node name="Ja" type="Button" parent="Kasten/Flaeche/Spalte/Auswahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 44)
+custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 21
 
-[node name="Nein" type="Button" parent="Kasten/Rand/Spalte/Auswahl"]
+[node name="Nein" type="Button" parent="Kasten/Flaeche/Spalte/Auswahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 44)
+custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 21
 
-[node name="Hinweis" type="Label" parent="Kasten/Rand/Spalte"]
-theme_type_variation = &"PapierText"
+[node name="Hinweis" type="Label" parent="Kasten/Flaeche/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.93, 0.74, 0.34, 0.85)
 theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.42, 0.3, 0.18, 1)
 horizontal_alignment = 2
+
+[node name="NamensSchild" type="PanelContainer" parent="Kasten"]
+layout_mode = 1
+offset_left = 34.0
+offset_top = -26.0
+offset_right = 200.0
+offset_bottom = 20.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("NamensSchild")
+
+[node name="Sprecher" type="Label" parent="Kasten/NamensSchild"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.11, 0.04, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 30

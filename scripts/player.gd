@@ -229,9 +229,17 @@ func schiessen_starten() -> void:
 		minispiel = _minispiel_bude
 		_minispiel_bude.spiel_starten(self)
 
+## Ein Gespräch oder Minispiel endet oft mit derselben Taste, die „Benutzen" auslöst.
+## Das Ende kommt über _unhandled_input, „gerade gedrückt" wird aber erst danach in
+## _handle_interaction abgefragt — dieselbe Taste hätte den NPC gleich wieder
+## angesprochen, das Gespräch lief in Dauerschleife. Darum kurz keine Interaktion.
+const INTERAKTION_SPERRE_MS := 300
+var _interaktion_ab := 0
+
 func minispiel_beendet() -> void:
 	minispiel = null
 	_cam.current = true
+	_interaktion_ab = Time.get_ticks_msec() + INTERAKTION_SPERRE_MS
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_local:
@@ -880,11 +888,12 @@ func _handle_interaction(delta: float) -> void:
 	# Im vollen Zelt ist fast immer irgendetwas im Blick — nur bei „nichts im Blick"
 	# abzulegen, klappte im Test praktisch nie.
 	var traegt := carry_state != 0 or not extra_kruege.is_empty()
-	if traegt and Input.is_action_just_pressed("interact") \
+	var benutzen := Input.is_action_just_pressed("interact") and Time.get_ticks_msec() >= _interaktion_ab
+	if traegt and benutzen \
 			and (_current_target == null or _hint_for(_current_target) == ""):
 		_ablegen()
 		return
-	if Input.is_action_just_pressed("interact"):
+	if benutzen:
 		# Jemanden auf dem Arm? Dann wirft dieses E ihn weg, egal wohin man schaut.
 		if traegt_raufbold or traegt_spieler:
 			if traegt_spieler:
@@ -902,7 +911,7 @@ func _handle_interaction(delta: float) -> void:
 				return
 	if _current_target == null:
 		return
-	if Input.is_action_just_pressed("interact"):
+	if benutzen:
 		if _current_target.has_method("ist_abgelegt"):
 			# Abgelegten Krug/Teller aufheben — nur mit freien Händen
 			if carry_state == 0:
