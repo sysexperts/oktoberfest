@@ -131,7 +131,9 @@ func _liegend(achse: String, x: float, y: float, z: float) -> Transform3D:
 func _kellermats() -> void:
 	_mat("stein", Color(0.44, 0.42, 0.39), 0.95)
 	_mat("ziegel", Color(0.42, 0.26, 0.21), 0.9)
-	_mat("moertel", Color(0.55, 0.52, 0.47), 0.95)
+	# Mörtelfugen: breit und kontrastarm. Als 3 cm dünne, helle Streifen waren sie viel
+	# schmaler als ein Pixel und krabbelten beim Bewegen (Flackern an den Schachtwänden).
+	_mat("moertel", Color(0.5, 0.4, 0.33), 0.95)
 	_mat("holz", Color(0.46, 0.3, 0.17), 0.8)
 	_mat("holz_dunkel", Color(0.27, 0.17, 0.1), 0.8)
 	# Die Kellertreppe hat dasselbe Holz wie die Emporentreppen im Zelt (Dielen für
@@ -220,7 +222,7 @@ func _wand_x(x: float, z0: float, z1: float, hoehe: float, anteil := 1.0) -> voi
 	var h := hoehe * anteil
 	_add("ziegel", _box(Vector3(0.3, h, z1 - z0)), _at(x, BODEN_Y + h / 2.0, (z0 + z1) / 2.0))
 	for f: float in [0.33, 0.66]:
-		_add("moertel", _box(Vector3(0.32, 0.03, z1 - z0)), _at(x, BODEN_Y + h * f, (z0 + z1) / 2.0))
+		_add("moertel", _box(Vector3(0.31, 0.08, z1 - z0)), _at(x, BODEN_Y + h * f, (z0 + z1) / 2.0))
 
 ## Ziegelwand entlang x bei festem z
 func _wand_z(z: float, x0: float, x1: float, hoehe: float, anteil := 1.0) -> void:
@@ -229,10 +231,13 @@ func _wand_z(z: float, x0: float, x1: float, hoehe: float, anteil := 1.0) -> voi
 	var h := hoehe * anteil
 	_add("ziegel", _box(Vector3(x1 - x0, h, 0.3)), _at((x0 + x1) / 2.0, BODEN_Y + h / 2.0, z))
 	for f: float in [0.33, 0.66]:
-		_add("moertel", _box(Vector3(x1 - x0, 0.03, 0.32)), _at((x0 + x1) / 2.0, BODEN_Y + h * f, z))
+		_add("moertel", _box(Vector3(x1 - x0, 0.08, 0.31)), _at((x0 + x1) / 2.0, BODEN_Y + h * f, z))
 
 ## Zwischen Kellerdecke und Zeltboden rings um das Loch: Ziegel an den Seiten,
 ## Balkenkranz unter der Schnittkante. Nach Norden offen — dort steigt man ein.
+## Die Balken stehen 1 cm vor der Ziegelwand im Schacht: bündig lag ihre Fläche in
+## derselben Ebene wie die Wand (x = -10,4 bzw. z = 0,9) — Z-Fighting, ein langer
+## flackernder Streifen am Schachtrand (gemessen mit tools/treppen_zfight).
 ## Der Kranz reicht bis 5 cm unter die Dielenoberkante (Boden 0,1 m dick, Oberseite
 ## bei 0,07): mit Oberkante bei -0,04 blieb eine Fuge unter dem Boden, durch die
 ## Licht in einem hellen Streifen in den Keller fiel.
@@ -245,8 +250,8 @@ func _schachtkragen() -> void:
 	# Streifen Tageslicht fällt in den Schacht.
 	_add("ziegel", _box(Vector3(0.3, h, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X0 - 0.15, y, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
 	_add("ziegel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.3, h, 0.3)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, y, SCHACHT_Z0 - 0.15))
-	_add("holz_dunkel", _box(Vector3(0.12, 0.26, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.06, -0.08, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
-	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z0 - 0.06))
+	_add("holz_dunkel", _box(Vector3(0.12, 0.26, SCHACHT_Z1 - SCHACHT_Z0)), _at(SCHACHT_X1 + 0.05, -0.08, (SCHACHT_Z0 + SCHACHT_Z1) / 2.0))
+	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z0 - 0.05))
 	_add("holz_dunkel", _box(Vector3(SCHACHT_X1 - SCHACHT_X0 + 0.24, 0.26, 0.12)), _at((SCHACHT_X0 + SCHACHT_X1) / 2.0, -0.08, SCHACHT_Z1 + 0.06))
 	# Geländer oben an der offenen Seite (zur Halle) und am tiefen Ende. Am tiefen Ende
 	# nur das Stück neben der Emporentreppe (x -10,7 … -10,4): die Emporentreppe

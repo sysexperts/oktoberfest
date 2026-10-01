@@ -72,6 +72,8 @@ func anwenden() -> void:
 		we.environment.adjustment_enabled = stufe >= 1
 	# Kantenglättung: MSAA glättet Geometriekanten und Schnittlinien, FXAA den Rest
 	var vp := get_viewport()
+	# Anisotrope Filterung: Böden im flachen Blickwinkel (Dielen) flimmern sonst an den Fugen
+	vp.anisotropic_filtering_level = [Viewport.ANISOTROPY_4X, Viewport.ANISOTROPY_8X, Viewport.ANISOTROPY_16X][stufe]
 	vp.msaa_3d = Viewport.MSAA_2X if stufe >= 2 else Viewport.MSAA_DISABLED
 	vp.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA if stufe >= 1 else Viewport.SCREEN_SPACE_AA_DISABLED
 	var s := get_node_or_null(sonne) as DirectionalLight3D

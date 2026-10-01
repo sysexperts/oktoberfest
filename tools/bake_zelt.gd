@@ -97,10 +97,12 @@ func _texturen() -> void:
 			var c: Color = farben[i]
 			var maser := 0.5 + 0.5 * sin(TAU * (v * 6.0 + nv * 1.6 + i * 0.37))
 			c = c.darkened(0.14 * maser).lightened(0.06 * nv)
+			# Fugen kontrastarm: sehr dunkle, wenige Pixel breite Linien flimmerten beim
+			# Bewegen (Boden im flachen Blickwinkel). Vorher 0,6 und 0,5.
 			if lx < 2 or lx >= 63:
-				c = c.darkened(0.6)
+				c = c.darkened(0.34)
 			elif fposmod(v - float(stoss[i]), 1.0) < 0.005:
-				c = c.darkened(0.5)
+				c = c.darkened(0.28)
 			img.set_pixel(x, y, c)
 	_png(img, "dielen")
 
