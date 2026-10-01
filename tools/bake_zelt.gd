@@ -982,6 +982,9 @@ func _galerie(g: Node3D) -> void:
 
 		# Treppe an der Wand: Stufen, Wangen, Handlauf; Rampe als Kollision
 		var tr := _gruppe(e, "Treppe")
+		# 1 cm weiter zur Halle: die äußere Wange (x = ±11,97) und die Wandvertäfelung
+		# füllten sonst denselben Raum (siehe tools/bake_treppen.gd)
+		tr.position.x = -s * 0.01
 		var zu: float = t.zu
 		var zo: float = t.zo
 		var lauf := zo - zu

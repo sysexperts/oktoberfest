@@ -14,9 +14,16 @@ extends SceneTree
 ##   oberste Stufe endet genau an der Emporenkante (kein Überlappen mit dem Boden)
 ## Maße (Stufenzahl, Breite, Steigung, Lage) werden aus den alten Stufen gelesen.
 ##
+## Wandabstand: Die äußere Wange (x = ±11,97, 6 cm dick) füllte exakt denselben Raum
+## wie die Wandvertäfelung (ebenfalls x = ±11,97, 6 cm dick) — alle Flächen lagen in
+## denselben Ebenen. Die ganze Treppe sitzt deshalb 1 cm weiter zur Halle (Knoten
+## „Treppe“ um ±1 cm versetzt): die Wange steht 1 cm vor der Vertäfelung, nichts
+## liegt mehr bündig.
+##
 ##   godot --headless --path . --script tools/bake_treppen.gd
 
 const ZELT := "res://scenes/tent.tscn"
+const WANDABSTAND := 0.01
 const DICK := 0.05
 const NASE := 0.03
 const SETZ := 0.03
@@ -109,6 +116,9 @@ func _bauen(root: Node, tr: Node) -> int:
 		tritt = stufen[1].position.z - s1.position.z
 		steigung = s1.position.y + DICK / 2.0
 		zu = s1.position.z - alt.size.z / 2.0 + NASE
+	# zur Halle hin: West (x < 0) nach +x, Ost nach -x. Gesetzt, nicht addiert —
+	# das Werkzeug lässt sich beliebig oft laufen.
+	tr.position.x = -signf(qx) * WANDABSTAND
 	for st in stufen:
 		tr.remove_child(st)
 		st.free()

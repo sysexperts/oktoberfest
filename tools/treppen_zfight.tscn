@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/treppen_zfight.gd" id="1"]
+
+[node name="TreppenZFight" type="Node"]
+script = ExtResource("1")

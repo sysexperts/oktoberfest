@@ -203,7 +203,7 @@ size = Vector3(1.24, 0.05, 0.41511112)
 size = Vector3(1.24, 0.15400001, 0.03)
 
 [sub_resource type="BoxMesh" id="BoxMesh_7btha"]
-size = Vector3(1.24, 0.05, 0.39111114)
+size = Vector3(1.24, 0.05, 0.3911111)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w5df1"]
 size = Vector3(1.3, 0.22, 6.35)
@@ -1028,6 +1028,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.5
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -7.55, 3.62, 8.5)
 
 [node name="Treppe" type="Node3D" parent="Galerie/EmporeWest" unique_id=1270045951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, 0)
 
 [node name="Wange_10_73" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1272997212]
 transform = Transform3D(1, 0, 0, 0, 0.8747914, 0.4844998, 0, -0.4844998, 0.8747914, -10.73, 1.74, 3.25)
@@ -1069,182 +1070,182 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.73, 3.87, 5.9583335)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_40fn6")
 
-[node name="Tritt1" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1199770561]
+[node name="Tritt1" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1201205031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.17500001, 0.17755555)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe1" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=629970720]
+[node name="Setzstufe1" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=112900687]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.075, 0.014999984)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt2" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=242319049]
+[node name="Tritt2" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2018796570]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.37500003, 0.53866667)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe2" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=834620752]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.275, 0.37611112)
+[node name="Setzstufe2" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1424752307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.275, 0.3761111)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt3" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=939295278]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.57500005, 0.8997778)
+[node name="Tritt3" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1178891143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.57500005, 0.89977777)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe3" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=664432302]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.47500002, 0.73722225)
+[node name="Setzstufe3" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1539223753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.47500002, 0.7372222)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt4" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1222701275]
+[node name="Tritt4" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2112480712]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.77500004, 1.2608889)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe4" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1101435132]
+[node name="Setzstufe4" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=158966692]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.675, 1.0983334)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt5" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=740646390]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.9750001, 1.6220001)
+[node name="Tritt5" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1704109005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.9750001, 1.622)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe5" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1031290040]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.87500006, 1.4594445)
+[node name="Setzstufe5" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2048515338]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 0.87500006, 1.4594444)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt6" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1623344254]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.1750001, 1.9831113)
+[node name="Tritt6" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1359345379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.1750001, 1.9831111)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe6" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=365571042]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.075, 1.8205557)
+[node name="Setzstufe6" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1606845181]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.075, 1.8205556)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt7" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1185507495]
+[node name="Tritt7" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=483283238]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.3750001, 2.3442223)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe7" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=217600931]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.2750001, 2.1816669)
+[node name="Setzstufe7" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=738024175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.2750001, 2.1816666)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt8" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=334257016]
+[node name="Tritt8" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1703189348]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.575, 2.7053335)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe8" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=441049353]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.4750001, 2.542778)
+[node name="Setzstufe8" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=618607545]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.4750001, 2.5427778)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt9" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1542633278]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.7750001, 3.0664446)
+[node name="Tritt9" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=858188277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.7750001, 3.0664444)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe9" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2094111075]
+[node name="Setzstufe9" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2061439155]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.6750001, 2.903889)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt10" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1269216562]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.9750001, 3.4275558)
+[node name="Tritt10" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1388267356]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.9750001, 3.4275556)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe10" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=431104706]
+[node name="Setzstufe10" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=912457637]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 1.8750001, 3.265)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt11" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1488020473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.1750002, 3.788667)
+[node name="Tritt11" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=775552865]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.1750002, 3.7886667)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe11" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2069596079]
+[node name="Setzstufe11" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2147463363]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.075, 3.6261113)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt12" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=995271773]
+[node name="Tritt12" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=183258837]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.3750002, 4.149778)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe12" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1403217829]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.275, 3.9872224)
+[node name="Setzstufe12" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=558464017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.275, 3.9872222)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt13" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=930282498]
+[node name="Tritt13" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=737410974]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.575, 4.510889)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe13" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=115619583]
+[node name="Setzstufe13" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=419341620]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.4750001, 4.3483334)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt14" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=906781803]
+[node name="Tritt14" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1727358305]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.775, 4.872)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe14" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1261103185]
+[node name="Setzstufe14" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=593026830]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.6750002, 4.7094445)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt15" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=678545684]
+[node name="Tritt15" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1028249381]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.9750001, 5.2331114)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe15" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=60504753]
+[node name="Setzstufe15" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=160410121]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 2.8750002, 5.0705557)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt16" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=314456278]
+[node name="Tritt16" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1989991285]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.1750002, 5.5942225)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe16" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=573186239]
+[node name="Setzstufe16" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1476477950]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.0750003, 5.431667)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt17" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1405599858]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.3750002, 5.9553337)
+[node name="Tritt17" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1410389223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.3750002, 5.955333)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe17" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1486429121]
+[node name="Setzstufe17" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=118271556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.275, 5.792778)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt18" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=2057584751]
+[node name="Tritt18" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=427097297]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.5750003, 6.304445)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_7btha")
 
-[node name="Setzstufe18" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1716618306]
+[node name="Setzstufe18" type="MeshInstance3D" parent="Galerie/EmporeWest/Treppe" unique_id=1550042402]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.35, 3.4750001, 6.153889)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
@@ -1505,6 +1506,7 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.55
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7.55, 3.62, 8.5)
 
 [node name="Treppe" type="Node3D" parent="Galerie/EmporeOst" unique_id=281088272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0, 0)
 
 [node name="Wange_10_73" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1838476451]
 transform = Transform3D(1, 0, 0, 0, 0.8747914, 0.4844998, 0, -0.4844998, 0.8747914, 10.73, 1.74, -6.75)
@@ -1546,183 +1548,183 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.73, 3.87, -4.0416665)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_40fn6")
 
-[node name="Tritt1" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=850178023]
+[node name="Tritt1" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1947243031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.17500001, -9.822445)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe1" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=566230520]
+[node name="Setzstufe1" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=735257289]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.075, -9.985001)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt2" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=664168393]
+[node name="Tritt2" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1234501652]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.37500003, -9.461334)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe2" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=435746504]
+[node name="Setzstufe2" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1194051577]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.275, -9.62389)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt3" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=880784659]
+[node name="Tritt3" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1146236610]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.57500005, -9.100224)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe3" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=762569962]
+[node name="Setzstufe3" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=897187114]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.47500002, -9.262779)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt4" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1172437256]
+[node name="Tritt4" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1239043873]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.77500004, -8.739113)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe4" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1080208585]
+[node name="Setzstufe4" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=153791400]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.675, -8.901669)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt5" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=477520826]
+[node name="Tritt5" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=496372086]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.9750001, -8.378002)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe5" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=8332372]
+[node name="Setzstufe5" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1235417941]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 0.87500006, -8.540558)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt6" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1609276352]
+[node name="Tritt6" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1799723296]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.1750001, -8.0168915)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe6" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=622436769]
+[node name="Setzstufe6" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=349221264]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.075, -8.179447)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt7" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1008811538]
+[node name="Tritt7" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1057076176]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.3750001, -7.655781)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe7" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1935466974]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.2750001, -7.818336)
+[node name="Setzstufe7" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1841195074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.2750001, -7.8183365)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt8" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1997756947]
+[node name="Tritt8" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1407217506]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.575, -7.29467)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe8" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1153573105]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.4750001, -7.4572253)
+[node name="Setzstufe8" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=433927640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.4750001, -7.457226)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt9" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1105391064]
+[node name="Tritt9" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=2031606724]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.7750001, -6.9335594)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe9" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=2005823725]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.6750001, -7.0961146)
+[node name="Setzstufe9" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=271166828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.6750001, -7.096115)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt10" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=693933213]
+[node name="Tritt10" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1490558869]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.9750001, -6.5724487)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe10" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=349734283]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.8750001, -6.735004)
+[node name="Setzstufe10" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1657303139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 1.8750001, -6.7350044)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt11" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1041085472]
+[node name="Tritt11" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=36209164]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.1750002, -6.211338)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe11" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=399214581]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.075, -6.3738933)
+[node name="Setzstufe11" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1599669880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.075, -6.3738937)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt12" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=321150631]
+[node name="Tritt12" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1288426128]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.3750002, -5.8502274)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe12" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1156271818]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.275, -6.0127826)
+[node name="Setzstufe12" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=452258509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.275, -6.012783)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt13" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1730418388]
+[node name="Tritt13" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=146107199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.575, -5.4891167)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe13" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1229416204]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.4750001, -5.651672)
+[node name="Setzstufe13" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1871888992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.4750001, -5.6516724)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt14" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1931955511]
+[node name="Tritt14" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=452440199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.775, -5.128006)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe14" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=487284287]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.6750002, -5.290561)
+[node name="Setzstufe14" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=744512458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.6750002, -5.2905617)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt15" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=679832264]
+[node name="Tritt15" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=26570364]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.9750001, -4.7668953)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe15" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1912493442]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.8750002, -4.9294505)
+[node name="Setzstufe15" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=582907059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 2.8750002, -4.929451)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt16" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1928098728]
+[node name="Tritt16" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=236500777]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.1750002, -4.4057846)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe16" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=946059925]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.0750003, -4.56834)
+[node name="Setzstufe16" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1730274985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.0750003, -4.5683403)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt17" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1423470735]
+[node name="Tritt17" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1616861497]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.3750002, -4.044674)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_npji6")
 
-[node name="Setzstufe17" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1773202315]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.275, -4.207229)
+[node name="Setzstufe17" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1217665977]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.275, -4.2072296)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
-[node name="Tritt18" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1752960909]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.5750003, -3.6955633)
+[node name="Tritt18" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=730903747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.5750003, -3.6955636)
 material_override = ExtResource("1_0r5ff")
 mesh = SubResource("BoxMesh_7btha")
 
-[node name="Setzstufe18" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=1790836012]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.4750001, -3.8461185)
+[node name="Setzstufe18" type="MeshInstance3D" parent="Galerie/EmporeOst/Treppe" unique_id=21034826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.35, 3.4750001, -3.8461187)
 material_override = ExtResource("2_vxvqr")
 mesh = SubResource("BoxMesh_nlbtl")
 
