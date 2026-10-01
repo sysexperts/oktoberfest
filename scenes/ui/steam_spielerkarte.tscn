@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/ui/steam_spielerkarte.gd" id="1_k"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/plus.svg" id="2_plus"]
+[ext_resource type="Shader" path="res://assets/shader/profil_rahmen.gdshader" id="3_rahmen"]
+[ext_resource type="Shader" path="res://assets/shader/rund_maske.gdshader" id="4_maske"]
 
 [sub_resource type="StyleBoxFlat" id="KarteStil"]
 content_margin_left = 14.0
@@ -51,17 +53,22 @@ corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
-[sub_resource type="StyleBoxFlat" id="BildRahmen"]
-bg_color = Color(0.2, 0.15, 0.11, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.34, 0.8, 0.87, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="ShaderMaterial" id="RahmenMat"]
+resource_local_to_scene = true
+shader = ExtResource("3_rahmen")
+shader_parameter/farbe_a = Color(0.34, 0.8, 0.87, 1)
+shader_parameter/farbe_b = Color(0.62, 0.45, 0.95, 1)
+shader_parameter/rundung = 0.17
+shader_parameter/dicke = 0.04
+shader_parameter/glow_rand = 0.13
+shader_parameter/tempo = 0.3
+shader_parameter/strahl = 0.55
+shader_parameter/leuchten = 0.7
+shader_parameter/puls = 2.0
+
+[sub_resource type="ShaderMaterial" id="MaskeMat"]
+shader = ExtResource("4_maske")
+shader_parameter/rundung = 0.2
 
 [sub_resource type="StyleBoxFlat" id="Punkt"]
 bg_color = Color(0.34, 0.8, 0.87, 1)
@@ -87,7 +94,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [node name="Spielerkarte" type="PanelContainer"]
-custom_minimum_size = Vector2(250, 300)
+custom_minimum_size = Vector2(250, 330)
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("KarteStil")
 script = ExtResource("1_k")
@@ -103,29 +110,80 @@ theme_override_constants/separation = 6
 [node name="BildZeile" type="CenterContainer" parent="Spieler"]
 layout_mode = 2
 
-[node name="Rahmen" type="PanelContainer" parent="Spieler/BildZeile"]
-custom_minimum_size = Vector2(92, 92)
+[node name="Rahmen" type="Control" parent="Spieler/BildZeile"]
+custom_minimum_size = Vector2(132, 132)
 layout_mode = 2
-theme_override_styles/panel = SubResource("BildRahmen")
+
+[node name="Glow" type="ColorRect" parent="Spieler/BildZeile/Rahmen"]
+unique_name_in_owner = true
+material = SubResource("RahmenMat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Grund" type="ColorRect" parent="Spieler/BildZeile/Rahmen"]
+material = SubResource("MaskeMat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 22.0
+offset_right = -22.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.15, 0.11, 1)
 
 [node name="Profilbild" type="TextureRect" parent="Spieler/BildZeile/Rahmen"]
 unique_name_in_owner = true
-layout_mode = 2
+material = SubResource("MaskeMat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 22.0
+offset_right = -22.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 6
 
 [node name="Anfangsbuchstabe" type="Label" parent="Spieler/BildZeile/Rahmen"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 42
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Punkt" type="Panel" parent="Spieler/BildZeile/Rahmen"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(22, 22)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_top = -36.0
+offset_right = -14.0
+offset_bottom = -14.0
+grow_horizontal = 0
+grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Punkt")
 

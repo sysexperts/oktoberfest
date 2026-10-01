@@ -27,6 +27,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	for i in %Karten.get_child_count():
 		var karte := %Karten.get_child(i)
+		karte.verzoegerung = 0.25 + i * 0.1
 		karte.figur_waehlen.connect(_wahl_oeffnen)
 		karte.einladen.connect(_overlay_einladen)
 	%Wahl.gewaehlt.connect(_figur_gewaehlt)
@@ -40,9 +41,28 @@ func _ready() -> void:
 		quelle.lobby_aktualisiert.connect(_aktualisieren)
 	if not Net.connection_failed.is_connected(_on_verbindung_fehlgeschlagen):
 		Net.connection_failed.connect(_on_verbindung_fehlgeschlagen)
+	_eingang_animieren()
+	_start_pulsieren()
 	_start_war_schon_da = quelle.lobby_wert("start") == "1"
 	_figur = _gemerkte_figur()
 	_aktualisieren()
+
+# ------------------------------------------------------------ Bewegung
+## Das Fenster blendet sich ein und wächst dabei von ganz leicht kleiner auf Größe.
+func _eingang_animieren() -> void:
+	var fenster: Control = %Fenster
+	fenster.modulate.a = 0.0
+	fenster.scale = Vector2(0.96, 0.96)
+	fenster.pivot_offset = fenster.size / 2.0
+	var t := create_tween().set_parallel(true)
+	t.tween_property(fenster, "modulate:a", 1.0, 0.4)
+	t.tween_property(fenster, "scale", Vector2.ONE, 0.55).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+## Der Startknopf atmet leicht, damit er als Hauptknopf auffällt
+func _start_pulsieren() -> void:
+	var t := create_tween().set_loops()
+	t.tween_property(%Los, "self_modulate", Color(1.14, 1.08, 0.92), 1.1).set_trans(Tween.TRANS_SINE)
+	t.tween_property(%Los, "self_modulate", Color.WHITE, 1.1).set_trans(Tween.TRANS_SINE)
 
 # ------------------------------------------------------------ Anzeige
 func _aktualisieren() -> void:
@@ -131,14 +151,18 @@ func _freunde_zeigen(mitglieder: Array) -> void:
 		if k != %FreundeLeer:
 			k.queue_free()
 	%FreundeLeer.visible = freunde.is_empty()
+	%FreundeAnzahl.text = str(freunde.size())
+	var nr := 0
 	for f: Dictionary in freunde:
 		var zeile := FreundZeile.instantiate()
+		zeile.verzoegerung = nr * 0.07
+		nr += 1
 		%FreundeListe.add_child(zeile)
 		var d := f.duplicate()
 		d["textur"] = quelle.avatar_textur(int(f["id"]))
 		zeile.zeige(d)
 		if _eingeladen.has(int(f["id"])):
-			zeile.get_node("%Einladen").disabled = true
+			zeile.als_eingeladen()
 		zeile.einladen.connect(_freund_einladen)
 
 # ------------------------------------------------------------ Figur

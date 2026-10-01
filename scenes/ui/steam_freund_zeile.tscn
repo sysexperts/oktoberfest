@@ -1,51 +1,224 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/steam_freund_zeile.gd" id="1_z"]
+[ext_resource type="Shader" path="res://assets/shader/profil_rahmen.gdshader" id="2_rahmen"]
+[ext_resource type="Shader" path="res://assets/shader/rund_maske.gdshader" id="3_maske"]
 
-[sub_resource type="StyleBoxFlat" id="BildRahmen"]
-bg_color = Color(0.2, 0.15, 0.11, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+[sub_resource type="StyleBoxFlat" id="ZeileRuhe"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.94, 0.86, 0.05)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.94, 0.86, 0.07)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
 
-[node name="FreundZeile" type="HBoxContainer"]
-theme_override_constants/separation = 12
+[sub_resource type="StyleBoxFlat" id="ZeileHover"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.839, 0.349, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.45)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="ShaderMaterial" id="RahmenMat"]
+resource_local_to_scene = true
+shader = ExtResource("2_rahmen")
+shader_parameter/farbe_a = Color(0.34, 0.8, 0.87, 1)
+shader_parameter/farbe_b = Color(0.62, 0.45, 0.95, 1)
+shader_parameter/rundung = 0.3
+shader_parameter/dicke = 0.06
+shader_parameter/glow_rand = 0.14
+shader_parameter/tempo = 0.3
+shader_parameter/strahl = 0.5
+shader_parameter/leuchten = 0.6
+shader_parameter/puls = 2.0
+
+[sub_resource type="ShaderMaterial" id="MaskeMat"]
+shader = ExtResource("3_maske")
+shader_parameter/rundung = 0.27
+
+[sub_resource type="StyleBoxFlat" id="EinladenRuhe"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.96, 0.76, 0.42, 0.14)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.96, 0.76, 0.42, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="EinladenHover"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.96, 0.76, 0.42, 0.36)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.88, 0.55, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.96, 0.76, 0.42, 0.35)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="EinladenGedrueckt"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.96, 0.76, 0.42, 0.55)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.88, 0.55, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="EinladenFertig"]
+content_margin_left = 16.0
+content_margin_top = 6.0
+content_margin_right = 16.0
+content_margin_bottom = 6.0
+bg_color = Color(0.31, 0.48, 0.23, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.8, 0.3, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="FreundZeile" type="PanelContainer"]
+mouse_filter = 1
+theme_override_styles/panel = SubResource("ZeileRuhe")
 script = ExtResource("1_z")
+stil_ruhe = SubResource("ZeileRuhe")
+stil_hover = SubResource("ZeileHover")
 
-[node name="Rahmen" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(38, 38)
+[node name="Zeile" type="HBoxContainer" parent="."]
 layout_mode = 2
-theme_override_styles/panel = SubResource("BildRahmen")
+theme_override_constants/separation = 14
 
-[node name="Profilbild" type="TextureRect" parent="Rahmen"]
+[node name="Rahmen" type="Control" parent="Zeile"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+
+[node name="Glow" type="ColorRect" parent="Zeile/Rahmen"]
 unique_name_in_owner = true
-layout_mode = 2
+material = SubResource("RahmenMat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Grund" type="ColorRect" parent="Zeile/Rahmen"]
+material = SubResource("MaskeMat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.2, 0.15, 0.11, 1)
+
+[node name="Profilbild" type="TextureRect" parent="Zeile/Rahmen"]
+unique_name_in_owner = true
+material = SubResource("MaskeMat")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Anfangsbuchstabe" type="Label" parent="Rahmen"]
+[node name="Anfangsbuchstabe" type="Label" parent="Zeile/Rahmen"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Name" type="Label" parent="."]
-unique_name_in_owner = true
+[node name="Text" type="VBoxContainer" parent="Zeile"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 19
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="Zeile/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text_overrun_behavior = 3
 
-[node name="Status" type="Label" parent="."]
+[node name="Status" type="Label" parent="Zeile/Text"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 
-[node name="Einladen" type="Button" parent="."]
+[node name="Einladen" type="Button" parent="Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 38)
+custom_minimum_size = Vector2(130, 42)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+theme_override_colors/font_hover_color = Color(1, 0.97, 0.85, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.78, 0.92, 0.65, 1)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/focus = SubResource("EinladenHover")
+theme_override_styles/disabled = SubResource("EinladenFertig")
+theme_override_styles/hover = SubResource("EinladenHover")
+theme_override_styles/pressed = SubResource("EinladenGedrueckt")
+theme_override_styles/normal = SubResource("EinladenRuhe")
 text = "SW_INVITE"
