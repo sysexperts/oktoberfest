@@ -5654,7 +5654,42 @@ func _spawn_mess_near(p: Vector3) -> void:
 
 ## kind: 0 = Erbrochenes, 1 = Urin. Auf der Empore bleibt der Fleck oben (und nicht
 ## über dem Treppenloch).
+## Halbe Maße der Tischfläche samt Bänken (m) und der Abstand, den ein Fleck davon haben
+## soll: unter dem Tisch käme man mit E nicht heran, der Strahl träfe den Tisch (und
+## E würde ihn verschieben statt zu putzen).
+const TISCH_FLECK_HALB := Vector2(1.2, 0.8)
+const TISCH_FLECK_RAND := 0.55
+
+## Schiebt einen Fleck aus dem Bereich unter und direkt an den Tischen heraus, zur
+## nächsten freien Seite.
+func _fleck_neben_tisch(p: Vector3, ebene: int) -> Vector3:
+	for runde in 3:
+		var bewegt := false
+		for bt in _all_tables:
+			var t := bt as Node3D
+			if t == null or not is_instance_valid(t) or tisch_ebene(t) != ebene:
+				continue
+			var lokal := t.global_transform.affine_inverse() * p
+			var grenze := TISCH_FLECK_HALB + Vector2(TISCH_FLECK_RAND, TISCH_FLECK_RAND)
+			if absf(lokal.x) >= grenze.x or absf(lokal.z) >= grenze.y:
+				continue
+			# Über die Seite mit der kleinsten Strecke hinaus
+			var nach_x := grenze.x - absf(lokal.x)
+			var nach_z := grenze.y - absf(lokal.z)
+			if nach_z <= nach_x:
+				lokal.z = signf(lokal.z if lokal.z != 0.0 else 1.0) * (grenze.y + 0.05)
+			else:
+				lokal.x = signf(lokal.x if lokal.x != 0.0 else 1.0) * (grenze.x + 0.05)
+			p = t.global_transform * lokal
+			bewegt = true
+		if not bewegt:
+			break
+	return p
+
 func _spawn_mess_at(p: Vector3, kind: int) -> void:
+	# Abdeckplanen liegen absichtlich auf den Möbeln, alles andere bleibt neben den Tischen
+	if kind < Mess.DECKE or kind >= Mess.DECKE + 10:
+		p = _fleck_neben_tisch(p, ebene_von(p))
 	var id := _mess_next
 	_mess_next += 1
 	_mess_clean[id] = 0.0
