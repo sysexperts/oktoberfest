@@ -3,5 +3,9 @@
 [ext_resource type="PackedScene" path="res://scenes/figuren/charakter3.tscn" id="1"]
 [ext_resource type="Texture2D" path="res://assets/character/character3/varianten/lila.png" id="2"]
 
+[ext_resource type="PackedScene" path="res://scenes/zubehoer/rosenkranz.tscn" id="3"]
+
 [node name="Charakter3" instance=ExtResource("1")]
 textur = ExtResource("2")
+zubehoer = Array[PackedScene]([ExtResource("3")])
+zubehoer_anpassung = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 0, -0.76, 0.0)

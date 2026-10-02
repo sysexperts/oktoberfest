@@ -32,6 +32,9 @@ func _init() -> void:
 	_brille("sonnenbrille", Color(0.03, 0.03, 0.03), Color(0.02, 0.025, 0.03, 0.9), true)
 	_konrad_hut("konrad_hut")
 	_konrad_bart("konrad_bart")
+	# Rosen, Rosen-Rand, Knospen
+	_kranz("rosenkranz", [Color(0.82, 0.1, 0.16), Color(0.55, 0.05, 0.1), Color(0.96, 0.82, 0.86)])
+	_kranz("rosenkranz_rosa", [Color(0.95, 0.5, 0.68), Color(0.78, 0.3, 0.5), Color(1.0, 0.95, 0.85)])
 	print("Zubehör gebacken.")
 	quit()
 
@@ -666,3 +669,73 @@ func _konrad_bart(datei: String) -> void:
 	_fertig(am, st, "Bart", 0.85)
 	ResourceSaver.save(am, ZIEL + datei + ".tres")
 	print("  ", datei, ": ", am.get_surface_count(), " Oberflächen")
+
+# ------------------------------------------------------------ Rosenkranz
+## Kranz aus Efeu und Rosen, liegt wie ein Reif um den Kopf (etwas über der Stirn).
+func _kranz(datei: String, farben: Array) -> void:
+	var am := ArrayMesh.new()
+	_rng.seed = 77
+	var mitte_y := 1.635
+	var radius := 0.2
+	# Ranke: Röhre im Kreis, leicht wellig
+	var st := _neu()
+	var punkte := []
+	var radien := []
+	var n := 48
+	for i in n + 1:
+		var w := TAU * float(i) / n
+		var r := radius + 0.006 * sin(w * 9.0)
+		punkte.append(Vector3(sin(w) * r, mitte_y + 0.008 * sin(w * 5.0) - 0.012 * (1.0 - cos(w)) * 0.0, cos(w) * r))
+		radien.append(0.013)
+	_roehre(st, punkte, radien, Color(0.2, 0.32, 0.12), 8)
+	_fertig(am, st, "Ranke", 0.9)
+	# Blätter: kleine Rauten, nach außen und leicht nach oben geneigt
+	st = _neu()
+	for i in 44:
+		var w := TAU * (float(i) + _rng.randf() * 0.4) / 44.0
+		var aussen := Vector3(sin(w), 0.0, cos(w))
+		var quer := Vector3(cos(w), 0.0, -sin(w))
+		var fuss := aussen * (radius + 0.005) + Vector3(0, mitte_y + _rng.randf_range(-0.012, 0.012), 0)
+		var spitze := fuss + aussen * 0.045 + Vector3(0, _rng.randf_range(-0.03, 0.03), 0)
+		var gr := _rng.randf_range(0.0, 1.0)
+		var f := Color(0.16, 0.34, 0.12).lerp(Color(0.3, 0.46, 0.16), gr)
+		var a := fuss + quer * 0.014
+		var b := fuss - quer * 0.014
+		for v in [fuss, a, spitze, fuss, spitze, b]:
+			st.set_color(f)
+			st.add_vertex(v)
+	_fertig(am, st, "Blatt", 0.85)
+	# Rosen: je drei Blütenkugeln (Kern, Außenring) und Knospen dazwischen
+	var rosen := _neu()
+	var knospen := _neu()
+	var anzahl := 9
+	for i in anzahl:
+		var w := TAU * (float(i) + 0.5) / anzahl
+		var aussen := Vector3(sin(w), 0.0, cos(w))
+		var pos := aussen * (radius + 0.012) + Vector3(0, mitte_y + 0.012, 0)
+		_kugel(rosen, pos, 0.036, farben[1], 0.9)
+		_kugel(rosen, pos + aussen * 0.012 + Vector3(0, 0.008, 0), 0.027, farben[0], 0.8)
+		_kugel(rosen, pos + aussen * 0.022 + Vector3(0, 0.012, 0), 0.015, farben[1], 0.7)
+		# Knospe zwischen zwei Rosen
+		var w2 := w + TAU / anzahl / 2.0
+		var a2 := Vector3(sin(w2), 0.0, cos(w2))
+		_kugel(knospen, a2 * (radius + 0.008) + Vector3(0, mitte_y + 0.004, 0), 0.016, farben[2], 0.8)
+	_fertig(am, rosen, "Rose", 0.8)
+	_fertig(am, knospen, "Knospe", 0.8)
+	ResourceSaver.save(am, ZIEL + datei + ".tres")
+
+func _kugel(st: SurfaceTool, mitte: Vector3, r: float, farbe: Color, _rauh: float) -> void:
+	var nu := 12
+	var nv := 8
+	var p := []
+	for j in nv + 1:
+		for i in nu + 1:
+			var a := TAU * float(i) / nu
+			var b := PI * float(j) / nv
+			p.append(mitte + Vector3(sin(b) * cos(a), cos(b), sin(b) * sin(a)) * r)
+	for j in nv:
+		for i in nu:
+			var k := j * (nu + 1) + i
+			for t in [k, k + 1, k + nu + 2, k, k + nu + 2, k + nu + 1]:
+				st.set_color(farbe)
+				st.add_vertex(p[t])
