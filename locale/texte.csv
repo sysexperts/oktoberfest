@@ -632,6 +632,9 @@ KOOP_FIG_6,Wilhelm Brille,Wilhelm glasses,Wilhelm Gözlük
 KOOP_FIG_7,Alex Rot,Alex red,Alex Kırmızı
 KOOP_FIG_8,Alex Grün,Alex green,Alex Yeşil
 KOOP_FIG_9,Alex Grau,Alex grey,Alex Gri
+KOOP_FIG_10,Lisa Blau,Lisa blue,Lisa Mavi
+KOOP_FIG_11,Lisa Grün,Lisa green,Lisa Yeşil
+KOOP_FIG_12,Lisa Lila,Lisa purple,Lisa Mor
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam

@@ -16,6 +16,10 @@ const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/alex_rot_brille.tscn"),
 	preload("res://scenes/figuren/alex_gruen_sonnenbrille.tscn"),
 	preload("res://scenes/figuren/alex_grau_hut.tscn"),
+	# Weitere Frauen: Lisa mit anderem Dirndl (Farbe per tools/bake_kleidung.gd)
+	preload("res://scenes/figuren/lisa_blau.tscn"),
+	preload("res://scenes/figuren/lisa_gruen.tscn"),
+	preload("res://scenes/figuren/lisa_lila.tscn"),
 ]
 ## Figuren, die auf der Bank sitzen. Lisa (charakter3) sitzt mit einer
 ## Sitzkorrektur gegen den Rock (assets/sitz_lisa.tres, scenes/werkzeuge/sitz_haltung.tscn).
@@ -31,6 +35,10 @@ const GAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/alex_rot_brille.tscn"),
 	preload("res://scenes/figuren/alex_gruen_sonnenbrille.tscn"),
 	preload("res://scenes/figuren/alex_grau_hut.tscn"),
+	# Weitere Frauen: Lisa mit anderem Dirndl (Farbe per tools/bake_kleidung.gd)
+	preload("res://scenes/figuren/lisa_blau.tscn"),
+	preload("res://scenes/figuren/lisa_gruen.tscn"),
+	preload("res://scenes/figuren/lisa_lila.tscn"),
 ]
 ## Stehende Gäste: stehen hinter der Bank am Tisch statt zu sitzen, bestellen,
 ## trinken und tanzen sonst wie alle.

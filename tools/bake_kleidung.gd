@@ -9,6 +9,8 @@ extends SceneTree
 
 const C2 := "res://assets/character/character2/character2_texture_0.png"
 const ALEX := "res://assets/character/character4/alex_Walking_withSkin_texture_0.png"
+## Lisa (Dirndl): die Farbtextur steckt als Bild 0 neben dem glb (4096², wird für die Varianten halbiert)
+const C3 := "res://assets/character/character3/character3_Image_0.jpg"
 
 ## Regel: Farbton-Mitte (Grad), halbe Breite (Grad), Mindestsättigung,
 ## Höchsthelligkeit, Zielfarbe. Die Zielfarbe gilt für die mittlere Helligkeit
@@ -33,11 +35,26 @@ const VARIANTEN := {
 		{"ton": 206.0, "breite": 22.0, "saett": 0.12, "hell_max": 0.62, "bezug": 0.37, "farbe": Color(0.4, 0.4, 0.4)},
 		{"ton": 92.0, "breite": 26.0, "saett": 0.15, "hell_max": 0.5, "bezug": 0.24, "farbe": Color(0.36, 0.24, 0.13)},
 	]],
+	# Lisa: Dirndl umgefärbt. Das Rot des Dirndls ist fast gesättigt (0,96), Haut und Haare
+	# liegen bei 0,4 — daran lassen sie sich trennen. Das helle Rosa der Stickerei hat
+	# einen etwas anderen Farbton (340°) und wird gesondert mitgenommen.
+	"res://assets/character/character3/varianten/blau.png": [C3, [
+		{"ton": 355.0, "breite": 35.0, "saett": 0.8, "hell_max": 0.95, "bezug": 0.54, "farbe": Color(0.1, 0.22, 0.62)},
+		{"ton": 340.0, "breite": 14.0, "saett": 0.4, "hell_max": 1.0, "bezug": 0.7, "farbe": Color(0.4, 0.55, 0.92)},
+	]],
+	"res://assets/character/character3/varianten/gruen.png": [C3, [
+		{"ton": 355.0, "breite": 35.0, "saett": 0.8, "hell_max": 0.95, "bezug": 0.54, "farbe": Color(0.09, 0.4, 0.2)},
+		{"ton": 340.0, "breite": 14.0, "saett": 0.4, "hell_max": 1.0, "bezug": 0.7, "farbe": Color(0.45, 0.8, 0.5)},
+	]],
+	"res://assets/character/character3/varianten/lila.png": [C3, [
+		{"ton": 355.0, "breite": 35.0, "saett": 0.8, "hell_max": 0.95, "bezug": 0.54, "farbe": Color(0.42, 0.14, 0.52)},
+		{"ton": 340.0, "breite": 14.0, "saett": 0.4, "hell_max": 1.0, "bezug": 0.7, "farbe": Color(0.75, 0.55, 0.88)},
+	]],
 }
 
 func _init() -> void:
 	if "histogramm" in OS.get_cmdline_user_args():
-		for q in [C2, ALEX]:
+		for q in [C2, ALEX, C3]:
 			_histogramm(q)
 		quit()
 		return
@@ -47,6 +64,9 @@ func _init() -> void:
 		if not geladen.has(quelle):
 			geladen[quelle] = Image.load_from_file(quelle)
 		var bild: Image = (geladen[quelle] as Image).duplicate()
+		# Große Quellen (Lisa, 4096²) für die Varianten halbieren — die Figur ist klein im Bild
+		if bild.get_width() > 2048:
+			bild.resize(2048, 2048, Image.INTERPOLATE_LANCZOS)
 		var geaendert := _umfaerben(bild, VARIANTEN[ziel][1])
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(ziel.get_base_dir()))
 		bild.save_png(ProjectSettings.globalize_path(ziel))
