@@ -50,7 +50,7 @@ class Lauf extends Node:
 		gm._zelt_offen = true
 		gm._fuss_t = 0.0
 		gm._fuss_t = 1000.0
-		gm._fuss_pfad_anlegen(Vector3(4.0, 0.0, -2.5))   # fester Weg fürs Bild
+		gm._fuss_pfad_anlegen(Vector3(3.5, 0.0, 3.0))   # fester Weg fürs Bild
 		gm._update_fussspuren(0.01)
 		gm._guest_sim = echte_gaeste   # die Spielschleife darf mit den vorgetäuschten Gästen nicht weiterlaufen
 		var erster: int = gm._fuss_anzahl()
@@ -71,6 +71,19 @@ class Lauf extends Node:
 		sp._cam.current = true
 		await _frames(30)
 		get_viewport().get_texture().get_image().save_png("res://tools/fussspuren_boden.png")
+		# Balance: Liegt schon viel anderer Dreck herum, kommt kein neuer Weg
+		var davor_weg: int = gm._fuss_anzahl()
+		for i in 5:
+			gm._spawn_mess_at(Vector3(-6.0 + float(i), 0.0, 0.5), Mess.DRECK)
+		gm._guest_sim = {1: {}, 2: {}}
+		gm._fuss_t = 0.0
+		gm._update_fussspuren(0.01)
+		gm._guest_sim = echte_gaeste
+		var gesperrt: bool = gm._fuss_anzahl() == davor_weg
+		print("kein neuer Weg bei viel anderem Dreck: ", gesperrt)
+		# Und der Takt: nach einem Weg dauert es mindestens FUSS_MIN_ABSTAND bis zum nächsten
+		var takt: float = gm._fuss_t
+		print("Abstand bis zum nächsten Weg: %.0f s (mindestens %.0f)" % [takt, gm.FUSS_MIN_ABSTAND])
 		# Weitere Wege, bis die Höchstzahl erreicht ist — darüber hinaus darf nichts mehr kommen
 		for i in 30:
 			gm._fuss_pfad_anlegen()
@@ -101,7 +114,7 @@ class Lauf extends Node:
 			if not gm._messes.has(id):
 				break
 		print("nach dem Wischen: %d -> %d, Stück weg: %s" % [vorher, gm._fuss_anzahl(), not gm._messes.has(id)])
-		return erster >= 3 and anzahl <= gm.FUSS_MAX and anzahl > erster and not gm._messes.has(id) and gm._fuss_anzahl() == vorher - 1
+		return erster >= 3 and anzahl <= gm.FUSS_MAX and anzahl >= erster and gesperrt and takt >= gm.FUSS_MIN_ABSTAND and not gm._messes.has(id) and gm._fuss_anzahl() == vorher - 1
 
 	func _frames(k: int) -> void:
 		for i in k:

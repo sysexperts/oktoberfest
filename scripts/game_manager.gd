@@ -5503,20 +5503,26 @@ func _remove_guest(id: int) -> void:
 		_guests.erase(id)
 
 # ---- Fußspuren ----
-## Solange das Zelt offen ist, tragen die Gäste Dreck herein: vom Eingang zieht sich
-## ein welliger Fußweg zu einem Tisch (Schrittpaar neben Schrittpaar, jedes Stück
-## ein eigener Fleck zum Wischen, E halten). Je mehr Gäste, desto öfter kommt ein
-## neuer Weg; bei Regen doppelt so schnell. Die Spuren trüben die Sauberkeit nur
-## leicht (FUSS_GEWICHT), häufen sich aber bis FUSS_MAX an.
-const FUSS_MAX := 36
+## Solange das Zelt offen ist, tragen die Gäste ab und zu Dreck herein: vom Eingang zieht
+## sich ein welliger Fußweg zu einem der eingangsnahen Tische (Schrittpaar neben Schrittpaar,
+## jedes Stück ein eigener Fleck zum Wischen, E halten). Bewusst selten: ein Weg alle
+## paar Minuten Spielzeit (ein Spieltag dauert real nur ~5 Minuten), unabhängig davon, wie
+## viele Gäste kommen — das Putzen soll Abwechslung sein und nicht die ganze Schicht füllen.
+## Kein neuer Weg, solange noch viel anderer Dreck liegt oder die Sauberkeit ohnehin niedrig ist.
+const FUSS_MAX := 18
 const FUSS_GEWICHT := 0.08
-## Sekunden zwischen zwei neuen Wegen bei einem Gast; mit der Wurzel der Gästezahl kürzer
-const FUSS_ABSTAND := 90.0
-const FUSS_MIN_ABSTAND := 14.0
-## Abstand der Stücke auf dem Weg, Ausschlag der Wellen (Meter) und Wellen je Weg
+## Sekunden zwischen zwei Wegen (leicht kürzer mit mehr Gästen) und der kürzeste Abstand
+const FUSS_ABSTAND := 150.0
+const FUSS_MIN_ABSTAND := 80.0
+## Die erste Spur kommt etwas nach der Eröffnung, damit das Tutorial sie zeigen kann
+const FUSS_ERSTE := 40.0
+## Abstand der Stücke auf dem Weg, Ausschlag der Wellen (Meter)
 const FUSS_SCHRITT := 1.0
-const FUSS_AUSSCHLAG := 1.1
-var _fuss_t := 8.0
+const FUSS_AUSSCHLAG := 0.9
+## So viele Stücke anderer Flecken dürfen höchstens liegen, damit ein neuer Weg kommt
+const FUSS_ANDERER_DRECK_MAX := 3
+const FUSS_HYGIENE_MIN := 70.0
+var _fuss_t := FUSS_ERSTE
 var _fuss_gemeldet := false
 
 func _fuss_anzahl() -> int:
@@ -5529,11 +5535,15 @@ func _fuss_anzahl() -> int:
 func _update_fussspuren(delta: float) -> void:
 	if _phase != Phase.SHIFT or not _zelt_offen or _guest_sim.is_empty():
 		return
-	var tempo := 2.0 if _ereignis == "regen" else 1.0
+	var tempo := 1.5 if _ereignis == "regen" else 1.0
 	_fuss_t -= delta * tempo
 	if _fuss_t > 0.0:
 		return
-	_fuss_t = maxf(FUSS_MIN_ABSTAND, FUSS_ABSTAND / sqrt(float(_guest_sim.size())))
+	_fuss_t = maxf(FUSS_MIN_ABSTAND, FUSS_ABSTAND / (1.0 + 0.1 * sqrt(float(_guest_sim.size()))))
+	# Nicht noch mehr Arbeit, wenn schon genug herumliegt
+	var anderer_dreck := _mess_kind.size() - _fuss_anzahl()
+	if anderer_dreck > FUSS_ANDERER_DRECK_MAX or _hygiene < FUSS_HYGIENE_MIN:
+		return
 	_fuss_pfad_anlegen()
 
 ## Wohin ein Fußweg führt: ein Sitzplatz am Boden im Zelt, sonst irgendeine freie Stelle.
@@ -5545,7 +5555,10 @@ func _fuss_ziel() -> Vector3:
 			plaetze.append(p)
 	if plaetze.is_empty():
 		return DRECK_PLAETZE[randi() % DRECK_PLAETZE.size()]
-	return plaetze[randi() % plaetze.size()]
+	# Nur die sechs Plätze, die am nächsten am Eingang liegen: kurze Wege, wenig Putzarbeit
+	plaetze.sort_custom(func(a: Vector3, b: Vector3) -> bool:
+		return a.distance_squared_to(ENTRANCE) < b.distance_squared_to(ENTRANCE))
+	return plaetze[randi() % mini(6, plaetze.size())]
 
 ## Legt einen welligen Fußweg vom Eingang zum Ziel an (ohne Vorgabe ein Sitzplatz).
 ## Rückgabe: Zahl der Stücke.

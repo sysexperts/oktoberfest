@@ -161,8 +161,8 @@ func _apply_kind() -> void:
 		_disc.visible = false
 		_label.visible = false
 		_fuss.visible = true
-		# Das Stück liegt in Laufrichtung (das Bild zeigt nach oben = -Z)
-		_fuss.rotation.y = PI - deg_to_rad(float((kind - FUSS) % FUSS_RICHTUNGEN * FUSS_GRAD))
+		# Das Stück liegt in Laufrichtung (das Bild zeigt nach oben = -Z, geprüft mit tools/render_fussspur.tscn)
+		_fuss.rotation.y = PI + deg_to_rad(float((kind - FUSS) % FUSS_RICHTUNGEN * FUSS_GRAD))
 		return
 	if ist_sabotage():
 		var bier := (_disc.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
