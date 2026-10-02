@@ -30,3 +30,4 @@ tools/*.png.import
 # Python-Zwischenablage
 __pycache__/
 *.pyc
+avatare_export/
