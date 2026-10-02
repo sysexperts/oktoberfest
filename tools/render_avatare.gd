@@ -10,6 +10,14 @@ const Figuren := preload("res://scripts/figuren.gd")
 ## Es wird groß gerendert und dann aufs Gesicht zugeschnitten (siehe _gesicht_ausschnitt)
 const RENDER := 900
 const GROESSE := 256
+## Drehung der Figur (Grad), Abstand Brust unter dem Kopfknochen, Rand und kleinste Bildhöhe (m)
+const DREHUNG := 18.0
+const BRUST_UNTER_KOPF := 0.3
+const RAND := 0.1
+const MIN_SEITE := 0.6
+## Kopfhöhe (m) für Figuren ohne brauchbaren Kopfknochen, und feste Oberkante (Otto)
+const KOPF_Y := {0: 1.0, 3: 1.3, 7: 1.3, 8: 1.3, 9: 1.3}
+const OBEN := {0: 1.4}
 const AUSGABE := "res://assets/ui/avatare/figur_%d.png"
 ## Kopfhöhe kommt aus dem Knochen "Head" der jeweiligen Figur; Abstand und
 ## Brennweite sind für alle gleich, damit die Köpfe gleich groß wirken.
@@ -56,11 +64,28 @@ func _ready() -> void:
 		figur.stehen()
 		for f in 25:
 			await get_tree().process_frame
-		var h := _kopf_hoehe(figur)
-		kamera.look_at_from_position(Vector3(0.12, h + 0.22, ABSTAND), Vector3(0, h - MITTE_UNTER_KOPF, 0))
+		# Alle gleich: dieselbe Drehung (leicht zur Seite), Orthokamera, Ausschnitt von der
+		# Brust bis zur höchsten Stelle der Figur (Hut, Haare), Mitte auf dem Kopf
+		figur.rotation_degrees.y = DREHUNG
+		var kopf := _kopf_pos(figur)
+		# Bei Otto und Alex liefert das Skelett keinen brauchbaren Kopfknochen
+		if KOPF_Y.has(i):
+			kopf.y = KOPF_Y[i]
+		var oben := _oberkante(figur, kopf.y)
+		if OBEN.has(i):
+			oben = OBEN[i]
+		var unten := kopf.y - BRUST_UNTER_KOPF
+		var seite := maxf(oben - unten + RAND, MIN_SEITE)
+		kamera.projection = Camera3D.PROJECTION_ORTHOGONAL
+		kamera.size = seite
+		kamera.look_at_from_position(Vector3(kopf.x, oben + RAND * 0.5 - seite * 0.5, kopf.z + 3.0),
+			Vector3(kopf.x, oben + RAND * 0.5 - seite * 0.5, kopf.z))
 		await get_tree().process_frame
 		await get_tree().process_frame
-		var bild := _gesicht_ausschnitt(ansicht.get_texture().get_image())
+		var bild := ansicht.get_texture().get_image()
+		bild.convert(Image.FORMAT_RGBA8)
+		bild.resize(GROESSE, GROESSE, Image.INTERPOLATE_LANCZOS)
+		_unten_ausblenden(bild)
 		# OneDrive oder Virenscanner halten die Datei manchmal kurz fest — nochmal versuchen
 		for versuch in 5:
 			if bild.save_png(ProjectSettings.globalize_path(AUSGABE % i)) == OK:
@@ -71,11 +96,32 @@ func _ready() -> void:
 	print("AVATARE FERTIG: %d" % Figuren.ALLE.size())
 	get_tree().quit()
 
-func _kopf_hoehe(f: Figur) -> float:
+func _kopf_pos(f: Figur) -> Vector3:
 	if f.skelett == null or f.skelett.find_bone("Head") < 0:
-		return 1.6
+		return Vector3(0, 1.6, 0)
 	var b := f.skelett.find_bone("Head")
-	return (f.skelett.global_transform * f.skelett.get_bone_global_pose(b).origin).y
+	return f.skelett.global_transform * f.skelett.get_bone_global_pose(b).origin
+
+## Höchster Punkt der Figur über dem Kopf (Hut, Frisur, Feder), aus den Mesh-Rahmen
+func _oberkante(f: Figur, kopf_y: float) -> float:
+	var oben := kopf_y + 0.12
+	for mi: MeshInstance3D in f.find_children("*", "MeshInstance3D", true, false):
+		if mi.mesh == null:
+			continue
+		var box := mi.global_transform * mi.mesh.get_aabb()
+		# Rümpfe und Ganzkörper-Netze reichen nur bis zum Scheitel; Ausreißer begrenzen
+		oben = maxf(oben, minf(box.end.y, kopf_y + 0.7))
+	return oben
+
+## Unterer Rand weich ausblenden, damit die Brust nicht hart abgeschnitten wirkt
+func _unten_ausblenden(bild: Image) -> void:
+	var von := int(bild.get_height() * 0.84)
+	for y in range(von, bild.get_height()):
+		var f := 1.0 - float(y - von) / float(bild.get_height() - von)
+		for x in bild.get_width():
+			var c := bild.get_pixel(x, y)
+			c.a *= f
+			bild.set_pixel(x, y, c)
 
 ## Augen finden (zwei weiße, runde Flächen auf gleicher Höhe) und quadratisch um
 ## das Gesicht schneiden, die Größe aus dem Augenabstand — so sitzen alle Gesichter

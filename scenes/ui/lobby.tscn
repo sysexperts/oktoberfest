@@ -18,32 +18,18 @@
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_11.png" id="av11"]
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_12.png" id="av12"]
 [ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
+[ext_resource type="Texture2D" path="res://assets/ui/karte_ruhe.png" id="karte_ruhe"]
+[ext_resource type="Texture2D" path="res://assets/ui/karte_hover.png" id="karte_hover"]
+[ext_resource type="Texture2D" path="res://assets/ui/karte_gewaehlt.png" id="karte_gewaehlt"]
 
-[sub_resource type="StyleBoxFlat" id="KarteRuhe"]
-bg_color = Color(1, 0.94, 0.86, 0.05)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
+[sub_resource type="StyleBoxTexture" id="KarteRuhe"]
+texture = ExtResource("karte_ruhe")
 
-[sub_resource type="StyleBoxFlat" id="KarteHover"]
-bg_color = Color(1, 0.94, 0.86, 0.1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
+[sub_resource type="StyleBoxTexture" id="KarteHover"]
+texture = ExtResource("karte_hover")
 
-[sub_resource type="StyleBoxFlat" id="KarteGewaehlt"]
-bg_color = Color(1, 0.839, 0.349, 0.1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.839, 0.349, 0.9)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
+[sub_resource type="StyleBoxTexture" id="KarteGewaehlt"]
+texture = ExtResource("karte_gewaehlt")
 
 [sub_resource type="StyleBoxFlat" id="FensterStil"]
 content_margin_left = 44.0
