@@ -737,7 +737,7 @@ func _hint_for(t: Node3D) -> String:
 			return "HINT_HAND_KRUG"
 		return "HINT_HAND_ABLEGEN" if carry_state != 0 or not extra_kruege.is_empty() else ""
 	if t.has_method("ist_abgelegt"):
-		return "HINT_AUFHEBEN" if carry_state == 0 else ""
+		return "HINT_AUFHEBEN" if _kann_aufheben(t) else ""
 	if t is Braustation:
 		var st: Dictionary = _world.brau_stand(int((t as Braustation).schritt)) if _world.has_method("brau_stand") else {}
 		if bool(st.get("fertig", false)):
@@ -915,8 +915,11 @@ func _handle_interaction(delta: float) -> void:
 		return
 	if benutzen:
 		if _current_target.has_method("ist_abgelegt"):
-			# Abgelegten Krug/Teller aufheben — nur mit freien Händen
-			if carry_state == 0:
+			# Abgelegten Krug/Teller aufheben — mit freien Händen, oder einen vollen
+			# Krug zu den Krügen in der Hand dazunehmen (bis MAX_KRUEGE)
+			if _kann_aufheben(_current_target):
+				if carry_state != 0:
+					_krug_weglegen()
 				_world.net_aufheben.rpc_id(1, _current_target.ablage_id)
 				_sfx("pop")
 			return
@@ -1110,6 +1113,13 @@ func _handle_interaction(delta: float) -> void:
 
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
+
+## Abgelegten Gegenstand aufheben? Mit leerer Hand immer; mit einem vollen Krug in
+## der Hand nur weitere volle Krüge, solange noch Platz ist (wie beim Zapfen).
+func _kann_aufheben(t: Node) -> bool:
+	if carry_state == 0:
+		return true
+	return kann_weiteren_krug() and int(t.art) == 1 and float(t.fuellung) >= 0.999
 
 ## Noch Platz für einen weiteren vollen Krug? (Hand voll, weniger als MAX_KRUEGE)
 func kann_weiteren_krug() -> bool:
