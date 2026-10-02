@@ -1456,6 +1456,11 @@ func _add_player(peer_id: int, spawn_index: int) -> void:
 		p.position = Vector3(0, 0.1, 0)
 	_players_container.add_child(p)
 	_players_nodes[peer_id] = p
+	# Beim Host landet die Lobby-Wahl schon in p._ready (call_local), noch bevor der Spieler
+	# in _players_nodes steht — dann fand _net_spieler_info ihn nicht. Hier nachholen.
+	if _spieler_info.has(peer_id) and p.has_method("set_info"):
+		var d: Dictionary = _spieler_info[peer_id]
+		p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), int(d.get("figur", 0)))
 
 @rpc("authority", "reliable", "call_local")
 func _remove_player(peer_id: int) -> void:

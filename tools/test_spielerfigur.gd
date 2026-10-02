@@ -1,0 +1,62 @@
+extends Node
+const Spielstart := preload("res://tools/spielstart.gd")
+## Prüft, dass die im Warteraum gewählte Figur (Nr. 12 = Silke) beim Spieler ankommt,
+## wie beim Start aus dem Steam-Warteraum (Net.solo = false, KoopDaten.lobby_wahl).
+
+const KoopDaten := preload("res://scripts/koop_daten.gd")
+const DATEIEN := ["user://saves/slot_1.json", "user://saves/slot_2.json", "user://saves/slot_3.json",
+	"user://einstellungen.cfg"]
+
+func _ready() -> void:
+	get_tree().root.add_child.call_deferred(Lauf.new())
+
+class Lauf extends Node:
+	const KoopDaten := preload("res://scripts/koop_daten.gd")
+	var _gab_es := {}
+
+	func _ready() -> void:
+		process_mode = Node.PROCESS_MODE_ALWAYS
+		for pfad: String in DATEIEN:
+			if FileAccess.file_exists(pfad + ".testbackup"):
+				DirAccess.copy_absolute(ProjectSettings.globalize_path(pfad + ".testbackup"), ProjectSettings.globalize_path(pfad))
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(pfad + ".testbackup"))
+		for pfad: String in DATEIEN:
+			_gab_es[pfad] = FileAccess.file_exists(pfad)
+			if _gab_es[pfad]:
+				DirAccess.copy_absolute(ProjectSettings.globalize_path(pfad), ProjectSettings.globalize_path(pfad + ".testbackup"))
+		var ok := await _pruefen()
+		_wiederherstellen()
+		print("TEST ", "BESTANDEN" if ok else "FEHLGESCHLAGEN")
+		get_tree().quit(0 if ok else 1)
+
+	func _pruefen() -> bool:
+		Net.solo = false
+		Net.neues_spiel = true
+		Net.slot = 2
+		KoopDaten.lobby_wahl = {"name": "Test", "figur": int(OS.get_environment("FIG") if OS.get_environment("FIG") != "" else "12"), "id": ""}
+		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+		get_tree().change_scene_to_file(Net.GAME_SCENE)
+		var ende := Time.get_ticks_msec() + 120000
+		var gm: Node = null
+		while Time.get_ticks_msec() < ende:
+			var sz := get_tree().current_scene
+			if sz != null and sz.has_method("net_book_tent"):
+				gm = sz
+				break
+			await get_tree().process_frame
+		if gm == null:
+			return false
+		for i in 120:
+			await get_tree().process_frame
+		var sp: Node = gm._players_nodes.get(1)
+		print("Figur: ", sp._model.scene_file_path, " Info: ", gm._spieler_info)
+		return sp._model.scene_file_path.ends_with("lisa_lila.tscn")
+
+	func _wiederherstellen() -> void:
+		for pfad: String in DATEIEN:
+			var echt := ProjectSettings.globalize_path(pfad)
+			if _gab_es.get(pfad, false):
+				DirAccess.copy_absolute(echt + ".testbackup", echt)
+				DirAccess.remove_absolute(echt + ".testbackup")
+			elif FileAccess.file_exists(pfad):
+				DirAccess.remove_absolute(echt)
