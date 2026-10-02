@@ -412,6 +412,10 @@ MSG_DAY_START,"Tag %d · 07:00 — Zelt offen! Gäste ab 08:00, Feierabend um 22
 MSG_TABLE_NONE,Kein Tisch zum Verkaufen,No table to sell,Satılacak masa yok
 MSG_TABLE_SOLD,Tisch verkauft (+%s) · noch %d,Table sold (+%s) · %d left,Masa satıldı (+%s) · %d kaldı
 MSG_STOCK_EMPTY,Lager leer! %s nachbestellen (Festbüro Ware),Storage empty! Reorder %s (Fair Office Supplies),Depo boş! %s sipariş et (Fuar Ofisi Malzeme)
+MSG_KEIN_BIER,Kein Bier mehr im Lager! Im Festbüro unter Ware nachbestellen.,No beer left in storage! Reorder it at the fair office under Supplies.,Depoda bira kalmadı! Fuar ofisinde Malzeme sekmesinden sipariş et.
+MSG_KEIN_ESSEN,Kein Essen mehr im Lager! Im Festbüro unter Ware nachbestellen.,No food left in storage! Reorder it at the fair office under Supplies.,Depoda yemek kalmadı! Fuar ofisinde Malzeme sekmesinden sipariş et.
+HINT_KEIN_BIER,Kein Bier im Lager — im Festbüro nachbestellen,No beer in storage — reorder at the fair office,Depoda bira yok — fuar ofisinden sipariş et
+HINT_KEIN_ESSEN,Kein Essen im Lager — im Festbüro nachbestellen,No food in storage — reorder at the fair office,Depoda yemek yok — fuar ofisinden sipariş et
 MSG_EVENING,"19:00 — das Zelt wird voll, die Gäste werden ungeduldig","19:00 — the tent fills up, guests get impatient","19:00 — çadır doluyor, misafirler sabırsızlanıyor"
 MSG_DAY_END,Feierabend! Netto %s · Bilanz im Festbüro · schlafen startet den nächsten Tag,Closing time! Net %s · report in the Fair Office · sleep to start the next day,Mesai bitti! Net %s · bilanço Fuar Ofisinde · uyumak sonraki günü başlatır
 POPUP_RESERVE,"Zuerst Ware einkaufen!\n\nDu hast kein Bier im Lager und keine Lieferung unterwegs.\nBehalte mindestens %s für ein Paket Bier — sonst kannst du nichts verkaufen.\n\nFestbüro Ware","Buy supplies first!\n\nYou have no beer in storage and no delivery on the way.\nKeep at least %s for a package of beer — otherwise you can't sell anything.\n\nFair Office Supplies","Önce malzeme al!\n\nDepoda bira yok ve yolda teslimat yok.\nBir paket bira için en az %s ayır — yoksa hiçbir şey satamazsın.\n\nFuar Ofisi Malzeme"

@@ -823,6 +823,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_TAKE_ANOTHER" if kann_weiteren_krug() else ""
 	if t is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
+			if carry_fill <= 0.0 and (t as KegStation).beer_type != WASSER and not _bestand_frei(1):
+				return "HINT_KEIN_BIER"
 			return "HINT_TAP"
 		if _has_full_mug():
 			return "HINT_KRUG_VOLL"
@@ -830,6 +832,8 @@ func _hint_for(t: Node3D) -> String:
 	if t is FoodStation:
 		var ft := (t as FoodStation).food_type
 		var kocht := carry_state == 2 and carry_type == ft and carry_fill < 1.0
+		if carry_state == 0 and not _bestand_frei(2):
+			return "HINT_KEIN_ESSEN"
 		return "HINT_COOK" if carry_state == 0 or kocht else ""
 	if t is Computer:
 		return "HINT_COMPUTER"
@@ -1084,25 +1088,35 @@ func _handle_interaction(delta: float) -> void:
 			_sfx_loop("glug" if int((_current_target as Braustation).schritt) == 1 else "sizzle")
 	if Input.is_action_pressed("interact") and _current_target is KegStation:
 		if carry_state == 1 and carry_fill < 1.0:
-			if carry_fill <= 0.0:
-				_zapfen_an()   # Zapfhahn auf — nur mit Datei
-			carry_type = (_current_target as KegStation).beer_type
-			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
-			if carry_fill >= 1.0:
-				_zapfen_aus()   # voll: Schaum-Ende der Aufnahme nicht mehr abspielen
+			# Ein neuer Krug wird nur angezapft, solange noch Bier im Lager ist, das
+			# nicht schon abgefüllt herumsteht (Wasser kostet nichts)
+			var neuer_krug := carry_fill <= 0.0 and (_current_target as KegStation).beer_type != WASSER
+			if neuer_krug and not _bestand_frei(1):
+				_bestand_leer_melden(1)
 			else:
-				_zapf_bis = Time.get_ticks_msec() / 1000.0 + 0.25
-				_sfx_loop("glug")
+				if carry_fill <= 0.0:
+					_zapfen_an()   # Zapfhahn auf — nur mit Datei
+				carry_type = (_current_target as KegStation).beer_type
+				carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+				if carry_fill >= 1.0:
+					_zapfen_aus()   # voll: Schaum-Ende der Aufnahme nicht mehr abspielen
+				else:
+					_zapf_bis = Time.get_ticks_msec() / 1000.0 + 0.25
+					_sfx_loop("glug")
 	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
 	if Input.is_action_pressed("interact") and _current_target is FoodStation:
 		var ft := (_current_target as FoodStation).food_type
-		if carry_state == 0:
-			carry_state = 2
-			carry_type = ft
-			carry_fill = 0.0
-		if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
-			carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
-			_sfx_loop("sizzle")
+		if carry_state == 0 and not _bestand_frei(2):
+			# Nichts im Lager, das nicht schon fertig auf der Ausgabe liegt: gar nicht erst kochen
+			_bestand_leer_melden(2)
+		else:
+			if carry_state == 0:
+				carry_state = 2
+				carry_type = ft
+				carry_fill = 0.0
+			if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
+				carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
+				_sfx_loop("sizzle")
 	# Kir temizle (E basılı tut)
 	if Input.is_action_pressed("interact") and _current_target is Mess:
 		if _world.has_method("net_clean"):
@@ -1110,6 +1124,30 @@ func _handle_interaction(delta: float) -> void:
 			if not (_current_target as Mess).ist_plane():
 				_fegt_bis = Time.get_ticks_msec() / 1000.0 + 0.2
 			_sfx_loop("scrub")
+
+## Ist von dieser Ware (1 Bier, 2 Essen) noch etwas übrig, das nicht schon als Krug
+## oder Teller unterwegs ist? Der Bestand sinkt erst beim Servieren — ohne diese
+## Prüfung zapfte und kochte man weiter und erfuhr erst am Gast, dass das Lager leer war.
+func _bestand_frei(art: int) -> bool:
+	if not (_world.has_method("_ausgabe_gesamt") and "_stock" in _world):
+		return true
+	var vorrat := int(_world._stock.get(_world.WARE_ESSEN if art == 2 else _world.WARE_BIER, 0))
+	var unterwegs := int(_world._ausgabe_gesamt(art))
+	if art == 1:
+		unterwegs += extra_kruege.size()
+	return vorrat > unterwegs
+
+var _bestand_hinweis_ab := 0
+
+## Gedrückt gehalten kommt das jeden Frame — die Meldung nur alle paar Sekunden.
+func _bestand_leer_melden(art: int) -> void:
+	if Time.get_ticks_msec() < _bestand_hinweis_ab:
+		return
+	_bestand_hinweis_ab = Time.get_ticks_msec() + 3000
+	var hud := _world.get_node_or_null("HUD")
+	if hud and hud.has_method("melde_text"):
+		hud.melde_text(String(TranslationServer.translate("MSG_KEIN_ESSEN" if art == 2 else "MSG_KEIN_BIER")), 1)
+	_sfx("pop")
 
 func _has_full_mug() -> bool:
 	return carry_state == 1 and carry_fill >= 0.999
