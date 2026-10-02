@@ -24,10 +24,13 @@ const TEMPO := 1.7
 @export var figur_nr := 2
 @export var rundgang: NodePath = ^"../Rundgang"
 ## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
-@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
+## Der Festleiter begrüßt, liest dann Sepps Brief selbst vor (er hat ihn für den Erben
+## aufbewahrt) und stellt die Frage — alles ein Gespräch, kein eigener Brief-Bildschirm.
+@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_BRIEF_EIN", "CHEF_BRIEF_A", "CHEF_BRIEF_B", "CHEF_BRIEF_C",
+	"CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
 ## Onkel Sepps Brief, vor der ersten Frage. Texte wie oben mit _DU / _IHR.
-@export var zeilen_brief: Array[String] = ["BRIEF_1", "BRIEF_2", "BRIEF_3"]
+@export var zeilen_brief: Array[String] = []
 
 @onready var _ausruf: Label3D = get_node_or_null("Ausruf")
 

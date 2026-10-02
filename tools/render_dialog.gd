@@ -12,7 +12,7 @@ func _ready() -> void:
 	await _warte(5)
 	d.visible = true
 	d.get_node("%Sprecher").text = "Festleiter"
-	d.get_node("%Text").text = "Unterschreibt vorne am roten Schild, dann gehört das Zelt euch. Danach kommt der Rest von allein — erst die Tische, dann das Bier."
+	d.get_node("%Text").text = "»Mein liebes Patenkind — und ihr Spinner, die es sicher mitbringt: Wenn ihr das hört, hat mich die letzte Maß erwischt. Vierzig Jahre hab ich auf dem Sloptoberfest ausgeschenkt — und jetzt vermache ich euch mein Festzelt.«"
 	d.get_node("%Hinweis").text = "Linksklick / E weiter"
 	d.get_node("%Kasten").modulate.a = 1.0
 	d.set_process(false)
