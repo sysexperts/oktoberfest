@@ -13,6 +13,8 @@ const DRECK_ARTEN := [0, 1, 2, 4]
 const DECKE := 10
 ## Ab hier: Sabotage von Huber — auslaufendes Fass (Bierlache, kostet Bier bis sie weg ist)
 const SABOTAGE := 20
+## Ab hier: Fußspuren, die Gäste ins Zelt tragen (wischen, regelmäßig)
+const FUSS := 30
 ## Etwas Luft um die Plane herum: das Möbel darunter steht nicht immer mittig
 const DECKEN_RAND := 0.4
 const DECKEN_GROESSE := {
@@ -42,6 +44,7 @@ var _pruef := 0.0
 @onready var _label: Label3D = $Label
 @onready var _plane: MeshInstance3D = $Plane
 @onready var _pfeil: Label3D = $Pfeil
+@onready var _fuss: MeshInstance3D = $Fuss
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -94,7 +97,10 @@ func set_kind(k: int) -> void:
 		_apply_kind()
 
 func ist_sabotage() -> bool:
-	return kind >= SABOTAGE
+	return kind >= SABOTAGE and kind < FUSS
+
+func ist_fuss() -> bool:
+	return kind >= FUSS
 
 func ist_plane() -> bool:
 	return kind >= DECKE and kind < SABOTAGE
@@ -132,11 +138,29 @@ func deckt(punkt: Vector3) -> bool:
 func _apply_kind() -> void:
 	if _disc == null:
 		return
+	# Erst alles zurücksetzen: _ready zeigt die Form für Art 0, danach kommt set_kind —
+	# ohne das blieb darunter der Klecks der ersten Art liegen (bei den Fußspuren
+	# sah man den Erbrochenes-Fleck statt der Abdrücke)
+	_disc.visible = true
+	_label.visible = true
+	_kotze.visible = false
+	_urin.visible = false
+	_dreck.visible = false
+	_plane.visible = false
+	_fuss.visible = false
 	# Nur Planen und Bodendreck bekommen den Wegweiser
 	set_process(ist_plane() or ist_dreck())
 	if not (ist_plane() or ist_dreck()):
 		_pfeil.visible = false
 	_pfeil.position.y = _pfeil_hoehe()
+	if ist_fuss():
+		_disc.visible = false
+		_label.visible = false
+		_fuss.visible = true
+		# Jede Spur sieht anders aus: gedreht und mal gespiegelt
+		_fuss.rotation.y = float(mess_id) * 2.4
+		_fuss.scale = Vector3(-1.0 if mess_id % 2 == 0 else 1.0, 1.0, 1.0)
+		return
 	if ist_sabotage():
 		var bier := (_disc.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
 		bier.albedo_color = Color(0.85, 0.58, 0.12, 0.92)
@@ -183,6 +207,12 @@ func apply_progress(p: float) -> void:
 		_plane.position = Vector3(0.0, 0.0, g.z * 0.45 * q)
 		_plane.rotation.x = 0.18 * q
 		_plane.scale = Vector3(g.x * (1.0 + 0.03 * q), g.y * (1.0 - 0.35 * q), g.z * (1.0 - 0.15 * q))
+		return
+	if ist_fuss():
+		# Beim Wischen blasst die Spur aus
+		var fm := _fuss.material_override as StandardMaterial3D
+		if fm:
+			fm.albedo_color.a = lerpf(1.0, 0.0, clampf(p, 0.0, 1.0))
 		return
 	if ist_dreck():
 		var d := lerpf(1.5, 0.4, clampf(p, 0.0, 1.0))

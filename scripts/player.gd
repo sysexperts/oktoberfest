@@ -860,6 +860,8 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_SLEEP" if geschlossen else "HINT_SLEEP_SHIFT"
 	if t is Mess and t.ist_plane():
 		return "HINT_PLANE"
+	if t is Mess and t.ist_fuss():
+		return "HINT_WISCHEN"
 	if t is Mess and t.ist_dreck():
 		return "HINT_FEGEN"
 	if t is Mess:

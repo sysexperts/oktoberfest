@@ -10,6 +10,7 @@
 [ext_resource type="ArrayMesh" uid="uid://dw8f17636ys17" path="res://assets/dreck/plane.tres" id="8_plane"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/kotze.tres" id="9_kotze"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/urin.tres" id="10_urin"]
+[ext_resource type="Texture2D" path="res://assets/dreck/fussspur.png" id="11_fuss"]
 
 [sub_resource type="StandardMaterial3D" id="Mat"]
 resource_local_to_scene = true
@@ -19,6 +20,18 @@ albedo_color = Color(0.55, 0.6, 0.15, 0.95)
 [sub_resource type="CylinderMesh" id="Disc"]
 bottom_radius = 0.55
 height = 0.05
+
+[sub_resource type="StandardMaterial3D" id="MatFuss"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("11_fuss")
+roughness = 1.0
+
+[sub_resource type="QuadMesh" id="FussFlaeche"]
+size = Vector2(2.4, 2.4)
+orientation = 1
 
 [node name="Mess" type="Node3D" unique_id=579409845]
 script = ExtResource("1")
@@ -88,3 +101,9 @@ outline_modulate = Color(0.07, 0.06, 0.12, 1)
 text = "▼"
 font_size = 52
 outline_size = 14
+
+[node name="Fuss" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.065, 0)
+visible = false
+material_override = SubResource("MatFuss")
+mesh = SubResource("FussFlaeche")

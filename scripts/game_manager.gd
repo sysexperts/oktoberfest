@@ -4600,6 +4600,7 @@ func _shift_process(delta: float) -> void:
 	_update_staff(delta)
 	_update_complaints(delta)
 	_update_hygiene(delta)
+	_update_fussspuren(delta)
 
 ## Gästetyp nach Gewicht (GAST_TYPEN).
 func _gast_typ_waehlen() -> String:
@@ -5501,10 +5502,53 @@ func _remove_guest(id: int) -> void:
 			c.queue_free()
 		_guests.erase(id)
 
+# ---- Fußspuren ----
+## Solange das Zelt offen ist, tragen die Gäste Dreck herein: an den Laufwegen
+## erscheinen Fußspuren, die man regelmäßig wischen muss (E halten). Je mehr Gäste,
+## desto schneller; bei Regen doppelt so schnell. Sie trüben die Sauberkeit nur
+## leicht (FUSS_GEWICHT), häufen sich aber bis FUSS_MAX an.
+const FUSS_MAX := 10
+const FUSS_GEWICHT := 0.35
+## Sekunden zwischen zwei neuen Spuren bei einem Gast; mit der Wurzel der Gästezahl kürzer
+const FUSS_ABSTAND := 24.0
+const FUSS_MIN_ABSTAND := 4.0
+var _fuss_t := 8.0
+var _fuss_gemeldet := false
+
+func _fuss_anzahl() -> int:
+	var n := 0
+	for k in _mess_kind.values():
+		if int(k) >= Mess.FUSS:
+			n += 1
+	return n
+
+func _update_fussspuren(delta: float) -> void:
+	if _phase != Phase.SHIFT or not _zelt_offen or _guest_sim.is_empty():
+		return
+	var tempo := 2.0 if _ereignis == "regen" else 1.0
+	_fuss_t -= delta * tempo
+	if _fuss_t > 0.0:
+		return
+	_fuss_t = maxf(FUSS_MIN_ABSTAND, FUSS_ABSTAND / sqrt(float(_guest_sim.size())))
+	if _fuss_anzahl() >= FUSS_MAX:
+		return
+	# Laufwege: die freien Bodenstellen im Zelt, an denen auch der Dreck liegt
+	var ort: Vector3 = DRECK_PLAETZE[randi() % DRECK_PLAETZE.size()] + Vector3(randf_range(-0.7, 0.7), 0.0, randf_range(-0.7, 0.7))
+	for m in _messes.values():
+		if is_instance_valid(m) and (m as Node3D).global_position.distance_to(ort) < 1.8:
+			return
+	_spawn_mess_at(ort, Mess.FUSS)
+	if not _fuss_gemeldet:
+		_fuss_gemeldet = true
+		_melde("MSG_FUSS_ERSTE", [], 0)
+
 # ---- Temizlik / hijyen ----
 func _update_hygiene(delta: float) -> void:
-	var n := _messes.size()
-	if n > 0:
+	# Fußspuren trüben die Sauberkeit nur leicht, ein Fleck zählt voll
+	var n := 0.0
+	for k in _mess_kind.values():
+		n += FUSS_GEWICHT if int(k) >= Mess.FUSS else 1.0
+	if n > 0.0:
 		_hygiene = maxf(0.0, _hygiene - HYGIENE_DRAIN * n * delta)
 		if _npc_roles.has(ROLE_CLEAN):
 			for mid in _messes.keys():
@@ -5571,7 +5615,8 @@ func net_clean(id: int) -> void:
 		putzer = 1
 	var putz_faktor := 1.0
 	# Dreck fegen und Planen abziehen dauern ein paar Sekunden (≈ 3 s)
-	if int(_mess_kind.get(id, 0)) >= Mess.DRECK:
+	var putz_art := int(_mess_kind.get(id, 0))
+	if putz_art >= Mess.DRECK and putz_art < Mess.FUSS:
 		putz_faktor *= DRECK_TEMPO
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
@@ -6312,7 +6357,7 @@ func _huber_schicht(delta: float) -> void:
 			_saboteur_losschicken()
 	var leck := false
 	for k in _mess_kind.values():
-		if int(k) >= Mess.SABOTAGE:
+		if int(k) >= Mess.SABOTAGE and int(k) < Mess.FUSS:
 			leck = true
 			break
 	if not leck:
