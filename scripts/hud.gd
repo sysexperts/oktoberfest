@@ -437,6 +437,33 @@ func set_quest(step: int, total: int) -> void:
 	%AufgabeNummer.text = tr("HUD_TASK") % [step + 1, total]
 	%AufgabeTitel.text = tr("QUEST_%d_TITLE" % step)
 	%AufgabeText.text = Texte.mit_tasten("QUEST_%d_TEXT" % step)
+	# Teilziele nur im Putzschritt — der Server schickt den Stand gleich
+	%Teilziele.visible = false
+
+## Teilziele von „Putze das Zelt": je Zeile Haken und Zähler (GameManager._putz_senden).
+## stand: [Planen übrig, gesamt, Dreck übrig, gesamt, Säcke entsorgt, gesamt]; leer = ausblenden.
+const HAKEN_AN := preload("res://assets/ui/haken_an.svg")
+const HAKEN_AUS := preload("res://assets/ui/haken_aus.svg")
+const PUTZ_FARBE_OFFEN := Color(0.9, 0.86, 0.78)
+const PUTZ_FARBE_FERTIG := Color(0.55, 0.85, 0.45)
+
+func set_putz_stand(stand: Array) -> void:
+	%Teilziele.visible = stand.size() == 6 and _quest_step == 2
+	if not %Teilziele.visible:
+		return
+	var zeilen := [
+		[tr("PUTZ_PLANEN") % [int(stand[1]) - int(stand[0]), int(stand[1])], int(stand[0]) == 0],
+		[tr("PUTZ_DRECK") % [int(stand[3]) - int(stand[2]), int(stand[3])], int(stand[2]) == 0],
+		[tr("PUTZ_MUELL") % [int(stand[4]), int(stand[5])], int(stand[4]) >= int(stand[5])],
+	]
+	for i in zeilen.size():
+		var zeile := %Teilziele.get_child(i)
+		var fertig: bool = zeilen[i][1]
+		(zeile.get_node("Haken") as TextureRect).texture = HAKEN_AN if fertig else HAKEN_AUS
+		var text := zeile.get_node("Text") as Label
+		text.text = zeilen[i][0]
+		text.add_theme_color_override("font_color", PUTZ_FARBE_FERTIG if fertig else PUTZ_FARBE_OFFEN)
+	%MuellOrt.text = tr("PUTZ_MUELL_ORT")
 
 ## Grüner Haken mit Ton, ein paar Sekunden über der nächsten Aufgabe.
 func _aufgabe_erledigt(schritt: int) -> void:

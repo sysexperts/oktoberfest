@@ -49,3 +49,17 @@ mesh = ExtResource("2_sack")
 [node name="Form" type="CollisionShape3D" parent="Kollision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.63650000095367, 0.02500003576279)
 shape = SubResource("KollisionForm")
+
+[node name="Beschriftung" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.15, 0)
+pixel_size = 0.006
+billboard = 1
+double_sided = true
+no_depth_test = true
+fixed_size = false
+modulate = Color(1, 0.88, 0.5, 1)
+outline_modulate = Color(0.1, 0.06, 0.02, 1)
+text = "WORLD_MUELLTONNE"
+font_size = 64
+outline_size = 14
+visibility_range_end = 40.0

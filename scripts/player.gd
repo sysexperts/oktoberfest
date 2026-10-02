@@ -235,6 +235,8 @@ func schiessen_starten() -> void:
 ## angesprochen, das Gespräch lief in Dauerschleife. Darum kurz keine Interaktion.
 const INTERAKTION_SPERRE_MS := 300
 var _interaktion_ab := 0
+## Der Hinweis zum Müllsack kommt nur beim ersten Sack
+var _muell_tipp_gezeigt := false
 
 func minispiel_beendet() -> void:
 	minispiel = null
@@ -1016,6 +1018,12 @@ func _handle_interaction(delta: float) -> void:
 			carry_fill = 1.0
 			_world.net_pickup_package.rpc_id(1, pk.pkg_id)
 			_sfx("pop")
+			if pk.kind == 3 and not _muell_tipp_gezeigt:
+				# Müllsack: wohin damit? Einmal sagen, die Pfeilführung kommt dazu
+				_muell_tipp_gezeigt = true
+				var hud := _world.get_node_or_null("HUD")
+				if hud and hud.has_method("melde_text"):
+					hud.melde_text(String(TranslationServer.translate("MSG_MUELL_TONNE")), 0)
 		elif _current_target is Lager:
 			# Außerhalb der Schicht mit leeren Händen: Regal aufnehmen/abstellen
 			if carry_state == 0 and _world.has_method("in_intermission") and _world.in_intermission():

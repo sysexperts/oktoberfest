@@ -507,6 +507,78 @@ theme_override_font_sizes/font_size = 16
 text = "Geh zum Wiesenbüro und miete ein Zelt."
 autowrap_mode = 3
 
+[node name="Teilziele" type="VBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="Zeile0" type="HBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile0"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Zeile1" type="HBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile1"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Zeile2" type="HBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile2"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="MuellOrt" type="Label" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.57, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3
+
 [node name="AufgabeSkip" type="Label" parent="Rechts/Aufgabe/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2

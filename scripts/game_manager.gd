@@ -4508,6 +4508,7 @@ func _process(delta: float) -> void:
 		return
 	_leer_seit = 0.0
 	_ziel_senden(delta)
+	_putz_senden(delta)
 	if _dreck_nachlegen and _messes_container:
 		_dreck_nachlegen = false
 		if _quest_step == 2 and _tent_stage > 0 and not _dreck_uebrig():
@@ -6132,6 +6133,41 @@ func _fass_platz(sorte: int) -> Vector3:
 			if k is KegStation and int(k.beer_type) == sorte:
 				return Vector3((k as Node3D).global_position.x, 0.1, ZAPFER_POINT.z)
 	return ZAPFER_POINT
+
+# ================================================= Teilziele „Putze das Zelt"
+## Im Tutorial-Schritt 2 steht in der Aufgabenkarte, was noch zu tun ist: Planen,
+## Dreck, Säcke in die Mülltonne — jeweils mit Zähler. Der Server zählt, alle sehen es.
+var _putz_takt := 0.0
+var _putz_gesendet: Array = []
+
+func _putz_senden(delta: float) -> void:
+	_putz_takt -= delta
+	if _putz_takt > 0.0:
+		return
+	_putz_takt = 0.5
+	var stand: Array = []
+	# Solange der Dreck erst ausgelegt wird, wären alle Zähler 0 — nichts zeigen
+	if _quest_step == 2 and _tent_stage > 0 and not _dreck_nachlegen:
+		var planen := 0
+		var dreck := 0
+		for k in _mess_kind.values():
+			var art := int(k)
+			if art >= Mess.DECKE and art < Mess.SABOTAGE:
+				planen += 1
+			elif art >= Mess.DRECK and art < Mess.DECKE:
+				dreck += 1
+		stand = [planen, DECKEN_PLAETZE.size(), dreck, DRECK_PLAETZE.size(),
+			_muell_entsorgt, maxi(_muell_erzeugt, DRECK_PLAETZE.size())]
+	if stand != _putz_gesendet:
+		_putz_gesendet = stand
+		net_putz_stand.rpc(stand)
+
+## stand: [Planen übrig, Planen gesamt, Dreck übrig, Dreck gesamt, Säcke entsorgt, Säcke gesamt];
+## leer = keine Teilziele zeigen
+@rpc("authority", "reliable", "call_local")
+func net_putz_stand(stand: Array) -> void:
+	if _hud and _hud.has_method("set_putz_stand"):
+		_hud.set_putz_stand(stand)
 
 # ================================================= Müllsäcke (Zelt putzen)
 ## Jeder weggefegte Dreckhaufen wird ein Müllsack (Package, Sorte MUELL). Die
