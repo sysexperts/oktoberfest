@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/emote_rad.tscn" id="90_emote"]
 [ext_resource type="PackedScene" path="res://scenes/ui/abstimmung.tscn" id="5_abst"]
 [ext_resource type="PackedScene" path="res://scenes/ui/lobby.tscn" id="6_lobby"]
+[ext_resource type="PackedScene" path="res://scenes/ui/spielerliste.tscn" id="91_sl"]
 [ext_resource type="PackedScene" path="res://scenes/ui/schicht_intro.tscn" id="7_intro"]
 [ext_resource type="Shader" path="res://assets/shader/ui_glas.gdshader" id="80_glas"]
 [ext_resource type="Script" path="res://scripts/ui/glas.gd" id="81_glasskript"]
@@ -801,6 +802,9 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Lobby" parent="." instance=ExtResource("6_lobby")]
+unique_name_in_owner = true
+
+[node name="Spielerliste" parent="." instance=ExtResource("91_sl")]
 unique_name_in_owner = true
 
 [node name="SchichtIntro" parent="." instance=ExtResource("7_intro")]
