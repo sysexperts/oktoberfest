@@ -578,6 +578,7 @@ var _mess_clean := {}
 var _mess_next := 0
 
 func _ready() -> void:
+	_lager_standard_merken()
 	Game.reset()
 	_hud = $HUD
 	_sfx_node = $Sfx
@@ -1147,6 +1148,7 @@ func _load_game() -> bool:
 	# Spielstände von vor den Emporen: Regale nicht auf den Treppen stehen lassen
 	for r in _lagerregale():
 		(r as Node3D).position = _neben_treppe((r as Node3D).position)
+	_lager_sanieren()
 	_apply_tent()
 	# … und Tische nicht auf Treppen oder Stützen
 	for i in _beertables.size():
@@ -3955,6 +3957,33 @@ var _held_lager := {}        # peer_id -> Regal-Index (Server)
 var _haelt_lager := {}       # vom Server: Peer-ID (Text) -> Index
 
 ## Alle Lagerregale in fester Reihenfolge (nach Knotenname).
+## Standardlage der Regale aus der Szene: Name -> [Position, Drehung]. Wird beim Start
+## gemerkt und braucht, wer ein Regal durch den früheren Tragefehler (siehe
+## _update_held_lager) außerhalb des Zelts abgestellt hat.
+var _lager_standard := {}
+
+func _lager_standard_merken() -> void:
+	for r in get_tree().get_nodes_in_group("lager"):
+		_lager_standard[String(r.name)] = [(r as Node3D).position, (r as Node3D).rotation.y]
+
+## Stand eines geladenen Spielstands prüfen: liegt ein Regal außerhalb des Zeltes, zurück
+## an seinen Platz (die gekauften an ihren Kaufplatz).
+func _lager_sanieren() -> void:
+	for r in _lagerregale():
+		var g := (r as Node3D).global_position
+		if absf(g.x) <= WAND_X and g.z >= WAND_HINTEN and g.z <= WAND_VORN:
+			continue
+		var n := String(r.name)
+		if _lager_standard.has(n):
+			(r as Node3D).position = _lager_standard[n][0]
+			(r as Node3D).rotation.y = _lager_standard[n][1]
+		elif n.begins_with("LagerKauf"):
+			var nr := int(n.trim_prefix("LagerKauf"))
+			if nr >= 1 and nr <= LAGERREGAL_PLAETZE.size():
+				var platz: Vector3 = LAGERREGAL_PLAETZE[nr - 1]
+				(r as Node3D).position = Vector3(platz.x, 0.0, platz.z)
+				(r as Node3D).rotation.y = platz.y
+
 func _lagerregale() -> Array:
 	var regale := get_tree().get_nodes_in_group("lager")
 	regale.sort_custom(func(a, b): return String(a.name) < String(b.name))
@@ -4022,8 +4051,11 @@ func net_move_lager(index: int) -> void:
 		_held_lager.erase(s)
 		if idx >= 0 and idx < regale.size():
 			var r := regale[idx] as Node3D
-			r.position = _neben_treppe(Vector3(clampf(r.position.x, -WAND_X + 0.6, WAND_X - 0.6), 0.0,
-				clampf(r.position.z, WAND_HINTEN + 0.6, WAND_VORN - 0.6)))
+			# Weltkoordinaten: Die Regale im Lagerraum sind Kinder des Lagerraums (liegt bei
+			# -4 / 7), "position" wäre dort etwas anderes als die Stelle vor dem Spieler
+			var g := r.global_position
+			r.global_position = _neben_treppe(Vector3(clampf(g.x, -WAND_X + 0.6, WAND_X - 0.6), 0.0,
+				clampf(g.z, WAND_HINTEN + 0.6, WAND_VORN - 0.6)))
 	elif index >= 0 and index < regale.size() and not _held_lager.values().has(index) \
 			and not _held.has(s) and not _held_deko.has(s):
 		_held_lager[s] = index
@@ -4052,7 +4084,9 @@ func _update_held_lager() -> void:
 		if pl == null or idx < 0 or idx >= regale.size():
 			continue
 		var p: Vector3 = (pl as Node3D).global_position - (pl as Node3D).global_transform.basis.z * 2.0
-		(regale[idx] as Node3D).position = Vector3(p.x, 0.0, p.z)
+		# global_position, nicht position: das Regal im Lagerraum hing sonst um dessen
+		# Versatz (-4 / 7) neben dem Spieler — "ganz weit weg", nicht mehr zu erreichen
+		(regale[idx] as Node3D).global_position = Vector3(p.x, 0.0, p.z)
 
 ## Lage aller Regale für Clients und Spielstand: [[x, z, rot], …]
 func _lager_lagen() -> Array:

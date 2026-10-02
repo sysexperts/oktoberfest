@@ -904,6 +904,20 @@ func _handle_interaction(delta: float) -> void:
 		_ablegen()
 		return
 	if benutzen:
+		# Regal, Tisch oder Einrichtung in den Händen: E setzt es ab, egal worauf man gerade
+		# schaut (vorher ging das nur, wenn das getragene Stück selbst im Blick war)
+		if _world.has_method("haelt_lager") and _world.haelt_lager(name.to_int()):
+			_world.net_move_lager.rpc_id(1, -1)
+			_sfx("pop")
+			return
+		if _world.has_method("haelt_tisch") and _world.haelt_tisch(name.to_int()):
+			_world.net_move_table.rpc_id(1, -1)
+			_sfx("pop")
+			return
+		if _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int()):
+			_world.net_move_einrichtung.rpc_id(1, -1)
+			_sfx("pop")
+			return
 		# Jemanden auf dem Arm? Dann wirft dieses E ihn weg, egal wohin man schaut.
 		if traegt_raufbold or traegt_spieler:
 			if traegt_spieler:
