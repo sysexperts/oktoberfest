@@ -714,6 +714,13 @@ func _schicht_fortsetzen() -> void:
 func in_intermission() -> bool:
 	return _phase == Phase.INTERMISSION
 
+## Festbüro und Aufbau (Tische, Regale, Deko, Einkäufe, Personal, Lizenzen): nach
+## Feierabend und morgens, solange das Zelt noch nicht eröffnet ist. Nur bei
+## offenem Zelt, wenn Gäste kommen, ist das Büro zu. Schlafen geht weiter nur
+## nach Feierabend (in_intermission).
+func buero_offen() -> bool:
+	return _phase == Phase.INTERMISSION or (_phase == Phase.SHIFT and not _zelt_offen)
+
 func _tent_ready() -> bool:
 	return _tent_stage > 0 and _active_count > 0
 
@@ -1600,7 +1607,7 @@ func _apply_tent() -> void:
 ## Zelt mieten (Stufe 1) — der Name kommt aus dem Mietdialog (scenes/ui/zelt_mieten.tscn).
 @rpc("any_peer", "reliable", "call_local")
 func net_book_tent(zelt_name := "") -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION or _tent_stage != 0:
+	if not multiplayer.is_server() or not buero_offen() or _tent_stage != 0:
 		return
 	if not _afford(TENT_BOOK_COST):
 		_fehler("MSG_NO_MONEY", ["OFFER_TENT_RENT", _eur(TENT_BOOK_COST)])
@@ -1651,7 +1658,7 @@ func _zeltname_anzeigen() -> void:
 ## Kiosk: Tisch kaufen/platzieren (limit je Zeltstufe).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_table() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _tent_stage == 0:
 		_fehler("MSG_NEED_TENT")
@@ -1680,7 +1687,7 @@ func net_buy_table() -> void:
 ## Kiosk: Werbung — anında popülerlik enjeksiyonu (her seviye daha pahalı).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_marketing() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -1699,7 +1706,7 @@ func net_buy_marketing() -> void:
 ## Kiosk: Deko — kalıcı gelir çarpanı.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_deko() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -1718,7 +1725,7 @@ func net_buy_deko() -> void:
 ## Festbüro: Toilette einbauen — danach pinkelt niemand mehr in die Ecke.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_toilet() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -2004,7 +2011,7 @@ func net_skip_tutorial() -> void:
 ## Festbüro: Künstler für die nächste Schicht buchen.
 @rpc("any_peer", "reliable", "call_local")
 func net_book_artist(tier: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if not ARTIST_COST.has(tier):
 		return
@@ -2934,7 +2941,7 @@ func _consume_stock(okind: int) -> void:
 ## Festbüro: Mitarbeiter einstellen (1 Koch, 2 Kellner, 3 Reinigung).
 @rpc("any_peer", "reliable", "call_local")
 func net_hire_staff(role: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if not STAFF_HIRE_COST.has(role):
 		return
@@ -2967,7 +2974,7 @@ func net_hire_staff(role: int) -> void:
 ## Festbüro: schwächsten Mitarbeiter dieser Rolle aufstufen.
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_staff(role: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -3521,7 +3528,7 @@ func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sy: PackedFloat32
 ## Festbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_license(key: String) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if not LIC_COST.has(key):
 		return
@@ -3554,7 +3561,7 @@ func net_buy_license(key: String) -> void:
 ## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_tent() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -3773,7 +3780,7 @@ func _net_abstimmung(aktiv: bool, starter: String, ja: int, nein: int, gesamt: i
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
 @rpc("any_peer", "reliable", "call_local")
 func net_sell_table() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _active_count <= 0:
 		_fehler("MSG_TABLE_NONE")
@@ -3787,7 +3794,7 @@ func net_sell_table() -> void:
 ## Molada bira masasını tut/bırak (yerleştir).
 @rpc("any_peer", "reliable", "call_local")
 func net_move_table(index: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
@@ -3968,7 +3975,7 @@ func _haelt_lager_stand() -> Dictionary:
 
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_lagerregal() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if _tent_stage == 0:
 		_fehler("MSG_NEED_TENT")
@@ -4004,7 +4011,7 @@ func _add_lagerregal(nr: int, x: float, z: float, rot: float) -> void:
 ## Regal aufnehmen oder abstellen (außerhalb der Schicht, mit leeren Händen).
 @rpc("any_peer", "reliable", "call_local")
 func net_move_lager(index: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
@@ -4096,7 +4103,7 @@ func _update_held_tables() -> void:
 ## Büro steht weit weg, dort vor dem Käufer wäre er fehl am Platz.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_einrichtung(art: String) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	if not Katalog.ARTEN.has(art):
 		return
@@ -4313,7 +4320,7 @@ func _add_einrichtung(did: int, art: String, x: float, z: float, rot: float) -> 
 ## Molada: Gegenstand aufnehmen oder hinstellen (wie Tische).
 @rpc("any_peer", "reliable", "call_local")
 func net_move_einrichtung(did: int) -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
@@ -4341,7 +4348,7 @@ func net_rotate_einrichtung() -> void:
 ## Getragenen Gegenstand verkaufen — die Hälfte des Kaufpreises kommt zurück.
 @rpc("any_peer", "reliable", "call_local")
 func net_sell_einrichtung() -> void:
-	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not buero_offen():
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:
@@ -5782,6 +5789,9 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	if not multiplayer.is_server():
 		_zelt_offen = bool(buero.get("zelt_offen", true))
 	_eroeffnung_anzeigen()
+	# Das Zelt hat geöffnet, während das Festbüro offen war: Fenster zu — Käufe gingen nicht mehr durch
+	if _hud and not buero_offen() and _hud.has_method("is_booking_open") and _hud.is_booking_open():
+		_hud.close_booking()
 	var ereignis_neu := str(buero.get("ereignis", ""))
 	if ereignis_neu != _ereignis or multiplayer.is_server():
 		if not multiplayer.is_server():
@@ -6526,7 +6536,7 @@ func net_personal_lohn(sid: int) -> void:
 ## Festbüro: entlassen
 @rpc("any_peer", "reliable", "call_local")
 func net_personal_entlassen(sid: int) -> void:
-	if not multiplayer.is_server() or not _staff_sim.has(sid) or _phase != Phase.INTERMISSION:
+	if not multiplayer.is_server() or not _staff_sim.has(sid) or not buero_offen():
 		return
 	_melde("MSG_PERSONAL_ENTLASSEN", [str(_staff_sim[sid].get("name", ""))], 0)
 	_personal_weg(sid)

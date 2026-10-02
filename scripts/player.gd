@@ -782,6 +782,8 @@ func _hint_for(t: Node3D) -> String:
 			return ""
 		return str(t.bude.hinweis) if "hinweis" in t.bude else "HINT_SCHIESSSTAND"
 	var geschlossen: bool = _world.has_method("in_intermission") and _world.in_intermission()
+	# Festbüro und Aufbau: auch morgens bei noch geschlossenem Zelt
+	var aufbau: bool = _world.has_method("buero_offen") and _world.buero_offen()
 	if t is Customer:
 		var g := t as Customer
 		# Wasser für Angetrunkene, Bierleichen heimbringen
@@ -808,12 +810,12 @@ func _hint_for(t: Node3D) -> String:
 			return ""
 		return "HINT_AUSGABE_TAKE" if (t as Ausgabe).hat_fertiges() else "HINT_AUSGABE_EMPTY"
 	if t is Einrichtung:
-		if not geschlossen:
+		if not aufbau:
 			return ""
 		var traegt: bool = _world.has_method("haelt_einrichtung") and _world.haelt_einrichtung(name.to_int())
 		return "HINT_PLACE_DECO" if traegt else "HINT_MOVE_DECO"
 	if t is BeerTable:
-		if not geschlossen:
+		if not aufbau:
 			return ""
 		var traegt_tisch: bool = _world.has_method("haelt_tisch") and _world.haelt_tisch(name.to_int())
 		return "HINT_PLACE_TABLE" if traegt_tisch else "HINT_MOVE_TABLE"
@@ -846,14 +848,14 @@ func _hint_for(t: Node3D) -> String:
 			return "HINT_MUELL_NICHT_LAGER"
 		if carry_state == 3:
 			return "HINT_STORE"
-		if geschlossen and carry_state == 0:
+		if aufbau and carry_state == 0:
 			var traegt_regal: bool = _world.has_method("haelt_lager") and _world.haelt_lager(name.to_int())
 			return "HINT_PLACE_LAGER" if traegt_regal else "HINT_MOVE_LAGER"
 		return "HINT_STORAGE"
 	if t is ZeltVermietung:
 		return "HINT_RENT_TENT"
 	if t is OfficeDesk or t is BookingKiosk:
-		return "HINT_OFFICE" if geschlossen else "HINT_OFFICE_SHIFT"
+		return "HINT_OFFICE" if aufbau else "HINT_OFFICE_SHIFT"
 	if t is Caravan:
 		return "HINT_SLEEP" if geschlossen else "HINT_SLEEP_SHIFT"
 	if t is Mess and t.ist_plane():
@@ -983,12 +985,12 @@ func _handle_interaction(delta: float) -> void:
 				_sfx("ding")
 		elif _current_target is BeerTable:
 			# Molada masayı tut/bırak (yerleştir)
-			if _world.has_method("in_intermission") and _world.in_intermission():
+			if _world.has_method("buero_offen") and _world.buero_offen():
 				_world.net_move_table.rpc_id(1, (_current_target as BeerTable).idx)
 				_sfx("pop")
 		elif _current_target is Einrichtung:
 			# Molada Lampe/Deko aufnehmen oder abstellen
-			if _world.has_method("in_intermission") and _world.in_intermission():
+			if _world.has_method("buero_offen") and _world.buero_offen():
 				_world.net_move_einrichtung.rpc_id(1, (_current_target as Einrichtung).deko_id)
 				_sfx("pop")
 		elif _current_target is Ausgabe and _has_ready() and carry_state in [1, 2] \
@@ -1033,7 +1035,7 @@ func _handle_interaction(delta: float) -> void:
 					hud.melde_text(String(TranslationServer.translate("MSG_MUELL_TONNE")), 0)
 		elif _current_target is Lager:
 			# Außerhalb der Schicht mit leeren Händen: Regal aufnehmen/abstellen
-			if carry_state == 0 and _world.has_method("in_intermission") and _world.in_intermission():
+			if carry_state == 0 and _world.has_method("buero_offen") and _world.buero_offen():
 				_world.net_move_lager.rpc_id(1, _world._lagerregale().find(_current_target))
 				_sfx("pop")
 			# Getragenes Paket abladen
@@ -1060,14 +1062,14 @@ func _handle_interaction(delta: float) -> void:
 			_sfx("pop")
 		elif _current_target is OfficeDesk:
 			# Festbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
-			if _world.has_method("in_intermission") and _world.in_intermission():
+			if _world.has_method("buero_offen") and _world.buero_offen():
 				if _world.has_method("open_booking_ui"):
 					_world.open_booking_ui()
 			else:
 				_sfx("pop")
 		elif _current_target is BookingKiosk:
 			# Zelt buchen / Tisch stellen / upgrade (sadece molada)
-			if _world.has_method("in_intermission") and _world.in_intermission():
+			if _world.has_method("buero_offen") and _world.buero_offen():
 				if _world.has_method("open_booking_ui"):
 					_world.open_booking_ui()
 		elif _current_target is Gaerfass:

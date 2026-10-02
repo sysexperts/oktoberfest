@@ -222,7 +222,7 @@ HINT_RAUSWERFEN,{interact} Raufbold rauswerfen,{interact} Throw the brawler out,
 HINT_STORE,{interact} Paket einlagern,{interact} Store package,{interact} Paketi depola
 HINT_STORAGE,Lager — Pakete hierher bringen,Storage — bring packages here,Depo — paketleri buraya getir
 HINT_OFFICE,{interact} Festbüro öffnen,{interact} Open Fair Office,{interact} Fuar Ofisini aç
-HINT_OFFICE_SHIFT,Festbüro öffnet nach Feierabend,The Fair Office opens after closing time,Fuar Ofisi kapanıştan sonra açılır
+HINT_OFFICE_SHIFT,Festbüro ist bei offenem Zelt geschlossen,The Fair Office is closed while the tent is open,Çadır açıkken fuar ofisi kapalı
 HINT_SLEEP,{interact} Schlafen — neuer Tag,{interact} Sleep — next day,{interact} Uyu — yeni gün
 HINT_SLEEP_SHIFT,Schlafen erst nach Feierabend,You can sleep after closing time,Kapanıştan sonra uyuyabilirsin
 HINT_MOVE_TABLE,{interact} Tisch verschieben,{interact} Move table,{interact} Masayı taşı

@@ -43,6 +43,7 @@ func ziel_suchen() -> Node3D:
 	if sp == null or not gm.has_method("tutorial_active") or not gm.tutorial_active():
 		return null
 	var geschlossen: bool = gm.in_intermission()
+	var buero: bool = gm.buero_offen()
 	# Rundgang: Hat der Festleiter Neues zu erzählen oder läuft er voraus, zeigt der Pfeil auf ihn
 	var fuehrer := get_tree().get_first_node_in_group("festleiter") as Node3D
 	if fuehrer and fuehrer.has_method("hat_neues") and (fuehrer.hat_neues() or fuehrer.unterwegs()):
@@ -59,7 +60,7 @@ func ziel_suchen() -> Node3D:
 			var schild := _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
 			if schild:
 				return schild
-			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
+			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if buero else null
 		2:
 			# Zelt putzen: Sack in der Hand → Müllplatz, sonst Plane/Dreck, dann liegende Säcke
 			if sp.carry_state == 3 and sp.carry_pkg_kind == 3:
@@ -69,7 +70,7 @@ func ziel_suchen() -> Node3D:
 				return dreck
 			return _naechstes(sp, func(n: Node) -> bool: return n is Package and n.kind == 3)
 		3, 4, 10, 11, 12, 13:
-			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if geschlossen else null
+			return _naechstes(sp, func(n: Node) -> bool: return n is OfficeDesk) if buero else null
 		5:
 			# Lieferwagen unterwegs — schon zeigen, wohin die Pakete später gehören
 			return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
