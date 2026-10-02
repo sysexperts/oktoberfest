@@ -26,7 +26,9 @@ func _karte(pfad: String, hell: float, dick: float, rand: Color) -> void:
 			var innen := _innenabstand(x, y)
 			var breite := 2.0 + dick * 3.0
 			if innen < breite:
+				var al := c.a
 				c = c.lerp(Color(rand.r, rand.g, rand.b, 1.0), rand.a * clampf(breite - innen, 0.0, 1.0))
+				c.a = al
 			bild.set_pixel(x, y, c)
 	bild.save_png(ProjectSettings.globalize_path(pfad))
 

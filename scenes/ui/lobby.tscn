@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/karte_ruhe.png" id="karte_ruhe"]
 [ext_resource type="Texture2D" path="res://assets/ui/karte_hover.png" id="karte_hover"]
 [ext_resource type="Texture2D" path="res://assets/ui/karte_gewaehlt.png" id="karte_gewaehlt"]
+[ext_resource type="Script" path="res://scripts/ui/figurkarte.gd" id="karte_s"]
 
 [sub_resource type="StyleBoxTexture" id="KarteRuhe"]
 texture = ExtResource("karte_ruhe")
@@ -417,6 +418,7 @@ theme_override_constants/v_separation = 12
 columns = 5
 
 [node name="Figur0" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -456,6 +458,7 @@ text = "KOOP_FIG_0"
 horizontal_alignment = 1
 
 [node name="Figur1" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -495,6 +498,7 @@ text = "KOOP_FIG_1"
 horizontal_alignment = 1
 
 [node name="Figur2" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -534,6 +538,7 @@ text = "KOOP_FIG_2"
 horizontal_alignment = 1
 
 [node name="Figur3" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -573,6 +578,7 @@ text = "KOOP_FIG_3"
 horizontal_alignment = 1
 
 [node name="Figur4" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -612,6 +618,7 @@ text = "KOOP_FIG_4"
 horizontal_alignment = 1
 
 [node name="Figur5" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -651,6 +658,7 @@ text = "KOOP_FIG_5"
 horizontal_alignment = 1
 
 [node name="Figur6" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -690,6 +698,7 @@ text = "KOOP_FIG_6"
 horizontal_alignment = 1
 
 [node name="Figur7" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -729,6 +738,7 @@ text = "KOOP_FIG_7"
 horizontal_alignment = 1
 
 [node name="Figur8" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -768,6 +778,7 @@ text = "KOOP_FIG_8"
 horizontal_alignment = 1
 
 [node name="Figur9" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -807,6 +818,7 @@ text = "KOOP_FIG_9"
 horizontal_alignment = 1
 
 [node name="Figur10" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -846,6 +858,7 @@ text = "KOOP_FIG_10"
 horizontal_alignment = 1
 
 [node name="Figur11" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
@@ -885,6 +898,7 @@ text = "KOOP_FIG_11"
 horizontal_alignment = 1
 
 [node name="Figur12" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
 custom_minimum_size = Vector2(130, 158)
 layout_mode = 2
 theme_override_styles/focus = SubResource("KarteHover")
