@@ -30,7 +30,7 @@ albedo_texture = ExtResource("11_fuss")
 roughness = 1.0
 
 [sub_resource type="QuadMesh" id="FussFlaeche"]
-size = Vector2(2.4, 2.4)
+size = Vector2(2.2, 2.2)
 orientation = 1
 
 [node name="Mess" type="Node3D" unique_id=579409845]

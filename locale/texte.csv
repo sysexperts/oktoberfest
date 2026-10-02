@@ -908,7 +908,7 @@ CHEF_PUTZ_3_IHR,"Die Säcke tragt ihr raus und werft sie in die Mülltonne links
 HINT_PLANE,{interact} halten: Plane abziehen,Hold {interact}: pull off the cover,{interact} basılı tut: örtüyü çek
 HINT_FEGEN,{interact} halten: fegen,Hold {interact}: sweep,{interact} basılı tut: süpür
 HINT_WISCHEN,{interact} halten: Fußspuren wischen,Hold {interact}: wipe up the footprints,{interact} basılı tut: ayak izlerini sil
-MSG_FUSS_ERSTE,Fußspuren! Die Gäste schleppen Dreck ins Zelt — wisch sie regelmäßig weg,Footprints! Guests drag dirt into the tent — wipe them up regularly,Ayak izleri! Misafirler çadıra pislik taşıyor — düzenli olarak sil
+MSG_FUSS_ERSTE,Fußspuren vom Eingang bis zu den Tischen! Die Gäste schleppen Dreck ins Zelt — wisch den Weg regelmäßig weg,Footprints from the door to the tables! Guests drag dirt into the tent — wipe the trail up regularly,Girişten masalara ayak izleri! Misafirler çadıra pislik taşıyor — yolu düzenli olarak sil
 HINT_MUELL_ABSTELLEN,{interact} Müllsack in die Tonne werfen,{interact} Throw the rubbish bag into the bin,{interact} Çöp torbasını kutuya at
 HINT_MUELL_NICHT_LAGER,Müll gehört in die Mülltonne vor dem Zelt,Rubbish goes into the bin outside the tent,Çöp çadırın önündeki çöp kutusuna gider
 PUTZ_PLANEN,Planen abziehen (%d/%d),Pull off the covers (%d/%d),Örtüleri çek (%d/%d)

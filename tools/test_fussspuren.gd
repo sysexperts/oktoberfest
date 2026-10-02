@@ -1,7 +1,9 @@
 extends Node
 const Spielstart := preload("res://tools/spielstart.gd")
-## Prüft die Fußspuren: erscheinen im offenen Zelt bei Gästen, lassen sich wischen,
-## zeigen den Hinweis und stehen als Bild in tools/fussspuren.png.
+## Prüft die Fußspuren: Im offenen Zelt entsteht ein welliger Weg vom Eingang zu einem
+## Tisch (mehrere Stücke), höchstens FUSS_MAX, kein neuer Weg bei geschlossenem Zelt;
+## ein Stück zeigt den Hinweis und lässt sich wischen. Bilder: tools/fussspuren.png (von
+## oben) und tools/fussspuren_boden.png (aus Augenhöhe).
 ## Sichert Spielstände und Einstellungen vorher und stellt sie danach wieder her.
 ##   godot --path . res://tools/test_fussspuren.tscn   (mit Fenster)
 
@@ -37,50 +39,60 @@ class Lauf extends Node:
 		if kino and kino.aktiv:
 			kino.beenden()
 		var sp: Node3D = gm._players_nodes.get(1)
-		# Gäste vortäuschen, Zelt offen: Spuren müssen entstehen, aber höchstens FUSS_MAX
+		# Zelt gemietet mit Tischen, damit es Sitzplätze als Ziel gibt
+		gm._tent_stage = 1
+		gm._rebuild_seats()
+		print("Sitzplätze: ", gm._seats.size())
+		# Gäste vortäuschen, Zelt offen
 		var echte_gaeste: Dictionary = gm._guest_sim
 		gm._guest_sim = {1: {}, 2: {}, 3: {}, 4: {}}
 		gm._phase = gm.Phase.SHIFT
 		gm._zelt_offen = true
-		for i in 40:
-			gm._fuss_t = 0.0
-			gm._update_fussspuren(0.01)
+		gm._fuss_t = 0.0
+		gm._fuss_t = 1000.0
+		gm._fuss_pfad_anlegen(Vector3(4.0, 0.0, -2.5))   # fester Weg fürs Bild
+		gm._update_fussspuren(0.01)
+		gm._guest_sim = echte_gaeste   # die Spielschleife darf mit den vorgetäuschten Gästen nicht weiterlaufen
+		var erster: int = gm._fuss_anzahl()
+		print("Stücke im ersten Weg: ", erster)
+		# Bild nur mit diesem einen Weg, aus dem Zelt von schräg oben
+		var oben := Camera3D.new()
+		gm.add_child(oben)
+		oben.global_position = Vector3(2.0, 6.5, 9.0)
+		oben.look_at(Vector3(2.0, 0.0, 5.5))
+		oben.current = true
+		await _frames(30)
+		get_viewport().get_texture().get_image().save_png("res://tools/fussspuren.png")
+		oben.queue_free()
+		# Aus Augenhöhe am Eingang, den Weg entlang
+		sp.global_position = Vector3(0, 0.1, 14.5)
+		sp.look_at(Vector3(0, 1.0, 3.0))
+		sp._head.rotation.x = -0.45
+		sp._cam.current = true
+		await _frames(30)
+		get_viewport().get_texture().get_image().save_png("res://tools/fussspuren_boden.png")
+		# Weitere Wege, bis die Höchstzahl erreicht ist — darüber hinaus darf nichts mehr kommen
+		for i in 30:
+			gm._fuss_pfad_anlegen()
 		var anzahl: int = gm._fuss_anzahl()
-		print("Fußspuren nach 40 Versuchen: ", anzahl, " (Höchstzahl ", gm.FUSS_MAX, ")")
-		# Bei geschlossenem Zelt oder ohne Gäste kommen keine dazu
+		print("Stücke nach 30 weiteren Wegen: ", anzahl, " (Höchstzahl ", gm.FUSS_MAX, ")")
+		# Bei geschlossenem Zelt kommt nichts dazu
 		gm._zelt_offen = false
+		gm._guest_sim = {1: {}}
 		gm._fuss_t = 0.0
 		gm._update_fussspuren(0.01)
-		print("bei geschlossenem Zelt unverändert: ", gm._fuss_anzahl() == anzahl)
 		gm._guest_sim = echte_gaeste
+		print("bei geschlossenem Zelt unverändert: ", gm._fuss_anzahl() == anzahl)
 		await _frames(20)
-		# Eine Spur aufsuchen: Hinweis, Bild, wischen
+		# Ein Stück: Hinweis und Wischen
 		var spur: Mess = null
 		for m in gm._messes.values():
 			if m is Mess and m.ist_fuss():
 				spur = m
 				break
 		if spur == null:
-			print("keine Spur gefunden")
 			return false
 		print("Hinweis an der Spur: ", sp._hint_for(spur), " · ist_dreck=", spur.ist_dreck(), " ist_sabotage=", spur.ist_sabotage())
-		# Feste Stelle für das Bild: Spur und zum Vergleich ein Dreckhaufen, Kamera von oben
-		var punkt := Vector3(0.0, 0.0, 2.5)
-		gm._spawn_mess_at(punkt, Mess.FUSS)
-		gm._spawn_mess_at(punkt + Vector3(1.3, 0.0, 0.0), Mess.DRECK)
-		sp.global_position = punkt + Vector3(0.6, 0.1, 3.5)
-		await _frames(10)
-		var kamera := Camera3D.new()
-		gm.add_child(kamera)
-		kamera.global_position = punkt + Vector3(0.7, 1.7, 1.4)
-		kamera.look_at(punkt + Vector3(0.6, 0.0, 0.0))
-		kamera.current = true
-		await _frames(30)
-		print("Kamera aktiv: ", get_viewport().get_camera_3d().global_position)
-		get_viewport().get_texture().get_image().save_png("res://tools/fussspuren.png")
-		var q: MeshInstance3D = spur._fuss
-		print("Fuss-Quad: sichtbar=%s in_baum=%s Welt=%s scale=%s mat=%s tex=%s" % [q.visible, q.is_visible_in_tree(), q.global_position, q.global_transform.basis.get_scale(), q.material_override, (q.material_override as StandardMaterial3D).albedo_texture if q.material_override else null])
-		print("Mess: ", spur.global_position, " kind=", spur.kind, " Kotze=", spur._kotze.visible, " Disc=", spur._disc.visible)
 		var id: int = spur.mess_id
 		var vorher: int = gm._fuss_anzahl()
 		for i in 120:
@@ -88,8 +100,8 @@ class Lauf extends Node:
 			await get_tree().process_frame
 			if not gm._messes.has(id):
 				break
-		print("nach dem Wischen: %d -> %d, Spur weg: %s (Schritte %d)" % [vorher, gm._fuss_anzahl(), not gm._messes.has(id), 0])
-		return anzahl >= 1 and anzahl <= gm.FUSS_MAX and not gm._messes.has(id) and gm._fuss_anzahl() == vorher - 1
+		print("nach dem Wischen: %d -> %d, Stück weg: %s" % [vorher, gm._fuss_anzahl(), not gm._messes.has(id)])
+		return erster >= 3 and anzahl <= gm.FUSS_MAX and anzahl > erster and not gm._messes.has(id) and gm._fuss_anzahl() == vorher - 1
 
 	func _frames(k: int) -> void:
 		for i in k:

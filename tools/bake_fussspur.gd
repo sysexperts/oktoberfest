@@ -1,6 +1,8 @@
 extends SceneTree
-## Zeichnet die Fußspuren-Textur fürs Zelt: vier Schuhabdrücke im Wechsel links und
-## rechts, matschbraun, mit weichem Rand. Raus kommt assets/dreck/fussspur.png.
+## Zeichnet die Fußspuren-Textur fürs Zelt: zwei Schuhabdrücke (links, rechts) hintereinander,
+## matschbraun, mit weichem Rand. Mehrere solcher Stücke ergeben den Weg vom Eingang zu den
+## Tischen (GameManager._fuss_pfad_anlegen). Das Bild zeigt nach oben = Laufrichtung.
+## Raus kommt assets/dreck/fussspur.png.
 ## Aufruf: godot --headless --path . --script res://tools/bake_fussspur.gd
 ## Danach einmal importieren: godot --headless --path . --import
 
@@ -11,10 +13,9 @@ const FARBE := Color(0.1, 0.06, 0.03)
 func _init() -> void:
 	var bild := Image.create(GROESSE, GROESSE, false, Image.FORMAT_RGBA8)
 	bild.fill(Color(FARBE, 0.0))
-	# Spur von unten nach oben, leicht schräg; links und rechts abwechselnd
+	# Ein Schrittpaar von unten nach oben: links hinten, rechts vorn
 	var schritte := [
-		[Vector2(215, 395), -0.10, true], [Vector2(295, 300), 0.04, false],
-		[Vector2(222, 205), -0.06, true], [Vector2(292, 112), 0.08, false],
+		[Vector2(196, 345), -0.08, true], [Vector2(318, 165), 0.08, false],
 	]
 	for s: Array in schritte:
 		_abdruck(bild, s[0], s[1], s[2])

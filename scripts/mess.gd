@@ -13,8 +13,12 @@ const DRECK_ARTEN := [0, 1, 2, 4]
 const DECKE := 10
 ## Ab hier: Sabotage von Huber — auslaufendes Fass (Bierlache, kostet Bier bis sie weg ist)
 const SABOTAGE := 20
-## Ab hier: Fußspuren, die Gäste ins Zelt tragen (wischen, regelmäßig)
+## Ab hier: Fußspuren, die Gäste ins Zelt tragen (wischen, regelmäßig). Jedes Stück
+## ist ein Schrittpaar; die Laufrichtung steckt in der Art: FUSS + Richtung in
+## FUSS_GRAD-Schritten (0 = nach +Z, wächst im Uhrzeigersinn von oben gesehen).
 const FUSS := 30
+const FUSS_GRAD := 10
+const FUSS_RICHTUNGEN := 36
 ## Etwas Luft um die Plane herum: das Möbel darunter steht nicht immer mittig
 const DECKEN_RAND := 0.4
 const DECKEN_GROESSE := {
@@ -157,9 +161,8 @@ func _apply_kind() -> void:
 		_disc.visible = false
 		_label.visible = false
 		_fuss.visible = true
-		# Jede Spur sieht anders aus: gedreht und mal gespiegelt
-		_fuss.rotation.y = float(mess_id) * 2.4
-		_fuss.scale = Vector3(-1.0 if mess_id % 2 == 0 else 1.0, 1.0, 1.0)
+		# Das Stück liegt in Laufrichtung (das Bild zeigt nach oben = -Z)
+		_fuss.rotation.y = PI - deg_to_rad(float((kind - FUSS) % FUSS_RICHTUNGEN * FUSS_GRAD))
 		return
 	if ist_sabotage():
 		var bier := (_disc.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D

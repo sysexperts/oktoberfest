@@ -5503,15 +5503,19 @@ func _remove_guest(id: int) -> void:
 		_guests.erase(id)
 
 # ---- Fußspuren ----
-## Solange das Zelt offen ist, tragen die Gäste Dreck herein: an den Laufwegen
-## erscheinen Fußspuren, die man regelmäßig wischen muss (E halten). Je mehr Gäste,
-## desto schneller; bei Regen doppelt so schnell. Sie trüben die Sauberkeit nur
+## Solange das Zelt offen ist, tragen die Gäste Dreck herein: vom Eingang zieht sich
+## ein welliger Fußweg zu einem Tisch (Schrittpaar neben Schrittpaar, jedes Stück
+## ein eigener Fleck zum Wischen, E halten). Je mehr Gäste, desto öfter kommt ein
+## neuer Weg; bei Regen doppelt so schnell. Die Spuren trüben die Sauberkeit nur
 ## leicht (FUSS_GEWICHT), häufen sich aber bis FUSS_MAX an.
-const FUSS_MAX := 10
-const FUSS_GEWICHT := 0.35
-## Sekunden zwischen zwei neuen Spuren bei einem Gast; mit der Wurzel der Gästezahl kürzer
-const FUSS_ABSTAND := 24.0
-const FUSS_MIN_ABSTAND := 4.0
+const FUSS_MAX := 36
+const FUSS_GEWICHT := 0.08
+## Sekunden zwischen zwei neuen Wegen bei einem Gast; mit der Wurzel der Gästezahl kürzer
+const FUSS_ABSTAND := 90.0
+const FUSS_MIN_ABSTAND := 14.0
+## Abstand der Stücke auf dem Weg, Ausschlag der Wellen (Meter) und Wellen je Weg
+const FUSS_SCHRITT := 1.0
+const FUSS_AUSSCHLAG := 1.1
 var _fuss_t := 8.0
 var _fuss_gemeldet := false
 
@@ -5530,17 +5534,50 @@ func _update_fussspuren(delta: float) -> void:
 	if _fuss_t > 0.0:
 		return
 	_fuss_t = maxf(FUSS_MIN_ABSTAND, FUSS_ABSTAND / sqrt(float(_guest_sim.size())))
-	if _fuss_anzahl() >= FUSS_MAX:
-		return
-	# Laufwege: die freien Bodenstellen im Zelt, an denen auch der Dreck liegt
-	var ort: Vector3 = DRECK_PLAETZE[randi() % DRECK_PLAETZE.size()] + Vector3(randf_range(-0.7, 0.7), 0.0, randf_range(-0.7, 0.7))
-	for m in _messes.values():
-		if is_instance_valid(m) and (m as Node3D).global_position.distance_to(ort) < 1.8:
-			return
-	_spawn_mess_at(ort, Mess.FUSS)
+	_fuss_pfad_anlegen()
+
+## Wohin ein Fußweg führt: ein Sitzplatz am Boden im Zelt, sonst irgendeine freie Stelle.
+func _fuss_ziel() -> Vector3:
+	var plaetze: Array[Vector3] = []
+	for sitz in _seats:
+		var p: Vector3 = sitz.pos
+		if p.y < 0.5 and absf(p.x) < 10.0 and p.z < ENTRANCE.z - 2.0 and p.z > -6.0:
+			plaetze.append(p)
+	if plaetze.is_empty():
+		return DRECK_PLAETZE[randi() % DRECK_PLAETZE.size()]
+	return plaetze[randi() % plaetze.size()]
+
+## Legt einen welligen Fußweg vom Eingang zum Ziel an (ohne Vorgabe ein Sitzplatz).
+## Rückgabe: Zahl der Stücke.
+func _fuss_pfad_anlegen(vorgabe_ziel := Vector3.INF) -> int:
+	var start := ENTRANCE + Vector3(randf_range(-1.2, 1.2), 0.0, -0.6)
+	var ziel := _fuss_ziel() if vorgabe_ziel == Vector3.INF else vorgabe_ziel
+	var weg := ziel - start
+	weg.y = 0.0
+	var laenge := weg.length()
+	var stuecke := int(laenge / FUSS_SCHRITT)
+	if stuecke < 3 or _fuss_anzahl() + stuecke > FUSS_MAX:
+		return 0
+	var seite := Vector3(-weg.z, 0.0, weg.x).normalized()
+	var phase := randf() * TAU
+	var wellen := randf_range(1.0, 1.8)
+	var punkte: Array[Vector3] = []
+	for i in stuecke + 1:
+		var t := float(i) / float(stuecke)
+		# Am Eingang und am Tisch läuft der Weg gerade, dazwischen schwingt er aus
+		var ausschlag := FUSS_AUSSCHLAG * sin(PI * t) * sin(t * TAU * wellen + phase)
+		punkte.append(start + weg * t + seite * ausschlag)
+	var angelegt := 0
+	for i in stuecke:
+		var richtung := punkte[i + 1] - punkte[i]
+		var grad := rad_to_deg(atan2(richtung.x, richtung.z))
+		var nr := posmod(roundi(grad / float(Mess.FUSS_GRAD)), Mess.FUSS_RICHTUNGEN)
+		_spawn_mess_at(punkte[i], Mess.FUSS + nr)
+		angelegt += 1
 	if not _fuss_gemeldet:
 		_fuss_gemeldet = true
 		_melde("MSG_FUSS_ERSTE", [], 0)
+	return angelegt
 
 # ---- Temizlik / hijyen ----
 func _update_hygiene(delta: float) -> void:
@@ -5618,6 +5655,8 @@ func net_clean(id: int) -> void:
 	var putz_art := int(_mess_kind.get(id, 0))
 	if putz_art >= Mess.DRECK and putz_art < Mess.FUSS:
 		putz_faktor *= DRECK_TEMPO
+	elif putz_art >= Mess.FUSS:
+		putz_faktor *= 2.0   # ein Stück Fußweg ist schnell weggewischt
 	_mess_clean[id] = float(_mess_clean.get(id, 0.0)) + CLEAN_PER_CALL * putz_faktor
 	if _mess_clean[id] >= 1.0:
 		var art_dreck := int(_mess_kind.get(id, 0))
