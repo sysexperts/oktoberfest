@@ -14,10 +14,12 @@ const GROESSE := 256
 const DREHUNG := 18.0
 const BRUST_UNTER_KOPF := 0.3
 const RAND := 0.1
+const SEITE_FAKTOR := 1.0
 const MIN_SEITE := 0.6
 ## Kopfhöhe (m) für Figuren ohne brauchbaren Kopfknochen, und feste Oberkante (Otto)
 const KOPF_Y := {0: 1.0, 3: 1.3, 7: 1.3, 8: 1.3, 9: 1.3}
 const OBEN := {0: 1.4}
+## POSE (Umgebungsvariable): winken, jubeln, posen; AV_AUS: anderer Zielpfad für Versuche
 const AUSGABE := "res://assets/ui/avatare/figur_%d.png"
 ## Kopfhöhe kommt aus dem Knochen "Head" der jeweiligen Figur; Abstand und
 ## Brennweite sind für alle gleich, damit die Köpfe gleich groß wirken.
@@ -51,6 +53,12 @@ func _ready() -> void:
 	licht.light_color = Color(1, 0.95, 0.85)
 	licht.light_energy = 1.2
 	ansicht.add_child(licht)
+	# Warmes Gegenlicht von hinten links: goldener Rand um Haare und Schultern
+	var gegen := DirectionalLight3D.new()
+	gegen.rotation_degrees = Vector3(-10, 150, 0)
+	gegen.light_color = Color(1.0, 0.72, 0.4)
+	gegen.light_energy = 1.1
+	ansicht.add_child(gegen)
 	var kamera := Camera3D.new()
 	kamera.fov = BRENNWEITE
 	ansicht.add_child(kamera)
@@ -64,6 +72,8 @@ func _ready() -> void:
 		figur.stehen()
 		for f in 25:
 			await get_tree().process_frame
+		_pose_stellen(figur)
+		await get_tree().process_frame
 		# Alle gleich: dieselbe Drehung (leicht zur Seite), Orthokamera, Ausschnitt von der
 		# Brust bis zur höchsten Stelle der Figur (Hut, Haare), Mitte auf dem Kopf
 		figur.rotation_degrees.y = DREHUNG
@@ -75,7 +85,7 @@ func _ready() -> void:
 		if OBEN.has(i):
 			oben = OBEN[i]
 		var unten := kopf.y - BRUST_UNTER_KOPF
-		var seite := maxf(oben - unten + RAND, MIN_SEITE)
+		var seite := maxf(oben - unten + RAND, MIN_SEITE) * float(OS.get_environment("AV_FAKTOR") if OS.get_environment("AV_FAKTOR") != "" else 1.0)
 		kamera.projection = Camera3D.PROJECTION_ORTHOGONAL
 		kamera.size = seite
 		kamera.look_at_from_position(Vector3(kopf.x, oben + RAND * 0.5 - seite * 0.5, kopf.z + 3.0),
@@ -88,13 +98,23 @@ func _ready() -> void:
 		_unten_ausblenden(bild)
 		# OneDrive oder Virenscanner halten die Datei manchmal kurz fest — nochmal versuchen
 		for versuch in 5:
-			if bild.save_png(ProjectSettings.globalize_path(AUSGABE % i)) == OK:
+			if bild.save_png(ProjectSettings.globalize_path(_ausgabe() % i)) == OK:
 				break
 			await get_tree().create_timer(0.3).timeout
 		figur.queue_free()
 		await get_tree().process_frame
 	print("AVATARE FERTIG: %d" % Figuren.ALLE.size())
 	get_tree().quit()
+
+func _ausgabe() -> String:
+	var a := OS.get_environment("AV_AUS")
+	return a if a != "" else AUSGABE
+
+func _pose_stellen(f: Figur) -> void:
+	match OS.get_environment("POSE"):
+		"winken": f.winke_pose(0.45)
+		"jubeln": f.jubel_pose(0.4)
+		"posen": f.posen_pose(0.5)
 
 func _kopf_pos(f: Figur) -> Vector3:
 	if f.skelett == null or f.skelett.find_bone("Head") < 0:
