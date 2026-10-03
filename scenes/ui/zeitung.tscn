@@ -2,12 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/ui/zeitung.gd" id="1_skript"]
 [ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="3_bogen"]
+[ext_resource type="Texture2D" path="res://assets/ui/zeitung_blatt.png" id="3_bogen"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
-
-[sub_resource type="AtlasTexture" id="Pergament"]
-atlas = ExtResource("3_bogen")
-region = Rect2(664, 516, 484, 320)
 
 [sub_resource type="StyleBoxFlat" id="Linie"]
 bg_color = Color(0.25, 0.17, 0.08, 1)
@@ -26,25 +22,23 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.55)
 
-[node name="Blatt" type="NinePatchRect" parent="."]
+[node name="Blatt" type="TextureRect" parent="."]
 unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -320.0
-offset_right = 400.0
-offset_bottom = 320.0
+offset_left = -440.0
+offset_top = -340.0
+offset_right = 440.0
+offset_bottom = 340.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("Pergament")
-patch_margin_left = 60
-patch_margin_top = 60
-patch_margin_right = 60
-patch_margin_bottom = 60
+texture = ExtResource("3_bogen")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Rand" type="MarginContainer" parent="Blatt"]
 anchors_preset = 15
@@ -53,10 +47,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 80
-theme_override_constants/margin_top = 105
-theme_override_constants/margin_right = 80
-theme_override_constants/margin_bottom = 55
+theme_override_constants/margin_left = 84
+theme_override_constants/margin_top = 88
+theme_override_constants/margin_right = 84
+theme_override_constants/margin_bottom = 80
 
 [node name="Spalte" type="VBoxContainer" parent="Blatt/Rand"]
 layout_mode = 2
@@ -78,7 +72,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.35, 0.25, 0.14, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 15
 text = "Ausgabe Tag 1"
 horizontal_alignment = 1
 
@@ -94,7 +88,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.12, 0.07, 0.03, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 34
 text = "Schlagzeile"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -105,7 +99,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.25, 0.17, 0.08, 1)
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 19
 text = "Unterzeile"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -123,7 +117,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "• Meldung"
 autowrap_mode = 3
 
@@ -133,7 +127,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.3, 0.2, 0.1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 17
 text = "Zahlen"
 horizontal_alignment = 1
 
@@ -143,6 +137,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.42, 0.3, 0.18, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 15
 text = "ZEITUNG_SCHLIESSEN"
 horizontal_alignment = 2

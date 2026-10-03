@@ -107,7 +107,7 @@ func _process(delta: float) -> void:
 	_blatt.pivot_offset = _blatt.size * 0.5
 	var k := minf(1.0, _t * 3.0)
 	_blatt.scale = Vector2.ONE * lerpf(0.6, 1.0, k)
-	_blatt.rotation = lerpf(-0.35, -0.03, k)
+	_blatt.rotation = lerpf(-0.35, 0.0, k)
 
 func schliessen() -> void:
 	if not aktiv:
