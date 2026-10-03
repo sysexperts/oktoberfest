@@ -65,7 +65,7 @@ func _auszeichnen(text: String, farbe: Color) -> String:
 	var pos := 0
 	for m in _regex.search_all(text):
 		aus += _maskiert(text.substr(pos, m.get_start() - pos))
-		aus += "[color=#%s]%s[/color]" % [hex, _maskiert(m.get_string().replace(" ", "00a0"))]
+		aus += "[color=#%s]%s[/color]" % [hex, _maskiert(m.get_string().replace(" ", String.chr(0xA0)))]
 		pos = m.get_end()
 	aus += _maskiert(text.substr(pos)) + "[/color]"
 	return aus
