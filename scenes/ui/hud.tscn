@@ -588,6 +588,12 @@ theme_override_font_sizes/font_size = 13
 text = "HUD_TASK_SKIP"
 horizontal_alignment = 2
 
+[node name="Meldungen" type="VBoxContainer" parent="Rechts"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
 [node name="Bestellungen" type="PanelContainer" parent="Rechts"]
 unique_name_in_owner = true
 visible = false
@@ -810,22 +816,6 @@ unique_name_in_owner = true
 [node name="SchichtIntro" parent="." instance=ExtResource("7_intro")]
 unique_name_in_owner = true
 
-[node name="Meldungen" type="VBoxContainer" parent="."]
-unique_name_in_owner = true
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -444.0
-offset_top = -24.0
-offset_right = -24.0
-offset_bottom = -24.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_filter = 2
-theme_override_constants/separation = 8
-alignment = 2
 alignment = 2
 
 [node name="Hinweisfenster" type="CenterContainer" parent="."]
