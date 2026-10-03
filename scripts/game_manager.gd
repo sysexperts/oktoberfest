@@ -5871,6 +5871,12 @@ func _net_guests(cids: PackedInt32Array, cx: PackedFloat32Array, cy: PackedFloat
 ## Beliebtheit stand still).
 @rpc("authority", "unreliable", "call_local")
 func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, ids: PackedInt32Array, pr: PackedFloat32Array, night: bool) -> void:
+	# Mitspieler spiegeln den Kontostand auch in Game.money: Fenster wie das Glücksrad
+	# lesen ihn dort (Einsatzknöpfe), ohne das blieb er auf einem Client bei 0 und alle
+	# Knöpfe waren gesperrt. Der Server ist die Quelle — hier wird nur gelesen.
+	if not multiplayer.is_server():
+		Game.money = money
+		Game.score = score
 	_hud.set_money(money)
 	_hud.set_score(score)
 	_hud.set_time(clock, night)
