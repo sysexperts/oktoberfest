@@ -2,12 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/ui/kalender.gd" id="1_skript"]
 [ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/ui_bogen.png" id="3_bogen"]
+[ext_resource type="Texture2D" path="res://assets/ui/kalender_blatt.png" id="3_bogen"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
-
-[sub_resource type="AtlasTexture" id="Pergament"]
-atlas = ExtResource("3_bogen")
-region = Rect2(664, 516, 484, 320)
 
 [sub_resource type="StyleBoxFlat" id="Zelle"]
 bg_color = Color(0.98, 0.93, 0.8, 0.55)
@@ -25,6 +21,10 @@ content_margin_top = 4.0
 content_margin_right = 6.0
 content_margin_bottom = 4.0
 
+[sub_resource type="StyleBoxFlat" id="LinieDick"]
+bg_color = Color(0.2, 0.12, 0.05, 1)
+content_margin_top = 3.0
+
 [node name="Kalender" type="CanvasLayer"]
 layer = 27
 visible = false
@@ -40,24 +40,22 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.5)
 
-[node name="Blatt" type="NinePatchRect" parent="."]
+[node name="Blatt" type="TextureRect" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -560.0
-offset_top = -300.0
-offset_right = 560.0
-offset_bottom = 300.0
+offset_left = -584.0
+offset_top = -324.0
+offset_right = 584.0
+offset_bottom = 324.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("Pergament")
-patch_margin_left = 60
-patch_margin_top = 60
-patch_margin_right = 60
-patch_margin_bottom = 60
+texture = ExtResource("3_bogen")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Rand" type="MarginContainer" parent="Blatt"]
 anchors_preset = 15
@@ -66,10 +64,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 70
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_right = 70
-theme_override_constants/margin_bottom = 45
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 84
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 78
 
 [node name="Spalte" type="VBoxContainer" parent="Blatt/Rand"]
 layout_mode = 2
@@ -80,11 +78,17 @@ theme_override_constants/separation = 10
 theme_type_variation = &"PapierText"
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 46
 text = "KALENDER_TITEL"
 horizontal_alignment = 1
+
+[node name="LinieDick" type="PanelContainer" parent="Blatt/Rand/Spalte"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("LinieDick")
 
 [node name="Tage" type="GridContainer" parent="Blatt/Rand/Spalte"]
 unique_name_in_owner = true
