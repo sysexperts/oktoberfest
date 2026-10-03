@@ -38,6 +38,15 @@ const MUSIK_ORT := Vector3(0.0, 3.0, -2.0)
 ## Grundriss des Zelts (für die Kirmes-Geräusche)
 const ZELT_MIN := Vector2(-12.3, -14.3)
 const ZELT_MAX := Vector2(12.3, 11.3)
+## Eigener Bus für die Zeltmusik: seine Lautstärke folgt dem Abstand zum Zelt, die
+## Ein-/Ausblenden der Stücke (volume_db am Player) bleibt davon unberührt.
+const ZELT_BUS := "ZeltMusik"
+## Ab dieser Entfernung (m) von der Zeltwand ist vom Zelt nichts mehr zu hören; davor fällt
+## die Lautstärke gleich hinter der Wand steil ab (nur ganz nah am Zelt hört man es noch)
+const ZELT_HOERWEITE := 9.0
+## Wie schnell Zelt- und Außenklang ineinander übergehen (je Sekunde, kleiner = langsamer)
+const UEBERGANG_TEMPO := 0.8
+var _zelt_db := 0.0
 var _musik_db := -6.0
 var _musik_tween: Tween
 var _music_stream: AudioStream
@@ -98,10 +107,11 @@ func _ready() -> void:
 	# Echte Musik ist schon abgemischt, der Ersatzton nicht.
 	_musik_db = -2.0 if not _instrumental.is_empty() else -12.0
 	_music_player.volume_db = _musik_db
-	# Bis ~14 m voll (das ganze Zelt), danach leiser, ab 110 m nicht mehr hörbar
-	_music_player.unit_size = 14.0
-	_music_player.max_distance = 110.0
-	_music_player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_INVERSE_DISTANCE
+	# Keine Entfernungsdämpfung durch die 3D-Quelle: die Lautstärke regelt _process nach dem
+	# Abstand zur Zeltwand (Bus ZeltMusik), damit draußen kaum noch etwas vom Zelt zu hören ist.
+	_music_player.attenuation_model = AudioStreamPlayer3D.ATTENUATION_DISABLED
+	_zelt_bus_anlegen()
+	_music_player.bus = ZELT_BUS
 	_music_player.finished.connect(_naechstes_stueck)
 	add_child(_music_player)
 	_music_player.position = MUSIK_ORT
@@ -261,8 +271,23 @@ func musik_ausblenden(dauer: float) -> void:
 		_music_player.volume_db = _musik_db
 		_musik_tween = null)
 
-## Draußen: Menümusik + dezentes Stimmengewirr (nur bei offener Wiesn).
-## Im Zelt beides aus — dort spielt die Zeltmusik.
+## Abstand (m) von der Zeltwand, 0 im Zelt
+func _abstand_zum_zelt(p: Vector3) -> float:
+	var dx := maxf(maxf(ZELT_MIN.x - p.x, p.x - ZELT_MAX.x), 0.0)
+	var dz := maxf(maxf(ZELT_MIN.y - p.z, p.z - ZELT_MAX.y), 0.0)
+	return Vector2(dx, dz).length()
+
+func _zelt_bus_anlegen() -> void:
+	if AudioServer.get_bus_index(ZELT_BUS) >= 0:
+		return
+	AudioServer.add_bus()
+	var i := AudioServer.bus_count - 1
+	AudioServer.set_bus_name(i, ZELT_BUS)
+	AudioServer.set_bus_send(i, "Musik")
+
+## Im Zelt spielt die Zeltmusik, draußen Menümusik und Stimmengewirr. Beim Hinausgehen
+## geht das langsam ineinander über: gleich hinter der Zeltwand fällt das Zelt steil ab
+## und ist ab ZELT_HOERWEITE weg, der Außenklang kommt im selben Maß herein.
 func _process(delta: float) -> void:
 	if not _ok:
 		return
@@ -270,14 +295,25 @@ func _process(delta: float) -> void:
 	if kamera == null:
 		return
 	var p := kamera.global_position
-	var im_zelt := p.x > ZELT_MIN.x and p.x < ZELT_MAX.x and p.z > ZELT_MIN.y and p.z < ZELT_MAX.y
-	var k := clampf(delta * 1.5, 0.0, 1.0)
-	# 0 am Zelt, 1 ab ~35 m Abstand
+	var k := clampf(delta * UEBERGANG_TEMPO, 0.0, 1.0)
+	# 0 im Zelt, 1 ab ZELT_HOERWEITE draußen
+	var t := clampf(_abstand_zum_zelt(p) / ZELT_HOERWEITE, 0.0, 1.0)
+	# Zeltmusik: erst steil leiser, dann ausklingend
+	var zelt_ziel := -70.0 * pow(t, 0.55)
+	_zelt_db = lerpf(_zelt_db, zelt_ziel, k)
+	var bus := AudioServer.get_bus_index(ZELT_BUS)
+	if bus >= 0:
+		AudioServer.set_bus_volume_db(bus, _zelt_db)
+	# Außenklang: kommt in dem Maß herein, wie das Zelt geht (weich eingeblendet)
+	var innen := smoothstep(0.0, 1.0, t)
+	# 0 am Zelt, 1 ab ~35 m Abstand vom Musikort (Menümusik wird nach draußen lauter)
 	var weg := clampf((Vector2(p.x, p.z).distance_to(Vector2(MUSIK_ORT.x, MUSIK_ORT.z)) - 14.0) / 21.0, 0.0, 1.0)
-	var musik_ziel := -60.0 if im_zelt else lerpf(-26.0, -10.0, weg)
+	var musik_voll := lerpf(-26.0, -10.0, weg)
+	var musik_ziel := lerpf(-60.0, musik_voll, innen)
 	_draussen_player.volume_db = lerpf(_draussen_player.volume_db, musik_ziel, k)
 	if _crowd_stream != null:
-		var menge_ziel := -18.0 if (_wiesn_offen and not im_zelt) else -60.0
+		var menge_voll := -18.0 if _wiesn_offen else -60.0
+		var menge_ziel := lerpf(-60.0, menge_voll, innen)
 		_crowd_player.volume_db = lerpf(_crowd_player.volume_db, menge_ziel, k)
 		if not _wiesn_offen and _crowd_player.playing and _crowd_player.volume_db < -55.0:
 			_crowd_player.stop()
