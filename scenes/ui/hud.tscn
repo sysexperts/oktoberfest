@@ -91,6 +91,20 @@ fill_to = Vector2(1, 0)
 [sub_resource type="StyleBoxTexture" id="AufgabeFade"]
 texture = SubResource("AufgabeVerlaufTextur")
 
+[sub_resource type="Gradient" id="LeisteVerlauf"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.03, 0.022, 0.015, 0.88, 0.03, 0.022, 0.015, 0.7, 0.03, 0.022, 0.015, 0)
+
+[sub_resource type="GradientTexture2D" id="LeisteVerlaufTextur"]
+gradient = SubResource("LeisteVerlauf")
+width = 256
+height = 8
+fill_from = Vector2(0, 0)
+fill_to = Vector2(1, 0)
+
+[sub_resource type="StyleBoxTexture" id="LeisteFade"]
+texture = SubResource("LeisteVerlaufTextur")
+
 [sub_resource type="StyleBoxFlat" id="AufgabeRahmen"]
 bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
@@ -120,21 +134,14 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Glasfeld")
-
-[node name="Glas" type="ColorRect" parent="Oben/Leiste"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 18.0
+theme_override_styles/panel = SubResource("LeisteFade")
 
 [node name="Rand" type="MarginContainer" parent="Oben/Leiste"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 20
+theme_override_constants/margin_left = 22
 theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 22
+theme_override_constants/margin_right = 56
 theme_override_constants/margin_bottom = 12
 
 [node name="Spalte" type="VBoxContainer" parent="Oben/Leiste/Rand"]
@@ -405,6 +412,14 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 2
 theme_override_font_sizes/font_size = 14
 text = "Ereignis"
+
+[node name="StrichLeiste" type="ColorRect" parent="Oben/Leiste"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 2
+color = Color(1, 0.839, 0.349, 0.95)
 
 [node name="Rechts" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
