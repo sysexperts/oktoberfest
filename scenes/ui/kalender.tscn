@@ -1,718 +1,252 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/kalender.gd" id="1_skript"]
-[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/kalender_blatt.png" id="3_bogen"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="2_fraktur"]
+[ext_resource type="PackedScene" path="res://scenes/ui/kalender_tag.tscn" id="3_tag"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/kalender.svg" id="4_kal"]
+[ext_resource type="Script" path="res://scripts/ui/passend.gd" id="5_passend"]
 
-[sub_resource type="StyleBoxFlat" id="Zelle"]
-bg_color = Color(0.98, 0.93, 0.8, 0.55)
+[sub_resource type="StyleBoxFlat" id="FensterStil"]
+content_margin_left = 34.0
+content_margin_top = 24.0
+content_margin_right = 34.0
+content_margin_bottom = 24.0
+bg_color = Color(0.082, 0.064, 0.052, 0.97)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.45, 0.3, 0.15, 0.8)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 6.0
-content_margin_bottom = 4.0
+border_color = Color(1, 0.839, 0.349, 0.5)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 34
 
-[sub_resource type="StyleBoxFlat" id="LinieDick"]
-bg_color = Color(0.2, 0.12, 0.05, 1)
-content_margin_top = 3.0
+[sub_resource type="StyleBoxFlat" id="DetailStil"]
+content_margin_left = 20.0
+content_margin_top = 12.0
+content_margin_right = 20.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.94, 0.86, 0.06)
+border_width_left = 4
+border_color = Color(1, 0.839, 0.349, 0.9)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="BalkenHinten"]
+bg_color = Color(1, 0.94, 0.86, 0.1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="BalkenVorn"]
+bg_color = Color(1, 0.839, 0.349, 0.95)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Gradient" id="ZierVerlauf"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 0.839, 0.349, 0, 1, 0.839, 0.349, 0.75, 1, 0.839, 0.349, 0)
+
+[sub_resource type="GradientTexture2D" id="ZierTextur"]
+gradient = SubResource("ZierVerlauf")
+width = 512
+height = 4
+fill_from = Vector2(0, 0)
+fill_to = Vector2(1, 0)
 
 [node name="Kalender" type="CanvasLayer"]
 layer = 27
 visible = false
 script = ExtResource("1_skript")
-zelle_normal = SubResource("Zelle")
 
 [node name="Abdunkeln" type="ColorRect" parent="."]
+unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0, 0, 0, 0.5)
+color = Color(0, 0, 0, 0.55)
 
-[node name="Blatt" type="TextureRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -584.0
-offset_top = -324.0
-offset_right = 584.0
-offset_bottom = 324.0
+[node name="Mitte" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("3_bogen")
+
+[node name="Fenster" type="PanelContainer" parent="Mitte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("FensterStil")
+
+[node name="Passend" type="Node" parent="Mitte/Fenster"]
+script = ExtResource("5_passend")
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Fenster"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Kopf" type="HBoxContainer" parent="Mitte/Fenster/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Symbol" type="TextureRect" parent="Mitte/Fenster/Spalte/Kopf"]
+self_modulate = Color(1, 0.839, 0.349, 1)
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("4_kal")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Rand" type="MarginContainer" parent="Blatt"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 84
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 78
-
-[node name="Spalte" type="VBoxContainer" parent="Blatt/Rand"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 10
-
-[node name="Titel" type="Label" parent="Blatt/Rand/Spalte"]
-theme_type_variation = &"PapierText"
+[node name="Titel" type="Label" parent="Mitte/Fenster/Spalte/Kopf"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.93, 0.74, 1)
+theme_override_fonts/font = ExtResource("2_fraktur")
 theme_override_font_sizes/font_size = 46
 text = "KALENDER_TITEL"
-horizontal_alignment = 1
 
-[node name="LinieDick" type="PanelContainer" parent="Blatt/Rand/Spalte"]
+[node name="Fortschritt" type="VBoxContainer" parent="Mitte/Fenster/Spalte/Kopf"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+
+[node name="FortschrittText" type="Label" parent="Mitte/Fenster/Spalte/Kopf/Fortschritt"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 16
+text = "Tag 5 von 16"
+horizontal_alignment = 2
+
+[node name="Balken" type="ProgressBar" parent="Mitte/Fenster/Spalte/Kopf/Fortschritt"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("BalkenHinten")
+theme_override_styles/fill = SubResource("BalkenVorn")
+value = 30.0
+show_percentage = false
+
+[node name="Zier" type="TextureRect" parent="Mitte/Fenster/Spalte"]
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("LinieDick")
+texture = SubResource("ZierTextur")
+expand_mode = 1
 
-[node name="Tage" type="GridContainer" parent="Blatt/Rand/Spalte"]
+[node name="Tage" type="GridContainer" parent="Mitte/Fenster/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 columns = 8
 
-[node name="Tag1" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
+[node name="Tag1" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag2" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag3" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag4" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag5" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag6" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag7" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag8" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag9" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag10" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag11" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag12" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag13" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag14" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag15" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Tag16" parent="Mitte/Fenster/Spalte/Tage" instance=ExtResource("3_tag")]
+layout_mode = 2
+
+[node name="Detail" type="PanelContainer" parent="Mitte/Fenster/Spalte"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_override_styles/panel = SubResource("DetailStil")
+
+[node name="Reihe" type="HBoxContainer" parent="Mitte/Fenster/Spalte/Detail"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="DetailSymbol" type="TextureRect" parent="Mitte/Fenster/Spalte/Detail/Reihe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Mitte/Fenster/Spalte/Detail/Reihe"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag1"]
-layout_mode = 2
-mouse_filter = 2
+size_flags_vertical = 4
 theme_override_constants/separation = 2
 
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "1"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag1/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag2" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag2"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "2"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag2/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag3" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag3"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "3"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag3/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag4" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag4"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "4"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag4/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag5" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag5"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "5"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag5/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag6" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag6"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "6"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag6/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag7" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag7"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "7"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag7/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag8" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag8"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "8"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag8/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag9" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag9"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "9"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag9/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag10" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag10"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "10"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag10/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag11" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag11"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "11"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag11/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag12" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag12"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "12"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag12/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag13" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag13"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "13"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag13/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag14" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag14"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "14"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag14/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag15" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag15"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "15"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag15/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Tag16" type="PanelContainer" parent="Blatt/Rand/Spalte/Tage"]
-custom_minimum_size = Vector2(112, 150)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_styles/panel = SubResource("Zelle")
-
-[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Tage/Tag16"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.2, 0.08, 1)
-theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 24
-text = "16"
-
-[node name="Ereignis" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="Extras" type="Label" parent="Blatt/Rand/Spalte/Tage/Tag16/Inhalt"]
-theme_type_variation = &"PapierText"
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.45, 0.15, 0.08, 1)
-theme_override_font_sizes/font_size = 12
-autowrap_mode = 3
-
-[node name="Legende" type="Label" parent="Blatt/Rand/Spalte"]
-theme_type_variation = &"PapierText"
+[node name="DetailTitel" type="Label" parent="Mitte/Fenster/Spalte/Detail/Reihe/Text"]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.35, 0.24, 0.12, 1)
+theme_override_colors/font_color = Color(1, 0.93, 0.74, 1)
+theme_override_fonts/font = ExtResource("2_fraktur")
+theme_override_font_sizes/font_size = 28
+text = "Titel"
+
+[node name="DetailText" type="Label" parent="Mitte/Fenster/Spalte/Detail/Reihe/Text"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.86, 0.79, 1)
+theme_override_font_sizes/font_size = 17
+text = "Beschreibung"
+autowrap_mode = 3
+
+[node name="Legende" type="Label" parent="Mitte/Fenster/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.57, 0.5, 1)
 theme_override_font_sizes/font_size = 14
 text = "KALENDER_LEGENDE"
 horizontal_alignment = 1
-autowrap_mode = 3

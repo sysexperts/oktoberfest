@@ -29,7 +29,7 @@ class Lauf extends Node:
 		gm._broadcast_meta()
 		await _warten(0.4)
 		gm.get_node("Kalender").zeigen()
-		await _warten(0.5)
+		await _warten(2.0)
 		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/kalender.png")
 		get_tree().quit()
 	func _warten(s: float) -> void:

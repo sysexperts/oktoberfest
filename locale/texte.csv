@@ -1060,7 +1060,7 @@ ZEITUNG_M_HUBER_3,Gerücht: Konrad soll nachts um fremde Zelte schleichen.,Rumou
 ZEITUNG_M_HUBER_4,Konrad verlost Freibier — aber nur für Stammgäste.,Konrad raffles free beer — regulars only.,Konrad bedava bira çekilişi yapıyor — sadece müdavimlere.
 ACTION_KALENDER,Kalender,Calendar,Takvim
 KALENDER_TITEL,Festkalender,Fair calendar,Fuar takvimi
-KALENDER_LEGENDE,"Heute ist hervorgehoben. Bankrate am Abend · Konrad bietet eine Wette an · Duell um Sepps Ehre · K oder Esc schließt","Today is highlighted. bank instalment in the evening · Konrad offers a bet · duel for Sepp's honour · K or Esc closes","Bugün vurgulandı. akşam banka taksiti · Konrad bahis teklif ediyor · Sepp'in onuru için düello · K veya Esc kapatır"
+KALENDER_LEGENDE,"Karte anwählen für Details · Gold leuchtet der heutige Tag, Haken = vorbei · K oder Esc schließt","Select a card for details · today glows gold, tick = past · K or Esc closes","Ayrıntı için bir kart seç · bugün altın parlar, tik = geçti · K veya Esc kapatır"
 KALENDER_ERSTER,Erster Festtag,First day of the fair,Fuarın ilk günü
 KALENDER_BANK,%s,%s,%s
 KALENDER_WETTE,Konrad-Wette,Konrad bet,Konrad bahsi
@@ -1214,3 +1214,9 @@ ZEITUNG_ANZEIGE_3,ANZEIGE|Verloren: Zapfhahn|Goldener Zapfhahn nahe der Blaskape
 ZEITUNG_NUMMER,Nr. %d · Wiesn-Blatt,No. %d · Fair Gazette,No. %d · Şenlik Gazetesi
 SPIELERLISTE_EREIGNISSE,Heute passiert,Today,Bugün olanlar
 ACTION_SPIELERLISTE,Spielerliste,Player list,Oyuncu listesi
+KALENDER_FORTSCHRITT,Tag %d von %d,Day %d of %d,Gün %d / %d
+KALENDER_TAG,Tag %d,Day %d,Gün %d
+KALENDER_HEUTE,HEUTE,TODAY,BUGÜN
+KALENDER_NORMAL_TITEL,Festtag,Fair day,Fuar günü
+KALENDER_NORMAL,Ein ganz normaler Festtag — kein besonderes Ereignis geplant.,A perfectly normal fair day — no special event planned.,Tamamen sıradan bir fuar günü — özel bir etkinlik yok.
+KALENDER_BANK_DETAIL,Am Abend wird eine Bankrate von %s fällig.,A bank instalment of %s is due in the evening.,Akşam %s tutarında banka taksiti vadesi gelir.
