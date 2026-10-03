@@ -52,6 +52,8 @@ class Lauf extends Node:
 		var kino = gm.get_node_or_null("Kino")
 		if kino and kino.aktiv:
 			kino.beenden()
+		hud.melde("MSG_GOODS_ORDERED", [1, "GOODS_BEER", {"euro": 40}], 2)
+		hud.melde("MSG_RAUSCH")
 		var ev := InputEventKey.new()
 		ev.physical_keycode = KEY_TAB
 		ev.pressed = true
@@ -61,7 +63,8 @@ class Lauf extends Node:
 		var liste: Control = hud.get_node("%Spielerliste")
 		print("Liste sichtbar: ", liste.visible, " Zeilen: ", liste.get_node("%Liste").get_child_count())
 		get_viewport().get_texture().get_image().save_png(ProjectSettings.globalize_path("res://build/spielerliste.png"))
-		var ok := liste.visible and liste.get_node("%Liste").get_child_count() == 1
+		print("Ereignisse: ", liste.get_node("%Ereignisse").get_child_count())
+		var ok := liste.visible and liste.get_node("%Liste").get_child_count() == 1 and liste.get_node("%Ereignisse").get_child_count() == 2
 		ev = ev.duplicate()
 		ev.pressed = false
 		Input.parse_input_event(ev)

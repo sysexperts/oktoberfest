@@ -27,7 +27,7 @@ var _roh := ""
 func zeige(text: String, art: int) -> void:
 	_roh = text
 	var farbe: Color = FARBEN[clampi(art, 0, FARBEN.size() - 1)]
-	%Text.text = "[right]" + _auszeichnen(text, farbe) + "[/right]"
+	%Text.text = "[right]" + auszeichnen(text, farbe) + "[/right]"
 	%Strich.color = Color(farbe.r, farbe.g, farbe.b, 0.9)
 	modulate.a = 0.0
 	_panel.position.x = 60.0
@@ -56,7 +56,7 @@ func _process(_delta: float) -> void:
 	if _panel.size.y != h or _panel.size.x != size.x:
 		_panel.size = Vector2(size.x, h)
 
-func _auszeichnen(text: String, farbe: Color) -> String:
+static func auszeichnen(text: String, farbe: Color) -> String:
 	if _regex == null:
 		_regex = RegEx.new()
 		_regex.compile(r"(?i)(\d[\d.,]*\s?(?:€|%|Uhr)?|\b(?:" + "|".join(BEGRIFFE) + r")\b)")
@@ -70,7 +70,7 @@ func _auszeichnen(text: String, farbe: Color) -> String:
 	aus += _maskiert(text.substr(pos)) + "[/color]"
 	return aus
 
-func _maskiert(t: String) -> String:
+static func _maskiert(t: String) -> String:
 	return t.replace("[", "[lb]")
 
 func text() -> String:

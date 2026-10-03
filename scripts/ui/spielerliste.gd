@@ -10,6 +10,9 @@ const FARBEN := [Color(0.85, 0.2, 0.2), Color(0.2, 0.45, 0.85), Color(0.2, 0.7, 
 	Color(0.7, 0.3, 0.8), Color(0.95, 0.85, 0.2), Color(0.95, 0.95, 0.95)]
 
 @export var zeile: PackedScene
+@export var ereignis: PackedScene
+
+const Meldung := preload("res://scripts/ui/meldung.gd")
 
 var _gm: Node
 var _t := 0.0
@@ -57,3 +60,20 @@ func _aufbauen() -> void:
 		(z.get_node("%Name") as Label).text = name_text
 		(z.get_node("%Ich") as Label).visible = int(peer) == ich
 	%Titel.text = tr("SPIELERLISTE_TITEL") % peers.size()
+	_ereignisse_zeigen()
+
+## Die letzten Meldungen zum Nachlesen (neueste oben), in der Farbe ihrer Art
+func _ereignisse_zeigen() -> void:
+	for k in %Ereignisse.get_children():
+		k.queue_free()
+	var hud := get_parent()
+	var liste: Array = hud.verlauf if "verlauf" in hud else []
+	%Ereignisse.visible = not liste.is_empty()
+	for i in range(liste.size() - 1, -1, -1):
+		var e: Dictionary = liste[i]
+		var z := ereignis.instantiate()
+		%Ereignisse.add_child(z)
+		var farbe: Color = Meldung.FARBEN[clampi(int(e.get("art", 0)), 0, Meldung.FARBEN.size() - 1)]
+		(z.get_node("%Strich") as ColorRect).color = Color(farbe.r, farbe.g, farbe.b, 0.9)
+		(z.get_node("%Zeit") as Label).text = str(e.get("zeit", ""))
+		(z.get_node("%Text") as RichTextLabel).text = Meldung.auszeichnen(str(e.get("text", "")), farbe)

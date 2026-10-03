@@ -507,11 +507,23 @@ func _aufgabe_erledigt(schritt: int) -> void:
 # ------------------------------------------------------------ Meldungen
 const MELDUNG := preload("res://scenes/ui/meldung.tscn")
 const MAX_MELDUNGEN := 4
+## Alle Meldungen der letzten Zeit zum Nachlesen (Tab): {text, art, zeit}, neueste zuletzt
+const MAX_VERLAUF := 14
+var verlauf: Array[Dictionary] = []
+
+func _verlauf_merken(text: String, art: int) -> void:
+	var zeit := ""
+	if _clock >= 0.0:
+		zeit = "%02d:%02d" % [int(_clock) % 24, int((_clock - floorf(_clock)) * 60.0)]
+	verlauf.append({"text": text, "art": art, "zeit": zeit})
+	while verlauf.size() > MAX_VERLAUF:
+		verlauf.pop_front()
 
 ## Meldung unten in der Mitte. Neue kommen unten dazu, ältere rutschen hoch;
 ## mehr als vier auf einmal verdrängen die ältesten.
 ## art: 0 Info, 1 Problem, 2 Erfolg.
 func melde(schluessel: String, werte: Array = [], art := 0) -> void:
+	_verlauf_merken(Texte.meldung(schluessel, werte), art)
 	var m := MELDUNG.instantiate()
 	_meldungen.add_child(m)
 	m.zeige(Texte.meldung(schluessel, werte), art)
@@ -659,6 +671,7 @@ func _ziel_anzeigen() -> void:
 
 ## Fertiger Text als Meldung (schon übersetzt)
 func melde_text(text: String, art := 0) -> void:
+	_verlauf_merken(text, art)
 	var m := MELDUNG.instantiate()
 	_meldungen.add_child(m)
 	m.zeige(text, art)
