@@ -77,6 +77,20 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="Gradient" id="AufgabeVerlauf"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.03, 0.022, 0.015, 0, 0.03, 0.022, 0.015, 0.62, 0.03, 0.022, 0.015, 0.86)
+
+[sub_resource type="GradientTexture2D" id="AufgabeVerlaufTextur"]
+gradient = SubResource("AufgabeVerlauf")
+width = 256
+height = 8
+fill_from = Vector2(0, 0)
+fill_to = Vector2(1, 0)
+
+[sub_resource type="StyleBoxTexture" id="AufgabeFade"]
+texture = SubResource("AufgabeVerlaufTextur")
+
 [sub_resource type="StyleBoxFlat" id="AufgabeRahmen"]
 bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
@@ -397,7 +411,7 @@ unique_name_in_owner = true
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -374.0
+offset_left = -414.0
 offset_top = 12.0
 offset_right = -14.0
 offset_bottom = 300.0
@@ -410,21 +424,14 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("AufgabeRahmen")
-
-[node name="Glas" type="ColorRect" parent="Rechts/Erledigt"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 18.0
+theme_override_styles/panel = SubResource("AufgabeFade")
 
 [node name="Rand" type="MarginContainer" parent="Rechts/Erledigt"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 18
+theme_override_constants/margin_left = 44
 theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 18
+theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 14
 
 [node name="ErledigtText" type="Label" parent="Rechts/Erledigt/Rand"]
@@ -436,26 +443,28 @@ theme_override_font_sizes/font_size = 19
 text = "✓ Erledigt: Miete dein Festzelt"
 autowrap_mode = 3
 
+horizontal_alignment = 2
+[node name="StrichErledigt" type="ColorRect" parent="Rechts/Erledigt"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+color = Color(0.55, 0.93, 0.55, 0.95)
+
 [node name="Aufgabe" type="PanelContainer" parent="Rechts"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("AufgabeRahmen")
-
-[node name="Glas" type="ColorRect" parent="Rechts/Aufgabe"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 18.0
+theme_override_styles/panel = SubResource("AufgabeFade")
 
 [node name="Rand" type="MarginContainer" parent="Rechts/Aufgabe"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 18
+theme_override_constants/margin_left = 44
 theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 18
+theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 16
 
 [node name="Spalte" type="VBoxContainer" parent="Rechts/Aufgabe/Rand"]
@@ -468,6 +477,7 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
+alignment = 2
 [node name="ChipAufgabe" type="PanelContainer" parent="Rechts/Aufgabe/Rand/Spalte/Kopf"]
 layout_mode = 2
 size_flags_vertical = 4
@@ -499,15 +509,17 @@ theme_override_font_sizes/font_size = 21
 text = "Miete dein Festzelt"
 autowrap_mode = 3
 
+horizontal_alignment = 2
 [node name="AufgabeText" type="Label" parent="Rechts/Aufgabe/Rand/Spalte"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(330, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.78, 0.71, 1)
 theme_override_font_sizes/font_size = 16
 text = "Geh zum Wiesenbüro und miete ein Zelt."
 autowrap_mode = 3
 
+horizontal_alignment = 2
 [node name="Teilziele" type="VBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte"]
 unique_name_in_owner = true
 visible = false
@@ -520,26 +532,21 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile0"]
-custom_minimum_size = Vector2(18, 18)
-layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
+alignment = 2
 [node name="Text" type="Label" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile0"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
+horizontal_alignment = 2
 [node name="Zeile1" type="HBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile1"]
+alignment = 2
+[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile0"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -553,12 +560,14 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
+horizontal_alignment = 2
 [node name="Zeile2" type="HBoxContainer" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile2"]
+alignment = 2
+[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile1"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -572,14 +581,16 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
+horizontal_alignment = 2
 [node name="MuellOrt" type="Label" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(330, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.57, 0.5, 1)
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
+horizontal_alignment = 2
 [node name="AufgabeSkip" type="Label" parent="Rechts/Aufgabe/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -587,6 +598,22 @@ theme_override_colors/font_color = Color(0.62, 0.57, 0.5, 1)
 theme_override_font_sizes/font_size = 13
 text = "HUD_TASK_SKIP"
 horizontal_alignment = 2
+
+[node name="Haken" type="TextureRect" parent="Rechts/Aufgabe/Rand/Spalte/Teilziele/Zeile2"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StrichAufgabe" type="ColorRect" parent="Rechts/Aufgabe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+color = Color(1, 0.839, 0.349, 0.95)
 
 [node name="Meldungen" type="VBoxContainer" parent="Rechts"]
 unique_name_in_owner = true
@@ -599,21 +626,14 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("AufgabeRahmen")
-
-[node name="Glas" type="ColorRect" parent="Rechts/Bestellungen"]
-material = SubResource("MatGlas")
-layout_mode = 2
-mouse_filter = 2
-script = ExtResource("81_glasskript")
-radius = 18.0
+theme_override_styles/panel = SubResource("AufgabeFade")
 
 [node name="Rand" type="MarginContainer" parent="Rechts/Bestellungen"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 18
+theme_override_constants/margin_left = 44
 theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 18
+theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 14
 
 [node name="Spalte" type="VBoxContainer" parent="Rechts/Bestellungen/Rand"]
@@ -627,11 +647,20 @@ theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
 theme_override_font_sizes/font_size = 14
 text = "HUD_ORDERS"
 
+horizontal_alignment = 2
 [node name="BestellListe" type="VBoxContainer" parent="Rechts/Bestellungen/Rand/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 2
+
+[node name="StrichBestellungen" type="ColorRect" parent="Rechts/Bestellungen"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+color = Color(1, 0.839, 0.349, 0.95)
 
 [node name="HilfeHinweis" type="Label" parent="."]
 unique_name_in_owner = true

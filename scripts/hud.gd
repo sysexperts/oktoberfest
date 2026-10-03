@@ -451,6 +451,18 @@ func set_quest(step: int, total: int) -> void:
 	%AufgabeText.text = Texte.mit_tasten("QUEST_%d_TEXT" % step)
 	# Teilziele nur im Putzschritt — der Server schickt den Stand gleich
 	%Teilziele.visible = false
+	if step != vorher:
+		_aufgabe_neu_zeigen()
+
+## Neue Aufgabe: Karte blendet ein, der Titel leuchtet kurz auf, der Strich blitzt.
+func _aufgabe_neu_zeigen() -> void:
+	_aufgabe.modulate.a = 0.0
+	%AufgabeTitel.modulate = Color(1.7, 1.45, 0.8)
+	%StrichAufgabe.color = Color(1, 1, 1, 1)
+	var tw := create_tween().set_parallel(true)
+	tw.tween_property(_aufgabe, "modulate:a", 1.0, 0.45)
+	tw.tween_property(%AufgabeTitel, "modulate", Color.WHITE, 0.9).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(%StrichAufgabe, "color", Color(1, 0.839, 0.349, 0.95), 0.9)
 
 ## Teilziele von „Putze das Zelt": je Zeile Haken und Zähler (GameManager._putz_senden).
 ## stand: [Planen übrig, gesamt, Dreck übrig, gesamt, Säcke entsorgt, gesamt]; leer = ausblenden.
@@ -481,6 +493,8 @@ func set_putz_stand(stand: Array) -> void:
 func _aufgabe_erledigt(schritt: int) -> void:
 	%ErledigtText.text = tr("HUD_TASK_DONE") % tr("QUEST_%d_TITLE" % schritt)
 	%Erledigt.visible = true
+	%Erledigt.modulate.a = 0.0
+	create_tween().tween_property(%Erledigt, "modulate:a", 1.0, 0.3)
 	var sfx := get_parent().get_node_or_null("Sfx")
 	if sfx:
 		sfx.play("ding")
