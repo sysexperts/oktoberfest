@@ -327,10 +327,11 @@ func set_day(day: int) -> void:
 	set_time(_clock, _night)
 
 ## Geöffnet/geschlossen steckt schon in der Uhrzeit (set_time mit -1).
-## Beim ersten Schichtbeginn: kurze Einführung, wer was macht.
-func set_phase(offen: bool) -> void:
-	if offen:
-		%SchichtIntro.beim_schichtbeginn()
+## Die Tafel „So läuft die Schicht" (SchichtIntro) ist vorerst abgeschaltet — die
+## Erklärung kommt später anders. Szene und Skript bleiben liegen: zum Wiederaktivieren
+## hier %SchichtIntro.beim_schichtbeginn() bei offen == true aufrufen.
+func set_phase(_offen: bool) -> void:
+	pass
 
 func set_popularity(v: float) -> void:
 	_pop = v
