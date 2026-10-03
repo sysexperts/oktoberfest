@@ -507,15 +507,18 @@ func _aufgabe_erledigt(schritt: int) -> void:
 # ------------------------------------------------------------ Meldungen
 const MELDUNG := preload("res://scenes/ui/meldung.tscn")
 const MAX_MELDUNGEN := 4
-## Alle Meldungen der letzten Zeit zum Nachlesen (Tab): {text, art, zeit}, neueste zuletzt
-const MAX_VERLAUF := 14
+## Alle Meldungen des aktuellen Tages zum Nachlesen (Tab): {text, art, zeit, tag}, neueste zuletzt
+const MAX_VERLAUF := 24
 var verlauf: Array[Dictionary] = []
 
 func _verlauf_merken(text: String, art: int) -> void:
 	var zeit := ""
 	if _clock >= 0.0:
 		zeit = "%02d:%02d" % [int(_clock) % 24, int((_clock - floorf(_clock)) * 60.0)]
-	verlauf.append({"text": text, "art": art, "zeit": zeit})
+	# Nur der aktuelle Tag: beim Tageswechsel fliegt der Verlauf des Vortags raus
+	while not verlauf.is_empty() and int(verlauf[0].get("tag", _day)) != _day:
+		verlauf.pop_front()
+	verlauf.append({"text": text, "art": art, "zeit": zeit, "tag": _day})
 	while verlauf.size() > MAX_VERLAUF:
 		verlauf.pop_front()
 

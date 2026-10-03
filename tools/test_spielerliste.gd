@@ -71,7 +71,11 @@ class Lauf extends Node:
 		for i in 10:
 			await get_tree().process_frame
 		print("nach Loslassen sichtbar: ", liste.visible)
-		return ok and not liste.visible
+		# Neuer Tag: Verlauf des Vortags weg
+		hud._day = 2
+		hud.melde("MSG_RAUSCH")
+		print("Verlauf nach Tageswechsel: ", hud.verlauf.size())
+		return ok and not liste.visible and hud.verlauf.size() == 1
 
 	func _wiederherstellen() -> void:
 		for pfad: String in DATEIEN:

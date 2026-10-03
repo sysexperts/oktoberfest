@@ -62,12 +62,14 @@ func _aufbauen() -> void:
 	%Titel.text = tr("SPIELERLISTE_TITEL") % peers.size()
 	_ereignisse_zeigen()
 
-## Die letzten Meldungen zum Nachlesen (neueste oben), in der Farbe ihrer Art
+## Die Meldungen des heutigen Tages zum Nachlesen (neueste oben), in der Farbe ihrer Art
 func _ereignisse_zeigen() -> void:
 	for k in %Ereignisse.get_children():
 		k.queue_free()
 	var hud := get_parent()
-	var liste: Array = hud.verlauf if "verlauf" in hud else []
+	var alle: Array = hud.verlauf if "verlauf" in hud else []
+	# Nur der heutige Tag; nach dem Schlafen beginnt die Liste neu
+	var liste: Array = alle.filter(func(e: Dictionary) -> bool: return int(e.get("tag", -1)) == int(hud._day))
 	%Ereignisse.visible = not liste.is_empty()
 	for i in range(liste.size() - 1, -1, -1):
 		var e: Dictionary = liste[i]
