@@ -1320,7 +1320,8 @@ func _kotzen(delta: float) -> void:
 	# Erst würgen, dann liegt es auf dem Boden — wie bei den Gästen
 	if not _kotz_fleck and _kotz_t <= KOTZ_DAUER - KOTZ_FLECK_NACH:
 		_kotz_fleck = true
-		promille = KOTZ_REST
+		# Nur absenken: wer nüchtern per Emote (Q) kotzt, soll danach nicht angetrunken sein
+		promille = minf(promille, KOTZ_REST)
 		if _world and _world.has_method("net_spieler_kotzt"):
 			_world.net_spieler_kotzt.rpc_id(1)
 	# Eigene Sicht: Kopf kippt mit jedem Stoß nach vorn und unten, der Körper geht
