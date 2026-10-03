@@ -452,7 +452,7 @@ ACTION_DETAILS,Bestellungen als Text,Show orders as text,Siparişleri yazıyla g
 ACTION_CAMERA,Schulterkamera,Shoulder camera,Omuz kamerası
 HELP_STICK_L,Linker Stick,Left stick,Sol çubuk
 HELP_STICK_R,Rechter Stick,Right stick,Sağ çubuk
-HUD_HELP_HINT,{help} Hilfe · {kalender} Kalender,{help} Help · {kalender} Calendar,{help} Yardım · {kalender} Takvim
+HUD_HELP_HINT,{help} Hilfe · {kalender} Kalender · {spielerliste} Spieler,{help} Help · {kalender} Calendar · {spielerliste} Players,{help} Yardım · {kalender} Takvim · {spielerliste} Oyuncular
 PAUSE_HELP,Hilfe und Steuerung,Help and controls,Yardım ve kontroller
 HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
 HELP_FLOW,"1. Festbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Hinten Krug nehmen, am Fass zapfen, vorne auf die Ausgabe stellen — dort holen Kellner ab und bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug at the back, pour at a keg, put it on the pass up front — waiters pick up there and serve. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Arkada kupa al, fıçıda doldur, öndeki servis yerine koy — garsonlar oradan alıp servis yapar. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
@@ -1213,3 +1213,4 @@ ZEITUNG_ANZEIGE_2,"ANZEIGE|Suche Aushilfe|Kellner gesucht, flinke Hände, wenig 
 ZEITUNG_ANZEIGE_3,ANZEIGE|Verloren: Zapfhahn|Goldener Zapfhahn nahe der Blaskapelle verloren. Finder erhält eine Maß.,ADVERT|Lost: tap|Golden tap lost near the brass band. Finder gets a stein.,İLAN|Kayıp: musluk|Bando yakınında altın musluk kayboldu. Bulana bir bira.
 ZEITUNG_NUMMER,Nr. %d · Wiesn-Blatt,No. %d · Fair Gazette,No. %d · Şenlik Gazetesi
 SPIELERLISTE_EREIGNISSE,Heute passiert,Today,Bugün olanlar
+ACTION_SPIELERLISTE,Spielerliste,Player list,Oyuncu listesi

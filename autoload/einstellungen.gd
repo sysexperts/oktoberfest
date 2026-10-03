@@ -24,6 +24,7 @@ const STANDARD_TASTEN := {
 	"springen": KEY_SPACE,
 	"trinken": KEY_G,
 	"kalender": KEY_K,
+	"spielerliste": KEY_TAB,
 }
 
 ## Gamepad (Xbox-Layout, so auch auf dem Steam Deck). Fest, nicht umbelegbar —
@@ -39,6 +40,8 @@ const PAD_KNOEPFE := {
 	"costume": JOY_BUTTON_DPAD_UP,
 	"kalender": JOY_BUTTON_DPAD_DOWN,
 	"help": JOY_BUTTON_DPAD_LEFT,
+	## Back/View halten: Spielerliste und Tagesereignisse (wie die Tabelle in anderen Spielen)
+	"spielerliste": JOY_BUTTON_BACK,
 }
 ## Laufen mit dem linken Stick: Achse und Richtung (-1 = negativ, 1 = positiv).
 const PAD_ACHSEN := {
@@ -74,6 +77,7 @@ const PAD_NAMEN := {
 	JOY_BUTTON_DPAD_DOWN: "↓",
 	JOY_BUTTON_DPAD_LEFT: "←",
 	JOY_BUTTON_DPAD_RIGHT: "→",
+	JOY_BUTTON_BACK: "Back",
 }
 
 ## Knopf -> Zeichen in der Glyphenschrift, je Geraetesatz. Kenney legt die
@@ -226,7 +230,31 @@ func _zeiger_ort() -> Vector2:
 	return _zeiger if _zeiger.is_finite() else get_viewport().get_mouse_position()
 var _pad_maus_unten := false
 
+## Am Controller soll kein Mauszeiger im Bild hängen: Menüs und Fenster (Zeitung,
+## Gespräche, Glücksrad) laufen über den Fokus, der Zeiger stünde nur sinnlos herum.
+## Er verschwindet, sobald der Stick eine Weile nicht benutzt wurde, und kommt sofort
+## wieder, wenn man mit dem Stick zeigt oder zur Maus greift (Baumodus, Kirmesspiele).
+const ZEIGER_VERSTECKEN_NACH_MS := 2500
+var _zeiger_weg := false
+var _leeres_bild: ImageTexture
+
+func zeiger_versteckt() -> bool:
+	return _zeiger_weg
+
+func _zeiger_pruefen() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var soll := am_pad and Time.get_ticks_msec() > _pad_maus_bis + ZEIGER_VERSTECKEN_NACH_MS
+	if soll == _zeiger_weg:
+		return
+	_zeiger_weg = soll
+	if _leeres_bild == null:
+		_leeres_bild = ImageTexture.create_from_image(Image.create_empty(2, 2, false, Image.FORMAT_RGBA8))
+	for form in range(0, 17):
+		Input.set_custom_mouse_cursor(_leeres_bild if soll else null, form as Input.CursorShape)
+
 func _process(delta: float) -> void:
+	_zeiger_pruefen()
 	if not am_pad or DisplayServer.get_name() == "headless":
 		return
 	var richtung := Input.get_vector("blick_links", "blick_rechts", "blick_hoch", "blick_runter")
@@ -546,6 +574,8 @@ func _pad_anwenden() -> void:
 		# Godots Vorgabe ist 0,5 — damit müsste man den Stick halb durchdrücken,
 		# bevor sich die Figur bewegt.
 		InputMap.action_set_deadzone(aktion, pad_totzone)
+	# Zweiter Sprint-Knopf: linken Stick eindrücken (L3) — in den meisten Spielen üblich
+	_pad_knopf("sprint", JOY_BUTTON_LEFT_STICK)
 	# Menüführung: Godots eingebaute ui_accept/ui_cancel haben hier nur Tasten,
 	# keinen Knopf (geprüft mit tools/test_pad). Ohne diese zwei Zeilen käme man
 	# am Steam Deck in kein Menü hinein und aus keinem wieder heraus.

@@ -125,6 +125,12 @@ func _wahl_oeffnen() -> void:
 	%Wahl.visible = true
 	(%Raster.get_child(_figur) as Button).grab_focus.call_deferred()
 
+## B / Esc schließt die Figurenwahl (am Controller sonst nur über „Fertig" erreichbar)
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and %Wahl.visible and event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		_wahl_schliessen()
+
 func _wahl_schliessen() -> void:
 	%Wahl.visible = false
 	%FigurWaehlen.grab_focus.call_deferred()

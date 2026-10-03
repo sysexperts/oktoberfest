@@ -68,14 +68,16 @@ var _geld_lauf: Tween = null
 var _geld_puls: Tween = null
 var _balken_laeuft := {}
 
-## Tab halten zeigt, wer im Zelt mitspielt (nicht beim Tippen in einem Textfeld)
+## Spielerliste halten (Tab, am Controller Back/View): wer im Zelt mitspielt, dazu die
+## Ereignisse des Tages (nicht beim Tippen in einem Textfeld)
 func _input(event: InputEvent) -> void:
-	if not (event is InputEventKey) or (event as InputEventKey).physical_keycode != KEY_TAB or event.is_echo():
+	if not event.is_action("spielerliste") or event.is_echo():
 		return
+	var an := event.is_pressed()
 	var fokus := get_viewport().gui_get_focus_owner()
-	if event.pressed and fokus is LineEdit:
+	if an and fokus is LineEdit:
 		return
-	_spielerliste.zeigen(event.pressed)
+	_spielerliste.zeigen(an)
 	get_viewport().set_input_as_handled()
 
 func _ready() -> void:

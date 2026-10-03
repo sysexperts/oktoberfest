@@ -53,6 +53,8 @@ func _ready() -> void:
 	_figur = _gemerkte_figur()
 	_welt_vorbelegen()
 	_aktualisieren()
+	# Controller: ohne angewählten Knopf käme man mit dem Steuerkreuz nirgends hinein
+	%Bereit.grab_focus.call_deferred()
 
 # ------------------------------------------------------------ Bewegung
 ## Das Fenster blendet sich ein.

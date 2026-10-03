@@ -70,7 +70,8 @@ func _neu_pad() -> void:
 	_zeile(tr("ACTION_LOOK"), tr("HELP_STICK_R"))
 	for aktion: String in Einstellungen.PAD_KNOEPFE:
 		var knopf := Einstellungen.anzeige_name(aktion)
-		_zeile(tr("ACTION_" + aktion.to_upper()), knopf + " / RT" if aktion == "interact" else knopf)
+		var extra := " / RT" if aktion == "interact" else (" / L3" if aktion == "sprint" else "")
+		_zeile(tr("ACTION_" + aktion.to_upper()), knopf + extra)
 	_zeile(tr("ACTION_DETAILS"), "LT")
 	_zeile(tr("ACTION_CAMERA"), "R3")
 	_zeile(tr("ACTION_PAUSE"), "Start")
