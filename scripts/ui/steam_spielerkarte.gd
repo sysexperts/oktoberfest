@@ -61,7 +61,9 @@ func zeige(d: Dictionary) -> void:
 		%FigurName.text = tr("SW_NO_FIGURE")
 	%Waehlen.visible = d.get("ich", false)
 	var bereit: bool = d.get("bereit", false)
-	%Marke.visible = bereit
+	# Der Platz der Marke bleibt immer belegt, sonst springt die Karte beim Bereit-Klicken
+	%Marke.visible = true
+	%Marke.modulate.a = 1.0 if bereit else 0.0
 	if bereit and not _war_bereit:
 		_aufspringen(%Marke)
 	_war_bereit = bereit
