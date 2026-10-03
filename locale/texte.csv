@@ -1205,3 +1205,10 @@ SIGN_HUBER_ZELT,Konrad-Zelt,Konrad-Zelt,Konrad-Zelt
 SIGN_STAND,Stand,Stall,Tezgah
 SPIELERLISTE_TITEL,Im Zelt (%d),In the tent (%d),Çadırda (%d)
 SPIELERLISTE_ICH,DU,YOU,SEN
+ZEITUNG_BILD_1,"Prost! Die Maß des Tages, gezeichnet vom Festkurier-Zeichner.","Cheers! The tankard of the day, drawn by our staff artist.","Şerefe! Günün bardağı, gazetemizin ressamından."
+ZEITUNG_BILD_2,Schaum bis zum Rand: So muss eine Maß aussehen.,Foam to the brim: this is how a stein should look.,Köpük ağzına kadar: bir bira bardağı böyle olmalı.
+ZEITUNG_BILD_3,"Kühl, golden, gerecht eingeschenkt — Sinnbild eines guten Festes.","Cool, golden, fairly poured — the symbol of a good fair.","Serin, altın, adilce dolduruldu — iyi bir şenliğin simgesi."
+ZEITUNG_ANZEIGE_1,ANZEIGE|Frische Brezn!|Täglich knusprig beim Festleiter. Nur solange der Vorrat reicht.,ADVERT|Fresh pretzels!|Crispy every day at the fair manager's. While stocks last.,İLAN|Taze simit!|Her gün fuar müdüründe çıtır çıtır. Stoklarla sınırlı.
+ZEITUNG_ANZEIGE_2,"ANZEIGE|Suche Aushilfe|Kellner gesucht, flinke Hände, wenig Durst. Bewerbung im Festbüro.","ADVERT|Help wanted|Waiter sought, quick hands, little thirst. Apply at the fair office.","İLAN|Eleman aranıyor|Garson aranıyor, çevik eller, az susuzluk. Başvuru fuar ofisine."
+ZEITUNG_ANZEIGE_3,ANZEIGE|Verloren: Zapfhahn|Goldener Zapfhahn nahe der Blaskapelle verloren. Finder erhält eine Maß.,ADVERT|Lost: tap|Golden tap lost near the brass band. Finder gets a stein.,İLAN|Kayıp: musluk|Bando yakınında altın musluk kayboldu. Bulana bir bira.
+ZEITUNG_NUMMER,Nr. %d · Wiesn-Blatt,No. %d · Fair Gazette,No. %d · Şenlik Gazetesi

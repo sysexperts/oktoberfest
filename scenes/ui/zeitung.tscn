@@ -4,10 +4,28 @@
 [ext_resource type="Theme" path="res://assets/ui/theme.tres" id="2_theme"]
 [ext_resource type="Texture2D" path="res://assets/ui/zeitung_blatt.png" id="3_bogen"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="4_fraktur"]
+[ext_resource type="Texture2D" path="res://assets/ui/zeitung_bild.png" id="5_bild"]
+[ext_resource type="Script" path="res://scripts/ui/fueller.gd" id="6_fueller"]
 
-[sub_resource type="StyleBoxFlat" id="Linie"]
+[sub_resource type="StyleBoxFlat" id="LinieDick"]
+bg_color = Color(0.2, 0.12, 0.05, 1)
+content_margin_top = 3.0
+
+[sub_resource type="StyleBoxFlat" id="LinieDuenn"]
 bg_color = Color(0.25, 0.17, 0.08, 1)
-content_margin_top = 2.0
+content_margin_top = 1.0
+
+[sub_resource type="StyleBoxFlat" id="Anzeige"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.17, 0.08, 1)
 
 [node name="Zeitung" type="CanvasLayer"]
 layer = 28
@@ -48,39 +66,60 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 84
-theme_override_constants/margin_top = 88
+theme_override_constants/margin_top = 84
 theme_override_constants/margin_right = 84
-theme_override_constants/margin_bottom = 80
+theme_override_constants/margin_bottom = 78
 
 [node name="Spalte" type="VBoxContainer" parent="Blatt/Rand"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 5
 
 [node name="Kopf" type="Label" parent="Blatt/Rand/Spalte"]
 theme_type_variation = &"PapierText"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
 theme_override_fonts/font = ExtResource("4_fraktur")
-theme_override_font_sizes/font_size = 46
+theme_override_font_sizes/font_size = 54
 text = "ZEITUNG_NAME"
 horizontal_alignment = 1
 
-[node name="Ausgabe" type="Label" parent="Blatt/Rand/Spalte"]
-theme_type_variation = &"PapierText"
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.35, 0.25, 0.14, 1)
-theme_override_font_sizes/font_size = 15
-text = "Ausgabe Tag 1"
-horizontal_alignment = 1
-
-[node name="Linie1" type="PanelContainer" parent="Blatt/Rand/Spalte"]
+[node name="LinieKopf1" type="PanelContainer" parent="Blatt/Rand/Spalte"]
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Linie")
+theme_override_styles/panel = SubResource("LinieDick")
+
+[node name="Ausgaberei" type="HBoxContainer" parent="Blatt/Rand/Spalte"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Nummer" type="Label" parent="Blatt/Rand/Spalte/Ausgaberei"]
+theme_type_variation = &"PapierText"
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.35, 0.25, 0.14, 1)
+theme_override_font_sizes/font_size = 14
+text = "Nr. 1"
+
+[node name="Ausgabe" type="Label" parent="Blatt/Rand/Spalte/Ausgaberei"]
+theme_type_variation = &"PapierText"
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.35, 0.25, 0.14, 1)
+theme_override_font_sizes/font_size = 14
+text = "Ausgabe Tag 1"
+horizontal_alignment = 2
+
+[node name="LinieKopf2" type="PanelContainer" parent="Blatt/Rand/Spalte"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("LinieDuenn")
 
 [node name="Schlagzeile" type="Label" parent="Blatt/Rand/Spalte"]
 theme_type_variation = &"PapierText"
@@ -99,7 +138,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.25, 0.17, 0.08, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 17
 text = "Unterzeile"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -108,28 +147,167 @@ autowrap_mode = 3
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Linie")
+theme_override_styles/panel = SubResource("LinieDuenn")
 
-[node name="Meldungen" type="Label" parent="Blatt/Rand/Spalte"]
-theme_type_variation = &"PapierText"
-unique_name_in_owner = true
+[node name="Spalten" type="HBoxContainer" parent="Blatt/Rand/Spalte"]
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("2_theme")
-theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 20
-text = "• Meldung"
-autowrap_mode = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
 
-[node name="Zahlen" type="Label" parent="Blatt/Rand/Spalte"]
+[node name="Bildspalte" type="VBoxContainer" parent="Blatt/Rand/Spalte/Spalten"]
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Bild" type="TextureRect" parent="Blatt/Rand/Spalte/Spalten/Bildspalte"]
+custom_minimum_size = Vector2(205, 166)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_bild")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Bildtext" type="Label" parent="Blatt/Rand/Spalte/Spalten/Bildspalte"]
 theme_type_variation = &"PapierText"
 unique_name_in_owner = true
+custom_minimum_size = Vector2(205, 0)
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.3, 0.2, 0.1, 1)
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 13
+text = "Bildunterschrift"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Zahlen" type="Label" parent="Blatt/Rand/Spalte/Spalten/Bildspalte"]
+theme_type_variation = &"PapierText"
+unique_name_in_owner = true
+custom_minimum_size = Vector2(205, 0)
+layout_mode = 2
+size_flags_vertical = 10
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 14
 text = "Zahlen"
 horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Trenner1" type="ColorRect" parent="Blatt/Rand/Spalte/Spalten"]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.25, 0.17, 0.08, 0.8)
+
+[node name="Spalte2" type="VBoxContainer" parent="Blatt/Rand/Spalte/Spalten"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="MeldungenA" type="RichTextLabel" parent="Blatt/Rand/Spalte/Spalten/Spalte2"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+theme_override_colors/default_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+bbcode_enabled = true
+fit_content = true
+text = "Meldungen"
+scroll_active = false
+
+[node name="FuellerA" type="Control" parent="Blatt/Rand/Spalte/Spalten/Spalte2"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("6_fueller")
+seed_wert = 4
+
+[node name="Trenner2" type="ColorRect" parent="Blatt/Rand/Spalte/Spalten"]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.25, 0.17, 0.08, 0.8)
+
+[node name="Spalte3" type="VBoxContainer" parent="Blatt/Rand/Spalte/Spalten"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="MeldungenB" type="RichTextLabel" parent="Blatt/Rand/Spalte/Spalten/Spalte3"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+theme_override_colors/default_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+bbcode_enabled = true
+fit_content = true
+text = "Meldungen"
+scroll_active = false
+
+[node name="FuellerB" type="Control" parent="Blatt/Rand/Spalte/Spalten/Spalte3"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("6_fueller")
+seed_wert = 9
+
+[node name="AnzeigeBox" type="PanelContainer" parent="Blatt/Rand/Spalte/Spalten/Spalte3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Anzeige")
+
+[node name="Inhalt" type="VBoxContainer" parent="Blatt/Rand/Spalte/Spalten/Spalte3/AnzeigeBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="AnzeigeKopf" type="Label" parent="Blatt/Rand/Spalte/Spalten/Spalte3/AnzeigeBox/Inhalt"]
+theme_type_variation = &"PapierText"
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.4, 0.28, 0.16, 1)
+theme_override_font_sizes/font_size = 11
+text = "ANZEIGE"
+horizontal_alignment = 1
+
+[node name="AnzeigeTitel" type="Label" parent="Blatt/Rand/Spalte/Spalten/Spalte3/AnzeigeBox/Inhalt"]
+theme_type_variation = &"PapierText"
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.12, 0.05, 1)
+theme_override_fonts/font = ExtResource("4_fraktur")
+theme_override_font_sizes/font_size = 22
+text = "Titel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="AnzeigeText" type="Label" parent="Blatt/Rand/Spalte/Spalten/Spalte3/AnzeigeBox/Inhalt"]
+theme_type_variation = &"PapierText"
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.25, 0.17, 0.08, 1)
+theme_override_font_sizes/font_size = 13
+text = "Text"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="Hinweis" type="Label" parent="Blatt/Rand/Spalte"]
 theme_type_variation = &"PapierText"
@@ -137,6 +315,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_theme")
 theme_override_colors/font_color = Color(0.42, 0.3, 0.18, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 14
 text = "ZEITUNG_SCHLIESSEN"
 horizontal_alignment = 2

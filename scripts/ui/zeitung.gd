@@ -33,7 +33,8 @@ func zeigen(b: Dictionary, zustand: Dictionary) -> void:
 	var kopf := schlagzeile(b, zelt)
 	%Schlagzeile.text = kopf[0]
 	%Unterzeile.text = kopf[1]
-	%Meldungen.text = "\n".join(meldungen(b, zustand))
+	_spalten_fuellen(meldungen(b, zustand), int(b.get("day", 1)))
+	%Nummer.text = tr("ZEITUNG_NUMMER") % (int(b.get("day", 1)) + 100)
 	%Zahlen.text = tr("ZEITUNG_ZAHLEN") % [int(b.get("served", 0)), Texte.euro(int(b.get("earn", 0))), int(b.get("pop", 0))]
 	%Hinweis.text = tr("ZEITUNG_SCHLIESSEN")
 	aktiv = true
@@ -41,6 +42,31 @@ func zeigen(b: Dictionary, zustand: Dictionary) -> void:
 	_t = 0.0
 	_spieler.minispiel = self
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+## Kurzmeldungen auf zwei Spalten verteilen (vorn fett bis zum Doppelpunkt), Bild-
+## unterschrift und Anzeige wechseln mit dem Tag.
+func _spalten_fuellen(liste: Array[String], tag: int) -> void:
+	var haelfte := int(ceil(liste.size() / 2.0))
+	var a: Array[String] = []
+	var bb: Array[String] = []
+	for i in liste.size():
+		(a if i < haelfte else bb).append(_meldung_setzen(liste[i]))
+	%MeldungenA.text = "\n\n".join(a)
+	%MeldungenB.text = "\n\n".join(bb)
+	%Bildtext.text = tr("ZEITUNG_BILD_%d" % (1 + tag % 3))
+	var anzeige := tr("ZEITUNG_ANZEIGE_%d" % (1 + (tag + 1) % 3)).split("|")
+	if anzeige.size() == 3:
+		%AnzeigeKopf.text = anzeige[0]
+		%AnzeigeTitel.text = anzeige[1]
+		%AnzeigeText.text = anzeige[2]
+
+## Aufzählungspunkt weg, Vorspann bis zum Doppelpunkt fett
+static func _meldung_setzen(t: String) -> String:
+	var z := t.trim_prefix("• ").replace("[", "[lb]")
+	var p := z.find(":")
+	if p > 0 and p < 24:
+		return "[b]" + z.substr(0, p + 1) + "[/b]" + z.substr(p + 1)
+	return z
 
 ## [Schlagzeile, Unterzeile] — die auffälligste Sache des Tages zuerst
 static func schlagzeile(b: Dictionary, zelt: String) -> Array[String]:
