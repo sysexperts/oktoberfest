@@ -1,0 +1,789 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://tools/anim_vorschau.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter2.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/charakter3.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/alex.tscn" id="5"]
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.2, 0.2, 0.26, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.75, 0.75, 0.8, 1)
+
+[sub_resource type="PlaneMesh" id="Boden"]
+size = Vector2(8, 4)
+
+[node name="AnimVorschau" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Umgebung" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
+[node name="Sonne" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.906, 0.18, -0.38, 0, 0.9, 0.43, 0.42, -0.39, 0.82, 0, 3, 0)
+
+[node name="Boden" type="MeshInstance3D" parent="."]
+mesh = SubResource("Boden")
+
+[node name="Kamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.995, 0.1, 0, -0.1, 0.995, 0, 1.5, 4.2)
+fov = 45.0
+
+[node name="Standard" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0)
+
+[node name="Wilhelm" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
+
+[node name="Lisa" parent="." instance=ExtResource("4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+
+[node name="Alex" parent="." instance=ExtResource("5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
+
+[node name="Oberflaeche" type="CanvasLayer" parent="."]
+
+[node name="Anzeige" type="Label" parent="Oberflaeche"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 20
+text = "Vorschau"
+
+[node name="Regler" type="HBoxContainer" parent="Oberflaeche"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -340.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_vertical = 0
+theme_override_constants/separation = 24
+
+[node name="Spalte0" type="VBoxContainer" parent="Oberflaeche/Regler"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Titel" type="Label" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Standard"
+horizontal_alignment = 1
+
+[node name="RueckenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/RueckenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Rücken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/RueckenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/RueckenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="NackenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/NackenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Nacken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/NackenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/NackenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="KopfZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/KopfZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Kopf"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/KopfZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/KopfZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="HuefteZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/HuefteZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Hüfte"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/HuefteZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/HuefteZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="BeineZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/BeineZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Beine"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/BeineZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/BeineZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/ArmeZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme außen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/ArmeZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/ArmeZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeSitzenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme Sitzen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/ArmeSitzenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="GehenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte0"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte0/GehenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Gehen-Anteil"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte0/GehenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0
+max_value = 1
+step = 0.05
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte0/GehenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="Spalte1" type="VBoxContainer" parent="Oberflaeche/Regler"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Titel" type="Label" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Wilhelm"
+horizontal_alignment = 1
+
+[node name="RueckenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/RueckenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Rücken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/RueckenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/RueckenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="NackenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/NackenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Nacken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/NackenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/NackenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="KopfZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/KopfZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Kopf"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/KopfZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/KopfZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="HuefteZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/HuefteZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Hüfte"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/HuefteZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/HuefteZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="BeineZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/BeineZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Beine"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/BeineZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/BeineZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/ArmeZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme außen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/ArmeZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/ArmeZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeSitzenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme Sitzen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/ArmeSitzenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="GehenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte1"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte1/GehenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Gehen-Anteil"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte1/GehenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0
+max_value = 1
+step = 0.05
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte1/GehenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="Spalte2" type="VBoxContainer" parent="Oberflaeche/Regler"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Titel" type="Label" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Lisa"
+horizontal_alignment = 1
+
+[node name="RueckenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/RueckenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Rücken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/RueckenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/RueckenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="NackenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/NackenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Nacken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/NackenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/NackenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="KopfZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/KopfZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Kopf"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/KopfZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/KopfZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="HuefteZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/HuefteZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Hüfte"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/HuefteZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/HuefteZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="BeineZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/BeineZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Beine"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/BeineZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/BeineZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/ArmeZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme außen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/ArmeZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/ArmeZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeSitzenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme Sitzen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/ArmeSitzenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="GehenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte2"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte2/GehenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Gehen-Anteil"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte2/GehenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0
+max_value = 1
+step = 0.05
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte2/GehenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="Spalte3" type="VBoxContainer" parent="Oberflaeche/Regler"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Titel" type="Label" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Alex"
+horizontal_alignment = 1
+
+[node name="RueckenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/RueckenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Rücken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/RueckenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/RueckenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="NackenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/NackenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Nacken"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/NackenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/NackenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="KopfZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/KopfZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Kopf"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/KopfZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -20
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/KopfZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="HuefteZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/HuefteZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Hüfte"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/HuefteZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/HuefteZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="BeineZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/BeineZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Beine"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/BeineZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -30
+max_value = 30
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/BeineZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/ArmeZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme außen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/ArmeZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/ArmeZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="ArmeSitzenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Arme Sitzen"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/ArmeSitzenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = -10
+max_value = 40
+step = 0.5
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/ArmeSitzenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="GehenZeile" type="HBoxContainer" parent="Oberflaeche/Regler/Spalte3"]
+layout_mode = 2
+
+[node name="Beschriftung" type="Label" parent="Oberflaeche/Regler/Spalte3/GehenZeile"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Gehen-Anteil"
+
+[node name="Regler" type="HSlider" parent="Oberflaeche/Regler/Spalte3/GehenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0
+max_value = 1
+step = 0.05
+
+[node name="Wert" type="Label" parent="Oberflaeche/Regler/Spalte3/GehenZeile"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "0"
+
+[node name="Speichern" type="Button" parent="Oberflaeche"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 52.0
+grow_horizontal = 0
+text = "In Figurszenen speichern"

@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" path="res://assets/character/standard/standardkoerper.glb" id="2_modell"]
 [ext_resource type="AnimationLibrary" path="res://assets/character/standard/standard_animationen.res" id="3_anim"]
 
-[node name="Bean" type="Node3D"]
+[node name="Standard" type="Node3D"]
 script = ExtResource("1_figur")
 anim_stehen = "geliehen/Idle_12"
 anim_gehen = "geliehen/Walking"
@@ -28,3 +28,24 @@ transform = Transform3D(0.93, 0, 0, 0, 0.93, 0, 0, 0, 0.93, 0, 0, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Modell")
+
+[node name="Hemd" parent="Modell/Armature/Skeleton3D"]
+visible = false
+
+[node name="Hut" parent="Modell/Armature/Skeleton3D"]
+visible = false
+
+[node name="Janker" parent="Modell/Armature/Skeleton3D"]
+visible = false
+
+[node name="Lederhose" parent="Modell/Armature/Skeleton3D"]
+visible = false
+
+[node name="band" parent="Modell/Armature/Skeleton3D"]
+visible = false
+
+[node name="feder" parent="Modell/Armature/Skeleton3D"]
+visible = false
+
+[node name="Gurt" parent="Modell/Armature/Skeleton3D"]
+visible = false

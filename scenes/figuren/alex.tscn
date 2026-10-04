@@ -10,11 +10,14 @@
 [node name="Alex" type="Node3D"]
 script = ExtResource("1_figur")
 anim_stehen = "geliehen/Idle_12"
-anim_gehen = "Walking"
-anim_rennen = "geliehen2/Running"
+anim_gehen = "geliehen/Walking"
+anim_rennen = "geliehen/Running"
 anim_tanzen = PackedStringArray("geliehen/Hip_Hop_Dance", "geliehen/ymca_dance")
 anim_sitzen = "geliehen/Sit_and_Drink"
 anim_betrunken = "geliehen4/Unsteady_Walk"
+aufrichten_ruecken = 0.0
+aufrichten_nacken = 0.0
+aufrichten_kopf = 0.0
 metall_ignorieren = true
 eigenleuchten = 0.35
 leih_animationen = ExtResource("4_rennen")

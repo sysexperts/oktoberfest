@@ -55,6 +55,32 @@ extends Node3D
 ## mit anderem Skelett, bei denen Ausleihen nicht geht. Heißt "geliehen/<Name>".
 @export var leih_bibliothek: AnimationLibrary
 
+## Aufrecht stehen und gehen: die gemeinsamen Clips lassen Oberkörper und Kopf
+## hängen. Winkel in Grad (positiv = aufrichten), wirkt nur bei stehen/gehen.
+@export var aufrichten_ruecken := 6.0
+@export var aufrichten_nacken := 6.0
+@export var aufrichten_kopf := 9.0
+## Becken kippen (positiv = nach vorn aufrichten); die Oberschenkel bleiben dabei,
+## wie sie sind. Beine: Oberschenkel zusätzlich neigen.
+@export var aufrichten_huefte := 0.0
+@export var aufrichten_beine := 0.0
+## Oberarme nach außen drehen (Grad), bei jeder Animation: die Clips sind für
+## schlankere Körper gemacht, die Arme laufen sonst durch den Rumpf. Beim Sitzen
+## kommt arme_sitzen dazu (Trinken).
+@export var arme_abspreizen := 10.0
+## Schultern waagerecht richten, beim Stehen und Gehen (0 = aus, 1 = ganz)
+@export_range(0.0, 1.0, 0.05) var aufrichten_waage := 1.0
+@export var arme_sitzen := 8.0
+## Zusätzlich beim Extra (Kopf kratzen): die Hand soll neben dem Kopf landen, nicht darin
+@export var arme_extra := 14.0
+## Ellbogen öffnen (Grad), solange die Hand oben am Kopf ist (Kopf kratzen, Trinken)
+@export var ellbogen_auf := 0.0
+## Anteil der Korrektur beim Gehen (der Kopf hängt dort weniger)
+@export_range(0.0, 1.0, 0.05) var aufrichten_gehen := 0.35
+
+const Aufrichten := preload("res://scripts/aufrichten.gd")
+var _aufrichten: SkeletonModifier3D
+
 const LEIH_BIBLIOTHEK := "geliehen"
 
 ## Geliehene Animationsbibliotheken je Quellmodell — einmal geladen, von allen
@@ -135,12 +161,13 @@ func _material_anpassen() -> void:
 					kopie.metallic = 0.0
 					kopie.metallic_texture = null
 					kopie.metallic_specular = 0.3
-				# Ohne Farbtextur würde das Leuchten die Figur einfarbig weiß färben
-				if eigenleuchten == 0.0 or (eigenleuchten > 0.0 and kopie.albedo_texture == null):
+				if eigenleuchten == 0.0:
 					kopie.emission_enabled = false
 				elif eigenleuchten > 0.0:
 					kopie.emission_enabled = true
-					kopie.emission = Color.WHITE
+					# Ohne Farbtextur (Standardkörper) leuchtet die Grundfarbe selbst;
+					# sonst würde das Leuchten die Figur einfarbig weiß färben
+					kopie.emission = kopie.albedo_color if kopie.albedo_texture == null else Color.WHITE
 					kopie.emission_texture = kopie.albedo_texture
 					# Farbe × Textur. Steht ein Modell auf „Addieren" (charakter2),
 					# ergibt Weiß + Textur eine einfarbig weiße Figur.
@@ -200,6 +227,7 @@ func hat(name: String) -> bool:
 func stehen() -> void:
 	if anim == null:
 		return
+	_haltung_an(true)
 	anim.active = true
 	if idle_ist_standbild:
 		if hat(anim_gehen):
@@ -216,6 +244,7 @@ func pose_auffrischen() -> void:
 		anim.seek(standbild_zeit, true)
 
 func gehen(tempo := 1.0) -> void:
+	_haltung_an(true, aufrichten_gehen)
 	if hat(anim_gehen):
 		_spiele(anim_gehen, tempo)
 
@@ -271,6 +300,28 @@ func _sitz_korrektur_an(an: bool) -> void:
 func sitz_hoehe_gesamt() -> float:
 	return sitz_hoehe + (sitz_korrektur.hoehe if sitz_korrektur else 0.0)
 
+## Aufrichten-Modifier (scripts/aufrichten.gd) ans Skelett hängen und ein-/ausschalten
+func _haltung_an(an: bool, staerke := 1.0, sitzend := false, extra := false) -> void:
+	if skelett == null:
+		return
+	if _aufrichten == null:
+		if not an:
+			return
+		_aufrichten = Aufrichten.new()
+		_aufrichten.name = "Aufrichten"
+		_aufrichten.figur = self
+		skelett.add_child(_aufrichten)
+	_aufrichten.ruecken = aufrichten_ruecken * staerke
+	_aufrichten.nacken = aufrichten_nacken * staerke
+	_aufrichten.kopf = aufrichten_kopf * staerke
+	_aufrichten.huefte = aufrichten_huefte * staerke
+	_aufrichten.waage = aufrichten_waage * staerke
+	_aufrichten.arme_hoch = arme_extra
+	_aufrichten.ellbogen_auf = ellbogen_auf
+	_aufrichten.arme = arme_abspreizen + (arme_sitzen if sitzend else 0.0)
+	_aufrichten.beine = aufrichten_beine * staerke
+	_aufrichten.active = an
+
 func braucht_idle_bewegung() -> bool:
 	return idle_ist_standbild
 
@@ -285,6 +336,9 @@ func _zufaellig_aus(liste: PackedStringArray, tempo: float) -> bool:
 ## zufälligen Stelle, damit nicht alle Figuren im Gleichschritt gehen.
 func _spiele(name: String, tempo: float) -> void:
 	anim.active = true
+	# Arme gelten bei jeder Animation, Rücken/Kopf nur beim Stehen und Gehen
+	var staerke := 1.0 if name == anim_stehen else (aufrichten_gehen if name == anim_gehen else 0.0)
+	_haltung_an(true, staerke, name == anim_sitzen, name in anim_extras or name == anim_sitzen)
 	if name != anim_sitzen:
 		_sitz_korrektur_an(false)
 	if anim.current_animation != name:
@@ -321,6 +375,7 @@ func nachtruhe(an: bool) -> void:
 ## `heftig` ist der Takt des Würgens: 0 = Luft holen, 1 = voller Stoß. Damit
 ## sehen die eigene Sicht (scripts/player.gd) und die Figur denselben Rhythmus.
 const KNOCHEN_NAMEN := {
+	"huefte": ["Hips", "mixamorig_Hips"],
 	"wirbel_unten": ["Spine02", "mixamorig_Spine"],
 	"wirbel_mitte": ["Spine01", "mixamorig_Spine1"],
 	"wirbel_oben": ["Spine", "mixamorig_Spine2"],
@@ -330,6 +385,8 @@ const KNOCHEN_NAMEN := {
 	"arm_r": ["RightArm", "mixamorig_RightArm"],
 	"unterarm_l": ["LeftForeArm", "mixamorig_LeftForeArm"],
 	"unterarm_r": ["RightForeArm", "mixamorig_RightForeArm"],
+	"hand_r": ["RightHand", "mixamorig_RightHand"],
+	"hand_l": ["LeftHand", "mixamorig_LeftHand"],
 	"oberschenkel_l": ["LeftUpLeg", "mixamorig_LeftUpLeg"],
 	"oberschenkel_r": ["RightUpLeg", "mixamorig_RightUpLeg"],
 	"unterschenkel_l": ["LeftLeg", "mixamorig_LeftLeg"],
@@ -403,6 +460,31 @@ func winke_pose(t: float) -> void:
 	_knochen("arm_l", -0.15)
 	_knochen("wirbel_oben", 0.05)
 	_knochen("kopf", sin(t * 3.5) * 0.06)
+
+## Knochen so drehen, dass die Strecke zu seinem Kindknochen in `richtung` zeigt
+## (Figur-Raum). Die Winkel jedes Modells sind verschieden — Zielrichtungen
+## sehen auf jedem Rig gleich aus. Eltern müssen vorher gerichtet sein.
+func _richte(rolle: String, kind_rolle: String, richtung: Vector3) -> void:
+	var b := _knochen_index(rolle)
+	var c := _knochen_index(kind_rolle)
+	if b < 0 or c < 0:
+		return
+	skelett.set_bone_pose_rotation(b, skelett.get_bone_rest(b).basis.get_rotation_quaternion())
+	var ist := skelett.get_bone_global_pose(c).origin - skelett.get_bone_global_pose(b).origin
+	var skel_zu_figur := global_basis.orthonormalized().inverse() * skelett.global_basis.orthonormalized()
+	var soll := skel_zu_figur.inverse() * richtung.normalized()
+	var drehung := Quaternion(ist.normalized(), soll.normalized())
+	var eltern := skelett.get_bone_parent(b)
+	var eltern_rot := Quaternion.IDENTITY if eltern < 0 else skelett.get_bone_global_pose(eltern).basis.orthonormalized().get_rotation_quaternion()
+	var jetzt := skelett.get_bone_global_pose(b).basis.orthonormalized().get_rotation_quaternion()
+	skelett.set_bone_pose_rotation(b, eltern_rot.inverse() * drehung * jetzt)
+
+func _knochen_index(rolle: String) -> int:
+	for name: String in KNOCHEN_NAMEN.get(rolle, [rolle]):
+		var b := skelett.find_bone(name)
+		if b >= 0:
+			return b
+	return -1
 
 func jubel_pose(t: float) -> void:
 	if skelett == null:
