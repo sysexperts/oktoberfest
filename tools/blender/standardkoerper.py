@@ -54,7 +54,7 @@ def material(name, farbe_srgb, rauheit=0.8):
 HAUT = material("Haut", (0.66, 0.43, 0.32))
 AUGAPFEL = material("Augapfel", (0.99, 0.93, 0.87), 0.5)
 PUPILLE = material("Pupille", (0.03, 0.03, 0.03), 0.35)
-BRAUE = material("Braue", (0.45, 0.39, 0.26))
+BRAUE = material("Braue", (0.45, 0.39, 0.26) if OUTFIT == "bean" else (0.17, 0.10, 0.06))   # Franz: Haarfarbe wie der Bart
 MUND = material("Mund", (0.66, 0.40, 0.31))
 
 

@@ -860,25 +860,89 @@ elif OUTFIT == "franz":
     gams = vereinen(bart_teile, "Gamsbart")
     gams.data.materials.append(material("Gamsbart", (0.62, 0.55, 0.42), 0.9))
 
-    # Bayerischer Schnauzer: breit, hängt über den Mundwinkeln und läuft in hochgezwirbelten Spitzen aus
-    schnurr = []
-    for i in range(41):
-        t = (i - 20) / 20.0
-        a_t = abs(t)
-        mx = t * 0.112
-        mh = 1.232 - 0.026 * math.sin(min(a_t, 0.6) / 0.6 * math.pi * 0.5) + 0.075 * (max(0.0, a_t - 0.6) / 0.4) ** 1.5
-        r = 0.021 * (1.0 - a_t ** 2.2) + 0.007
-        schnurr.append(kugel(Vector((mx, haut_y(mx, mh) + 0.008, mh)), (r, 0.010, r * 0.85), "bart", 10))
-    schnurrbart = vereinen(schnurr, "Schnurrbart")
-    schnurrbart.data.materials.append(material("Schnurrbart", (0.24, 0.16, 0.10), 0.9))
+    # Bayerischer Schnauzer, richtig modelliert: dicker Körper aus Kugelketten (verjüngt, schwingt
+    # über die Mundwinkel nach unten und läuft in einer hochgezwirbelten Spitze aus), danach zu einer
+    # geschlossenen, glatten Form verschmolzen und mit Haarsträhnen bemalt.
+    HAAR = np.array([0.17, 0.10, 0.06])
+    teile_b = []
+    for sx in (1, -1):
+        punkte = []
+        for i in range(30):
+            t = i / 29.0
+            x = sx * (0.008 + 0.125 * t)
+            # Höhe: über der Lippe, nach außen fallend, am Ende steil nach oben gezwirbelt
+            h = 1.226 - 0.040 * math.sin(min(t / 0.62, 1.0) * math.pi * 0.5) + 0.095 * max(0.0, (t - 0.62) / 0.38) ** 1.7
+            r = 0.026 * (1.0 - 0.80 * t ** 1.3) + 0.005
+            punkte.append((x, h, r))
+        for x, h, r in punkte:
+            teile_b.append(kugel(Vector((x, haut_y(max(-0.19, min(0.19, x)), h) + 0.004 + r * 0.55, h)), (r * 1.15, r * 0.85, r), "bart", 12))
+    # Mitte schließen
+    for i in range(5):
+        teile_b.append(kugel(Vector((0.0, haut_y(0.0, 1.226) + 0.012, 1.226 - 0.004 * i)), (0.020, 0.014, 0.020), "bart_mitte", 12))
+    schnurrbart = vereinen(teile_b, "Schnurrbart")
+    schnurrbart.data.remesh_voxel_size = 0.0028
+    bpy.context.view_layer.objects.active = schnurrbart
+    bpy.ops.object.voxel_remesh()
+    _m = schnurrbart.modifiers.new("Glatt", 'SMOOTH')
+    _m.factor = 0.6
+    _m.iterations = 6
+    bpy.ops.object.modifier_apply(modifier="Glatt")
+    _d = schnurrbart.modifiers.new("Dez", 'DECIMATE')
+    _d.ratio = 0.22
+    bpy.ops.object.modifier_apply(modifier="Dez")
+    bpy.ops.object.shade_smooth()
 
-    for o in (gams, schnurrbart):
+    def bart_farbe(P):
+        gx, gy = P[:, 0], P[:, 1]
+        # Haarsträhnen: feine Linien, die von der Mitte nach außen laufen und mit der Höhe leicht abfallen
+        strahl = np.sin((gy + 0.35 * np.abs(gx)) * 900) * 0.5 + 0.5
+        fein = ruis(P, 150.0)
+        col = HAAR[None, :] * (0.78 + 0.30 * strahl + 0.20 * fein)[:, None]
+        return mischen(col, HAAR[None, :] * 1.6, hart(strahl, 0.15, 0.2) * 0.35)
+
+    schnurrbart = fertig("Schnurrbart", [schnurrbart], bart_farbe, 1024, 0.9)
+
+    # Augenlider: halbe Hauben über den oberen Augen, innen tiefer (grummeliger Blick)
+    LID = material("Lid", (0.66, 0.43, 0.32), 0.8)
+    lider = []
+    for sx in (1, -1):
+        ay = haut_y(sx * 0.093, 1.30)
+        lid = kugel(Vector((sx * 0.093, ay + 0.010, 1.30)), (0.0715, 0.0480, 0.0715), "lid", 72)
+        bmx = bmesh.new()
+        bmx.from_mesh(lid.data)
+        # Schnittebene durch das Auge, zur Nase hin abfallend (innen tiefer = grummeliger Blick);
+        # sauber mit bisect statt Punkte löschen, damit die Lidkante glatt ist
+        nz = Vector((sx * 0.34, 0.0, 1.0)).normalized()     # Normale zeigt nach oben, außen etwas höher
+        bmesh.ops.bisect_plane(bmx, geom=list(bmx.verts) + list(bmx.edges) + list(bmx.faces),
+                               plane_co=Vector((sx * 0.093, 0.0, 1.304)), plane_no=-nz, clear_outer=True)
+        rand_k = [e for e in bmx.edges if e.is_boundary]
+        if rand_k:
+            bmesh.ops.holes_fill(bmx, edges=rand_k, sides=100000)
+        bmesh.ops.recalc_face_normals(bmx, faces=bmx.faces)
+        bmx.to_mesh(lid.data)
+        bmx.free()
+        lid.data.materials.append(LID)
+        bpy.context.view_layer.objects.active = lid
+        bpy.ops.object.shade_smooth()
+        lider.append(lid)
+    for o in lider:
         o.parent = arm_obj
         vg = o.vertex_groups.new(name="Head")
         vg.add([v.index for v in o.data.vertices], 1.0, 'REPLACE')
         mod = o.modifiers.new("Armature", 'ARMATURE')
         mod.object = arm_obj
         kleidung_objekte.append(o)
+
+    for g in list(schnurrbart.vertex_groups):
+        schnurrbart.vertex_groups.remove(g)
+    _kopf = schnurrbart.vertex_groups.new(name="Head")
+    _kopf.add([v.index for v in schnurrbart.data.vertices], 1.0, 'REPLACE')
+    gams.parent = arm_obj
+    _vg = gams.vertex_groups.new(name="Head")
+    _vg.add([v.index for v in gams.data.vertices], 1.0, 'REPLACE')
+    _mod = gams.modifiers.new("Armature", 'ARMATURE')
+    _mod.object = arm_obj
+    kleidung_objekte.append(gams)
 
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])

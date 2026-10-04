@@ -2,24 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dia2146lyxydk"
-path.s3tc="res://.godot/imported/franz_Koerper_tex.png-2fd20e11cbbb099571dd480ef41b2e4e.s3tc.ctex"
+uid="uid://dsntbtk7xj05e"
+path="res://.godot/imported/franz_Schnurrbart_tex.png-48608044c80ca5247e3c06c489e64286.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 generator_parameters={
-"md5": "15db9ea8b917c6079a14a078568e310b"
+"md5": "6ac47ba929c0ce681906f46b3f0dcc14"
 }
 
 [deps]
 
-source_file="res://assets/character/standard/franz_Koerper_tex.png"
-dest_files=["res://.godot/imported/franz_Koerper_tex.png-2fd20e11cbbb099571dd480ef41b2e4e.s3tc.ctex"]
+source_file="res://assets/character/standard/franz_Schnurrbart_tex.png"
+dest_files=["res://.godot/imported/franz_Schnurrbart_tex.png-48608044c80ca5247e3c06c489e64286.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -41,4 +40,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

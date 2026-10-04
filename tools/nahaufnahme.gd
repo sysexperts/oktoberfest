@@ -18,7 +18,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for a in [["hand_vorn", 0.0, 0.7, 2.4], ["hand_seite", -90.0, 0.7, 2.4], ["kopf_seite", -90.0, 1.3, 2.2],
-			["ganz", 0.0, 0.85, 4.6], ["oberkoerper", 0.0, 1.1, 2.6], ["schraeg", -35.0, 0.9, 3.6], ["seite_ober", -90.0, 1.1, 2.6], ["ruecken", 180.0, 1.1, 2.6], ["hose_seite", -90.0, 0.65, 2.4], ["seite_hinten", -135.0, 1.0, 2.6], ["kopf_hinten", 150.0, 1.5, 2.2]]:
+			["gesicht_nah", 0.0, 1.3, 1.5], ["gesicht_seite", -60.0, 1.3, 1.5], ["ganz", 0.0, 0.85, 4.6], ["oberkoerper", 0.0, 1.1, 2.6], ["schraeg", -35.0, 0.9, 3.6], ["seite_ober", -90.0, 1.1, 2.6], ["ruecken", 180.0, 1.1, 2.6], ["hose_seite", -90.0, 0.65, 2.4], ["seite_hinten", -135.0, 1.0, 2.6], ["kopf_hinten", 150.0, 1.5, 2.2]]:
 		f.rotation_degrees.y = a[1]
 		kam.look_at_from_position(Vector3(0, a[2], a[3]), Vector3(0, a[2], 0))
 		await get_tree().process_frame
