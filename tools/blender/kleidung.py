@@ -863,7 +863,7 @@ elif OUTFIT == "franz":
     # Bayerischer Schnauzer, richtig modelliert: dicker Körper aus Kugelketten (verjüngt, schwingt
     # über die Mundwinkel nach unten und läuft in einer hochgezwirbelten Spitze aus), danach zu einer
     # geschlossenen, glatten Form verschmolzen und mit Haarsträhnen bemalt.
-    HAAR = np.array([0.17, 0.10, 0.06])
+    HAAR = np.array([0.52, 0.52, 0.54])
     teile_b = []
     for sx in (1, -1):
         punkte = []
@@ -912,9 +912,9 @@ elif OUTFIT == "franz":
         bmx.from_mesh(lid.data)
         # Schnittebene durch das Auge, zur Nase hin abfallend (innen tiefer = grummeliger Blick);
         # sauber mit bisect statt Punkte löschen, damit die Lidkante glatt ist
-        nz = Vector((sx * 0.34, 0.0, 1.0)).normalized()     # Normale zeigt nach oben, außen etwas höher
+        nz = Vector((0.0, 0.0, 1.0))     # Normale zeigt nach oben, außen etwas höher
         bmesh.ops.bisect_plane(bmx, geom=list(bmx.verts) + list(bmx.edges) + list(bmx.faces),
-                               plane_co=Vector((sx * 0.093, 0.0, 1.304)), plane_no=-nz, clear_outer=True)
+                               plane_co=Vector((sx * 0.093, 0.0, 1.309)), plane_no=-nz, clear_outer=True)
         rand_k = [e for e in bmx.edges if e.is_boundary]
         if rand_k:
             bmesh.ops.holes_fill(bmx, edges=rand_k, sides=100000)
