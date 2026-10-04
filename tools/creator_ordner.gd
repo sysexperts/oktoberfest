@@ -37,6 +37,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	for i in n:
 		figuren[i].stehen()
+		if ordner == "baerte":
+			Assets.faerben(figuren[i], Color(0.38, 0.24, 0.14))
 		if ordner == "brillen":
 			Assets.faerben(figuren[i], Assets.BRILLEN[(i + 1) % Assets.BRILLEN.size()]["farbe"])
 	await get_tree().process_frame

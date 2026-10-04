@@ -17,6 +17,7 @@ import numpy as np
 from mathutils import kdtree
 
 kleidung_objekte = []
+SCHWACH_AO = set()      # Teile mit kaum Schatten (Bärte: einfarbig, damit sie sich gleichmäßig einfärben lassen)
 _bemalt = []      # (Objekt, Bild, Farbfeld) für das Einbacken der Schatten
 
 
@@ -1925,6 +1926,8 @@ elif OUTFIT == "baerte":
         return kugel(Vector((x, haut_y(max(-0.19, min(0.19, x)), h) + 0.004 + r * 0.55 + tief, h)), (r * 1.15 * sx, r * 0.85 * sy, r * sz), "b", 12)
 
     def b_formen(name, teile, voxel=0.0045, glaetten=6, anteil=0.20):
+        glaetten = glaetten * 2 + 4
+        anteil = min(0.5, anteil * 1.4)
         o = vereinen(teile, name)
         o.data.remesh_voxel_size = voxel
         bpy.context.view_layer.objects.active = o
@@ -1940,16 +1943,16 @@ elif OUTFIT == "baerte":
         return o
 
     def bart_grau(P):
-        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
-        strahl = 0.5 + 0.5 * np.sin(gx * 900 + gy * 70 + ruis(P, 40.0) * 5.0)
-        fein = ruis(P, 150.0)
-        v = 0.60 + 0.26 * strahl + 0.12 * fein
-        return np.repeat(np.clip(v, 0, 1)[:, None], 3, axis=1)
+        """Gleichmäßiges Grau ohne Muster: alle Bärte haben denselben Grundton, damit die Haarfarbe im Creator
+        überall gleich aufgetragen wird"""
+        v = 0.78 + 0.02 * ruis(P, 60.0)
+        return np.repeat(v[:, None], 3, axis=1)
 
     def bart_fertig(name, o, malen=bart_grau):
-        f = fertig(name + "_farbe", [o], malen, 1024, 0.9)
+        f = fertig(name + "_farbe", [o], malen, 512, 0.9)
         for g in list(f.vertex_groups):
             f.vertex_groups.remove(g)
+        SCHWACH_AO.add(f.name)
         HUETE[name] = [f]
 
     # ---- 1. Bayerischer Schnauzer (hochgezwirbelt)
@@ -2037,8 +2040,7 @@ elif OUTFIT == "baerte":
     st = schale_ganz("stoppeln", lambda c: 0.0035, weg_st, 3, offen_st)
 
     def stoppel_mal(P):
-        n = ruis(P, 260.0)
-        v = 0.45 + 0.40 * np.clip((n - 0.40) * 3.0, 0, 1)
+        v = 0.78 + 0.02 * ruis(P, 60.0)
         return np.repeat(v[:, None], 3, axis=1)
 
     bart_fertig("stoppeln", st, stoppel_mal)
@@ -2139,7 +2141,7 @@ def ao_einbacken(staerke=0.55):
         for k in versteckt:
             k.hide_render = False
         ao = np.array(ao_img.pixels[:], np.float32).reshape(groesse, groesse, 4)[:, :, 0]
-        st = 0.22 if o.name in haut_namen else staerke
+        st = 0.22 if o.name in haut_namen else (0.06 if o.name in SCHWACH_AO else staerke)
         fertig_bild = np.clip(bild * (1.0 - st + st * ao[:, :, None]), 0, 1)
         rgba = np.concatenate([fertig_bild, np.ones((groesse, groesse, 1), np.float32)], axis=2)
         img.pixels.foreach_set(rgba.ravel())
