@@ -12,41 +12,95 @@ signal fertig(look: Dictionary)
 signal abgebrochen
 
 const STANDARD_FARBEN := [
-	Color(0.85, 0.15, 0.15), Color(0.90, 0.45, 0.10), Color(0.95, 0.80, 0.20), Color(0.30, 0.60, 0.25),
-	Color(0.15, 0.50, 0.55), Color(0.15, 0.30, 0.65), Color(0.45, 0.25, 0.60), Color(0.90, 0.45, 0.65),
-	Color(0.35, 0.22, 0.13), Color(0.12, 0.12, 0.13), Color(0.55, 0.55, 0.58), Color(0.95, 0.95, 0.95),
+	Color(0.85, 0.15, 0.15), Color(0.90, 0.45, 0.10), Color(0.95, 0.80, 0.20),
+	Color(0.20, 0.55, 0.30), Color(0.15, 0.55, 0.60), Color(0.15, 0.35, 0.75), Color(0.45, 0.25, 0.65),
+	Color(0.90, 0.45, 0.65), Color(0.45, 0.28, 0.16), Color(0.12, 0.12, 0.13), Color(0.55, 0.55, 0.60),
+	Color(0.97, 0.97, 0.97),
 ]
+## Bausteine mit Pfeilen: Schlüssel im Look → Name der Knoten (%…Zurueck, %…Name, %…Weiter)
 const AUSWAHL := {"augen": "Augen", "emotion": "Emotion", "bart": "Bart", "hut": "Hut", "brille": "Brille"}
-const FARBEN := {"haut": "HautFarbe", "haar": "HaarFarbe", "hut_farbe": "HutFarbe", "brille_farbe": "BrilleFarbe"}
+## Farben: Schlüssel im Look → Knoten mit den Farbflecken, und woher die Farben kommen
+const FARBEN := {"haut": "HautFarben", "haar": "HaarFarben", "hut_farbe": "HutFarben", "brille_farbe": "BrilleFarben"}
+const GOLD := Color(1, 0.839, 0.349)
 
 var _look := {}
 var _figur: Figur
 var _sperre := false
+## Farbflecken je Look-Schlüssel (für die Markierung der gewählten Farbe)
+var _flecken := {}
 
 func _ready() -> void:
 	for art: String in AUSWAHL:
-		var ob := get_node("%" + AUSWAHL[art]) as OptionButton
-		ob.clear()
-		for e: Dictionary in Look.liste(art):
-			ob.add_item(tr(e["name"]))
-			ob.set_item_metadata(ob.item_count - 1, e["id"])
-		ob.item_selected.connect(_auswahl_geaendert.bind(art))
+		get_node("%" + AUSWAHL[art] + "Zurueck").pressed.connect(_weiter.bind(art, -1))
+		get_node("%" + AUSWAHL[art] + "Weiter").pressed.connect(_weiter.bind(art, 1))
 	for schluessel: String in FARBEN:
-		var cp := get_node("%" + FARBEN[schluessel]) as ColorPickerButton
-		var presets: Array = Look.HAUTFARBEN if schluessel == "haut" else (Assets.HAARFARBEN if schluessel == "haar" else STANDARD_FARBEN)
-		var picker := cp.get_picker()
-		for c: Color in presets:
-			picker.add_preset(c)
-		picker.presets_visible = true
-		picker.sampler_visible = false
-		picker.color_modes_visible = false
-		picker.sliders_visible = schluessel != "haut" and schluessel != "haar"
-		cp.color_changed.connect(_farbe_geaendert.bind(schluessel))
+		var palette: Array = Look.HAUTFARBEN if schluessel == "haut" else (Assets.HAARFARBEN if schluessel == "haar" else STANDARD_FARBEN)
+		_flecken[schluessel] = []
+		var behaelter := get_node("%" + FARBEN[schluessel]) as Control
+		for c: Color in palette:
+			var k := _fleck(c)
+			k.pressed.connect(_farbe_gewaehlt.bind(schluessel, c))
+			behaelter.add_child(k)
+			_flecken[schluessel].append([k, c])
 	%Zufall.pressed.connect(func() -> void: _setzen(Look.zufall()))
 	%Abbrechen.pressed.connect(_abbrechen)
 	%Fertig.pressed.connect(_fertig)
 	%Vorschau.gui_input.connect(_vorschau_eingabe)
 	visible = false
+
+## Runder Farbfleck als Knopf; die gewählte Farbe bekommt einen goldenen Ring (_flecken_zeigen)
+func _fleck(farbe: Color) -> Button:
+	var k := Button.new()
+	k.custom_minimum_size = Vector2(34, 34)
+	k.focus_mode = Control.FOCUS_ALL
+	for zustand: String in ["normal", "hover", "pressed", "focus", "disabled"]:
+		k.add_theme_stylebox_override(zustand, _fleck_stil(farbe, false, zustand == "hover" or zustand == "focus"))
+	k.set_meta("farbe", farbe)
+	return k
+
+func _fleck_stil(farbe: Color, gewaehlt: bool, hell: bool) -> StyleBoxFlat:
+	var st := StyleBoxFlat.new()
+	st.bg_color = farbe
+	st.set_corner_radius_all(17)
+	st.set_border_width_all(4 if gewaehlt else 2)
+	st.border_color = GOLD if gewaehlt else (Color(1, 1, 1, 0.75) if hell else Color(0, 0, 0, 0.55))
+	st.set_content_margin_all(0)
+	return st
+
+func _flecken_zeigen() -> void:
+	for schluessel: String in _flecken:
+		var aktuell := Color.html(str(_look[schluessel]))
+		for paar: Array in _flecken[schluessel]:
+			var k: Button = paar[0]
+			var c: Color = paar[1]
+			var gewaehlt := c.is_equal_approx(aktuell) or c.to_html(false) == str(_look[schluessel])
+			for zustand: String in ["normal", "hover", "pressed", "focus", "disabled"]:
+				k.add_theme_stylebox_override(zustand, _fleck_stil(c, gewaehlt, zustand == "hover" or zustand == "focus"))
+
+func _farbe_gewaehlt(schluessel: String, farbe: Color) -> void:
+	if _sperre:
+		return
+	_look[schluessel] = farbe.to_html(false)
+	_flecken_zeigen()
+	if _figur:
+		Look.faerben(_figur, _look)
+
+## Pfeil links/rechts: nächsten Baustein wählen (rundherum)
+func _weiter(art: String, richtung: int) -> void:
+	var eintraege := Look.liste(art)
+	var i := 0
+	for k in eintraege.size():
+		if eintraege[k]["id"] == _look[art]:
+			i = k
+	_look[art] = eintraege[posmod(i + richtung, eintraege.size())]["id"]
+	_namen_zeigen()
+	_neu_bauen()
+
+func _namen_zeigen() -> void:
+	for art: String in AUSWAHL:
+		for e: Dictionary in Look.liste(art):
+			if e["id"] == _look[art]:
+				(get_node("%" + AUSWAHL[art] + "Name") as Label).text = tr(e["name"])
 
 func oeffnen(start: Dictionary) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -56,30 +110,9 @@ func oeffnen(start: Dictionary) -> void:
 
 func _setzen(look: Dictionary) -> void:
 	_look = Look.pruefen(look)
-	_sperre = true
-	for art: String in AUSWAHL:
-		var ob := get_node("%" + AUSWAHL[art]) as OptionButton
-		for i in ob.item_count:
-			if ob.get_item_metadata(i) == _look[art]:
-				ob.select(i)
-	for schluessel: String in FARBEN:
-		(get_node("%" + FARBEN[schluessel]) as ColorPickerButton).color = Color.html(str(_look[schluessel]))
-	_sperre = false
+	_namen_zeigen()
+	_flecken_zeigen()
 	_neu_bauen()
-
-func _auswahl_geaendert(index: int, art: String) -> void:
-	if _sperre:
-		return
-	var ob := get_node("%" + AUSWAHL[art]) as OptionButton
-	_look[art] = ob.get_item_metadata(index)
-	_neu_bauen()
-
-func _farbe_geaendert(farbe: Color, schluessel: String) -> void:
-	if _sperre:
-		return
-	_look[schluessel] = farbe.to_html(false)
-	if _figur:
-		Look.faerben(_figur, _look)
 
 ## Figur neu aufbauen (nur bei Wechsel eines Bausteins nötig, Farben brauchen das nicht)
 func _neu_bauen() -> void:

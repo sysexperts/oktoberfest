@@ -26,8 +26,8 @@ func _ready() -> void:
 			fehler += 1
 			print("FEHLER: Creator öffnet sich nicht")
 		else:
-			cc.get_node("%Hut").select(3)
-			cc.get_node("%Hut").item_selected.emit(3)
+			for i in 3:
+				cc.get_node("%HutWeiter").pressed.emit()
 			await get_tree().process_frame
 			cc.get_node("%Fertig").pressed.emit()
 			await get_tree().process_frame
