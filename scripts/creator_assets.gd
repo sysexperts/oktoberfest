@@ -31,8 +31,8 @@ const BRILLEN := [
 	{"id": "wayfarer", "name": "CREATOR_BRILLE_WAYFARER", "szene": preload("res://scenes/creator/brillen/wayfarer.tscn"), "farbe": Color(0.08, 0.08, 0.09)},
 	{"id": "lesebrille", "name": "CREATOR_BRILLE_LESE", "szene": preload("res://scenes/creator/brillen/lesebrille.tscn"), "farbe": Color(0.45, 0.28, 0.16)},
 	{"id": "oval", "name": "CREATOR_BRILLE_OVAL", "szene": preload("res://scenes/creator/brillen/oval.tscn"), "farbe": Color(0.55, 0.55, 0.58)},
-	{"id": "nerdbrille", "name": "CREATOR_BRILLE_NERD", "szene": preload("res://scenes/creator/brillen/nerdbrille.tscn"), "farbe": Color(0.07, 0.07, 0.08)},
-	{"id": "fliegerbrille", "name": "CREATOR_BRILLE_FLIEGER", "szene": preload("res://scenes/creator/brillen/fliegerbrille.tscn"), "farbe": Color(0.45, 0.28, 0.14)},
+	{"id": "sonnenbrille_rund", "name": "CREATOR_BRILLE_SONNE_RUND", "szene": preload("res://scenes/creator/brillen/sonnenbrille_rund.tscn"), "farbe": Color(0.07, 0.07, 0.08)},
+	{"id": "sonnenbrille_eckig", "name": "CREATOR_BRILLE_SONNE_ECKIG", "szene": preload("res://scenes/creator/brillen/sonnenbrille_eckig.tscn"), "farbe": Color(0.72, 0.60, 0.22)},
 	{"id": "monokel", "name": "CREATOR_BRILLE_MONOKEL", "szene": preload("res://scenes/creator/brillen/monokel.tscn"), "farbe": Color(0.72, 0.60, 0.22)},
 	{"id": "herzbrille", "name": "CREATOR_BRILLE_HERZ", "szene": preload("res://scenes/creator/brillen/herzbrille.tscn"), "farbe": Color(0.95, 0.30, 0.50)},
 ]

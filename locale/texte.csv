@@ -655,8 +655,8 @@ CREATOR_BRILLE_PILOT,Pilotenbrille,Aviators,Pilot gözlüğü
 CREATOR_BRILLE_WAYFARER,Wayfarer,Wayfarer,Wayfarer
 CREATOR_BRILLE_LESE,Lesebrille,Reading glasses,Okuma gözlüğü
 CREATOR_BRILLE_OVAL,Ovale Brille,Oval glasses,Oval gözlük
-CREATOR_BRILLE_NERD,Nerdbrille,Nerd glasses,İnek gözlüğü
-CREATOR_BRILLE_FLIEGER,Fliegerbrille,Aviator goggles,Pilot gözlüğü (steampunk)
+CREATOR_BRILLE_SONNE_RUND,Sonnenbrille rund,Round sunglasses,Yuvarlak güneş gözlüğü
+CREATOR_BRILLE_SONNE_ECKIG,Sonnenbrille eckig,Square sunglasses,Kare güneş gözlüğü
 CREATOR_BRILLE_MONOKEL,Monokel,Monocle,Monokl
 CREATOR_BRILLE_HERZ,Herzbrille,Heart glasses,Kalp gözlük
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç

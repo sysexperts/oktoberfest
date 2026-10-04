@@ -1686,31 +1686,13 @@ elif OUTFIT == "brillen":
     o, g = brille("oval", "oval", 0.076, 0.082, 0.0075, 0.0075, None, hoehe=AUGE_Z - 0.004)
     brille_fertig("oval", o, g)
 
-    # ---- 7. Nerdbrille: dicke runde Gläser, Pflaster auf der Nase
-    o, g = brille("nerdbrille", "rund", 0.090, 0.084, 0.0185, 0.0165, None, buegel_d=0.011, bruecke_z=0.03)
-    brille_fertig("nerdbrille", o, g)
-    pflaster = kugel(Vector((0, 0, 0)), (0.020, 0.0045, 0.015), "pflaster", 14)
-    pflaster.rotation_euler = (0, math.radians(18), 0)
-    pflaster.location = Vector((0.0, EBENE - 0.004, AUGE_Z + 0.040))
-    bpy.context.view_layer.objects.active = pflaster
-    bpy.ops.object.shade_smooth()
-    pflaster.data.materials.append(material("pflaster", (0.88, 0.80, 0.62), 0.8))
-    HUETE["nerdbrille"].append(pflaster)
+    # ---- 7. Sonnenbrille rund: dunkle runde Gläser, kräftiger Rahmen
+    o, g = brille("sonne_rund", "rund", 0.086, 0.086, 0.0125, 0.0115, (0.04, 0.04, 0.05, 0.90), buegel_d=0.0095)
+    brille_fertig("sonnenbrille_rund", o, g)
 
-    # ---- 8. Fliegerbrille (Steampunk): dicke runde Fassungen, helle Gläser, Lederband um den Kopf
-    def flieger_extras(bm, bg):
-        pfad = []
-        for k in range(0, 41):
-            th = -(math.pi - 0.95) + k / 40 * 2 * (math.pi - 0.95)
-            pfad.append(Vector((0.228 * math.sin(th), 0.210 * math.cos(th), AUGE_Z + 0.004)))
-        for sx, idx in ((-1.0, 0), (1.0, -1)):
-            ende = pfad[idx]
-            rand = Vector((sx * (AUGE_X + 0.092), EBENE + 0.01, AUGE_Z + 0.004))
-            pfad_seite = [rand, rand.lerp(ende, 0.5), ende]
-            kurve_roehre(bm, pfad_seite, 0.011, 6)
-        kurve_roehre(bm, pfad, 0.011, 6)
-    o, g = brille("flieger", "rund", 0.092, 0.092, 0.0150, 0.026, (0.72, 0.86, 0.95, 0.22), buegel_d=0.0001, extras=flieger_extras)
-    brille_fertig("fliegerbrille", o, g)
+    # ---- 8. Sonnenbrille eckig: breite, flache dunkle Gläser mit grünlichem Schimmer, schlanker Rahmen
+    o, g = brille("sonne_eckig", "eckig", 0.096, 0.064, 0.0075, 0.0085, (0.06, 0.13, 0.10, 0.88), buegel_d=0.0075)
+    brille_fertig("sonnenbrille_eckig", o, g)
 
     # ---- 9. Monokel (rechtes Auge) mit Kettchen
     def mono_extras(bm, bg):

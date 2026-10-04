@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wcocgfs3ectd"
-path="res://.godot/imported/nerdbrille_tex_nerdbrille_farbe.png-975f94b7fb675bed5a33efabc59e3df7.ctex"
+uid="uid://ct4gifbwcx1kq"
+path="res://.godot/imported/sonnenbrille_eckig_tex_sonnenbrille_eckig_farbe.png-6fe741f98c1f2bc84cf53aa83e4e78ec.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "0e924711ce39795a9022b695f06729d6"
+"md5": "1198fd6ef2909eea26a87639421e7dae"
 }
 
 [deps]
 
-source_file="res://assets/creator/brillen/nerdbrille_tex_nerdbrille_farbe.png"
-dest_files=["res://.godot/imported/nerdbrille_tex_nerdbrille_farbe.png-975f94b7fb675bed5a33efabc59e3df7.ctex"]
+source_file="res://assets/creator/brillen/sonnenbrille_eckig_tex_sonnenbrille_eckig_farbe.png"
+dest_files=["res://.godot/imported/sonnenbrille_eckig_tex_sonnenbrille_eckig_farbe.png-6fe741f98c1f2bc84cf53aa83e4e78ec.ctex"]
 
 [params]
 

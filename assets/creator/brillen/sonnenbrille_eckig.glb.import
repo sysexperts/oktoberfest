@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://d4kgc6uo8tjd2"
-path="res://.godot/imported/nerdbrille.glb-73b19b3dfec3a3b4543049ba904525de.scn"
+uid="uid://bf1dv56jnbdms"
+path="res://.godot/imported/sonnenbrille_eckig.glb-6c0ca7bcc91f4ba3489fda2c394797fb.scn"
 
 [deps]
 
-source_file="res://assets/creator/brillen/nerdbrille.glb"
-dest_files=["res://.godot/imported/nerdbrille.glb-73b19b3dfec3a3b4543049ba904525de.scn"]
+source_file="res://assets/creator/brillen/sonnenbrille_eckig.glb"
+dest_files=["res://.godot/imported/sonnenbrille_eckig.glb-6c0ca7bcc91f4ba3489fda2c394797fb.scn"]
 
 [params]
 

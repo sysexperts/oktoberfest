@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://gkd7qlxf8lso"
-path="res://.godot/imported/fliegerbrille.glb-46c31184150725ea62d6af168c619836.scn"
+uid="uid://1tdx6soce3d0"
+path="res://.godot/imported/sonnenbrille_rund.glb-733d9713e00385fc994472778152b515.scn"
 
 [deps]
 
-source_file="res://assets/creator/brillen/fliegerbrille.glb"
-dest_files=["res://.godot/imported/fliegerbrille.glb-46c31184150725ea62d6af168c619836.scn"]
+source_file="res://assets/creator/brillen/sonnenbrille_rund.glb"
+dest_files=["res://.godot/imported/sonnenbrille_rund.glb-733d9713e00385fc994472778152b515.scn"]
 
 [params]
 

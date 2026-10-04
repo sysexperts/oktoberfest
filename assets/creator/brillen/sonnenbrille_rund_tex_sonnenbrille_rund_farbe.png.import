@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcpufcg3cglsv"
-path="res://.godot/imported/fliegerbrille_tex_fliegerbrille_farbe.png-27a07ff229c4b8e0b4b9768c41635499.ctex"
+uid="uid://ci27n0f56d587"
+path="res://.godot/imported/sonnenbrille_rund_tex_sonnenbrille_rund_farbe.png-f0f6e73b1fce67ce7391d9710d0d717c.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "39667bcd9ba546bc5dca2540439c2fc1"
+"md5": "94ffb967ed22bfa0c2fbdbff1f630fa3"
 }
 
 [deps]
 
-source_file="res://assets/creator/brillen/fliegerbrille_tex_fliegerbrille_farbe.png"
-dest_files=["res://.godot/imported/fliegerbrille_tex_fliegerbrille_farbe.png-27a07ff229c4b8e0b4b9768c41635499.ctex"]
+source_file="res://assets/creator/brillen/sonnenbrille_rund_tex_sonnenbrille_rund_farbe.png"
+dest_files=["res://.godot/imported/sonnenbrille_rund_tex_sonnenbrille_rund_farbe.png-f0f6e73b1fce67ce7391d9710d0d717c.ctex"]
 
 [params]
 
