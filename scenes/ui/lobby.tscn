@@ -294,7 +294,7 @@ custom_minimum_size = Vector2(220, 52)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 19
-text = "LOBBY_PICK_FIGURE"
+text = "MENU_CHARACTER"
 
 [node name="AbstandC" type="Control" parent="Mitte/Panel/Spalte"]
 custom_minimum_size = Vector2(0, 8)

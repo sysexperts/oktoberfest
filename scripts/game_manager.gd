@@ -1415,6 +1415,7 @@ func _client_ready(version: String) -> void:
 	_melde("NET_PLAYER_JOINED", [], 2)
 	# Namen, Farben und Abteilungen der anderen (Lobby)
 	_net_spieler_info.rpc_id(sender, _spieler_info)
+	_net_looks.rpc_id(sender, _looks)
 	for mid in _messes.keys():
 		_add_mess.rpc_id(sender, mid, (_messes[mid] as Node3D).position, int(_mess_kind.get(mid, 0)))
 	for gid in _guest_sim.keys():
@@ -1461,6 +1462,8 @@ func _add_player(peer_id: int, spawn_index: int) -> void:
 	if _spieler_info.has(peer_id) and p.has_method("set_info"):
 		var d: Dictionary = _spieler_info[peer_id]
 		p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), int(d.get("figur", 0)))
+	if _looks.has(peer_id) and p.has_method("look_setzen"):
+		p.look_setzen(str(_looks[peer_id]))
 
 @rpc("authority", "reliable", "call_local")
 func _remove_player(peer_id: int) -> void:
@@ -3708,6 +3711,28 @@ func net_lobby_setzen(spielername: String, farbe: int, figur: int = -1, lobby_id
 	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5),
 		"figur": clampi(figur, 0, Figuren.ALLE.size() - 1)}
 	_net_spieler_info.rpc(_spieler_info)
+
+## Selbst gebaute Charaktere (Creator): Peer → Look als JSON-Text. Der Server prüft nur die Länge,
+## der Inhalt wird bei jedem Empfänger in scripts/charakter_look.gd geprüft.
+var _looks := {}
+
+@rpc("any_peer", "reliable", "call_local")
+func net_look_setzen(code: String) -> void:
+	if not multiplayer.is_server() or code.length() > 400:
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	_looks[s] = code
+	_net_looks.rpc(_looks)
+
+@rpc("authority", "reliable", "call_local")
+func _net_looks(looks: Dictionary) -> void:
+	_looks = looks
+	for peer in looks.keys():
+		var p = _players_nodes.get(int(peer))
+		if p and p.has_method("look_setzen") and p.look_code != str(looks[peer]):
+			p.look_setzen(str(looks[peer]))
 
 @rpc("authority", "reliable", "call_local")
 func _net_spieler_info(info: Dictionary) -> void:

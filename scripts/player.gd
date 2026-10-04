@@ -53,6 +53,7 @@ var _current_target: Node3D = null
 var _highlight_ring: MeshInstance3D
 var _pitch := 0.0
 const Figuren := preload("res://scripts/figuren.gd")
+const Look := preload("res://scripts/charakter_look.gd")
 var _cur_anim := ""
 ## Einleitung: bis wann eine Geste läuft, die die Laufanimation nicht überschreiben darf
 var _geste_bis := 0.0
@@ -134,6 +135,11 @@ func _ready() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		_make_highlight_ring()
 		_sfx_node = _world.get_node_or_null("Sfx")
+		if Look.gespeichert():
+			if Net.solo:
+				look_setzen.call_deferred(Look.zu_code(Look.laden()))
+			elif _world.has_method("net_look_setzen"):
+				_world.net_look_setzen.rpc_id(1, Look.zu_code(Look.laden()))
 		if not Net.solo:
 			if not KoopDaten.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
 				# Aus dem Warteraum (Einladungscode): Name und Figur stehen schon fest
@@ -397,8 +403,25 @@ func _physics_process(delta: float) -> void:
 	_besen_zeigen()
 	_update_animation(delta)
 
+## Selbst gebauter Charakter (Creator): Look als JSON-Text, leer = Figur aus der Auswahlliste
+var look_code := ""
+
+func look_setzen(code: String) -> void:
+	var l := Look.aus_code(code)
+	look_code = Look.zu_code(l)
+	_fass_loesen()
+	var neu := Figuren.einsetzen_figur(self, Look.bauen(l))
+	Look.faerben(neu, l)
+	_model = neu
+	_fass_anheften()
+	_model.visible = not _is_local
+	_cur_anim = ""
+
 ## Figur aus dem Warteraum einsetzen (scripts/figuren.gd), Animationen neu starten.
 func _figur_setzen(nr: int) -> void:
+	# Wer einen selbst gebauten Charakter hat, behält ihn (set_info kommt bei jeder Lobby-Änderung)
+	if look_code != "":
+		return
 	var szene: PackedScene = Figuren.ALLE[posmod(nr, Figuren.ALLE.size())]
 	# Das Fass hängt am Skelett der alten Figur — vorher zurückholen, sonst
 	# verschwindet es mit ihr

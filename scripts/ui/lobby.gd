@@ -8,6 +8,8 @@ extends Control
 
 const Texte := preload("res://scripts/ui/texte.gd")
 const Figuren := preload("res://scripts/figuren.gd")
+const Look := preload("res://scripts/charakter_look.gd")
+const CreatorSkript := preload("res://scripts/ui/charakter_creator.gd")
 ## Porträts der wählbaren Figuren (tools/render_avatare.tscn), Nr. = Platz in Figuren.ALLE
 const AVATAR := "res://assets/ui/avatare/figur_%d.png"
 ## Gleiche Farben wie player.gd COSTUME_COLORS (Schal)
@@ -26,7 +28,10 @@ func _ready() -> void:
 		(knopf.get_node("Flaeche") as ColorRect).color = FARBEN[i]
 		knopf.pressed.connect(_farbe_waehlen.bind(i))
 	%Los.pressed.connect(_los)
-	%FigurWaehlen.pressed.connect(_wahl_oeffnen)
+	%FigurWaehlen.pressed.connect(_creator_oeffnen)
+	# Statt der Figurenliste baut man sich jetzt seinen Charakter (Creator)
+	%FigurAvatar.visible = false
+	%FigurName.visible = false
 	%Zu.pressed.connect(_wahl_schliessen)
 	for i in Figuren.ALLE.size():
 		(%Raster.get_child(i) as Button).pressed.connect(_figur_waehlen.bind(i))
@@ -120,6 +125,14 @@ func _figuren_zeigen() -> void:
 		knopf.button_pressed = i == _figur
 		knopf.disabled = belegt.has(i) and i != _figur
 		knopf.modulate = Color(1, 1, 1, 0.4) if knopf.disabled else Color.WHITE
+
+## Charakter-Creator statt Figurenliste; danach geht der Look an den Server und an alle Mitspieler
+func _creator_oeffnen() -> void:
+	CreatorSkript.zeigen(self, func() -> void:
+		if _gm and _gm.has_method("net_look_setzen"):
+			_gm.net_look_setzen.rpc_id(1, Look.zu_code(Look.laden()))
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		%FigurWaehlen.grab_focus.call_deferred())
 
 func _wahl_oeffnen() -> void:
 	%Wahl.visible = true

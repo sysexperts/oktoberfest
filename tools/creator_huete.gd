@@ -18,7 +18,7 @@ func _ready() -> void:
 		var f: Figur = (load("res://scenes/figuren/standard.tscn") as PackedScene).instantiate()
 		var z: Array[PackedScene] = []
 		if Assets.HUETE[i]["szene"] != null:
-			z.append(Assets.HUETE[i]["szene"])
+			z.append(Assets.laden(Assets.HUETE[i]))
 		f.zubehoer = z
 		f.position = Vector3((i - (n - 1) * 0.5) * 0.62, 0, 0)
 		add_child(f)

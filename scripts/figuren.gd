@@ -83,3 +83,16 @@ static func einsetzen(besitzer: Node3D, szene: PackedScene) -> Figur:
 	besitzer.add_child(neu)
 	besitzer.move_child(neu, platz)
 	return neu
+
+## Wie einsetzen(), aber mit einer fertig gebauten Figur (selbst erstellter Charakter, scripts/charakter_look.gd)
+static func einsetzen_figur(besitzer: Node3D, neu: Figur) -> Figur:
+	var alt := besitzer.get_node("Model") as Node3D
+	neu.transform = alt.transform
+	var platz := alt.get_index()
+	alt.name = "ModelAlt"
+	besitzer.remove_child(alt)
+	alt.queue_free()
+	neu.name = "Model"
+	besitzer.add_child(neu)
+	besitzer.move_child(neu, platz)
+	return neu

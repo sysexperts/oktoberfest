@@ -9,6 +9,8 @@ const SERVER_IP := "185.248.140.225"
 const KOOP_LOBBY_SZENE := "res://scenes/ui/koop_lobby.tscn"
 const STEAM_WARTERAUM := "res://scenes/ui/steam_warteraum.tscn"
 const Texte := preload("res://scripts/ui/texte.gd")
+const Look := preload("res://scripts/charakter_look.gd")
+const CreatorSkript := preload("res://scripts/ui/charakter_creator.gd")
 const MenueMusik := preload("res://scripts/ui/menue_musik.gd")
 
 @onready var _haupt: Control = %Hauptspalte
@@ -52,6 +54,7 @@ func _ready() -> void:
 	else:
 		%Koop.pressed.connect(func() -> void: get_tree().change_scene_to_file(KOOP_LOBBY_SZENE))
 	_einst.pressed.connect(_on_einstellungen)
+	%Charakter.pressed.connect(func() -> void: _creator(func() -> void: (_weiter if _weiter.visible else _neu).grab_focus()))
 	%Credits.pressed.connect(_zeige.bind(_credits_panel))
 	%Beenden.pressed.connect(func() -> void: get_tree().quit())
 
@@ -69,7 +72,7 @@ func _ready() -> void:
 	SteamDienst.lobby_fehler.connect(_on_steam_fehler)
 	SteamDienst.lobby_betreten.connect(_on_steam_lobby_betreten)
 	%CreditsZurueck.pressed.connect(_zeige.bind(_haupt))
-	_bestaetigen.confirmed.connect(func() -> void: Net.start_solo(true, _gewaehlter_platz))
+	_bestaetigen.confirmed.connect(func() -> void: _vor_neuem_spiel(func() -> void: Net.start_solo(true, _gewaehlter_platz)))
 
 	# Solange das Einstellungsmenü noch nicht existiert, Knopf nicht anbieten.
 	_einst.disabled = not ResourceLoader.exists(EINSTELLUNGEN_SZENE)
@@ -190,9 +193,20 @@ func _on_platz(platz: int) -> void:
 		return
 	_gewaehlter_platz = platz
 	if Net.speicherstand_info(platz).is_empty():
-		Net.start_solo(true, platz)
+		_vor_neuem_spiel(func() -> void: Net.start_solo(true, platz))
 	else:
 		_bestaetigen.popup_centered()
+
+## Vor einem neuen Spiel den Charakter bauen — wer schon einen hat, spielt gleich los
+## (ändern geht jederzeit über den Knopf „Charakter“ im Hauptmenü).
+func _vor_neuem_spiel(los: Callable) -> void:
+	if Look.gespeichert():
+		los.call()
+	else:
+		_creator(los)
+
+func _creator(danach := Callable()) -> void:
+	CreatorSkript.zeigen(self, danach)
 
 func _platz_knopf(platz: int) -> Button:
 	return get_node("%%PlatzKnopf%d" % platz)

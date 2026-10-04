@@ -7,6 +7,7 @@ extends Control
 
 const KoopDaten := preload("res://scripts/koop_daten.gd")
 const Figuren := preload("res://scripts/figuren.gd")
+const CreatorSkript := preload("res://scripts/ui/charakter_creator.gd")
 const Texte := preload("res://scripts/ui/texte.gd")
 const FreundZeile := preload("res://scenes/ui/steam_freund_zeile.tscn")
 const HAUPTMENUE := "res://scenes/ui/hauptmenue.tscn"
@@ -228,7 +229,9 @@ func _erste_freie_figur(mitglieder: Array) -> int:
 	return 0
 
 func _wahl_oeffnen() -> void:
-	%Wahl.zeigen(maxi(_figur, 0), _belegt(quelle.lobby_mitglieder()))
+	# Statt der Figurenliste: Charakter-Creator. Der Look liegt danach in user://charakter.cfg und
+	# geht beim Spielstart an alle Mitspieler (Player._ready → GameManager.net_look_setzen).
+	CreatorSkript.zeigen(self, func() -> void: %Bereit.grab_focus())
 
 func _figur_gewaehlt(nr: int) -> void:
 	_figur = nr

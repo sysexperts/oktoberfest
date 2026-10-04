@@ -1,0 +1,274 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/charakter_creator.gd" id="1_cc"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="FensterStil"]
+content_margin_left = 28.0
+content_margin_top = 26.0
+content_margin_right = 28.0
+content_margin_bottom = 26.0
+bg_color = Color(0.082, 0.064, 0.052, 0.98)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 26
+
+[sub_resource type="StyleBoxFlat" id="VorschauStil"]
+bg_color = Color(0.13, 0.105, 0.085, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="Environment" id="Umgebung"]
+background_mode = 1
+background_color = Color(0.13, 0.105, 0.085, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 0.93, 0.82, 1)
+ambient_light_energy = 0.8
+
+[node name="CharakterCreator" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_cc")
+
+[node name="Dunkel" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.03, 0.024, 0.02, 0.92)
+
+[node name="Mitte" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Reihe" type="HBoxContainer" parent="Mitte"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="VorschauRahmen" type="PanelContainer" parent="Mitte/Reihe"]
+custom_minimum_size = Vector2(430, 640)
+layout_mode = 2
+theme_override_styles/panel = SubResource("VorschauStil")
+
+[node name="Vorschau" type="SubViewportContainer" parent="Mitte/Reihe/VorschauRahmen"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_default_cursor_shape = 13
+stretch = true
+
+[node name="Ansicht" type="SubViewport" parent="Mitte/Reihe/VorschauRahmen/Vorschau"]
+own_world_3d = true
+handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(430, 640)
+render_target_update_mode = 4
+
+[node name="Umgebung" type="WorldEnvironment" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+environment = SubResource("Umgebung")
+
+[node name="Licht" type="DirectionalLight3D" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 3, 3)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.3
+
+[node name="Kamera" type="Camera3D" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9976, 0.0698, 0, -0.0698, 0.9976, 0, 0.95, 3.25)
+fov = 34.0
+
+[node name="Drehteller" type="Node3D" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+unique_name_in_owner = true
+
+[node name="Fenster" type="PanelContainer" parent="Mitte/Reihe"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("FensterStil")
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Reihe/Fenster"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "CREATOR_TITLE"
+horizontal_alignment = 1
+
+[node name="Geschlecht" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Maennlich" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Geschlecht"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 44)
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "CREATOR_MALE"
+
+[node name="Weiblich" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Geschlecht"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 44)
+layout_mode = 2
+disabled = true
+toggle_mode = true
+text = "CREATOR_FEMALE"
+tooltip_text = "CREATOR_FEMALE_SOON"
+
+[node name="Raster" type="GridContainer" parent="Mitte/Reihe/Fenster/Spalte"]
+layout_mode = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="LHaut" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATOR_SKIN"
+
+[node name="PlatzHaut" type="Control" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+layout_mode = 2
+
+[node name="HautFarbe" type="ColorPickerButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 44)
+layout_mode = 2
+edit_alpha = false
+
+[node name="LAugen" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATOR_EYES"
+
+[node name="Augen" type="OptionButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+fit_to_longest_item = false
+
+[node name="RestAugen" type="Control" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+layout_mode = 2
+
+[node name="LAusdruck" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATOR_FACE"
+
+[node name="Emotion" type="OptionButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+fit_to_longest_item = false
+
+[node name="RestAusdruck" type="Control" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+layout_mode = 2
+
+[node name="LBart" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATOR_BEARD"
+
+[node name="Bart" type="OptionButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+fit_to_longest_item = false
+
+[node name="HaarFarbe" type="ColorPickerButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 44)
+layout_mode = 2
+edit_alpha = false
+
+[node name="LHut" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATOR_HAT"
+
+[node name="Hut" type="OptionButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+fit_to_longest_item = false
+
+[node name="HutFarbe" type="ColorPickerButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 44)
+layout_mode = 2
+edit_alpha = false
+
+[node name="LBrille" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CREATOR_GLASSES"
+
+[node name="Brille" type="OptionButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+fit_to_longest_item = false
+
+[node name="BrilleFarbe" type="ColorPickerButton" parent="Mitte/Reihe/Fenster/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 44)
+layout_mode = 2
+edit_alpha = false
+
+[node name="Hinweis" type="Label" parent="Mitte/Reihe/Fenster/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 16
+text = "CREATOR_HINT"
+horizontal_alignment = 1
+
+[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Zufall" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 52)
+layout_mode = 2
+text = "CREATOR_RANDOM"
+
+[node name="Abbrechen" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 52)
+layout_mode = 2
+text = "CREATOR_CANCEL"
+
+[node name="Fertig" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "CREATOR_DONE"

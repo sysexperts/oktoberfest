@@ -1273,3 +1273,18 @@ KALENDER_HEUTE,HEUTE,TODAY,BUGÜN
 KALENDER_NORMAL_TITEL,Festtag,Fair day,Fuar günü
 KALENDER_NORMAL,Ein ganz normaler Festtag — kein besonderes Ereignis geplant.,A perfectly normal fair day — no special event planned.,Tamamen sıradan bir fuar günü — özel bir etkinlik yok.
 KALENDER_BANK_DETAIL,Am Abend wird eine Bankrate von %s fällig.,A bank instalment of %s is due in the evening.,Akşam %s tutarında banka taksiti vadesi gelir.
+CREATOR_TITLE,Dein Charakter,Your character,Karakterin
+CREATOR_MALE,Männlich,Male,Erkek
+CREATOR_FEMALE,Weiblich,Female,Kadın
+CREATOR_FEMALE_SOON,Kommt bald,Coming soon,Yakında
+CREATOR_SKIN,Haut,Skin,Cilt
+CREATOR_EYES,Augen,Eyes,Gözler
+CREATOR_FACE,Ausdruck,Expression,İfade
+CREATOR_BEARD,Bart,Beard,Sakal
+CREATOR_HAT,Hut,Hat,Şapka
+CREATOR_GLASSES,Brille,Glasses,Gözlük
+CREATOR_HINT,Mit der Maus die Figur drehen,Drag to rotate the character,Karakteri döndürmek için sürükle
+CREATOR_RANDOM,Zufall,Random,Rastgele
+CREATOR_CANCEL,Abbrechen,Cancel,İptal
+CREATOR_DONE,Fertig,Done,Tamam
+MENU_CHARACTER,Charakter,Character,Karakter

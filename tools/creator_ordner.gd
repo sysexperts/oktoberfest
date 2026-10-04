@@ -27,9 +27,9 @@ func _ready() -> void:
 		var f: Figur = (load("res://scenes/figuren/%s.tscn" % ("basis" if ordner in ["augen", "emotionen", "baerte"] else "standard")) as PackedScene).instantiate()
 		var z: Array[PackedScene] = [load(pfade[i])]
 		if ordner == "emotionen" or ordner == "baerte":
-			z.append(Assets.AUGEN[0]["szene"])
+			z.append(Assets.laden(Assets.AUGEN[0]))
 			if ordner == "baerte":
-				z.append(Assets.EMOTIONEN[0]["szene"])
+				z.append(Assets.laden(Assets.EMOTIONEN[0]))
 		f.zubehoer = z
 		f.position = Vector3((i - (n - 1) * 0.5) * 0.7, 0, 0)
 		add_child(f)

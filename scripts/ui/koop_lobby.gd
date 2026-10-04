@@ -1,4 +1,5 @@
 extends Control
+const CreatorSkript := preload("res://scripts/ui/charakter_creator.gd")
 const KoopDaten := preload("res://scripts/koop_daten.gd")
 ## Warteraum mit Einladungscode. Einer erstellt ein Spiel und bekommt einen Code,
 ## Freunde treten damit bei. Jeder wählt Name und Figur; der Gastgeber drückt
@@ -45,6 +46,8 @@ func _ready() -> void:
 	%Los.pressed.connect(_los)
 	for i in %Figuren.get_child_count():
 		(%Figuren.get_child(i) as Button).pressed.connect(_figur_waehlen.bind(i))
+	# Statt der Figurenkarten: Charakter-Creator (der Look geht beim Spielstart an alle Mitspieler)
+	%CharakterKnopf.pressed.connect(func() -> void: CreatorSkript.zeigen(self, func() -> void: %CharakterKnopf.grab_focus()))
 	%Takt.timeout.connect(_abfragen)
 	%Abfrage.request_completed.connect(_on_abfrage)
 	%Aktion.request_completed.connect(_on_aktion)
