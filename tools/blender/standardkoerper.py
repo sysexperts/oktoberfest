@@ -386,9 +386,9 @@ for o in [koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.data.validate(verbose=False)
     for poly in o.data.polygons:
         poly.use_smooth = True
-if OUTFIT == "huete":
-    # Creator-Assets: jeder Hut einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
-    ordner = os.path.join(ROOT, "assets", "creator", "huete")
+if OUTFIT in ("huete", "frisuren"):
+    # Creator-Assets: jeder Hut / jede Frisur einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
+    ordner = os.path.join(ROOT, "assets", "creator", OUTFIT)
     os.makedirs(ordner, exist_ok=True)
     for hname, teile_h in HUETE.items():
         bpy.ops.object.select_all(action='DESELECT')

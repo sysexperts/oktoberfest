@@ -1114,6 +1114,172 @@ elif OUTFIT == "huete":
     h = formen("stirnband", band_k, 0.006, 4, 0.3)
     hut_fertig("stirnband", h, [], lambda P: grau(P, 0.90))
 
+elif OUTFIT == "frisuren":
+    # ================================================================ Creator-Assets: Frisuren (männlich)
+    # Jede Frisur hängt starr am Kopfknochen, wird einzeln exportiert; "<name>_farbe" ist neutral grau
+    # gemalt (Strähnen, Wirbel) und wird im Creator mit der Haarfarbe eingefärbt.
+    HUETE = {}
+
+    def hairline(c, vorn, seite, hinten):
+        """Unterkante der Haube je Blickwinkel: vorn (Stirn), seitlich, hinten (Nacken)"""
+        d = max(0.0001, math.hypot(c.x, c.y))
+        cos_v = -c.y / d                      # +1 = Gesicht, -1 = Nacken
+        if cos_v >= 0:
+            return seite + (vorn - seite) * cos_v ** 1.5
+        return seite + (hinten - seite) * (-cos_v) ** 1.2
+
+    def haube(name, vorn=1.505, seite=1.405, hinten=1.345, offset=0.016, oben_weg=None, vorn_weg=None):
+        """Kappe aus dem Kopf des Körpers (folgt dessen Form), aufgeblasen und an der Haarlinie beschnitten"""
+        def weg(c):
+            if c.z < 1.30:
+                return True
+            if oben_weg is not None and c.z > oben_weg:
+                return True
+            if vorn_weg is not None and (-c.y) > vorn_weg and c.z < 1.60:
+                return True
+            return c.z < hairline(c, vorn, seite, hinten)
+        return schale_ganz(name, lambda c: offset, weg, 3)
+
+    def stachel(pos, richtung, laenge, dicke, name="stachel"):
+        """Kegelartiger Stachel/Strähne: pos in Godot-Koordinaten, richtung als Godot-Vektor"""
+        k = kugel(Vector((0, 0, 0)), (dicke, dicke, laenge), name, 10)
+        d = g2b(Vector(richtung)).normalized()
+        k.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
+        k.location = g2b(Vector(pos)) + d * laenge * 0.75
+        return k
+
+    def kugel_g(pos, radien, name="k", seg=16):
+        """Kugel an Godot-Position pos, radien (x breit, y hoch, z tief) in Godot-Achsen"""
+        return kugel(g2b(Vector(pos)), (radien[0], radien[2], radien[1]), name, seg)
+
+    def formen_f(name, teile, voxel=0.008, glaetten=6, anteil=0.16):
+        o = vereinen(teile, name)
+        o.data.remesh_voxel_size = voxel
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.voxel_remesh()
+        m = o.modifiers.new("Glatt", 'SMOOTH')
+        m.factor = 0.6
+        m.iterations = glaetten
+        bpy.ops.object.modifier_apply(modifier="Glatt")
+        d = o.modifiers.new("Dez", 'DECIMATE')
+        d.ratio = anteil
+        bpy.ops.object.modifier_apply(modifier="Dez")
+        bpy.ops.object.shade_smooth()
+        return o
+
+    def haar_grau(P, laenge=1.0):
+        """Neutrales, gesträhntes Haar in Grau (Haarfarbe wird in Godot aufgetragen)"""
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        wink = np.arctan2(gz, gx)
+        strahl = 0.5 + 0.5 * np.sin(wink * 70 + gy * 90 + ruis(P, 25.0) * 6.0)
+        fein = ruis(P, 140.0)
+        v = 0.62 + 0.26 * strahl + 0.10 * fein
+        # Spitzen und Oberseiten etwas heller, Wurzel am Kopf dunkler
+        v = v * (0.84 + 0.22 * np.clip((gy - 1.35) / 0.35, 0, 1))
+        return np.repeat(np.clip(v, 0, 1)[:, None], 3, axis=1)
+
+    def frisur_fertig(name, o):
+        f = fertig(name + "_farbe", [o], haar_grau, 1024, 0.9)
+        for g in list(f.vertex_groups):
+            f.vertex_groups.remove(g)
+        HUETE[name] = [f]
+
+    # ---- 1. Kurzhaar (Bürstenschnitt)
+    frisur_fertig("kurzhaar", haube("kurzhaar", offset=0.012))
+
+    # ---- 2. Seitenscheitel
+    k = haube("scheitel_kappe", offset=0.022, vorn=1.515, seite=1.40, hinten=1.34)
+    welle = [kugel_g((-0.075, 1.690, 0.075), (0.125, 0.052, 0.105), "welle", 22),
+             kugel_g((-0.130, 1.655, 0.040), (0.085, 0.070, 0.115), "welle", 22),
+             kugel_g((-0.040, 1.715, 0.020), (0.130, 0.040, 0.120), "welle", 22),
+             kugel_g((0.095, 1.700, -0.015), (0.105, 0.035, 0.150), "welle", 22),
+             kugel_g((-0.100, 1.585, 0.150), (0.100, 0.050, 0.050), "welle", 18)]
+    frisur_fertig("seitenscheitel", formen_f("seitenscheitel", [k] + welle, 0.006, 8))
+
+    # ---- 3. Tolle (Pompadour mit kurzen Seiten)
+    k = haube("tolle_kappe", offset=0.012, vorn=1.50, seite=1.435, hinten=1.38)
+    tolle = []
+    for i in range(10):
+        t = i / 9
+        tolle.append(kugel_g((0.0, 1.650 + 0.095 * math.sin(t * 2.4), 0.060 + 0.200 * t), (0.150 - 0.040 * t, 0.060 + 0.020 * math.sin(t * math.pi), 0.075), "tolle", 20))
+    frisur_fertig("tolle", formen_f("tolle", [k] + tolle, 0.006, 8))
+
+    # ---- 4. Igel (Stachelhaare)
+    k = haube("igel_kappe", offset=0.014, vorn=1.51)
+    st = []
+    import random
+    rnd = random.Random(7)
+    for i in range(70):
+        w = rnd.uniform(0, math.tau)
+        rr = math.sqrt(rnd.uniform(0.0, 1.0))
+        x = 0.185 * rr * math.sin(w)
+        z = 0.172 * rr * math.cos(w)
+        if z > 0.07 and rr > 0.55:
+            continue                                  # Stirn frei halten
+        y = 1.692 - 0.13 * rr ** 2.2
+        n = Vector((x * 1.3, 0.9, z * 1.3)).normalized()
+        st.append(stachel((x, y - 0.012, z), (n.x, n.y, n.z), 0.075, 0.019))
+    frisur_fertig("igel", formen_f("igel", [k] + st, 0.006, 4, 0.2))
+
+    # ---- 5. Langhaar (schulterlang)
+    k = haube("lang_kappe", offset=0.016, vorn=1.505, seite=1.31, hinten=1.28)
+    lang = []
+    for i in range(14):
+        t = i / 13
+        y = 1.46 - 0.40 * t
+        lang.append(kugel_g((0.0, y, -0.205 - 0.025 * t), (0.200 - 0.015 * t, 0.040, 0.055), "lang", 18))
+    for sx in (1, -1):
+        for i in range(8):
+            t = i / 7
+            lang.append(kugel_g((sx * (0.207 + 0.01 * t), 1.47 - 0.22 * t, -0.04 - 0.07 * t), (0.034, 0.040, 0.15 - 0.02 * t), "lang_s", 14))
+    frisur_fertig("langhaar", formen_f("langhaar", [k] + lang, 0.008))
+
+    # ---- 6. Dutt (Männerdutt)
+    k = haube("dutt_kappe", offset=0.014, vorn=1.51)
+    dutt = [kugel_g((0.0, 1.745, -0.085), (0.075, 0.062, 0.075), "dutt", 22),
+            kugel_g((0.0, 1.700, -0.060), (0.060, 0.040, 0.060), "dutt_fuss", 16)]
+    frisur_fertig("dutt", formen_f("dutt", [k] + dutt, 0.006))
+
+    # ---- 7. Irokese
+    k = haube("iro_kappe", offset=0.009, vorn=1.51, seite=1.455, hinten=1.40)
+    iro = []
+    for i in range(11):
+        t = i / 10
+        z = 0.14 - 0.30 * t
+        y = 1.690 - 0.02 * abs(t - 0.45) ** 1.5
+        iro.append(stachel((0.0, y - 0.01, z), (0.0, 1.0, 0.18 - 0.5 * t), 0.115 - 0.02 * abs(t - 0.4), 0.026))
+    frisur_fertig("irokese", formen_f("irokese", [k] + iro, 0.006, 4, 0.2))
+
+    # ---- 8. Locken (Afro)
+    cloud = [kugel_g((0.0, 1.595, -0.02), (0.250, 0.200, 0.235), "afro", 28)]
+    rnd = random.Random(11)
+    for i in range(130):
+        # Punkte auf der oberen Halbkugel, nicht vor dem Gesicht
+        u = rnd.uniform(0.0, 1.0)
+        v = rnd.uniform(0.0, math.tau)
+        hy = 0.10 + 0.90 * u
+        rr = math.sqrt(1.0 - hy * hy)
+        dx, dz = rr * math.sin(v), rr * math.cos(v)
+        px, py, pz = 0.255 * dx, 1.595 + 0.215 * hy, -0.02 + 0.240 * dz
+        if pz > 0.08 and py < 1.640:
+            continue
+        cloud.append(kugel_g((px, py, pz), (0.052, 0.052, 0.052), "locke", 10))
+    frisur_fertig("locken", formen_f("locken", cloud, 0.010, 5, 0.12))
+
+    # ---- 9. Topfschnitt (Pilzkopf)
+    k = haube("topf_kappe", offset=0.020, vorn=1.535, seite=1.43, hinten=1.385)
+    topf = []
+    for i in range(24):
+        w = (i / 24) * math.tau
+        if math.cos(w) < -0.1:
+            continue
+        topf.append(kugel_g((0.212 * math.sin(w), 1.54, 0.20 * math.cos(w)), (0.030, 0.038, 0.030), "franse", 10))
+    frisur_fertig("topfschnitt", formen_f("topfschnitt", [k] + topf, 0.007))
+
+    # ---- 10. Haarkranz (Halbglatze)
+    k = haube("kranz_kappe", offset=0.022, vorn=1.40, seite=1.375, hinten=1.320, oben_weg=1.575, vorn_weg=0.085)
+    frisur_fertig("haarkranz", k)
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 
@@ -1160,7 +1326,17 @@ def ao_einbacken(staerke=0.55):
         bpy.ops.object.select_all(action='DESELECT')
         o.select_set(True)
         bpy.context.view_layer.objects.active = o
+        # Haut und Hände: AO ohne Kleidung backen, sonst stehen Schatten von Jacke und Hut im nackten
+        # Körper (Creator: Glatze und nackte Beine hätten dann einen anderen Hautton)
+        versteckt = []
+        if o.name in haut_namen:
+            for k in kleidung_objekte:
+                if not k.hide_render:
+                    k.hide_render = True
+                    versteckt.append(k)
         bpy.ops.object.bake(type='AO', margin=6, use_clear=True)
+        for k in versteckt:
+            k.hide_render = False
         ao = np.array(ao_img.pixels[:], np.float32).reshape(groesse, groesse, 4)[:, :, 0]
         st = 0.22 if o.name in haut_namen else staerke
         fertig_bild = np.clip(bild * (1.0 - st + st * ao[:, :, None]), 0, 1)

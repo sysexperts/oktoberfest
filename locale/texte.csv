@@ -648,6 +648,17 @@ CREATOR_HUT_CAP,Baseballcap,Baseball cap,Beyzbol şapkası
 CREATOR_HUT_FISCHER,Fischerhut,Bucket hat,Balıkçı şapkası
 CREATOR_HUT_COWBOY,Cowboyhut,Cowboy hat,Kovboy şapkası
 CREATOR_HUT_STIRNBAND,Stirnband,Headband,Kafa bandı
+CREATOR_HAAR_OHNE,Glatze,Bald,Kel
+CREATOR_HAAR_KURZ,Kurzhaar,Short hair,Kısa saç
+CREATOR_HAAR_SCHEITEL,Seitenscheitel,Side part,Yandan ayrık
+CREATOR_HAAR_TOLLE,Tolle,Pompadour,Kabarık saç
+CREATOR_HAAR_IGEL,Igel,Spiky,Dikenli saç
+CREATOR_HAAR_LANG,Langhaar,Long hair,Uzun saç
+CREATOR_HAAR_DUTT,Dutt,Man bun,Topuz
+CREATOR_HAAR_IROKESE,Irokese,Mohawk,Mohikan
+CREATOR_HAAR_LOCKEN,Locken,Curls,Kıvırcık
+CREATOR_HAAR_TOPF,Topfschnitt,Bowl cut,Kase kesim
+CREATOR_HAAR_KRANZ,Haarkranz,Monk's ring,Halka saç
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam

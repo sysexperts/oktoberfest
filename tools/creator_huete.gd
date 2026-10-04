@@ -35,6 +35,10 @@ func _ready() -> void:
 		kam.look_at_from_position(Vector3(0, 1.4, 11.0), Vector3(0, 1.4, 0))
 		await get_tree().process_frame
 		await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png("res://build/blender/huete_%s.png" % a[0])
+		var bild := get_viewport().get_texture().get_image()
+		bild.save_png("res://build/blender/huete_%s.png" % a[0])
+		var b := bild.get_width()
+		var h := bild.get_height()
+		bild.get_region(Rect2i(0, int(h * 0.36), b, int(h * 0.22))).save_png("res://build/blender/huete_%s_kopf.png" % a[0])
 	print("FERTIG")
 	get_tree().quit()
