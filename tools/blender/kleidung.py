@@ -1403,6 +1403,90 @@ elif OUTFIT == "frisuren":
             strähne(bm, OBEN, VORN, phi, 1.00 - 0.10 * ebene, haarlinie(phi, 1.9, 2.05, 2.35), 7, lift, 0.004, breit, 0.55, 0.0, 0.05 * math.sin(phi * 5))
     frisur_fertig("haarkranz", bm, haube("kranz_kappe", offset=0.007, vorn=1.40, seite=1.40, hinten=1.34, oben_weg=1.545, vorn_weg=0.09))
 
+    # ---- Frisuren nach Quaternius-Vorlage (CC0, Universal Base Characters): die Haarformen der fertigen
+    # Frisuren werden auf unseren Kopf skaliert, an die Kopfoberfläche gedrückt (Haaransatz sitzt an der Haut),
+    # verdickt und zu einer glatten, kompakten Form verschmolzen — passend zum Stil des Körpers.
+    if os.environ.get("QUATERNIUS") == "1":
+        from mathutils.bvhtree import BVHTree
+        HUETE = {}
+        # Quelle: Quaternius "Universal Base Characters" (Standard, CC0), Ordner Hairstyles/Origin at 0/glTF (Godot),
+        # dorthin kopiert: build/fremd/haare_gltf (nicht in Git). Aufruf: QUATERNIUS=1 EXPORT_ORDNER=frisuren_q OUTFIT=frisuren
+        Q_ORDNER = os.path.join(ROOT, "build", "fremd", "haare_gltf")
+        dg = bpy.context.evaluated_depsgraph_get()
+        bvh = BVHTree.FromObject(koerper, dg)
+
+        def glatt_schritt(t, a, b, x):
+            u = max(0.0, min(1.0, (x - a) / (b - a)))
+            return u * u * (3 - 2 * u)
+
+        def q_haar(name, datei, skala, versatz, vorskal=1.0, dicke=0.012, voxel=0.0055, anhaften=0.014):
+            vorher = set(bpy.data.objects)
+            bpy.ops.import_scene.gltf(filepath=os.path.join(Q_ORDNER, datei))
+            neu = [o for o in bpy.data.objects if o not in vorher]
+            meshes = [o for o in neu if o.type == 'MESH']
+            for o in neu:
+                if o.type != 'MESH':
+                    bpy.data.objects.remove(o, do_unlink=True)
+            for o in meshes:
+                o.parent = None
+                bpy.context.view_layer.objects.active = o
+                o.select_set(True)
+            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            ob = vereinen(meshes, name) if len(meshes) > 1 else meshes[0]
+            ob.name = name
+            ob.modifiers.clear()
+            ob.vertex_groups.clear()
+            roh = [Vector((v.co.x * vorskal, v.co.z * vorskal, -v.co.y * vorskal)) for v in ob.data.vertices]
+            if versatz == "auto":
+                # Mitte in x/z auf den Kopf, Oberkante auf die Kopfkuppel
+                mn = Vector((min(p.x for p in roh), min(p.y for p in roh), min(p.z for p in roh)))
+                mx = Vector((max(p.x for p in roh), max(p.y for p in roh), max(p.z for p in roh)))
+                versatz = (-(mn.x + mx.x) / 2 * skala[0], 1.70 - mx.y * skala[1], -(mn.z + mx.z) / 2 * skala[2] + 0.0)
+            for v, g in zip(ob.data.vertices, roh):
+                gp = Vector((g.x * skala[0] + versatz[0], g.y * skala[1] + versatz[1], g.z * skala[2] + versatz[2]))
+                v.co = g2b(gp)
+            # an die Kopfoberfläche drücken: nahe Punkte setzen auf die Haut (Abstand `anhaften`)
+            for v in ob.data.vertices:
+                ort, nrm, _i, dist = bvh.find_nearest(v.co)
+                if ort is None:
+                    continue
+                innen = (v.co - ort).dot(nrm) < 0
+                t = 1.0 if innen else glatt_schritt(0, 0.075, 0.015, dist)
+                ziel = ort + nrm * anhaften
+                v.co = v.co.lerp(ziel, t)
+            bm_ = bmesh.new()
+            bm_.from_mesh(ob.data)
+            bmesh.ops.recalc_face_normals(bm_, faces=bm_.faces)
+            bm_.to_mesh(ob.data)
+            bm_.free()
+            bpy.context.view_layer.objects.active = ob
+            so = ob.modifiers.new("Dicke", 'SOLIDIFY')
+            so.thickness = dicke
+            so.offset = 1.0
+            bpy.ops.object.modifier_apply(modifier="Dicke")
+            ob.data.remesh_voxel_size = voxel
+            bpy.ops.object.voxel_remesh()
+            sm = ob.modifiers.new("Glatt", 'SMOOTH')
+            sm.factor = 0.5
+            sm.iterations = 5
+            bpy.ops.object.modifier_apply(modifier="Glatt")
+            dz = ob.modifiers.new("Dez", 'DECIMATE')
+            dz.ratio = 0.2
+            bpy.ops.object.modifier_apply(modifier="Dez")
+            bpy.ops.object.shade_smooth()
+            f = fertig(name + "_farbe", [ob], haar_grau, 1024, 0.9)
+            for g in list(f.vertex_groups):
+                f.vertex_groups.remove(g)
+            HUETE[name] = [f]
+
+        S = (2.6, 1.55, 2.3)
+        V = (0.0, 1.70 - 1.83 * S[1], 0.045)
+        q_haar("q_kurzhaar", "Hair_Buzzed.gltf", S, V)
+        q_haar("q_seitenscheitel", "Hair_SimpleParted.gltf", S, V)
+        q_haar("q_langhaar", "Hair_Long.gltf", S, V)
+        q_haar("q_dutt", "Hair_Buns.gltf", S, "auto", 0.01)
+        q_haar("q_bart", "Hair_Beard.gltf", (2.4, 1.2, 1.9), (0.0, 1.27 - 1.689 * 1.2, 0.03), 1.0, 0.012, 0.0055, 0.016)
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 

@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bgbbie73gvas0"
-path="res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.ctex"
+path.s3tc="res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "fe546b5469c79788789a55d2a8bb8b19"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/creator/huete/wollmuetze_tex_wollmuetze_farbe.png"
-dest_files=["res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.ctex"]
+dest_files=["res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
