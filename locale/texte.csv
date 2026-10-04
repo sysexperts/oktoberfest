@@ -636,6 +636,18 @@ KOOP_FIG_10,Hanne,Hanne,Hanne
 KOOP_FIG_11,Tina,Tina,Tina
 KOOP_FIG_12,Silke,Silke,Silke
 KOOP_FIG_13,Franz,Franz,Franz
+CREATOR_HUT_OHNE,Kein Hut,No hat,Şapka yok
+CREATOR_HUT_FILZHUT,Filzhut,Felt hat,Keçe şapka
+CREATOR_HUT_TIROLER,Tirolerhut,Tyrolean hat,Tirol şapkası
+CREATOR_HUT_SCHIEBER,Schiebermütze,Flat cap,Yassı kasket
+CREATOR_HUT_STROH,Strohhut,Straw hat,Hasır şapka
+CREATOR_HUT_ZYLINDER,Zylinder,Top hat,Silindir şapka
+CREATOR_HUT_WOLLMUETZE,Wollmütze,Beanie,Bere
+CREATOR_HUT_MELONE,Melone,Bowler hat,Melon şapka
+CREATOR_HUT_CAP,Baseballcap,Baseball cap,Beyzbol şapkası
+CREATOR_HUT_FISCHER,Fischerhut,Bucket hat,Balıkçı şapkası
+CREATOR_HUT_COWBOY,Cowboyhut,Cowboy hat,Kovboy şapkası
+CREATOR_HUT_STIRNBAND,Stirnband,Headband,Kafa bandı
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam

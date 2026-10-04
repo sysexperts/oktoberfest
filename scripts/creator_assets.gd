@@ -7,6 +7,8 @@ extends RefCounted
 ## Ohne class_name (neue Klassennamen brauchen auf dem Server eine Neuindizierung), per preload einbinden.
 
 const HUETE := [
+	# Kein Hut: Glatze (der Körper ist kahl, Frisuren kommen als eigene Bausteine)
+	{"id": "ohne", "name": "CREATOR_HUT_OHNE", "szene": null, "farbe": Color.WHITE},
 	{"id": "filzhut", "name": "CREATOR_HUT_FILZHUT", "szene": preload("res://scenes/creator/huete/filzhut.tscn"), "farbe": Color(0.30, 0.38, 0.22)},
 	{"id": "tirolerhut", "name": "CREATOR_HUT_TIROLER", "szene": preload("res://scenes/creator/huete/tirolerhut.tscn"), "farbe": Color(0.30, 0.20, 0.13)},
 	{"id": "schiebermuetze", "name": "CREATOR_HUT_SCHIEBER", "szene": preload("res://scenes/creator/huete/schiebermuetze.tscn"), "farbe": Color(0.35, 0.35, 0.38)},
@@ -14,6 +16,10 @@ const HUETE := [
 	{"id": "zylinder", "name": "CREATOR_HUT_ZYLINDER", "szene": preload("res://scenes/creator/huete/zylinder.tscn"), "farbe": Color(0.12, 0.12, 0.13)},
 	{"id": "wollmuetze", "name": "CREATOR_HUT_WOLLMUETZE", "szene": preload("res://scenes/creator/huete/wollmuetze.tscn"), "farbe": Color(0.75, 0.15, 0.15)},
 	{"id": "melone", "name": "CREATOR_HUT_MELONE", "szene": preload("res://scenes/creator/huete/melone.tscn"), "farbe": Color(0.18, 0.18, 0.20)},
+	{"id": "baseballcap", "name": "CREATOR_HUT_CAP", "szene": preload("res://scenes/creator/huete/baseballcap.tscn"), "farbe": Color(0.15, 0.30, 0.65)},
+	{"id": "fischerhut", "name": "CREATOR_HUT_FISCHER", "szene": preload("res://scenes/creator/huete/fischerhut.tscn"), "farbe": Color(0.55, 0.60, 0.40)},
+	{"id": "cowboyhut", "name": "CREATOR_HUT_COWBOY", "szene": preload("res://scenes/creator/huete/cowboyhut.tscn"), "farbe": Color(0.60, 0.42, 0.24)},
+	{"id": "stirnband", "name": "CREATOR_HUT_STIRNBAND", "szene": preload("res://scenes/creator/huete/stirnband.tscn"), "farbe": Color(0.85, 0.20, 0.20)},
 ]
 
 ## Alle Teile von `wurzel`, deren Name auf "_farbe" endet, in `farbe` färben

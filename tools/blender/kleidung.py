@@ -1028,9 +1028,10 @@ elif OUTFIT == "huete":
 
     # ---- 3. Schiebermütze
     krone = kette(BR - 0.01, BR + 0.215, lambda t: (0.226 - 0.040 * t ** 2.2, 0.206 - 0.036 * t ** 2.2), 12, 0.036)
-    schirm = kugel(g2b(0, BR + 0.005, 0.215), (0.125, 0.095, 0.014), "schirm", 32)
-    schirm.rotation_euler = (math.radians(-10), 0, 0)
-    h = formen("schiebermuetze", krone + [schirm], 0.008)
+    schirm = kugel(Vector((0, 0, 0)), (0.125, 0.110, 0.022), "schirm", 36)
+    schirm.rotation_euler = (math.radians(10), 0, 0)
+    schirm.location = g2b(0, BR + 0.005, 0.225)
+    h = formen("schiebermuetze", krone + [schirm], 0.006)
     knopf = fest("schiebermuetze_knopf", kugel(g2b(0, BR + 0.225, 0.0), (0.018, 0.018, 0.012), "knopf", 12), (0.2, 0.2, 0.2), 0.8)
     hut_fertig("schiebermuetze", h, [knopf])
 
@@ -1078,6 +1079,40 @@ elif OUTFIT == "huete":
     h = formen("melone", [krempe] + krone, 0.009)
     band = fest("melone_band", kugel(g2b(0, BR + 0.05, 0.0), (0.244, 0.224, 0.028), "band", 32), (0.08, 0.08, 0.08), 0.7)
     hut_fertig("melone", h, [band], lambda P: grau(P, 0.78))
+
+    # ---- 8. Baseballcap (Schirm vorn)
+    krone = kette(BR - 0.01, BR + 0.22, lambda t: (0.228 * math.sqrt(max(0.0, 1.0 - t ** 3.0)) + 0.012, 0.208 * math.sqrt(max(0.0, 1.0 - t ** 3.0)) + 0.012), 13, 0.036)
+    schirm = kugel(Vector((0, 0, 0)), (0.120, 0.130, 0.022), "schirm", 40)
+    schirm.rotation_euler = (math.radians(14), 0, 0)
+    schirm.location = g2b(0, BR + 0.0, 0.250)
+    h = formen("baseballcap", krone + [schirm], 0.005)
+    knopf = fest("baseballcap_knopf", kugel(g2b(0, BR + 0.232, 0.0), (0.016, 0.016, 0.010), "knopf", 12), (0.12, 0.12, 0.12), 0.8)
+    hut_fertig("baseballcap", h, [knopf], lambda P: grau(P, 0.85))
+
+    # ---- 9. Fischerhut (Bucket Hat)
+    krone = kette(BR - 0.005, BR + 0.20, lambda t: (0.228 - 0.030 * t, 0.208 - 0.028 * t), 11, 0.034)
+    krempe = kugel(g2b(0, BR + 0.005, 0.0), (0.300, 0.280, 0.016), "krempe", 40)
+    krempe2 = kugel(g2b(0, BR - 0.02, 0.0), (0.268, 0.250, 0.014), "krempe2", 40)
+    h = formen("fischerhut", [krempe, krempe2] + krone, 0.008)
+    hut_fertig("fischerhut", h, [], lambda P: grau(P, 0.88))
+
+    # ---- 10. Cowboyhut (aufgebogene Krempe)
+    krempe_t = []
+    for k in range(48):
+        w = k / 48 * math.tau
+        sx, cz = math.sin(w), math.cos(w)
+        hoch = 0.050 * (sx ** 2)          # seitlich nach oben gebogen
+        krempe_t.append(kugel(g2b(0.300 * sx, BR + hoch, 0.275 * cz), (0.045, 0.045, 0.014), "krempe", 10))
+    krone = kette(BR + 0.02, BR + 0.26, lambda t: (0.226 - 0.012 * t, 0.206 - 0.010 * t), 12, 0.036)
+    delle = kugel(g2b(0, BR + 0.27, 0.0), (0.120, 0.130, 0.020), "delle", 20)
+    h = formen("cowboyhut", krempe_t + krone + [delle], 0.008)
+    band = fest("cowboyhut_band", kugel(g2b(0, BR + 0.06, 0.0), (0.232, 0.212, 0.030), "band", 32), (0.20, 0.12, 0.07), 0.8)
+    hut_fertig("cowboyhut", h, [band], lambda P: grau(P, 0.84))
+
+    # ---- 11. Stirnband
+    band_k = kette(BR - 0.04, BR + 0.04, lambda t: (0.226, 0.206), 4, 0.024)
+    h = formen("stirnband", band_k, 0.006, 4, 0.3)
+    hut_fertig("stirnband", h, [], lambda P: grau(P, 0.90))
 
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])

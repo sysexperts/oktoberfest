@@ -11,13 +11,16 @@ func _ready() -> void:
 	env.ambient_light_color = Color(0.85, 0.85, 0.88)
 	var we := WorldEnvironment.new(); we.environment = env; add_child(we)
 	var sonne := DirectionalLight3D.new(); sonne.rotation_degrees = Vector3(-35, 30, 0); add_child(sonne)
-	var kam := Camera3D.new(); kam.fov = 22.0; add_child(kam); kam.current = true
+	var kam := Camera3D.new(); kam.fov = 24.0; add_child(kam); kam.current = true
 	var n := Assets.HUETE.size()
 	var figuren: Array[Figur] = []
 	for i in n:
 		var f: Figur = (load("res://scenes/figuren/standard.tscn") as PackedScene).instantiate()
-		f.zubehoer = [Assets.HUETE[i]["szene"]]
-		f.position = Vector3((i - (n - 1) * 0.5) * 0.60, 0, 0)
+		var z: Array[PackedScene] = []
+		if Assets.HUETE[i]["szene"] != null:
+			z.append(Assets.HUETE[i]["szene"])
+		f.zubehoer = z
+		f.position = Vector3((i - (n - 1) * 0.5) * 0.62, 0, 0)
 		add_child(f)
 		figuren.append(f)
 	await get_tree().process_frame
@@ -29,7 +32,7 @@ func _ready() -> void:
 	for a in [["vorn", 0.0], ["seite", -90.0]]:
 		for f in figuren:
 			f.rotation_degrees.y = a[1]
-		kam.look_at_from_position(Vector3(0, 1.4, 8.2), Vector3(0, 1.4, 0))
+		kam.look_at_from_position(Vector3(0, 1.4, 11.0), Vector3(0, 1.4, 0))
 		await get_tree().process_frame
 		await get_tree().process_frame
 		get_viewport().get_texture().get_image().save_png("res://build/blender/huete_%s.png" % a[0])

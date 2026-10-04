@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgbbie73gvas0"
-path="res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.ctex"
+uid="uid://bal6qbugrub4o"
+path="res://.godot/imported/baseballcap_tex_baseballcap_farbe.png-4fa790266546e707727bd97d24308956.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "fe546b5469c79788789a55d2a8bb8b19"
+"md5": "89ff7bee73d5d285b88b1cb62861f917"
 }
 
 [deps]
 
-source_file="res://assets/creator/huete/wollmuetze_tex_wollmuetze_farbe.png"
-dest_files=["res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.ctex"]
+source_file="res://assets/creator/huete/baseballcap_tex_baseballcap_farbe.png"
+dest_files=["res://.godot/imported/baseballcap_tex_baseballcap_farbe.png-4fa790266546e707727bd97d24308956.ctex"]
 
 [params]
 

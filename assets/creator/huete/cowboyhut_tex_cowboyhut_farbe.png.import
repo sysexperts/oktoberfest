@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgbbie73gvas0"
-path="res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.ctex"
+uid="uid://dgkaijtbm521u"
+path="res://.godot/imported/cowboyhut_tex_cowboyhut_farbe.png-76bad010d968a579d300668bef2ee7f9.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "fe546b5469c79788789a55d2a8bb8b19"
+"md5": "9242d52db816b37486303bd561a7806b"
 }
 
 [deps]
 
-source_file="res://assets/creator/huete/wollmuetze_tex_wollmuetze_farbe.png"
-dest_files=["res://.godot/imported/wollmuetze_tex_wollmuetze_farbe.png-c386737e78bac98b778f85e0ea7a28fb.ctex"]
+source_file="res://assets/creator/huete/cowboyhut_tex_cowboyhut_farbe.png"
+dest_files=["res://.godot/imported/cowboyhut_tex_cowboyhut_farbe.png-76bad010d968a579d300668bef2ee7f9.ctex"]
 
 [params]
 
