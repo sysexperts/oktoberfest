@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_10.png" id="av10"]
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_11.png" id="av11"]
 [ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_12.png" id="av12"]
+[ext_resource type="Texture2D" path="res://assets/ui/avatare/figur_13.png" id="av13"]
 [ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 [ext_resource type="Texture2D" path="res://assets/ui/karte_ruhe.png" id="karte_ruhe"]
 [ext_resource type="Texture2D" path="res://assets/ui/karte_hover.png" id="karte_hover"]
@@ -935,6 +936,46 @@ stretch_mode = 5
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
 text = "KOOP_FIG_12"
+horizontal_alignment = 1
+
+[node name="Figur13" type="Button" parent="Wahl/Mitte/Panel/Spalte/Raster"]
+script = ExtResource("karte_s")
+custom_minimum_size = Vector2(130, 158)
+layout_mode = 2
+theme_override_styles/focus = SubResource("KarteHover")
+theme_override_styles/hover = SubResource("KarteHover")
+theme_override_styles/normal = SubResource("KarteRuhe")
+theme_override_styles/pressed = SubResource("KarteGewaehlt")
+theme_override_styles/disabled = SubResource("KarteRuhe")
+toggle_mode = true
+
+[node name="Inhalt" type="VBoxContainer" parent="Wahl/Mitte/Panel/Spalte/Raster/Figur13"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = -6.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Avatar" type="TextureRect" parent="Wahl/Mitte/Panel/Spalte/Raster/Figur13/Inhalt"]
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("av13")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Wahl/Mitte/Panel/Spalte/Raster/Figur13/Inhalt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "KOOP_FIG_13"
 horizontal_alignment = 1
 
 [node name="Zu" type="Button" parent="Wahl/Mitte/Panel/Spalte"]
