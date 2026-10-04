@@ -1116,20 +1116,100 @@ elif OUTFIT == "huete":
 
 elif OUTFIT == "frisuren":
     # ================================================================ Creator-Assets: Frisuren (männlich)
+    # Methode (Stylized-Hair-Workflow): jede Frisur besteht aus einzelnen, dicken, abgeflachten Strähnen
+    # (Locks), die vom Wirbel aus über die Kopfform laufen, zur Spitze hin schmaler werden und sich
+    # in zwei bis drei Lagen überlappen — so entstehen sichtbare Strähnenkanten mit Schatten dazwischen.
+    # Darunter liegt eine dünne Kopfhaut-Kappe, die Lücken schließt. Kein Voxel-Remesh (der würde
+    # alles zu einem Klumpen verschmelzen).
     # Jede Frisur hängt starr am Kopfknochen, wird einzeln exportiert; "<name>_farbe" ist neutral grau
-    # gemalt (Strähnen, Wirbel) und wird im Creator mit der Haarfarbe eingefärbt.
+    # (Wurzel dunkler, Spitzen heller) und wird in Godot mit der Haarfarbe eingefärbt.
     HUETE = {}
+    HC = Vector((0.0, 1.52, 0.0))                    # Mitte der Kopfkuppel (Godot-Koordinaten)
+    HR = Vector((0.205, 0.175, 0.19))                # Halbachsen der Kuppel
+    YUNTEN = 0.30                                    # unterhalb des Äquators fällt das Haar gerade
 
-    def hairline(c, vorn, seite, hinten):
-        """Unterkante der Haube je Blickwinkel: vorn (Stirn), seitlich, hinten (Nacken)"""
-        d = max(0.0001, math.hypot(c.x, c.y))
-        cos_v = -c.y / d                      # +1 = Gesicht, -1 = Nacken
-        if cos_v >= 0:
-            return seite + (vorn - seite) * cos_v ** 1.5
-        return seite + (hinten - seite) * (-cos_v) ** 1.2
+    def oberflaeche(u, lift):
+        """Punkt auf der Kopfoberfläche zur Richtung u (Einheitsvektor, Godot), um `lift` nach außen.
+        Unter dem Äquator bleibt der Querschnitt gleich (der Kopf ist dort ein Zylinder)."""
+        if u.y >= 0:
+            p = HC + Vector((HR.x * u.x, HR.y * u.y, HR.z * u.z))
+            n = Vector((u.x / HR.x, u.y / HR.y, u.z / HR.z)).normalized()
+        else:
+            h = max(1e-4, math.hypot(u.x, u.z))
+            p = HC + Vector((HR.x * u.x / h, YUNTEN * u.y, HR.z * u.z / h))
+            n = Vector((u.x / (HR.x * h), 0.0, u.z / (HR.z * h))).normalized()
+        return p + n * lift, n
 
-    def haube(name, vorn=1.505, seite=1.405, hinten=1.345, offset=0.016, oben_weg=None, vorn_weg=None):
-        """Kappe aus dem Kopf des Körpers (folgt dessen Form), aufgeblasen und an der Haarlinie beschnitten"""
+    def rahmen(pol, vorn=Vector((0, 0, 1))):
+        a = Vector(pol).normalized()
+        e1 = (vorn - a * vorn.dot(a))
+        if e1.length < 1e-4:
+            e1 = Vector((1, 0, 0)) - a * a.x
+        e1.normalize()
+        e2 = a.cross(e1).normalized()
+        return a, e1, e2
+
+    def roehre_bm(bm, pfad, radien, normalen, flach=0.55, seg=8):
+        """Abgeflachte Röhre (breit entlang der Kopfoberfläche, dünn nach außen) mit Spitze am Ende"""
+        ringe = []
+        n_p = len(pfad)
+        for i, (p, r, nrm) in enumerate(zip(pfad, radien, normalen)):
+            t = (pfad[min(i + 1, n_p - 1)] - pfad[max(i - 1, 0)]).normalized()
+            b = t.cross(nrm)
+            if b.length < 1e-5:
+                b = t.cross(Vector((0, 1, 0)))
+            b.normalize()
+            nn = b.cross(t).normalized()
+            ring = []
+            for k in range(seg):
+                w = k / seg * math.tau
+                q = p + b * (math.cos(w) * r) + nn * (math.sin(w) * r * flach)
+                ring.append(bm.verts.new(g2b(q)))
+            ringe.append(ring)
+        for i in range(n_p - 1):
+            for k in range(seg):
+                bm.faces.new([ringe[i][k], ringe[i][(k + 1) % seg], ringe[i + 1][(k + 1) % seg], ringe[i + 1][k]])
+        spitze = bm.verts.new(g2b(pfad[-1] + (pfad[-1] - pfad[-2]).normalized() * radien[-1] * 1.4))
+        for k in range(seg):
+            bm.faces.new([ringe[-1][k], ringe[-1][(k + 1) % seg], spitze])
+        wurzel = bm.verts.new(g2b(pfad[0] - normalen[0] * radien[0] * 0.4))
+        for k in range(seg):
+            bm.faces.new([ringe[0][(k + 1) % seg], ringe[0][k], wurzel])
+
+    def strähne(bm, pol, vorn, psi, th0, th1, n=11, lift=(0.010, 0.014), bauch=0.0, breit=(0.030, 0.012),
+                flach=0.55, haengen=0.0, schwung=0.0):
+        """Eine Strähne: Meridian der Kopfkuppel um den Pol `pol` im Winkel psi, von th0 bis th1;
+        bauch = zusätzliches Abheben in der Mitte (Volumen), haengen = gerade Verlängerung nach unten,
+        schwung = seitliches Ausweichen (Wellen)"""
+        a, e1, e2 = rahmen(pol, vorn)
+        pfad, radien, normalen = [], [], []
+        for k in range(n + 1):
+            t = k / n
+            th = th0 + (th1 - th0) * t
+            ps = psi + schwung * math.sin(t * math.pi * 1.5)
+            u = a * math.cos(th) + (e1 * math.cos(ps) + e2 * math.sin(ps)) * math.sin(th)
+            l = lift[0] + (lift[1] - lift[0]) * t + bauch * math.sin(t * math.pi)
+            p, nrm = oberflaeche(u.normalized(), l)
+            pfad.append(p)
+            normalen.append(nrm)
+            radien.append(breit[0] + (breit[1] - breit[0]) * t ** 0.9)
+        if haengen > 0.0:
+            m = 5
+            for k in range(1, m + 1):
+                t = k / m
+                p = pfad[n] + Vector((0, -haengen * t, 0)) + normalen[n] * (0.004 * t)
+                pfad.append(p)
+                normalen.append(normalen[n])
+                radien.append(breit[1] * (1.0 - 0.45 * t))
+        roehre_bm(bm, pfad, radien, normalen, flach)
+
+    def haarlinie(phi, vorn=1.62, seite=1.96, hinten=2.20):
+        """Endwinkel th (vom Scheitel aus) je Blickrichtung phi (0 = Gesicht): bestimmt die Haarlinie"""
+        c = math.cos(phi)
+        return seite + (vorn - seite) * c ** 1.5 if c >= 0 else seite + (hinten - seite) * (-c) ** 1.2
+
+    def haube(name, vorn=1.505, seite=1.405, hinten=1.345, offset=0.008, oben_weg=None, vorn_weg=None):
+        """Dünne Kopfhaut-Kappe aus dem Kopf des Körpers, an der Haarlinie beschnitten"""
         def weg(c):
             if c.z < 1.30:
                 return True
@@ -1137,148 +1217,191 @@ elif OUTFIT == "frisuren":
                 return True
             if vorn_weg is not None and (-c.y) > vorn_weg and c.z < 1.60:
                 return True
-            return c.z < hairline(c, vorn, seite, hinten)
+            d = max(0.0001, math.hypot(c.x, c.y))
+            cv = -c.y / d
+            h = seite + (vorn - seite) * cv ** 1.5 if cv >= 0 else seite + (hinten - seite) * (-cv) ** 1.2
+            return c.z < h
         return schale_ganz(name, lambda c: offset, weg, 3)
 
-    def stachel(pos, richtung, laenge, dicke, name="stachel"):
-        """Kegelartiger Stachel/Strähne: pos in Godot-Koordinaten, richtung als Godot-Vektor"""
-        k = kugel(Vector((0, 0, 0)), (dicke, dicke, laenge), name, 10)
-        d = g2b(Vector(richtung)).normalized()
-        k.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
-        k.location = g2b(Vector(pos)) + d * laenge * 0.75
-        return k
-
-    def kugel_g(pos, radien, name="k", seg=16):
-        """Kugel an Godot-Position pos, radien (x breit, y hoch, z tief) in Godot-Achsen"""
-        return kugel(g2b(Vector(pos)), (radien[0], radien[2], radien[1]), name, seg)
-
-    def formen_f(name, teile, voxel=0.008, glaetten=6, anteil=0.16):
-        o = vereinen(teile, name)
-        o.data.remesh_voxel_size = voxel
-        bpy.context.view_layer.objects.active = o
-        bpy.ops.object.voxel_remesh()
-        m = o.modifiers.new("Glatt", 'SMOOTH')
-        m.factor = 0.6
-        m.iterations = glaetten
-        bpy.ops.object.modifier_apply(modifier="Glatt")
-        d = o.modifiers.new("Dez", 'DECIMATE')
-        d.ratio = anteil
-        bpy.ops.object.modifier_apply(modifier="Dez")
-        bpy.ops.object.shade_smooth()
-        return o
-
-    def haar_grau(P, laenge=1.0):
-        """Neutrales, gesträhntes Haar in Grau (Haarfarbe wird in Godot aufgetragen)"""
+    def haar_grau(P):
+        """Neutrales Haar: Wurzel dunkler, Spitzen/Oberseite heller, feine Strähnenlinien"""
         gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
         wink = np.arctan2(gz, gx)
-        strahl = 0.5 + 0.5 * np.sin(wink * 70 + gy * 90 + ruis(P, 25.0) * 6.0)
-        fein = ruis(P, 140.0)
-        v = 0.62 + 0.26 * strahl + 0.10 * fein
-        # Spitzen und Oberseiten etwas heller, Wurzel am Kopf dunkler
-        v = v * (0.84 + 0.22 * np.clip((gy - 1.35) / 0.35, 0, 1))
+        fein = ruis(P, 120.0)
+        strahl = 0.5 + 0.5 * np.sin(wink * 55 + gy * 140 + ruis(P, 30.0) * 5.0)
+        # Abstand von der Kopfachse (1 = Kopfoberfläche): je weiter außen, desto heller
+        rad = np.sqrt((gx / 0.205) ** 2 + (gz / 0.19) ** 2)
+        hoch = np.clip((gy - 1.40) / 0.30, 0, 1)
+        v = 0.50 + 0.22 * strahl + 0.08 * fein + 0.20 * np.clip((rad - 1.0) * 3.0 + hoch * 0.5, 0, 1)
         return np.repeat(np.clip(v, 0, 1)[:, None], 3, axis=1)
 
-    def frisur_fertig(name, o):
+    def frisur_fertig(name, bm, kappe=None):
+        me = bpy.data.meshes.new(name)
+        bm.to_mesh(me)
+        bm.free()
+        o = bpy.data.objects.new(name, me)
+        scene.collection.objects.link(o)
+        teile = [o] + ([kappe] if kappe is not None else [])
+        if len(teile) > 1:
+            o = vereinen(teile, name)
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.shade_smooth()
         f = fertig(name + "_farbe", [o], haar_grau, 1024, 0.9)
         for g in list(f.vertex_groups):
             f.vertex_groups.remove(g)
         HUETE[name] = [f]
 
-    # ---- 1. Kurzhaar (Bürstenschnitt)
-    frisur_fertig("kurzhaar", haube("kurzhaar", offset=0.012))
-
-    # ---- 2. Seitenscheitel
-    k = haube("scheitel_kappe", offset=0.022, vorn=1.515, seite=1.40, hinten=1.34)
-    welle = [kugel_g((-0.075, 1.690, 0.075), (0.125, 0.052, 0.105), "welle", 22),
-             kugel_g((-0.130, 1.655, 0.040), (0.085, 0.070, 0.115), "welle", 22),
-             kugel_g((-0.040, 1.715, 0.020), (0.130, 0.040, 0.120), "welle", 22),
-             kugel_g((0.095, 1.700, -0.015), (0.105, 0.035, 0.150), "welle", 22),
-             kugel_g((-0.100, 1.585, 0.150), (0.100, 0.050, 0.050), "welle", 18)]
-    frisur_fertig("seitenscheitel", formen_f("seitenscheitel", [k] + welle, 0.006, 8))
-
-    # ---- 3. Tolle (Pompadour mit kurzen Seiten)
-    k = haube("tolle_kappe", offset=0.012, vorn=1.50, seite=1.435, hinten=1.38)
-    tolle = []
-    for i in range(10):
-        t = i / 9
-        tolle.append(kugel_g((0.0, 1.650 + 0.095 * math.sin(t * 2.4), 0.060 + 0.200 * t), (0.150 - 0.040 * t, 0.060 + 0.020 * math.sin(t * math.pi), 0.075), "tolle", 20))
-    frisur_fertig("tolle", formen_f("tolle", [k] + tolle, 0.006, 8))
-
-    # ---- 4. Igel (Stachelhaare)
-    k = haube("igel_kappe", offset=0.014, vorn=1.51)
-    st = []
     import random
-    rnd = random.Random(7)
-    for i in range(70):
-        w = rnd.uniform(0, math.tau)
-        rr = math.sqrt(rnd.uniform(0.0, 1.0))
-        x = 0.185 * rr * math.sin(w)
-        z = 0.172 * rr * math.cos(w)
-        if z > 0.07 and rr > 0.55:
-            continue                                  # Stirn frei halten
-        y = 1.692 - 0.13 * rr ** 2.2
-        n = Vector((x * 1.3, 0.9, z * 1.3)).normalized()
-        st.append(stachel((x, y - 0.012, z), (n.x, n.y, n.z), 0.075, 0.019))
-    frisur_fertig("igel", formen_f("igel", [k] + st, 0.006, 4, 0.2))
+    OBEN = Vector((0, 1, 0))
+    VORN = Vector((0, 0, 1))
 
-    # ---- 5. Langhaar (schulterlang)
-    k = haube("lang_kappe", offset=0.016, vorn=1.505, seite=1.31, hinten=1.28)
-    lang = []
-    for i in range(14):
-        t = i / 13
-        y = 1.46 - 0.40 * t
-        lang.append(kugel_g((0.0, y, -0.205 - 0.025 * t), (0.200 - 0.015 * t, 0.040, 0.055), "lang", 18))
-    for sx in (1, -1):
-        for i in range(8):
-            t = i / 7
-            lang.append(kugel_g((sx * (0.207 + 0.01 * t), 1.47 - 0.22 * t, -0.04 - 0.07 * t), (0.034, 0.040, 0.15 - 0.02 * t), "lang_s", 14))
-    frisur_fertig("langhaar", formen_f("langhaar", [k] + lang, 0.008))
+    # ---- 1. Kurzhaar: zwei überlappende Lagen kurzer, dicker Strähnen vom Wirbel zur Haarlinie
+    bm = bmesh.new()
+    for ebene, (anz, versatz, th0, lift, breit) in enumerate([(26, 0.0, 0.10, (0.008, 0.010), (0.034, 0.020)),
+                                                              (26, 0.5, 0.45, (0.016, 0.018), (0.030, 0.016))]):
+        for i in range(anz):
+            phi = (i + versatz) / anz * math.tau
+            strähne(bm, OBEN, VORN, phi, th0, haarlinie(phi) - 0.04 * ebene, 9, lift, 0.004, breit, 0.55)
+    frisur_fertig("kurzhaar", bm, haube("kurzhaar_kappe", offset=0.007))
 
-    # ---- 6. Dutt (Männerdutt)
-    k = haube("dutt_kappe", offset=0.014, vorn=1.51)
-    dutt = [kugel_g((0.0, 1.745, -0.085), (0.075, 0.062, 0.075), "dutt", 22),
-            kugel_g((0.0, 1.700, -0.060), (0.060, 0.040, 0.060), "dutt_fuss", 16)]
-    frisur_fertig("dutt", formen_f("dutt", [k] + dutt, 0.006))
+    # ---- 2. Seitenscheitel: Strähnen laufen von einem Scheitel rechts über den Kopf nach links
+    bm = bmesh.new()
+    pol = Vector((1.0, 0.05, 0.0))
+    for ebene, (anz, versatz, th0, lift, breit, schw) in enumerate([(15, 0.0, 0.30, (0.012, 0.012), (0.030, 0.016), 0.00),
+                                                                    (14, 0.5, 0.55, (0.022, 0.016), (0.034, 0.018), 0.05)]):
+        for i in range(anz):
+            psi = -0.62 - 1.75 * (i + versatz) / anz           # von vorn-oben über die Kuppel bis nach hinten-oben
+            th1 = 2.00 - 0.30 * abs(psi + 1.5) / 0.9
+            strähne(bm, pol, VORN, psi, th0, th1, 12, lift, 0.012 if ebene else 0.006, breit, 0.55, 0.0, schw)
+    # Sauber abgesetzter Scheitel rechts: ein paar kurze Strähnen davor
+    for i in range(8):
+        strähne(bm, OBEN, VORN, -0.9 + 0.26 * i, 0.12, 0.70, 6, (0.010, 0.012), 0.0, (0.026, 0.016), 0.5)
+    frisur_fertig("seitenscheitel", bm, haube("scheitel_kappe", offset=0.007, vorn=1.515))
 
-    # ---- 7. Irokese
-    k = haube("iro_kappe", offset=0.009, vorn=1.51, seite=1.455, hinten=1.40)
-    iro = []
-    for i in range(11):
-        t = i / 10
-        z = 0.14 - 0.30 * t
-        y = 1.690 - 0.02 * abs(t - 0.45) ** 1.5
-        iro.append(stachel((0.0, y - 0.01, z), (0.0, 1.0, 0.18 - 0.5 * t), 0.115 - 0.02 * abs(t - 0.4), 0.026))
-    frisur_fertig("irokese", formen_f("irokese", [k] + iro, 0.006, 4, 0.2))
+    # ---- 3. Tolle: Strähnen heben sich an der Stirn hoch und laufen nach hinten über die Kuppel
+    bm = bmesh.new()
+    pol = Vector((0.0, 0.10, 1.0))
+    for ebene, (anz, versatz, th0, lift, breit) in enumerate([(13, 0.0, 0.95, (0.030, 0.014), (0.036, 0.020)),
+                                                              (12, 0.5, 1.10, (0.040, 0.016), (0.036, 0.018))]):
+        for i in range(anz):
+            psi = -1.05 + 2.10 * (i + versatz) / anz            # ψ = 0 zeigt nach oben, ± zu den Seiten
+            th1 = 2.25 - 0.55 * abs(psi) / 1.05
+            strähne(bm, pol, OBEN, psi, th0 + 0.25 * abs(psi) / 1.05, th1, 12, lift, 0.060 if ebene == 0 else 0.045, breit, 0.55)
+    # Seiten kurz
+    for i in range(18):
+        phi = (i / 18) * math.tau
+        if abs(math.cos(phi)) > 0.80:
+            continue
+        strähne(bm, OBEN, VORN, phi, 0.9, haarlinie(phi, 1.62, 1.90, 2.12), 6, (0.008, 0.010), 0.0, (0.030, 0.020), 0.5)
+    frisur_fertig("tolle", bm, haube("tolle_kappe", offset=0.007, vorn=1.50, seite=1.435, hinten=1.38))
 
-    # ---- 8. Locken (Afro)
-    cloud = [kugel_g((0.0, 1.595, -0.02), (0.250, 0.200, 0.235), "afro", 28)]
+    # ---- 4. Igel: kurze, spitze, dicke Stacheln vom Wirbel nach außen
+    bm = bmesh.new()
+    rnd = random.Random(5)
+    for ebene, (anz, th_lo, th_hi, ln) in enumerate([(32, 0.15, 1.00, 0.085), (30, 0.95, 1.55, 0.070)]):
+        for i in range(anz):
+            phi = rnd.uniform(0, math.tau)
+            th = rnd.uniform(th_lo, th_hi)
+            if abs(phi) < 0.8 and th > 1.2:
+                continue
+            u = OBEN * math.cos(th) + (VORN * math.cos(phi) + Vector((1, 0, 0)) * math.sin(phi)) * math.sin(th)
+            p, nrm = oberflaeche(u.normalized(), 0.004)
+            richt = (nrm * 0.75 + OBEN * 0.7).normalized()
+            pfad = [p + richt * ln * (k / 4) for k in range(5)]
+            roehre_bm(bm, pfad, [0.026 - 0.018 * (k / 4) ** 1.4 for k in range(5)], [nrm] * 5, 0.9, 7)
+    frisur_fertig("igel", bm, haube("igel_kappe", offset=0.007, vorn=1.51))
+
+    # ---- 5. Langhaar: lange Strähnen laufen am Hinterkopf und an den Seiten bis auf die Schultern
+    bm = bmesh.new()
+    for ebene, (anz, versatz, th0, lift, breit, ende) in enumerate([(30, 0.0, 0.10, (0.012, 0.016), (0.036, 0.024), 0.40),
+                                                                    (30, 0.5, 0.60, (0.022, 0.024), (0.036, 0.022), 0.33)]):
+        for i in range(anz):
+            phi = (i + versatz) / anz * math.tau
+            c = math.cos(phi)
+            if c > 0.84:
+                # Stirnbereich: nur bis zur Haarlinie
+                strähne(bm, OBEN, VORN, phi, th0, haarlinie(phi), 9, (lift[0], lift[0] + 0.004), 0.004, (breit[0], breit[1] * 0.7), 0.55)
+            else:
+                laenge = ende * (0.55 + 0.45 * (1.0 - c) / 2.0 * 1.2) if c < 0.0 else ende * 0.55
+                strähne(bm, OBEN, VORN, phi, th0, haarlinie(phi, 1.62, 1.90, 1.92), 9, lift, 0.006, breit, 0.55, laenge,
+                        0.04 * math.sin(phi * 3))
+    frisur_fertig("langhaar", bm, haube("lang_kappe", offset=0.007, vorn=1.505, seite=1.31, hinten=1.28))
+
+    # ---- 6. Dutt: Strähnen laufen von der Haarlinie nach oben-hinten zu einem Haarknoten
+    bm = bmesh.new()
+    pol = Vector((0.0, 0.50, -0.60))
+    for ebene, (anz, versatz, lift, breit) in enumerate([(26, 0.0, (0.010, 0.020), (0.032, 0.018)),
+                                                         (26, 0.5, (0.018, 0.026), (0.030, 0.014))]):
+        for i in range(anz):
+            psi = (i + versatz) / anz * math.tau
+            # Start an der Haarlinie (großer Winkel), Ende am Knoten (th klein)
+            th_start = 1.40 + 0.25 * math.cos(psi)
+            strähne(bm, pol, VORN, psi, th_start, 0.10, 11, lift, 0.0, breit, 0.55)
+    # Knoten: dicker Wulst aus zwei Ringen und Kuppe
+    for r_, hh in ((0.074, 1.755), (0.060, 1.790)):
+        pfad = []
+        for k in range(14):
+            w = k / 13 * math.tau
+            pfad.append(Vector((0.052 * math.cos(w), hh, -0.085 + 0.052 * math.sin(w))))
+        roehre_bm(bm, pfad + [pfad[0] + Vector((0, 0.002, 0))], [r_ * 0.62] * 14 + [r_ * 0.55], [OBEN] * 15, 0.95, 10)
+    bm.verts.ensure_lookup_table()
+    frisur_fertig("dutt", bm, haube("dutt_kappe", offset=0.007, vorn=1.51, seite=1.40, hinten=1.36))
+
+    # ---- 7. Irokese: Kamm aus hohen, schmalen Strähnen, Seiten rasiert
+    bm = bmesh.new()
+    for i in range(15):
+        t = i / 14
+        z = 0.15 - 0.34 * t
+        y0 = 1.69 - 0.035 * abs(t - 0.45) ** 1.3
+        hoehe = 0.16 - 0.04 * abs(t - 0.35)
+        pfad = [Vector((0.0, y0 + hoehe * (k / 6), z - 0.07 * (k / 6) ** 1.6)) for k in range(7)]
+        roehre_bm(bm, pfad, [0.060 - 0.050 * (k / 6) ** 1.2 for k in range(7)], [Vector((1, 0, 0))] * 7, 0.34, 8)
+    frisur_fertig("irokese", bm)
+
+    # ---- 8. Locken: dichte Kuppel aus vielen dicken, runden Locken
+    bm = bmesh.new()
     rnd = random.Random(11)
-    for i in range(130):
-        # Punkte auf der oberen Halbkugel, nicht vor dem Gesicht
-        u = rnd.uniform(0.0, 1.0)
-        v = rnd.uniform(0.0, math.tau)
-        hy = 0.10 + 0.90 * u
-        rr = math.sqrt(1.0 - hy * hy)
-        dx, dz = rr * math.sin(v), rr * math.cos(v)
-        px, py, pz = 0.255 * dx, 1.595 + 0.215 * hy, -0.02 + 0.240 * dz
-        if pz > 0.08 and py < 1.640:
-            continue
-        cloud.append(kugel_g((px, py, pz), (0.052, 0.052, 0.052), "locke", 10))
-    frisur_fertig("locken", formen_f("locken", cloud, 0.010, 5, 0.12))
+    zentren = []
+    for lage, (anz, rad, lk) in enumerate([(110, 1.0, 0.062), (90, 1.16, 0.058), (30, 1.28, 0.056)]):
+        for i in range(anz):
+            u1 = rnd.uniform(0.0, 1.0)
+            ph = rnd.uniform(0.0, math.tau)
+            hy = 0.05 + 0.95 * (u1 ** 0.55)
+            rr = math.sqrt(1.0 - hy * hy)
+            u = Vector((rr * math.sin(ph), hy, rr * math.cos(ph)))
+            if u.z > 0.50 and u.y < 0.55:
+                continue                                   # Stirn frei
+            zentren.append((HC + Vector((0.250 * u.x, 0.215 * u.y, 0.245 * u.z)) * rad + Vector((0, 0.02, -0.01)), lk))
+    for (c, r_) in zentren:
+        ico = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r_)
+        for v in ico["verts"]:
+            v.co = v.co + g2b(c)
+    frisur_fertig("locken", bm, haube("locken_kappe", offset=0.012, vorn=1.52, seite=1.42, hinten=1.36))
 
-    # ---- 9. Topfschnitt (Pilzkopf)
-    k = haube("topf_kappe", offset=0.020, vorn=1.535, seite=1.43, hinten=1.385)
-    topf = []
-    for i in range(24):
-        w = (i / 24) * math.tau
-        if math.cos(w) < -0.1:
-            continue
-        topf.append(kugel_g((0.212 * math.sin(w), 1.54, 0.20 * math.cos(w)), (0.030, 0.038, 0.030), "franse", 10))
-    frisur_fertig("topfschnitt", formen_f("topfschnitt", [k] + topf, 0.007))
+    # ---- 9. Topfschnitt: gerade, dicke Strähnen fallen gleichmäßig bis zu einer Linie rund um den Kopf
+    bm = bmesh.new()
+    for ebene, (anz, versatz, th0, lift, breit) in enumerate([(30, 0.0, 0.10, (0.012, 0.018), (0.034, 0.028)),
+                                                              (30, 0.5, 0.50, (0.022, 0.026), (0.034, 0.026))]):
+        for i in range(anz):
+            phi = (i + versatz) / anz * math.tau
+            c = math.cos(phi)
+            ende = 1.50 + (0.20 if c > 0 else 0.0) * 0   # Fransen enden überall auf gleicher Höhe (unten gerade)
+            ziel_y = 1.545 if c > 0.5 else (1.455 if c > -0.5 else 1.43)
+            ziel_th = math.acos(max(-0.99, min(0.99, (ziel_y - 1.52) / (0.175 if ziel_y >= 1.52 else YUNTEN))))
+            strähne(bm, OBEN, VORN, phi, th0, min(ziel_th, 2.1), 9, lift, 0.004, breit, 0.55)
+    frisur_fertig("topfschnitt", bm, haube("topf_kappe", offset=0.008, vorn=1.535, seite=1.43, hinten=1.385))
 
-    # ---- 10. Haarkranz (Halbglatze)
-    k = haube("kranz_kappe", offset=0.022, vorn=1.40, seite=1.375, hinten=1.320, oben_weg=1.575, vorn_weg=0.085)
-    frisur_fertig("haarkranz", k)
+    # ---- 10. Haarkranz: Strähnen nur an Seiten und Hinterkopf, oben kahl
+    bm = bmesh.new()
+    for ebene, (anz, versatz, lift, breit) in enumerate([(40, 0.0, (0.012, 0.016), (0.030, 0.020)),
+                                                         (40, 0.5, (0.020, 0.022), (0.028, 0.018))]):
+        for i in range(anz):
+            phi = (i + versatz) / anz * math.tau
+            c = math.cos(phi)
+            if c > 0.30:
+                continue
+            strähne(bm, OBEN, VORN, phi, 1.00 - 0.10 * ebene, haarlinie(phi, 1.9, 2.05, 2.35), 7, lift, 0.004, breit, 0.55, 0.0, 0.05 * math.sin(phi * 5))
+    frisur_fertig("haarkranz", bm, haube("kranz_kappe", offset=0.007, vorn=1.40, seite=1.40, hinten=1.34, oben_weg=1.545, vorn_weg=0.09))
 
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
