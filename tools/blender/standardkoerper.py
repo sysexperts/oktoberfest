@@ -386,7 +386,7 @@ for o in [koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.data.validate(verbose=False)
     for poly in o.data.polygons:
         poly.use_smooth = True
-if OUTFIT in ("huete", "frisuren"):
+if OUTFIT in ("huete", "frisuren", "brillen"):
     # Creator-Assets: jeder Hut / jede Frisur einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
     ordner = os.path.join(ROOT, "assets", "creator", os.environ.get("EXPORT_ORDNER", OUTFIT))
     os.makedirs(ordner, exist_ok=True)

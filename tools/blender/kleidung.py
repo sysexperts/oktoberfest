@@ -1487,6 +1487,268 @@ elif OUTFIT == "frisuren":
         q_haar("q_dutt", "Hair_Buns.gltf", S, "auto", 0.01)
         q_haar("q_bart", "Hair_Beard.gltf", (2.4, 1.2, 1.9), (0.0, 1.27 - 1.689 * 1.2, 0.03), 1.0, 0.012, 0.0055, 0.016)
 
+elif OUTFIT == "brillen":
+    # ================================================================ Creator-Assets: Brillen
+    # Gestell = "<name>_farbe" (neutral grau, wird im Creator eingefärbt), Gläser = "<name>_glas"
+    # (Festfarbe, halbdurchsichtig). Alles sitzt starr am Kopfknochen, vor den großen Augen.
+    HUETE = {}
+    AY = haut_y(0.093, 1.30)                 # Hautoberfläche vorn bei den Augen (Blender-y, negativ)
+    EBENE = AY - 0.056                        # Brillenebene vor Augäpfeln und Pupillen
+    AUGE_X = 0.093
+    AUGE_Z = 1.305
+
+    def bm_neu():
+        return bmesh.new()
+
+    def kurve_roehre(bm, pts, r, seg=8, rs=None):
+        """Röhre entlang der Punkte pts (Blender-Koordinaten), Radius r (oder Liste rs je Punkt)"""
+        ringe = []
+        n = len(pts)
+        for i, p in enumerate(pts):
+            t = (pts[min(i + 1, n - 1)] - pts[max(i - 1, 0)]).normalized()
+            h = Vector((0, 0, 1)) if abs(t.z) < 0.9 else Vector((1, 0, 0))
+            a = t.cross(h).normalized()
+            b = t.cross(a).normalized()
+            rr = rs[i] if rs else r
+            ring = [bm.verts.new(p + a * (math.cos(k / seg * math.tau) * rr) + b * (math.sin(k / seg * math.tau) * rr)) for k in range(seg)]
+            ringe.append(ring)
+        for i in range(n - 1):
+            for k in range(seg):
+                bm.faces.new([ringe[i][k], ringe[i][(k + 1) % seg], ringe[i + 1][(k + 1) % seg], ringe[i + 1][k]])
+        for ring in (ringe[0], ringe[-1]):
+            bm.faces.new(ring if ring is ringe[0] else list(reversed(ring)))
+
+    def form_pts(form, cx, cz, rx, rz, n=44):
+        """Umriss einer Glasform als Liste von (x, z) im Uhrzeigersinn — Godot-x = Blender-x, z = Höhe"""
+        out = []
+        for i in range(n):
+            w = i / n * math.tau
+            c, s_ = math.cos(w), math.sin(w)
+            if form == "rund":
+                x, z = c, s_
+            elif form == "eckig":
+                e = 6.0
+                x, z = math.copysign(abs(c) ** (2 / e), c), math.copysign(abs(s_) ** (2 / e), s_)
+            elif form == "oval":
+                x, z = c, s_ * 0.80
+            elif form == "pilot":              # Tropfen: oben breit, unten schmal und nach innen gezogen
+                x = c * (1.0 - 0.18 * (1 - s_) / 2) * (1.0 if s_ > 0 else (1.0 - 0.25 * -s_))
+                z = s_ * 0.92 - 0.08 * (1 if s_ < 0 else 0) * 0
+                x = x * 1.0
+            elif form == "wayfarer":           # oben breiter, kräftig trapezförmig
+                e = 3.2
+                x, z = math.copysign(abs(c) ** (2 / e), c), math.copysign(abs(s_) ** (2 / e), s_) * 0.82
+                x *= 1.0 + 0.14 * z
+            elif form == "halb":               # Lesebrille: flach, niedrig
+                e = 3.0
+                x, z = math.copysign(abs(c) ** (2 / e), c), math.copysign(abs(s_) ** (2 / e), s_) * 0.52
+            elif form == "herz":
+                t = w
+                x = 16 * math.sin(t) ** 3 / 17.0
+                z = (13 * math.cos(t) - 5 * math.cos(2 * t) - 2 * math.cos(3 * t) - math.cos(4 * t)) / 17.0 + 0.10
+            elif form == "stern":
+                rad = 0.62 + 0.38 * (0.5 + 0.5 * math.cos(5 * w))
+                x, z = rad * c, rad * s_
+            else:
+                x, z = c, s_
+            out.append((cx + rx * x, cz + rz * z))
+        return out
+
+    def glas_rahmen(bm, pts, dicke, tiefe, y):
+        """Rahmen entlang des Umrisses: Querschnitt dicke (in der Ebene) x tiefe (nach vorn/hinten)"""
+        n = len(pts)
+        ringe = []
+        for i, (x, z) in enumerate(pts):
+            x0, z0 = pts[(i - 1) % n]
+            x1, z1 = pts[(i + 1) % n]
+            t = Vector((x1 - x0, 0, z1 - z0)).normalized()
+            nrm = Vector((t.z, 0, -t.x))             # nach außen
+            ring = []
+            for k in range(8):
+                w = k / 8 * math.tau
+                p = Vector((x, y, z)) + nrm * (math.cos(w) * dicke) + Vector((0, 1, 0)) * (math.sin(w) * tiefe)
+                ring.append(bm.verts.new(p))
+            ringe.append(ring)
+        for i in range(n):
+            j = (i + 1) % n
+            for k in range(8):
+                bm.faces.new([ringe[i][k], ringe[i][(k + 1) % 8], ringe[j][(k + 1) % 8], ringe[j][k]])
+
+    def glas_scheibe(bm, pts, y, dicke=0.003):
+        v1 = [bm.verts.new(Vector((x, y - dicke, z))) for x, z in pts]
+        v2 = [bm.verts.new(Vector((x, y + dicke, z))) for x, z in pts]
+        bm.faces.new(v1)
+        bm.faces.new(list(reversed(v2)))
+        n = len(pts)
+        for i in range(n):
+            j = (i + 1) % n
+            bm.faces.new([v1[i], v1[j], v2[j], v2[i]])
+
+    def objekt(bm, name):
+        me = bpy.data.meshes.new(name)
+        bm.to_mesh(me)
+        bm.free()
+        o = bpy.data.objects.new(name, me)
+        scene.collection.objects.link(o)
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.shade_smooth()
+        return o
+
+    def kopf_bogen(y0, hoehe, hinten=0.07, breite=0.222, tiefe=0.205, ab=-0.20):
+        """Bügelverlauf: von der Gestellecke (vorn) an der Kopfseite entlang nach hinten, (links, rechts)"""
+        links = []
+        for t in np.linspace(0.0, 1.0, 14):
+            y = y0 + (hinten - y0) * t
+            x = breite * (1.0 - 0.55 * (1 - t) ** 3) if t > 0 else breite
+            links.append(Vector((x, y, hoehe + ab * t * 0.0)))
+        return links
+
+    def brille(name, form, rx, rz, rahmen_d, rahmen_t, glas_farbe=None, bruecke_z=0.02, buegel_d=0.0065, dick_buegel=1.0,
+               nur_rechts=False, extras=None, gx=AUGE_X, hoehe=AUGE_Z):
+        bm = bm_neu()
+        bg = bm_neu()
+        seiten = [1.0] if nur_rechts else [-1.0, 1.0]
+        for sx in seiten:
+            pts = form_pts(form, sx * gx, hoehe, rx, rz)
+            glas_rahmen(bm, pts, rahmen_d, rahmen_t, EBENE)
+            if glas_farbe is not None:
+                glas_scheibe(bg, pts, EBENE)
+            # Bügel
+            ax = sx * (gx + rx)
+            pfad = [Vector((ax, EBENE, hoehe + rz * 0.35)), Vector((sx * 0.222, EBENE + 0.02, hoehe + rz * 0.30))]
+            for t in np.linspace(0.12, 1.0, 10):
+                pfad.append(Vector((sx * 0.224, EBENE + 0.03 + (0.30 - 0.03) * t, hoehe + rz * 0.30)))
+            if not nur_rechts or True:
+                kurve_roehre(bm, pfad, buegel_d * dick_buegel, 6)
+        if not nur_rechts:
+            # Nasenbrücke
+            y_br = EBENE
+            p0 = Vector((-gx + rx * 0.98, y_br, hoehe + rz * bruecke_z / 0.02 * 0.30))
+            p1 = Vector((gx - rx * 0.98, y_br, hoehe + rz * bruecke_z / 0.02 * 0.30))
+            mitte = Vector((0, y_br, hoehe + rz * 0.42))
+            kurve_roehre(bm, [p0, p0.lerp(mitte, 0.5), mitte, p1.lerp(mitte, 0.5), p1], rahmen_d * 0.8, 6)
+        if extras:
+            extras(bm, bg)
+        o = objekt(bm, name + "_farbe_roh")
+        teile_out = [o]
+        gl = None
+        if glas_farbe is not None:
+            gl = objekt(bg, name + "_glas")
+            gl.data.materials.append(glas_mat(name + "_glas", glas_farbe))
+        return o, gl
+
+    def glas_mat(name, farbe):
+        m = bpy.data.materials.new(name)
+        m.use_nodes = True
+        b = m.node_tree.nodes["Principled BSDF"]
+        lin = srgb(farbe[:3])
+        b.inputs["Base Color"].default_value = (*lin, 1.0)
+        b.inputs["Alpha"].default_value = farbe[3]
+        b.inputs["Roughness"].default_value = 0.15
+        m.diffuse_color = (*lin, farbe[3])
+        try:
+            m.surface_render_method = 'BLENDED'
+        except Exception:
+            m.blend_method = 'BLEND'
+        return m
+
+    def gestell_grau(P):
+        n1 = ruis(P, 60.0)
+        v = 0.82 + 0.08 * n1
+        return np.repeat(v[:, None], 3, axis=1)
+
+    def brille_fertig(name, o, gl):
+        f = fertig(name + "_farbe", [o], gestell_grau, 512, 0.5)
+        for g in list(f.vertex_groups):
+            f.vertex_groups.remove(g)
+        teile = [f]
+        if gl is not None:
+            gl.parent = None
+            teile.append(gl)
+        HUETE[name] = teile
+
+    # ---- 1. Rund (dünner Drahtrahmen)
+    o, g = brille("rund", "rund", 0.080, 0.080, 0.0050, 0.0055, None)
+    brille_fertig("rund", o, g)
+    # ---- 2. Eckig (dickes Gestell)
+    o, g = brille("eckig", "eckig", 0.084, 0.068, 0.0125, 0.012, None, buegel_d=0.010)
+    brille_fertig("eckig", o, g)
+    # ---- 3. Pilotenbrille
+    o, g = brille("pilot", "pilot", 0.088, 0.086, 0.0050, 0.0055, (0.28, 0.20, 0.08, 0.62))
+    brille_fertig("pilot", o, g)
+    # ---- 4. Wayfarer (Sonnenbrille)
+    o, g = brille("wayfarer", "wayfarer", 0.086, 0.070, 0.0150, 0.0135, (0.06, 0.06, 0.08, 0.82), buegel_d=0.0115)
+    brille_fertig("wayfarer", o, g)
+    # ---- 5. Lesebrille (Halbrand)
+    o, g = brille("lesebrille", "halb", 0.080, 0.080, 0.0060, 0.0060, None)
+    brille_fertig("lesebrille", o, g)
+    # ---- 6. Opa-Brille (kleine Ovale)
+    o, g = brille("oval", "oval", 0.076, 0.082, 0.0075, 0.0075, None, hoehe=AUGE_Z - 0.004)
+    brille_fertig("oval", o, g)
+
+    # ---- 7. Sportbrille (Wrap: ein durchgehendes Glas, schmale Ränder)
+    def sport_extras(bm, bg):
+        pts = []
+        for i in range(60):
+            w = i / 60 * math.tau
+            c, s_ = math.cos(w), math.sin(w)
+            e = 3.4
+            x = math.copysign(abs(c) ** (2 / e), c) * 0.200
+            z = math.copysign(abs(s_) ** (2 / e), s_) * 0.062 + AUGE_Z + 0.004
+            pts.append((x, z))
+        glas_rahmen(bm, pts, 0.0070, 0.0085, EBENE - 0.004)
+        glas_scheibe(bg, pts, EBENE - 0.004)
+        # Seitenschutz: Bügel greift nach hinten
+        for sx in (-1.0, 1.0):
+            kurve_roehre(bm, [Vector((sx * 0.200, EBENE - 0.004, AUGE_Z + 0.015)), Vector((sx * 0.222, EBENE + 0.03, AUGE_Z + 0.015)),
+                              Vector((sx * 0.224, EBENE + 0.20, AUGE_Z + 0.015))], 0.0085, 6)
+    bmx, bgx = bm_neu(), bm_neu()
+    sport_extras(bmx, bgx)
+    o = objekt(bmx, "sport_farbe_roh")
+    g = objekt(bgx, "sport_glas")
+    g.data.materials.append(glas_mat("sport_glas", (0.12, 0.28, 0.55, 0.72)))
+    brille_fertig("sportbrille", o, g)
+    bpy.data.objects.remove(bpy.data.objects.get("sport_farbe_roh.001") or bpy.data.objects.new("x", None), do_unlink=True) if False else None
+
+    # ---- 8. Skibrille: große Maske mit Gummiband um den Kopf
+    def ski_extras(bm, bg):
+        pts = []
+        for i in range(64):
+            w = i / 64 * math.tau
+            c, s_ = math.cos(w), math.sin(w)
+            e = 3.0
+            x = math.copysign(abs(c) ** (2 / e), c) * 0.225
+            z = math.copysign(abs(s_) ** (2 / e), s_) * 0.100 + AUGE_Z + 0.004
+            pts.append((x, z))
+        glas_rahmen(bm, pts, 0.0125, 0.020, EBENE - 0.010)
+        glas_scheibe(bg, pts, EBENE - 0.014, 0.004)
+        # Band rund um den Kopf (Kopfform: Zylinder)
+        band = []
+        for i in range(48):
+            w = i / 48 * math.tau
+            band.append(Vector((0.222 * math.sin(w), 0.205 * math.cos(w) + 0.0, AUGE_Z + 0.012)))
+        # Der Kopf liegt in Blender in -y vorn; Punkte (x, y, z): y = -(Godot-z)
+        band = [Vector((p.x, -p.y * 0.0 + p.y, p.z)) for p in band]
+        kurve_roehre(bm, band + [band[0]], 0.017, 8)
+    bmx, bgx = bm_neu(), bm_neu()
+    ski_extras(bmx, bgx)
+    o = objekt(bmx, "ski_farbe_roh")
+    g = objekt(bgx, "ski_glas")
+    g.data.materials.append(glas_mat("ski_glas", (0.95, 0.55, 0.12, 0.62)))
+    brille_fertig("skibrille", o, g)
+
+    # ---- 9. Monokel (rechtes Auge) mit Kettchen
+    def mono_extras(bm, bg):
+        sx = 1.0
+        pfad = [Vector((sx * (AUGE_X), EBENE, AUGE_Z - 0.088)), Vector((sx * 0.11, EBENE + 0.01, AUGE_Z - 0.16)),
+                Vector((sx * 0.17, EBENE + 0.04, AUGE_Z - 0.23)), Vector((sx * 0.19, EBENE + 0.10, AUGE_Z - 0.30))]
+        kurve_roehre(bm, pfad, 0.0025, 5)
+    o, g = brille("monokel", "rund", 0.086, 0.086, 0.0070, 0.0075, (0.80, 0.90, 0.95, 0.16), nur_rechts=True, extras=mono_extras)
+    brille_fertig("monokel", o, g)
+    # ---- 10. Herzbrille (Partybrille)
+    o, g = brille("herzbrille", "herz", 0.092, 0.088, 0.0095, 0.010, (0.95, 0.25, 0.45, 0.50), hoehe=AUGE_Z + 0.002)
+    brille_fertig("herzbrille", o, g)
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 

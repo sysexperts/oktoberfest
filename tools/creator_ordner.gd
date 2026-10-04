@@ -33,13 +33,14 @@ func _ready() -> void:
 	await get_tree().process_frame
 	for i in n:
 		figuren[i].stehen()
-		Assets.faerben(figuren[i], Assets.HAARFARBEN[(i * 2 + 2) % Assets.HAARFARBEN.size()])
+		var farben := Assets.BRILLEN
+		Assets.faerben(figuren[i], farben[(i + 1) % farben.size()]["farbe"])
 	await get_tree().process_frame
 	await get_tree().process_frame
-	for a in [["vorn", 0.0], ["seite", -90.0], ["schraeg", -40.0]]:
+	for a in [["vorn", 0.0], ["seite", -90.0], ["schraeg", -40.0], ["nah", 0.0]]:
 		for f in figuren:
 			f.rotation_degrees.y = a[1]
-		kam.look_at_from_position(Vector3(0, 1.5, 5.0 + n * 0.5), Vector3(0, 1.5, 0))
+		kam.look_at_from_position(Vector3(0, 1.5, (5.0 + n * 0.5) if a[0] != "nah" else 2.2), Vector3(0, 1.5 if a[0] != "nah" else 1.3, 0))
 		await get_tree().process_frame
 		await get_tree().process_frame
 		var bild := get_viewport().get_texture().get_image()

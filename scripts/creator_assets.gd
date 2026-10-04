@@ -1,5 +1,5 @@
 extends RefCounted
-## Bausteine des Charakter-Creators: Hüte (später Brillen, Bärte, Haare …). Jeder Baustein ist eine
+## Bausteine des Charakter-Creators: Hüte und Brillen (später Bärte, Kleidung …). Frisuren gibt es bei Männern nicht. Jeder Baustein ist eine
 ## Szene unter scenes/creator/<art>/, gebaut mit tools/blender/standardkoerper.py (OUTFIT=huete).
 ## Alle sitzen auf dem einen Standardkörper (scenes/figuren/standard.tscn) und werden über Figur.zubehoer
 ## an den Kopfknochen gehängt. Teile, deren Name auf "_farbe" endet, werden im Creator eingefärbt,
@@ -22,31 +22,19 @@ const HUETE := [
 	{"id": "stirnband", "name": "CREATOR_HUT_STIRNBAND", "szene": preload("res://scenes/creator/huete/stirnband.tscn"), "farbe": Color(0.85, 0.20, 0.20)},
 ]
 
-## Frisuren (männlich). "ohne" = Glatze, der Körper ist kahl. Die Haarfarbe kommt aus HAARFARBEN.
-const FRISUREN := [
-	{"id": "ohne", "name": "CREATOR_HAAR_OHNE", "szene": null},
-	{"id": "kurzhaar", "name": "CREATOR_HAAR_KURZ", "szene": preload("res://scenes/creator/frisuren/kurzhaar.tscn")},
-	{"id": "seitenscheitel", "name": "CREATOR_HAAR_SCHEITEL", "szene": preload("res://scenes/creator/frisuren/seitenscheitel.tscn")},
-	{"id": "tolle", "name": "CREATOR_HAAR_TOLLE", "szene": preload("res://scenes/creator/frisuren/tolle.tscn")},
-	{"id": "igel", "name": "CREATOR_HAAR_IGEL", "szene": preload("res://scenes/creator/frisuren/igel.tscn")},
-	{"id": "langhaar", "name": "CREATOR_HAAR_LANG", "szene": preload("res://scenes/creator/frisuren/langhaar.tscn")},
-	{"id": "dutt", "name": "CREATOR_HAAR_DUTT", "szene": preload("res://scenes/creator/frisuren/dutt.tscn")},
-	{"id": "irokese", "name": "CREATOR_HAAR_IROKESE", "szene": preload("res://scenes/creator/frisuren/irokese.tscn")},
-	{"id": "locken", "name": "CREATOR_HAAR_LOCKEN", "szene": preload("res://scenes/creator/frisuren/locken.tscn")},
-	{"id": "topfschnitt", "name": "CREATOR_HAAR_TOPF", "szene": preload("res://scenes/creator/frisuren/topfschnitt.tscn")},
-	{"id": "haarkranz", "name": "CREATOR_HAAR_KRANZ", "szene": preload("res://scenes/creator/frisuren/haarkranz.tscn")},
-]
-
-## Auswahl der Haarfarben im Creator (die Frisuren sind neutral grau gemalt und werden damit eingefärbt)
-const HAARFARBEN := [
-	Color(0.93, 0.78, 0.45),   # blond
-	Color(0.78, 0.60, 0.30),   # dunkelblond
-	Color(0.38, 0.24, 0.14),   # braun
-	Color(0.13, 0.09, 0.07),   # schwarz
-	Color(0.62, 0.25, 0.12),   # rotbraun
-	Color(0.80, 0.34, 0.10),   # rot
-	Color(0.62, 0.62, 0.64),   # grau
-	Color(0.95, 0.95, 0.95),   # weiß
+## Brillen. "ohne" = keine Brille. Gestell (Teil "*_farbe") ist einfärbbar, Gläser haben Festfarbe.
+const BRILLEN := [
+	{"id": "ohne", "name": "CREATOR_BRILLE_OHNE", "szene": null, "farbe": Color.WHITE},
+	{"id": "rund", "name": "CREATOR_BRILLE_RUND", "szene": preload("res://scenes/creator/brillen/rund.tscn"), "farbe": Color(0.75, 0.62, 0.25)},
+	{"id": "eckig", "name": "CREATOR_BRILLE_ECKIG", "szene": preload("res://scenes/creator/brillen/eckig.tscn"), "farbe": Color(0.10, 0.10, 0.12)},
+	{"id": "pilot", "name": "CREATOR_BRILLE_PILOT", "szene": preload("res://scenes/creator/brillen/pilot.tscn"), "farbe": Color(0.78, 0.70, 0.35)},
+	{"id": "wayfarer", "name": "CREATOR_BRILLE_WAYFARER", "szene": preload("res://scenes/creator/brillen/wayfarer.tscn"), "farbe": Color(0.08, 0.08, 0.09)},
+	{"id": "lesebrille", "name": "CREATOR_BRILLE_LESE", "szene": preload("res://scenes/creator/brillen/lesebrille.tscn"), "farbe": Color(0.45, 0.28, 0.16)},
+	{"id": "oval", "name": "CREATOR_BRILLE_OVAL", "szene": preload("res://scenes/creator/brillen/oval.tscn"), "farbe": Color(0.55, 0.55, 0.58)},
+	{"id": "sportbrille", "name": "CREATOR_BRILLE_SPORT", "szene": preload("res://scenes/creator/brillen/sportbrille.tscn"), "farbe": Color(0.15, 0.15, 0.17)},
+	{"id": "skibrille", "name": "CREATOR_BRILLE_SKI", "szene": preload("res://scenes/creator/brillen/skibrille.tscn"), "farbe": Color(0.12, 0.25, 0.55)},
+	{"id": "monokel", "name": "CREATOR_BRILLE_MONOKEL", "szene": preload("res://scenes/creator/brillen/monokel.tscn"), "farbe": Color(0.72, 0.60, 0.22)},
+	{"id": "herzbrille", "name": "CREATOR_BRILLE_HERZ", "szene": preload("res://scenes/creator/brillen/herzbrille.tscn"), "farbe": Color(0.95, 0.30, 0.50)},
 ]
 
 ## Alle Teile von `wurzel`, deren Name auf "_farbe" endet, in `farbe` färben

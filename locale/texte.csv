@@ -648,17 +648,17 @@ CREATOR_HUT_CAP,Baseballcap,Baseball cap,Beyzbol şapkası
 CREATOR_HUT_FISCHER,Fischerhut,Bucket hat,Balıkçı şapkası
 CREATOR_HUT_COWBOY,Cowboyhut,Cowboy hat,Kovboy şapkası
 CREATOR_HUT_STIRNBAND,Stirnband,Headband,Kafa bandı
-CREATOR_HAAR_OHNE,Glatze,Bald,Kel
-CREATOR_HAAR_KURZ,Kurzhaar,Short hair,Kısa saç
-CREATOR_HAAR_SCHEITEL,Seitenscheitel,Side part,Yandan ayrık
-CREATOR_HAAR_TOLLE,Tolle,Pompadour,Kabarık saç
-CREATOR_HAAR_IGEL,Igel,Spiky,Dikenli saç
-CREATOR_HAAR_LANG,Langhaar,Long hair,Uzun saç
-CREATOR_HAAR_DUTT,Dutt,Man bun,Topuz
-CREATOR_HAAR_IROKESE,Irokese,Mohawk,Mohikan
-CREATOR_HAAR_LOCKEN,Locken,Curls,Kıvırcık
-CREATOR_HAAR_TOPF,Topfschnitt,Bowl cut,Kase kesim
-CREATOR_HAAR_KRANZ,Haarkranz,Monk's ring,Halka saç
+CREATOR_BRILLE_OHNE,Keine Brille,No glasses,Gözlük yok
+CREATOR_BRILLE_RUND,Runde Brille,Round glasses,Yuvarlak gözlük
+CREATOR_BRILLE_ECKIG,Eckige Brille,Square glasses,Kare gözlük
+CREATOR_BRILLE_PILOT,Pilotenbrille,Aviators,Pilot gözlüğü
+CREATOR_BRILLE_WAYFARER,Wayfarer,Wayfarer,Wayfarer
+CREATOR_BRILLE_LESE,Lesebrille,Reading glasses,Okuma gözlüğü
+CREATOR_BRILLE_OVAL,Ovale Brille,Oval glasses,Oval gözlük
+CREATOR_BRILLE_SPORT,Sportbrille,Sport glasses,Spor gözlüğü
+CREATOR_BRILLE_SKI,Skibrille,Ski goggles,Kayak gözlüğü
+CREATOR_BRILLE_MONOKEL,Monokel,Monocle,Monokl
+CREATOR_BRILLE_HERZ,Herzbrille,Heart glasses,Kalp gözlük
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam
