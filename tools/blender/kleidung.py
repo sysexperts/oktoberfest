@@ -944,6 +944,141 @@ elif OUTFIT == "franz":
     _mod.object = arm_obj
     kleidung_objekte.append(gams)
 
+elif OUTFIT == "huete":
+    # ================================================================ Creator-Assets: Hüte
+    # Jeder Hut ist ein eigenes Teil (Modell-Koordinaten des Standardkörpers, Ursprung = Modellursprung),
+    # wird einzeln als GLB exportiert und in Godot an den Kopfknochen gehängt. Das Teil "<name>_farbe"
+    # ist neutral grau gemalt und wird im Creator per albedo_color eingefärbt; Band, Feder usw. sind
+    # eigene Teile mit Festfarbe.
+    HUETE = {}
+    BR = 1.498            # Höhe der Krempe (über den Brauen bei 1.428)
+
+    def kette(y0, y1, profil, n, dicke=0.032, seg=26):
+        """Ringe von y0 bis y1; profil(t) -> (rx, ry): Halbachsen in x und Tiefe"""
+        out = []
+        for i in range(n):
+            t = i / (n - 1)
+            rx, ry = profil(t)
+            out.append(kugel(g2b(0, y0 + (y1 - y0) * t, 0.0), (rx, ry, dicke), "ring", seg))
+        return out
+
+    def formen(name, teile, voxel=0.010, glaetten=6, anteil=0.14):
+        o = vereinen(teile, name)
+        o.data.remesh_voxel_size = voxel
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.voxel_remesh()
+        m = o.modifiers.new("Glatt", 'SMOOTH')
+        m.factor = 0.6
+        m.iterations = glaetten
+        bpy.ops.object.modifier_apply(modifier="Glatt")
+        d = o.modifiers.new("Dez", 'DECIMATE')
+        d.ratio = anteil
+        bpy.ops.object.modifier_apply(modifier="Dez")
+        bpy.ops.object.shade_smooth()
+        return o
+
+    def grau(P, hell=0.86):
+        """Neutrales Gewebe/Filz in Grau — wird in Godot eingefärbt"""
+        n1 = ruis(P, 16.0)
+        n2 = ruis(P, 70.0)
+        v = hell * (0.92 + 0.10 * n1 + 0.05 * n2)
+        return np.repeat(v[:, None], 3, axis=1)
+
+    def fest(name, o, farbe, rauheit=0.85):
+        o.name = name
+        o.data.name = name
+        o.data.materials.clear()
+        o.data.materials.append(material(name, farbe, rauheit))
+        bpy.ops.object.select_all(action='DESELECT')
+        return o
+
+    def hut_fertig(name, farbteile, details, bemalen_fn=grau, groesse=1024):
+        haupt = farbteile if not isinstance(farbteile, list) else farbteile[0]
+        o = fertig(name + "_farbe", [haupt], bemalen_fn, groesse, 0.95)
+        for g in list(o.vertex_groups):
+            o.vertex_groups.remove(g)
+        HUETE[name] = [o] + details
+
+    # ---- 1. Filzhut mit Feder (Bean)
+    krempe = kugel(g2b(0, BR, 0.0), (0.290, 0.268, 0.030), "krempe", 32)
+    krone = kette(BR + 0.02, BR + 0.20, lambda t: (0.235 - 0.022 * t, 0.215 - 0.020 * t), 11)
+    h = formen("filzhut", [krempe] + krone)
+    band = fest("filzhut_band", kugel(g2b(0, BR + 0.055, 0.0), (0.240, 0.220, 0.034), "band", 32), (0.07, 0.07, 0.06), 0.8)
+    feder = kugel(Vector((0, 0, 0)), (0.012, 0.045, 0.085), "feder", 14)
+    feder.rotation_euler = (math.radians(-18), math.radians(22), math.radians(18))
+    feder.location = g2b(0.225, BR + 0.19, 0.0) + Vector((0, 0.01, 0.0))
+    fest("filzhut_feder", feder, (0.74, 0.68, 0.55), 0.9)
+    hut_fertig("filzhut", h, [band, feder])
+
+    # ---- 2. Tirolerhut mit Gamsbart
+    krempe = kugel(g2b(0, BR, 0.0), (0.262, 0.242, 0.026), "krempe", 32)
+    krone = kette(BR + 0.02, BR + 0.24, lambda t: (0.222 - 0.060 * t, 0.202 - 0.058 * t), 12)
+    h = formen("tirolerhut", [krempe] + krone)
+    band = fest("tirolerhut_band", kugel(g2b(0, BR + 0.06, 0.0), (0.236, 0.216, 0.026), "band", 32), (0.26, 0.34, 0.20), 0.85)
+    bart_t = []
+    for i in range(9):
+        w = (i - 4) / 4.0
+        k = kugel(Vector((0, 0, 0)), (0.008, 0.008, 0.075), "gams", 8)
+        k.location = g2b(0.196 + 0.010 * w, BR + 0.15 + 0.012 * abs(w), 0.028 * w)
+        k.rotation_euler = (math.radians(-20 + 6 * w), math.radians(16 + 4 * w), math.radians(12 * w))
+        bart_t.append(k)
+    gams = vereinen(bart_t, "gams")
+    fest("tirolerhut_gams", gams, (0.62, 0.55, 0.42), 0.9)
+    hut_fertig("tirolerhut", h, [band, gams])
+
+    # ---- 3. Schiebermütze
+    krone = kette(BR - 0.01, BR + 0.215, lambda t: (0.226 - 0.040 * t ** 2.2, 0.206 - 0.036 * t ** 2.2), 12, 0.036)
+    schirm = kugel(g2b(0, BR + 0.005, 0.215), (0.125, 0.095, 0.014), "schirm", 32)
+    schirm.rotation_euler = (math.radians(-10), 0, 0)
+    h = formen("schiebermuetze", krone + [schirm], 0.008)
+    knopf = fest("schiebermuetze_knopf", kugel(g2b(0, BR + 0.225, 0.0), (0.018, 0.018, 0.012), "knopf", 12), (0.2, 0.2, 0.2), 0.8)
+    hut_fertig("schiebermuetze", h, [knopf])
+
+    # ---- 4. Strohhut
+    krempe = kugel(g2b(0, BR, 0.0), (0.340, 0.320, 0.014), "krempe", 40)
+    krone = kette(BR + 0.01, BR + 0.22, lambda t: (0.232 - 0.016 * t, 0.212 - 0.014 * t), 10)
+    h = formen("strohhut", [krempe] + krone, 0.009)
+    band = fest("strohhut_band", kugel(g2b(0, BR + 0.05, 0.0), (0.236, 0.216, 0.030), "band", 32), (0.60, 0.12, 0.10), 0.8)
+
+    def stroh(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        flecht = 0.88 + 0.10 * np.sin(np.hypot(gx, gz) * 520) * np.sin(np.arctan2(gz, gx) * 90)
+        return np.repeat((flecht * (0.9 + 0.12 * ruis(P, 40.0)))[:, None], 3, axis=1)
+
+    hut_fertig("strohhut", h, [band], stroh)
+
+    # ---- 5. Zylinder
+    krempe = kugel(g2b(0, BR, 0.0), (0.300, 0.280, 0.018), "krempe", 36)
+    krone = kette(BR + 0.01, BR + 0.40, lambda t: (0.240, 0.220), 14)
+    h = formen("zylinder", [krempe] + krone, 0.009)
+    band = fest("zylinder_band", kugel(g2b(0, BR + 0.07, 0.0), (0.243, 0.223, 0.044), "band", 32), (0.55, 0.10, 0.10), 0.7)
+    hut_fertig("zylinder", h, [band], lambda P: grau(P, 0.80))
+
+    # ---- 6. Wollmütze mit Bommel
+    krone = kette(BR - 0.01, BR + 0.26, lambda t: (0.228 * math.sqrt(max(0.0, 1.0 - t ** 2.6)) + 0.012, 0.208 * math.sqrt(max(0.0, 1.0 - t ** 2.6)) + 0.012), 14, 0.036)
+    umschlag = kette(BR - 0.012, BR + 0.05, lambda t: (0.238, 0.218), 4, 0.030)
+    h = formen("wollmuetze", krone + umschlag, 0.008)
+    bommel = kugel(g2b(0, BR + 0.30, 0.0), (0.050, 0.050, 0.050), "bommel", 20)
+    bommel_o = formen("wollmuetze_bommel", [bommel], 0.006, 3, 0.4)
+
+    def wolle_gestrickt(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        wirk = 0.80 + 0.14 * np.sin(gy * 520) + 0.07 * np.sin(np.arctan2(gz, gx) * 120)
+        return np.repeat((wirk * (0.92 + 0.10 * ruis(P, 50.0)))[:, None], 3, axis=1)
+
+    hut_fertig("wollmuetze", h, [], wolle_gestrickt)
+    # Bommel nutzt dieselbe Farbe: gleich mit zum Haupt-Teil
+    HUETE["wollmuetze"] = [HUETE["wollmuetze"][0], fertig("wollmuetze_bommel_farbe", [bommel_o], wolle_gestrickt, 512, 0.95)]
+    for g in list(HUETE["wollmuetze"][1].vertex_groups):
+        HUETE["wollmuetze"][1].vertex_groups.remove(g)
+
+    # ---- 7. Melone (Bowler)
+    krempe = kugel(g2b(0, BR, 0.0), (0.268, 0.248, 0.020), "krempe", 36)
+    krone = kette(BR + 0.01, BR + 0.27, lambda t: (0.236 * math.sqrt(max(0.0, 1.0 - t ** 2.4)) + 0.020, 0.216 * math.sqrt(max(0.0, 1.0 - t ** 2.4)) + 0.020), 13, 0.034)
+    h = formen("melone", [krempe] + krone, 0.009)
+    band = fest("melone_band", kugel(g2b(0, BR + 0.05, 0.0), (0.244, 0.224, 0.028), "band", 32), (0.08, 0.08, 0.08), 0.7)
+    hut_fertig("melone", h, [band], lambda P: grau(P, 0.78))
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 

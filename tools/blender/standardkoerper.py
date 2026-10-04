@@ -386,6 +386,23 @@ for o in [koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.data.validate(verbose=False)
     for poly in o.data.polygons:
         poly.use_smooth = True
+if OUTFIT == "huete":
+    # Creator-Assets: jeder Hut einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
+    ordner = os.path.join(ROOT, "assets", "creator", "huete")
+    os.makedirs(ordner, exist_ok=True)
+    for hname, teile_h in HUETE.items():
+        bpy.ops.object.select_all(action='DESELECT')
+        for o in teile_h:
+            o.parent = None
+            o.modifiers.clear()
+            for g in list(o.vertex_groups):
+                o.vertex_groups.remove(g)
+            o.select_set(True)
+        bpy.ops.export_scene.gltf(filepath=os.path.join(ordner, hname + ".glb"), use_selection=True,
+                                  export_format='GLB', export_yup=True, export_skins=False)
+        print("Hut exportiert:", hname)
+    print("FERTIG Hüte")
+    raise SystemExit
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "standardkoerper.blend"))
 bpy.ops.object.select_all(action='DESELECT')
 for o in [arm_obj, koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
