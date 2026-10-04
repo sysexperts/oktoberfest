@@ -568,7 +568,9 @@ def hemd_farbe(P):
 
 hemd = fertig("Hemd", hemd_teile, hemd_farbe, 2048)
 
-# =================================================================== Janker (Trachtenjacke)
+# =======
+
+============================================================ Janker (Trachtenjacke)
 HEM = 0.76                                                   # Saum: auf Hüfthöhe, über der Hose
 OEFF_UNTEN, OEFF_OBEN = 0.060, 0.108
 

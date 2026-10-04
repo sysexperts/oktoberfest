@@ -71,6 +71,8 @@ extends Node3D
 ## Schultern waagerecht richten, beim Stehen und Gehen (0 = aus, 1 = ganz)
 @export_range(0.0, 1.0, 0.05) var aufrichten_waage := 1.0
 @export var arme_sitzen := 8.0
+## Hüftschwung beim Gehen und Rennen dämpfen (0 = aus, 1 = starr)
+@export_range(0.0, 1.0, 0.05) var huefte_ruhig := 0.0
 ## Zusätzlich beim Extra (Kopf kratzen): die Hand soll neben dem Kopf landen, nicht darin
 @export var arme_extra := 14.0
 ## Ellbogen öffnen (Grad), solange die Hand oben am Kopf ist (Kopf kratzen, Trinken)
@@ -301,7 +303,7 @@ func sitz_hoehe_gesamt() -> float:
 	return sitz_hoehe + (sitz_korrektur.hoehe if sitz_korrektur else 0.0)
 
 ## Aufrichten-Modifier (scripts/aufrichten.gd) ans Skelett hängen und ein-/ausschalten
-func _haltung_an(an: bool, staerke := 1.0, sitzend := false, extra := false) -> void:
+func _haltung_an(an: bool, staerke := 1.0, sitzend := false, extra := false, gehend := false) -> void:
 	if skelett == null:
 		return
 	if _aufrichten == null:
@@ -316,6 +318,7 @@ func _haltung_an(an: bool, staerke := 1.0, sitzend := false, extra := false) -> 
 	_aufrichten.kopf = aufrichten_kopf * staerke
 	_aufrichten.huefte = aufrichten_huefte * staerke
 	_aufrichten.waage = aufrichten_waage * staerke
+	_aufrichten.huefte_ruhig = huefte_ruhig if gehend else 0.0
 	_aufrichten.arme_hoch = arme_extra
 	_aufrichten.ellbogen_auf = ellbogen_auf
 	_aufrichten.arme = arme_abspreizen + (arme_sitzen if sitzend else 0.0)
@@ -338,7 +341,7 @@ func _spiele(name: String, tempo: float) -> void:
 	anim.active = true
 	# Arme gelten bei jeder Animation, Rücken/Kopf nur beim Stehen und Gehen
 	var staerke := 1.0 if name == anim_stehen else (aufrichten_gehen if name == anim_gehen else 0.0)
-	_haltung_an(true, staerke, name == anim_sitzen, name in anim_extras or name == anim_sitzen)
+	_haltung_an(true, staerke, name == anim_sitzen, name in anim_extras or name == anim_sitzen, name == anim_gehen or name == anim_rennen)
 	if name != anim_sitzen:
 		_sitz_korrektur_an(false)
 	if anim.current_animation != name:

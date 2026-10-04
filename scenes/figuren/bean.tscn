@@ -14,6 +14,7 @@ anim_sitzen = "geliehen/Sit_and_Drink"
 anim_extras = PackedStringArray("geliehen/Confused_Scratch")
 anim_betrunken = "geliehen/Unsteady_Walk"
 ellbogen_auf = -60.0
+huefte_ruhig = 0.7
 arme_extra = 35.0
 sitz_hoehe = 0.04
 eigenleuchten = 0.5

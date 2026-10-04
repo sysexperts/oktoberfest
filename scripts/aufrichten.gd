@@ -14,6 +14,8 @@ var huefte := 0.0
 var beine := 0.0
 ## Oberarme nach außen (Grad)
 var arme := 0.0
+## Hüftschwung dämpfen (0 = Clip unverändert, 1 = Hüfte starr): der gemeinsame Geh-Clip wackelt mit dem Becken
+var huefte_ruhig := 0.0
 ## Zusätzlich nach außen (Grad), aber nur solange die Hand hoch oben ist (Kopf kratzen)
 var arme_hoch := 0.0
 ## Ellbogen öffnen (Grad), solange die Hand oben am Kopf ist: die Hand landet vor dem Gesicht statt darin
@@ -34,6 +36,12 @@ func _process_modification() -> void:
 		return
 	var achse := (sk.global_basis.orthonormalized().inverse() * figur.global_basis.orthonormalized() * Vector3.RIGHT).normalized()
 	# Rücken auf drei Wirbel verteilt, Kopfneigung auf Nacken und Kopf
+	if huefte_ruhig > 0.0:
+		var hb := _knochen(sk, "huefte")
+		if hb >= 0:
+			var ruhe := sk.get_bone_rest(hb).basis.get_rotation_quaternion()
+			var delta := ruhe.inverse() * sk.get_bone_pose_rotation(hb)
+			sk.set_bone_pose_rotation(hb, ruhe * Quaternion.IDENTITY.slerp(delta, 1.0 - huefte_ruhig))
 	if waage > 0.0:
 		_waage(sk, achse)
 	var winkel := {
