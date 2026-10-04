@@ -24,7 +24,7 @@ func _ready() -> void:
 	var n := pfade.size()
 	var figuren: Array[Figur] = []
 	for i in n:
-		var f: Figur = (load("res://scenes/figuren/standard.tscn") as PackedScene).instantiate()
+		var f: Figur = (load("res://scenes/figuren/%s.tscn" % ("basis" if ordner == "augen" else "standard")) as PackedScene).instantiate()
 		var z: Array[PackedScene] = [load(pfade[i])]
 		f.zubehoer = z
 		f.position = Vector3((i - (n - 1) * 0.5) * 0.7, 0, 0)
@@ -33,8 +33,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	for i in n:
 		figuren[i].stehen()
-		var farben := Assets.BRILLEN
-		Assets.faerben(figuren[i], farben[(i + 1) % farben.size()]["farbe"])
+		if ordner == "brillen":
+			Assets.faerben(figuren[i], Assets.BRILLEN[(i + 1) % Assets.BRILLEN.size()]["farbe"])
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for a in [["vorn", 0.0], ["seite", -90.0], ["schraeg", -40.0], ["nah", 0.0]]:

@@ -659,6 +659,16 @@ CREATOR_BRILLE_SONNE_RUND,Sonnenbrille rund,Round sunglasses,Yuvarlak güneş g�
 CREATOR_BRILLE_SONNE_ECKIG,Sonnenbrille eckig,Square sunglasses,Kare güneş gözlüğü
 CREATOR_BRILLE_MONOKEL,Monokel,Monocle,Monokl
 CREATOR_BRILLE_HERZ,Herzbrille,Heart glasses,Kalp gözlük
+CREATOR_AUGE_GROSS,Große Augen,Big eyes,Büyük gözler
+CREATOR_AUGE_KLEIN,Kleine Augen,Small eyes,Küçük gözler
+CREATOR_AUGE_OVAL_HOCH,Hohe Ovale,Tall ovals,Uzun oval
+CREATOR_AUGE_OVAL_BREIT,Breite Ovale,Wide ovals,Geniş oval
+CREATOR_AUGE_MUEDE,Müde,Sleepy,Uykulu
+CREATOR_AUGE_WUETEND,Wütend,Angry,Kızgın
+CREATOR_AUGE_SCHIELEND,Schielend,Cross-eyed,Şaşı
+CREATOR_AUGE_PUNKTE,Punktaugen,Dot eyes,Nokta gözler
+CREATOR_AUGE_PUPILLEN,Große Pupillen,Big pupils,Büyük göz bebekleri
+CREATOR_AUGE_ZWINKERND,Zwinkernd,Winking,Göz kırpan
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam

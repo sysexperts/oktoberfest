@@ -1706,6 +1706,104 @@ elif OUTFIT == "brillen":
     o, g = brille("herzbrille", "herz", 0.092, 0.088, 0.0095, 0.010, (0.95, 0.25, 0.45, 0.50), hoehe=AUGE_Z + 0.002)
     brille_fertig("herzbrille", o, g)
 
+elif OUTFIT == "augen":
+    # ================================================================ Creator-Assets: Augen (Form; Augenfarbe bleibt schwarz)
+    # Augäpfel (creme), Pupillen (schwarz) und gegebenenfalls Lider (Hautfarbe, Teil "*_haut") als eigener Baustein.
+    HUETE = {}
+    AX0, AZ0 = 0.093, 1.30
+    LIDMAT = material("Lid", (0.66, 0.43, 0.32), 0.8)
+
+    def auge_paar(name, rx=0.066, rz=0.066, pr=(0.040, 0.040), schiel=0.0, pz_off=-0.002, lid=None, abstand=AX0,
+                  hoehe=AZ0, nur_pupille=False, zwinkern=False, tiefe=0.036):
+        """lid: None oder (Schnitthöhe relativ zur Augenmitte, Neigung nach innen)"""
+        teile = []
+        pup = []
+        lider = []
+        for sx in (1.0, -1.0):
+            ay = haut_y(sx * abstand, hoehe)
+            if zwinkern and sx < 0:
+                # geschlossenes Auge: schwarzer Bogen (lächelnd) statt Augapfel
+                pts = []
+                for k in range(15):
+                    t = (k / 14 - 0.5) * 2.0
+                    pts.append(Vector((sx * abstand + t * 0.060, ay - 0.004, hoehe + 0.010 - 0.022 * t * t)))
+                b = bmesh.new()
+                kurve_roehre_dick(b, pts, 0.0065)
+                me = bpy.data.meshes.new("zwinkern")
+                b.to_mesh(me)
+                b.free()
+                o = bpy.data.objects.new("zwinkern", me)
+                scene.collection.objects.link(o)
+                o.data.materials.append(PUPILLE)
+                pup.append(o)
+                continue
+            if not nur_pupille:
+                a = kugel(Vector((sx * abstand, ay + 0.010, hoehe)), (rx, tiefe, rz), "auge", 28)
+                a.data.materials.append(AUGAPFEL)
+                teile.append(a)
+            px = sx * (abstand - 0.002 - schiel)
+            p = kugel(Vector((px, ay - 0.019 + (0.014 if nur_pupille else 0.0), hoehe + pz_off)), (pr[0], 0.010 if not nur_pupille else 0.012, pr[1]), "pupille", 20)
+            p.data.materials.append(PUPILLE)
+            pup.append(p)
+            if lid is not None and not nur_pupille:
+                hoeh_rel, neigung = lid
+                cap = kugel(Vector((sx * abstand, ay + 0.010, hoehe)), (rx + 0.0055, tiefe + 0.012, rz + 0.0055), "lid", 72)
+                bmx = bmesh.new()
+                bmx.from_mesh(cap.data)
+                nz = Vector((sx * neigung, 0.0, 1.0)).normalized()
+                bmesh.ops.bisect_plane(bmx, geom=list(bmx.verts) + list(bmx.edges) + list(bmx.faces),
+                                       plane_co=Vector((sx * abstand, 0.0, hoehe + hoeh_rel)), plane_no=-nz, clear_outer=True)
+                rr = [e for e in bmx.edges if e.is_boundary]
+                if rr:
+                    bmesh.ops.holes_fill(bmx, edges=rr, sides=100000)
+                bmesh.ops.recalc_face_normals(bmx, faces=bmx.faces)
+                bmx.to_mesh(cap.data)
+                bmx.free()
+                cap.data.materials.append(LIDMAT)
+                lider.append(cap)
+        return teile, pup, lider
+
+    def kurve_roehre_dick(bm, pts, r, seg=8):
+        ringe = []
+        n = len(pts)
+        for i, p in enumerate(pts):
+            t = (pts[min(i + 1, n - 1)] - pts[max(i - 1, 0)]).normalized()
+            h = Vector((0, 0, 1)) if abs(t.z) < 0.9 else Vector((1, 0, 0))
+            a = t.cross(h).normalized()
+            b = t.cross(a).normalized()
+            rr = r * (0.55 + 0.45 * math.sin(i / (n - 1) * math.pi))
+            ringe.append([bm.verts.new(p + a * (math.cos(k / seg * math.tau) * rr) + b * (math.sin(k / seg * math.tau) * rr)) for k in range(seg)])
+        for i in range(n - 1):
+            for k in range(seg):
+                bm.faces.new([ringe[i][k], ringe[i][(k + 1) % seg], ringe[i + 1][(k + 1) % seg], ringe[i + 1][k]])
+
+    def augen_fertig(name, teile, pup, lider):
+        alle = []
+        for o in teile + pup + lider:
+            for poly in o.data.polygons:
+                poly.use_smooth = True
+        if teile:
+            teile[0].name = name + "_augapfel"
+        HUETE[name] = teile + pup
+        for l in lider:
+            l.name = name + "_haut"
+            HUETE[name].append(l)
+
+    for name, kw in [
+        ("gross", {}),
+        ("klein", dict(rx=0.040, rz=0.040, pr=(0.026, 0.026), abstand=0.098)),
+        ("oval_hoch", dict(rx=0.050, rz=0.086, pr=(0.034, 0.052), hoehe=AZ0 + 0.004)),
+        ("oval_breit", dict(rx=0.080, rz=0.050, pr=(0.044, 0.034), hoehe=AZ0 - 0.004)),
+        ("muede", dict(lid=(0.002, 0.0))),
+        ("wuetend", dict(lid=(0.008, 0.42))),
+        ("schielend", dict(schiel=0.030, pz_off=0.006)),
+        ("punkte", dict(nur_pupille=True, pr=(0.032, 0.040))),
+        ("grosse_pupillen", dict(rx=0.064, rz=0.064, pr=(0.056, 0.056))),
+        ("zwinkernd", dict(rx=0.062, rz=0.062, pr=(0.040, 0.040), zwinkern=True)),
+    ]:
+        t, pu, li = auge_paar(name, **kw)
+        augen_fertig(name, t, pu, li)
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 

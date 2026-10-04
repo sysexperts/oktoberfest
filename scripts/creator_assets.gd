@@ -37,6 +37,21 @@ const BRILLEN := [
 	{"id": "herzbrille", "name": "CREATOR_BRILLE_HERZ", "szene": preload("res://scenes/creator/brillen/herzbrille.tscn"), "farbe": Color(0.95, 0.30, 0.50)},
 ]
 
+## Augenformen (Augenfarbe bleibt schwarz). Brauen und Mund gehören zum Basiskörper (scenes/figuren/basis.tscn),
+## die Augen kommen als Baustein. Teile mit "_haut" im Namen (Lider) werden in der Hautfarbe eingefärbt.
+const AUGEN := [
+	{"id": "gross", "name": "CREATOR_AUGE_GROSS", "szene": preload("res://scenes/creator/augen/gross.tscn")},
+	{"id": "klein", "name": "CREATOR_AUGE_KLEIN", "szene": preload("res://scenes/creator/augen/klein.tscn")},
+	{"id": "oval_hoch", "name": "CREATOR_AUGE_OVAL_HOCH", "szene": preload("res://scenes/creator/augen/oval_hoch.tscn")},
+	{"id": "oval_breit", "name": "CREATOR_AUGE_OVAL_BREIT", "szene": preload("res://scenes/creator/augen/oval_breit.tscn")},
+	{"id": "muede", "name": "CREATOR_AUGE_MUEDE", "szene": preload("res://scenes/creator/augen/muede.tscn")},
+	{"id": "wuetend", "name": "CREATOR_AUGE_WUETEND", "szene": preload("res://scenes/creator/augen/wuetend.tscn")},
+	{"id": "schielend", "name": "CREATOR_AUGE_SCHIELEND", "szene": preload("res://scenes/creator/augen/schielend.tscn")},
+	{"id": "punkte", "name": "CREATOR_AUGE_PUNKTE", "szene": preload("res://scenes/creator/augen/punkte.tscn")},
+	{"id": "grosse_pupillen", "name": "CREATOR_AUGE_PUPILLEN", "szene": preload("res://scenes/creator/augen/grosse_pupillen.tscn")},
+	{"id": "zwinkernd", "name": "CREATOR_AUGE_ZWINKERND", "szene": preload("res://scenes/creator/augen/zwinkernd.tscn")},
+]
+
 ## Alle Teile von `wurzel`, deren Name auf "_farbe" endet, in `farbe` färben
 static func faerben(wurzel: Node, farbe: Color) -> void:
 	for n in wurzel.find_children("*_farbe*", "MeshInstance3D", true, false):
