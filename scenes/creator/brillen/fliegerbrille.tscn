@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://assets/creator/brillen/skibrille.glb" id="1_glb"]
+[ext_resource type="PackedScene" path="res://assets/creator/brillen/fliegerbrille.glb" id="1_glb"]
 
-[node name="skibrille" type="Node3D"]
+[node name="fliegerbrille" type="Node3D"]
 metadata/lage = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Modell" parent="." instance=ExtResource("1_glb")]

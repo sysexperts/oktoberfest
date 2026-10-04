@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cwe8l3u7be5fx"
-path="res://.godot/imported/skibrille.glb-6e4bb3b0296b11e24049be5a95dd12e8.scn"
+uid="uid://d4kgc6uo8tjd2"
+path="res://.godot/imported/nerdbrille.glb-73b19b3dfec3a3b4543049ba904525de.scn"
 
 [deps]
 
-source_file="res://assets/creator/brillen/skibrille.glb"
-dest_files=["res://.godot/imported/skibrille.glb-6e4bb3b0296b11e24049be5a95dd12e8.scn"]
+source_file="res://assets/creator/brillen/nerdbrille.glb"
+dest_files=["res://.godot/imported/nerdbrille.glb-73b19b3dfec3a3b4543049ba904525de.scn"]
 
 [params]
 

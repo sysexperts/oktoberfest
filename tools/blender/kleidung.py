@@ -1686,56 +1686,31 @@ elif OUTFIT == "brillen":
     o, g = brille("oval", "oval", 0.076, 0.082, 0.0075, 0.0075, None, hoehe=AUGE_Z - 0.004)
     brille_fertig("oval", o, g)
 
-    # ---- 7. Sportbrille (Wrap: ein durchgehendes Glas, schmale Ränder)
-    def sport_extras(bm, bg):
-        pts = []
-        for i in range(60):
-            w = i / 60 * math.tau
-            c, s_ = math.cos(w), math.sin(w)
-            e = 3.4
-            x = math.copysign(abs(c) ** (2 / e), c) * 0.200
-            z = math.copysign(abs(s_) ** (2 / e), s_) * 0.062 + AUGE_Z + 0.004
-            pts.append((x, z))
-        glas_rahmen(bm, pts, 0.0070, 0.0085, EBENE - 0.004)
-        glas_scheibe(bg, pts, EBENE - 0.004)
-        # Seitenschutz: Bügel greift nach hinten
-        for sx in (-1.0, 1.0):
-            kurve_roehre(bm, [Vector((sx * 0.200, EBENE - 0.004, AUGE_Z + 0.015)), Vector((sx * 0.222, EBENE + 0.03, AUGE_Z + 0.015)),
-                              Vector((sx * 0.224, EBENE + 0.20, AUGE_Z + 0.015))], 0.0085, 6)
-    bmx, bgx = bm_neu(), bm_neu()
-    sport_extras(bmx, bgx)
-    o = objekt(bmx, "sport_farbe_roh")
-    g = objekt(bgx, "sport_glas")
-    g.data.materials.append(glas_mat("sport_glas", (0.12, 0.28, 0.55, 0.72)))
-    brille_fertig("sportbrille", o, g)
-    bpy.data.objects.remove(bpy.data.objects.get("sport_farbe_roh.001") or bpy.data.objects.new("x", None), do_unlink=True) if False else None
+    # ---- 7. Nerdbrille: dicke runde Gläser, Pflaster auf der Nase
+    o, g = brille("nerdbrille", "rund", 0.090, 0.084, 0.0185, 0.0165, None, buegel_d=0.011, bruecke_z=0.03)
+    brille_fertig("nerdbrille", o, g)
+    pflaster = kugel(Vector((0, 0, 0)), (0.020, 0.0045, 0.015), "pflaster", 14)
+    pflaster.rotation_euler = (0, math.radians(18), 0)
+    pflaster.location = Vector((0.0, EBENE - 0.004, AUGE_Z + 0.040))
+    bpy.context.view_layer.objects.active = pflaster
+    bpy.ops.object.shade_smooth()
+    pflaster.data.materials.append(material("pflaster", (0.88, 0.80, 0.62), 0.8))
+    HUETE["nerdbrille"].append(pflaster)
 
-    # ---- 8. Skibrille: große Maske mit Gummiband um den Kopf
-    def ski_extras(bm, bg):
-        pts = []
-        for i in range(64):
-            w = i / 64 * math.tau
-            c, s_ = math.cos(w), math.sin(w)
-            e = 3.0
-            x = math.copysign(abs(c) ** (2 / e), c) * 0.225
-            z = math.copysign(abs(s_) ** (2 / e), s_) * 0.100 + AUGE_Z + 0.004
-            pts.append((x, z))
-        glas_rahmen(bm, pts, 0.0125, 0.020, EBENE - 0.010)
-        glas_scheibe(bg, pts, EBENE - 0.014, 0.004)
-        # Band rund um den Kopf (Kopfform: Zylinder)
-        band = []
-        for i in range(48):
-            w = i / 48 * math.tau
-            band.append(Vector((0.222 * math.sin(w), 0.205 * math.cos(w) + 0.0, AUGE_Z + 0.012)))
-        # Der Kopf liegt in Blender in -y vorn; Punkte (x, y, z): y = -(Godot-z)
-        band = [Vector((p.x, -p.y * 0.0 + p.y, p.z)) for p in band]
-        kurve_roehre(bm, band + [band[0]], 0.017, 8)
-    bmx, bgx = bm_neu(), bm_neu()
-    ski_extras(bmx, bgx)
-    o = objekt(bmx, "ski_farbe_roh")
-    g = objekt(bgx, "ski_glas")
-    g.data.materials.append(glas_mat("ski_glas", (0.95, 0.55, 0.12, 0.62)))
-    brille_fertig("skibrille", o, g)
+    # ---- 8. Fliegerbrille (Steampunk): dicke runde Fassungen, helle Gläser, Lederband um den Kopf
+    def flieger_extras(bm, bg):
+        pfad = []
+        for k in range(0, 41):
+            th = -(math.pi - 0.95) + k / 40 * 2 * (math.pi - 0.95)
+            pfad.append(Vector((0.228 * math.sin(th), 0.210 * math.cos(th), AUGE_Z + 0.004)))
+        for sx, idx in ((-1.0, 0), (1.0, -1)):
+            ende = pfad[idx]
+            rand = Vector((sx * (AUGE_X + 0.092), EBENE + 0.01, AUGE_Z + 0.004))
+            pfad_seite = [rand, rand.lerp(ende, 0.5), ende]
+            kurve_roehre(bm, pfad_seite, 0.011, 6)
+        kurve_roehre(bm, pfad, 0.011, 6)
+    o, g = brille("flieger", "rund", 0.092, 0.092, 0.0150, 0.026, (0.72, 0.86, 0.95, 0.22), buegel_d=0.0001, extras=flieger_extras)
+    brille_fertig("fliegerbrille", o, g)
 
     # ---- 9. Monokel (rechtes Auge) mit Kettchen
     def mono_extras(bm, bg):

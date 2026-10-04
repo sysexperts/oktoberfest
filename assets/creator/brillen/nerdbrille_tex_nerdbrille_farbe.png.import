@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqsjd0x5apx5a"
-path="res://.godot/imported/skibrille_tex_skibrille_farbe.png-b0140efdcae321a49026811498b72290.ctex"
+uid="uid://wcocgfs3ectd"
+path="res://.godot/imported/nerdbrille_tex_nerdbrille_farbe.png-975f94b7fb675bed5a33efabc59e3df7.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "7696981abe3529a7ad7b99e5183cda81"
+"md5": "0e924711ce39795a9022b695f06729d6"
 }
 
 [deps]
 
-source_file="res://assets/creator/brillen/skibrille_tex_skibrille_farbe.png"
-dest_files=["res://.godot/imported/skibrille_tex_skibrille_farbe.png-b0140efdcae321a49026811498b72290.ctex"]
+source_file="res://assets/creator/brillen/nerdbrille_tex_nerdbrille_farbe.png"
+dest_files=["res://.godot/imported/nerdbrille_tex_nerdbrille_farbe.png-975f94b7fb675bed5a33efabc59e3df7.ctex"]
 
 [params]
 
