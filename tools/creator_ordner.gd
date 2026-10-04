@@ -24,10 +24,12 @@ func _ready() -> void:
 	var n := pfade.size()
 	var figuren: Array[Figur] = []
 	for i in n:
-		var f: Figur = (load("res://scenes/figuren/%s.tscn" % ("basis" if ordner in ["augen", "emotionen"] else "standard")) as PackedScene).instantiate()
+		var f: Figur = (load("res://scenes/figuren/%s.tscn" % ("basis" if ordner in ["augen", "emotionen", "baerte"] else "standard")) as PackedScene).instantiate()
 		var z: Array[PackedScene] = [load(pfade[i])]
-		if ordner == "emotionen":
+		if ordner == "emotionen" or ordner == "baerte":
 			z.append(Assets.AUGEN[0]["szene"])
+			if ordner == "baerte":
+				z.append(Assets.EMOTIONEN[0]["szene"])
 		f.zubehoer = z
 		f.position = Vector3((i - (n - 1) * 0.5) * 0.7, 0, 0)
 		add_child(f)
@@ -42,7 +44,7 @@ func _ready() -> void:
 	for a in [["vorn", 0.0], ["seite", -90.0], ["schraeg", -40.0], ["nah", 0.0]]:
 		for f in figuren:
 			f.rotation_degrees.y = a[1]
-		kam.look_at_from_position(Vector3(0, 1.5, (5.0 + n * 0.5) if a[0] != "nah" else 2.2), Vector3(0, 1.5 if a[0] != "nah" else 1.3, 0))
+		kam.look_at_from_position(Vector3(0, 1.5, (5.0 + n * 0.5) if a[0] != "nah" else 2.2), Vector3(0, 1.5 if a[0] != "nah" else (1.2 if ordner == "baerte" else 1.3), 0))
 		await get_tree().process_frame
 		await get_tree().process_frame
 		var bild := get_viewport().get_texture().get_image()

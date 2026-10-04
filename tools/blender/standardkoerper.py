@@ -232,7 +232,7 @@ AUGE_Y, AUGE_X, AUGE_R = 1.30, 0.093, 0.066     # riesig: ein Drittel der Kopfbr
 for s in (1, -1):
     ay = haut_y(s * AUGE_X, AUGE_Y)
     # Auge halb in der Haut: Mittelpunkt etwas hinter der Oberflaeche
-    if OUTFIT not in ("basis", "augen"):          # Creator-Basiskörper hat keine Augen, die kommen als Bausteine
+    if OUTFIT not in ("basis", "augen", "baerte"):          # Creator-Basiskörper hat keine Augen, die kommen als Bausteine
         a = kugel(Vector((s * AUGE_X, ay + 0.010, AUGE_Y)), (AUGE_R, 0.036, AUGE_R), "auge", 28)
         a.data.materials.append(AUGAPFEL)
         p = kugel(Vector((s * (AUGE_X - 0.002), ay - 0.019, AUGE_Y - 0.002)), (0.040, 0.010, 0.040), "pupille", 20)
@@ -240,7 +240,7 @@ for s in (1, -1):
         gesicht += [a, p]
     # Braue: dicker Balken, innen höher (leicht besorgt-freundlich)
     bx, bh = s * 0.105, 1.428
-    if OUTFIT not in ("basis", "augen", "emotionen"):       # Creator: Brauen und Mund kommen als Emotions-Baustein
+    if OUTFIT not in ("basis", "augen", "emotionen", "baerte"):       # Creator: Brauen und Mund kommen als Emotions-Baustein
         br = kugel(Vector((0, 0, 0)), (0.058, 0.022, 0.021), "braue", 16)
         br.rotation_euler = (0, math.radians(s * 12), 0)
         br.location = Vector((bx, haut_y(bx, bh) + 0.008, bh))
@@ -254,7 +254,7 @@ for i in range(25):
     mund_teile.append(kugel(Vector((mx, haut_y(mx, mh) + 0.002, mh)), (0.005, 0.004, 0.005), "mundteil", 6))
 mund = vereinen(mund_teile, "mund")
 mund.data.materials.append(MUND)
-if OUTFIT not in ("basis", "augen", "emotionen"):
+if OUTFIT not in ("basis", "augen", "emotionen", "baerte"):
     gesicht.append(mund)
 else:
     bpy.data.objects.remove(mund, do_unlink=True)
@@ -391,7 +391,7 @@ for o in [koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.data.validate(verbose=False)
     for poly in o.data.polygons:
         poly.use_smooth = True
-if OUTFIT in ("huete", "frisuren", "brillen", "augen", "emotionen"):
+if OUTFIT in ("huete", "frisuren", "brillen", "augen", "emotionen", "baerte"):
     # Creator-Assets: jeder Hut / jede Frisur einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
     ordner = os.path.join(ROOT, "assets", "creator", os.environ.get("EXPORT_ORDNER", OUTFIT))
     os.makedirs(ordner, exist_ok=True)

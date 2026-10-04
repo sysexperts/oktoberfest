@@ -65,6 +65,21 @@ const EMOTIONEN := [
 	{"id": "grinsend", "name": "CREATOR_EMO_GRINSEND", "szene": preload("res://scenes/creator/emotionen/grinsend.tscn")},
 ]
 
+## Bärte. "ohne" = glatt rasiert. Bart-Teile heißen "*_farbe" und werden in der Haarfarbe eingefärbt.
+const BAERTE := [
+	{"id": "ohne", "name": "CREATOR_BART_OHNE", "szene": null, "farbe": Color.WHITE},
+	{"id": "schnauzer", "name": "CREATOR_BART_SCHNAUZER", "szene": preload("res://scenes/creator/baerte/schnauzer.tscn"), "farbe": Color(0.35, 0.22, 0.12)},
+	{"id": "walross", "name": "CREATOR_BART_WALROSS", "szene": preload("res://scenes/creator/baerte/walross.tscn"), "farbe": Color(0.45, 0.30, 0.18)},
+	{"id": "fumanchu", "name": "CREATOR_BART_FUMANCHU", "szene": preload("res://scenes/creator/baerte/fumanchu.tscn"), "farbe": Color(0.12, 0.09, 0.07)},
+	{"id": "kinnbart", "name": "CREATOR_BART_KINN", "szene": preload("res://scenes/creator/baerte/kinnbart.tscn"), "farbe": Color(0.30, 0.18, 0.10)},
+	{"id": "backenbart", "name": "CREATOR_BART_BACKEN", "szene": preload("res://scenes/creator/baerte/backenbart.tscn"), "farbe": Color(0.55, 0.55, 0.57)},
+	{"id": "vollbart", "name": "CREATOR_BART_VOLL", "szene": preload("res://scenes/creator/baerte/vollbart.tscn"), "farbe": Color(0.38, 0.24, 0.14)},
+	{"id": "stoppeln", "name": "CREATOR_BART_STOPPELN", "szene": preload("res://scenes/creator/baerte/stoppeln.tscn"), "farbe": Color(0.20, 0.15, 0.12)},
+	{"id": "zotteln", "name": "CREATOR_BART_ZOTTELN", "szene": preload("res://scenes/creator/baerte/zotteln.tscn"), "farbe": Color(0.93, 0.93, 0.94)},
+	{"id": "kinnband", "name": "CREATOR_BART_KINNBAND", "szene": preload("res://scenes/creator/baerte/kinnband.tscn"), "farbe": Color(0.12, 0.09, 0.07)},
+	{"id": "hufeisen", "name": "CREATOR_BART_HUFEISEN", "szene": preload("res://scenes/creator/baerte/hufeisen.tscn"), "farbe": Color(0.25, 0.20, 0.15)},
+]
+
 ## Alle Teile von `wurzel`, deren Name auf "_farbe" endet, in `farbe` färben
 static func faerben(wurzel: Node, farbe: Color) -> void:
 	for n in wurzel.find_children("*_farbe*", "MeshInstance3D", true, false):

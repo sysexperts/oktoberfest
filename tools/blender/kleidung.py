@@ -1914,6 +1914,173 @@ elif OUTFIT == "emotionen":
     ausdruck("grinsend", [braue(1, 1.420, -18, 0.062, 0.024), braue(-1, 1.434, 4, 0.058, 0.021)],
              mund(0.070, lambda t: 0.016 * max(0.0, t) ** 2 + 0.004 * t * t, 0.0075, 0.010))
 
+elif OUTFIT == "baerte":
+    # ================================================================ Creator-Assets: Bärte
+    # Alle Bärte sind glatte, modellierte Formen (Kugelketten, Remesh, glätten), auf die Haut gelegt.
+    # Haarfarbe: neutral graues Haar, wird als "*_farbe" in Godot eingefärbt.
+    HUETE = {}
+
+    def bpunkt(x, h, r, tief=0.0, sx=1.0, sy=1.0, sz=1.0):
+        """Kugel auf der Haut bei (x, Höhe h): r Radius, tief = zusätzlicher Abstand nach vorn"""
+        return kugel(Vector((x, haut_y(max(-0.19, min(0.19, x)), h) + 0.004 + r * 0.55 + tief, h)), (r * 1.15 * sx, r * 0.85 * sy, r * sz), "b", 12)
+
+    def b_formen(name, teile, voxel=0.0045, glaetten=6, anteil=0.20):
+        o = vereinen(teile, name)
+        o.data.remesh_voxel_size = voxel
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.voxel_remesh()
+        m = o.modifiers.new("Glatt", 'SMOOTH')
+        m.factor = 0.6
+        m.iterations = glaetten
+        bpy.ops.object.modifier_apply(modifier="Glatt")
+        d = o.modifiers.new("Dez", 'DECIMATE')
+        d.ratio = anteil
+        bpy.ops.object.modifier_apply(modifier="Dez")
+        bpy.ops.object.shade_smooth()
+        return o
+
+    def bart_grau(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        strahl = 0.5 + 0.5 * np.sin(gx * 900 + gy * 70 + ruis(P, 40.0) * 5.0)
+        fein = ruis(P, 150.0)
+        v = 0.60 + 0.26 * strahl + 0.12 * fein
+        return np.repeat(np.clip(v, 0, 1)[:, None], 3, axis=1)
+
+    def bart_fertig(name, o, malen=bart_grau):
+        f = fertig(name + "_farbe", [o], malen, 1024, 0.9)
+        for g in list(f.vertex_groups):
+            f.vertex_groups.remove(g)
+        HUETE[name] = [f]
+
+    # ---- 1. Bayerischer Schnauzer (hochgezwirbelt)
+    t_ = []
+    for sx in (1, -1):
+        for i in range(30):
+            t = i / 29.0
+            x = sx * (0.008 + 0.125 * t)
+            h = 1.232 - 0.040 * math.sin(min(t / 0.62, 1.0) * math.pi * 0.5) + 0.095 * max(0.0, (t - 0.62) / 0.38) ** 1.7
+            t_.append(bpunkt(x, h, 0.026 * (1.0 - 0.80 * t ** 1.3) + 0.005))
+    for i in range(5):
+        t_.append(bpunkt(0.0, 1.226 - 0.004 * i, 0.021))
+    bart_fertig("schnauzer", b_formen("schnauzer", t_, 0.0028, 6, 0.22))
+
+    # ---- 2. Walross: dicker, tief hängender Schnauzer
+    t_ = []
+    for sx in (1, -1):
+        for i in range(28):
+            t = i / 27.0
+            x = sx * (0.004 + 0.135 * t)
+            h = 1.240 - 0.075 * t ** 0.8
+            t_.append(bpunkt(x, h, 0.036 * (1.0 - 0.55 * t ** 1.5) + 0.009, 0.004))
+    for i in range(6):
+        t_.append(bpunkt(0.0, 1.235 - 0.004 * i, 0.034))
+    bart_fertig("walross", b_formen("walross", t_, 0.0045, 6, 0.2))
+
+    # ---- 3. Fu-Manchu: dünner Schnauzer, der lang und schmal an den Mundwinkeln herabhängt
+    t_ = []
+    for sx in (1, -1):
+        for i in range(34):
+            t = i / 33.0
+            x = sx * (0.006 + 0.075 * min(1.0, t * 2.2))
+            h = 1.228 - 0.005 * min(1.0, t * 2.2) - 0.165 * max(0.0, (t - 0.45) / 0.55) ** 1.1
+            t_.append(bpunkt(x, h, 0.017 * (1.0 - 0.65 * t) + 0.005, 0.002))
+    for i in range(5):
+        t_.append(bpunkt(0.0, 1.228, 0.014))
+    bart_fertig("fumanchu", b_formen("fumanchu", t_, 0.0030, 6, 0.25))
+
+    # ---- 4. Kinnbart (Ziegenbart) mit dünnem Schnauzer
+    t_ = []
+    for i in range(10):
+        t = i / 9.0
+        t_.append(bpunkt(0.0, 1.165 - 0.085 * t, 0.030 * (1.0 - 0.55 * t) + 0.008, 0.006 * (1 - t), 0.9, 0.9, 1.15))
+    for sx in (1, -1):
+        for i in range(12):
+            t = i / 11.0
+            t_.append(bpunkt(sx * (0.004 + 0.052 * t), 1.226 - 0.012 * t, 0.012 * (1.0 - 0.4 * t) + 0.004))
+    for i in range(4):
+        t_.append(bpunkt(0.0, 1.226 - 0.003 * i, 0.012))
+    bart_fertig("kinnbart", b_formen("kinnbart", t_, 0.0032, 6, 0.25))
+
+    # ---- 5. Backenbart (Koteletten): breite Streifen an den Wangen bis zum Kiefer
+    t_ = []
+    for sx in (1, -1):
+        for i in range(14):
+            t = i / 13.0
+            h = 1.325 - 0.215 * t
+            x = sx * (0.178 - 0.030 * t ** 1.4)
+            t_.append(bpunkt(x, h, 0.040 + 0.020 * math.sin(t * math.pi * 0.9), 0.0, 0.8, 1.0, 1.0))
+    bart_fertig("backenbart", b_formen("backenbart", t_, 0.0045, 6, 0.2))
+
+    # ---- 6. Vollbart: Wangen, Kinn und Kiefer, Mund bleibt frei
+    t_ = []
+    for h in np.linspace(1.12, 1.30, 7):
+        for x in np.linspace(-0.175, 0.175, 11):
+            if abs(x) < 0.064 and 1.170 < h < 1.230:
+                continue                                     # Mundbereich frei
+            if (x / 0.200) ** 2 + ((h - 1.215) / 0.100) ** 2 > 1.0:
+                continue                                     # Umriss: Ellipse um Wangen und Kinn (runder Kiefer)
+            fall = 1.0 - ((abs(x) / 0.20) ** 2) * 0.6
+            t_.append(bpunkt(float(x), float(h), 0.034 * fall + 0.014, 0.012))
+    for i in range(8):
+        t = i / 7.0
+        t_.append(bpunkt(0.0, 1.13 - 0.12 * t, 0.060 * (1.0 - 0.55 * t), 0.016, 0.9, 1.0, 1.0))
+    bart_fertig("vollbart", b_formen("vollbart", t_, 0.0055, 7, 0.14))
+
+    # ---- 7. Dreitagebart (Stoppeln): dünne Schicht auf Kinn, Wangen und Oberlippe
+    def weg_st(c):
+        vorn = -c.y > -0.02
+        return not (vorn and (c.x / 0.206) ** 2 + ((c.z - 1.200) / 0.098) ** 2 < 1.0)
+
+    def offen_st(c):
+        return abs(c.x) < 0.068 and 1.172 < c.z < 1.228 and -c.y > 0.0
+
+    st = schale_ganz("stoppeln", lambda c: 0.0035, weg_st, 3, offen_st)
+
+    def stoppel_mal(P):
+        n = ruis(P, 260.0)
+        v = 0.45 + 0.40 * np.clip((n - 0.40) * 3.0, 0, 1)
+        return np.repeat(v[:, None], 3, axis=1)
+
+    bart_fertig("stoppeln", st, stoppel_mal)
+
+    # ---- 8. Lange Zotteln (Weihnachtsmann-/Zauberer-Bart): fällt bis auf die Brust
+    t_ = []
+    for i in range(22):
+        t = i / 21.0
+        h = 1.20 - 0.40 * t
+        breite = 0.150 * (1.0 - 0.60 * t ** 1.4)
+        r = 0.050 * (1.0 - 0.60 * t) + 0.018
+        for x in np.linspace(-breite, breite, 6 if t < 0.8 else 3):
+            t_.append(bpunkt(float(x), h, r, 0.010 + 0.030 * t))
+    for sx in (1, -1):
+        for i in range(10):
+            t = i / 9.0
+            t_.append(bpunkt(sx * (0.185 - 0.050 * t), 1.31 - 0.14 * t, 0.040, 0.0))
+    for i in range(6):
+        t_.append(bpunkt(0.0, 1.232 - 0.003 * i, 0.028, 0.010))
+    bart_fertig("zotteln", b_formen("zotteln", t_, 0.0065, 6, 0.12))
+
+    # ---- 9. Kinnband: schmaler Bart entlang des Kiefers von Ohr zu Ohr
+    t_ = []
+    for k in range(27):
+        w = (k / 26.0 - 0.5) * math.pi
+        x = 0.185 * math.sin(w)
+        h = 1.145 + 0.094 * (1.0 - math.cos(w)) ** 1.5
+        t_.append(bpunkt(x, h, 0.020 + 0.006 * (1 - abs(math.sin(w))), 0.004))
+    bart_fertig("kinnband", b_formen("kinnband", t_, 0.0035, 6, 0.22))
+
+    # ---- 10. Hufeisen: Schnauzer, der als schmale Bahn an den Mundwinkeln herabläuft
+    t_ = []
+    for sx in (1, -1):
+        for i in range(26):
+            t = i / 25.0
+            x = sx * (0.008 + 0.062 * min(1.0, t * 1.8) + 0.004 * t)
+            h = 1.232 - 0.004 * min(1.0, t * 1.8) - 0.115 * max(0.0, (t - 0.38) / 0.62) ** 1.2
+            t_.append(bpunkt(x, h, 0.026 * (1.0 - 0.45 * t) + 0.008, 0.004))
+    for i in range(5):
+        t_.append(bpunkt(0.0, 1.230, 0.022))
+    bart_fertig("hufeisen", b_formen("hufeisen", t_, 0.0032, 6, 0.22))
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 

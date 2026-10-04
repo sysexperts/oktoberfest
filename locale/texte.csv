@@ -677,6 +677,17 @@ CREATOR_EMO_UEBERRASCHT,Überrascht,Surprised,Şaşırmış
 CREATOR_EMO_SKEPTISCH,Skeptisch,Skeptical,Şüpheci
 CREATOR_EMO_GENERVT,Genervt,Annoyed,Bıkkın
 CREATOR_EMO_GRINSEND,Fies grinsend,Smirking,Sinsi gülen
+CREATOR_BART_OHNE,Rasiert,Clean-shaven,Tıraşlı
+CREATOR_BART_SCHNAUZER,Bayerischer Schnauzer,Handlebar mustache,Bavyera bıyığı
+CREATOR_BART_WALROSS,Walross,Walrus mustache,Mors bıyığı
+CREATOR_BART_FUMANCHU,Fu-Manchu,Fu Manchu,Fu Manchu
+CREATOR_BART_KINN,Kinnbart,Goatee,Keçi sakalı
+CREATOR_BART_BACKEN,Backenbart,Mutton chops,Favori
+CREATOR_BART_VOLL,Vollbart,Full beard,Gür sakal
+CREATOR_BART_STOPPELN,Dreitagebart,Stubble,Uzamış sakal
+CREATOR_BART_ZOTTELN,Langer Bart,Long beard,Uzun sakal
+CREATOR_BART_KINNBAND,Kinnband,Chin strap,Çene bandı
+CREATOR_BART_HUFEISEN,Hufeisenbart,Horseshoe mustache,At nalı bıyığı
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam
