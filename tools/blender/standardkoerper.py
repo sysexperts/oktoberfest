@@ -17,6 +17,7 @@ gemeinsamen Animationen ohne Umrechnung laufen
 import bpy, bmesh, json, math, os
 from mathutils import Vector
 
+OUTFIT = os.environ.get("OUTFIT", "bean")      # bean | seppl: nur die Kleidung unterscheidet sich
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "build", "blender")
 os.makedirs(OUT, exist_ok=True)
@@ -389,7 +390,7 @@ bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "standardkoerper.blend"))
 bpy.ops.object.select_all(action='DESELECT')
 for o in [arm_obj, koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.select_set(True)
-glb = os.path.join(ROOT, "assets", "character", "standard", "standardkoerper.glb")
+glb = os.path.join(ROOT, "assets", "character", "standard", "standardkoerper.glb" if OUTFIT == "bean" else OUTFIT + ".glb")
 os.makedirs(os.path.dirname(glb), exist_ok=True)
 bpy.ops.export_scene.gltf(filepath=glb, use_selection=True, export_format='GLB',
                           export_yup=True, export_skins=True)

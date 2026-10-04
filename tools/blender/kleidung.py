@@ -529,198 +529,353 @@ def sanft(a, b, x):
 
 SCHULTERNAHT = 0.200       # hier wird Rumpf von Ärmel getrennt (wie eine Naht)
 
-# =================================================================== Hemd (Karo)
-def verschweissen(teile, name, dist=0.0002):
-    """Mehrere Teile (Rumpf + Ärmel), die an einer gemeinsamen Schnittebene mit gleichem Abstand
-    aufgeblasen wurden, zu EINER Fläche vereinen: die Punkte auf der Naht liegen exakt
-    aufeinander und werden verschmolzen."""
-    o = vereinen(teile, name)
-    bm = bmesh.new()
-    bm.from_mesh(o.data)
-    bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=dist)
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    bm.to_mesh(o.data)
-    bm.free()
-    bpy.context.view_layer.objects.active = o
+if OUTFIT == "bean":
+    # =================================================================== Hemd (Karo)
+    def verschweissen(teile, name, dist=0.0002):
+        """Mehrere Teile (Rumpf + Ärmel), die an einer gemeinsamen Schnittebene mit gleichem Abstand
+        aufgeblasen wurden, zu EINER Fläche vereinen: die Punkte auf der Naht liegen exakt
+        aufeinander und werden verschmolzen."""
+        o = vereinen(teile, name)
+        bm = bmesh.new()
+        bm.from_mesh(o.data)
+        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=dist)
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bm.to_mesh(o.data)
+        bm.free()
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.shade_smooth()
+        return o
+
+
+    HEMD_OFF = lambda c: 0.010
+    hemd_teile = [schale("hemd_rumpf", HEMD_OFF, [unter(0.90), ueber(1.14)] + breiter_als(SCHULTERNAHT), 0)]
+    for seite in ("Left", "Right"):
+        hemd_teile.append(schale("hemd_" + seite, HEMD_OFF, nur_arm(seite, SCHULTERNAHT) + [ueber(1.14), ende_ebene(seite, 0.82)], 0))
+    hemd_koerper = verschweissen(hemd_teile, "Hemd")
+    hemd_teile = [hemd_koerper]
+
+
+    def hemd_farbe(P):
+        s = 0.034
+        kx = np.floor(P[:, 0] / s) % 2
+        ky = np.floor(P[:, 1] / s) % 2
+        weiss = np.array([0.94, 0.94, 0.90])
+        mitte = np.array([0.50, 0.62, 0.48])
+        dunkel = np.array([0.14, 0.27, 0.17])
+        summe = kx + ky    # Gingham: weiss / Halbton (ein Streifen) / dunkel (beide)
+        col = np.where((summe == 0)[:, None], weiss, np.where((summe == 1)[:, None], mitte, dunkel))
+        return col * (0.93 + 0.12 * ruis(P, 70.0))[:, None]
+
+
+    hemd = fertig("Hemd", hemd_teile, hemd_farbe, 2048)
+
+    # ==================================================== Janker (Trachtenjacke)
+    HEM = 0.76                                                   # Saum: auf Hüfthöhe, über der Hose
+    OEFF_UNTEN, OEFF_OBEN = 0.060, 0.108
+
+
+    def janker_offset(c):
+        # oben an Schultern und Hals etwas weiter, damit keine Haut am Kragen durchschaut
+        return 0.022 + 0.014 * sanft(0.90, HEM, c.z)             # unten etwas ausgestellt
+
+
+    jk_rumpf = schale("janker_rumpf", janker_offset, [unter(HEM), ueber(1.14)] + breiter_als(SCHULTERNAHT), 6)
+    # Vorn offen: V, unten schmal und oben breiter; die Rückseite bleibt geschlossen
+    ausschneiden(jk_rumpf, keil([(-OEFF_UNTEN, 0.70), (OEFF_UNTEN, 0.70), (OEFF_OBEN, 1.24), (-OEFF_OBEN, 1.24)], 0.30, -0.02))
+    jk_teile = [jk_rumpf]
+    for seite in ("Left", "Right"):
+        jk_teile.append(schale("janker_" + seite, janker_offset, nur_arm(seite, SCHULTERNAHT) + [ueber(1.14), ende_ebene(seite, 0.62), schraege(seite)], 6))
+    janker_haupt = verschweissen(jk_teile, "Janker")
+
+
+    def oeff_breite(z):
+        return OEFF_UNTEN + (z - 0.70) / (1.24 - 0.70) * (OEFF_OBEN - OEFF_UNTEN)
+
+
+    # Details: vier Knöpfe an der Kante, zwei Taschenklappen
+    details = []
+    knopf_pos = []
+    for z in (0.835, 0.905, 0.975, 1.045):
+        x = oeff_breite(z) + 0.034
+        knopf_pos.append((x, z))
+        details.append(kugel(Vector((x, hoehe_y(janker_haupt, x, z) + 0.002, z)), (0.015, 0.008, 0.015), "knopf", 14))
+    for sx in (1, -1):
+        x, z = sx * 0.130, 0.84
+        details.append(kugel(Vector((x, hoehe_y(janker_haupt, x, z) + 0.004, z)), (0.046, 0.012, 0.024), "klappe", 16))
+
+
+    def janker_farbe(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        col = wolle(P, [0.37, 0.38, 0.39])
+        trim = np.zeros(len(P))
+        trim = np.maximum(trim, hart(gy, HEM + 0.022, 0.004) * (np.abs(gx) < 0.2))             # Saum
+        kante = np.abs(np.abs(gx) - oeff_breite(gy))                                              # Öffnungskante
+        trim = np.maximum(trim, hart(kante, 0.013, 0.003) * (gz > -0.02) * (gy > HEM))
+        for seite, vz in (("Left", 1.0), ("Right", -1.0)):                                        # Ärmelbündchen
+            trim = np.maximum(trim, ((arm_t(P, seite) > 0.55) & (vz * gx > 0.15)) * 1.0)
+        for sx in (1, -1):                                                                        # Klappenränder
+            dx = (gx - sx * 0.130) / 0.048
+            dy = (gy - 0.84) / 0.026
+            rand = np.abs(np.maximum(np.abs(dx), np.abs(dy)) - 1.0)
+            trim = np.maximum(trim, hart(rand, 0.07, 0.03) * (gz > 0.05))
+        col = mischen(col, GRUEN[None, :] * (0.9 + 0.2 * ruis(P, 60.0))[:, None], trim)
+        for kx, kz in knopf_pos:                                                                  # Knöpfe holzbraun
+            d = np.hypot(gx - kx, gy - kz)
+            col = mischen(col, np.array([0.40, 0.23, 0.13])[None, :] * (0.9 + 0.25 * ruis(P, 90.0))[:, None],
+                          hart(d, 0.016, 0.003) * (gz > 0.05))
+        return col
+
+
+    janker = fertig("Janker", [janker_haupt] + details, janker_farbe, 2048, 0.95)
+
+    # =================================================================== Lederhose
+    def hose_offset(c):
+        return 0.012 + 0.012 * sanft(0.62, 0.50, c.z)            # Beinabschluss etwas weiter
+
+
+    hose_koerper = schale("Lederhose", hose_offset, [unter(0.50), ueber(0.87)] + breiter_als(0.200))
+
+
+    def hose_farbe(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        col = wolle(P, [0.20, 0.17, 0.12], 1.4)                                  # dunkles Leder, fleckig
+        col = mischen(col, GRUEN[None, :], hart(gy, 0.512, 0.004) * (gy > 0.40))   # Saumkante
+        for sx in (1, -1):                                                         # Stickerei vorn
+            for cy, ang, ln in ((0.64, 0.0, 0.050), (0.60, 0.9, 0.032), (0.60, -0.9, 0.032), (0.56, 0.0, 0.026)):
+                u, v = gx - sx * 0.108, gy - cy
+                ca, sa = math.cos(ang), math.sin(ang)
+                uu, vv = u * ca - v * sa, u * sa + v * ca
+                blatt = (np.abs(uu) < 0.016 * np.clip(1 - (vv / ln) ** 2, 0, 1)) & (np.abs(vv) < ln)
+                col = mischen(col, GRUEN_HELL[None, :], (blatt & (gz > 0.02)) * 1.0)
+            mitte = hart(np.abs(gx - sx * 0.108), 0.0035, 0.002) * (gy > 0.52) * (gy < 0.70) * (gz > 0.02)
+            col = mischen(col, CREME[None, :] * 0.8, mitte)
+        return col
+
+
+    hose = fertig("Lederhose", [hose_koerper], hose_farbe, 2048, 0.9, True)
+
+    # =================================================================== Gürtel (Taille)
+    gurt_koerper = schale("Gurt", lambda c: 0.012, [unter(0.835), ueber(0.895)] + breiter_als(0.200))
+    gurt_y = hoehe_y(gurt_koerper, 0.0, 0.865)
+    plakette = kugel(Vector((0, gurt_y - 0.004, 0.865)), (0.060, 0.014, 0.036), "plakette", 20)
+
+
+    def gurt_farbe(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        leder = wolle(P, [0.10, 0.14, 0.10], 1.2)
+        r = np.hypot(gx / 0.060, (gy - 0.865) / 0.036)
+        pl = np.tile(np.array([0.12, 0.30, 0.17]), (len(P), 1))
+        pl = mischen(pl, CREME[None, :], hart(np.abs(r - 0.82), 0.12, 0.05))
+        pl = mischen(pl, CREME[None, :], hart(np.abs(gx), 0.006, 0.003) * (r < 0.7))
+        pl = pl * (0.92 + 0.14 * ruis(P, 70.0))[:, None]
+        ist_plakette = (r < 1.03) & (gz > 0.18)
+        return np.where(ist_plakette[:, None], pl, leder)
+
+
+    gurt_obj = fertig("Gurt", [gurt_koerper, plakette], gurt_farbe, 1024, 0.8, True)
+
+    # =================================================================== Hut (starr am Kopfknochen)
+    HUT_UNTEN = 1.498          # Krempe direkt über den Brauen (Brauen sitzen bei 1.428)
+    teile = []
+    teile.append(kugel(g2b(0, HUT_UNTEN, 0.0), (0.290, 0.268, 0.030), "krempe", 32))
+    for i in range(11):
+        t = i / 10
+        teile.append(kugel(g2b(0, HUT_UNTEN + 0.02 + 0.20 * t, 0.0), (0.235 - 0.022 * t, 0.215 - 0.020 * t, 0.032), "krone", 28))
+    hut = vereinen(teile, "Hut")
+    hut.data.remesh_voxel_size = 0.010
+    bpy.context.view_layer.objects.active = hut
+    bpy.ops.object.voxel_remesh()
+    gl = hut.modifiers.new("Glatt", 'SMOOTH')
+    gl.factor = 0.6
+    gl.iterations = 6
+    bpy.ops.object.modifier_apply(modifier="Glatt")
+    dz = hut.modifiers.new("Dez", 'DECIMATE')
+    dz.ratio = 0.13
+    bpy.ops.object.modifier_apply(modifier="Dez")
     bpy.ops.object.shade_smooth()
-    return o
+    band = kugel(g2b(0, HUT_UNTEN + 0.055, 0.0), (0.240, 0.220, 0.034), "band", 32)
+    feder = kugel(Vector((0, 0, 0)), (0.012, 0.045, 0.085), "feder", 14)
+    feder.rotation_euler = (math.radians(-18), math.radians(22), math.radians(18))
+    feder.location = g2b(0.225, HUT_UNTEN + 0.19, 0.0) + Vector((0, 0.01, 0.0))
 
 
-HEMD_OFF = lambda c: 0.010
-hemd_teile = [schale("hemd_rumpf", HEMD_OFF, [unter(0.90), ueber(1.14)] + breiter_als(SCHULTERNAHT), 0)]
-for seite in ("Left", "Right"):
-    hemd_teile.append(schale("hemd_" + seite, HEMD_OFF, nur_arm(seite, SCHULTERNAHT) + [ueber(1.14), ende_ebene(seite, 0.82)], 0))
-hemd_koerper = verschweissen(hemd_teile, "Hemd")
-hemd_teile = [hemd_koerper]
+    def hut_farbe(P):
+        col = wolle(P, [0.24, 0.31, 0.19], 1.5)      # Filz
+        return col
 
 
-def hemd_farbe(P):
-    s = 0.034
-    kx = np.floor(P[:, 0] / s) % 2
-    ky = np.floor(P[:, 1] / s) % 2
-    weiss = np.array([0.94, 0.94, 0.90])
-    mitte = np.array([0.50, 0.62, 0.48])
-    dunkel = np.array([0.14, 0.27, 0.17])
-    summe = kx + ky    # Gingham: weiss / Halbton (ein Streifen) / dunkel (beide)
-    col = np.where((summe == 0)[:, None], weiss, np.where((summe == 1)[:, None], mitte, dunkel))
-    return col * (0.93 + 0.12 * ruis(P, 70.0))[:, None]
+    hut_ob = fertig("Hut", [hut], hut_farbe, 1024, 0.95)
+    band.data.materials.append(material("Hutband", (0.07, 0.07, 0.06), 0.8))
+    feder.data.materials.append(material("Feder", (0.74, 0.68, 0.55), 0.9))
+    for o in (band, feder):
+        o.parent = arm_obj
+        vg = o.vertex_groups.new(name="Head")
+        vg.add([v.index for v in o.data.vertices], 1.0, 'REPLACE')
+        mod = o.modifiers.new("Armature", 'ARMATURE')
+        mod.object = arm_obj
+        kleidung_objekte.append(o)
+    # Hut starr am Kopf (statt der übernommenen Körpergewichte)
+    for g in list(hut_ob.vertex_groups):
+        hut_ob.vertex_groups.remove(g)
+    kg = hut_ob.vertex_groups.new(name="Head")
+    kg.add([v.index for v in hut_ob.data.vertices], 1.0, 'REPLACE')
 
 
-hemd = fertig("Hemd", hemd_teile, hemd_farbe, 2048)
 
-# =======
+elif OUTFIT == "seppl":
+    # ================================================================ Seppl: Weste, Leinenhemd, grüne Lederhose, Tirolerhut, Schnurrbart
+    LODEN = np.array([0.13, 0.22, 0.27])
+    LEDER_GRUEN = np.array([0.10, 0.20, 0.12])
+    LEINEN = np.array([0.93, 0.91, 0.84])
+    HOLZ = np.array([0.80, 0.72, 0.52])
 
-============================================================ Janker (Trachtenjacke)
-HEM = 0.76                                                   # Saum: auf Hüfthöhe, über der Hose
-OEFF_UNTEN, OEFF_OBEN = 0.060, 0.108
+    def verschweissen(teile, name, dist=0.0002):
+        o = vereinen(teile, name)
+        bm = bmesh.new()
+        bm.from_mesh(o.data)
+        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=dist)
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bm.to_mesh(o.data)
+        bm.free()
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.shade_smooth()
+        return o
 
+    # ---- Leinenhemd (lange Ärmel, vorn ein Schlitz mit Knopfleiste)
+    HEMD_OFF = lambda c: 0.010
+    hemd_teile = [schale("hemd_rumpf", HEMD_OFF, [unter(0.84), ueber(1.14)] + breiter_als(SCHULTERNAHT), 0)]
+    for seite in ("Left", "Right"):
+        hemd_teile.append(schale("hemd_" + seite, HEMD_OFF, nur_arm(seite, SCHULTERNAHT) + [ueber(1.14), ende_ebene(seite, 0.92)], 0))
+    hemd_koerper = verschweissen(hemd_teile, "Hemd")
 
-def janker_offset(c):
-    # oben an Schultern und Hals etwas weiter, damit keine Haut am Kragen durchschaut
-    return 0.022 + 0.014 * sanft(0.90, HEM, c.z)             # unten etwas ausgestellt
+    def hemd_farbe(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        col = wolle(P, LEINEN, 0.7)
+        faden = 0.97 + 0.03 * np.sin(gy * 420) * np.sin(gx * 420)
+        col = col * faden[:, None]
+        # Knopfleiste in der Mitte und Bündchen
+        col = mischen(col, LEINEN[None, :] * 0.82, hart(np.abs(gx), 0.012, 0.003) * (gz > 0.05) * (gy > 0.9))
+        for seite, vz in (("Left", 1.0), ("Right", -1.0)):
+            col = mischen(col, LEINEN[None, :] * 0.78, ((arm_t(P, seite) > 0.80) & (vz * gx > 0.15)) * 1.0)
+        return col
 
+    hemd = fertig("Hemd", [hemd_koerper], hemd_farbe, 2048)
 
-jk_rumpf = schale("janker_rumpf", janker_offset, [unter(HEM), ueber(1.14)] + breiter_als(SCHULTERNAHT), 6)
-# Vorn offen: V, unten schmal und oben breiter; die Rückseite bleibt geschlossen
-ausschneiden(jk_rumpf, keil([(-OEFF_UNTEN, 0.70), (OEFF_UNTEN, 0.70), (OEFF_OBEN, 1.24), (-OEFF_OBEN, 1.24)], 0.30, -0.02))
-jk_teile = [jk_rumpf]
-for seite in ("Left", "Right"):
-    jk_teile.append(schale("janker_" + seite, janker_offset, nur_arm(seite, SCHULTERNAHT) + [ueber(1.14), ende_ebene(seite, 0.62), schraege(seite)], 6))
-janker_haupt = verschweissen(jk_teile, "Janker")
+    # ---- Trachtenweste (ohne Ärmel, vorn offen, Knöpfe)
+    WESTE_UNTEN, WESTE_OBEN = 0.050, 0.100
+    def weste_oeff(z):
+        return WESTE_UNTEN + (z - 0.70) / (1.24 - 0.70) * (WESTE_OBEN - WESTE_UNTEN)
 
+    weste_off = lambda c: 0.024 + 0.010 * sanft(0.92, 0.80, c.z)
+    weste = schale("weste", weste_off, [unter(0.80), ueber(1.13)] + breiter_als(0.176), 4)
+    ausschneiden(weste, keil([(-WESTE_UNTEN, 0.70), (WESTE_UNTEN, 0.70), (WESTE_OBEN, 1.24), (-WESTE_OBEN, 1.24)], 0.30, -0.02))
+    weste_details = []
+    weste_knoepfe = []
+    for z in (0.84, 0.91, 0.98, 1.05):
+        x = weste_oeff(z) + 0.030
+        weste_knoepfe.append((x, z))
+        weste_details.append(kugel(Vector((x, hoehe_y(weste, x, z) + 0.002, z)), (0.013, 0.007, 0.013), "knopf", 14))
 
-def oeff_breite(z):
-    return OEFF_UNTEN + (z - 0.70) / (1.24 - 0.70) * (OEFF_OBEN - OEFF_UNTEN)
+    def weste_farbe(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        col = wolle(P, LODEN)
+        rand = np.zeros(len(P))
+        rand = np.maximum(rand, hart(gy, 0.80 + 0.020, 0.004))                               # Saum
+        rand = np.maximum(rand, hart(np.abs(np.abs(gx) - weste_oeff(gy)), 0.010, 0.003) * (gz > -0.02))
+        rand = np.maximum(rand, hart(np.abs(np.abs(gx) - 0.176), 0.010, 0.003))              # Armloch
+        col = mischen(col, CREME[None, :] * 0.85, rand)
+        # Zierstickerei: kleine Rauten entlang der Brust
+        for sx in (1, -1):
+            for cy in (0.88, 0.97, 1.06):
+                d = np.abs(gx - sx * 0.130) / 0.018 + np.abs(gy - cy) / 0.018
+                col = mischen(col, GRUEN_HELL[None, :], hart(d, 1.0, 0.25) * (gz > 0.05))
+        for kx, kz in weste_knoepfe:
+            d = np.hypot(gx - kx, gy - kz)
+            col = mischen(col, HOLZ[None, :], hart(d, 0.015, 0.003) * (gz > 0.05))
+        return col
 
+    weste_obj = fertig("Weste", [weste] + weste_details, weste_farbe, 2048, 0.9)
 
-# Details: vier Knöpfe an der Kante, zwei Taschenklappen
-details = []
-knopf_pos = []
-for z in (0.835, 0.905, 0.975, 1.045):
-    x = oeff_breite(z) + 0.034
-    knopf_pos.append((x, z))
-    details.append(kugel(Vector((x, hoehe_y(janker_haupt, x, z) + 0.002, z)), (0.015, 0.008, 0.015), "knopf", 14))
-for sx in (1, -1):
-    x, z = sx * 0.130, 0.84
-    details.append(kugel(Vector((x, hoehe_y(janker_haupt, x, z) + 0.004, z)), (0.046, 0.012, 0.024), "klappe", 16))
+    # ---- Lederhose, grün, mit Latz und heller Naht
+    hose_off = lambda c: 0.020 + 0.012 * sanft(0.62, 0.50, c.z)
+    hose_koerper = schale("Lederhose", hose_off, [unter(0.50), ueber(0.87)] + breiter_als(0.235), 2)
 
+    def hose_farbe(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        col = wolle(P, LEDER_GRUEN, 1.5)
+        col = mischen(col, CREME[None, :] * 0.8, hart(gy, 0.512, 0.004) * (gy > 0.40))     # Saum hell
+        # Latz: Rechteck vorn mit heller Naht
+        latz = np.maximum(np.abs(gx) / 0.075, np.abs(gy - 0.80) / 0.065)
+        col = mischen(col, CREME[None, :] * 0.8, hart(np.abs(latz - 1.0), 0.07, 0.03) * (gz > 0.03))
+        # Naht an den Oberschenkeln
+        for sx in (1, -1):
+            naht = hart(np.abs(gx - sx * 0.110), 0.003, 0.002) * (gy > 0.52) * (gy < 0.74) * (gz > 0.02)
+            col = mischen(col, CREME[None, :] * 0.8, naht)
+        return col
 
-def janker_farbe(P):
-    gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
-    col = wolle(P, [0.37, 0.38, 0.39])
-    trim = np.zeros(len(P))
-    trim = np.maximum(trim, hart(gy, HEM + 0.022, 0.004) * (np.abs(gx) < 0.2))             # Saum
-    kante = np.abs(np.abs(gx) - oeff_breite(gy))                                              # Öffnungskante
-    trim = np.maximum(trim, hart(kante, 0.013, 0.003) * (gz > -0.02) * (gy > HEM))
-    for seite, vz in (("Left", 1.0), ("Right", -1.0)):                                        # Ärmelbündchen
-        trim = np.maximum(trim, ((arm_t(P, seite) > 0.55) & (vz * gx > 0.15)) * 1.0)
-    for sx in (1, -1):                                                                        # Klappenränder
-        dx = (gx - sx * 0.130) / 0.048
-        dy = (gy - 0.84) / 0.026
-        rand = np.abs(np.maximum(np.abs(dx), np.abs(dy)) - 1.0)
-        trim = np.maximum(trim, hart(rand, 0.07, 0.03) * (gz > 0.05))
-    col = mischen(col, GRUEN[None, :] * (0.9 + 0.2 * ruis(P, 60.0))[:, None], trim)
-    for kx, kz in knopf_pos:                                                                  # Knöpfe holzbraun
-        d = np.hypot(gx - kx, gy - kz)
-        col = mischen(col, np.array([0.40, 0.23, 0.13])[None, :] * (0.9 + 0.25 * ruis(P, 90.0))[:, None],
-                      hart(d, 0.016, 0.003) * (gz > 0.05))
-    return col
+    hose = fertig("Lederhose", [hose_koerper], hose_farbe, 2048, 0.9, True)
 
+    # ---- Tirolerhut mit Gamsbart (starr am Kopf)
+    HUT_UNTEN = 1.498
+    teile = [kugel(g2b(0, HUT_UNTEN, 0.0), (0.262, 0.242, 0.026), "krempe", 32)]
+    for i in range(12):
+        t = i / 11
+        teile.append(kugel(g2b(0, HUT_UNTEN + 0.02 + 0.22 * t, 0.0), (0.222 - 0.060 * t, 0.202 - 0.058 * t, 0.032), "krone", 28))
+    hut = vereinen(teile, "Hut")
+    hut.data.remesh_voxel_size = 0.010
+    bpy.context.view_layer.objects.active = hut
+    bpy.ops.object.voxel_remesh()
+    _m = hut.modifiers.new("Glatt", 'SMOOTH')
+    _m.factor = 0.6
+    _m.iterations = 6
+    bpy.ops.object.modifier_apply(modifier="Glatt")
+    _d = hut.modifiers.new("Dez", 'DECIMATE')
+    _d.ratio = 0.13
+    bpy.ops.object.modifier_apply(modifier="Dez")
+    bpy.ops.object.shade_smooth()
 
-janker = fertig("Janker", [janker_haupt] + details, janker_farbe, 2048, 0.95)
+    def hut_farbe(P):
+        gy = P[:, 1]
+        col = wolle(P, [0.24, 0.17, 0.12], 1.5)
+        band_m = hart(np.abs(gy - (HUT_UNTEN + 0.06)), 0.024, 0.004)
+        col = mischen(col, np.array([0.26, 0.34, 0.20])[None, :], band_m)
+        flecht = hart(np.abs(np.sin((P[:, 0] + P[:, 2]) * 120)), 0.35, 0.2) * band_m
+        return mischen(col, CREME[None, :] * 0.7, flecht * 0.5)
 
-# =================================================================== Lederhose
-def hose_offset(c):
-    return 0.012 + 0.012 * sanft(0.62, 0.50, c.z)            # Beinabschluss etwas weiter
+    hut_ob = fertig("Hut", [hut], hut_farbe, 1024, 0.95)
+    for g in list(hut_ob.vertex_groups):
+        hut_ob.vertex_groups.remove(g)
+    _kg = hut_ob.vertex_groups.new(name="Head")
+    _kg.add([v.index for v in hut_ob.data.vertices], 1.0, 'REPLACE')
 
+    # Gamsbart: Büschel aus schmalen Ellipsoiden am Band
+    bart_teile = []
+    for i in range(9):
+        w = (i - 4) / 4.0
+        pos = g2b(0.196 + 0.010 * w, HUT_UNTEN + 0.15 + 0.012 * abs(w), 0.028 * w)
+        k = kugel(Vector((0, 0, 0)), (0.008, 0.008, 0.075), "gams", 8)
+        k.location = pos
+        k.rotation_euler = (math.radians(-20 + 6 * w), math.radians(16 + 4 * w), math.radians(12 * w))
+        bart_teile.append(k)
+    gams = vereinen(bart_teile, "Gamsbart")
+    gams.data.materials.append(material("Gamsbart", (0.62, 0.55, 0.42), 0.9))
 
-hose_koerper = schale("Lederhose", hose_offset, [unter(0.50), ueber(0.87)] + breiter_als(0.200))
+    # Schnurrbart: auf die Haut gelegt, am Kopf befestigt
+    schnurr = []
+    for i in range(21):
+        t = (i - 10) / 10.0
+        mx, mh = t * 0.075, 1.232 - 0.016 * abs(t) ** 1.5
+        schnurr.append(kugel(Vector((mx, haut_y(mx, mh) + 0.006, mh)), (0.015, 0.010, 0.013 - 0.003 * abs(t)), "bart", 10))
+    schnurrbart = vereinen(schnurr, "Schnurrbart")
+    schnurrbart.data.materials.append(material("Schnurrbart", (0.22, 0.14, 0.09), 0.9))
 
-
-def hose_farbe(P):
-    gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
-    col = wolle(P, [0.20, 0.17, 0.12], 1.4)                                  # dunkles Leder, fleckig
-    col = mischen(col, GRUEN[None, :], hart(gy, 0.512, 0.004) * (gy > 0.40))   # Saumkante
-    for sx in (1, -1):                                                         # Stickerei vorn
-        for cy, ang, ln in ((0.64, 0.0, 0.050), (0.60, 0.9, 0.032), (0.60, -0.9, 0.032), (0.56, 0.0, 0.026)):
-            u, v = gx - sx * 0.108, gy - cy
-            ca, sa = math.cos(ang), math.sin(ang)
-            uu, vv = u * ca - v * sa, u * sa + v * ca
-            blatt = (np.abs(uu) < 0.016 * np.clip(1 - (vv / ln) ** 2, 0, 1)) & (np.abs(vv) < ln)
-            col = mischen(col, GRUEN_HELL[None, :], (blatt & (gz > 0.02)) * 1.0)
-        mitte = hart(np.abs(gx - sx * 0.108), 0.0035, 0.002) * (gy > 0.52) * (gy < 0.70) * (gz > 0.02)
-        col = mischen(col, CREME[None, :] * 0.8, mitte)
-    return col
-
-
-hose = fertig("Lederhose", [hose_koerper], hose_farbe, 2048, 0.9, True)
-
-# =================================================================== Gürtel (Taille)
-gurt_koerper = schale("Gurt", lambda c: 0.012, [unter(0.835), ueber(0.895)] + breiter_als(0.200))
-gurt_y = hoehe_y(gurt_koerper, 0.0, 0.865)
-plakette = kugel(Vector((0, gurt_y - 0.004, 0.865)), (0.060, 0.014, 0.036), "plakette", 20)
-
-
-def gurt_farbe(P):
-    gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
-    leder = wolle(P, [0.10, 0.14, 0.10], 1.2)
-    r = np.hypot(gx / 0.060, (gy - 0.865) / 0.036)
-    pl = np.tile(np.array([0.12, 0.30, 0.17]), (len(P), 1))
-    pl = mischen(pl, CREME[None, :], hart(np.abs(r - 0.82), 0.12, 0.05))
-    pl = mischen(pl, CREME[None, :], hart(np.abs(gx), 0.006, 0.003) * (r < 0.7))
-    pl = pl * (0.92 + 0.14 * ruis(P, 70.0))[:, None]
-    ist_plakette = (r < 1.03) & (gz > 0.18)
-    return np.where(ist_plakette[:, None], pl, leder)
-
-
-gurt_obj = fertig("Gurt", [gurt_koerper, plakette], gurt_farbe, 1024, 0.8, True)
-
-# =================================================================== Hut (starr am Kopfknochen)
-HUT_UNTEN = 1.498          # Krempe direkt über den Brauen (Brauen sitzen bei 1.428)
-teile = []
-teile.append(kugel(g2b(0, HUT_UNTEN, 0.0), (0.290, 0.268, 0.030), "krempe", 32))
-for i in range(11):
-    t = i / 10
-    teile.append(kugel(g2b(0, HUT_UNTEN + 0.02 + 0.20 * t, 0.0), (0.235 - 0.022 * t, 0.215 - 0.020 * t, 0.032), "krone", 28))
-hut = vereinen(teile, "Hut")
-hut.data.remesh_voxel_size = 0.010
-bpy.context.view_layer.objects.active = hut
-bpy.ops.object.voxel_remesh()
-gl = hut.modifiers.new("Glatt", 'SMOOTH')
-gl.factor = 0.6
-gl.iterations = 6
-bpy.ops.object.modifier_apply(modifier="Glatt")
-dz = hut.modifiers.new("Dez", 'DECIMATE')
-dz.ratio = 0.13
-bpy.ops.object.modifier_apply(modifier="Dez")
-bpy.ops.object.shade_smooth()
-band = kugel(g2b(0, HUT_UNTEN + 0.055, 0.0), (0.240, 0.220, 0.034), "band", 32)
-feder = kugel(Vector((0, 0, 0)), (0.012, 0.045, 0.085), "feder", 14)
-feder.rotation_euler = (math.radians(-18), math.radians(22), math.radians(18))
-feder.location = g2b(0.225, HUT_UNTEN + 0.19, 0.0) + Vector((0, 0.01, 0.0))
-
-
-def hut_farbe(P):
-    col = wolle(P, [0.24, 0.31, 0.19], 1.5)      # Filz
-    return col
-
-
-hut_ob = fertig("Hut", [hut], hut_farbe, 1024, 0.95)
-band.data.materials.append(material("Hutband", (0.07, 0.07, 0.06), 0.8))
-feder.data.materials.append(material("Feder", (0.74, 0.68, 0.55), 0.9))
-for o in (band, feder):
-    o.parent = arm_obj
-    vg = o.vertex_groups.new(name="Head")
-    vg.add([v.index for v in o.data.vertices], 1.0, 'REPLACE')
-    mod = o.modifiers.new("Armature", 'ARMATURE')
-    mod.object = arm_obj
-    kleidung_objekte.append(o)
-# Hut starr am Kopf (statt der übernommenen Körpergewichte)
-for g in list(hut_ob.vertex_groups):
-    hut_ob.vertex_groups.remove(g)
-kg = hut_ob.vertex_groups.new(name="Head")
-kg.add([v.index for v in hut_ob.data.vertices], 1.0, 'REPLACE')
-
+    for o in (gams, schnurrbart):
+        o.parent = arm_obj
+        vg = o.vertex_groups.new(name="Head")
+        vg.add([v.index for v in o.data.vertices], 1.0, 'REPLACE')
+        mod = o.modifiers.new("Armature", 'ARMATURE')
+        mod.object = arm_obj
+        kleidung_objekte.append(o)
 
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
