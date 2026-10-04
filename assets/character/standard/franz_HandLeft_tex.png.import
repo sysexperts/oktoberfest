@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xvm7extuwipn"
-path="res://.godot/imported/seppl_HandLeft_tex.png-4d66e17a1ccba840f120d41e92bcfc3c.ctex"
+uid="uid://dqiabu4hyy7ug"
+path="res://.godot/imported/franz_HandLeft_tex.png-14e49fafead09c4e267a271a4956329b.ctex"
 metadata={
 "vram_texture": false
 }
@@ -13,8 +13,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/character/standard/seppl_HandLeft_tex.png"
-dest_files=["res://.godot/imported/seppl_HandLeft_tex.png-4d66e17a1ccba840f120d41e92bcfc3c.ctex"]
+source_file="res://assets/character/standard/franz_HandLeft_tex.png"
+dest_files=["res://.godot/imported/franz_HandLeft_tex.png-14e49fafead09c4e267a271a4956329b.ctex"]
 
 [params]
 

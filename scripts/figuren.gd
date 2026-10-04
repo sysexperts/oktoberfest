@@ -20,8 +20,8 @@ const ALLE: Array[PackedScene] = [
 	preload("res://scenes/figuren/lisa_blau.tscn"),
 	preload("res://scenes/figuren/lisa_gruen.tscn"),
 	preload("res://scenes/figuren/lisa_lila.tscn"),
-	# Gleicher Körper und gleiches Skelett wie Bean (tools/blender/standardkoerper.py, OUTFIT=seppl)
-	preload("res://scenes/figuren/seppl.tscn"),
+	# Gleicher Körper und gleiches Skelett wie Bean (tools/blender/standardkoerper.py, OUTFIT=franz)
+	preload("res://scenes/figuren/franz.tscn"),
 ]
 ## Figuren, die auf der Bank sitzen. Lisa (charakter3) sitzt mit einer
 ## Sitzkorrektur gegen den Rock (assets/sitz_lisa.tres, scenes/werkzeuge/sitz_haltung.tscn).
@@ -41,7 +41,7 @@ const GAESTE: Array[PackedScene] = [
 	preload("res://scenes/figuren/lisa_blau.tscn"),
 	preload("res://scenes/figuren/lisa_gruen.tscn"),
 	preload("res://scenes/figuren/lisa_lila.tscn"),
-	preload("res://scenes/figuren/seppl.tscn"),
+	preload("res://scenes/figuren/franz.tscn"),
 ]
 ## Stehende Gäste: stehen hinter der Bank am Tisch statt zu sitzen, bestellen,
 ## trinken und tanzen sonst wie alle.

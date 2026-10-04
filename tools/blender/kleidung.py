@@ -722,8 +722,8 @@ if OUTFIT == "bean":
 
 
 
-elif OUTFIT == "seppl":
-    # ================================================================ Seppl: Weste, Leinenhemd, grüne Lederhose, Tirolerhut, Schnurrbart
+elif OUTFIT == "franz":
+    # ================================================================ Franz: Weste, Leinenhemd, grüne Lederhose, Tirolerhut, Schnurrbart
     LODEN = np.array([0.13, 0.22, 0.27])
     LEDER_GRUEN = np.array([0.10, 0.20, 0.12])
     LEINEN = np.array([0.93, 0.91, 0.84])

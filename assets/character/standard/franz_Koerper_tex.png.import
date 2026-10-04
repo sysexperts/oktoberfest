@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbihuo6rxfilp"
-path="res://.godot/imported/seppl_Lederhose_tex.png-643b06bc596911b7840ad28f0f6fd8ed.ctex"
+uid="uid://dia2146lyxydk"
+path="res://.godot/imported/franz_Koerper_tex.png-2fd20e11cbbb099571dd480ef41b2e4e.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "9d149690ade059916d2796a8fdcf4427"
+"md5": "2050e7a80dacdcb6388028315539dc6a"
 }
 
 [deps]
 
-source_file="res://assets/character/standard/seppl_Lederhose_tex.png"
-dest_files=["res://.godot/imported/seppl_Lederhose_tex.png-643b06bc596911b7840ad28f0f6fd8ed.ctex"]
+source_file="res://assets/character/standard/franz_Koerper_tex.png"
+dest_files=["res://.godot/imported/franz_Koerper_tex.png-2fd20e11cbbb099571dd480ef41b2e4e.ctex"]
 
 [params]
 

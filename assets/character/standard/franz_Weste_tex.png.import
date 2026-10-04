@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwwevjt1b4b7v"
-path="res://.godot/imported/seppl_Koerper_tex.png-9f4630a75187d048e177f004ccf47dd3.ctex"
+uid="uid://cik7ntmqvnkfw"
+path="res://.godot/imported/franz_Weste_tex.png-2e78e36ce83c46da7578258d3567c910.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "2050e7a80dacdcb6388028315539dc6a"
+"md5": "d481a74f780bd34088590b4454df8758"
 }
 
 [deps]
 
-source_file="res://assets/character/standard/seppl_Koerper_tex.png"
-dest_files=["res://.godot/imported/seppl_Koerper_tex.png-9f4630a75187d048e177f004ccf47dd3.ctex"]
+source_file="res://assets/character/standard/franz_Weste_tex.png"
+dest_files=["res://.godot/imported/franz_Weste_tex.png-2e78e36ce83c46da7578258d3567c910.ctex"]
 
 [params]
 

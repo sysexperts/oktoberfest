@@ -11,7 +11,7 @@ func _ready() -> void:
 	var we := WorldEnvironment.new(); we.environment = env; add_child(we)
 	var sonne := DirectionalLight3D.new(); sonne.rotation_degrees = Vector3(-35, 30, 0); add_child(sonne)
 	var kam := Camera3D.new(); kam.fov = 25.0; add_child(kam); kam.current = true
-	var f: Figur = (load("res://scenes/figuren/seppl.tscn") as PackedScene).instantiate()
+	var f: Figur = (load("res://scenes/figuren/franz.tscn") as PackedScene).instantiate()
 	add_child(f)
 	await get_tree().process_frame
 	f.stehen()

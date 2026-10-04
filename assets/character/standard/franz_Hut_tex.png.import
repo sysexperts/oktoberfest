@@ -2,19 +2,19 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2pbbltuc2aiw"
-path="res://.godot/imported/seppl_HandRight_tex.png-9cdce984b2e462265d72379451bc2ff1.ctex"
+uid="uid://1lagbec6ycl3"
+path="res://.godot/imported/franz_Hut_tex.png-d4cefe14f07f15b635986f275ce4024b.ctex"
 metadata={
 "vram_texture": false
 }
 generator_parameters={
-"md5": "1371c36551567f62a16ef9d735819d7a"
+"md5": "c2170bd2b4b76860af3bb8cccaaf42f4"
 }
 
 [deps]
 
-source_file="res://assets/character/standard/seppl_HandRight_tex.png"
-dest_files=["res://.godot/imported/seppl_HandRight_tex.png-9cdce984b2e462265d72379451bc2ff1.ctex"]
+source_file="res://assets/character/standard/franz_Hut_tex.png"
+dest_files=["res://.godot/imported/franz_Hut_tex.png-d4cefe14f07f15b635986f275ce4024b.ctex"]
 
 [params]
 

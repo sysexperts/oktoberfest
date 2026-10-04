@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/figur.gd" id="1_figur"]
-[ext_resource type="PackedScene" path="res://assets/character/standard/seppl.glb" id="2_modell"]
+[ext_resource type="PackedScene" path="res://assets/character/standard/franz.glb" id="2_modell"]
 [ext_resource type="AnimationLibrary" path="res://assets/character/standard/standard_animationen.res" id="3_anim"]
 
-[node name="Seppl" type="Node3D"]
+[node name="Franz" type="Node3D"]
 script = ExtResource("1_figur")
 anim_stehen = "geliehen/Idle_12"
 anim_gehen = "geliehen/Walking"

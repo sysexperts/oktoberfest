@@ -17,7 +17,7 @@ gemeinsamen Animationen ohne Umrechnung laufen
 import bpy, bmesh, json, math, os
 from mathutils import Vector
 
-OUTFIT = os.environ.get("OUTFIT", "bean")      # bean | seppl: nur die Kleidung unterscheidet sich
+OUTFIT = os.environ.get("OUTFIT", "bean")      # bean | franz: nur die Kleidung unterscheidet sich
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "build", "blender")
 os.makedirs(OUT, exist_ok=True)

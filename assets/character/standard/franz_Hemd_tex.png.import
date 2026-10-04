@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bijw65q0u3xfw"
-path="res://.godot/imported/seppl_Hemd_tex.png-c1317c2bd6e2589a59e9e95ec6c58ca5.ctex"
+uid="uid://bi3jbuuh6xcgy"
+path="res://.godot/imported/franz_Hemd_tex.png-72ae1798e3f5cf224b05ac0b7e251eac.ctex"
 metadata={
 "vram_texture": false
 }
@@ -13,8 +13,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/character/standard/seppl_Hemd_tex.png"
-dest_files=["res://.godot/imported/seppl_Hemd_tex.png-c1317c2bd6e2589a59e9e95ec6c58ca5.ctex"]
+source_file="res://assets/character/standard/franz_Hemd_tex.png"
+dest_files=["res://.godot/imported/franz_Hemd_tex.png-72ae1798e3f5cf224b05ac0b7e251eac.ctex"]
 
 [params]
 

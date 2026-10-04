@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bc85kp2bl643g"
-path="res://.godot/imported/seppl.glb-57d61cd9141695c6e0518a24a6ca8a56.scn"
+uid="uid://surywtvhk8tm"
+path="res://.godot/imported/franz.glb-26deac7a39ca8e21f27416c348a36a53.scn"
 
 [deps]
 
-source_file="res://assets/character/standard/seppl.glb"
-dest_files=["res://.godot/imported/seppl.glb-57d61cd9141695c6e0518a24a6ca8a56.scn"]
+source_file="res://assets/character/standard/franz.glb"
+dest_files=["res://.godot/imported/franz.glb-26deac7a39ca8e21f27416c348a36a53.scn"]
 
 [params]
 
