@@ -1973,10 +1973,10 @@ elif OUTFIT == "baerte":
         for i in range(28):
             t = i / 27.0
             x = sx * (0.004 + 0.135 * t)
-            h = 1.240 - 0.075 * t ** 0.8
+            h = 1.212 - 0.070 * t ** 0.8
             t_.append(bpunkt(x, h, 0.036 * (1.0 - 0.55 * t ** 1.5) + 0.009, 0.004))
     for i in range(6):
-        t_.append(bpunkt(0.0, 1.235 - 0.004 * i, 0.034))
+        t_.append(bpunkt(0.0, 1.208 - 0.004 * i, 0.034))
     bart_fertig("walross", b_formen("walross", t_, 0.0045, 6, 0.2))
 
     # ---- 3. Fu-Manchu: dünner Schnauzer, der lang und schmal an den Mundwinkeln herabhängt
@@ -2016,11 +2016,11 @@ elif OUTFIT == "baerte":
 
     # ---- 6. Vollbart: Wangen, Kinn und Kiefer, Mund bleibt frei
     t_ = []
-    for h in np.linspace(1.12, 1.30, 7):
+    for h in np.linspace(1.10, 1.205, 6):
         for x in np.linspace(-0.175, 0.175, 11):
             if abs(x) < 0.064 and 1.170 < h < 1.230:
                 continue                                     # Mundbereich frei
-            if (x / 0.200) ** 2 + ((h - 1.215) / 0.100) ** 2 > 1.0:
+            if (x / 0.200) ** 2 + ((h - 1.150) / 0.060) ** 2 > 1.0:
                 continue                                     # Umriss: Ellipse um Wangen und Kinn (runder Kiefer)
             fall = 1.0 - ((abs(x) / 0.20) ** 2) * 0.6
             t_.append(bpunkt(float(x), float(h), 0.034 * fall + 0.014, 0.012))
@@ -2032,7 +2032,7 @@ elif OUTFIT == "baerte":
     # ---- 7. Dreitagebart (Stoppeln): dünne Schicht auf Kinn, Wangen und Oberlippe
     def weg_st(c):
         vorn = -c.y > -0.02
-        return not (vorn and (c.x / 0.206) ** 2 + ((c.z - 1.200) / 0.098) ** 2 < 1.0)
+        return not (vorn and (c.x / 0.206) ** 2 + ((c.z - 1.165) / 0.064) ** 2 < 1.0)
 
     def offen_st(c):
         return abs(c.x) < 0.068 and 1.172 < c.z < 1.228 and -c.y > 0.0
