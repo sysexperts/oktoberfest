@@ -24,8 +24,10 @@ func _ready() -> void:
 	var n := pfade.size()
 	var figuren: Array[Figur] = []
 	for i in n:
-		var f: Figur = (load("res://scenes/figuren/%s.tscn" % ("basis" if ordner == "augen" else "standard")) as PackedScene).instantiate()
+		var f: Figur = (load("res://scenes/figuren/%s.tscn" % ("basis" if ordner in ["augen", "emotionen"] else "standard")) as PackedScene).instantiate()
 		var z: Array[PackedScene] = [load(pfade[i])]
+		if ordner == "emotionen":
+			z.append(Assets.AUGEN[0]["szene"])
 		f.zubehoer = z
 		f.position = Vector3((i - (n - 1) * 0.5) * 0.7, 0, 0)
 		add_child(f)

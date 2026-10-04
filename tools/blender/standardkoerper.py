@@ -240,11 +240,12 @@ for s in (1, -1):
         gesicht += [a, p]
     # Braue: dicker Balken, innen höher (leicht besorgt-freundlich)
     bx, bh = s * 0.105, 1.428
-    br = kugel(Vector((0, 0, 0)), (0.058, 0.022, 0.021), "braue", 16)
-    br.rotation_euler = (0, math.radians(s * 12), 0)
-    br.location = Vector((bx, haut_y(bx, bh) + 0.008, bh))
-    br.data.materials.append(BRAUE)
-    gesicht.append(br)
+    if OUTFIT not in ("basis", "augen", "emotionen"):       # Creator: Brauen und Mund kommen als Emotions-Baustein
+        br = kugel(Vector((0, 0, 0)), (0.058, 0.022, 0.021), "braue", 16)
+        br.rotation_euler = (0, math.radians(s * 12), 0)
+        br.location = Vector((bx, haut_y(bx, bh) + 0.008, bh))
+        br.data.materials.append(BRAUE)
+        gesicht.append(br)
 # Mund: dünner, kaum sichtbarer Strich als flaches Lächeln, auf die Haut gelegt
 mund_teile = []
 for i in range(25):
@@ -253,7 +254,10 @@ for i in range(25):
     mund_teile.append(kugel(Vector((mx, haut_y(mx, mh) + 0.002, mh)), (0.005, 0.004, 0.005), "mundteil", 6))
 mund = vereinen(mund_teile, "mund")
 mund.data.materials.append(MUND)
-gesicht.append(mund)
+if OUTFIT not in ("basis", "augen", "emotionen"):
+    gesicht.append(mund)
+else:
+    bpy.data.objects.remove(mund, do_unlink=True)
 
 # ------------------------------------------------------------------ Armature
 bpy.ops.object.armature_add(enter_editmode=True)
@@ -387,7 +391,7 @@ for o in [koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.data.validate(verbose=False)
     for poly in o.data.polygons:
         poly.use_smooth = True
-if OUTFIT in ("huete", "frisuren", "brillen", "augen"):
+if OUTFIT in ("huete", "frisuren", "brillen", "augen", "emotionen"):
     # Creator-Assets: jeder Hut / jede Frisur einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
     ordner = os.path.join(ROOT, "assets", "creator", os.environ.get("EXPORT_ORDNER", OUTFIT))
     os.makedirs(ordner, exist_ok=True)

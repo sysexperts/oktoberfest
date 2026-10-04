@@ -1804,6 +1804,116 @@ elif OUTFIT == "augen":
         t, pu, li = auge_paar(name, **kw)
         augen_fertig(name, t, pu, li)
 
+elif OUTFIT == "emotionen":
+    # ================================================================ Creator-Assets: Gesichtsausdrücke (Brauen + Mund)
+    # Jeder Ausdruck ist ein Baustein aus zwei Brauen und einem Mund (plus Extras wie Träne). Die Brauen
+    # heißen "*_farbe" (Haarfarbe), alles andere hat Festfarbe.
+    HUETE = {}
+    BRAU = (0.45, 0.39, 0.26)
+
+    def r_dick(bm, pts, r, seg=8, spitz=True):
+        ringe = []
+        n = len(pts)
+        for i, p in enumerate(pts):
+            t = (pts[min(i + 1, n - 1)] - pts[max(i - 1, 0)]).normalized()
+            h = Vector((0, 0, 1)) if abs(t.z) < 0.9 else Vector((1, 0, 0))
+            a = t.cross(h).normalized()
+            b = t.cross(a).normalized()
+            rr = r * ((0.50 + 0.50 * math.sin(i / (n - 1) * math.pi)) if spitz else 1.0)
+            ringe.append([bm.verts.new(p + a * (math.cos(k / seg * math.tau) * rr) + b * (math.sin(k / seg * math.tau) * rr)) for k in range(seg)])
+        for i in range(n - 1):
+            for k in range(seg):
+                bm.faces.new([ringe[i][k], ringe[i][(k + 1) % seg], ringe[i + 1][(k + 1) % seg], ringe[i + 1][k]])
+
+    def glatt_obj(o, mat):
+        for poly in o.data.polygons:
+            poly.use_smooth = True
+        o.data.materials.clear()
+        o.data.materials.append(mat)
+        return o
+
+    def braue(sx, y, tilt, breit=0.058, dick=0.021, x=0.105, krumm=0.0, name="braue"):
+        """Braue auf der Haut: tilt in Grad (positiv: wie die freundliche Ausgangsbraue, innen höher; negativ: wütend)"""
+        k = kugel(Vector((0, 0, 0)), (breit * 1.1, 0.022, dick * 1.15), name, 16)
+        k.rotation_euler = (0, math.radians(sx * tilt * 1.3), 0)
+        bx = sx * x
+        k.location = Vector((bx, haut_y(bx, y) + 0.008, y + krumm))
+        return k
+
+    def mund(breite, kurve, dick=0.0055, schief=0.0, h0=1.195, name="mund"):
+        """Mundlinie: kurve(t) in [-1, 1] gibt die Höhenabweichung in m"""
+        pts = []
+        dick *= 1.8
+        for i in range(25):
+            t = (i - 12) / 12.0
+            mx, mh = t * breite, h0 + 0.012 + kurve(t) * 1.4 + schief * t
+            pts.append(Vector((mx, haut_y(mx, mh) + 0.002 + dick * 0.5, mh)))
+        b = bmesh.new()
+        r_dick(b, pts, dick, 8, True)
+        me = bpy.data.meshes.new(name)
+        b.to_mesh(me)
+        b.free()
+        o = bpy.data.objects.new(name, me)
+        scene.collection.objects.link(o)
+        return o
+
+    MUNDMAT = material("MundDunkel", (0.20, 0.09, 0.07), 0.6)
+    BRAUMAT = material("BraueEmotion", (0.45, 0.39, 0.26), 0.8)
+
+    def ausdruck(name, brauen, mund_obj, extras=()):
+        teile = []
+        for o in brauen:
+            glatt_obj(o, BRAUMAT)
+        # alle Brauen zu einem Teil "<name>_farbe"
+        b = vereinen(brauen, name + "_farbe") if len(brauen) > 1 else brauen[0]
+        b.name = name + "_farbe"
+        teile.append(b)
+        glatt_obj(mund_obj, MUNDMAT)
+        teile.append(mund_obj)
+        for e in extras:
+            teile.append(e)
+        HUETE[name] = teile
+
+    # ---- 1. Freundlich (Ausgangsgesicht)
+    ausdruck("freundlich", [braue(1, 1.428, 12), braue(-1, 1.428, 12)], mund(0.050, lambda t: 0.010 * t * t))
+    # ---- 2. Wütend: Brauen steil nach innen unten, tiefer, Mund hängt
+    ausdruck("wuetend", [braue(1, 1.414, -26, 0.062, 0.025, 0.100), braue(-1, 1.414, -26, 0.062, 0.025, 0.100)],
+             mund(0.050, lambda t: -0.020 * t * t, 0.0065))
+    # ---- 3. Fröhlich: Brauen hoch, breites Lachen
+    ausdruck("froehlich", [braue(1, 1.446, 8), braue(-1, 1.446, 8)], mund(0.078, lambda t: 0.034 * t * t, 0.0085))
+    # ---- 4. Traurig: Brauen innen hoch, Mundwinkel unten, eine Träne
+    tr = kugel(Vector((0, 0, 0)), (0.0105, 0.008, 0.016), "traene", 14)
+    tr.location = Vector((0.108, haut_y(0.108, 1.235) + 0.006, 1.235))
+    tr.data.materials.append(material("Traene", (0.60, 0.82, 0.98), 0.2))
+    for poly in tr.data.polygons:
+        poly.use_smooth = True
+    ausdruck("traurig", [braue(1, 1.426, 26), braue(-1, 1.426, 26)], mund(0.040, lambda t: -0.016 * t * t, 0.0060), [tr])
+    # ---- 5. Überrascht: Brauen sehr hoch, runder offener Mund
+    ring = []
+    for k in range(32):
+        w = k / 32 * math.tau
+        ring.append(Vector((0.020 * math.sin(w), 0, 1.185 + 0.027 * math.cos(w))))
+    ring = [Vector((p.x, haut_y(p.x, p.z) + 0.003, p.z)) for p in ring]
+    b = bmesh.new()
+    r_dick(b, ring + [ring[0]], 0.0065, 8, False)
+    me = bpy.data.meshes.new("o_mund")
+    b.to_mesh(me)
+    b.free()
+    omund = bpy.data.objects.new("o_mund", me)
+    scene.collection.objects.link(omund)
+    innen = kugel(Vector((0.0, haut_y(0.0, 1.185) + 0.0015, 1.185)), (0.0185, 0.003, 0.0255), "mund_innen", 20)
+    glatt_obj(innen, MUNDMAT)
+    ausdruck("ueberrascht", [braue(1, 1.462, 0, 0.056, 0.020), braue(-1, 1.462, 0, 0.056, 0.020)], omund, [innen])
+    # ---- 6. Skeptisch: eine Braue hoch, andere tief, schiefer Mund
+    ausdruck("skeptisch", [braue(1, 1.452, -8, 0.060, 0.021), braue(-1, 1.416, 14, 0.058, 0.023)],
+             mund(0.046, lambda t: 0.0, 0.0055, 0.016))
+    # ---- 7. Genervt: Brauen flach und tief, gerader Mund
+    ausdruck("genervt", [braue(1, 1.412, -4, 0.064, 0.024), braue(-1, 1.412, -4, 0.064, 0.024)],
+             mund(0.042, lambda t: 0.0, 0.0055))
+    # ---- 8. Fies grinsend: Brauen böse, schiefes breites Grinsen
+    ausdruck("grinsend", [braue(1, 1.420, -18, 0.062, 0.024), braue(-1, 1.434, 4, 0.058, 0.021)],
+             mund(0.070, lambda t: 0.016 * max(0.0, t) ** 2 + 0.004 * t * t, 0.0075, 0.010))
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 

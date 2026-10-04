@@ -52,6 +52,19 @@ const AUGEN := [
 	{"id": "zwinkernd", "name": "CREATOR_AUGE_ZWINKERND", "szene": preload("res://scenes/creator/augen/zwinkernd.tscn")},
 ]
 
+## Gesichtsausdrücke (Brauen + Mund, z. B. Wut). Der Basiskörper hat weder Augen noch Brauen noch Mund,
+## alles drei kommt als Baustein. Brauen heißen "*_farbe" (Haarfarbe).
+const EMOTIONEN := [
+	{"id": "freundlich", "name": "CREATOR_EMO_FREUNDLICH", "szene": preload("res://scenes/creator/emotionen/freundlich.tscn")},
+	{"id": "wuetend", "name": "CREATOR_EMO_WUETEND", "szene": preload("res://scenes/creator/emotionen/wuetend.tscn")},
+	{"id": "froehlich", "name": "CREATOR_EMO_FROEHLICH", "szene": preload("res://scenes/creator/emotionen/froehlich.tscn")},
+	{"id": "traurig", "name": "CREATOR_EMO_TRAURIG", "szene": preload("res://scenes/creator/emotionen/traurig.tscn")},
+	{"id": "ueberrascht", "name": "CREATOR_EMO_UEBERRASCHT", "szene": preload("res://scenes/creator/emotionen/ueberrascht.tscn")},
+	{"id": "skeptisch", "name": "CREATOR_EMO_SKEPTISCH", "szene": preload("res://scenes/creator/emotionen/skeptisch.tscn")},
+	{"id": "genervt", "name": "CREATOR_EMO_GENERVT", "szene": preload("res://scenes/creator/emotionen/genervt.tscn")},
+	{"id": "grinsend", "name": "CREATOR_EMO_GRINSEND", "szene": preload("res://scenes/creator/emotionen/grinsend.tscn")},
+]
+
 ## Alle Teile von `wurzel`, deren Name auf "_farbe" endet, in `farbe` färben
 static func faerben(wurzel: Node, farbe: Color) -> void:
 	for n in wurzel.find_children("*_farbe*", "MeshInstance3D", true, false):

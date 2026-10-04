@@ -669,6 +669,14 @@ CREATOR_AUGE_SCHIELEND,Schielend,Cross-eyed,Şaşı
 CREATOR_AUGE_PUNKTE,Punktaugen,Dot eyes,Nokta gözler
 CREATOR_AUGE_PUPILLEN,Große Pupillen,Big pupils,Büyük göz bebekleri
 CREATOR_AUGE_ZWINKERND,Zwinkernd,Winking,Göz kırpan
+CREATOR_EMO_FREUNDLICH,Freundlich,Friendly,Dost canlısı
+CREATOR_EMO_WUETEND,Wütend,Angry,Kızgın
+CREATOR_EMO_FROEHLICH,Fröhlich,Happy,Neşeli
+CREATOR_EMO_TRAURIG,Traurig,Sad,Üzgün
+CREATOR_EMO_UEBERRASCHT,Überrascht,Surprised,Şaşırmış
+CREATOR_EMO_SKEPTISCH,Skeptisch,Skeptical,Şüpheci
+CREATOR_EMO_GENERVT,Genervt,Annoyed,Bıkkın
+CREATOR_EMO_GRINSEND,Fies grinsend,Smirking,Sinsi gülen
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam
