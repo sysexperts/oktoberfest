@@ -860,14 +860,17 @@ elif OUTFIT == "franz":
     gams = vereinen(bart_teile, "Gamsbart")
     gams.data.materials.append(material("Gamsbart", (0.62, 0.55, 0.42), 0.9))
 
-    # Schnurrbart: auf die Haut gelegt, am Kopf befestigt
+    # Bayerischer Schnauzer: breit, hängt über den Mundwinkeln und läuft in hochgezwirbelten Spitzen aus
     schnurr = []
-    for i in range(21):
-        t = (i - 10) / 10.0
-        mx, mh = t * 0.075, 1.232 - 0.016 * abs(t) ** 1.5
-        schnurr.append(kugel(Vector((mx, haut_y(mx, mh) + 0.006, mh)), (0.015, 0.010, 0.013 - 0.003 * abs(t)), "bart", 10))
+    for i in range(41):
+        t = (i - 20) / 20.0
+        a_t = abs(t)
+        mx = t * 0.112
+        mh = 1.232 - 0.026 * math.sin(min(a_t, 0.6) / 0.6 * math.pi * 0.5) + 0.075 * (max(0.0, a_t - 0.6) / 0.4) ** 1.5
+        r = 0.021 * (1.0 - a_t ** 2.2) + 0.007
+        schnurr.append(kugel(Vector((mx, haut_y(mx, mh) + 0.008, mh)), (r, 0.010, r * 0.85), "bart", 10))
     schnurrbart = vereinen(schnurr, "Schnurrbart")
-    schnurrbart.data.materials.append(material("Schnurrbart", (0.22, 0.14, 0.09), 0.9))
+    schnurrbart.data.materials.append(material("Schnurrbart", (0.24, 0.16, 0.10), 0.9))
 
     for o in (gams, schnurrbart):
         o.parent = arm_obj

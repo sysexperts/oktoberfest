@@ -3,22 +3,23 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cik7ntmqvnkfw"
-path="res://.godot/imported/franz_Weste_tex.png-2e78e36ce83c46da7578258d3567c910.ctex"
+path.s3tc="res://.godot/imported/franz_Weste_tex.png-2e78e36ce83c46da7578258d3567c910.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
-"md5": "d481a74f780bd34088590b4454df8758"
+"md5": "3514177ceaf66c0d94f2938fbd7cb801"
 }
 
 [deps]
 
 source_file="res://assets/character/standard/franz_Weste_tex.png"
-dest_files=["res://.godot/imported/franz_Weste_tex.png-2e78e36ce83c46da7578258d3567c910.ctex"]
+dest_files=["res://.godot/imported/franz_Weste_tex.png-2e78e36ce83c46da7578258d3567c910.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
