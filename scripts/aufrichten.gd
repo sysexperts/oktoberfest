@@ -42,6 +42,10 @@ func _process_modification() -> void:
 			var ruhe := sk.get_bone_rest(hb).basis.get_rotation_quaternion()
 			var delta := ruhe.inverse() * sk.get_bone_pose_rotation(hb)
 			sk.set_bone_pose_rotation(hb, ruhe * Quaternion.IDENTITY.slerp(delta, 1.0 - huefte_ruhig))
+			# Seitliches Verschieben des Beckens ebenfalls dämpfen (Querachse der Figur im Skelett-Raum)
+			var quer_h := (sk.global_basis.orthonormalized().inverse() * figur.global_basis.orthonormalized() * Vector3.RIGHT).normalized()
+			var versatz := sk.get_bone_pose_position(hb) - sk.get_bone_rest(hb).origin
+			sk.set_bone_pose_position(hb, sk.get_bone_rest(hb).origin + versatz - quer_h * quer_h.dot(versatz) * huefte_ruhig)
 	if waage > 0.0:
 		_waage(sk, achse)
 	var winkel := {
