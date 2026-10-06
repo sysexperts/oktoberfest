@@ -886,23 +886,23 @@ if you are reading this, the last beer got me. Forty years I poured at the Slopt
 bu mektubu okuyorsanız son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi festival çadırımı size bırakıyorum."
 BRIEF_2_DU,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Konrad pes etmeni bekliyor. Ona bu iyiliği yapma."
 BRIEF_2_IHR,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Konrad pes etmenizi bekliyor. Ona bu iyiliği yapmayın."
-BRIEF_3_DU,"Der Festleiter erwartet dich in seinem Festbüro, ganz im Osten der Kirmes. Such ihn auf, er zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+BRIEF_3_DU,"Festleiter Horst erwartet dich in seinem Festbüro, ganz im Osten der Kirmes. Such ihn auf, er zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat di,
-dein Onkel Sepp","The fair manager is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
+dein Onkel Sepp","Fair manager Horst is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
 
 Cheers and farewell,
-your Uncle Sepp","Fuar müdürü seni fuarın en doğusundaki ofisinde bekliyor. Onu bul, sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
+your Uncle Sepp","Fuar müdürü Horst seni fuarın en doğusundaki ofisinde bekliyor. Onu bul, sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
 
 Şerefe ve hoşça kal,
 Sepp Amcan"
-BRIEF_3_IHR,"Der Festleiter erwartet euch in seinem Festbüro, ganz im Osten der Kirmes. Sucht ihn auf, er zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+BRIEF_3_IHR,"Festleiter Horst erwartet euch in seinem Festbüro, ganz im Osten der Kirmes. Sucht ihn auf, er zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat eich,
-euer Onkel Sepp","The fair manager is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
+euer Onkel Sepp","Fair manager Horst is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
 
 Cheers and farewell,
-your Uncle Sepp","Fuar müdürü sizi fuarın en doğusundaki ofisinde bekliyor. Onu bulun, size her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
+your Uncle Sepp","Fuar müdürü Horst sizi fuarın en doğusundaki ofisinde bekliyor. Onu bulun, size her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
 
 Şerefe ve hoşça kalın,
 Sepp Amcanız"
@@ -914,10 +914,10 @@ CHEF_6_DU,"Und der Konrad vom Nachbarzelt reibt sich schon die Hände …","And 
 CHEF_6_IHR,"Und der Konrad vom Nachbarzelt reibt sich schon die Hände …","And Konrad from the tent next door is already rubbing his hands …","Yan çadırdaki Konrad de şimdiden ellerini ovuşturuyor …"
 CHEF_8_DU,"Du schaffst das. Der Sepp wäre stolz auf dich.","You can do it. Sepp would be proud of you.","Bunu başarırsın. Sepp seninle gurur duyardı."
 CHEF_8_IHR,"Ihr schafft das. Der Sepp wäre stolz auf euch.","You can do it. Sepp would be proud of you.","Bunu başarırsınız. Sepp sizinle gurur duyardı."
-HINT_FESTLEITER,{interact} Mit dem Festleiter reden,{interact} Talk to the fair manager,{interact} Fuar müdürüyle konuş
+HINT_FESTLEITER,{interact} Mit Festleiter Horst reden,{interact} Talk to fair manager Horst,{interact} Fuar müdürü Horst'la konuş
 DIALOG_WEITER,Linksklick / E weiter,Left click / E for next,Devam için sol tık / E
 DIALOG_ENDE,Linksklick / E beenden,Left click / E to finish,Bitirmek için sol tık / E
-FESTLEITER_NAME,Festbetreiber Horst,Fair operator Horst,Fuar işletmecisi Horst
+FESTLEITER_NAME,Festleiter Horst,Fair manager Horst,Fuar müdürü Horst
 CHEF_7_DU,"Unterschreib vorne am roten Schild, dann gehört das Zelt dir. Danach komm zu mir — ich zeig dir, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzala, çadır senin olsun. Sonra yanıma gel — devamını göstereyim."
 CHEF_7_IHR,"Unterschreibt vorne am roten Schild, dann gehört das Zelt euch. Danach kommt zu mir — ich zeig euch, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzalayın, çadır sizin olsun. Sonra yanıma gelin — devamını göstereyim."
 CHEF_BUERO_1_DU,"Das ist mein Festbüro. Hier am Schreibtisch kaufst du alles, was dein Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırının ihtiyacı olan her şeyi bu masadan alırsın."
@@ -962,7 +962,7 @@ ZIEL_SAUBER,Keine einzige Pfütze im Zelt,Not a single puddle in the tent,Çadı
 ZIEL_VERPASST,Höchstens %d Bestellungen verpassen,Miss at most %d orders,En fazla %d siparişi kaçır
 ZIEL_BESCHWERDEN,Keine einzige Beschwerde,Not a single complaint,Tek bir şikayet bile olmasın
 MSG_ZIEL_NEU,Tagesziel: %s,Daily goal: %s,Günlük hedef: %s
-MSG_ZIEL_GESCHAFFT,Tagesziel geschafft! Der Festleiter legt %s drauf,Daily goal reached! The fair manager adds %s,Günlük hedef tamam! Fuar müdürü %s ekliyor
+MSG_ZIEL_GESCHAFFT,Tagesziel geschafft! Festleiter Horst legt %s drauf,Daily goal reached! Fair manager Horst adds %s,Günlük hedef tamam! Fuar müdürü Horst %s ekliyor
 MSG_ZIEL_VERFEHLT,Tagesziel verfehlt — morgen neues Glück,Daily goal missed — better luck tomorrow,Günlük hedef kaçtı — yarın yeni şans
 MSG_BANK_MORGEN,Morgen Abend bucht die Bank %s für Sepps Schulden ab,Tomorrow evening the bank collects %s for Sepp's debts,Yarın akşam banka Sepp'in borçları için %s çekecek
 MSG_BANK_BEZAHLT,Rate von %s bezahlt — noch %s Schulden,Instalment of %s paid — %s debt left,%s taksit ödendi — %s borç kaldı
@@ -984,10 +984,10 @@ MSG_PLEITE_HUBER,Der Konrad vom Nachbarzelt hat's schon gehört — und grinst,K
 CHEF_KREDIT_DU,"Und die Brauerei will noch %s von dir. Der Konrad erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeig's ihm!","And the brewery still wants %s from you. Konrad is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası senden hâlâ %s istiyor. Konrad herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü göster!"
 CHEF_KREDIT_IHR,"Und die Brauerei will noch %s von euch. Der Konrad erzählt schon überall, dass Sepps Zelt bald ihm gehört — zeigt's ihm!","And the brewery still wants %s from you. Konrad is telling everyone that Sepp's tent will soon be his — prove him wrong!","Bira fabrikası sizden hâlâ %s istiyor. Konrad herkese Sepp'in çadırının yakında onun olacağını anlatıyor — ona gününü gösterin!"
 QUEST_1_TITLE,Übernimm Sepps Zelt,Take over Sepp's tent,Sepp'in çadırını devral
-QUEST_1_TEXT,"Folge dem Festleiter zum Festzelt. Am Eingang steht das rote Schild — dort mit {interact} unterschreiben und dem Zelt einen Namen geben (500 € Gebühr, die ersten 5 Tage ohne Miete).","Follow the fair manager to the beer tent. The red board is at the entrance — sign there with {interact} and name the tent (500 € fee, the first 5 days rent-free).","Fuar müdürünü bira çadırına kadar takip et. Girişte kırmızı tabela var — orada {interact} ile imzala ve çadıra bir isim ver (500 € ücret, ilk 5 gün kira yok)."
+QUEST_1_TEXT,"Folge Festleiter Horst zum Festzelt. Am Eingang steht das rote Schild — dort mit {interact} unterschreiben und dem Zelt einen Namen geben (500 € Gebühr, die ersten 5 Tage ohne Miete).","Follow fair manager Horst to the beer tent. The red board is at the entrance — sign there with {interact} and name the tent (500 € fee, the first 5 days rent-free).","Fuar müdürü Horst'u bira çadırına kadar takip et. Girişte kırmızı tabela var — orada {interact} ile imzala ve çadıra bir isim ver (500 € ücret, ilk 5 gün kira yok)."
 QUEST_2_TITLE,Putze das Zelt,Clean the tent,Çadırı temizle
-QUEST_0_TITLE,Sprich mit dem Festleiter,Talk to the fair manager,Fuar müdürüyle konuş
-QUEST_0_TEXT,"Der Festleiter wartet vor seinem Festbüro im Osten der Kirmes. Hör dir an, was er zu Sepps Zelt sagt.","The fair manager is waiting outside his fair office in the east of the fair. Hear what he has to say about Sepp's tent.","Fuar müdürü fuarın doğusundaki ofisinin önünde bekliyor. Sepp'in çadırı hakkında ne dediğini dinle."
+QUEST_0_TITLE,Sprich mit Festleiter Horst,Talk to fair manager Horst,Fuar müdürü Horst'la konuş
+QUEST_0_TEXT,"Festleiter Horst wartet vor seinem Festbüro im Osten der Kirmes. Hör dir an, was er zu Sepps Zelt sagt.","Fair manager Horst is waiting outside his fair office in the east of the fair. Hear what he has to say about Sepp's tent.","Fuar müdürü Horst fuarın doğusundaki ofisinin önünde bekliyor. Sepp'in çadırı hakkında ne dediğini dinle."
 CHEF_1_DU,"Na so was — du musst Sepps Patenkind sein! Er hat mir so viel von dir erzählt. Mein Beileid.","Well I never — you must be Sepp's godchild! He told me so much about you. My condolences.","Vay — sen Sepp'in vaftiz çocuğu olmalısın! Bana senden çok bahsetti. Başın sağ olsun."
 CHEF_1_IHR,"Na so was — ihr müsst Sepps Erben sein! Er hat mir so viel von euch erzählt. Mein Beileid.","Well I never — you must be Sepp's heirs! He told me so much about you. My condolences.","Vay — siz Sepp'in varisleri olmalısınız! Bana sizden çok bahsetti. Başınız sağ olsun."
 CHEF_2_DU,"Ich muss ehrlich sein: Sepps Zelt stand ein ganzes Jahr leer und ist völlig verdreckt. Und die Bank will noch %s von seinen Schulden.","I have to be honest: Sepp's tent stood empty for a whole year and is filthy. And the bank still wants %s of his debts.","Dürüst olmalıyım: Sepp'in çadırı koca bir yıl boş kaldı ve berbat halde. Banka da onun borçlarından hâlâ %s istiyor."
@@ -1000,8 +1000,8 @@ CHEF_BRIEF_A_DU,"»Mein liebes Patenkind, wenn du das hörst, hat mich die letzt
 CHEF_BRIEF_A_IHR,"»Mein liebes Patenkind — und ihr Spinner, die es sicher mitbringt: Wenn ihr das hört, hat mich die letzte Maß erwischt. Vierzig Jahre hab ich auf dem Sloptoberfest ausgeschenkt — und jetzt vermache ich euch mein Festzelt.«","»My dear godchild — and whatever lunatics you are bringing along: if you are hearing this, the last beer got me. Forty years I poured at the Sloptoberfest — and now I leave my beer tent to you all.«","»Sevgili vaftiz çocuğum — ve yanında getirdiğin o deliler: bunu duyuyorsanız son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi çadırımı size bırakıyorum.«"
 CHEF_BRIEF_B_DU,"»Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.«","»I will be honest: the tent is dusty, and a few debts are attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.«","»Dürüst olayım: Çadır tozlu, üstünde birkaç borç da var. Yan çadırdaki Konrad pes etmeni bekliyor. Ona bu iyiliği yapma.«"
 CHEF_BRIEF_B_IHR,"»Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.«","»I will be honest: the tent is dusty, and a few debts are attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.«","»Dürüst olayım: Çadır tozlu, üstünde birkaç borç da var. Yan çadırdaki Konrad pes etmenizi bekliyor. Ona bu iyiliği yapmayın.«"
-CHEF_BRIEF_C_DU,"»Der Festleiter, mein alter Freund, zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht. Prost und pfiat di, dein Onkel Sepp.«","»The fair manager, my old friend, will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes. Cheers and farewell, your Uncle Sepp.«","»Eski dostum fuar müdürü sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez. Şerefe ve hoşça kal, Sepp Amcan.«"
-CHEF_BRIEF_C_IHR,"»Der Festleiter, mein alter Freund, zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht. Prost und pfiat eich, euer Onkel Sepp.«","»The fair manager, my old friend, will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes. Cheers and farewell, your Uncle Sepp.«","»Eski dostum fuar müdürü size her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez. Şerefe ve hoşça kalın, Sepp Amcanız.«"
+CHEF_BRIEF_C_DU,"»Festleiter Horst, mein alter Freund, zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht. Prost und pfiat di, dein Onkel Sepp.«","»Fair manager Horst, my old friend, will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes. Cheers and farewell, your Uncle Sepp.«","»Eski dostum fuar müdürü Horst sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez. Şerefe ve hoşça kal, Sepp Amcan.«"
+CHEF_BRIEF_C_IHR,"»Festleiter Horst, mein alter Freund, zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht. Prost und pfiat eich, euer Onkel Sepp.«","»Fair manager Horst, my old friend, will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes. Cheers and farewell, your Uncle Sepp.«","»Eski dostum fuar müdürü Horst size her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez. Şerefe ve hoşça kalın, Sepp Amcanız.«"
 CHEF_FRAGE_DU,Also — übernimmst du Sepps Zelt?,So — will you take over Sepp's tent?,Peki — Sepp'in çadırını devralır mısın?
 CHEF_FRAGE_IHR,Also — übernehmt ihr Sepps Zelt?,So — will you take over Sepp's tent?,Peki — Sepp'in çadırını devralır mısınız?
 CHEF_WAHL_JA_DU,"Ja, ich mach's!","Yes, I will do it!","Evet, yaparım!"
@@ -1111,8 +1111,8 @@ HUBER_NACH_SIEG_DU,"Jaja, schon gut. Nächstes Jahr krieg ich dich. Prost.","Yea
 HUBER_NACH_SIEG_IHR,"Jaja, schon gut. Nächstes Jahr krieg ich euch. Prost.","Yeah, yeah, fine. Next year I'll get you. Cheers.","Tamam tamam. Seneye sizi yakalayacağım. Şerefe."
 BRIEF_ENDE_TITEL,Ein letzter Brief von Onkel Sepp,One last letter from Uncle Sepp,Sepp Amca'dan son bir mektup
 BRIEF_SCHLIESSEN,Linksklick: schließen,Left click: close,Sol tık: kapat
-BRIEF_ENDE_1_DU,"Der Festleiter hat mir versprochen, dir das hier erst zu geben, wenn du den Konrad geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Konrad. If you are reading this: I always knew it.","Fuar müdürü bunu sana ancak Konrad'ı yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
-BRIEF_ENDE_1_IHR,"Der Festleiter hat mir versprochen, euch das hier erst zu geben, wenn ihr den Konrad geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","The fair manager promised me to give you this only once you had beaten Konrad. If you are reading this: I always knew it.","Fuar müdürü bunu size ancak Konrad'ı yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
+BRIEF_ENDE_1_DU,"Festleiter Horst hat mir versprochen, dir das hier erst zu geben, wenn du den Konrad geschlagen hast. Wenn du das liest: Ich hab's immer gewusst.","Fair manager Horst promised me to give you this only once you had beaten Konrad. If you are reading this: I always knew it.","Fuar müdürü Horst bunu sana ancak Konrad'ı yendiğinde vereceğine söz verdi. Bunu okuyorsan: Hep biliyordum."
+BRIEF_ENDE_1_IHR,"Festleiter Horst hat mir versprochen, euch das hier erst zu geben, wenn ihr den Konrad geschlagen habt. Wenn ihr das lest: Ich hab's immer gewusst.","Fair manager Horst promised me to give you this only once you had beaten Konrad. If you are reading this: I always knew it.","Fuar müdürü Horst bunu size ancak Konrad'ı yendiğinizde vereceğine söz verdi. Bunu okuyorsanız: Hep biliyordum."
 BRIEF_ENDE_2_DU,"Das Zelt gehört jetzt wirklich dir. Mach's besser als ich, und vergiss nie: Eine kalte Maß und ein freundliches Wort — mehr braucht's nicht.
 
 Prost, mein Patenkind.
@@ -1140,7 +1140,7 @@ ZEITUNG_ZAHLEN,"Heute: %d Gäste bedient · %s Umsatz · Beliebtheit %d %%","Tod
 ZEITUNG_LEER,Gähnende Leere im Zelt „%s“,Deathly quiet at „%s“,%s'da derin sessizlik
 ZEITUNG_LEER_UNTER,Kein einziger Gast bedient — die Blaskapelle spielte für die Tauben.,Not a single guest served — the brass band played for the pigeons.,Tek bir misafire bile servis yapılmadı — bando güvercinlere çaldı.
 ZEITUNG_BESCHWERDEN,Beschwerdeflut im Zelt „%s“!,Flood of complaints at „%s“!,%s'da şikayet yağmuru!
-ZEITUNG_BESCHWERDEN_UNTER,"%d Gäste beschwerten sich — der Festleiter runzelt die Stirn.","%d guests complained — the fair manager is frowning.","%d misafir şikayet etti — fuar müdürü kaşlarını çattı."
+ZEITUNG_BESCHWERDEN_UNTER,"%d Gäste beschwerten sich — Festleiter Horst runzelt die Stirn.","%d guests complained — fair manager Horst is frowning.","%d misafir şikayet etti — fuar müdürü Horst kaşlarını çattı."
 ZEITUNG_PFUETZEN,Pfützen-Alarm im Zelt „%s“,Puddle alert at „%s“,%s'da birikinti alarmı
 ZEITUNG_PFUETZEN_UNTER,"%d Pfützen in einer Schicht. Leser fragen: Gibt es dort überhaupt ein Klo?","%d puddles in one shift. Readers ask: is there even a toilet?","Bir vardiyada %d birikinti. Okurlar soruyor: orada tuvalet var mı?"
 ZEITUNG_GEGANGEN,%d Gäste gehen durstig heim,%d guests go home thirsty,%d misafir susuz eve gitti
@@ -1158,7 +1158,7 @@ ZEITUNG_M_BANK,Bank erinnert: Rate fällig am Abend von Tag %d (%s).,Bank remind
 ZEITUNG_M_KLO,Leserbrief: „Warum hat das Festzelt kein Klo?“,Letter to the editor: “Why doesn't the tent have a toilet?”,Okur mektubu: “Çadırda neden tuvalet yok?”
 ZEITUNG_M_KELLNER,Gäste klagen über lange Wartezeiten — fehlt es an Kellnern?,Guests complain about long waits — not enough waiters?,Misafirler uzun beklemeden şikayetçi — garson mu eksik?
 ZEITUNG_M_HUBER_1,Konrad-Zelt kündigt „die kälteste Maß des Fests“ an.,The Konrad-Zelt promises “the coldest stein of the fair”.,Konrad-Zelt “fuarın en soğuk birası” sözü veriyor.
-ZEITUNG_M_HUBER_2,Alois Konrad im Interview: „Sepps Zelt? Das hält keine Woche.“,Alois Konrad in an interview: “Sepp's tent? Won't last a week.”,Alois Konrad röportajda: “Sepp'in çadırı mı? Bir hafta dayanmaz.”
+ZEITUNG_M_HUBER_2,Konrad im Interview: „Sepps Zelt? Das hält keine Woche.“,Konrad in an interview: “Sepp's tent? Won't last a week.”,Konrad röportajda: “Sepp'in çadırı mı? Bir hafta dayanmaz.”
 ZEITUNG_M_HUBER_3,Gerücht: Konrad soll nachts um fremde Zelte schleichen.,Rumour: Konrad is said to sneak around other tents at night.,Söylenti: Konrad'ın geceleri başka çadırların etrafında dolaştığı söyleniyor.
 ZEITUNG_M_HUBER_4,Konrad verlost Freibier — aber nur für Stammgäste.,Konrad raffles free beer — regulars only.,Konrad bedava bira çekilişi yapıyor — sadece müdavimlere.
 ACTION_KALENDER,Kalender,Calendar,Takvim
@@ -1195,7 +1195,7 @@ DECO_TEPPICH_INFO,Roter Teppich mit Rautenmuster.,Red rug with diamond pattern.,
 DECO_WARTEBANK,Holzbank,Wooden bench,Ahşap bank
 DECO_WARTEBANK_INFO,Bank mit Lehne zum Verschnaufen.,Bench with backrest for a breather.,Soluklanmak için arkalıklı bank.
 DECO_GARDEROBE,Garderobe,Coat stand,Portmanto
-DECO_GARDEROBE_INFO,Mit Hut und Janker — wie beim Festleiter.,With hat and jacket — just like the fair manager's.,Şapka ve ceketle — fuar müdürününki gibi.
+DECO_GARDEROBE_INFO,Mit Hut und Janker — wie bei Festleiter Horst.,With hat and jacket — just like fair manager Horst's.,Şapka ve ceketle — fuar müdürü Horst'unki gibi.
 DECO_KAFFEEECKE,Kaffeeecke,Coffee corner,Kahve köşesi
 DECO_KAFFEEECKE_INFO,Anrichte mit Kaffeemaschine und Tassen.,Sideboard with coffee machine and cups.,Kahve makinesi ve fincanlarla büfe.
 TEAM_TITEL,Dein Team (%d),Your team (%d),Ekibin (%d)
@@ -1223,25 +1223,25 @@ MSG_SABOTEUR_DA,Da schleicht jemand Fremdes ins Zelt … ob das einer vom Konrad
 MSG_SABOTEUR_ERWISCHT,Saboteur erwischt! Konrad ist blamiert — die Gäste spendieren %s,Saboteur caught! Konrad is embarrassed — the guests chip in %s,Sabotajcı yakalandı! Konrad rezil oldu — misafirler %s bahşiş veriyor
 HINT_SABOTEUR,{interact} Erwischt! Saboteur rauswerfen,{interact} Gotcha! Throw the saboteur out,{interact} Yakaladım! Sabotajcıyı dışarı at
 STAMM_NAME_ALOIS,Opa Alois,Grandpa Alois,Alois Dede
-STAMM_NAME_VRONI,Vroni vom Trachtenverein,Vroni from the costume club,Kıyafet kulübünden Vroni
-STAMM_NAME_KATHI,Kathi (Influencerin),Kathi (influencer),Kathi (fenomen)
+STAMM_NAME_VERONIKA,Veronika vom Trachtenverein,Veronika from the costume club,Kıyafet kulübünden Veronika
+STAMM_NAME_KATHARINA,Katharina (Influencerin),Katharina (influencer),Katharina (fenomen)
 STAMM_NAME_FRANZ,Franz der Metzger,Franz the butcher,Kasap Franz
 STAMM_NAME_GIULIA,Giulia aus Verona,Giulia from Verona,Veronalı Giulia
-STAMM_NAME_WIGGERL,"Wiggerl, Sepps alter Spezl","Wiggerl, Sepp's old pal","Wiggerl, Sepp'in eski kankası"
+STAMM_NAME_LUDWIG,"Ludwig, Sepps alter Freund","Ludwig, Sepp's old friend","Ludwig, Sepp'in eski dostu"
 MSG_STAMM_ALOIS_DA,Opa Alois ist da — wie jedes Jahr will er sein Helles. Schnell sein!,Grandpa Alois is here — like every year he wants his Helles. Be quick!,Alois Dede geldi — her yıl olduğu gibi Helles'ini istiyor. Çabuk ol!
-MSG_STAMM_VRONI_DA,Vroni vom Trachtenverein schaut vorbei — sie entscheidet, wo der Verein feiert.,Vroni from the costume club drops by — she decides where the club celebrates.,Kıyafet kulübünden Vroni uğradı — kulübün nerede kutlayacağına o karar veriyor.
-MSG_STAMM_KATHI_DA,Influencerin Kathi ist im Zelt! Wenn's ihr gefällt, postet sie euch.,Influencer Kathi is in the tent! If she likes it she'll post about you.,Fenomen Kathi çadırda! Beğenirse sizi paylaşacak.
+MSG_STAMM_VERONIKA_DA,Veronika vom Trachtenverein schaut vorbei — sie entscheidet, wo der Verein feiert.,Veronika from the costume club drops by — she decides where the club celebrates.,Kıyafet kulübünden Veronika uğradı — kulübün nerede kutlayacağına o karar veriyor.
+MSG_STAMM_KATHARINA_DA,Influencerin Katharina ist im Zelt! Wenn's ihr gefällt, postet sie euch.,Influencer Katharina is in the tent! If she likes it she'll post about you.,Fenomen Katharina çadırda! Beğenirse sizi paylaşacak.
 MSG_STAMM_FRANZ_DA,Franz der Metzger ist da — er testet, ob euer Essen was taugt.,Franz the butcher is here — he'll test whether your food is any good.,Kasap Franz geldi — yemeğinizin iyi olup olmadığını test edecek.
 MSG_STAMM_GIULIA_DA,Giulia aus Verona ist wieder da — sie liebt Radler.,Giulia from Verona is back — she loves Radler.,Veronalı Giulia yine geldi — Radler'e bayılıyor.
-MSG_STAMM_WIGGERL_DA,"Wiggerl, Sepps alter Spezl, sitzt am Stammtisch. Er kannte Sepp 40 Jahre.","Wiggerl, Sepp's old pal, is at the regulars' table. He knew Sepp for 40 years.","Sepp'in eski kankası Wiggerl müdavim masasında. Sepp'i 40 yıl tanıdı."
+MSG_STAMM_LUDWIG_DA,"Ludwig, Sepps alter Freund, sitzt am Stammtisch. Er kannte Sepp 40 Jahre.","Ludwig, Sepp's old friend, is at the regulars' table. He knew Sepp for 40 years.","Sepp'in eski dostu Ludwig müdavim masasında. Sepp'i 40 yıl tanıdı."
 MSG_STAMM_ZUFRIEDEN,%s ist zufrieden (%d/%d),%s is happy (%d/%d),%s memnun (%d/%d)
 MSG_STAMM_VERAERGERT,%s musste zu lange warten — und ist verärgert.,%s had to wait too long — and is annoyed.,%s çok uzun bekledi — ve kızgın.
 MSG_STAMM_BELOHNUNG_ALOIS,Opa Alois erzählt überall von eurem Zelt — die Alten kommen jetzt alle (+Beliebtheit).,Grandpa Alois tells everyone about your tent — the old folks all come now (+popularity).,Alois Dede çadırınızı herkese anlatıyor — yaşlılar artık hep geliyor (+popülerlik).
-MSG_STAMM_BELOHNUNG_VRONI,Der Trachtenverein feiert ab jetzt bei euch! Vroni zahlt die Vereinskasse ein (+250 € und Beliebtheit).,The costume club celebrates with you from now on! Vroni pays in the club funds (+250 € and popularity).,Kıyafet kulübü artık sizde kutluyor! Vroni kulüp kasasını ödüyor (+250 € ve popülerlik).
-MSG_STAMM_BELOHNUNG_KATHI,Kathis Video geht viral: „Das beste Zelt des Fests!“ (+viel Beliebtheit),Kathi's video goes viral: “Best tent at the fair!” (+lots of popularity),Kathi'nin videosu viral oldu: “Fuarın en iyi çadırı!” (+çok popülerlik)
+MSG_STAMM_BELOHNUNG_VERONIKA,Der Trachtenverein feiert ab jetzt bei euch! Veronika zahlt die Vereinskasse ein (+250 € und Beliebtheit).,The costume club celebrates with you from now on! Veronika pays in the club funds (+250 € and popularity).,Kıyafet kulübü artık sizde kutluyor! Veronika kulüp kasasını ödüyor (+250 € ve popülerlik).
+MSG_STAMM_BELOHNUNG_KATHARINA,Katharinas Video geht viral: „Das beste Zelt des Fests!“ (+viel Beliebtheit),Katharina's video goes viral: “Best tent at the fair!” (+lots of popularity),Katharina'nın videosu viral oldu: “Fuarın en iyi çadırı!” (+çok popülerlik)
 MSG_STAMM_BELOHNUNG_FRANZ,Franz ist überzeugt und liefert euch 20 Portionen Zutaten gratis.,Franz is convinced and delivers 20 portions of ingredients for free.,Franz ikna oldu ve size 20 porsiyon malzemeyi bedava getiriyor.
 MSG_STAMM_BELOHNUNG_GIULIA,Giulia bringt eine ganze Reisegruppe mit — Trinkgeld 400 €!,Giulia brings a whole tour group — 400 € in tips!,Giulia bütün bir tur grubunu getiriyor — 400 € bahşiş!
-MSG_STAMM_BELOHNUNG_WIGGERL,"Wiggerl: „Der Sepp wär stolz auf euch.“ Er legt 300 € auf den Tresen — „die hat er mir mal geliehen.“","Wiggerl: “Sepp would be proud of you.” He puts 300 € on the bar — “he lent me that once.”","Wiggerl: “Sepp sizinle gurur duyardı.” Tezgaha 300 € bırakıyor — “bunu bir zamanlar bana ödünç vermişti.”"
+MSG_STAMM_BELOHNUNG_LUDWIG,"Ludwig: „Der Sepp wär stolz auf euch.“ Er legt 300 € auf den Tresen — „die hat er mir mal geliehen.“","Ludwig: “Sepp would be proud of you.” He puts 300 € on the bar — “he lent me that once.”","Ludwig: “Sepp sizinle gurur duyardı.” Tezgaha 300 € bırakıyor — “bunu bir zamanlar bana ödünç vermişti.”"
 COMP_STEP,10 %,10 %,%10
 COMP_ROW_BIER,"Helles, Weizen, Radler:","Helles, wheat beer, shandy:","Helles, buğday birası, radler:"
 COMP_ROW_SNACK,"Brezn, Würstl:","Pretzel, sausage:","Brezel, sosis:"
@@ -1311,7 +1311,7 @@ SPIELERLISTE_ICH,DU,YOU,SEN
 ZEITUNG_BILD_1,"Prost! Die Maß des Tages, gezeichnet vom Festkurier-Zeichner.","Cheers! The tankard of the day, drawn by our staff artist.","Şerefe! Günün bardağı, gazetemizin ressamından."
 ZEITUNG_BILD_2,Schaum bis zum Rand: So muss eine Maß aussehen.,Foam to the brim: this is how a stein should look.,Köpük ağzına kadar: bir bira bardağı böyle olmalı.
 ZEITUNG_BILD_3,"Kühl, golden, gerecht eingeschenkt — Sinnbild eines guten Festes.","Cool, golden, fairly poured — the symbol of a good fair.","Serin, altın, adilce dolduruldu — iyi bir şenliğin simgesi."
-ZEITUNG_ANZEIGE_1,ANZEIGE|Frische Brezn!|Täglich knusprig beim Festleiter. Nur solange der Vorrat reicht.,ADVERT|Fresh pretzels!|Crispy every day at the fair manager's. While stocks last.,İLAN|Taze simit!|Her gün fuar müdüründe çıtır çıtır. Stoklarla sınırlı.
+ZEITUNG_ANZEIGE_1,ANZEIGE|Frische Brezn!|Täglich knusprig bei Festleiter Horst. Nur solange der Vorrat reicht.,ADVERT|Fresh pretzels!|Crispy every day at fair manager Horst's. While stocks last.,İLAN|Taze simit!|Her gün fuar müdürü Horst'ta çıtır çıtır. Stoklarla sınırlı.
 ZEITUNG_ANZEIGE_2,"ANZEIGE|Suche Aushilfe|Kellner gesucht, flinke Hände, wenig Durst. Bewerbung im Festbüro.","ADVERT|Help wanted|Waiter sought, quick hands, little thirst. Apply at the fair office.","İLAN|Eleman aranıyor|Garson aranıyor, çevik eller, az susuzluk. Başvuru fuar ofisine."
 ZEITUNG_ANZEIGE_3,ANZEIGE|Verloren: Zapfhahn|Goldener Zapfhahn nahe der Blaskapelle verloren. Finder erhält eine Maß.,ADVERT|Lost: tap|Golden tap lost near the brass band. Finder gets a stein.,İLAN|Kayıp: musluk|Bando yakınında altın musluk kayboldu. Bulana bir bira.
 ZEITUNG_NUMMER,Nr. %d · Wiesn-Blatt,No. %d · Fair Gazette,No. %d · Şenlik Gazetesi

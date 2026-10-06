@@ -24,10 +24,9 @@ const TEMPO := 1.7
 @export var figur_nr := 2
 @export var rundgang: NodePath = ^"../Rundgang"
 ## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
-## Der Festleiter begrüßt, liest dann Sepps Brief selbst vor (er hat ihn für den Erben
-## aufbewahrt) und stellt die Frage — alles ein Gespräch, kein eigener Brief-Bildschirm.
-@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_BRIEF_EIN", "CHEF_BRIEF_A", "CHEF_BRIEF_B", "CHEF_BRIEF_C",
-	"CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
+## Festleiter Horst begrüßt und stellt die Frage. Sepps Brief wird nur noch einmal gezeigt (Brief-Fenster,
+## scripts/ui/kino.gd) — Horst liest ihn nicht mehr vor (Doppelbrief entfernt, v320).
+@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
 ## Onkel Sepps Brief, vor der ersten Frage. Texte wie oben mit _DU / _IHR.
 @export var zeilen_brief: Array[String] = []

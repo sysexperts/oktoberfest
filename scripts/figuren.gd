@@ -219,7 +219,7 @@ static func einsetzen_npc(besitzer: Node3D, id: int, salz := 0) -> Figur:
 
 
 ## Benannte Stammgäste (GameManager.STAMMGAESTE): feste Figur je Name, Geschlecht passend zum Namen
-const STAMM_GESCHLECHT := {"alois": "m", "vroni": "w", "kathi": "w", "franz": "m", "giulia": "w", "wiggerl": "m"}
+const STAMM_GESCHLECHT := {"alois": "m", "veronika": "w", "katharina": "w", "franz": "m", "giulia": "w", "ludwig": "m"}
 
 static func einsetzen_stamm(besitzer: Node3D, name: String) -> Figur:
 	var l := npc_look(hash(name), 7, str(STAMM_GESCHLECHT.get(name, "")))
@@ -240,7 +240,7 @@ static func einsetzen_look(besitzer: Node3D, roh: Dictionary) -> Figur:
 	Look.faerben(f, l)
 	return f
 
-## Alois Huber, der Bösewicht: Zylinder, Monokel, gezwirbelter Bart, finsterer Blick, weinroter Janker
+## Konrad, der Bösewicht: Zylinder, Monokel, gezwirbelter Bart, finsterer Blick, weinroter Janker
 static func look_huber() -> Dictionary:
 	var l := Look.standard("m")
 	l["haut"] = Look.HAUTFARBEN[1].to_html(false)

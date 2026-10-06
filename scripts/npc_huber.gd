@@ -1,5 +1,5 @@
 extends Node3D
-## Alois Huber, Wirt vom Nachbarzelt und Rivale. Steht vor seinem roten Zelt
+## Konrad, Wirt vom Nachbarzelt und Rivale. Steht vor seinem roten Zelt
 ## (scenes/huber_zelt.tscn). Ansprechen mit E öffnet das Gespräch unten im Bild
 ## (scripts/ui/dialog.gd). Was er sagt, hängt vom Stand ab:
 ##   Tage 1–4 Spott, 5–10 Stichelei (er sabotiert heimlich), ab 11 kündigt er das

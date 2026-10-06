@@ -408,9 +408,6 @@ const KOMBO_MAX := 10
 ## Finale am letzten Festtag: voller Andrang, Star-Act spielt gratis
 const FINALE_ANDRANG := 1.3
 ## Nächstes Fest wird anspruchsvoller (Spaß-Plan 4.2) — je Fest nach der ersten:
-const SAISON_MIETE := 0.2       # +20 % Miete
-const SAISON_GEDULD := 0.06     # −6 % Geduld (nie unter 70 %)
-const SAISON_ANDRANG := 0.1     # +10 % Gäste
 ## Gästetypen (Spaß-Plan 3.2): "" normal, stamm, tourist, tracht, vip — Gewichte
 const GAST_TYPEN := {"": 55, "stamm": 15, "tourist": 15, "tracht": 10, "vip": 5}
 const TYP_GEDULD := {"stamm": 1.5, "tourist": 0.7, "vip": 0.8}
@@ -1255,16 +1252,14 @@ func _apply_daylight(clock: float) -> void:
 	ALTSTADT_MAT.set_shader_parameter("nacht", t)
 ## Geduld je Bestellung — sinkt mit dem Spieltag (Wirtschaft.geduld).
 func _geduld() -> float:
-	var g := Wirtschaft.geduld(ORDER_PATIENCE, _stufen_tag()) * float(GEDULD_FAKTOR[_schwierigkeit]) \
-		* maxf(0.7, 1.0 - SAISON_GEDULD * float(_saison_nr - 1))
+	var g := Wirtschaft.geduld(ORDER_PATIENCE, _stufen_tag()) * float(GEDULD_FAKTOR[_schwierigkeit])
 	if _ereignis == "familie":
 		g *= 1.2   # Familien warten geduldiger
 	g *= 1.0 + gemuetlichkeit()   # gemütliches Zelt: man wartet lieber
 	return g * 0.85 if _ereignis == "bus" else g
 
 func _daily_rent() -> int:
-	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _stufen_tag())) * float(MIETE_FAKTOR[_schwierigkeit])
-		* (1.0 + SAISON_MIETE * float(_saison_nr - 1)))
+	return roundi(float(Wirtschaft.miete(int(TENT_RENT.get(_tent_stage, 0)), _stufen_tag())) * float(MIETE_FAKTOR[_schwierigkeit]))
 
 ## E2.4: satılabilir içecek tipleri — lisansa bağlı (1 Helles hep açık).
 func _drinks_avail() -> Array:
@@ -4647,7 +4642,6 @@ func _shift_process(delta: float) -> void:
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
 		andrang *= _ereignis_andrang()
 		andrang *= float(ANDRANG_FAKTOR[_schwierigkeit])
-		andrang *= 1.0 + SAISON_ANDRANG * float(_saison_nr - 1)   # jedes Fest voller
 		# Koop: mit mehr Spielern kommen mehr Gäste, sonst ist es zu leicht
 		andrang *= 1.0 + KOOP_ANDRANG_JE_SPIELER * float(maxi(1, _players_nodes.size()) - 1)
 		var target := mini(_seats.size(), int(round(andrang * float(_seats.size()) * _time_factor() * draw)))
@@ -5371,7 +5365,7 @@ func _spawn_guest() -> void:
 		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
 		"drinks": 0, "puke_t": 0.0, "puked": false
 	}
-	# Benannter Stammgast (Opa Alois, Vroni …) — einer pro Tag, nach dem Tutorial
+	# Benannter Stammgast (Opa Alois, Veronika …) — einer pro Tag, nach dem Tutorial
 	var stamm := _stammgast_waehlen()
 	if stamm != "":
 		_guest_sim[id].typ = "stamm"
@@ -6625,7 +6619,7 @@ func _net_duell_ergebnis(gewonnen: bool, gesamt: float, huber_zeit: float, versc
 ## Die Tagesereignisse einer Saison stehen im Voraus fest (Kalender, Taste K,
 ## scenes/ui/kalender.tscn): feste Sondertage plus zufällige Ereignisse ab Tag 3.
 ## Geplant zu Saisonbeginn, gespeichert und an alle geschickt (Büro-Zustand „plan").
-const SONDERTAGE := {1: "anstich", 5: "tracht", 8: "familie", 10: "italiener", 11: "italiener", 16: "finale"}
+const SONDERTAGE := {1: "anstich", 5: "tracht", 8: "familie", 10: "italiener", 11: "italiener"}
 var _plan: Array = []
 
 ## Plan für die laufende Saison anlegen, falls noch keiner da ist
@@ -6858,7 +6852,7 @@ func _net_saboteur_weg() -> void:
 ## Jeder hat einen Wunsch (Alois: Helles, Franz: Hendl, Giulia: Radler …). Dreimal
 ## zufrieden bedient → Belohnung auf seine Art, verpasst → zählt zurück.
 ## Stand im Spielstand ("stamm"), Anzeige im Festkurier und über dem Kopf.
-const STAMMGAESTE := ["alois", "vroni", "kathi", "franz", "giulia", "wiggerl"]
+const STAMMGAESTE := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig"]
 const STAMM_ZIEL := 3
 const STAMM_CHANCE := 0.03   # je neuem Gast, bis heute einer da war
 var _stamm := {}             # key -> {"gut": n, "belohnt": bool}
@@ -6875,7 +6869,7 @@ func _stammgast_waehlen() -> String:
 
 func _stamm_wunsch(g: Dictionary) -> void:
 	match str(g.get("stamm", "")):
-		"alois", "wiggerl":
+		"alois", "ludwig":
 			g.okind = 1
 			g.otype = 1
 		"giulia":
@@ -6916,17 +6910,17 @@ func _stamm_belohnung(k: String) -> void:
 	match k:
 		"alois":
 			_pop_erhoehen(6.0)
-		"vroni":
+		"veronika":
 			_pop_erhoehen(4.0)
 			_add_income(250)
-		"kathi":
+		"katharina":
 			_pop_erhoehen(10.0)
 		"franz":
 			_stock[WARE_ESSEN] = int(_stock[WARE_ESSEN]) + 20
 			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 		"giulia":
 			_add_income(400)
-		"wiggerl":
+		"ludwig":
 			_add_income(300)
 			_pop_erhoehen(3.0)
 	_melde("MSG_STAMM_BELOHNUNG_" + k.to_upper(), [], 2)

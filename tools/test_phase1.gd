@@ -1424,7 +1424,7 @@ class Lauf extends Node:
 			gm._staff_wage(2, 1, "schnell") > gm._staff_wage(2, 1) and gm._staff_wage(2, 1, "schluckspecht") < gm._staff_wage(2, 1)
 			and gm._staff_wage(2, 1, "quatsch") == gm._staff_wage(2, 1), "")
 		_check("Flink läuft schneller", gm._staff_tempo({"eig": "schnell"}) > gm._staff_tempo({}), "")
-		_check("Fest 3: mehr Miete, weniger Geduld", miete_w3 >= miete_w1 and geduld_w3 < geduld_w1,
+		_check("Keine Saison-Steigerung mehr: Miete und Geduld gleich (v320)", miete_w3 == miete_w1 and absf(geduld_w3 - geduld_w1) < 0.01,
 			"Miete %d → %d, Geduld %.1f → %.1f" % [miete_w1, miete_w3, geduld_w1, geduld_w3])
 		gm._phase = gm.Phase.INTERMISSION
 

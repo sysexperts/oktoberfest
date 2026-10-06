@@ -20,7 +20,7 @@ func _ready() -> void:
 		reihe.append(h)
 	Figuren.einsetzen_look(reihe[0], Figuren.look_huber())
 	Figuren.einsetzen_look(reihe[1], Figuren.look_festleiter())
-	var namen := ["alois", "vroni", "kathi", "franz", "giulia", "wiggerl"]
+	var namen := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig"]
 	for i in 6:
 		Figuren.einsetzen_stamm(reihe[2 + i], namen[i])
 	for h in reihe:

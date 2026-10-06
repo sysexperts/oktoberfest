@@ -11,7 +11,7 @@ const BEER_COLORS := {1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: C
 const FOOD_NAMES := {1: "Brezn", 2: "Würstl", 3: "Hendl"}
 ## Gästetyp vom Server ("" normal, stamm, tourist, tracht, vip) — Symbol in der Blase
 var typ := ""
-## Name eines Stammgasts ("alois", "vroni" …) — steht immer über dem Kopf
+## Name eines Stammgasts ("alois", "veronika" …) — steht immer über dem Kopf
 var stamm := ""
 const TYP_SYMBOL := {"stamm": "🏠 ", "tourist": "🎒 ", "tracht": "🪶 ", "vip": "⭐ "}
 const FOOD_COLORS := {1: Color(0.72, 0.45, 0.15), 2: Color(0.8, 0.3, 0.2), 3: Color(0.9, 0.6, 0.25)}
