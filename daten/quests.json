@@ -467,8 +467,7 @@
   "titel": "Q_N-2-3_TITLE",
   "text": "Q_N-2-3_TEXT",
   "ausloeser": {
-   "kapitel": 2,
-   "mail": "M2-12"
+   "flag": "nur_per_hand"
   },
   "bedingung": {
    "flag": "kontrolle_bestanden"

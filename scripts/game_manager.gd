@@ -6856,6 +6856,8 @@ func _story_morgen() -> void:
 		_story.post_senden("M2-11")
 	elif morgen == "kontrolle":
 		_story.post_senden("M2-12")
+		if not _story.quests.has("N-2-3"):
+			_story._folge({"quest_starten": "N-2-3"})   # Hygienekontrolle als Nebenquest (ohne Angebot)
 	if _krank_sid < 0 and not _staff_sim.is_empty() and randf() < KRANK_CHANCE:
 		var ids := _staff_sim.keys()
 		_krank_sid = int(ids.pick_random())
