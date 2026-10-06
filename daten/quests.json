@@ -407,5 +407,75 @@
   "gefallen": {
    "art": "dieb"
   }
+ },
+ {
+  "id": "G-3",
+  "typ": "gefallen",
+  "kapitel": 2,
+  "titel": "Q_G-3_TITLE",
+  "text": "Q_G-3_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.3
+   },
+   "mail": "M-G3"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-3"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 250
+  },
+  "gefallen": {
+   "art": "sau"
+  }
+ },
+ {
+  "id": "G-4",
+  "typ": "gefallen",
+  "kapitel": 2,
+  "titel": "Q_G-4_TITLE",
+  "text": "Q_G-4_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G4"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-4"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "spion"
+  }
+ },
+ {
+  "id": "N-2-3",
+  "typ": "neben",
+  "kapitel": 2,
+  "titel": "Q_N-2-3_TITLE",
+  "text": "Q_N-2-3_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "mail": "M2-12"
+  },
+  "bedingung": {
+   "flag": "kontrolle_bestanden"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 150
+  }
  }
 ]

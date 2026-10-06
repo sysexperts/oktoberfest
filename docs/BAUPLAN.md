@@ -3,6 +3,22 @@
 Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober Aufwandsschätzung. **Gebaut wird erst auf dein Kommando.**
 **Aufwand** in „Sitzungen" (eine Sitzung = ein zusammenhängender Arbeitsblock mit mir): **S** = 0,5 · **M** = 1 · **L** = 3 · **XL** = 5 · **XXL** = 8. Das sind Schätzungen, die sich beim Bauen verschieben. Summe unten.
 
+## Fortschritt (laufend gepflegt)
+
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v332.
+
+| Phase | Stand | Version |
+|---|---|---|
+| P0 Vorbereitung | ✔ fertig | v320 |
+| P1 Kern-Systeme | ✔ fertig | v321 |
+| P2 Computer-Desktop | ✔ fertig (Apps, Laptop mit begehbarem Wohnwagen) | v322 bis v324 |
+| P3 Kapitel 1 | ✔ fertig (spielbar bis zum ersten Feierabend) | v325 |
+| P4 Kapitel 2 | ✔ fertig bis auf die Nebenquest „Happy Hour" | v329 bis v332 |
+| P5 Gefallen und Security | ◐ System plus vier Gefallen (Spanner, Taschendieb, Sau, Konrads Spion) und vier Security-Posten fertig; 5 weitere Gefallen, Security als Personal offen | v330 bis v332 |
+| P6 bis P11 | ☐ offen | |
+
+---
+
 ## Grundsätze
 - **Vorhandenes wiederverwenden:** Der Rundgang (Tutorial), das Festbüro-Menü, die Zeitung, der Kalender, der Braukeller, das Packen und Tragen von Raufbolden, die tote Konrad-Handlung (Wette, Saboteur, Duell, v269 abgeschaltet), der Charakter-Creator, die Einrichtung.
 - **`game_manager.gd` hat fast 7000 Zeilen.** Neue Systeme kommen in eigene Skripte (Kapitel, Quests, Post, Sabotage, Casino, Fest), der GameManager ruft sie nur auf.
@@ -37,10 +53,10 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Wo | Aufwand |
 |---|---|---|
-| Namen angleichen: **Konrad**, **Festleiter Horst** (in EN/TR übersetzen), Stammgäste **Ludwig, Veronika, Katharina** | `locale/texte.csv`, `game_manager.gd` (STAMMGAESTE), Zeitung | S |
-| Saison und Finale vollständig ausbauen (toter Code, Taste K, Abschlussbrief am Saisonende, Saison-Meilensteine) | `wirtschaft.gd`, `kalender.gd`, `game_manager.gd` | S |
-| Datenformat für Quests und Mails festlegen (CSV oder JSON, mit Schlüsseln der Übersetzungstabelle) | neu `daten/` | S |
-| Tutorial-Doppelbrief beheben (Vorarbeit für Kapitel 1) | `intro.gd`, `npc_festleiter.gd` | S |
+| ✔ Namen angleichen: **Konrad**, **Festleiter Horst** (in EN/TR übersetzen), Stammgäste **Ludwig, Veronika, Katharina** | `locale/texte.csv`, `game_manager.gd` (STAMMGAESTE), Zeitung | S |
+| ✔ Saison und Finale vollständig ausbauen (toter Code, Taste K, Abschlussbrief am Saisonende, Saison-Meilensteine) | `wirtschaft.gd`, `kalender.gd`, `game_manager.gd` | S |
+| ✔ Datenformat für Quests und Mails festlegen (CSV oder JSON, mit Schlüsseln der Übersetzungstabelle) | neu `daten/` | S |
+| ✔ Tutorial-Doppelbrief beheben (Vorarbeit für Kapitel 1) | `intro.gd`, `npc_festleiter.gd` | S |
 
 **Test:** Spiel startet, Tutorial läuft wie vorher, keine Saison-Meldung mehr.
 
@@ -48,11 +64,11 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | System | Beschreibung | Aufwand |
 |---|---|---|
-| **Kapitel-Fortschritt** | Kapitelnummer und Story-Ziele im Spielstand, Server hält ihn, Clients bekommen Updates | M |
-| **Quest-System** | Quest-Daten laden, Zustände (offen, erfüllt, verfallen), Auslöser, Bedingungen messen (z. B. „1 Kellner eingestellt"), Fristen in Spieltagen, Belohnungen, Limit (1 Haupt + 3 andere) | L |
-| **Post-System** | Postfach pro Spielstand (gemeinsam im Koop), Absender, Betreff, Text, Antworten mit Folgen, gelesen/ungelesen | M |
-| **Hinweis-im-Moment** | Einmalige Hinweise beim ersten Auftreten, gemerkt im Spielstand | S |
-| **Kapitelwechsel-Logik** | Abschlussmeldung, Mail am selben Abend, Freischaltungen | S |
+| ✔ **Kapitel-Fortschritt** | Kapitelnummer und Story-Ziele im Spielstand, Server hält ihn, Clients bekommen Updates | M |
+| ✔ **Quest-System** | Quest-Daten laden, Zustände (offen, erfüllt, verfallen), Auslöser, Bedingungen messen (z. B. „1 Kellner eingestellt"), Fristen in Spieltagen, Belohnungen, Limit (1 Haupt + 3 andere) | L |
+| ✔ **Post-System** | Postfach pro Spielstand (gemeinsam im Koop), Absender, Betreff, Text, Antworten mit Folgen, gelesen/ungelesen | M |
+| ✔ **Hinweis-im-Moment** | Einmalige Hinweise beim ersten Auftreten, gemerkt im Spielstand | S |
+| ✔ **Kapitelwechsel-Logik** | Abschlussmeldung, Mail am selben Abend, Freischaltungen | S |
 
 **Test:** `tools/test_quests` (Quest erfüllen, verfallen, Reihenfolge), `tools/test_post`.
 
@@ -60,15 +76,15 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Teil | Aufwand |
 |---|---|
-| **Übergangs-Animation** am Büro-Computer (E drücken, Kamera fährt zum Bildschirm) | M |
-| **Desktop-Shell:** Symbole, Fenster, Schließen, Freischalten je Kapitel | M |
-| **E-Mail-App** (Posteingang, Absender, Lesen, Antworten) | M |
-| **Shop** (aus dem Festbüro-Menü: Zelt, Tische, Ware, Lizenzen, Künstler, Einrichtung) | M |
-| **Quests-App** (aktive, Meilensteine, später Meister-Liste) | S |
-| **Bank, Personal, Bilanz, Bierpreis** (aus Festbüro und Zeltcomputer) | M |
-| **Kalender-App** (aus `kalender.gd`) | S |
-| **Wetter und Amt**, **Social Media** (mittelwichtig) | M |
-| **Laptop im Wohnwagen** (derselbe Desktop) | S |
+| ✔ **Übergangs-Animation** am Büro-Computer (E drücken, Kamera fährt zum Bildschirm) | M |
+| ✔ **Desktop-Shell:** Symbole, Fenster, Schließen, Freischalten je Kapitel | M |
+| ✔ **E-Mail-App** (Posteingang, Absender, Lesen, Antworten) | M |
+| ✔ **Shop** (aus dem Festbüro-Menü: Zelt, Tische, Ware, Lizenzen, Künstler, Einrichtung) | M |
+| ✔ **Quests-App** (aktive, Meilensteine, später Meister-Liste) | S |
+| ✔ **Bank, Personal, Bilanz, Bierpreis** (aus Festbüro und Zeltcomputer) | M |
+| ✔ **Kalender-App** (aus `kalender.gd`) | S |
+| ✔ **Wetter und Amt**, **Social Media** (mittelwichtig) | M |
+| ✔ **Laptop im Wohnwagen** (derselbe Desktop) | S |
 
 **Wiederverwendung:** `festbuero.gd` (467 Zeilen), `zeltcomputer.gd`, `kalender.gd`, `zeitung.gd`.
 **Test:** Desktop öffnen/schließen im Koop, Kamera ohne Fehler, Shop kauft wie vorher.
@@ -77,11 +93,11 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| Kurzszene am Kirmestor und Titel | M |
-| Brief (einmal), Horst-Dialoge neu, Frage Ja/Nein | M |
-| Tutorial auf die Quests 1.0 bis 1.9 umstellen, Computer-Einführung | M |
-| Mails M1-01 bis M1-03 und Kapitelabschluss | S |
-| Texte DE/EN/TR für Kapitel 1 | S |
+| ✔ Kurzszene am Kirmestor und Titel | M |
+| ✔ Brief (einmal), Horst-Dialoge neu, Frage Ja/Nein | M |
+| ✔ Tutorial auf die Quests 1.0 bis 1.9 umstellen, Computer-Einführung | M |
+| ✔ Mails M1-01 bis M1-03 und Kapitelabschluss | S |
+| ✔ Texte DE/EN/TR für Kapitel 1 | S |
 
 **Danach:** Ein Spieler kann vom Start bis zum ersten Feierabend spielen. Hier entscheidet sich, ob sich das neue Spiel richtig anfühlt.
 
@@ -89,23 +105,23 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| Quests 2.1 bis 2.6 mit Mails und Freischaltungen | M |
-| Nebenquest-Generator (zufällig per Mail, Fristen) | M |
-| Krankmeldungen und Lohnwünsche als Mails mit Antworten | S |
-| Bank-Abzahlung selbst (Bank-App, Rate, Schulden-Stand) | S |
-| Konrads Mails, Wetter-/Amt-Mails | S |
-| Texte DE/EN/TR | S |
+| ✔ Quests 2.1 bis 2.6 mit Mails und Freischaltungen | M |
+| ◐ Nebenquest-Generator (zufällig per Mail, Fristen) — 4 von 5 Nebenquests (Happy Hour fehlt) | M |
+| ✔ Krankmeldungen und Lohnwünsche als Mails mit Antworten | S |
+| ✔ Bank-Abzahlung selbst (Bank-App, Rate, Schulden-Stand) | S |
+| ✔ Konrads Mails, Wetter-/Amt-Mails | S |
+| ✔ Texte DE/EN/TR | S |
 
 ## P5 · Gefallen, Security, Kirmes (XL)
 
 | Aufgabe | Aufwand |
 |---|---|
-| **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) | M |
-| **Täter-Figuren** (Spanner, Taschendieb, Betrunkener, Raufbolde, Fälscher, Dieb) über den Creator | M |
-| **Packen, Tragen, Übergeben** an Security (vorhandene Raufbold-Mechanik erweitern) | M |
-| **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |
-| Gefallen-Quests umsetzen (Sau, Brand, Sturm, Reporter, Lieferung usw.) | XL |
-| **Neue Modelle:** Sau (Tier), Eimer, Feuer-Effekt, Planen | M |
+| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 4 von 16 | M |
+| ◐ **Täter-Figuren** (Spanner, Taschendieb, Betrunkener, Raufbolde, Fälscher, Dieb) über den Creator | M |
+| ✔ **Packen, Tragen, Übergeben** an Security (vorhandene Raufbold-Mechanik erweitern) | M |
+| ◐ **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |
+| ◐ Gefallen-Quests umsetzen (Sau, Brand, Sturm, Reporter, Lieferung usw.) | XL |
+| ◐ **Neue Modelle:** Sau (Tier), Eimer, Feuer-Effekt, Planen | M |
 
 ## P6 · Kapitel 3: Konrad, Sabotage, Casino (XXL)
 

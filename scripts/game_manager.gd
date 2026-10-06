@@ -1980,6 +1980,11 @@ func story_folge(f: Dictionary) -> void:
 		(_staff_sim[_krank_sid] as Dictionary)["energie"] = KRANK_ENERGIE
 	if f.has("lohn_faktor_tag"):
 		_lohn_faktor_tag = float(f["lohn_faktor_tag"])
+	if f.has("lohn_erhoehen") and _lohn_sid >= 0:
+		net_personal_lohn(_lohn_sid)
+	if f.has("lohn_nein"):
+		pass
+	_lohn_sid = -1
 	_krank_sid = -1
 	_broadcast_meta()
 
@@ -5001,6 +5006,7 @@ func _update_ereignis(delta: float) -> void:
 				else:
 					_popularity = minf(100.0, _popularity + KONTROLLE_BONUS)
 					_melde("MSG_KONTROLLE_OK", [int(KONTROLLE_BONUS)], 2)
+					_story.ereignis("kontrolle_bestanden")
 		"prosit":
 			if _clock_hour() < GUEST_START_HOUR:
 				return
@@ -6834,6 +6840,7 @@ func _personal_name() -> String:
 const KRANK_ENERGIE := 0.25
 const KRANK_CHANCE := 0.2
 var _krank_sid := -1
+var _lohn_sid := -1
 var _lohn_faktor_tag := 1.0
 var _weizen_heute := 0
 
@@ -6843,6 +6850,12 @@ func _story_morgen() -> void:
 	if _story.kapitel == 2 and _day >= 4 and not _story.flags.has("konrad_m206"):
 		_story.flags["konrad_m206"] = true
 		_story.post_senden("M2-06")
+	# Wetterdienst und Amt kündigen für morgen an (Plan aus dem Kalender)
+	var morgen := plan_fuer(_day + 1)
+	if morgen == "regen":
+		_story.post_senden("M2-11")
+	elif morgen == "kontrolle":
+		_story.post_senden("M2-12")
 	if _krank_sid < 0 and not _staff_sim.is_empty() and randf() < KRANK_CHANCE:
 		var ids := _staff_sim.keys()
 		_krank_sid = int(ids.pick_random())
@@ -6874,6 +6887,9 @@ func _personal_morgen() -> void:
 		if _day - int(s.get("seit", _day)) >= LOHN_WUNSCH_AB and randf() < LOHN_WUNSCH_CHANCE 				and _lohn_plus(sid, LOHN_PLUS) > 0:
 			s.anliegen = "lohn"
 			s.seit_wunsch = _day
+			if _story.aktiv and _story.kapitel >= 2 and _lohn_sid < 0:
+				_lohn_sid = sid
+				_story.post_senden("M2-09")
 			_melde("MSG_PERSONAL_LOHNWUNSCH", [str(s.get("name", "")), _eur(_lohn_plus(sid, LOHN_PLUS))], 0)
 	for sid in weg:
 		_personal_weg(sid)

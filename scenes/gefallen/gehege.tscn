@@ -1,0 +1,133 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gefallen_gehege.gd" id="1_g"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="3_wt"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="2_holz"]
+
+[sub_resource type="BoxMesh" id="Rail"]
+size = Vector3(3.2, 0.08, 0.07)
+
+[sub_resource type="BoxMesh" id="RailKurz"]
+size = Vector3(1.0, 0.08, 0.07)
+
+[sub_resource type="BoxMesh" id="Pfosten"]
+size = Vector3(0.1, 1.0, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Stroh"]
+albedo_color = Color(0.88, 0.74, 0.35, 1)
+
+[sub_resource type="BoxMesh" id="Heu"]
+size = Vector3(2.8, 0.1, 2.8)
+
+[node name="Gehege" type="Node3D"]
+script = ExtResource("1_g")
+
+[node name="Hinten0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 0, 0.4, -1.6)
+mesh = SubResource("Rail")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Links0" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, -1.6, 0.4, 0)
+mesh = SubResource("Rail")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Rechts0" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 1.6, 0.4, 0)
+mesh = SubResource("Rail")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="VorneL0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, -1.1, 0.4, 1.6)
+mesh = SubResource("RailKurz")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="VorneR0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 1.1, 0.4, 1.6)
+mesh = SubResource("RailKurz")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Hinten1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 0, 0.8, -1.6)
+mesh = SubResource("Rail")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Links1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, -1.6, 0.8, 0)
+mesh = SubResource("Rail")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Rechts1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 1.6, 0.8, 0)
+mesh = SubResource("Rail")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="VorneL1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, -1.1, 0.8, 1.6)
+mesh = SubResource("RailKurz")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="VorneR1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 1.1, 0.8, 1.6)
+mesh = SubResource("RailKurz")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, -1.6, 0.5, -1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 1.6, 0.5, -1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, -1.6, 0.5, 1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 1.6, 0.5, 1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, -0.6, 0.5, 1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 0.6, 0.5, 1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten6" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 0, 0.5, -1.6)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten7" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, -1.6, 0.5, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Pfosten8" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 1.6, 0.5, 0)
+mesh = SubResource("Pfosten")
+surface_material_override/0 = ExtResource("2_holz")
+
+[node name="Heu" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0000, 0, -0.0000, 0, 1, 0, 0.0000, 0, 1.0000, 0, 0.05, 0)
+mesh = SubResource("Heu")
+surface_material_override/0 = SubResource("Stroh")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 0)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+modulate = Color(1, 0.9, 0.6, 1)
+text = "WORLD_GEHEGE"
+script = ExtResource("3_wt")
+schluessel = "WORLD_GEHEGE"

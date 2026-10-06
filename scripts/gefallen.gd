@@ -8,6 +8,7 @@ extends Node
 
 const TAETER := preload("res://scenes/gefallen/taeter.tscn")
 const POSTEN := preload("res://scenes/gefallen/security_posten.tscn")
+const GEHEGE := preload("res://scenes/gefallen/gehege.tscn")
 ## So viele feste Security-Posten stehen verteilt über die Kirmes
 const POSTEN_ANZAHL := 4
 ## So weit vor der Bude steht der Täter oder Posten (Kundenseite)
@@ -19,6 +20,8 @@ var _orte: Array[Vector3] = []
 var _posten_index: Array[int] = []
 var _posten: Array[Node3D] = []
 var _taeter: Node3D = null
+var _gehege: Node3D = null
+var _art := ""
 ## Server: laufender Gefallen {id, phase, traeger}; leer = keiner
 var _lauf := {}
 ## Alle Rechner: Phase und Träger für die Darstellung
@@ -88,16 +91,21 @@ func _starten(id: String) -> void:
 	var art := str((Daten.quest(id).get("gefallen", {}) as Dictionary).get("art", "spanner"))
 	_lauf = {"id": id, "phase": "suchen", "traeger": -1, "art": art}
 	var start := Vector3.ZERO
-	if art == "dieb" and _gm._crowd != null:
+	var ort: int = frei.pick_random()
+	var ort2 := -1
+	if art == "sau":
+		frei.erase(ort)
+		ort2 = frei.pick_random() if not frei.is_empty() else ort
+	if art != "spanner" and _gm._crowd != null:
 		_dieb_knoten = _gm._crowd.weg_start()
 		start = _gm._crowd.punkt(_dieb_knoten)
 		_dieb_pos = start
 		_dieb_richtung = Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
 		_hetze = 0.0
-	net_start.rpc(id, art, frei.pick_random(), start)
+	net_start.rpc(id, art, ort, start, ort2)
 
 @rpc("authority", "reliable", "call_local")
-func net_start(_id: String, art: String, ort: int, start: Vector3) -> void:
+func net_start(_id: String, art: String, ort: int, start: Vector3, ort2: int) -> void:
 	_taeter_weg()
 	if _orte.is_empty():
 		_orte_sammeln()
@@ -108,7 +116,12 @@ func net_start(_id: String, art: String, ort: int, start: Vector3) -> void:
 	_taeter = TAETER.instantiate() as Node3D
 	_taeter.set("art", art)
 	get_tree().current_scene.add_child(_taeter)
-	_taeter.global_position = start if art == "dieb" else _orte[ort]
+	_art = art
+	_taeter.global_position = start if art != "spanner" else _orte[ort]
+	if art == "sau" and ort2 >= 0 and ort2 < _orte.size():
+		_gehege = GEHEGE.instantiate() as Node3D
+		get_tree().current_scene.add_child(_gehege)
+		_gehege.global_position = _orte[ort2]
 
 @rpc("any_peer", "reliable", "call_local")
 func net_packen() -> void:
@@ -159,6 +172,9 @@ func net_ende() -> void:
 	_taeter_weg()
 
 func _taeter_weg() -> void:
+	if _gehege != null and is_instance_valid(_gehege):
+		_gehege.queue_free()
+	_gehege = null
 	if _taeter != null and is_instance_valid(_taeter):
 		_taeter.queue_free()
 	_taeter = null
@@ -166,11 +182,8 @@ func _taeter_weg() -> void:
 # ------------------------------------------------------------------ Dieb (Server)
 ## Der Dieb läuft die Wege der Menge entlang (scripts/crowd.gd). Kommt ein Spieler nah, rennt er vom Spieler weg,
 ## wird aber nach einer Weile müde (so lange rennt er, danach japst er) — mit Sprint ist er einzuholen.
-const DIEB_GEHEN := 1.6
-const DIEB_RENNEN := 5.0
-const DIEB_MUEDE := 2.6
-const DIEB_AUSDAUER := 7.0
-const DIEB_ALARM := 14.0
+## Tempo je Art: [gehen, rennen, müde, Ausdauer in s, Alarmabstand]
+const TEMPO := {"dieb": [1.6, 5.0, 2.6, 7.0, 14.0], "sau": [1.4, 5.6, 2.2, 6.0, 12.0], "spion": [1.8, 5.2, 2.4, 5.5, 18.0]}
 var _dieb_knoten := -1
 var _dieb_pos := Vector3.ZERO
 var _dieb_richtung := Vector3.FORWARD
@@ -192,15 +205,16 @@ func _dieb_schritt(delta: float) -> void:
 	var cr: Node = _gm._crowd
 	if cr == null or _dieb_knoten < 0:
 		return
+	var tp: Array = TEMPO[str(_lauf.get("art", "dieb"))]
 	var sp_pos := _naechster_spieler(_dieb_pos)
-	var nah := sp_pos.is_finite() and _dieb_pos.distance_to(sp_pos) < DIEB_ALARM
+	var nah := sp_pos.is_finite() and _dieb_pos.distance_to(sp_pos) < float(tp[4])
 	if nah:
 		_hetze += delta
 	else:
 		_hetze = maxf(0.0, _hetze - delta * 0.7)
-	var tempo := DIEB_GEHEN
+	var tempo := float(tp[0])
 	if nah:
-		tempo = DIEB_RENNEN if _hetze < DIEB_AUSDAUER else DIEB_MUEDE
+		tempo = float(tp[1]) if _hetze < float(tp[3]) else float(tp[2])
 	var ziel: Vector3 = cr.punkt(_dieb_knoten)
 	var zu := ziel - _dieb_pos
 	zu.y = 0.0
@@ -232,21 +246,28 @@ func net_dieb(pos: Vector3, yaw: float, tempo: float) -> void:
 # ------------------------------------------------------------------ Darstellung
 ## Wird getragen, hängt der Täter über der Schulter des Trägers
 func _process(delta: float) -> void:
-	if multiplayer.is_server() and not _lauf.is_empty() and str(_lauf.get("art", "")) == "dieb" and str(_lauf.phase) == "suchen":
+	if multiplayer.is_server() and not _lauf.is_empty() and str(_lauf.get("art", "")) in ["dieb", "sau", "spion"] and str(_lauf.phase) == "suchen":
 		_dieb_schritt(delta)
 	if _phase != "getragen" or _taeter == null or not is_instance_valid(_taeter):
 		return
 	var sp := _gm._players_nodes.get(_traeger) as Node3D if "_players_nodes" in _gm else null
 	if sp == null or not is_instance_valid(sp):
 		return
-	_taeter.global_position = sp.global_position + Vector3(0, 1.05, 0) - sp.global_transform.basis.z * 0.15
-	_taeter.rotation = Vector3(deg_to_rad(-80.0), sp.rotation.y, 0.0)
+	if _art == "sau":
+		# Die Sau hängt vor dem Bauch
+		_taeter.global_position = sp.global_position + Vector3(0, 0.55, 0) - sp.global_transform.basis.z * 0.45
+		_taeter.rotation = Vector3(0.0, sp.rotation.y, 0.0)
+	else:
+		_taeter.global_position = sp.global_position + Vector3(0, 1.05, 0) - sp.global_transform.basis.z * 0.15
+		_taeter.rotation = Vector3(deg_to_rad(-80.0), sp.rotation.y, 0.0)
 	_taeter.remove_from_group("interactable")
 
 ## Für den Zielpfeil (scripts/ui/zielmarker.gd): wohin gerade?
 func ziel_fuer(spieler: Node3D) -> Node3D:
 	if _phase == "suchen" and _taeter != null and is_instance_valid(_taeter):
 		return _taeter
+	if _phase == "getragen" and bool(spieler.get("traegt_taeter")) and _art == "sau":
+		return _gehege
 	if _phase == "getragen" and bool(spieler.get("traegt_taeter")):
 		var bester: Node3D = null
 		var d := INF

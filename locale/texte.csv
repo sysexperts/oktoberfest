@@ -1770,3 +1770,77 @@ fuarda biri insanların ceplerinden cüzdan çalıyor. Kalabalığa karışıyor
 Horst"
 MAIL_G2_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_G2_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_G-3_TITLE,Die Sau ist los,The pig is loose,Domuz kaçtı
+Q_G-3_TEXT,"Eine Sau vom Sauerennen ist ausgebüxt und rennt über die Kirmes. Fang sie ein (mit E, sie ist schnell, aber sie wird müde) und trag sie zum Gehege zurück.","A pig from the pig race has escaped and is running across the fair. Catch her (E, she is fast but gets tired) and carry her back to the pen.","Domuz yarışından bir domuz kaçtı ve fuarda koşuyor. Onu yakala (E, hızlı ama yorulur) ve ağıla geri taşı."
+MAIL_G3_BETREFF,Notfall am Sauerennen,Emergency at the pig race,Domuz yarışında acil durum
+MAIL_G3_TEXT,"Servus,
+
+eine Sau ist ausgebüxt! Der Besitzer ist verzweifelt. Fang sie ein und bring sie zurück ins Gehege. Aber pass auf, die ist schneller, als sie aussieht. Wenn sie ein paar Runden gerannt ist, wird sie müde.
+Ich leg dir 250 € drauf.
+
+Horst","Hi,
+
+a pig has escaped! The owner is desperate. Catch her and bring her back to the pen. But watch out, she is faster than she looks. After a few laps she gets tired.
+I will add €250.
+
+Horst","Selam,
+
+bir domuz kaçtı! Sahibi çaresiz. Onu yakala ve ağıla geri getir. Ama dikkat et, göründüğünden hızlı. Birkaç tur koşunca yorulur.
+Üstüne 250 € koyarım.
+
+Horst"
+MAIL_G3_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G3_A2,Heute nicht.,Not today.,Bugün olmaz.
+HINT_SAU_PACKEN,{interact} Sau einfangen,{interact} Catch the pig,{interact} Domuzu yakala
+HINT_GEHEGE_ABSETZEN,{interact} Sau ins Gehege setzen,{interact} Put the pig in the pen,{interact} Domuzu ağıla koy
+HINT_GEHEGE,Gehege,Pen,Ağıl
+WORLD_GEHEGE,"Gehege der Sau
+({interact}: Sau absetzen)","Pig pen
+({interact}: put the pig down)","Domuz ağılı
+({interact}: domuzu bırak)"
+Q_G-4_TITLE,Konrads Spion,Konrad's spy,Konrad'ın casusu
+Q_G-4_TEXT,"Ein Mann mit Melone und Sonnenbrille horcht auf der Kirmes herum und schreibt sich alles auf. Ich wette, der arbeitet für Konrad. Fang ihn ein (er ist schreckhaft und rennt früh los) und bring ihn zu einem Security-Posten.",A man in a bowler hat and sunglasses is eavesdropping at the fair and writing everything down. I bet he works for Konrad. Catch him (he is jumpy and bolts early) and bring him to a security post.,"Melon şapkalı ve güneş gözlüklü bir adam fuarda kulak misafiri oluyor ve her şeyi yazıyor. Konrad için çalıştığına bahse girerim. Onu yakala (ürkek, erken kaçar) ve bir güvenlik noktasına getir."
+MAIL_G4_BETREFF,Da horcht einer,Someone is listening,Biri dinliyor
+MAIL_G4_TEXT,"Servus,
+
+auf der Kirmes schleicht einer mit Melone und Sonnenbrille herum, horcht die Leute aus und schreibt mit. Ich wette, der gehört zum Konrad. Schnapp ihn dir, aber sei vorsichtig: Er ist schreckhaft und rennt früh los. Bring ihn zu einem Security-Posten.
+Dafür gibt es 300 €.
+
+Horst","Hi,
+
+someone in a bowler hat and sunglasses is sneaking around the fair, quizzing people and taking notes. I bet he belongs to Konrad. Catch him, but be careful: he is jumpy and bolts early. Bring him to a security post.
+That is worth €300.
+
+Horst","Selam,
+
+fuarda melon şapkalı ve güneş gözlüklü biri sinsice dolanıyor, insanlara sorular soruyor ve not alıyor. Konrad'a ait olduğuna bahse girerim. Onu yakala ama dikkat et: ürkek ve erken kaçıyor. Bir güvenlik noktasına getir.
+Bunun karşılığı 300 €.
+
+Horst"
+MAIL_G4_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G4_A2,Heute nicht.,Not today.,Bugün olmaz.
+MAIL_M2_09_BETREFF,Mehr Geld?,More money?,Daha çok para?
+MAIL_M2_09_TEXT,"Servus Chef, ich arbeite jetzt schon ein paar Tage für dich und es gefällt mir. Ich würde gern etwas mehr verdienen. Passt das?","Hi boss, I have been working for you for a few days now and I like it. I would like to earn a little more. Is that okay?","Selam patron, birkaç gündür senin için çalışıyorum ve hoşuma gidiyor. Biraz daha fazla kazanmak isterim. Olur mu?"
+MAIL_M2_09_A1,"Ja, das hast du dir verdient.","Yes, you have earned it.","Evet, bunu hak ettin."
+MAIL_M2_09_A2,Im Moment nicht.,Not right now.,Şu an olmaz.
+MAIL_M2_11_BETREFF,Morgen Regen,Rain tomorrow,Yarın yağmur
+MAIL_M2_11_TEXT,"Für morgen sind kräftige Schauer gemeldet. Draußen dürfte wenig los sein, dafür drängen die Leute ins Zelt.","Heavy showers are forecast for tomorrow. It should be quiet outside, but people will crowd into the tent.",Yarın şiddetli sağanak bekleniyor. Dışarısı sakin olur ama insanlar çadıra doluşur.
+MAIL_M2_12_BETREFF,Hygienekontrolle,Hygiene inspection,Hijyen kontrolü
+MAIL_M2_12_TEXT,"Sehr geehrte Herren und Damen,
+
+morgen um 15:00 Uhr führen wir eine Hygienekontrolle in Ihrem Zelt durch. Bitte halten Sie es in einem ordnungsgemäßen Zustand (mindestens 60 % Sauberkeit).
+
+Mit freundlichen Grüßen
+Wagner, Gewerbeamt","Dear Sir or Madam,
+
+tomorrow at 15:00 we will carry out a hygiene inspection in your tent. Please keep it in proper condition (at least 60 % cleanliness).
+
+Kind regards
+Wagner, trade office","Sayın yetkililer,
+
+yarın saat 15:00'te çadırınızda hijyen kontrolü yapacağız. Lütfen düzgün durumda tutun (en az %60 temizlik).
+
+Saygılarımızla
+Wagner, ticaret dairesi"
+Q_N-2-3_TITLE,Die Hygienekontrolle,The hygiene inspection,Hijyen kontrolü
+Q_N-2-3_TEXT,Das Amt kommt morgen um 15:00 Uhr. Halte das Zelt sauber (mindestens 60 %) und bestehe die Kontrolle.,The office comes tomorrow at 15:00. Keep the tent clean (at least 60 %) and pass the inspection.,Daire yarın saat 15:00'te geliyor. Çadırı temiz tut (en az %60) ve kontrolü geç.

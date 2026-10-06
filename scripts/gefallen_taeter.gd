@@ -1,11 +1,13 @@
 extends Node3D
 ## Täter eines Gefallens: eine Figur aus dem Creator. Bewusst ohne class_name. Aufbau: scenes/gefallen/taeter.tscn.
 ##   art "spanner": steht verdächtig herum (Sonnenbrille, Cap)
+##   art "sau":     eine ausgebüxte Sau (assets/models/sau.glb, tools/blender/sau.py), rennt wie der Dieb weg
 ##   art "dieb":    läuft durch die Menge und rennt vor Spielern weg (scripts/gefallen.gd simuliert ihn auf dem Server,
 ##                  hier wird nur sanft zur gemeldeten Position gelaufen)
 ## Wird mit E gepackt (scripts/gefallen.gd) und zu einem Security-Posten getragen.
 
 const Figuren := preload("res://scripts/figuren.gd")
+const SAU := preload("res://assets/models/sau.glb")
 
 ## Muss vor add_child gesetzt werden
 var art := "spanner"
@@ -15,11 +17,24 @@ var _ziel := Vector3.ZERO
 var _hat_ziel := false
 var _tempo := 0.0
 var _anim := ""
+var _sau: Node3D
+var _lauf_t := 0.0
 
 func _ready() -> void:
 	add_to_group("interactable")
+	if art == "sau":
+		_sau = SAU.instantiate() as Node3D
+		_sau.rotation.y = PI   # Modell blickt nach +Z, die Spielwelt nach -Z
+		add_child(_sau)
+		return
 	var l: Dictionary
-	if art == "dieb":
+	if art == "spion":
+		l = Figuren.npc_look(7003, 9, "m")
+		l["hut"] = "melone"
+		l["hut_farbe"] = Color(0.18, 0.12, 0.1).to_html(false)
+		l["brille"] = "sonnenbrille_rund"
+		l["brille_farbe"] = Color(0.05, 0.05, 0.06).to_html(false)
+	elif art == "dieb":
 		l = Figuren.npc_look(7002, 5, "m")
 		l["hut"] = "wollmuetze"
 		l["hut_farbe"] = Color(0.1, 0.1, 0.12).to_html(false)
@@ -40,7 +55,7 @@ func interact_point() -> Vector3:
 	return global_position + Vector3(0, 1.0, 0)
 
 func hinweis_text(_geschlossen: bool) -> String:
-	return "HINT_TAETER_PACKEN"
+	return "HINT_SAU_PACKEN" if art == "sau" else "HINT_TAETER_PACKEN"
 
 func gefallen_aktion(spieler: Node) -> void:
 	var g := get_tree().get_first_node_in_group("gefallen")
@@ -57,7 +72,12 @@ func ziel_setzen(pos: Vector3, yaw: float, tempo: float) -> void:
 	rotation.y = lerp_angle(rotation.y, yaw, 0.5)
 
 func _process(delta: float) -> void:
-	if art == "dieb":
+	if art == "sau":
+		if _hat_ziel:
+			global_position = global_position.lerp(_ziel, clampf(delta * 10.0, 0.0, 1.0))
+		_sau_laufen(delta)
+		return
+	if art == "dieb" or art == "spion":
 		if _hat_ziel:
 			global_position = global_position.lerp(_ziel, clampf(delta * 10.0, 0.0, 1.0))
 		var neu := "rennen" if _tempo > 3.5 else ("gehen" if _tempo > 0.3 else "stehen")
@@ -73,3 +93,22 @@ func _process(delta: float) -> void:
 	if _umschau <= 0.0:
 		_umschau = randf_range(3.0, 7.0)
 		rotation.y += randf_range(-0.9, 0.9)
+
+## Beine schwingen diagonal, der Rumpf wippt; steht die Sau, sind alle Beine still
+func _sau_laufen(delta: float) -> void:
+	if _sau == null:
+		return
+	var schwung := 0.0
+	if _tempo > 0.3:
+		_lauf_t += delta * (6.0 + _tempo * 2.4)
+		schwung = 0.75 if _tempo > 3.5 else 0.45
+	var s := sin(_lauf_t) * schwung
+	for n in ["BeinVL", "BeinHR"]:
+		var b := _sau.get_node_or_null(n) as Node3D
+		if b:
+			b.rotation.x = s
+	for n in ["BeinVR", "BeinHL"]:
+		var b := _sau.get_node_or_null(n) as Node3D
+		if b:
+			b.rotation.x = -s
+	_sau.position.y = absf(sin(_lauf_t)) * 0.05 * (schwung * 2.0)

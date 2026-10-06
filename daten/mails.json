@@ -216,5 +216,82 @@
     }
    }
   ]
+ },
+ {
+  "id": "M-G3",
+  "absender": "HORST",
+  "betreff": "MAIL_G3_BETREFF",
+  "text": "MAIL_G3_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G3_A1",
+    "folge": {
+     "quest_annehmen": "G-3"
+    }
+   },
+   {
+    "text": "MAIL_G3_A2",
+    "folge": {
+     "quest_ablehnen": "G-3"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G4",
+  "absender": "HORST",
+  "betreff": "MAIL_G4_BETREFF",
+  "text": "MAIL_G4_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G4_A1",
+    "folge": {
+     "quest_annehmen": "G-4"
+    }
+   },
+   {
+    "text": "MAIL_G4_A2",
+    "folge": {
+     "quest_ablehnen": "G-4"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M2-09",
+  "absender": "SABINE",
+  "betreff": "MAIL_M2_09_BETREFF",
+  "text": "MAIL_M2_09_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_09_A1",
+    "folge": {
+     "lohn_erhoehen": true
+    }
+   },
+   {
+    "text": "MAIL_M2_09_A2",
+    "folge": {
+     "lohn_nein": true
+    }
+   }
+  ],
+  "mehrfach": true
+ },
+ {
+  "id": "M2-11",
+  "absender": "WETTERDIENST",
+  "betreff": "MAIL_M2_11_BETREFF",
+  "text": "MAIL_M2_11_TEXT",
+  "antworten": [],
+  "mehrfach": true
+ },
+ {
+  "id": "M2-12",
+  "absender": "WAGNER",
+  "betreff": "MAIL_M2_12_BETREFF",
+  "text": "MAIL_M2_12_TEXT",
+  "antworten": [],
+  "mehrfach": true
  }
 ]
