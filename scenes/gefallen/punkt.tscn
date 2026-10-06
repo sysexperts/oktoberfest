@@ -1,0 +1,87 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gefallen_punkt.gd" id="1_p"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
+
+[sub_resource type="BoxMesh" id="PlaneMesh"]
+size = Vector3(1.6, 0.04, 1.1)
+
+[sub_resource type="StandardMaterial3D" id="PlaneMat"]
+albedo_color = Color(0.88, 0.2, 0.2, 1)
+
+[sub_resource type="CylinderMesh" id="FlammeMesh"]
+top_radius = 0.0
+bottom_radius = 0.28
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="FlammeMat"]
+albedo_color = Color(1, 0.55, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.45, 0.05, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="CylinderMesh" id="BrunnenMesh"]
+top_radius = 0.55
+bottom_radius = 0.6
+height = 0.9
+
+[sub_resource type="StandardMaterial3D" id="BrunnenMat"]
+albedo_color = Color(0.55, 0.55, 0.58, 1)
+
+[sub_resource type="CylinderMesh" id="WasserMesh"]
+top_radius = 0.45
+bottom_radius = 0.45
+height = 0.04
+
+[sub_resource type="StandardMaterial3D" id="WasserMat"]
+albedo_color = Color(0.3, 0.6, 0.95, 1)
+emission_enabled = true
+emission = Color(0.15, 0.4, 0.9, 1)
+
+[node name="Punkt" type="Node3D"]
+script = ExtResource("1_p")
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+mesh = SubResource("PlaneMesh")
+surface_material_override/0 = SubResource("PlaneMat")
+
+[node name="Feuer" type="Node3D" parent="."]
+
+[node name="Flamme" type="MeshInstance3D" parent="Feuer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("FlammeMesh")
+surface_material_override/0 = SubResource("FlammeMat")
+
+[node name="Flamme2" type="MeshInstance3D" parent="Feuer"]
+transform = Transform3D(0.7, 0, 0, 0, 0.8, 0, 0, 0, 0.7, 0.3, 0.55, 0.1)
+mesh = SubResource("FlammeMesh")
+surface_material_override/0 = SubResource("FlammeMat")
+
+[node name="Licht" type="OmniLight3D" parent="Feuer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+light_color = Color(1, 0.6, 0.2, 1)
+light_energy = 2.2
+omni_range = 8.0
+
+[node name="Brunnen" type="Node3D" parent="."]
+
+[node name="Rand" type="MeshInstance3D" parent="Brunnen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("BrunnenMesh")
+surface_material_override/0 = SubResource("BrunnenMat")
+
+[node name="Wasser" type="MeshInstance3D" parent="Brunnen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0)
+mesh = SubResource("WasserMesh")
+surface_material_override/0 = SubResource("WasserMat")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+modulate = Color(0.7, 0.88, 1, 1)
+text = "WORLD_QUELLE"
+script = ExtResource("2_wt")
+schluessel = "WORLD_QUELLE"

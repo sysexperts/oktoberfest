@@ -293,5 +293,45 @@
   "text": "MAIL_M2_12_TEXT",
   "antworten": [],
   "mehrfach": true
+ },
+ {
+  "id": "M-G5",
+  "absender": "HORST",
+  "betreff": "MAIL_G5_BETREFF",
+  "text": "MAIL_G5_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G5_A1",
+    "folge": {
+     "quest_annehmen": "G-5"
+    }
+   },
+   {
+    "text": "MAIL_G5_A2",
+    "folge": {
+     "quest_ablehnen": "G-5"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G6",
+  "absender": "HORST",
+  "betreff": "MAIL_G6_BETREFF",
+  "text": "MAIL_G6_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G6_A1",
+    "folge": {
+     "quest_annehmen": "G-6"
+    }
+   },
+   {
+    "text": "MAIL_G6_A2",
+    "folge": {
+     "quest_ablehnen": "G-6"
+    }
+   }
+  ]
  }
 ]

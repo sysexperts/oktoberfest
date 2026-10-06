@@ -1572,6 +1572,8 @@ func _geschleudert() -> bool:
 ## Wohnwagen aufzuwachen (gefunden im Bot-Lauf tools/sim_saison, 25.09.2026).
 ## Gefallen: trägt dieser Spieler gerade einen Täter? (setzt scripts/gefallen.gd)
 var traegt_taeter := false
+## Feuer-Gefallen: trägt dieser Spieler einen vollen Eimer?
+var traegt_wasser := false
 
 ## Wohnwagen: Der Innenraum liegt weit weg (scenes/wohnwagen_innen.tscn). Hineingehen merkt sich, wo man stand.
 var _draussen := Vector3.ZERO

@@ -476,5 +476,63 @@
   "belohnung": {
    "geld": 150
   }
+ },
+ {
+  "id": "G-5",
+  "typ": "gefallen",
+  "kapitel": 2,
+  "titel": "Q_G-5_TITLE",
+  "text": "Q_G-5_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G5"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-5"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 250
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "sturm",
+   "anzahl": 5,
+   "zeit": 150
+  }
+ },
+ {
+  "id": "G-6",
+  "typ": "gefallen",
+  "kapitel": 2,
+  "titel": "Q_G-6_TITLE",
+  "text": "Q_G-6_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G6"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-6"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "feuer",
+   "anzahl": 3,
+   "zeit": 180
+  }
  }
 ]

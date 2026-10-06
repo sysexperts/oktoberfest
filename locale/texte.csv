@@ -1844,3 +1844,57 @@ Saygılarımızla
 Wagner, ticaret dairesi"
 Q_N-2-3_TITLE,Die Hygienekontrolle,The hygiene inspection,Hijyen kontrolü
 Q_N-2-3_TEXT,Das Amt kommt morgen um 15:00 Uhr. Halte das Zelt sauber (mindestens 60 %) und bestehe die Kontrolle.,The office comes tomorrow at 15:00. Keep the tent clean (at least 60 %) and pass the inspection.,Daire yarın saat 15:00'te geliyor. Çadırı temiz tut (en az %60) ve kontrolü geç.
+Q_G-5_TITLE,Sturmwarnung,Storm warning,Fırtına uyarısı
+Q_G-5_TEXT,"Ein Sturm zieht auf! Fünf Planen auf der Kirmes sind lose. Lauf hin und sichere sie mit E, bevor der Sturm losbricht (2:30 Minuten).",A storm is coming! Five tarps at the fair are loose. Run there and secure them with E before the storm hits (2:30 minutes).,Fırtına geliyor! Fuardaki beş branda gevşek. Oraya koş ve fırtına kopmadan E ile sağlamlaştır (2:30 dakika).
+MAIL_G5_BETREFF,Sturm im Anmarsch,Storm on its way,Fırtına yolda
+MAIL_G5_TEXT,"Servus,
+
+der Wetterdienst meldet einen Sturm, und auf der Kirmes flattern fünf Planen lose herum. Wenn die wegfliegen, gibt es Ärger. Sichere sie schnell, du hast gut zwei Minuten.
+Ich leg dir 250 € drauf.
+
+Horst","Hi,
+
+the weather service reports a storm and five tarps are flapping loose at the fair. If they blow away, there will be trouble. Secure them quickly, you have a good two minutes.
+I will add €250.
+
+Horst","Selam,
+
+hava durumu bir fırtına bildiriyor ve fuarda beş branda gevşek çırpınıyor. Uçup giderlerse başımız belaya girer. Çabuk sağlamlaştır, iki dakikadan fazla vaktin var.
+Üstüne 250 € koyarım.
+
+Horst"
+MAIL_G5_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G5_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_G-6_TITLE,Brand am Imbiss,Fire at the snack bar,Büfede yangın
+Q_G-6_TEXT,Bei drei Buden brennt es! Hol am Brunnen Wasser (E) und lösch ein Feuer (E). Für jedes Feuer brauchst du einen vollen Eimer. Du hast drei Minuten.,Three stalls are on fire! Fetch water at the well (E) and put out a fire (E). Each fire needs a full bucket. You have three minutes.,Üç tezgâhta yangın var! Kuyudan su al (E) ve bir yangını söndür (E). Her yangın için dolu bir kova gerekir. Üç dakikan var.
+MAIL_G6_BETREFF,Feuer!,Fire!,Yangın!
+MAIL_G6_TEXT,"Servus,
+
+bei drei Imbissbuden brennt es! Es gibt einen Brunnen auf der Kirmes: Wasser holen und löschen, Eimer für Eimer. Ihr habt keine drei Minuten.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+three snack stalls are on fire! There is a well at the fair: fetch water and put the fires out, bucket by bucket. You have less than three minutes.
+I will add €300.
+
+Horst","Selam,
+
+üç büfede yangın var! Fuarda bir kuyu var: su al ve yangınları kova kova söndür. Üç dakikan yok.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G6_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G6_A2,Heute nicht.,Not today.,Bugün olmaz.
+HINT_STURM_SICHERN,{interact} Plane sichern,{interact} Secure tarp,{interact} Brandayı sağlamlaştır
+HINT_FEUER_LOESCHEN,{interact} Feuer löschen,{interact} Put out fire,{interact} Yangını söndür
+HINT_FEUER_WASSER,Erst Wasser holen (am Brunnen),Fetch water first (at the well),Önce su al (kuyudan)
+HINT_QUELLE,{interact} Eimer füllen,{interact} Fill bucket,{interact} Kovayı doldur
+WORLD_QUELLE,"Brunnen
+({interact}: Eimer füllen)","Well
+({interact}: fill bucket)","Kuyu
+({interact}: kovayı doldur)"
+MSG_EIMER_VOLL,"Der Eimer ist voll, jetzt zum Feuer","The bucket is full, now to the fire","Kova dolu, şimdi yangına"
+MSG_GEFALLEN_REST,Noch %d offen,%d left,%d kaldı
+MSG_GEFALLEN_GESCHAFFT,Geschafft! Horst legt %s auf dein Konto,Done! Horst adds %s to your account,Başardın! Horst hesabına %s ekliyor
+MSG_GEFALLEN_ZU_SPAET,"Zu spät, der Gefallen ist gescheitert","Too late, the favour failed","Çok geç, iş başarısız oldu"

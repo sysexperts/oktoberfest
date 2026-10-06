@@ -9,6 +9,7 @@ extends Node
 const TAETER := preload("res://scenes/gefallen/taeter.tscn")
 const POSTEN := preload("res://scenes/gefallen/security_posten.tscn")
 const GEHEGE := preload("res://scenes/gefallen/gehege.tscn")
+const PUNKT := preload("res://scenes/gefallen/punkt.tscn")
 ## So viele feste Security-Posten stehen verteilt über die Kirmes
 const POSTEN_ANZAHL := 4
 ## So weit vor der Bude steht der Täter oder Posten (Kundenseite)
@@ -22,6 +23,10 @@ var _posten: Array[Node3D] = []
 var _taeter: Node3D = null
 var _gehege: Node3D = null
 var _art := ""
+## Gefallen mit Punkten (Sturm, Feuer): die Knoten und die Variante
+var _punkte: Array[Node3D] = []
+var _quelle: Node3D = null
+var _variante := ""
 ## Server: laufender Gefallen {id, phase, traeger}; leer = keiner
 var _lauf := {}
 ## Alle Rechner: Phase und Träger für die Darstellung
@@ -89,6 +94,9 @@ func _starten(id: String) -> void:
 	if frei.is_empty():
 		return
 	var art := str((Daten.quest(id).get("gefallen", {}) as Dictionary).get("art", "spanner"))
+	if art == "punkte":
+		_punkte_starten(id, frei)
+		return
 	_lauf = {"id": id, "phase": "suchen", "traeger": -1, "art": art}
 	var start := Vector3.ZERO
 	var ort: int = frei.pick_random()
@@ -151,12 +159,16 @@ func net_uebergeben() -> void:
 		peer = 1
 	if peer != int(_lauf.traeger):
 		return
+	_erfuellt()
+
+## Gefallen geschafft: Quest abschließen, Belohnung, aufräumen (nur Server)
+func _erfuellt() -> void:
 	var id := str(_lauf.id)
 	# „fertig" hält den Ablauf fest, bis die Story die Quest abgeschlossen hat (sonst startet _abgleich ihn neu)
 	_lauf.phase = "fertig"
 	_story.ereignis("gefallen_" + id)
 	var lohn := int((Daten.quest(id).get("belohnung", {}) as Dictionary).get("geld", 0))
-	_gm._melde("MSG_GEFALLEN_UEBERGEBEN", [_gm._eur(lohn)], 2)
+	_gm._melde("MSG_GEFALLEN_UEBERGEBEN" if str(_lauf.get("art", "")) != "punkte" else "MSG_GEFALLEN_GESCHAFFT", [_gm._eur(lohn)], 2)
 	_gm._broadcast_meta()
 	_lauf = {}
 	net_ende.rpc()
@@ -172,12 +184,119 @@ func net_ende() -> void:
 	_taeter_weg()
 
 func _taeter_weg() -> void:
+	for p in _punkte:
+		if is_instance_valid(p):
+			p.queue_free()
+	_punkte.clear()
+	if _quelle != null and is_instance_valid(_quelle):
+		_quelle.queue_free()
+	_quelle = null
+	if "_players_nodes" in _gm:
+		for sp in _gm._players_nodes.values():
+			if sp != null and is_instance_valid(sp):
+				sp.set("traegt_wasser", false)
 	if _gehege != null and is_instance_valid(_gehege):
 		_gehege.queue_free()
 	_gehege = null
 	if _taeter != null and is_instance_valid(_taeter):
 		_taeter.queue_free()
 	_taeter = null
+
+# ------------------------------------------------------------------ Punkte (Sturm, Feuer)
+func _punkte_starten(id: String, frei: Array[int]) -> void:
+	var d: Dictionary = Daten.quest(id).get("gefallen", {})
+	var variante := str(d.get("variante", "sturm"))
+	var anzahl := mini(int(d.get("anzahl", 5)), frei.size())
+	frei.shuffle()
+	var orte := PackedInt32Array()
+	for i in anzahl:
+		orte.append(frei[i])
+	var quelle := -1
+	if variante == "feuer" and frei.size() > anzahl:
+		quelle = frei[anzahl]
+	_lauf = {"id": id, "phase": "suchen", "traeger": -1, "art": "punkte", "variante": variante, "offen": anzahl,
+		"zeit": float(d.get("zeit", 150.0)), "wasser": {}}
+	net_punkte_start.rpc(id, variante, orte, quelle)
+
+@rpc("authority", "reliable", "call_local")
+func net_punkte_start(_id: String, variante: String, orte: PackedInt32Array, quelle: int) -> void:
+	_taeter_weg()
+	if _orte.is_empty():
+		_orte_sammeln()
+	_art = "punkte"
+	_variante = variante
+	_phase = "suchen"
+	for i in orte.size():
+		if orte[i] < 0 or orte[i] >= _orte.size():
+			continue
+		var p := PUNKT.instantiate() as Node3D
+		p.set("variante", variante)
+		p.set("index", i)
+		get_tree().current_scene.add_child(p)
+		p.global_position = _orte[orte[i]]
+		_punkte.append(p)
+	if quelle >= 0 and quelle < _orte.size():
+		_quelle = PUNKT.instantiate() as Node3D
+		_quelle.set("variante", "quelle")
+		get_tree().current_scene.add_child(_quelle)
+		_quelle.global_position = _orte[quelle]
+
+## Feuerlöschen: am Brunnen einen Eimer füllen
+@rpc("any_peer", "reliable", "call_local")
+func net_wasser() -> void:
+	if not multiplayer.is_server() or _lauf.is_empty() or str(_lauf.get("art", "")) != "punkte":
+		return
+	var peer := multiplayer.get_remote_sender_id()
+	if peer == 0:
+		peer = 1
+	(_lauf.wasser as Dictionary)[peer] = true
+	net_wasser_stand.rpc(peer, true)
+	_gm._melde("MSG_EIMER_VOLL", [], 0)
+
+@rpc("authority", "reliable", "call_local")
+func net_wasser_stand(peer: int, voll: bool) -> void:
+	var sp: Node = _gm._players_nodes.get(peer) if "_players_nodes" in _gm else null
+	if sp != null and is_instance_valid(sp):
+		sp.set("traegt_wasser", voll)
+
+## Einen Punkt erledigen (Plane sichern, Feuer löschen)
+@rpc("any_peer", "reliable", "call_local")
+func net_punkt(i: int) -> void:
+	if not multiplayer.is_server() or _lauf.is_empty() or str(_lauf.get("art", "")) != "punkte":
+		return
+	var peer := multiplayer.get_remote_sender_id()
+	if peer == 0:
+		peer = 1
+	if i < 0 or i >= _punkte.size() or bool(_punkte[i].get("erledigt")):
+		return
+	if str(_lauf.variante) == "feuer":
+		if not bool((_lauf.wasser as Dictionary).get(peer, false)):
+			return
+		(_lauf.wasser as Dictionary)[peer] = false
+		net_wasser_stand.rpc(peer, false)
+	net_punkt_fertig.rpc(i)
+	_lauf.offen = int(_lauf.offen) - 1
+	if int(_lauf.offen) <= 0:
+		_erfuellt()
+	else:
+		_gm._melde("MSG_GEFALLEN_REST", [int(_lauf.offen)], 0)
+
+@rpc("authority", "reliable", "call_local")
+func net_punkt_fertig(i: int) -> void:
+	if i >= 0 and i < _punkte.size() and is_instance_valid(_punkte[i]):
+		_punkte[i].erledigt_setzen()
+
+## Zeit läuft (nur bei Gefallen mit Zeitlimit): abgelaufen = gescheitert
+func _punkte_zeit(delta: float) -> void:
+	_lauf.zeit = float(_lauf.zeit) - delta
+	if float(_lauf.zeit) > 0.0:
+		return
+	var id := str(_lauf.id)
+	_lauf = {}
+	_gm._melde("MSG_GEFALLEN_ZU_SPAET", [], 1)
+	_story._verfallen(id)
+	net_ende.rpc()
+	_gm._broadcast_meta()
 
 # ------------------------------------------------------------------ Dieb (Server)
 ## Der Dieb läuft die Wege der Menge entlang (scripts/crowd.gd). Kommt ein Spieler nah, rennt er vom Spieler weg,
@@ -246,6 +365,8 @@ func net_dieb(pos: Vector3, yaw: float, tempo: float) -> void:
 # ------------------------------------------------------------------ Darstellung
 ## Wird getragen, hängt der Täter über der Schulter des Trägers
 func _process(delta: float) -> void:
+	if multiplayer.is_server() and not _lauf.is_empty() and str(_lauf.get("art", "")) == "punkte":
+		_punkte_zeit(delta)
 	if multiplayer.is_server() and not _lauf.is_empty() and str(_lauf.get("art", "")) in ["dieb", "sau", "spion"] and str(_lauf.phase) == "suchen":
 		_dieb_schritt(delta)
 	if _phase != "getragen" or _taeter == null or not is_instance_valid(_taeter):
@@ -264,6 +385,18 @@ func _process(delta: float) -> void:
 
 ## Für den Zielpfeil (scripts/ui/zielmarker.gd): wohin gerade?
 func ziel_fuer(spieler: Node3D) -> Node3D:
+	if _art == "punkte" and _phase == "suchen":
+		if _variante == "feuer" and not bool(spieler.get("traegt_wasser")) and _quelle != null and is_instance_valid(_quelle):
+			return _quelle
+		var bester_punkt: Node3D = null
+		var abstand_min := INF
+		for p in _punkte:
+			if is_instance_valid(p) and not bool(p.get("erledigt")):
+				var a := spieler.global_position.distance_squared_to(p.global_position)
+				if a < abstand_min:
+					abstand_min = a
+					bester_punkt = p
+		return bester_punkt
 	if _phase == "suchen" and _taeter != null and is_instance_valid(_taeter):
 		return _taeter
 	if _phase == "getragen" and bool(spieler.get("traegt_taeter")) and _art == "sau":
