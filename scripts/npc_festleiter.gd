@@ -49,7 +49,7 @@ var _alter := 0.0
 func _ready() -> void:
 	add_to_group("festleiter")
 	add_to_group("interactable")
-	_figur = Figuren.einsetzen(self, Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
+	_figur = Figuren.einsetzen_look(self, Figuren.look_festleiter())
 	_figur.stehen()
 
 func ist_festleiter() -> bool:

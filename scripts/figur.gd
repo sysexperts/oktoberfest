@@ -28,6 +28,15 @@ extends Node3D
 ## Betrunken torkeln — wird statt anim_gehen benutzt, wenn ein Gast zu viel
 ## hat (scripts/customer.gd). Leer = die Figur torkelt nicht, sie geht normal.
 @export var anim_betrunken := ""
+## Weitere Clips (Mixamo, "mixamo/…", tools/bake_animationen.gd): ab und zu statt der Sitzanimation (Klatschen, Rufen …) ...
+@export var anim_sitz_extras: PackedStringArray = []
+## ... Stehen mit Varianten (jede Figur bleibt bei einer gewählten) ...
+@export var anim_stehen_varianten: PackedStringArray = []
+## ... betrunken stehen, zusätzliche Torkelgänge ...
+@export var anim_betrunken_stehen: PackedStringArray = []
+@export var anim_betrunken_mehr: PackedStringArray = []
+## ... und Tänze, die auf dem Boden vor der Bühne getanzt werden (statt auf dem Tisch)
+@export var anim_tanzen_buehne: PackedStringArray = []
 ## So weit wird die Figur beim Sitzen angehoben (Bankhöhe).
 @export var sitz_hoehe := 0.05
 ## Metallic-Anteil des Modells ignorieren. Manche Modelle bringen eine gebackene
@@ -54,6 +63,9 @@ extends Node3D
 ## Fertig umgerechnete Bibliothek (tools/bake_alex_animationen.gd) — für Modelle
 ## mit anderem Skelett, bei denen Ausleihen nicht geht. Heißt "geliehen/<Name>".
 @export var leih_bibliothek: AnimationLibrary
+## Mixamo-Animationen, auf den Standardkörper umgerechnet (tools/bake_animationen.gd -- mixamo). Heißen "mixamo/<Name>",
+## abspielen mit abspielen().
+@export var mixamo_bibliothek: AnimationLibrary
 
 ## Aufrecht stehen und gehen: die gemeinsamen Clips lassen Oberkörper und Kopf
 ## hängen. Winkel in Grad (positiv = aufrichten), wirkt nur bei stehen/gehen.
@@ -110,6 +122,9 @@ func _ready() -> void:
 		return
 	if leih_animationen or not leih_animationen_mehr.is_empty() or leih_bibliothek:
 		_animationen_ausleihen()
+	if mixamo_bibliothek and not anim.has_animation_library("mixamo"):
+		anim.add_animation_library("mixamo", mixamo_bibliothek)
+	_sitz_angleichen()
 	# Die importierten Animationen haben keine Schleife gesetzt
 	var schleifen := [anim_stehen, anim_gehen, anim_rennen, anim_sitzen, anim_betrunken]
 	schleifen.append_array(anim_tanzen)
@@ -145,11 +160,21 @@ func _animationen_ausleihen() -> void:
 		if bibliothek and not anim.has_animation_library(name):
 			anim.add_animation_library(name, bibliothek)
 
-func _material_anpassen() -> void:
-	for mi: MeshInstance3D in find_children("*", "MeshInstance3D", true, false):
+## Dieselbe Anpassung (Eigenleuchten, Metallic …) für später angehängte Teile, z. B. Kleidung aus dem
+## Charakter-Creator (scripts/charakter_look.gd). Durchsichtiges (Brillengläser) bleibt unberührt.
+func material_nachruesten(wurzel: Node) -> void:
+	_material_anpassen(wurzel)
+
+func _material_anpassen(wurzel: Node = null) -> void:
+	var netze := (wurzel if wurzel else self).find_children("*", "MeshInstance3D", true, false)
+	if wurzel is MeshInstance3D:
+		netze.append(wurzel)
+	for mi: MeshInstance3D in netze:
 		for s in mi.mesh.get_surface_count():
 			var original := mi.get_active_material(s) as BaseMaterial3D
 			if original == null:
+				continue
+			if wurzel and original.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
 				continue
 			var schluessel := [original, metall_ignorieren, eigenleuchten, helligkeit, textur]
 			if not _angepasst.has(schluessel):
@@ -186,6 +211,9 @@ func _material_anpassen() -> void:
 ## (größer, tiefer, weiter vorn) passen es hiermit an: wirkt auf jedes Teil
 ## vor dessen eigener Lage.
 @export var zubehoer_anpassung := Transform3D()
+## Zusätzliche Anpassung einzelner Teile (Index in `zubehoer` → Transform, wirkt vor deren Lage): der Creator
+## vergrößert damit Hüte über Frisuren.
+var zubehoer_extra := {}
 
 func _zubehoer_anlegen() -> void:
 	if zubehoer.is_empty() or skelett == null:
@@ -214,13 +242,14 @@ func _zubehoer_anlegen() -> void:
 				bindung = mi.skin.get_bind_pose(i) * mi.transform.affine_inverse()
 				break
 		break
-	for szene: PackedScene in zubehoer:
+	for nr in zubehoer.size():
+		var szene: PackedScene = zubehoer[nr]
 		if szene == null:
 			continue
 		var teil: Node3D = szene.instantiate()
 		var lage: Transform3D = teil.get_meta("lage", Transform3D())
 		halter.add_child(teil)
-		teil.transform = bindung * zubehoer_anpassung * lage
+		teil.transform = bindung * zubehoer_anpassung * (zubehoer_extra.get(nr, Transform3D()) as Transform3D) * lage
 
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)
@@ -237,7 +266,35 @@ func stehen() -> void:
 			anim.seek(standbild_zeit, true)
 			anim.speed_scale = 0.0
 	elif hat(anim_stehen):
-		_spiele(anim_stehen, 1.0)
+		var n := _stehen_wahl()
+		if n == anim_stehen:
+			_spiele(anim_stehen, 1.0)
+		else:
+			abspielen(n)
+
+var _stehen_name := ""
+## Jede Figur steht mit einem festen Clip: meist dem Standard, manchmal einer Variante (Zwerg-Idle …)
+func _stehen_wahl() -> String:
+	if _stehen_name == "":
+		_stehen_name = anim_stehen
+		var m := Array(anim_stehen_varianten).filter(func(n: String) -> bool: return hat(n))
+		if not m.is_empty() and randf() < 0.45:
+			_stehen_name = m.pick_random()
+	return _stehen_name
+
+func kann_betrunken_stehen() -> bool:
+	return Array(anim_betrunken_stehen).any(func(n: String) -> bool: return hat(n))
+
+var _besoffen_stehen := ""
+## Stehen mit Schwanken (Mixamo-Clips "drunk idle")
+func stehen_betrunken() -> void:
+	if _besoffen_stehen == "":
+		var m := Array(anim_betrunken_stehen).filter(func(n: String) -> bool: return hat(n))
+		_besoffen_stehen = m.pick_random() if not m.is_empty() else anim_stehen
+	if _besoffen_stehen == anim_stehen:
+		stehen()
+	else:
+		abspielen(_besoffen_stehen)
 
 ## Nur bei Standbild nötig: das Skelett jedes Bild auf die Standpose setzen,
 ## damit die Idle-Bewegung darauf aufsetzt.
@@ -254,11 +311,18 @@ func gehen(tempo := 1.0) -> void:
 func kann_torkeln() -> bool:
 	return hat(anim_betrunken)
 
+var _torkel_name := ""
+
 func torkeln(tempo := 1.0) -> void:
-	if hat(anim_betrunken):
-		_spiele(anim_betrunken, tempo)
-	else:
+	if not hat(anim_betrunken):
 		gehen(tempo)
+		return
+	if _torkel_name == "":
+		_torkel_name = anim_betrunken
+		var m := Array(anim_betrunken_mehr).filter(func(n: String) -> bool: return hat(n))
+		if not m.is_empty() and randf() < 0.5:
+			_torkel_name = m.pick_random()
+	_spiele(_torkel_name, tempo)
 
 func rennen(tempo := 1.0) -> void:
 	if hat(anim_rennen):
@@ -267,7 +331,9 @@ func rennen(tempo := 1.0) -> void:
 		gehen(tempo * 1.6)
 
 ## Spielt einen zufälligen Tanz. false, wenn die Figur keinen hat.
-func tanzen(tempo := 1.0) -> bool:
+func tanzen(tempo := 1.0, buehne := false) -> bool:
+	if buehne and Array(anim_tanzen_buehne).any(func(n: String) -> bool: return hat(n)):
+		return _zufaellig_aus(anim_tanzen_buehne, tempo)
 	return _zufaellig_aus(anim_tanzen, tempo)
 
 func extra() -> bool:
@@ -285,6 +351,67 @@ func sitzen() -> void:
 	if hat(anim_sitzen):
 		_spiele(anim_sitzen, 1.0)
 	_sitz_korrektur_an(true)
+	_sitz_aktiv = hat(anim_sitzen) and not anim_sitz_extras.is_empty()
+	_sitz_im_extra = false
+	_sitz_zeit = randf_range(4.0, 12.0)
+	set_process(_sitz_aktiv)
+
+var _sitz_aktiv := false
+var _sitz_im_extra := false
+var _sitz_zeit := 0.0
+
+## Wer sitzt, klatscht, ruft oder jubelt ab und zu (Mixamo-Clips) und trinkt dazwischen wie gewohnt
+func _process(delta: float) -> void:
+	if not _sitz_aktiv or anim == null:
+		return
+	_sitz_zeit -= delta
+	if _sitz_zeit > 0.0:
+		return
+	if _sitz_im_extra:
+		_sitz_im_extra = false
+		_spiele(anim_sitzen, 1.0)
+		_sitz_zeit = randf_range(6.0, 16.0)
+	else:
+		var m := Array(anim_sitz_extras).filter(func(n: String) -> bool: return hat(n))
+		if m.is_empty():
+			return
+		_sitz_im_extra = true
+		var n: String = m.pick_random()
+		abspielen(n)
+		_sitz_zeit = randf_range(2.5, 6.0)
+
+## Mixamo-Sitzclips auf die Hüfthöhe und -lage der Sitzanimation bringen (sonst schweben oder versinken Figuren beim Wechsel)
+func _sitz_angleichen() -> void:
+	if anim == null or not hat(anim_sitzen) or anim_sitz_extras.is_empty():
+		return
+	var ref: Variant = _hueft_mittel(anim.get_animation(anim_sitzen))
+	if ref == null:
+		return
+	for n in anim_sitz_extras:
+		if not hat(n):
+			continue
+		var a := anim.get_animation(n)
+		if a.has_meta("sitz_angeglichen"):
+			continue
+		var m: Variant = _hueft_mittel(a)
+		if m == null:
+			continue
+		var diff: Vector3 = (ref as Vector3) - (m as Vector3)
+		for t in a.get_track_count():
+			if a.track_get_type(t) == Animation.TYPE_POSITION_3D and String(a.track_get_path(t)).ends_with(":Hips"):
+				for k in a.track_get_key_count(t):
+					a.track_set_key_value(t, k, (a.track_get_key_value(t, k) as Vector3) + diff)
+		a.set_meta("sitz_angeglichen", true)
+
+func _hueft_mittel(a: Animation) -> Variant:
+	for t in a.get_track_count():
+		if a.track_get_type(t) == Animation.TYPE_POSITION_3D and String(a.track_get_path(t)).ends_with(":Hips"):
+			var summe := Vector3.ZERO
+			var n := a.track_get_key_count(t)
+			for k in n:
+				summe += a.track_get_key_value(t, k) as Vector3
+			return summe / maxf(n, 1.0)
+	return null
 
 func _sitz_korrektur_an(an: bool) -> void:
 	if sitz_korrektur == null or skelett == null:
@@ -335,9 +462,44 @@ func _zufaellig_aus(liste: PackedStringArray, tempo: float) -> bool:
 	_spiele(da.pick_random(), tempo)
 	return true
 
+## Animationen, die nur Männer bekommen (Frauen im Dirndl: der Rock macht sie nicht mit)
+const NUR_MAENNER := ["mixamo/flair_2"]
+
+## Eine beliebige Animation abspielen (z. B. "mixamo/Sitting_Drinking"). Gibt false zurück, wenn es sie nicht gibt.
+## Dauerschleifen starten an einer zufälligen Stelle, einmalige Bewegungen am Anfang.
+func abspielen(name: String, tempo := 1.0) -> bool:
+	if not hat(name):
+		return false
+	# Bewegungen, die ein Rock nicht mitmacht (Überschläge …): nur für Männer
+	if name in NUR_MAENNER and str(get_meta("geschlecht", "m")) == "w":
+		return false
+	anim.active = true
+	if not name in anim_sitz_extras:
+		_sitz_aktiv = false
+		set_process(false)
+	# Mixamo-Clips sind schon auf unsere Körperform gerechnet (Arme/Kopf, tools/bake_animationen.gd): kein Aufrichten darüber.
+	# Die älteren Clips behalten die Arm-Korrektur des Aufrichten-Modifiers.
+	_haltung_an(not name.begins_with("mixamo/"), 0.0, false, true, false)
+	_sitz_korrektur_an(false)
+	anim.root_motion_track = NodePath()
+	if anim.current_animation != name:
+		anim.play(name)
+		if anim.get_animation(name).loop_mode != Animation.LOOP_NONE:
+			anim.seek(randf() * anim.get_animation(name).length, true)
+	anim.speed_scale = tempo
+	return true
+
 ## Wechselt nur, wenn nicht schon diese Animation läuft — und startet an einer
 ## zufälligen Stelle, damit nicht alle Figuren im Gleichschritt gehen.
 func _spiele(name: String, tempo: float) -> void:
+	if name.begins_with("mixamo/"):
+		if abspielen(name, tempo):
+			# Tänze: die Hüftbewegung zählt nicht (wie bei den alten Tänzen), sonst wandert die Figur über den Tisch
+			anim.root_motion_track = _hueft_spur(name) if (name in anim_tanzen or name in anim_tanzen_buehne) else NodePath()
+		return
+	if name != anim_sitzen:
+		_sitz_aktiv = false
+		set_process(false)
 	anim.active = true
 	# Arme gelten bei jeder Animation, Rücken/Kopf nur beim Stehen und Gehen
 	var staerke := 1.0 if name == anim_stehen else (aufrichten_gehen if name == anim_gehen else 0.0)

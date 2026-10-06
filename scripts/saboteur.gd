@@ -17,7 +17,7 @@ var _figur: Figur
 func _ready() -> void:
 	add_to_group("saboteur")
 	add_to_group("interactable")
-	_figur = Figuren.einsetzen(self, Figuren.ALLE[2 % Figuren.ALLE.size()])
+	_figur = Figuren.einsetzen_npc(self, 4242, 3)
 	_figur.gehen(0.8)
 
 func ist_saboteur() -> bool:

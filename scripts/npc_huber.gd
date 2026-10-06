@@ -23,7 +23,7 @@ var _blick := 0.0
 func _ready() -> void:
 	add_to_group("huber")
 	add_to_group("interactable")
-	_figur = Figuren.einsetzen(self, figur_szene if figur_szene else Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
+	_figur = Figuren.einsetzen_look(self, Figuren.look_huber())
 	_figur.stehen()
 	_blick = rotation.y
 

@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dypw34l3uvxry"
-path="res://.godot/imported/standardkoerper_Janker_tex.png-89a36ded5ab4d70e71801b83970001a9.ctex"
+path.s3tc="res://.godot/imported/standardkoerper_Janker_tex.png-89a36ded5ab4d70e71801b83970001a9.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "0588862344b28e1ad9a5def0729191a4"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/character/standard/standardkoerper_Janker_tex.png"
-dest_files=["res://.godot/imported/standardkoerper_Janker_tex.png-89a36ded5ab4d70e71801b83970001a9.ctex"]
+dest_files=["res://.godot/imported/standardkoerper_Janker_tex.png-89a36ded5ab4d70e71801b83970001a9.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

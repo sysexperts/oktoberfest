@@ -47,12 +47,9 @@ const GLIEDER := {
 func _ready() -> void:
 	add_to_group("artist")
 	# Nur Figuren mit echter Tanzanimation auf die Bühne — der Reihe nach probieren
-	var start := posmod(String(name).hash(), Figuren.ALLE.size())
-	for k in Figuren.ALLE.size():
-		_figur = Figuren.einsetzen(self, Figuren.ALLE[(start + k) % Figuren.ALLE.size()])
-		if _figur.tanzen(randf_range(0.95, 1.05)):
-			_anim_tanz = true
-			break
+	_figur = Figuren.einsetzen_beruf(self, String(name).hash(), "kuenstler")
+	if _figur.tanzen(randf_range(0.95, 1.05)):
+		_anim_tanz = true
 	_model = _figur
 	_saenger = String(name).ends_with("0")
 	if _anim_tanz:

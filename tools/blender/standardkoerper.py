@@ -54,7 +54,7 @@ def material(name, farbe_srgb, rauheit=0.8):
 HAUT = material("Haut", (0.66, 0.43, 0.32))
 AUGAPFEL = material("Augapfel", (0.99, 0.93, 0.87), 0.5)
 PUPILLE = material("Pupille", (0.03, 0.03, 0.03), 0.35)
-BRAUE = material("Braue", (0.45, 0.39, 0.26) if OUTFIT in ("bean", "basis", "augen") else (0.52, 0.52, 0.54))   # Franz: Haarfarbe wie der Bart (grau)
+BRAUE = material("Braue", (0.45, 0.39, 0.26) if OUTFIT in ("bean", "basis", "augen", "kleidung") else (0.52, 0.52, 0.54))   # Franz: Haarfarbe wie der Bart (grau)
 MUND = material("Mund", (0.66, 0.40, 0.31))
 
 
@@ -232,7 +232,7 @@ AUGE_Y, AUGE_X, AUGE_R = 1.30, 0.093, 0.066     # riesig: ein Drittel der Kopfbr
 for s in (1, -1):
     ay = haut_y(s * AUGE_X, AUGE_Y)
     # Auge halb in der Haut: Mittelpunkt etwas hinter der Oberflaeche
-    if OUTFIT not in ("basis", "augen", "baerte"):          # Creator-Basiskörper hat keine Augen, die kommen als Bausteine
+    if OUTFIT not in ("basis", "augen", "baerte", "kleidung"):          # Creator-Basiskörper hat keine Augen, die kommen als Bausteine
         a = kugel(Vector((s * AUGE_X, ay + 0.010, AUGE_Y)), (AUGE_R, 0.036, AUGE_R), "auge", 28)
         a.data.materials.append(AUGAPFEL)
         p = kugel(Vector((s * (AUGE_X - 0.002), ay - 0.019, AUGE_Y - 0.002)), (0.040, 0.010, 0.040), "pupille", 20)
@@ -240,7 +240,7 @@ for s in (1, -1):
         gesicht += [a, p]
     # Braue: dicker Balken, innen höher (leicht besorgt-freundlich)
     bx, bh = s * 0.105, 1.428
-    if OUTFIT not in ("basis", "augen", "emotionen", "baerte"):       # Creator: Brauen und Mund kommen als Emotions-Baustein
+    if OUTFIT not in ("basis", "augen", "emotionen", "baerte", "kleidung"):       # Creator: Brauen und Mund kommen als Emotions-Baustein
         br = kugel(Vector((0, 0, 0)), (0.058, 0.022, 0.021), "braue", 16)
         br.rotation_euler = (0, math.radians(s * 12), 0)
         br.location = Vector((bx, haut_y(bx, bh) + 0.008, bh))
@@ -254,7 +254,7 @@ for i in range(25):
     mund_teile.append(kugel(Vector((mx, haut_y(mx, mh) + 0.002, mh)), (0.005, 0.004, 0.005), "mundteil", 6))
 mund = vereinen(mund_teile, "mund")
 mund.data.materials.append(MUND)
-if OUTFIT not in ("basis", "augen", "emotionen", "baerte"):
+if OUTFIT not in ("basis", "augen", "emotionen", "baerte", "kleidung"):
     gesicht.append(mund)
 else:
     bpy.data.objects.remove(mund, do_unlink=True)
@@ -391,11 +391,30 @@ for o in [koerper] + gesicht + [h for h, _ in haende] + kleidung_objekte:
     o.data.validate(verbose=False)
     for poly in o.data.polygons:
         poly.use_smooth = True
-if OUTFIT in ("huete", "frisuren", "brillen", "augen", "emotionen", "baerte"):
+if OUTFIT == "kleidung":
+    # Creator-Assets: jedes Stück einzeln als GLB, mit dem Skelett (das Netz hängt daran)
+    ordner = os.path.join(ROOT, "assets", "creator", "kleidung")
+    os.makedirs(ordner, exist_ok=True)
+    for kname, teile_k in KLEIDUNG.items():
+        if os.environ.get("NUR") and kname not in os.environ["NUR"].split(","):
+            continue
+        bpy.ops.object.select_all(action='DESELECT')
+        arm_obj.select_set(True)
+        for o in teile_k:
+            o.select_set(True)
+        bpy.ops.export_scene.gltf(filepath=os.path.join(ordner, kname + ".glb"), use_selection=True,
+                                  export_format='GLB', export_yup=True, export_skins=True,
+                                  export_vertex_color='ACTIVE')
+        print("Kleidung exportiert:", kname)
+    print("FERTIG Kleidung")
+    raise SystemExit
+if OUTFIT in ("huete", "frisuren", "frauenhaar", "brillen", "augen", "emotionen", "baerte"):
     # Creator-Assets: jeder Hut / jede Frisur einzeln als GLB (ohne Skelett, Modell-Koordinaten des Standardkörpers)
     ordner = os.path.join(ROOT, "assets", "creator", os.environ.get("EXPORT_ORDNER", OUTFIT))
     os.makedirs(ordner, exist_ok=True)
     for hname, teile_h in HUETE.items():
+        if os.environ.get("NUR") and hname not in os.environ["NUR"].split(","):
+            continue
         bpy.ops.object.select_all(action='DESELECT')
         for o in teile_h:
             o.parent = None

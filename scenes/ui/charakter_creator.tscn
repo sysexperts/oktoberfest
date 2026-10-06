@@ -4,28 +4,54 @@
 [ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="FensterStil"]
-content_margin_left = 28.0
-content_margin_top = 26.0
-content_margin_right = 28.0
-content_margin_bottom = 26.0
-bg_color = Color(0.082, 0.064, 0.052, 0.98)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
-shadow_color = Color(0, 0, 0, 0.5)
-shadow_size = 26
+content_margin_left = 24.0
+content_margin_top = 22.0
+content_margin_right = 24.0
+content_margin_bottom = 22.0
+bg_color = Color(0.075, 0.06, 0.05, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.22)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 24
 
 [sub_resource type="StyleBoxFlat" id="VorschauStil"]
 bg_color = Color(0.13, 0.105, 0.085, 1)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="Gradient" id="GlanzVerlauf"]
+offsets = PackedFloat32Array(0, 0.55, 1)
+colors = PackedColorArray(0.36, 0.26, 0.15, 1, 0.2, 0.15, 0.1, 0.55, 0.13, 0.105, 0.085, 0)
+
+[sub_resource type="GradientTexture2D" id="GlanzTextur"]
+gradient = SubResource("GlanzVerlauf")
+fill = 1
+fill_from = Vector2(0.5, 0.55)
+fill_to = Vector2(0.5, 0.0)
+
+[sub_resource type="CylinderMesh" id="BodenMesh"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.01
+radial_segments = 48
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="BodenStoff"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0, 0, 0, 0.38)
 
 [sub_resource type="Environment" id="Umgebung"]
-background_mode = 1
-background_color = Color(0.13, 0.105, 0.085, 1)
+background_mode = 0
 ambient_light_source = 2
 ambient_light_color = Color(1, 0.93, 0.82, 1)
 ambient_light_energy = 0.8
@@ -41,347 +67,795 @@ theme = ExtResource("2_theme")
 script = ExtResource("1_cc")
 
 [node name="Dunkel" type="ColorRect" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.03, 0.024, 0.02, 0.92)
+color = Color(0.03, 0.024, 0.02, 0.96)
 
-[node name="Mitte" type="CenterContainer" parent="."]
+[node name="Rand" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 36
 
-[node name="Reihe" type="HBoxContainer" parent="Mitte"]
+[node name="Reihe" type="HBoxContainer" parent="Rand"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 28
 
-[node name="VorschauRahmen" type="PanelContainer" parent="Mitte/Reihe"]
-custom_minimum_size = Vector2(430, 600)
-layout_mode = 2
-theme_override_styles/panel = SubResource("VorschauStil")
-
-[node name="Vorschau" type="SubViewportContainer" parent="Mitte/Reihe/VorschauRahmen"]
+[node name="Fenster" type="PanelContainer" parent="Rand/Reihe"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
-mouse_default_cursor_shape = 13
-stretch = true
-
-[node name="Ansicht" type="SubViewport" parent="Mitte/Reihe/VorschauRahmen/Vorschau"]
-own_world_3d = true
-handle_input_locally = false
-msaa_3d = 2
-size = Vector2i(430, 600)
-render_target_update_mode = 4
-
-[node name="Umgebung" type="WorldEnvironment" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
-environment = SubResource("Umgebung")
-
-[node name="Licht" type="DirectionalLight3D" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
-transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 3, 3)
-light_color = Color(1, 0.95, 0.85, 1)
-light_energy = 1.3
-
-[node name="Kamera" type="Camera3D" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.9976, 0.0698, 0, -0.0698, 0.9976, 0, 0.9, 3.9)
-fov = 34.0
-
-[node name="Drehteller" type="Node3D" parent="Mitte/Reihe/VorschauRahmen/Vorschau/Ansicht"]
-unique_name_in_owner = true
-
-[node name="Fenster" type="PanelContainer" parent="Mitte/Reihe"]
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.8
 theme_override_styles/panel = SubResource("FensterStil")
 
-[node name="Spalte" type="VBoxContainer" parent="Mitte/Reihe/Fenster"]
-custom_minimum_size = Vector2(520, 0)
+[node name="Spalte" type="VBoxContainer" parent="Rand/Reihe/Fenster"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 14
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte"]
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "CREATOR_TITLE"
-horizontal_alignment = 1
 
-[node name="Geschlecht" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte"]
-layout_mode = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Maennlich" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Geschlecht"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(170, 38)
-layout_mode = 2
-toggle_mode = true
-button_pressed = true
-text = "CREATOR_MALE"
-
-[node name="Weiblich" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Geschlecht"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(170, 38)
-layout_mode = 2
-disabled = true
-toggle_mode = true
-text = "CREATOR_FEMALE"
-tooltip_text = "CREATOR_FEMALE_SOON"
-
-[node name="Zeilen" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte"]
+[node name="Tabs" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Haut" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen"]
+[node name="TabAussehen" type="Button" parent="Rand/Reihe/Fenster/Spalte/Tabs"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
-theme_override_constants/separation = 4
+size_flags_horizontal = 3
+toggle_mode = true
+text = "CREATOR_TAB_LOOK"
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Haut"]
+[node name="TabKopf" type="Button" parent="Rand/Reihe/Fenster/Spalte/Tabs"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "CREATOR_TAB_HEAD"
+
+[node name="TabKleidung" type="Button" parent="Rand/Reihe/Fenster/Spalte/Tabs"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "CREATOR_TAB_CLOTHES"
+
+[node name="Scroll" type="ScrollContainer" parent="Rand/Reihe/Fenster/Spalte"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Seiten" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SeiteAussehen" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Geschlecht" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Maennlich" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Geschlecht"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "CREATOR_MALE"
+
+[node name="Weiblich" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Geschlecht"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "CREATOR_FEMALE"
+
+[node name="Haut" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Haut"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
 theme_override_font_sizes/font_size = 15
 text = "CREATOR_SKIN"
 
-[node name="HautFarben" type="HFlowContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Haut"]
+[node name="HautFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Haut"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
 
-[node name="Augen" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen"]
+[node name="Augen" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Augen"]
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Augen"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
 theme_override_font_sizes/font_size = 15
 text = "CREATOR_EYES"
 
-[node name="Wahl" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Augen"]
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Augen"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="AugenZurueck" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Augen/Wahl"]
+[node name="AugenZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Augen/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "‹"
 
-[node name="AugenName" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Augen/Wahl"]
+[node name="AugenName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Augen/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
-[node name="AugenWeiter" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Augen/Wahl"]
+[node name="AugenWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Augen/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "›"
 
-[node name="Ausdruck" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen"]
+[node name="Emotion" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Ausdruck"]
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Emotion"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
 theme_override_font_sizes/font_size = 15
 text = "CREATOR_FACE"
 
-[node name="Wahl" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Ausdruck"]
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Emotion"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="EmotionZurueck" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Ausdruck/Wahl"]
+[node name="EmotionZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Emotion/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "‹"
 
-[node name="EmotionName" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Ausdruck/Wahl"]
+[node name="EmotionName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Emotion/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
-[node name="EmotionWeiter" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Ausdruck/Wahl"]
+[node name="EmotionWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteAussehen/Emotion/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "›"
 
-[node name="Bart" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen"]
+[node name="SeiteKopf" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten"]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 4
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Bart"]
+[node name="Frisur" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Frisur"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "CREATOR_FRISUR"
+
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Frisur"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FrisurZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Frisur/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="FrisurName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Frisur/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="FrisurWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Frisur/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="FrisurFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Frisur"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="Bart" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Bart"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
 theme_override_font_sizes/font_size = 15
 text = "CREATOR_BEARD"
 
-[node name="Wahl" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Bart"]
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Bart"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="BartZurueck" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Bart/Wahl"]
+[node name="BartZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Bart/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "‹"
 
-[node name="BartName" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Bart/Wahl"]
+[node name="BartName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Bart/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
-[node name="BartWeiter" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Bart/Wahl"]
+[node name="BartWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Bart/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "›"
 
-[node name="HaarFarben" type="HFlowContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Bart"]
+[node name="BartFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Bart"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
 
-[node name="Hut" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen"]
+[node name="Hut" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Hut"]
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Hut"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
 theme_override_font_sizes/font_size = 15
 text = "CREATOR_HAT"
 
-[node name="Wahl" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Hut"]
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Hut"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="HutZurueck" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Hut/Wahl"]
+[node name="HutZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Hut/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "‹"
 
-[node name="HutName" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Hut/Wahl"]
+[node name="HutName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Hut/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
-[node name="HutWeiter" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Hut/Wahl"]
+[node name="HutWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Hut/Wahl"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
+custom_minimum_size = Vector2(48, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 24
 text = "›"
 
-[node name="HutFarben" type="HFlowContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Hut"]
+[node name="HutFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Hut"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
 
-[node name="Brille" type="VBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen"]
+[node name="Brille" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
-[node name="Titel" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Brille"]
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Brille"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
 theme_override_font_sizes/font_size = 15
 text = "CREATOR_GLASSES"
 
-[node name="Wahl" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Brille"]
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Brille"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BrilleZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Brille/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="BrilleName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Brille/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="BrilleWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Brille/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="BrilleFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKopf/Brille"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="SeiteKleidung" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Dirndl" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Dirndl"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "CREATOR_DIRNDL"
+
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Dirndl"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DirndlZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Dirndl/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="DirndlName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Dirndl/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="DirndlWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Dirndl/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="Hemd" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "CREATOR_HEMD"
+
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HemdZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="HemdName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="HemdWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="ReiheFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="BrilleZurueck" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Brille/Wahl"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "‹"
-
-[node name="BrilleName" type="Label" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Brille/Wahl"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BrilleWeiter" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Brille/Wahl"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(54, 42)
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "›"
-
-[node name="BrilleFarben" type="HFlowContainer" parent="Mitte/Reihe/Fenster/Spalte/Zeilen/Brille"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-
-[node name="Hinweis" type="Label" parent="Mitte/Reihe/Fenster/Spalte"]
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/ReiheFarben"]
+custom_minimum_size = Vector2(52, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_STOFF"
+
+[node name="HemdFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/ReiheFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="ReiheMusterFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/ReiheMusterFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_MUSTER"
+
+[node name="HemdMusterFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hemd/ReiheMusterFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="Jacke" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "CREATOR_JACKE"
+
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="JackeZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="JackeName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="JackeWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="ReiheFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/ReiheFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_STOFF"
+
+[node name="JackeFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/ReiheFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="ReiheMusterFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/ReiheMusterFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_MUSTER"
+
+[node name="JackeMusterFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Jacke/ReiheMusterFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="Hose" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "CREATOR_HOSE"
+
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HoseZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="HoseName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="HoseWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="ReiheFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/ReiheFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_STOFF"
+
+[node name="HoseFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/ReiheFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="ReiheMusterFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/ReiheMusterFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_MUSTER"
+
+[node name="HoseMusterFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Hose/ReiheMusterFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="Schuhe" type="VBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Titel" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 15
+text = "CREATOR_SCHUHE"
+
+[node name="Wahl" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SchuheZurueck" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "‹"
+
+[node name="SchuheName" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/Wahl"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="SchuheWeiter" type="Button" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/Wahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "›"
+
+[node name="ReiheFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/ReiheFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_STOFF"
+
+[node name="SchuheFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/ReiheFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="ReiheMusterFarben" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Beschriftung" type="Label" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/ReiheMusterFarben"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 1)
+theme_override_font_sizes/font_size = 14
+text = "CREATOR_MUSTER"
+
+[node name="SchuheMusterFarben" type="HFlowContainer" parent="Rand/Reihe/Fenster/Spalte/Scroll/Seiten/SeiteKleidung/Schuhe/ReiheMusterFarben"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 6
+
+[node name="Knoepfe" type="HBoxContainer" parent="Rand/Reihe/Fenster/Spalte"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Zufall" type="Button" parent="Rand/Reihe/Fenster/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CREATOR_RANDOM"
+
+[node name="Abbrechen" type="Button" parent="Rand/Reihe/Fenster/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CREATOR_CANCEL"
+
+[node name="Fertig" type="Button" parent="Rand/Reihe/Fenster/Spalte/Knoepfe"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.3
+theme_override_font_sizes/font_size = 22
+text = "CREATOR_DONE"
+
+[node name="VorschauRahmen" type="PanelContainer" parent="Rand/Reihe"]
+unique_name_in_owner = true
+clip_children = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+theme_override_styles/panel = SubResource("VorschauStil")
+
+[node name="Glanz" type="TextureRect" parent="Rand/Reihe/VorschauRahmen"]
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("GlanzTextur")
+expand_mode = 1
+
+[node name="Vorschau" type="SubViewportContainer" parent="Rand/Reihe/VorschauRahmen"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_default_cursor_shape = 13
+stretch = true
+
+[node name="Ansicht" type="SubViewport" parent="Rand/Reihe/VorschauRahmen/Vorschau"]
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 2
+size = Vector2i(1000, 900)
+render_target_update_mode = 4
+
+[node name="Umgebung" type="WorldEnvironment" parent="Rand/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+environment = SubResource("Umgebung")
+
+[node name="Licht" type="DirectionalLight3D" parent="Rand/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 3, 3)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 1.3
+
+[node name="Kamera" type="Camera3D" parent="Rand/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9976, 0.0698, 0, -0.0698, 0.9976, 0, 0.9, 3.9)
+fov = 34.0
+
+[node name="Boden" type="MeshInstance3D" parent="Rand/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.005, 0)
+mesh = SubResource("BodenMesh")
+surface_material_override/0 = SubResource("BodenStoff")
+
+[node name="Drehteller" type="Node3D" parent="Rand/Reihe/VorschauRahmen/Vorschau/Ansicht"]
+unique_name_in_owner = true
+
+[node name="Hinweis" type="Label" parent="Rand/Reihe/VorschauRahmen"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.68, 0.63, 0.57, 0.9)
 theme_override_font_sizes/font_size = 16
 text = "CREATOR_HINT"
 horizontal_alignment = 1
-
-[node name="Knoepfe" type="HBoxContainer" parent="Mitte/Reihe/Fenster/Spalte"]
-layout_mode = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Zufall" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Knoepfe"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 46)
-layout_mode = 2
-text = "CREATOR_RANDOM"
-
-[node name="Abbrechen" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Knoepfe"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 46)
-layout_mode = 2
-text = "CREATOR_CANCEL"
-
-[node name="Fertig" type="Button" parent="Mitte/Reihe/Fenster/Spalte/Knoepfe"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(190, 46)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "CREATOR_DONE"

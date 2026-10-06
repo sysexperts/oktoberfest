@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/creator/kleidung/bluse_lang.glb" id="1_glb"]
+
+[node name="bluse_lang" type="Node3D"]
+
+[node name="Modell" parent="." instance=ExtResource("1_glb")]

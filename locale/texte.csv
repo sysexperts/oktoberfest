@@ -648,6 +648,11 @@ CREATOR_HUT_CAP,Baseballcap,Baseball cap,Beyzbol şapkası
 CREATOR_HUT_FISCHER,Fischerhut,Bucket hat,Balıkçı şapkası
 CREATOR_HUT_COWBOY,Cowboyhut,Cowboy hat,Kovboy şapkası
 CREATOR_HUT_STIRNBAND,Stirnband,Headband,Kafa bandı
+CREATOR_HUT_KOCH,Kochmütze,Chef hat,Aşçı şapkası
+CREATOR_BRILLE_SECURITY,Security-Brille,Security shades,Güvenlik gözlüğü
+CREATOR_JACKE_KOCH,Kochjacke,Chef jacket,Aşçı ceketi
+CREATOR_JACKE_WARNWESTE,Warnweste,Hi-vis vest,Reflektörlü yelek
+CREATOR_SCHUERZE_ARBEIT,Arbeitsschürze,Work apron,İş önlüğü
 CREATOR_BRILLE_OHNE,Keine Brille,No glasses,Gözlük yok
 CREATOR_BRILLE_RUND,Runde Brille,Round glasses,Yuvarlak gözlük
 CREATOR_BRILLE_ECKIG,Eckige Brille,Square glasses,Kare gözlük
@@ -688,6 +693,51 @@ CREATOR_BART_STOPPELN,Dreitagebart,Stubble,Uzamış sakal
 CREATOR_BART_ZOTTELN,Langer Bart,Long beard,Uzun sakal
 CREATOR_BART_KINNBAND,Kinnband,Chin strap,Çene bandı
 CREATOR_BART_HUFEISEN,Hufeisenbart,Horseshoe mustache,At nalı bıyığı
+CREATOR_TAB_LOOK,Aussehen,Look,Görünüm
+CREATOR_TAB_HEAD,Kopf,Head,Baş
+CREATOR_TAB_CLOTHES,Kleidung,Clothes,Giysi
+CREATOR_FRISUR,Frisur,Hairstyle,Saç
+CREATOR_FRISUR_OHNE,Keine Frisur,No hairstyle,Saçsız
+CREATOR_FRISUR_BOB,Bob,Bob,Küt saç
+CREATOR_FRISUR_LANG,Lange Haare,Long hair,Uzun saç
+CREATOR_FRISUR_ZOEPFE,Zöpfe,Braids,Örgüler
+CREATOR_FRISUR_DUTT,Dutt,Bun,Topuz
+CREATOR_FRISUR_PFERDESCHWANZ,Pferdeschwanz,Ponytail,At kuyruğu
+CREATOR_FRISUR_KURZ,Kurzhaarschnitt,Pixie cut,Kısa saç
+CREATOR_DIRNDL,Dirndl,Dirndl,Dirndl
+CREATOR_BLUSE,Bluse,Blouse,Bluz
+CREATOR_BLUSE_LANG,Bluse (langärmlig),Blouse (long sleeves),Bluz (uzun kollu)
+CREATOR_BLUSE_KURZ,Bluse (kurz),Blouse (short),Bluz (kısa)
+CREATOR_DIRNDL_KLASSISCH_KURZ,Klassisches Dirndl (kurz),Classic dirndl (short),Klasik dirndl (kısa)
+CREATOR_DIRNDL_KLASSISCH_LANG,Klassisches Dirndl (lang),Classic dirndl (long),Klasik dirndl (uzun)
+CREATOR_DIRNDL_TRACHT,Tracht mit langen Ärmeln,Traditional dress with long sleeves,Uzun kollu geleneksel elbise
+CREATOR_DIRNDL_LANDHAUS,Landhauskleid,Country dress,Kır elbisesi
+CREATOR_KLEID,Kleid,Dress,Elbise
+CREATOR_SCHUERZE,Schürze,Apron,Önlük
+CREATOR_HEMD,Hemd,Shirt,Gömlek
+CREATOR_JACKE,Jacke,Jacket,Ceket
+CREATOR_HOSE,Hose,Trousers,Pantolon
+CREATOR_STOFF,Stoff,Fabric,Kumaş
+CREATOR_MUSTER,Muster,Pattern,Desen
+CREATOR_HEMD_OHNE,Kein Hemd,No shirt,Gömlek yok
+CREATOR_HEMD_KARO,Karohemd,Checked shirt,Kareli gömlek
+CREATOR_HEMD_KARO_KURZ,Karohemd kurz,Short checked shirt,Kısa kollu kareli gömlek
+CREATOR_HEMD_LEINEN,Leinenhemd,Linen shirt,Keten gömlek
+CREATOR_JACKE_OHNE,Keine Jacke,No jacket,Ceket yok
+CREATOR_JACKE_JANKER,Janker,Folk jacket,Bavyera ceketi
+CREATOR_SCHUHE,Schuhe,Shoes,Ayakkabı
+CREATOR_SCHUH_OHNE,Barfuß,Barefoot,Çıplak ayak
+CREATOR_SCHUH_HALB,Halbschuhe,Dress shoes,Klasik ayakkabı
+CREATOR_SCHUH_HAFERL,Haferlschuhe,Traditional shoes,Geleneksel ayakkabı
+CREATOR_SCHUH_SNEAKER,Turnschuhe,Sneakers,Spor ayakkabı
+CREATOR_SCHUH_STIEFEL,Arbeitsstiefel,Work boots,İş botu
+CREATOR_SCHUH_CLOG,Clogs,Clogs,Takunya
+CREATOR_SCHUH_BALLERINA,Ballerinas,Ballet flats,Babet
+CREATOR_SCHUH_SPANGEN,Spangenschuhe,Strap shoes,Bilekli ayakkabı
+CREATOR_JACKE_WESTE,Weste,Vest,Yelek
+CREATOR_HOSE_OHNE,Keine Hose,No trousers,Pantolon yok
+CREATOR_HOSE_LEDER,Lederhose,Lederhosen,Deri pantolon
+CREATOR_HOSE_KNIEBUND,Kniebundhose,Knee breeches,Diz bağlı pantolon
 LOBBY_PICK_FIGURE,Figur wählen,Choose character,Karakter seç
 LOBBY_FIGURE_TAKEN,Ausgegraute Figuren hat schon jemand.,Greyed-out characters are taken.,Gri karakterler başkasında.
 LOBBY_FIGURE_DONE,Fertig,Done,Tamam
@@ -867,7 +917,7 @@ CHEF_8_IHR,"Ihr schafft das. Der Sepp wäre stolz auf euch.","You can do it. Sep
 HINT_FESTLEITER,{interact} Mit dem Festleiter reden,{interact} Talk to the fair manager,{interact} Fuar müdürüyle konuş
 DIALOG_WEITER,Linksklick / E weiter,Left click / E for next,Devam için sol tık / E
 DIALOG_ENDE,Linksklick / E beenden,Left click / E to finish,Bitirmek için sol tık / E
-FESTLEITER_NAME,Festleiter,Fair manager,Fuar müdürü
+FESTLEITER_NAME,Festbetreiber Horst,Fair operator Horst,Fuar işletmecisi Horst
 CHEF_7_DU,"Unterschreib vorne am roten Schild, dann gehört das Zelt dir. Danach komm zu mir — ich zeig dir, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzala, çadır senin olsun. Sonra yanıma gel — devamını göstereyim."
 CHEF_7_IHR,"Unterschreibt vorne am roten Schild, dann gehört das Zelt euch. Danach kommt zu mir — ich zeig euch, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzalayın, çadır sizin olsun. Sonra yanıma gelin — devamını göstereyim."
 CHEF_BUERO_1_DU,"Das ist mein Festbüro. Hier am Schreibtisch kaufst du alles, was dein Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırının ihtiyacı olan her şeyi bu masadan alırsın."

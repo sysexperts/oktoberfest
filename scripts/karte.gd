@@ -216,11 +216,13 @@ func _eintrag_setzen(n: int, e: Dictionary) -> void:
 	# Essensbuden: Verkäufer hinter die Theke
 	var platz := k.get_node_or_null("Verkaeufer") as Node3D
 	if platz:
-		var figur := Figuren.ALLE[posmod(n * 7, Figuren.ALLE.size())].instantiate() as Node3D
+		var look := Figuren.npc_look(n * 7 + 11)
+		var figur := Figuren.Look.bauen(look)
 		figur.name = "Figur"
 		figur.add_to_group("nachtruhe")
 		figur.transform = platz.transform
 		k.add_child(figur)
+		Figuren.Look.faerben(figur, look)
 	add_child(k)
 	Sichtweite.anwenden(k)
 	if figur_von(k):

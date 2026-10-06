@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b5ierhqcbsfxe"
-path="res://.godot/imported/standardkoerper_Hut_tex.png-eb7641de64d1193ad5ae29a8d13c17d4.ctex"
+path.s3tc="res://.godot/imported/standardkoerper_Hut_tex.png-eb7641de64d1193ad5ae29a8d13c17d4.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "5e917bfdf3ab4926b6899174b52809a2"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/character/standard/standardkoerper_Hut_tex.png"
-dest_files=["res://.godot/imported/standardkoerper_Hut_tex.png-eb7641de64d1193ad5ae29a8d13c17d4.ctex"]
+dest_files=["res://.godot/imported/standardkoerper_Hut_tex.png-eb7641de64d1193ad5ae29a8d13c17d4.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

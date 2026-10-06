@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://br26a46sxyg5o"
-path="res://.godot/imported/standardkoerper_Koerper_tex.png-82d137f0472ab4ed2d16ff10bc02bef1.ctex"
+path.s3tc="res://.godot/imported/standardkoerper_Koerper_tex.png-82d137f0472ab4ed2d16ff10bc02bef1.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "7beac9fd464caeaeb3f53ef541a9c260"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/character/standard/standardkoerper_Koerper_tex.png"
-dest_files=["res://.godot/imported/standardkoerper_Koerper_tex.png-82d137f0472ab4ed2d16ff10bc02bef1.ctex"]
+dest_files=["res://.godot/imported/standardkoerper_Koerper_tex.png-82d137f0472ab4ed2d16ff10bc02bef1.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

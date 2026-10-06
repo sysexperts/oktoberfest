@@ -55,7 +55,8 @@ func _ready() -> void:
 	_net_pos = position
 	_net_yaw = rotation.y
 	_last = position
-	_figur = Figuren.einsetzen(self, Figuren.fuer_gast(cust_id))
+	# Namenlose Gäste: aus der ID zusammengewürfelt (Creator); benannte Stammgäste behalten ihre feste Figur
+	_figur = Figuren.einsetzen_npc(self, cust_id) if stamm == "" else Figuren.einsetzen_stamm(self, stamm)
 	_steht = Figuren.ist_stehgast(cust_id)
 	_model = _figur
 	_anim = _figur.anim
@@ -101,7 +102,7 @@ func set_tanz(an: bool, boden := false) -> void:
 		if _anim:
 			_anim.active = true
 		# Ohne Tanz stehen bleiben — die Laufanimation sah aus, als liefe er über den Tisch
-		if not _figur.tanzen(randf_range(0.9, 1.15)):
+		if not _figur.tanzen(randf_range(0.9, 1.15), boden):
 			_figur.stehen()
 		_cur = "Tanz"
 		if _mug:
@@ -117,6 +118,8 @@ func tanzt() -> bool:
 var rausch_stufe := 0
 ## Läuft gerade die Torkel-Animation? (nur Figuren mit Figur.anim_betrunken)
 var _torkelt := false
+## Steht gerade mit der Schwank-Animation (betrunken, Figur.anim_betrunken_stehen)
+var _wankt := false
 
 func set_rausch(s: int) -> void:
 	if s == rausch_stufe:
@@ -263,16 +266,20 @@ func _process(delta: float) -> void:
 	# Wer zu viel hat, torkelt statt zu gehen — Figuren ohne eigene Torkel-
 	# animation (Figur.anim_betrunken) gehen weiter normal.
 	var torkelt := want == "Walk" and rausch_stufe >= 2 and _figur.kann_torkeln()
-	if not _seated and (want != _cur or torkelt != _torkelt) and _anim:
+	var wankt := want == "Idle" and rausch_stufe >= 2 and _figur.kann_betrunken_stehen()
+	if not _seated and (want != _cur or torkelt != _torkelt or wankt != _wankt) and _anim:
 		if want == "Walk":
 			if torkelt:
 				_figur.torkeln(randf_range(0.85, 1.05))
 			else:
 				_figur.gehen()
+		elif wankt:
+			_figur.stehen_betrunken()
 		else:
 			_figur.stehen()
 		_cur = want
 		_torkelt = torkelt
+		_wankt = wankt
 	# Otururken bankta biraz alçal + hafif sarhoş sallanma
 	if _model:
 		var target_y := _figur.sitz_hoehe_gesamt() if _seated else 0.0

@@ -73,7 +73,7 @@ var _eng: PhysicsShapeQueryParameters3D = null
 func _ready() -> void:
 	add_to_group("visitor")
 	# Draußen läuft alles nur lokal — Zufall reicht, niemand muss dieselbe Figur sehen
-	_figur = Figuren.einsetzen(self, Figuren.zufaellig())
+	_figur = Figuren.einsetzen_npc(self, randi())
 	_model = _figur
 	# Keine Schatten: jeder Besucher würde sonst in jeder Schattenstufe noch
 	# einmal mit Skelett gezeichnet — bei Hunderten der größte Posten

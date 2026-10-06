@@ -64,8 +64,11 @@ def uv_auspacken(o):
     bpy.ops.object.mode_set(mode='OBJECT')
 
 
-def bemalen(o, farbe_fn, groesse=1024):
-    """UV-Karte anlegen und die Farbfunktion (Godot-Koordinaten → sRGB) auf die Textur backen"""
+def bemalen(o, farbe_fn, groesse=1024, kanal=False):
+    """UV-Karte anlegen und die Farbfunktion (Godot-Koordinaten → sRGB) auf die Textur backen.
+    kanal=True: Kleidung mit zwei einstellbaren Farben. farbe_fn liefert dann nur die Maske (0 = Hauptfarbe,
+    1 = Zweitfarbe/Besatz); die Textur trägt R = Maske, G = Schatten (Form + AO). Die Farben mischt in
+    Godot ein Shader (scripts/charakter_look.gd)."""
     uv_auspacken(o)
     me = o.data
     me.calc_loop_triangles()
@@ -78,7 +81,10 @@ def bemalen(o, farbe_fn, groesse=1024):
     LICHT /= np.linalg.norm(LICHT)
     # Lücken (Randtexel, winzige Dreiecke) nie schwarz lassen: mit der Mittelfarbe vorfüllen
     mitte = farbe_fn(pos[len(pos) // 2: len(pos) // 2 + 200].astype(np.float64))
-    bild[:] = np.median(mitte, axis=0).astype(np.float32)
+    if kanal:
+        bild[:] = np.array([float(np.median(mitte)), 0.9, 0.0], np.float32)
+    else:
+        bild[:] = np.median(mitte, axis=0).astype(np.float32)
     for tri in me.loop_triangles:
         uv = np.array([uvl[l].uv[:] for l in tri.loops], np.float32) * groesse
         p3 = pos[list(tri.vertices)]
@@ -110,7 +116,11 @@ def bemalen(o, farbe_fn, groesse=1024):
         # und wärmer, Oberseiten heller. Das gibt der flachen Farbe Volumen.
         licht = np.clip(N @ LICHT, -1, 1)
         schatten = np.clip(0.5 - licht * 0.5, 0, 1)[:, None]
-        farbe = farbe * (0.80 + 0.26 * (1 - schatten)) + schatten * 0.02 * np.array([1.0, 0.5, 0.3])[None, :]
+        if kanal:
+            form = 0.80 + 0.26 * (1 - schatten[:, 0])
+            farbe = np.stack([np.clip(farbe, 0, 1), form, np.zeros(len(form))], axis=1)
+        else:
+            farbe = farbe * (0.80 + 0.26 * (1 - schatten)) + schatten * 0.02 * np.array([1.0, 0.5, 0.3])[None, :]
         bild[ys.ravel()[innen], xs.ravel()[innen]] = farbe
         belegt[ys.ravel()[innen], xs.ravel()[innen]] = True
     # Ränder der Inseln auffüllen, damit an den Nähten keine Lücken durchscheinen
@@ -128,7 +138,7 @@ def bemalen(o, farbe_fn, groesse=1024):
     img.pixels.foreach_set(rgba.ravel())   # Zeile 0 = v 0 (Blender zählt von unten) — passt zu y = v * Größe
     img.pack()
     img.update()
-    _bemalt.append((o, img, bild.copy(), groesse))
+    _bemalt.append((o, img, bild.copy(), groesse, kanal))
     return img
 
 
@@ -148,7 +158,14 @@ def stoff_material(name, img, rauheit=0.9):
 ARM_KNOCHEN = ("LeftShoulder", "LeftArm", "LeftForeArm", "LeftHand", "RightShoulder", "RightArm", "RightForeArm", "RightHand")
 
 
-def binden(o, ohne_arme=False, starr_ab=None):
+GEWICHT_R = 0.07          # Körperpunkte in diesem Umkreis (m) mischen die Gewichte eines Kleidungspunkts
+GEWICHT_SIGMA = 0.03
+FEIN = [0]               # Unterteilungen der Körperkopie in schale() (Frauenkleidung: saubere Kanten)
+ARM_FOLGT = [False]     # Ärmel folgen nur dem Arm (nicht dem Rumpf), z. B. die Puffärmel der Bluse
+HUEFTE_UNTEN, HUEFTE_OBEN = 0.66, 0.78      # Höhe (m), ab der die Beine keinen Einfluss mehr auf Kleidung haben
+
+
+def binden(o, ohne_arme=False, starr_ab=None, eigene=None):
     """Gewichte vom nächsten Körperpunkt übernehmen, Armature-Modifier, Eltern.
     ohne_arme: Gürtel und Hose sollen nicht an den Armen hängen, die neben ihnen herunterhängen."""
     namen = {g.index: g.name for g in koerper.vertex_groups}
@@ -161,10 +178,82 @@ def binden(o, ohne_arme=False, starr_ab=None):
         baum.insert(v.co, i)
     baum.balance()
     gruppen = {}
+    bpy.context.view_layer.update()
+    arm_verts = set()
+    if ohne_arme:
+        for i, v in enumerate(koerper.data.vertices):
+            if len(v.groups):
+                dom = max(v.groups, key=lambda g: g.weight)
+                if namen[dom.group] in ARM_KNOCHEN:
+                    arm_verts.add(i)
+    baum_arm = None
+    if ARM_FOLGT[0]:
+        baum_arm = kdtree.KDTree(len(koerper.data.vertices))
+        for i, v in enumerate(koerper.data.vertices):
+            if len(v.groups) and namen[max(v.groups, key=lambda g: g.weight).group] in ARM_KNOCHEN:
+                baum_arm.insert(v.co, i)
+        baum_arm.balance()
     for v in o.data.vertices:
-        _, idx, _ = baum.find(v.co)
-        for g in koerper.data.vertices[idx].groups:
-            gruppen.setdefault(namen[g.group], []).append((v.index, g.weight))
+        # Gewichte aus dem weichen Umfeld statt vom nächsten Körperpunkt: Hemd, Jacke und Hose liegen nur wenige
+        # cm übereinander, bekommen so an derselben Stelle fast dieselben Gewichte (auch in der Achsel) und
+        # rutschen in der Pose nicht gegeneinander.
+        quellen = []
+        for _co, i, d in baum.find_range(v.co, GEWICHT_R):
+            quellen.append((i, math.exp(-(d / GEWICHT_SIGMA) ** 2)))
+        if not quellen:
+            _, idx, _ = baum.find(v.co)
+            quellen = [(idx, 1.0)]
+        summe = {}
+        gesamt = sum(w for _, w in quellen)
+        for idx, w in quellen:
+            for g in koerper.data.vertices[idx].groups:
+                summe[namen[g.group]] = summe.get(namen[g.group], 0.0) + g.weight * w / gesamt
+        t_arm = sanft(0.19, 0.26, abs(v.co.x)) if baum_arm is not None else 0.0
+        if t_arm > 0.0:
+            qa = [(i, math.exp(-(d / GEWICHT_SIGMA) ** 2)) for _co, i, d in baum_arm.find_range(v.co, GEWICHT_R)]
+            if not qa:
+                qa = [(baum_arm.find(v.co)[1], 1.0)]
+            ga = sum(w for _, w in qa)
+            nur_arm = {}
+            for idx, w in qa:
+                for g in koerper.data.vertices[idx].groups:
+                    nur_arm[namen[g.group]] = nur_arm.get(namen[g.group], 0.0) + g.weight * w / ga
+            na = sum(nur_arm.values()) or 1.0
+            ns = sum(summe.values()) or 1.0
+            alle_n = set(summe) | set(nur_arm)
+            summe = {n: (1.0 - t_arm) * summe.get(n, 0.0) / ns + t_arm * nur_arm.get(n, 0.0) / na for n in alle_n}
+        norm = sum(summe.values()) or 1.0
+        for n, w in summe.items():
+            gruppen.setdefault(n, []).append((v.index, w / norm))
+    eigene_idx = set()
+    if eigene is not None:
+        # Eigene Gewichte (z. B. der Rock, der sich nicht wie die Beine verformen darf) für alle Punkte, für die
+        # eigene(co) ein Dictionary name -> Gewicht liefert; die übrigen behalten die Körpergewichte.
+        ersetzt = {}
+        for v in o.data.vertices:
+            d = eigene(v.co)
+            if d is not None:
+                ersetzt[v.index] = d
+        eigene_idx = set(ersetzt)
+        gruppen = {n: [(i, w) for i, w in liste if i not in eigene_idx] for n, liste in gruppen.items()}
+        for i, d in ersetzt.items():
+            for n, w in d.items():
+                if w > 1e-4:
+                    gruppen.setdefault(n, []).append((i, w))
+    # Hüftbereich: die Beinknochen verlieren nach oben ihren Einfluss an das Becken. Hose, Hemd und Jacke liegen dort
+    # übereinander — hängen sie unterschiedlich stark am Oberschenkel, schiebt ein Bein sie ineinander.
+    neu = {}
+    for n, liste in gruppen.items():
+        bein = n.endswith("UpLeg") or n.endswith("Leg") or n.endswith("Foot") or n.endswith("Toes") or n.endswith("ToeBase")
+        for i, w in liste:
+            z = o.data.vertices[i].co.z
+            t = max(0.0, min(1.0, (z - HUEFTE_UNTEN) / (HUEFTE_OBEN - HUEFTE_UNTEN))) if bein and i not in eigene_idx else 0.0
+            d = neu.setdefault(n, {})
+            d[i] = d.get(i, 0.0) + w * (1.0 - t)
+            if t > 0.0:
+                h = neu.setdefault("Hips", {})
+                h[i] = h.get(i, 0.0) + w * t
+    gruppen = {n: list(d.items()) for n, d in neu.items()}
     if starr_ab is not None:
         # Am Halsansatz fest an den oberen Rücken ("Spine"): die Körpergewichte springen dort zwischen
         # Kopf, Hals und Rücken, das zerreißt die dünne Kante in der Pose.
@@ -267,7 +356,7 @@ def teil(name, teile, voxel, schnitte=(), ausschnitt=None, glaetten=6, anteil=0.
     return o
 
 
-def fertig(name, objekte, farbe_fn, groesse=1024, rauheit=0.9, ohne_arme=False, starr_ab=None):
+def fertig(name, objekte, farbe_fn, groesse=1024, rauheit=0.9, ohne_arme=False, starr_ab=None, kanal=False, eigene=None):
     """Teile verbinden, bemalen, an das Skelett binden"""
     o = objekte[0] if len(objekte) == 1 else vereinen(objekte, name)
     o.name = name
@@ -276,9 +365,9 @@ def fertig(name, objekte, farbe_fn, groesse=1024, rauheit=0.9, ohne_arme=False, 
     for poly in o.data.polygons:
         poly.material_index = 0
         poly.use_smooth = True
-    img = bemalen(o, farbe_fn, groesse)
+    img = bemalen(o, farbe_fn, groesse, kanal)
     o.data.materials.append(stoff_material(name, img, rauheit))
-    binden(o, ohne_arme, starr_ab)
+    binden(o, ohne_arme, starr_ab, eigene)
     kleidung_objekte.append(o)
     return o
 
@@ -357,16 +446,19 @@ def schale(name, offset_fn, ebenen, glaetten=2):
     scene.collection.objects.link(o)
     bm = bmesh.new()
     bm.from_mesh(o.data)
+    if FEIN[0]:
+        # feiner unterteilen: der Körper ist grob, an Ausschnitt und Saum würden die Schnittkanten sonst zackig
+        bmesh.ops.subdivide_edges(bm, edges=list(bm.edges), cuts=FEIN[0], use_grid_fill=True)
     bm.normal_update()
     for v in bm.verts:
         v.co = v.co + v.normal * offset_fn(v.co)
     bm.to_mesh(o.data)
     bm.free()
     bpy.context.view_layer.objects.active = o
-    if glaetten:
+    if glaetten or FEIN[0]:
         m = o.modifiers.new("Glatt", 'SMOOTH')
         m.factor = 0.5
-        m.iterations = glaetten
+        m.iterations = max(glaetten, 3 if FEIN[0] else 0)
         bpy.ops.object.modifier_apply(modifier="Glatt")
     bm = bmesh.new()
     bm.from_mesh(o.data)
@@ -1115,6 +1207,17 @@ elif OUTFIT == "huete":
     h = formen("stirnband", band_k, 0.006, 4, 0.3)
     hut_fertig("stirnband", h, [], lambda P: grau(P, 0.90))
 
+    # ---- 12. Kochmütze (hohe, bauschige Mütze)
+    def koch_profil(t):
+        r = 0.226 + 0.062 * math.sin(min(t / 0.55, 1.0) * math.pi / 2)
+        if t > 0.86:
+            r *= math.sqrt(max(0.0, 1.0 - ((t - 0.86) / 0.14) ** 2)) * 0.9 + 0.1
+        return (r, r * 0.92)
+    krone = kette(BR - 0.01, BR + 0.50, koch_profil, 20, 0.036)
+    h = formen("kochmuetze", krone, 0.009)
+    band = fest("kochmuetze_band", kugel(g2b(0, BR + 0.04, 0.0), (0.236, 0.216, 0.034), "band", 32), (0.88, 0.88, 0.86), 0.8)
+    hut_fertig("kochmuetze", h, [band], lambda P: grau(P, 0.96))
+
 elif OUTFIT == "frisuren":
     # ================================================================ Creator-Assets: Frisuren (männlich)
     # Methode (Stylized-Hair-Workflow): jede Frisur besteht aus einzelnen, dicken, abgeflachten Strähnen
@@ -1488,6 +1591,147 @@ elif OUTFIT == "frisuren":
         q_haar("q_dutt", "Hair_Buns.gltf", S, "auto", 0.01)
         q_haar("q_bart", "Hair_Beard.gltf", (2.4, 1.2, 1.9), (0.0, 1.27 - 1.689 * 1.2, 0.03), 1.0, 0.012, 0.0055, 0.016)
 
+elif OUTFIT == "frauenhaar":
+    # ================================================================ Creator-Assets: Frisuren (weiblich)
+    # Wie Lisa (character3): glatte, dicke Haarmasse, die das Gesicht einrahmt, mit runden Enden. Die Haube
+    # besteht aus überlappenden Kugeln auf der Kopfoberfläche (Voxel-Remesh macht daraus eine geschlossene,
+    # weiche Hülle). Vorn bleibt ein Fenster für Augen, Wangen und Mund frei.
+    HUETE = {}
+    HC = Vector((0.0, 1.52, 0.0))                    # Mitte der Kopfkuppel (Godot-Koordinaten)
+    HR = Vector((0.205, 0.175, 0.19))                # Halbachsen der Kuppel
+    KOPF_OBEN = HC.y + HR.y
+
+    def kopfpunkt(phi, y, lift):
+        """Punkt auf der Kopfoberfläche (phi = 0 vorn, wächst nach links/+x), um lift nach außen"""
+        dy = y - HC.y
+        s = math.sqrt(max(0.0, 1.0 - (dy / HR.y) ** 2)) if dy > 0 else 1.0
+        x, z = HR.x * s * math.sin(phi), HR.z * s * math.cos(phi)
+        n = Vector((x / HR.x ** 2, dy / HR.y ** 2 if dy > 0 else 0.0, z / HR.z ** 2)).normalized()
+        return Vector((x, y, z)) + n * lift
+
+    def glatt(a, b, x):
+        u = max(0.0, min(1.0, (x - a) / (b - a)))
+        return u * u * (3 - 2 * u)
+
+    def haube(unten, luecke=0.185, pony=1.535, lift=0.024, flare=0.048, r=0.056, schritt=0.036, hinten_unten=None, oben=KOPF_OBEN - 0.012):
+        """Kugeln über den ganzen Kopf bis zur Höhe unten(phi); vorn zwischen +-luecke nur oberhalb von pony.
+        hinten_unten: Funktion phi -> untere Kante (z. B. langes Haar im Nacken)."""
+        kugeln = []
+        y = oben
+        while y > 1.0:
+            dy = y - HC.y
+            sc = math.sqrt(max(0.0, 1.0 - (dy / HR.y) ** 2)) if dy > 0 else 1.0
+            n = max(6, int(math.tau * HR.x * max(sc, 0.2) / (schritt * 0.95)))
+            for i in range(n):
+                phi = math.tau * (i + 0.5 * (int((oben - y) / schritt) % 2)) / n
+                u0 = unten(phi) if hinten_unten is None else hinten_unten(phi)
+                if y < u0:
+                    continue
+                px = HR.x * sc * math.sin(phi)
+                vorn = math.cos(phi) > 0.0
+                if vorn and abs(px) < luecke and y < pony:
+                    continue
+                f = 1.0 - glatt(u0, u0 + 0.12, y)
+                kugeln.append(kugel(g2b(kopfpunkt(phi, y, lift + flare * f)), (r, r, r), "haar", 12))
+            y -= schritt * 0.9
+        # Scheitelpunkt: die oberste Kugelreihe lässt in der Mitte ein Loch
+        kugeln.append(kugel(g2b(Vector((0.0, KOPF_OBEN + lift - 0.004, 0.0))), (r * 1.15, r * 1.0, r * 1.15), "scheitel", 14))
+        return kugeln
+
+    def formen(name, teile, voxel=0.0100, glaetten=10, anteil=0.14):
+        o = vereinen(teile, name)
+        o.data.remesh_voxel_size = voxel
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.voxel_remesh()
+        m = o.modifiers.new("Glatt", 'SMOOTH')
+        m.factor = 0.6
+        m.iterations = glaetten
+        bpy.ops.object.modifier_apply(modifier="Glatt")
+        d = o.modifiers.new("Dez", 'DECIMATE')
+        d.ratio = anteil
+        bpy.ops.object.modifier_apply(modifier="Dez")
+        bpy.ops.object.shade_smooth()
+        return o
+
+    def haar_glatt(P):
+        """Neutrales Haar: Ansatz dunkler, Spitzen und Außenseite heller, leichte Strähnen"""
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        wink = np.arctan2(gz, gx)
+        strahl = 0.5 + 0.5 * np.sin(wink * 22 + gy * 18)
+        rad = np.sqrt((gx / 0.205) ** 2 + (gz / 0.19) ** 2)
+        v = 0.50 + 0.08 * strahl + 0.03 * ruis(P, 60.0) + 0.10 * np.clip((rad - 1.0) * 2.0, 0, 1) + 0.06 * np.clip((1.45 - gy) * 2.0, 0, 1)
+        return np.repeat(np.clip(v, 0, 0.82)[:, None], 3, axis=1)
+
+    def fest(name, o, farbe, rauheit=0.8):
+        o.name = name
+        o.data.name = name
+        o.data.materials.clear()
+        o.data.materials.append(material(name, farbe, rauheit))
+        bpy.ops.object.select_all(action='DESELECT')
+        return o
+
+    def haar_fertig(name, haupt, extras=()):
+        o = fertig(name + "_farbe", [haupt], haar_glatt, 1024, 0.9)
+        SCHWACH_AO.add(o.name)      # AO-Rauschen auf den vielen kleinen UV-Inseln würde helle Flecken geben
+        for g in list(o.vertex_groups):
+            o.vertex_groups.remove(g)
+        HUETE[name] = [o] + list(extras)
+
+    def strang(punkte, radien, name):
+        """Kugelkette (Zopf, Schwanz) durch Godot-Punkte mit Radien"""
+        return [kugel(g2b(p), (r, r, r), name, 12) for p, r in zip(punkte, radien)]
+
+    # ---- 1. Bob: schulterfrei, bis zum Kinn, runde Enden, Pony
+    haar_fertig("bob", formen("bob", haube(lambda phi: 1.20)))
+
+    # ---- 2. Langes Haar: seitlich bis zum Kinn, im Rücken bis auf die Schultern
+    def lang_unten(phi):
+        hinten = max(0.0, -math.cos(phi))
+        return 1.20 - 0.26 * glatt(0.2, 0.9, hinten)
+    haar_fertig("lang", formen("lang", haube(lambda phi: 1.20, hinten_unten=lang_unten, flare=0.040)))
+
+    # ---- 3. Zöpfe: kurze Haube, links und rechts ein Zopf mit Haargummi
+    teile = haube(lambda phi: 1.40, pony=1.54, flare=0.012)
+    gummis = []
+    for sx in (1, -1):
+        pk, rd = [], []
+        N = 30
+        for i in range(N):
+            t = i / (N - 1)
+            # vom Haaransatz hinter dem Ohr gerade nach unten, dicht am Körper: leicht nach vorn über die Schulter,
+            # dann am Oberkörper entlang (nicht frei in der Luft)
+            pk.append(Vector((sx * (0.232 - 0.020 * glatt(0.2, 0.6, t) + 0.006 * math.sin(i * 1.3)), 1.40 - 0.50 * t,
+                              0.085 * glatt(0.05, 0.55, t) + 0.008 * math.sin(i * 1.3 + 1))))
+            rd.append(0.050 - 0.018 * t)
+        teile += strang(pk, rd, "zopf")
+        gummis.append(kugel(g2b(pk[-1] + Vector((0, -0.028, 0))), (0.028, 0.024, 0.028), "gummi", 12))
+    g = vereinen(gummis, "zoepfe_gummi")
+    haar_fertig("zoepfe", formen("zoepfe", teile, 0.0085), [fest("zoepfe_gummi", g, (0.78, 0.12, 0.16), 0.7)])
+
+    # ---- 4. Dutt: Haube, Haarknoten oben hinten
+    teile = haube(lambda phi: 1.40, pony=1.54, flare=0.010)
+    teile += [kugel(g2b(0.0, 1.74, -0.055), (0.085, 0.075, 0.085), "dutt", 18)]
+    haar_fertig("dutt", formen("dutt", teile))
+
+    # ---- 5. Pferdeschwanz: Haube, hinten oben gebunden, der Schwanz fällt in den Nacken (dichte Kugelkette, damit er
+    # ein durchgehender Strang ist und nicht in einzelne Perlen zerfällt)
+    teile = haube(lambda phi: 1.40, pony=1.54, flare=0.010)
+    N = 30
+    pk = []
+    rd = []
+    for i in range(N):
+        t = i / (N - 1)
+        pk.append(Vector((0.0, 1.62 - 0.62 * t * (0.7 + 0.3 * t), -0.200 - 0.115 * math.sin(min(1.0, t * 1.15) * math.pi * 0.62) - 0.02 * t)))
+        rd.append(0.056 + 0.020 * math.sin(math.pi * min(1.0, t * 1.6)) - 0.026 * t)
+    teile += strang(pk, rd, "schwanz")
+    # Ansatz: dicke Kugeln zwischen Haube und Strang
+    teile += [kugel(g2b(Vector((0.0, 1.60, -0.235))), (0.075, 0.070, 0.075), "ansatz", 16)]
+    g = kugel(g2b(Vector((0.0, 1.585, -0.262))), (0.040, 0.036, 0.040), "gummi", 12)
+    haar_fertig("pferdeschwanz", formen("pferdeschwanz", teile, 0.0085), [fest("pferdeschwanz_gummi", g, (0.78, 0.12, 0.16), 0.7)])
+
+    # ---- 6. Kurz (Pixie): Haube bis über die Ohren, Pony
+    haar_fertig("kurz", formen("kurz", haube(lambda phi: 1.42, pony=1.53, luecke=0.175, flare=0.010)))
+
 elif OUTFIT == "brillen":
     # ================================================================ Creator-Assets: Brillen
     # Gestell = "<name>_farbe" (neutral grau, wird im Creator eingefärbt), Gläser = "<name>_glas"
@@ -1703,6 +1947,20 @@ elif OUTFIT == "brillen":
         kurve_roehre(bm, pfad, 0.0025, 5)
     o, g = brille("monokel", "rund", 0.086, 0.086, 0.0070, 0.0075, (0.80, 0.90, 0.95, 0.16), nur_rechts=True, extras=mono_extras)
     brille_fertig("monokel", o, g)
+    # ---- 11. Security-Brille: eckige dunkle Sonnenbrille mit Headset (Ohrhörer-Kabel und Mikrofonbügel an der rechten Seite)
+    def sec_extras(bm, bg):
+        kabel = [Vector((0.215, EBENE + 0.20, AUGE_Z - 0.06)), Vector((0.225, EBENE + 0.20, AUGE_Z - 0.15)),
+                 Vector((0.215, EBENE + 0.19, AUGE_Z - 0.26)), Vector((0.19, EBENE + 0.17, AUGE_Z - 0.36))]
+        kurve_roehre(bm, kabel, 0.0035, 6)
+        ohr = [Vector((0.22, EBENE + 0.20, AUGE_Z - 0.02)), Vector((0.235, EBENE + 0.20, AUGE_Z - 0.10))]
+        kurve_roehre(bm, ohr, 0.020, 8)
+        boom = [Vector((0.225, EBENE + 0.19, AUGE_Z - 0.10)), Vector((0.20, EBENE + 0.08, AUGE_Z - 0.17)),
+                Vector((0.14, EBENE - 0.02, AUGE_Z - 0.23)), Vector((0.075, EBENE - 0.045, AUGE_Z - 0.245))]
+        kurve_roehre(bm, boom, 0.0035, 6)
+        mic = [Vector((0.075, EBENE - 0.045, AUGE_Z - 0.245)), Vector((0.052, EBENE - 0.052, AUGE_Z - 0.250))]
+        kurve_roehre(bm, mic, 0.011, 8)
+    o, g = brille("sec", "eckig", 0.096, 0.064, 0.0090, 0.0090, (0.05, 0.05, 0.06, 0.90), buegel_d=0.0085, extras=sec_extras)
+    brille_fertig("security_brille", o, g)
     # ---- 10. Herzbrille (Partybrille)
     o, g = brille("herzbrille", "herz", 0.092, 0.088, 0.0095, 0.010, (0.95, 0.25, 0.45, 0.50), hoehe=AUGE_Z + 0.002)
     brille_fertig("herzbrille", o, g)
@@ -1715,7 +1973,7 @@ elif OUTFIT == "augen":
     LIDMAT = material("Lid", (0.66, 0.43, 0.32), 0.8)
 
     def auge_paar(name, rx=0.066, rz=0.066, pr=(0.040, 0.040), schiel=0.0, pz_off=-0.002, lid=None, abstand=AX0,
-                  hoehe=AZ0, nur_pupille=False, zwinkern=False, tiefe=0.036):
+                  hoehe=AZ0, nur_pupille=False, zwinkern=False, tiefe=0.036, wimpern=False):
         """lid: None oder (Schnitthöhe relativ zur Augenmitte, Neigung nach innen)"""
         teile = []
         pup = []
@@ -1746,6 +2004,24 @@ elif OUTFIT == "augen":
             p = kugel(Vector((px, ay - 0.019 + (0.014 if nur_pupille else 0.0), hoehe + pz_off)), (pr[0], 0.010 if not nur_pupille else 0.012, pr[1]), "pupille", 20)
             p.data.materials.append(PUPILLE)
             pup.append(p)
+            if wimpern and not nur_pupille:
+                # drei geschwungene Wimpern am äußeren oberen Rand (nach außen und oben gebogen)
+                for th_grad, laenge in ((22, 0.036), (46, 0.040), (70, 0.034)):
+                    th = math.radians(th_grad)
+                    d = Vector((sx * math.cos(th), 0.0, math.sin(th)))
+                    basis = Vector((sx * abstand, ay + 0.002, hoehe)) + Vector((d.x * rx * 0.97, 0.0, d.z * rz * 0.97))
+                    pts = [basis, basis + d * laenge * 0.4 + Vector((0, -0.003, 0.003)),
+                           basis + d * laenge * 0.75 + Vector((sx * 0.006, -0.004, 0.011)),
+                           basis + d * laenge + Vector((sx * 0.012, -0.004, 0.020))]
+                    bw = bmesh.new()
+                    kurve_roehre_dick(bw, pts, 0.0052)
+                    mw = bpy.data.meshes.new("wimper")
+                    bw.to_mesh(mw)
+                    bw.free()
+                    ow = bpy.data.objects.new("wimper", mw)
+                    scene.collection.objects.link(ow)
+                    ow.data.materials.append(PUPILLE)
+                    pup.append(ow)
             if lid is not None and not nur_pupille:
                 hoeh_rel, neigung = lid
                 cap = kugel(Vector((sx * abstand, ay + 0.010, hoehe)), (rx + 0.0055, tiefe + 0.012, rz + 0.0055), "lid", 72)
@@ -1804,6 +2080,18 @@ elif OUTFIT == "augen":
     ]:
         t, pu, li = auge_paar(name, **kw)
         augen_fertig(name, t, pu, li)
+    # Frauen: dieselben Formen (bis auf die Spezialaugen) mit Wimpern
+    for name, kw in [
+        ("gross_w", {}),
+        ("klein_w", dict(rx=0.040, rz=0.040, pr=(0.026, 0.026), abstand=0.098)),
+        ("oval_hoch_w", dict(rx=0.050, rz=0.086, pr=(0.034, 0.052), hoehe=AZ0 + 0.004)),
+        ("muede_w", dict(lid=(0.002, 0.0))),
+        ("grosse_pupillen_w", dict(rx=0.064, rz=0.064, pr=(0.056, 0.056))),
+        ("zwinkernd_w", dict(rx=0.062, rz=0.062, pr=(0.040, 0.040), zwinkern=True)),
+    ]:
+        kw["wimpern"] = True
+        t, pu, li = auge_paar(name, **kw)
+        augen_fertig(name, t, pu, li)
 
 elif OUTFIT == "emotionen":
     # ================================================================ Creator-Assets: Gesichtsausdrücke (Brauen + Mund)
@@ -1833,8 +2121,12 @@ elif OUTFIT == "emotionen":
         o.data.materials.append(mat)
         return o
 
+    FRAU = [False]
+
     def braue(sx, y, tilt, breit=0.058, dick=0.021, x=0.105, krumm=0.0, name="braue"):
         """Braue auf der Haut: tilt in Grad (positiv: wie die freundliche Ausgangsbraue, innen höher; negativ: wütend)"""
+        if FRAU[0]:
+            breit, dick = breit * 0.95, dick * 0.62
         k = kugel(Vector((0, 0, 0)), (breit * 1.1, 0.022, dick * 1.15), name, 16)
         k.rotation_euler = (0, math.radians(sx * tilt * 1.3), 0)
         bx = sx * x
@@ -1850,7 +2142,7 @@ elif OUTFIT == "emotionen":
             mx, mh = t * breite, h0 + 0.012 + kurve(t) * 1.4 + schief * t
             pts.append(Vector((mx, haut_y(mx, mh) + 0.002 + dick * 0.5, mh)))
         b = bmesh.new()
-        r_dick(b, pts, dick, 8, True)
+        r_dick(b, pts, dick * (1.9 if FRAU[0] else 1.0), 8, True)
         me = bpy.data.meshes.new(name)
         b.to_mesh(me)
         b.free()
@@ -1859,6 +2151,7 @@ elif OUTFIT == "emotionen":
         return o
 
     MUNDMAT = material("MundDunkel", (0.20, 0.09, 0.07), 0.6)
+    LIPPENMAT = material("Lippen", (0.80, 0.30, 0.38), 0.45)
     BRAUMAT = material("BraueEmotion", (0.45, 0.39, 0.26), 0.8)
 
     def ausdruck(name, brauen, mund_obj, extras=()):
@@ -1869,51 +2162,56 @@ elif OUTFIT == "emotionen":
         b = vereinen(brauen, name + "_farbe") if len(brauen) > 1 else brauen[0]
         b.name = name + "_farbe"
         teile.append(b)
-        glatt_obj(mund_obj, MUNDMAT)
+        glatt_obj(mund_obj, LIPPENMAT if FRAU[0] else MUNDMAT)
         teile.append(mund_obj)
         for e in extras:
             teile.append(e)
         HUETE[name] = teile
 
-    # ---- 1. Freundlich (Ausgangsgesicht)
-    ausdruck("freundlich", [braue(1, 1.428, 12), braue(-1, 1.428, 12)], mund(0.050, lambda t: 0.010 * t * t))
-    # ---- 2. Wütend: Brauen steil nach innen unten, tiefer, Mund hängt
-    ausdruck("wuetend", [braue(1, 1.414, -26, 0.062, 0.025, 0.100), braue(-1, 1.414, -26, 0.062, 0.025, 0.100)],
-             mund(0.050, lambda t: -0.020 * t * t, 0.0065))
-    # ---- 3. Fröhlich: Brauen hoch, breites Lachen
-    ausdruck("froehlich", [braue(1, 1.446, 8), braue(-1, 1.446, 8)], mund(0.078, lambda t: 0.034 * t * t, 0.0085))
-    # ---- 4. Traurig: Brauen innen hoch, Mundwinkel unten, eine Träne
-    tr = kugel(Vector((0, 0, 0)), (0.0105, 0.008, 0.016), "traene", 14)
-    tr.location = Vector((0.108, haut_y(0.108, 1.235) + 0.006, 1.235))
-    tr.data.materials.append(material("Traene", (0.60, 0.82, 0.98), 0.2))
-    for poly in tr.data.polygons:
-        poly.use_smooth = True
-    ausdruck("traurig", [braue(1, 1.426, 26), braue(-1, 1.426, 26)], mund(0.040, lambda t: -0.016 * t * t, 0.0060), [tr])
-    # ---- 5. Überrascht: Brauen sehr hoch, runder offener Mund
-    ring = []
-    for k in range(32):
-        w = k / 32 * math.tau
-        ring.append(Vector((0.020 * math.sin(w), 0, 1.185 + 0.027 * math.cos(w))))
-    ring = [Vector((p.x, haut_y(p.x, p.z) + 0.003, p.z)) for p in ring]
-    b = bmesh.new()
-    r_dick(b, ring + [ring[0]], 0.0065, 8, False)
-    me = bpy.data.meshes.new("o_mund")
-    b.to_mesh(me)
-    b.free()
-    omund = bpy.data.objects.new("o_mund", me)
-    scene.collection.objects.link(omund)
-    innen = kugel(Vector((0.0, haut_y(0.0, 1.185) + 0.0015, 1.185)), (0.0185, 0.003, 0.0255), "mund_innen", 20)
-    glatt_obj(innen, MUNDMAT)
-    ausdruck("ueberrascht", [braue(1, 1.462, 0, 0.056, 0.020), braue(-1, 1.462, 0, 0.056, 0.020)], omund, [innen])
-    # ---- 6. Skeptisch: eine Braue hoch, andere tief, schiefer Mund
-    ausdruck("skeptisch", [braue(1, 1.452, -8, 0.060, 0.021), braue(-1, 1.416, 14, 0.058, 0.023)],
-             mund(0.046, lambda t: 0.0, 0.0055, 0.016))
-    # ---- 7. Genervt: Brauen flach und tief, gerader Mund
-    ausdruck("genervt", [braue(1, 1.412, -4, 0.064, 0.024), braue(-1, 1.412, -4, 0.064, 0.024)],
-             mund(0.042, lambda t: 0.0, 0.0055))
-    # ---- 8. Fies grinsend: Brauen böse, schiefes breites Grinsen
-    ausdruck("grinsend", [braue(1, 1.420, -18, 0.062, 0.024), braue(-1, 1.434, 4, 0.058, 0.021)],
-             mund(0.070, lambda t: 0.016 * max(0.0, t) ** 2 + 0.004 * t * t, 0.0075, 0.010))
+    def alle_ausdruecke(sfx):
+        # ---- 1. Freundlich (Ausgangsgesicht)
+        ausdruck("freundlich" + sfx, [braue(1, 1.428, 12), braue(-1, 1.428, 12)], mund(0.050, lambda t: 0.010 * t * t))
+        # ---- 2. Wütend: Brauen steil nach innen unten, tiefer, Mund hängt
+        ausdruck("wuetend" + sfx, [braue(1, 1.414, -26, 0.062, 0.025, 0.100), braue(-1, 1.414, -26, 0.062, 0.025, 0.100)],
+                 mund(0.050, lambda t: -0.020 * t * t, 0.0065))
+        # ---- 3. Fröhlich: Brauen hoch, breites Lachen
+        ausdruck("froehlich" + sfx, [braue(1, 1.446, 8), braue(-1, 1.446, 8)], mund(0.078, lambda t: 0.034 * t * t, 0.0085))
+        # ---- 4. Traurig: Brauen innen hoch, Mundwinkel unten, eine Träne
+        tr = kugel(Vector((0, 0, 0)), (0.0105, 0.008, 0.016), "traene", 14)
+        tr.location = Vector((0.108, haut_y(0.108, 1.235) + 0.006, 1.235))
+        tr.data.materials.append(material("Traene", (0.60, 0.82, 0.98), 0.2))
+        for poly in tr.data.polygons:
+            poly.use_smooth = True
+        ausdruck("traurig" + sfx, [braue(1, 1.426, 26), braue(-1, 1.426, 26)], mund(0.040, lambda t: -0.016 * t * t, 0.0060), [tr])
+        # ---- 5. Überrascht: Brauen sehr hoch, runder offener Mund
+        ring = []
+        for k in range(32):
+            w = k / 32 * math.tau
+            ring.append(Vector((0.020 * math.sin(w), 0, 1.185 + 0.027 * math.cos(w))))
+        ring = [Vector((p.x, haut_y(p.x, p.z) + 0.003, p.z)) for p in ring]
+        b = bmesh.new()
+        r_dick(b, ring + [ring[0]], 0.0065, 8, False)
+        me = bpy.data.meshes.new("o_mund")
+        b.to_mesh(me)
+        b.free()
+        omund = bpy.data.objects.new("o_mund", me)
+        scene.collection.objects.link(omund)
+        innen = kugel(Vector((0.0, haut_y(0.0, 1.185) + 0.0015, 1.185)), (0.0185, 0.003, 0.0255), "mund_innen", 20)
+        glatt_obj(innen, MUNDMAT)
+        ausdruck("ueberrascht" + sfx, [braue(1, 1.462, 0, 0.056, 0.020), braue(-1, 1.462, 0, 0.056, 0.020)], omund, [innen])
+        # ---- 6. Skeptisch: eine Braue hoch, andere tief, schiefer Mund
+        ausdruck("skeptisch" + sfx, [braue(1, 1.452, -8, 0.060, 0.021), braue(-1, 1.416, 14, 0.058, 0.023)],
+                 mund(0.046, lambda t: 0.0, 0.0055, 0.016))
+        # ---- 7. Genervt: Brauen flach und tief, gerader Mund
+        ausdruck("genervt" + sfx, [braue(1, 1.412, -4, 0.064, 0.024), braue(-1, 1.412, -4, 0.064, 0.024)],
+                 mund(0.042, lambda t: 0.0, 0.0055))
+        # ---- 8. Fies grinsend: Brauen böse, schiefes breites Grinsen
+        ausdruck("grinsend" + sfx, [braue(1, 1.420, -18, 0.062, 0.024), braue(-1, 1.434, 4, 0.058, 0.021)],
+                 mund(0.070, lambda t: 0.016 * max(0.0, t) ** 2 + 0.004 * t * t, 0.0075, 0.010))
+
+    alle_ausdruecke("")
+    FRAU[0] = True
+    alle_ausdruecke("_w")
 
 elif OUTFIT == "baerte":
     # ================================================================ Creator-Assets: Bärte
@@ -2083,6 +2381,509 @@ elif OUTFIT == "baerte":
         t_.append(bpunkt(0.0, 1.230, 0.022))
     bart_fertig("hufeisen", b_formen("hufeisen", t_, 0.0032, 6, 0.22))
 
+elif OUTFIT == "kleidung":
+    # ================================================================ Creator-Assets: Hemden, Jacken, Hosen
+    # Drei Schichten, die sich beliebig kombinieren lassen, ohne durcheinanderzuclippen:
+    #   Hemd  (Abstand zum Körper ≈ 0,010–0,014)  — steckt in der Hose
+    #   Hose  (≈ 0,016, am Bund bis 0,87 m)       — liegt über dem Hemd
+    #   Jacke (≥ 0,026)                            — liegt über Hemd und Hose
+    # Jedes Stück ist aus dem Körper abgeleitet (aufgeblasene Kopie, zugeschnitten), am selben Skelett
+    # gewichtet und wird einzeln als GLB exportiert (Skelett + Netze des Stücks). Der Hauptteil heißt
+    # "<id>_farbe" und trägt eine Maske (R) und Schatten (G): Godot mischt daraus Hauptfarbe und
+    # Zweitfarbe/Besatz (scripts/charakter_look.gd). Knöpfe, Gürtel usw. heißen "<id>_fest" (feste Farbe).
+    KLEIDUNG = {}
+
+    def verschweissen(teile, name, dist=0.0002):
+        o = vereinen(teile, name)
+        bm = bmesh.new()
+        bm.from_mesh(o.data)
+        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=dist)
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bm.to_mesh(o.data)
+        bm.free()
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.shade_smooth()
+        return o
+
+    def oberarm_ende(seite, t):
+        a, e = POS[seite + "Arm"], POS[seite + "ForeArm"]
+        return (a + (e - a) * t, (e - a).normalized())
+
+    def schraege_z(seite, z0):
+        n = Vector((-1, 0, -1)).normalized() if seite == "Left" else Vector((1, 0, -1)).normalized()
+        return (Vector((SCHULTERNAHT if seite == "Left" else -SCHULTERNAHT, 0, z0)), n)
+
+    def rumpf_mit_aermeln(name, off, hem, aermel, hals=1.14, v=None):
+        """Rumpf + Ärmel zu einer Fläche verschweißt. aermel: ('ober', t) | ('unter', t) | None (ohne Ärmel).
+        v = (unten_breite, oben_breite): Vorderausschnitt als V, vorn offen."""
+        if aermel is None:
+            rumpf = schale(name + "_r", off, [unter(hem), ueber(1.13)] + breiter_als(0.176), 4)
+        else:
+            rumpf = schale(name + "_r", off, [unter(hem), ueber(hals)] + breiter_als(SCHULTERNAHT), 0)
+        if v:
+            ausschneiden(rumpf, keil([(-v[0], 0.70), (v[0], 0.70), (v[1], 1.24), (-v[1], 1.24)], 0.30, -0.02))
+        if aermel is None:
+            return rumpf
+        teile = [rumpf]
+        for seite in ("Left", "Right"):
+            ende = oberarm_ende(seite, aermel[1]) if aermel[0] == "ober" else ende_ebene(seite, aermel[1])
+            teile.append(schale(name + "_" + seite, off, nur_arm(seite, SCHULTERNAHT) + [ueber(hals), ende, schraege_z(seite, hem)], 0))
+        return verschweissen(teile, name)
+
+    def fest(name, o, farbe, rauheit=0.7, ohne_arme=False):
+        """Teil mit fester Farbe (Knopf, Gürtel), am Skelett gewichtet"""
+        o.name = name
+        o.data.name = name
+        o.data.materials.clear()
+        o.data.materials.append(material(name, farbe, rauheit))
+        for poly in o.data.polygons:
+            poly.use_smooth = True
+        binden(o, ohne_arme)
+        kleidung_objekte.append(o)
+        return o
+
+    def knoepfe(haupt, punkte, r=0.014, farbe=(0.40, 0.23, 0.13)):
+        teile = []
+        for x, z in punkte:
+            teile.append(kugel(Vector((x, hoehe_y(haupt, x, z) + 0.002, z)), (r, r * 0.55, r), "knopf", 14))
+        return vereinen(teile, "knoepfe")
+
+    def bias_farbe(o):
+        """Vertexfarbe (Rot) = Anteil des Tiefenvorrangs im Kleidungs-Shader: voll am Rumpf, null am Halsausschnitt und
+        an den Handgelenken. Dort ragt der Körper aus dem Stück, und ein vorgezogener Kragen oder Ärmel würde Kinn und
+        Hand verdecken."""
+        n = len(o.data.vertices)
+        P = np.array([[v.co.x, v.co.z, -v.co.y] for v in o.data.vertices])       # Blender -> Godot-Raum
+        rumpf = np.abs(P[:, 0]) < 0.22
+        oben = P[rumpf, 1].max()
+        # Frauenkleidung (Bluse, Kleid): kurze Abblendung, damit Bluse und Mieder am Ausschnitt dieselbe Reihenfolge behalten
+        # (sonst schneidet sich der Stoff dort zackig)
+        f = np.clip((oben - P[:, 1]) / (0.03 if o.name.startswith(("bluse", "kleid")) else 0.09), 0.0, 1.0)
+        for seite, vz in (("Left", 1.0), ("Right", -1.0)):
+            t = arm_t(P, seite)
+            arm = (vz * P[:, 0] > 0.22)
+            f = np.where(arm, np.clip((0.95 - t) / 0.30, 0.0, 1.0), f)
+        skala = 1.0
+        if o.name.startswith("bluse"):
+            skala = 1.75
+            # Puffärmel: in der Achsel stößt der Körper bei erhobenen Armen am weitesten durch den Stoff
+            ax = np.abs(P[:, 0])
+            f = f * (1.0 + 0.75 * np.array([sanft(0.12, 0.20, x) * (1.0 - sanft(0.34, 0.50, x)) for x in ax]))
+        attr = o.data.color_attributes.new("Col", 'BYTE_COLOR', 'POINT')
+        for i in range(n):
+            attr.data[i].color = (float(f[i]) / skala, 0.0, 0.0, 1.0)      # der Shader rechnet mal "skala" (Look: tiefe_skala)
+        o.data.color_attributes.active_color = attr
+
+    def stueck(name, haupt, maske, extras, groesse=512, ohne_arme=False, eigene=None, bias=None):
+        f = fertig(name + "_farbe", [haupt], maske, groesse, 0.95, ohne_arme, None, True, eigene)
+        if bias if bias is not None else name.startswith(("hemd", "jacke")):
+            bias_farbe(f)
+        KLEIDUNG[name] = [f] + extras
+
+    def streifen(P, z0, z1):
+        return hart(np.abs(P[:, 1] - (z0 + z1) / 2), (z1 - z0) / 2, 0.004)
+
+    def aermel_band(P, von, bis):
+        m = np.zeros(len(P))
+        for seite, vz in (("Left", 1.0), ("Right", -1.0)):
+            t = arm_t(P, seite)
+            m = np.maximum(m, ((t > von) & (t < bis) & (vz * P[:, 0] > 0.15)) * 1.0)
+        return m
+
+    # ============================================================ HEMDEN (Abstand 0,010–0,014)
+    def hemd(name, off, hem, aermel, maske, extras_fn=None, groesse=512):
+        o = rumpf_mit_aermeln(name, lambda c: off, hem, aermel)
+        ex = extras_fn(o) if extras_fn else []
+        stueck(name, o, maske, ex, groesse)
+
+    def maske_karo(P):
+        s = 0.034
+        kx = np.floor(P[:, 0] / s) % 2
+        ky = np.floor(P[:, 1] / s) % 2
+        return np.where(kx + ky == 0, 0.0, np.where(kx + ky == 1, 0.5, 1.0))
+
+    hemd("hemd_karo", 0.012, 0.84, ("unter", 0.97), maske_karo)
+    hemd("hemd_karo_kurz", 0.012, 0.84, ("ober", 0.62), maske_karo)
+
+    def leinen_extras(o):
+        pk = [(0.0, z) for z in (0.93, 1.01, 1.09)]
+        return [fest("hemd_leinen_fest", knoepfe(o, pk, 0.0085), (0.90, 0.86, 0.74), 0.6)]
+
+    def maske_leinen(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        platte = hart(np.abs(gx), 0.018, 0.003) * (gz > 0.02) * (gy > 0.88)
+        return np.maximum(platte, aermel_band(P, 0.86, 1.0))
+
+    hemd("hemd_leinen", 0.014, 0.84, ("unter", 0.97), maske_leinen, leinen_extras)
+
+    def maske_tshirt(P):
+        m = np.zeros(len(P))
+        for seite, vz in (("Left", 1.0), ("Right", -1.0)):
+            a, e = POS[seite + "Arm"], POS[seite + "ForeArm"]
+            ab = np.array(e - a)
+            t = ((P - np.array(a)) @ ab) / float(ab @ ab)
+            m = np.maximum(m, ((t > 0.50) & (t < 0.62) & (vz * P[:, 0] > 0.15)) * 1.0)
+        return np.maximum(m, streifen(P, 0.835, 0.855) * (np.abs(P[:, 0]) < 0.2))
+
+
+    # ============================================================ JACKEN (Abstand ≥ 0,026)
+    HEM = 0.76
+    OEFF_U, OEFF_O = 0.060, 0.108
+
+    def oeff_b(z):
+        return OEFF_U + (z - 0.70) / (1.24 - 0.70) * (OEFF_O - OEFF_U)
+
+    def maske_janker(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        m = streifen(P, HEM - 0.002, HEM + 0.022) * (np.abs(gx) < 0.2)                       # Saum
+        kante = np.abs(np.abs(gx) - oeff_b(gy))
+        m = np.maximum(m, hart(kante, 0.013, 0.003) * (gz > -0.02) * (gy > HEM))             # Vorderkante
+        m = np.maximum(m, aermel_band(P, 0.52, 1.0))                                          # Ärmelbündchen
+        for sx in (1, -1):                                                                    # Taschenklappen
+            dx = (gx - sx * 0.130) / 0.048
+            dy = (gy - 0.84) / 0.026
+            rand = np.abs(np.maximum(np.abs(dx), np.abs(dy)) - 1.0)
+            m = np.maximum(m, hart(rand, 0.07, 0.03) * (gz > 0.05))
+        return m
+
+    jk = rumpf_mit_aermeln("jacke_janker", lambda c: 0.028 + 0.012 * sanft(0.90, 0.76, c.z), HEM, ("unter", 0.62), 1.14, (OEFF_U, OEFF_O))
+    flaps = [kugel(Vector((sx * 0.130, hoehe_y(jk, sx * 0.130, 0.84) + 0.003, 0.84)), (0.046, 0.011, 0.024), "klappe", 16) for sx in (1, -1)]
+    jk_mit = vereinen([jk] + flaps, "jacke_janker")
+    kn = knoepfe(jk, [(oeff_b(z) + 0.034, z) for z in (0.835, 0.905, 0.975, 1.045)])
+    stueck("jacke_janker", jk_mit, maske_janker, [fest("jacke_janker_fest", kn, (0.40, 0.23, 0.13), 0.6)], 1024)
+
+    WESTE_U, WESTE_O = 0.050, 0.100
+
+    def weste_b(z):
+        return WESTE_U + (z - 0.70) / (1.24 - 0.70) * (WESTE_O - WESTE_U)
+
+    def maske_weste(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        m = streifen(P, 0.79, 0.82) * (np.abs(gx) < 0.2)
+        m = np.maximum(m, hart(np.abs(np.abs(gx) - weste_b(gy)), 0.010, 0.003) * (gz > -0.02) * (gy > 0.80))
+        m = np.maximum(m, hart(np.abs(np.abs(gx) - 0.176), 0.010, 0.003) * (gy > 0.92))
+        for sx in (1, -1):                                                                    # Rauten
+            for cy in (0.88, 0.97, 1.06):
+                d = np.abs(gx - sx * 0.130) / 0.018 + np.abs(gy - cy) / 0.018
+                m = np.maximum(m, hart(d, 1.0, 0.25) * (gz > 0.05))
+        return m
+
+    ws = rumpf_mit_aermeln("jacke_weste", lambda c: 0.028 + 0.008 * sanft(0.92, 0.80, c.z), 0.80, None, 1.13, (WESTE_U, WESTE_O))
+    kn = knoepfe(ws, [(weste_b(z) + 0.030, z) for z in (0.84, 0.91, 0.98, 1.05)], 0.013, )
+    stueck("jacke_weste", ws, maske_weste, [fest("jacke_weste_fest", kn, (0.82, 0.72, 0.50), 0.5)], 1024)
+
+    # ---- Berufskleidung: Kochjacke (zweireihig), Warnweste (Security), Arbeitsschürze
+    HEM_K = 0.80
+
+    def maske_kochjacke(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        m = streifen(P, HEM_K - 0.002, HEM_K + 0.016) * (np.abs(gx) < 0.2)
+        m = np.maximum(m, aermel_band(P, 0.84, 1.0))
+        m = np.maximum(m, hart(np.abs(gx - 0.065 * np.sign(gx)) , 0.006, 0.002) * (gz > 0.0) * (gy > HEM_K) * (gy < 1.12) * 0)
+        m = np.maximum(m, hart(np.abs(gx - 0.030), 0.007, 0.002) * (gz > 0.02) * (gy > HEM_K) * (gy < 1.13))   # Überschlag vorn
+        m = np.maximum(m, streifen(P, 1.095, 1.125) * (np.abs(gx) < 0.2))                                     # Kragen
+        return m
+
+    kj = rumpf_mit_aermeln("jacke_kochjacke", lambda c: 0.030 + 0.010 * sanft(0.92, 0.80, c.z), HEM_K, ("unter", 0.70), 1.14, None)
+    kn = knoepfe(kj, [(sx, z) for sx in (-0.020, 0.080) for z in (0.86, 0.93, 1.00, 1.07)], 0.012, )
+    stueck("jacke_kochjacke", kj, maske_kochjacke, [fest("jacke_kochjacke_fest", kn, (0.92, 0.92, 0.90), 0.5)], 1024)
+
+    def maske_warnweste(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        m = np.maximum(streifen(P, 0.885, 0.915), streifen(P, 1.005, 1.035)) * (np.abs(gx) < 0.2)          # Reflexstreifen quer
+        m = np.maximum(m, hart(np.abs(np.abs(gx) - 0.115), 0.016, 0.003) * (gy > 1.035))                    # Streifen über die Schultern
+        m = np.maximum(m, hart(np.abs(gx), 0.007, 0.002) * (gz > 0.02) * (gy > 0.80))                      # Reißverschluss
+        return m
+
+    wv = rumpf_mit_aermeln("jacke_warnweste", lambda c: 0.036 + 0.008 * sanft(0.92, 0.80, c.z), 0.78, None, 1.13, None)
+    stueck("jacke_warnweste", wv, maske_warnweste, [], 1024)
+
+    def maske_pullover(P):
+        gx = P[:, 0]
+        return np.maximum(np.maximum(streifen(P, 0.775, 0.805) * (np.abs(gx) < 0.2), aermel_band(P, 0.88, 1.0)), streifen(P, 1.075, 1.095) * (np.abs(gx) < 0.2))
+
+
+    # ============================================================ HOSEN (Abstand ≈ 0,016)
+    def hose(name, off_fn, saum, maske, extras_fn=None, bund=0.87, groesse=512):
+        o = schale(name + "_farbe", off_fn, [unter(saum), ueber(bund)] + breiter_als(0.200), 2)
+        ex = extras_fn(o) if extras_fn else []
+        stueck(name, o, maske, ex, groesse, True)
+
+    def gurt_extras(o):
+        ring = []
+        for k in range(56):
+            w = k / 56 * math.tau
+            ring.append(kugel(g2b(0.178 * math.sin(w), 0.865, 0.150 * math.cos(w)), (0.022, 0.022, 0.034), "gurt", 8))
+        g = teil("gurt", ring, 0.008, (), None, 6, 0.18)
+        gy = hoehe_y(g, 0.0, 0.865)
+        pl = kugel(Vector((0, gy - 0.004, 0.865)), (0.055, 0.012, 0.034), "plakette", 20)
+        return [fest("hose_gurt_fest", g, (0.10, 0.12, 0.10), 0.6, True), fest("hose_gurt_fest_plakette", pl, (0.78, 0.66, 0.30), 0.4, True)]
+
+    def blaetter(P, sx, cy_liste):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        m = np.zeros(len(P))
+        for cy, ang, ln in cy_liste:
+            u, v = gx - sx * 0.108, gy - cy
+            ca, sa = math.cos(ang), math.sin(ang)
+            uu, vv = u * ca - v * sa, u * sa + v * ca
+            blatt = (np.abs(uu) < 0.016 * np.clip(1 - (vv / ln) ** 2, 0, 1)) & (np.abs(vv) < ln)
+            m = np.maximum(m, (blatt & (gz > 0.02)) * 1.0)
+        return m
+
+    def maske_leder(saum, blatt_y=0.64):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            m = streifen(P, saum - 0.012, saum + 0.012) * (gy < 0.9)
+            for sx in (1, -1):
+                m = np.maximum(m, blaetter(P, sx, ((blatt_y, 0.0, 0.050), (blatt_y - 0.04, 0.9, 0.032), (blatt_y - 0.04, -0.9, 0.032), (blatt_y - 0.08, 0.0, 0.026))))
+                m = np.maximum(m, hart(np.abs(gx - sx * 0.108), 0.0035, 0.002) * (gy > saum + 0.02) * (gy < blatt_y + 0.06) * (gz > 0.02))
+            return m
+        return f
+
+    hose("hose_leder", lambda c: 0.016 + 0.014 * sanft(0.62, 0.50, c.z), 0.50, maske_leder(0.50), gurt_extras, groesse=1024)
+    hose("hose_kniebund", lambda c: 0.016 - 0.004 * sanft(0.44, 0.34, c.z), 0.34, maske_leder(0.34, 0.60), gurt_extras, groesse=1024)
+
+    def maske_naht(saum):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            m = streifen(P, saum - 0.008, saum + 0.008)
+            m = np.maximum(m, hart(np.abs(np.abs(gx) - 0.178), 0.004, 0.002) * (gy < 0.86) * (gy > saum))     # Seitennaht
+            m = np.maximum(m, hart(np.abs(gx), 0.004, 0.002) * (gz > 0.05) * (gy > 0.66) * (gy < 0.86))       # Mittelnaht
+            return m
+        return f
+
+    # ============================================================ DIRNDL (Frauen: Bluse = hemd, Kleid = hose, Schürze = jacke)
+    # Frauen tragen nur Dirndl: Bluse mit Puffärmeln (Hemd-Schicht), Mieder mit Rock (Hosen-Schicht) und Schürze
+    # (Jacken-Schicht, liegt vorn auf dem Rock). Der Rock ist ein Kegel um beide Beine; seine Gewichte hängen
+    # am Becken und nur zu einem Teil an den Oberschenkeln, damit Gehen und Sitzen ihn nicht zerreißen.
+    def oberarm_t(P, seite):
+        a, e = np.array(GPOS[seite + "Arm"]), np.array(GPOS[seite + "ForeArm"])
+        ab = e - a
+        return ((P - a) @ ab) / float(ab @ ab)
+
+    FEIN[0] = 2
+    puff_mitte = {sd: POS[sd + "Arm"] + (POS[sd + "ForeArm"] - POS[sd + "Arm"]) * 0.40 for sd in ("Left", "Right")}
+    achsel_mitte = {sd: POS[sd + "Arm"] + (POS[sd + "ForeArm"] - POS[sd + "Arm"]) * 0.05 for sd in ("Left", "Right")}
+
+    def bluse_off(c):
+        d = min((c - puff_mitte["Left"]).length, (c - puff_mitte["Right"]).length)
+        da = min((c - achsel_mitte["Left"]).length, (c - achsel_mitte["Right"]).length)
+        return 0.012 + 0.030 * math.exp(-(d / 0.085) ** 2)
+
+    def maske_bluse(P):
+        m = np.zeros(len(P))
+        for sd, vz in (("Left", 1.0), ("Right", -1.0)):
+            t = oberarm_t(P, sd)
+            m = np.maximum(m, ((t > 0.47) & (t < 0.56) & (vz * P[:, 0] > 0.17)) * 1.0)
+        return np.maximum(m, streifen(P, 0.835, 0.855) * (np.abs(P[:, 0]) < 0.2))
+
+    bl = rumpf_mit_aermeln("bluse", bluse_off, 0.84, ("ober", 0.56), 1.14, (0.03, 0.17))
+    stueck("bluse", bl, maske_bluse, [], 1024, False, None, True)
+
+    def breite_bei(z):
+        """halbe Breite und halbe Tiefe des Rumpfes (ohne Arme) auf Höhe z (Blender)"""
+        vs = [v.co for v in koerper.data.vertices if abs(v.co.z - z) < 0.02 and abs(v.co.x) < 0.24]
+        return max(abs(v.x) for v in vs), max(abs(v.y) for v in vs)
+
+    RW, RD = breite_bei(0.86)
+
+    def rock_ringe(saum, auf, extra, schluss=0.0, rueschen=0.0):
+        """Kegel aus flachen Ellipsoiden von der Taille (0.90) bis zum Saum"""
+        ringe = []
+        z = 0.90
+        while z > saum - 0.12 - schluss:
+            s_ = min(1.0, max(0.0, (0.88 - z) / (0.88 - saum)))
+            f = s_ ** 1.35
+            rue = rueschen * (sanft(saum + 0.10, saum, z) if rueschen else 0.0)
+            rx = RW + 0.030 + extra + auf * f + rue
+            ry = RD + 0.030 + extra + auf * 0.9 * f + rue
+            ringe.append(kugel(Vector((0, 0, z)), (rx, ry, 0.030), "ring", 28))
+            z -= 0.020
+        return ringe
+
+    def rock(name, saum, auf, extra=0.0, rueschen=0.0):
+        aussen = teil(name + "_a", rock_ringe(saum, auf, extra, 0.0, rueschen), 0.0105, [unter(saum)], None, 8, 0.30)
+        innen = teil(name + "_i", rock_ringe(saum, auf, extra - 0.016, 0.2, rueschen), 0.0105, (), None, 8, 0.30)
+        ausschneiden(aussen, innen)
+        return aussen
+
+    def rock_gewichte(c):
+        bein = 0.40 * (1.0 - sanft(0.50, 0.80, c.z))
+        links = sanft(-0.22, 0.22, c.x)
+        return {"Hips": 1.0 - bein, "LeftUpLeg": bein * links, "RightUpLeg": bein * (1.0 - links)}
+
+    def maske_kleid(saum):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            m = streifen(P, saum - 0.012, saum + 0.030) * (gy < 0.7)                         # Saumborte
+            m = np.maximum(m, streifen(P, 0.80, 0.835) * (np.abs(gx) < 0.26))               # Taillennaht
+            m = np.maximum(m, streifen(P, 1.095, 1.125) * (gy > 1.0))                       # oberer Rand
+            m = np.maximum(m, hart(np.abs(gx), 0.006, 0.003) * (gz > 0.02) * (gy > 0.88) * (gy < 1.10))   # Schnürung Mitte
+            sprosse = np.abs(((gy - 0.88) % 0.037) - 0.0185)
+            m = np.maximum(m, hart(sprosse, 0.0045, 0.002) * (np.abs(gx) < 0.065) * (gz > 0.02) * (gy > 0.88) * (gy < 1.09))
+            return m
+        return f
+
+    def kleid(name, saum, auf, ausschnitt=None, maske=None, rueschen=0.0, bund=0.80, hoehe=1.13):
+        """Mieder + Rock. ausschnitt: Vorderausschnitt (Punkte x/Höhe), maske: Besatz je Entwurf"""
+        mieder = rumpf_mit_aermeln(name + "_m", lambda c: 0.026, bund, None, hoehe + 0.01, None)
+        ausschneiden(mieder, keil(ausschnitt or [(-0.13, 1.03), (0.13, 1.03), (0.20, 1.17), (-0.20, 1.17)], 0.30, -0.02))
+        r = rock(name + "_r", saum, auf, 0.0, rueschen)
+        o = vereinen([mieder, r], name)
+        bpy.ops.object.shade_smooth()
+        stueck(name, o, (maske or maske_kleid)(saum), [], 1024, False, lambda c: rock_gewichte(c) if c.z < 0.86 else None, True)
+
+    kleid("kleid_kurz", 0.56, 0.17)
+    kleid("kleid_lang", 0.30, 0.21)
+
+    # ---- Entwurf 3 "Tracht": langärmelige Bluse, rundes Mieder mit Knopfleiste, langer Rock mit breiter Borte, lange Schürze
+    def bluse_lang_off(c):
+        d = min((c - puff_mitte["Left"]).length, (c - puff_mitte["Right"]).length)
+        return 0.012 + 0.024 * math.exp(-(d / 0.075) ** 2)
+
+    def maske_bluse_lang(P):
+        m = np.zeros(len(P))
+        for sd, vz in (("Left", 1.0), ("Right", -1.0)):
+            t = arm_t(P, sd)
+            m = np.maximum(m, ((t > 0.86) & (t < 1.1) & (vz * P[:, 0] > 0.15)) * 1.0)               # Manschette
+        return np.maximum(m, streifen(P, 0.835, 0.855) * (np.abs(P[:, 0]) < 0.2))
+
+    bl2 = rumpf_mit_aermeln("bluse_lang", bluse_lang_off, 0.84, ("unter", 0.97), 1.14, (0.03, 0.17))
+    stueck("bluse_lang", bl2, maske_bluse_lang, [], 1024, False, None, True)
+
+    def maske_kleid_tracht(saum):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            m = streifen(P, saum - 0.012, saum + 0.060) * (gy < 0.7)                                # breite Saumborte
+            m = np.maximum(m, streifen(P, saum + 0.080, saum + 0.092) * (gy < 0.7))
+            m = np.maximum(m, streifen(P, 0.80, 0.83) * (np.abs(gx) < 0.26))
+            m = np.maximum(m, hart(np.abs(gx), 0.010, 0.003) * (gz > 0.02) * (gy > 0.88) * (gy < 1.12))   # Knopfleiste
+            px = np.abs(gx)
+            for cy in (0.92, 0.99, 1.06):                                                           # Knöpfe
+                d = np.sqrt((px) ** 2 + (gy - cy) ** 2)
+                m = np.maximum(m, hart(d, 0.016, 0.004) * (gz > 0.02))
+            m = np.maximum(m, streifen(P, 1.105, 1.13) * (gy > 1.0))
+            return m
+        return f
+
+    kleid("kleid_tracht", 0.38, 0.20, [(-0.10, 1.08), (-0.05, 1.05), (0.05, 1.05), (0.10, 1.08), (0.18, 1.18), (-0.18, 1.18)], maske_kleid_tracht)
+
+    # ---- Entwurf 4 "Landhaus": kurze Bluse mit Flügelärmeln, weiter Ausschnitt, Glockenrock mit Rüsche, ohne Schürze
+    def bluse_kurz_off(c):
+        d = min((c - puff_mitte["Left"]).length, (c - puff_mitte["Right"]).length)
+        return 0.012 + 0.016 * math.exp(-(d / 0.08) ** 2)
+
+    def maske_bluse_kurz(P):
+        m = np.zeros(len(P))
+        for sd, vz in (("Left", 1.0), ("Right", -1.0)):
+            t = oberarm_t(P, sd)
+            m = np.maximum(m, ((t > 0.26) & (t < 0.34) & (vz * P[:, 0] > 0.17)) * 1.0)
+        return m
+
+    bl3 = rumpf_mit_aermeln("bluse_kurz", bluse_kurz_off, 0.84, ("ober", 0.34), 1.14, (0.03, 0.17))
+    stueck("bluse_kurz", bl3, maske_bluse_kurz, [], 1024, False, None, True)
+
+    def maske_kleid_land(saum):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            m = streifen(P, saum - 0.012, saum + 0.035) * (gy < 0.7)                                # Rüschenkante
+            m = np.maximum(m, streifen(P, 0.84, 0.88) * (np.abs(gx) < 0.26))                       # Gürtelband
+            m = np.maximum(m, hart(np.abs(gx), 0.030, 0.004) * (gz > 0.02) * (gy > 0.835) * (gy < 0.885))  # Schnalle
+            m = np.maximum(m, streifen(P, 1.105, 1.13) * (gy > 1.0))
+            # Streublumen: kleine Rauten im Rock
+            px = ((gx + 0.5) % 0.085) - 0.0425
+            py = ((gy + 0.5) % 0.085) - 0.0425
+            m = np.maximum(m, hart(np.abs(px) / 0.012 + np.abs(py) / 0.012, 1.0, 0.3) * (gy < 0.80) * (gy > saum + 0.06))
+            return m
+        return f
+
+    kleid("kleid_land", 0.46, 0.15, [(-0.16, 1.02), (0.16, 1.02), (0.21, 1.17), (-0.21, 1.17)], maske_kleid_land, 0.028)
+
+    def maske_schuerze(saum, hw_h):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            hw = 0.15 + (hw_h - 0.15) * np.clip((0.90 - gy) / (0.90 - saum), 0, 1)
+            m = streifen(P, saum - 0.01, saum + 0.035)                                      # Saumborte
+            m = np.maximum(m, streifen(P, 0.86, 0.90))                                       # Bund
+            m = np.maximum(m, hart(hw - np.abs(gx), 0.030, 0.006) * (gy < 0.86))              # Seitenborte
+            px = ((gx + 0.5) % 0.075) - 0.0375
+            py = ((gy + 0.5) % 0.075) - 0.0375
+            raute = np.abs(px) / 0.016 + np.abs(py) / 0.016
+            m = np.maximum(m, hart(raute, 1.0, 0.3) * (gy < 0.84) * (gy > saum + 0.05) * (np.abs(gx) < hw - 0.05))
+            return m
+        return f
+
+    def schuerze(name, saum, auf, maske_fn=None):
+        hw_h = 0.26 + auf * 0.30
+        r = rock(name + "_r", saum + 0.01, auf, 0.024)
+        pr = keil([(-0.15, 0.905), (0.15, 0.905), (hw_h, saum - 0.05), (-hw_h, saum - 0.05)], 0.70, 0.0)
+        b = r.modifiers.new("Schnitt", 'BOOLEAN')
+        b.operation = 'INTERSECT'
+        b.solver = 'MANIFOLD'
+        b.object = pr
+        bpy.context.view_layer.objects.active = r
+        bpy.ops.object.modifier_apply(modifier="Schnitt")
+        bpy.data.objects.remove(pr, do_unlink=True)
+        bpy.ops.object.shade_smooth()
+        stueck(name, r, maske_schuerze(saum, hw_h) if maske_fn is None else maske_fn, [], 1024, False, lambda c: rock_gewichte(c) if c.z < 0.86 else None, False)
+
+    schuerze("schuerze_kurz", 0.56, 0.17)
+    schuerze("schuerze_lang", 0.30, 0.21)
+    schuerze("schuerze_tracht", 0.38, 0.20)
+
+    def maske_arbeit(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        m = streifen(P, 0.86, 0.90)                                                   # Bund
+        m = np.maximum(m, streifen(P, 0.335, 0.350))                                  # Saumkante
+        tasche = np.maximum(np.abs(gx) / 0.085, np.abs(gy - 0.60) / 0.055)
+        m = np.maximum(m, hart(np.abs(tasche - 1.0), 0.07, 0.03) * (gz > 0.0))        # aufgesetzte Tasche
+        return m
+
+    schuerze("schuerze_arbeit", 0.34, 0.12, maske_arbeit)
+
+    # ============================================================ SCHUHE (Abstand ≈ 0,010–0,016, nur Füße und Unterschenkel)
+    # Schale des Fußes bis zur Schafthöhe, dazu eine dunkle Sohle ("<id>_fest"). Der Hauptteil ist zweifarbig:
+    # Hauptfarbe = Leder/Stoff, Zweitfarbe = Schnürung, Riemen, Kappe, Kragen.
+    def maske_schuh(hoehe, schnuer=False, riemen=False, kappe=False, kragen=True):
+        def f(P):
+            gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+            fx = np.abs(np.abs(gx) - 0.152) < 0.021
+            m = np.zeros(len(P))
+            if kragen:
+                m = np.maximum(m, streifen(P, hoehe - 0.016, hoehe + 0.004))
+            if schnuer:
+                bars = ((gz * 70.0) % 1.0) < 0.38
+                m = np.maximum(m, fx * bars * (gz > -0.012) * (gz < 0.058) * (gy > 0.075) * 1.0)
+            if riemen:
+                m = np.maximum(m, fx * hart(np.abs(gz - 0.012), 0.008, 0.002) * (gy > 0.06) * 1.0)
+            if kappe:
+                m = np.maximum(m, hart(np.abs(gz - 0.074), 0.006, 0.002) * (gy < 0.09) * 1.0)
+            return m
+        return f
+
+    def schuh(name, hoehe, off, maske, sohle_farbe=(0.10, 0.08, 0.07), sohle_dicke=0.018, sohle_hoch=0.024, extras_fn=None):
+        o = schale(name + "_farbe", lambda c: off, [ueber(hoehe)] + breiter_als(0.200), 2)
+        ex = []
+        so = schale(name + "_sohle", lambda c: sohle_dicke, [ueber(sohle_hoch)] + breiter_als(0.200), 2)
+        ex.append(fest(name + "_fest", so, sohle_farbe, 0.9, True))
+        if extras_fn:
+            ex += extras_fn()
+        stueck(name, o, maske, ex, 512, True, None, False)
+
+    schuh("schuh_halb", 0.128, 0.010, maske_schuh(0.128, schnuer=True))
+    schuh("schuh_ballerina", 0.096, 0.012, maske_schuh(0.096, kragen=True), (0.12, 0.09, 0.08), 0.012, 0.018)
+    schuh("schuh_spangen", 0.112, 0.012, maske_schuh(0.112, riemen=True, kragen=True), (0.12, 0.09, 0.08), 0.014, 0.020)
+    schuh("schuh_sneaker", 0.136, 0.015, maske_schuh(0.136, schnuer=True, kappe=True), (0.94, 0.94, 0.92), 0.022, 0.030)
+    schuh("schuh_clog", 0.118, 0.016, maske_schuh(0.118, kragen=True), (0.90, 0.90, 0.88), 0.016, 0.024)
+    schuh("schuh_stiefel", 0.250, 0.014, maske_schuh(0.250, kragen=True, kappe=True), (0.07, 0.07, 0.07), 0.024, 0.034)
+
+    def haferl_extras():
+        sock = schale("schuh_haferl_socke", lambda c: 0.009, [unter(0.118), ueber(0.300)] + breiter_als(0.200), 2)
+        return [fest("schuh_haferl_fest_socke", sock, (0.92, 0.91, 0.88), 0.9, True)]
+
+    schuh("schuh_haferl", 0.150, 0.011, maske_schuh(0.150, schnuer=True, kappe=True), (0.14, 0.09, 0.06), 0.017, 0.024, haferl_extras)
+
+
 # =================================================================== Haut malen (Körper und Hände)
 HAUT_BASIS = np.array([0.66, 0.43, 0.32])
 
@@ -2109,6 +2910,17 @@ for hand_obj, _seite in haende:
 
 
 # =================================================================== Weiche Schatten einbacken (Ambient Occlusion)
+def _weich(a, r):
+    """Box-Unschärfe (Radius r Pixel) in beiden Richtungen"""
+    for achse in (0, 1):
+        pad = np.concatenate([np.take(a, [0] * r, axis=achse), a, np.take(a, [-1] * r, axis=achse)], axis=achse)
+        c = np.cumsum(pad, axis=achse, dtype=np.float64)
+        c = np.concatenate([np.zeros_like(np.take(c, [0], axis=achse)), c], axis=achse)
+        n = a.shape[achse]
+        a = ((np.take(c, range(2 * r + 1, 2 * r + 1 + n), axis=achse) - np.take(c, range(0, n), axis=achse)) / (2 * r + 1)).astype(np.float32)
+    return a
+
+
 def ao_einbacken(staerke=0.55):
     haut_namen = ("Koerper", "HandLeft", "HandRight")
     """Cycles-AO auf jede bemalte Textur backen und in die Farben einrechnen — Falten, Ärmel,
@@ -2120,7 +2932,7 @@ def ao_einbacken(staerke=0.55):
     scene.render.bake.margin = 6
     scene.world = bpy.data.worlds.new("AOWelt")
     scene.world.light_settings.distance = 0.30
-    for o, img, bild, groesse in _bemalt:
+    for o, img, bild, groesse, kanal in _bemalt:
         ao_img = bpy.data.images.new(o.name + "_ao", groesse, groesse, alpha=False)
         mat = o.data.materials[0]
         knoten = mat.node_tree.nodes.new("ShaderNodeTexImage")
@@ -2137,12 +2949,24 @@ def ao_einbacken(staerke=0.55):
                 if not k.hide_render:
                     k.hide_render = True
                     versteckt.append(k)
+        if OUTFIT == "kleidung" and o in kleidung_objekte:
+            # alle Stücke liegen übereinander am selben Körper — beim Backen nur das eigene zeigen
+            for k in kleidung_objekte:
+                if k is not o and not k.hide_render:
+                    k.hide_render = True
+                    versteckt.append(k)
         bpy.ops.object.bake(type='AO', margin=6, use_clear=True)
         for k in versteckt:
             k.hide_render = False
         ao = np.array(ao_img.pixels[:], np.float32).reshape(groesse, groesse, 4)[:, :, 0]
+        ao = _weich(_weich(ao, 3), 3)        # wenige Samples geben fleckiges Rauschen: Schatten glätten
         st = 0.22 if o.name in haut_namen else (0.06 if o.name in SCHWACH_AO else staerke)
-        fertig_bild = np.clip(bild * (1.0 - st + st * ao[:, :, None]), 0, 1)
+        if kanal:
+            st = 0.30
+            fertig_bild = bild.copy()
+            fertig_bild[:, :, 1] = np.clip(bild[:, :, 1] * (1.0 - st + st * ao), 0, 1)
+        else:
+            fertig_bild = np.clip(bild * (1.0 - st + st * ao[:, :, None]), 0, 1)
         rgba = np.concatenate([fertig_bild, np.ones((groesse, groesse, 1), np.float32)], axis=2)
         img.pixels.foreach_set(rgba.ravel())
         img.pack()

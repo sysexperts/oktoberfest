@@ -2423,7 +2423,10 @@ func _raufbold_erzeugen(id: int, ort: Vector3) -> Node3D:
 	_customers_container.add_child(r)
 	r.global_position = Vector3(pos.x, 0.0, pos.z)
 	r.rotation.y = randf() * TAU
-	r.figur_setzen(Figuren.fuer_gast(id))
+	if c and is_instance_valid(c) and str(c.stamm) != "":
+		r.figur_setzen_npc(id)
+	else:
+		r.figur_setzen_npc(id)
 	r.gast_id = id
 	r.flucht_ziel = ENTRANCE + Vector3(randf_range(-3.0, 3.0), 0.0, randf_range(7.0, 11.0))
 	r.add_to_group("interactable")
@@ -3515,6 +3518,7 @@ func _add_staff(id: int, pos: Vector3, role: int, level: int) -> void:
 		return
 	var n := STAFF_SCENE.instantiate()
 	n.staff_id = id
+	n.role = role   # die Figur (Berufskleidung) wird schon in _ready gebaut
 	n.position = pos
 	_staff_container.add_child(n)
 	n.set_info(role, level)
@@ -3718,7 +3722,7 @@ var _looks := {}
 
 @rpc("any_peer", "reliable", "call_local")
 func net_look_setzen(code: String) -> void:
-	if not multiplayer.is_server() or code.length() > 400:
+	if not multiplayer.is_server() or code.length() > 1000:
 		return
 	var s := multiplayer.get_remote_sender_id()
 	if s == 0:

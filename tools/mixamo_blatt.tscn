@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/mixamo_blatt.gd" id="1"]
+
+[node name="MixamoBlatt" type="Node3D"]
+script = ExtResource("1")

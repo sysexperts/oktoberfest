@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/schuh_blatt.gd" id="1"]
+
+[node name="SchuhBlatt" type="Node3D"]
+script = ExtResource("1")

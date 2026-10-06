@@ -1,15 +1,21 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/figur.gd" id="1_figur"]
 [ext_resource type="PackedScene" path="res://assets/character/standard/basis.glb" id="2_modell"]
 [ext_resource type="AnimationLibrary" path="res://assets/character/standard/standard_animationen.res" id="3_anim"]
+[ext_resource type="AnimationLibrary" path="res://assets/character/standard/mixamo_animationen.res" id="4_mixamo"]
 
 [node name="Basis" type="Node3D"]
 script = ExtResource("1_figur")
 anim_stehen = "geliehen/Idle_12"
 anim_gehen = "geliehen/Walking"
 anim_rennen = "geliehen/Running"
-anim_tanzen = PackedStringArray("geliehen/Hip_Hop_Dance", "geliehen/ymca_dance")
+anim_tanzen = PackedStringArray("geliehen/Hip_Hop_Dance", "geliehen/ymca_dance", "mixamo/Silly_Dancing", "mixamo/Hip_Hop_Dancing")
+anim_tanzen_buehne = PackedStringArray("mixamo/breakdance_ready_3", "mixamo/breakdance_uprock", "mixamo/breakdance_uprock_var_1", "mixamo/Silly_Dancing", "geliehen/Hip_Hop_Dance")
+anim_sitz_extras = PackedStringArray("mixamo/Cheering_While_Sitting", "mixamo/Sitting_Angry")
+anim_stehen_varianten = PackedStringArray("mixamo/Dwarf_Idle", "mixamo/Idle")
+anim_betrunken_stehen = PackedStringArray("mixamo/drunk_idle", "mixamo/drunk_idle_variation", "mixamo/drunk_idle_variation_2")
+anim_betrunken_mehr = PackedStringArray("mixamo/drunk_walk")
 anim_sitzen = "geliehen/Sit_and_Drink"
 anim_extras = PackedStringArray("geliehen/Confused_Scratch")
 anim_betrunken = "geliehen/Unsteady_Walk"
@@ -23,6 +29,7 @@ aufrichten_ruecken = 6.0
 aufrichten_nacken = 6.0
 aufrichten_kopf = 9.0
 leih_bibliothek = ExtResource("3_anim")
+mixamo_bibliothek = ExtResource("4_mixamo")
 
 [node name="Modell" parent="." instance=ExtResource("2_modell")]
 transform = Transform3D(0.93, 0, 0, 0, 0.93, 0, 0, 0, 0.93, 0, 0, 0)

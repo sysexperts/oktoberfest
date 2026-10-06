@@ -43,7 +43,7 @@ func _ready() -> void:
 	_net_pos = position
 	_last = position
 	# Figur aus der ID: alle Mitspieler sehen denselben Angestellten
-	_figur = Figuren.einsetzen(self, Figuren.fuer_id(staff_id + FIGUR_VERSATZ))
+	_figur = Figuren.einsetzen_beruf(self, staff_id + FIGUR_VERSATZ, Figuren.BERUF_ROLLE.get(role, "kellner"))
 	_model = _figur
 	_anim = _figur.anim
 	_model.rotation.y = deg_to_rad(model_yaw_offset)

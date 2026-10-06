@@ -22,7 +22,7 @@ func _ready() -> void:
 		_pruefe(Color.html_is_valid(d["haut"]), "Hautfarbe gültig bei: " + schlecht.left(20))
 	# Figur bauen: jede Kombination aus je einem Baustein muss laden
 	var gebaut := 0
-	for art: String in Look.ARTEN:
+	for art: String in Look.ARTEN + Look.KLEIDER:
 		for e: Dictionary in Look.liste(art):
 			var k := Look.standard()
 			k[art] = e["id"]
@@ -31,6 +31,9 @@ func _ready() -> void:
 			Look.faerben(f, k)
 			await get_tree().process_frame
 			_pruefe(f.skelett != null, "Skelett da: %s/%s" % [art, e["id"]])
+			if art in Look.KLEIDER:
+				var n := f.skelett.get_node_or_null(art + "_farbe")
+				_pruefe((n != null) == (e["szene"] != null), "Kleidung am Skelett %s/%s" % [art, e["id"]])
 			var erwartet := 0
 			for a2: String in Look.ARTEN:
 				if Look.liste(a2).filter(func(x: Dictionary) -> bool: return x["id"] == k[a2])[0]["szene"] != null:

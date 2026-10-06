@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/creator/kleidung/jacke_kochjacke.glb" id="1_glb"]
+
+[node name="jacke_kochjacke" type="Node3D"]
+
+[node name="Modell" parent="." instance=ExtResource("1_glb")]

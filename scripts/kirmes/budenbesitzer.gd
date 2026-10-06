@@ -18,7 +18,7 @@ var _besetzt := false
 func _ready() -> void:
 	add_to_group("interactable")
 	add_to_group("nachtruhe")
-	_figur = Figuren.einsetzen(self, Figuren.ALLE[posmod(figur_nr, Figuren.ALLE.size())])
+	_figur = Figuren.einsetzen_npc(self, 900 + figur_nr)
 	_figur.stehen()
 	bude = get_parent()
 

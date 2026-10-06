@@ -68,6 +68,13 @@ func _ready() -> void:
 	_figur = $Kipper/Model as Figur
 	_pose_einbauen()
 
+## Zufalls-NPC mit der Figur des Gastes `id` (gleich wie scripts/customer.gd)
+func figur_setzen_npc(id: int) -> void:
+	_figur = Figuren.einsetzen_npc(_kipper, id)
+	_pose = null
+	_anim = ""
+	_pose_einbauen()
+
 ## Andere Figur einsetzen (Bean, Charakter 2 oder 3).
 func figur_setzen(szene: PackedScene) -> void:
 	_figur = Figuren.einsetzen(_kipper, szene)
