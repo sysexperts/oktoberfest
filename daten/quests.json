@@ -534,5 +534,110 @@
    "anzahl": 3,
    "zeit": 180
   }
+ },
+ {
+  "id": "3.1",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_1_TITLE",
+  "text": "Q_3_1_TEXT",
+  "ausloeser": {
+   "nach": "2.6",
+   "kapitel": 3,
+   "mail": "M3-01"
+  },
+  "bedingung": {
+   "flag": "wette_gewonnen"
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "geld": 100
+  }
+ },
+ {
+  "id": "3.2",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_2_TITLE",
+  "text": "Q_3_2_TEXT",
+  "ausloeser": {
+   "nach": "3.1"
+  },
+  "bedingung": {
+   "flag": "stink_beseitigt"
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "3.3",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_3_TITLE",
+  "text": "Q_3_3_TEXT",
+  "ausloeser": {
+   "nach": "3.2",
+   "mail": "M3-04"
+  },
+  "bedingung": {
+   "mw": "personal_security",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "geld": 150
+  }
+ },
+ {
+  "id": "3.4",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_4_TITLE",
+  "text": "Q_3_4_TEXT",
+  "ausloeser": {
+   "nach": "3.3"
+  },
+  "bedingung": {
+   "flag": "saboteur_gefasst"
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "3.5",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_5_TITLE",
+  "text": "Q_3_5_TEXT",
+  "ausloeser": {
+   "nach": "3.4"
+  },
+  "bedingung": {
+   "flag": "zettel_uebergeben"
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "geld": 200
+  }
+ },
+ {
+  "id": "3.6",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_6_TITLE",
+  "text": "Q_3_6_TEXT",
+  "ausloeser": {
+   "nach": "3.5"
+  },
+  "bedingung": {
+   "flag": "konrad_zur_rede"
+  },
+  "frist_tage": 0,
+  "belohnung": {},
+  "kapitelabschluss": 3,
+  "mail_erfuellt": [
+   "M3-05",
+   "M3-06"
+  ]
  }
 ]

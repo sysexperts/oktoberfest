@@ -112,6 +112,14 @@ func ansprechen() -> void:
 		rotation.y = atan2(zu.x, zu.z)
 	geste()
 	var wer := String(TranslationServer.translate("FESTLEITER_NAME"))
+	# Kapitel 3: den Zettel des Saboteurs an Horst übergeben (Quest 3.5)
+	var story := welt.get_node_or_null("Story")
+	if story != null and story.aktiv and story.zustand("3.5") == "offen" and bool(story.flags.get("zettel_da", false)):
+		var zettel: Array[String] = []
+		for k in ["CHEF_ZETTEL_1", "CHEF_ZETTEL_2", "CHEF_ZETTEL_3"]:
+			zettel.append(String(TranslationServer.translate(k + a)))
+		dialog.zeigen(wer, zettel, func() -> void: welt.net_story_flag.rpc_id(1, "zettel_uebergeben"))
+		return
 	if _station == null and _schritt() == 0:
 		_frage_stellen(dialog, welt, wer, a)
 		return

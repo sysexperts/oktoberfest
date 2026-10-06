@@ -280,8 +280,10 @@ const ROLE_KOCH := 1
 const ROLE_KELLNER := 2
 const ROLE_REINIGUNG := 3
 const ROLE_ZAPFER := 4
-const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400, 4: 450}
-const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80, 4: 90}   # Lohn/Schicht auf Level 1
+const ROLE_SECURITY := 5   # ab Kapitel 3: hält Prügeleien fern und stellt Saboteure
+const SECURITY_POINT := Vector3(0.0, 0.1, 12.0)   # steht am Zelteingang
+const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400, 4: 450, 5: 550}
+const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80, 4: 90, 5: 110}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 5
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
@@ -1941,7 +1943,7 @@ func _story_messwerte() -> Dictionary:
 	return {
 		"zelt_stufe": _tent_stage, "tische": _active_count,
 		"personal_koch": _staff_anzahl(ROLE_KOCH), "personal_kellner": _staff_anzahl(ROLE_KELLNER),
-		"personal_reinigung": _staff_anzahl(ROLE_REINIGUNG), "personal_zapfer": _staff_anzahl(ROLE_ZAPFER),
+		"personal_reinigung": _staff_anzahl(ROLE_REINIGUNG), "personal_zapfer": _staff_anzahl(ROLE_ZAPFER), "personal_security": _staff_anzahl(ROLE_SECURITY),
 		"lizenzen": lizenzen, "toilette": _has_toilet, "kuenstler": _ever_artist,
 		"bier_bestellt": int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty(),
 		"lieferung_da": not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0,
@@ -1980,6 +1982,8 @@ func story_folge(f: Dictionary) -> void:
 		(_staff_sim[_krank_sid] as Dictionary)["energie"] = KRANK_ENERGIE
 	if f.has("lohn_faktor_tag"):
 		_lohn_faktor_tag = float(f["lohn_faktor_tag"])
+	if f.has("konrad_wette"):
+		net_huber_wette(bool(f["konrad_wette"]))
 	if f.has("lohn_erhoehen") and _lohn_sid >= 0:
 		net_personal_lohn(_lohn_sid)
 	if f.has("lohn_nein"):
@@ -2413,9 +2417,12 @@ func _schlaegerei_planen() -> void:
 	_einzel_uhren = []
 	if _stufen_tag() < SCHLAEGEREI_AB_TAG or _tent_stage == 0:
 		return
-	if not _massen_gehabt or randf() < MASSEN_CHANCE:
+	var wache := _has_staff(ROLE_SECURITY)   # mit Security gibt es keine Massenschlägerei und nur halb so viele Streits
+	if not wache and (not _massen_gehabt or randf() < MASSEN_CHANCE):
 		_schlaegerei_uhr = randf_range(SCHLAEGEREI_UHR.x, SCHLAEGEREI_UHR.y)
 	for k in randi_range(EINZEL_JE_SCHICHT.x, EINZEL_JE_SCHICHT.y):
+		if wache and randf() < 0.5:
+			continue
 		_einzel_uhren.append(randf_range(EINZEL_UHR.x, EINZEL_UHR.y))
 	_einzel_uhren.sort()
 
@@ -3054,6 +3061,8 @@ func net_hire_staff(role: int) -> void:
 		return
 	if not STAFF_HIRE_COST.has(role):
 		return
+	if role == ROLE_SECURITY and (not _story.aktiv or _story.kapitel < 3):
+		return   # Security gibt es erst ab Kapitel 3
 	# Ohne Essenslizenz hätte der Koch nichts zu tun
 	if role == ROLE_KOCH and _foods_avail().is_empty():
 		_fehler("MSG_COOK_LICENSE")
@@ -3179,6 +3188,8 @@ func _staff_start(role: int) -> Vector3:
 			return KITCHEN_POINT
 		ROLE_ZAPFER:
 			return ZAPFER_POINT
+		ROLE_SECURITY:
+			return SECURITY_POINT
 	return BAR_POINT
 
 func _cook_level() -> int:
@@ -3285,6 +3296,9 @@ func _update_staff(delta: float) -> void:
 				_update_zapfer(s, delta)
 			ROLE_KOCH:
 				_update_koch(s, delta)
+			ROLE_SECURITY:
+				s.tgt = SECURITY_POINT
+				_staff_move(s, delta)
 			_:
 				s.tgt = KITCHEN_POINT
 				_staff_move(s, delta)
@@ -6158,7 +6172,7 @@ static func _eur(betrag: int) -> Dictionary:
 
 ## Namen als Übersetzungsschlüssel für Meldungen
 const WARE_KEYS := {1: "GOODS_BEER", 2: "GOODS_FOOD"}
-const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER"}
+const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER", 5: "STAFF_SECURITY"}
 const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS",
 	"festbier": "LIC_FESTBIER", "hendl": "LIC_HENDL"}
 const BETRAG_SZENE := preload("res://scenes/ui/betrag.tscn")
@@ -6294,6 +6308,14 @@ func _hinweis(ausloeser: String) -> void:
 	var k: String = _story.hinweis_zeigen(ausloeser)
 	if k != "":
 		_melde(k, [], 0)
+
+## Story-Flaggen, die Spieler per Gespräch setzen (Horst nimmt den Zettel, Konrad wird zur Rede gestellt)
+@rpc("any_peer", "reliable", "call_local")
+func net_story_flag(name: String) -> void:
+	if not multiplayer.is_server() or not name in ["zettel_uebergeben", "konrad_zur_rede"]:
+		return
+	_story.ereignis(name)
+	_broadcast_meta()
 
 ## Kapitel geschafft: Meldung an alle (nur der Server setzt Kapitel)
 func _kapitel_gewechselt(nr: int) -> void:
@@ -6614,9 +6636,8 @@ var _leck_t := 0.0
 func _huber_morgen() -> void:
 	_huber_wette = {}
 	_sabotage_t = -1.0
-	# Die Huber-Geschichte (Wette, Saboteur, Abwerben, Duell) ist raus (28.09.)
-	return
-	if tutorial_active():
+	# Konrads Streiche (Wette, Saboteur) gibt es ab Kapitel 3 der Story
+	if not _story.aktiv or _story.kapitel < 3 or tutorial_active():
 		return
 	var d := _day
 	if d >= HUBER_WETTE_AB and d % 3 == 0:
@@ -6629,9 +6650,15 @@ func _huber_morgen() -> void:
 		_huber_wette["einsatz"] = 150 + 50 * d
 		_huber_wette["angenommen"] = false
 		_melde("MSG_HUBER_WETTE", [], 0)
+		_story.post_senden("M3-02")
 	if d >= SABOTAGE_AB and d - _letzte_sabotage >= SABOTAGE_ABSTAND and randf() < 0.6:
 		_letzte_sabotage = d
 		_sabotage_t = randf_range(60.0, 180.0)
+	# Story-Quests brauchen den Streich: Stinkbombe (3.2) oder Saboteur (3.4) noch heute
+	if _story.zustand("3.2") == "offen" or _story.zustand("3.4") == "offen":
+		_saboteur_art = "stink" if _story.zustand("3.2") == "offen" else ""
+		_sabotage_t = randf_range(40.0, 90.0)
+		_letzte_sabotage = d
 
 ## Spieler nimmt Hubers Wette an (true) oder lehnt ab
 @rpc("any_peer", "reliable", "call_local")
@@ -6659,6 +6686,7 @@ func _huber_abrechnen() -> void:
 		if gewonnen:
 			Game.add_money(einsatz)
 			_popularity = minf(100.0, _popularity + 2.0)
+			_story.ereignis("wette_gewonnen")
 			_melde("MSG_HUBER_WETTE_GEWONNEN", [_eur(einsatz)], 2)
 		else:
 			Game.add_money(-einsatz)
@@ -6667,6 +6695,9 @@ func _huber_abrechnen() -> void:
 
 ## Während der Schicht: Sabotage auslösen und das Leck Bier kosten lassen
 func _huber_schicht(delta: float) -> void:
+	if _stink_offen and not _dreck_uebrig():
+		_stink_offen = false
+		_story.ereignis("stink_beseitigt")
 	if _sabotage_t > 0.0:
 		_sabotage_t -= delta
 		if _sabotage_t <= 0.0:
@@ -6989,8 +7020,12 @@ const SABOTEUR_POP := 4.0
 var _saboteur := {}          # {"art": "fass"/"stink", "rest": Sekunden bis zum Ziel}
 var _saboteur_knoten: Node3D = null
 
+var _saboteur_art := ""     # von der Story erzwungen ("" = Zufall)
+var _stink_offen := false
+
 func _saboteur_losschicken() -> void:
-	var art := "fass" if randf() < 0.5 else "stink"
+	var art := _saboteur_art if _saboteur_art != "" else ("fass" if randf() < 0.5 else "stink")
+	_saboteur_art = ""
 	var weg: Array = SABOTEUR_WEG_FASS if art == "fass" else SABOTEUR_WEG_STINK
 	_saboteur = {"art": art, "rest": Saboteur.dauer(weg)}
 	_net_saboteur_start.rpc(weg)
@@ -7021,6 +7056,7 @@ func _saboteur_schicht(delta: float) -> void:
 		for i in 4:
 			_spawn_mess_at(Vector3(randf_range(-8.0, 8.0), 0.0, randf_range(-5.0, 10.0)), 0)
 		_hygiene = maxf(0.0, _hygiene - 25.0)
+		_stink_offen = true
 		_melde("MSG_SABOTAGE_STINK", [], 1)
 	_net_saboteur_weg.rpc()
 
@@ -7028,7 +7064,12 @@ func _saboteur_schicht(delta: float) -> void:
 func net_saboteur_fangen() -> void:
 	if not multiplayer.is_server() or _saboteur.is_empty():
 		return
+	var art_gefangen := str(_saboteur.get("art", ""))
 	_saboteur = {}
+	_story.ereignis("saboteur_gefasst")
+	_story.ereignis("zettel_da")   # er verliert einen Zettel mit Konrads Schrift
+	if art_gefangen == "stink":
+		_story.ereignis("stink_beseitigt")
 	_add_income(SABOTEUR_LOHN)
 	_pop_erhoehen(SABOTEUR_POP)
 	_melde("MSG_SABOTEUR_ERWISCHT", [_eur(SABOTEUR_LOHN)], 2)

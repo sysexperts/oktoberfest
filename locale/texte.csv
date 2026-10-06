@@ -1898,3 +1898,53 @@ MSG_EIMER_VOLL,"Der Eimer ist voll, jetzt zum Feuer","The bucket is full, now to
 MSG_GEFALLEN_REST,Noch %d offen,%d left,%d kaldı
 MSG_GEFALLEN_GESCHAFFT,Geschafft! Horst legt %s auf dein Konto,Done! Horst adds %s to your account,Başardın! Horst hesabına %s ekliyor
 MSG_GEFALLEN_ZU_SPAET,"Zu spät, der Gefallen ist gescheitert","Too late, the favour failed","Çok geç, iş başarısız oldu"
+STAFF_SECURITY,Security,Security,Güvenlik
+STAFF_INFO_SECURITY,Steht am Zelteingang. Mit Security gibt es keine Massenschlägerei und nur halb so viele Streits. Er kann auch Saboteure abfangen.,Stands at the tent entrance. With security there are no mass brawls and only half as many fights. He can also intercept saboteurs.,"Çadır girişinde durur. Güvenlikle toplu kavga olmaz, tartışmalar yarıya iner. Sabotajcıları da yakalayabilir."
+Q_3_1_TITLE,Eine Wette,A bet,Bir bahis
+Q_3_1_TEXT,"Konrad wettet mit dir. Nimm die Wette an (per Mail oder im Gespräch mit ihm vor seinem Zelt) und gewinn sie, die Wette gilt immer für einen Tag.","Konrad bets against you. Accept the bet (by mail or by talking to him in front of his tent) and win it, a bet always lasts one day.","Konrad seninle bahse giriyor. Bahsi kabul et (e-postayla ya da çadırının önünde onunla konuşarak) ve kazan, bahis her zaman bir gün sürer."
+Q_3_2_TITLE,Es stinkt,It stinks,Kokuyor
+Q_3_2_TEXT,"Jemand legt dir eine Stinkbombe ins Zelt. Finde die Flecken und wisch sie weg, bis das Zelt wieder sauber ist.",Someone is planting a stink bomb in your tent. Find the stains and wipe them up until the tent is clean again.,Biri çadırına kokulu bomba bırakıyor. Lekeleri bul ve çadır yeniden temiz olana kadar sil.
+Q_3_3_TITLE,Wachpersonal,Security staff,Güvenlik personeli
+Q_3_3_TEXT,So geht das nicht weiter. Stell am Computer unter Shop → Personal einen Security ein. Er steht am Zelteingang und schreckt Raufbolde und Saboteure ab.,This cannot go on. Hire a security guard on the computer under Shop → Staff. He stands at the tent entrance and deters brawlers and saboteurs.,Böyle devam edemez. Bilgisayarda Mağaza → Personel bölümünden bir güvenlik görevlisi işe al. Çadır girişinde durur ve kavgacıları ve sabotajcıları caydırır.
+Q_3_4_TITLE,Der Saboteur,The saboteur,Sabotajcı
+Q_3_4_TEXT,"Ein verdächtiger Gast schleicht durchs Zelt. Wenn du ihn siehst, pack ihn mit E, bevor er Schaden anrichtet.","A suspicious guest is sneaking through the tent. If you see him, grab him with E before he does any damage.","Şüpheli bir misafir çadırda sinsice dolanıyor. Onu görürsen, zarar vermeden E ile yakala."
+Q_3_5_TITLE,Beweise,Evidence,Kanıtlar
+Q_3_5_TEXT,Der Saboteur hat einen Zettel verloren. Bring ihn zu Horst ins Festbüro und sprich mit ihm.,The saboteur dropped a note. Take it to Horst at the fair office and talk to him.,Sabotajcı bir not düşürdü. Onu fuar ofisinde Horst'a götür ve onunla konuş.
+Q_3_6_TITLE,Zur Rede gestellt,Confronted,Hesaba çekildi
+Q_3_6_TEXT,Stell Konrad vor seinem Zelt zur Rede und leg ihm den Zettel vor.,Confront Konrad in front of his tent and show him the note.,Konrad'ı çadırının önünde hesaba çek ve notu göster.
+MAIL_M3_01_BETREFF,Eine kleine Wette,A little bet,Küçük bir bahis
+MAIL_M3_01_TEXT,"Na, Sepps Patenkind? Läuft's? Ich wette, du hältst nicht mehr lange durch. Ab und zu mache ich dir ein Angebot. Nimm es an, wenn du dich traust. – K.","So, Sepp's godchild? Going well? I bet you will not last much longer. Now and then I will make you an offer. Take it if you dare. – K.","Eee, Sepp'in vaftiz çocuğu? İyi gidiyor mu? Daha fazla dayanamazsın bahse girerim. Ara sıra sana bir teklif yaparım. Cesaretin varsa kabul et. – K."
+MAIL_M3_02_BETREFF,Eine Wette,A bet,Bir bahis
+MAIL_M3_02_TEXT,"Ich wette, du schaffst es heute nicht. Der Einsatz steht in deiner Aufgabenkarte. Nimmst du an? – K.",I bet you will not manage today. The stake is on your task card. Do you accept? – K.,Bugün başaramayacağına bahse girerim. Bahis tutarı görev kartında. Kabul ediyor musun? – K.
+MAIL_M3_02_A1,Die Wette gilt.,The bet is on.,Bahis geçerli.
+MAIL_M3_02_A2,"Nein, danke.","No, thanks.","Hayır, teşekkürler."
+MAIL_M3_04_BETREFF,Jetzt reicht's,That is enough,Yeter artık
+MAIL_M3_04_TEXT,"Der Konrad spielt ein falsches Spiel, das spür ich. Stell einen Security ein, ab sofort geht keiner mehr unbemerkt ins Zelt. Das Geld hol ich mir später zurück.
+
+Horst","Konrad is playing a dirty game, I can feel it. Hire a security guard, from now on nobody goes into the tent unnoticed. I will get the money back later.
+
+Horst","Konrad kirli oyun oynuyor, hissediyorum. Bir güvenlik görevlisi işe al, bundan sonra kimse fark edilmeden çadıra girmesin. Parayı sonra geri alırım.
+
+Horst"
+MAIL_M3_05_BETREFF,Jetzt weißt du Bescheid,Now you know,Artık biliyorsun
+MAIL_M3_05_TEXT,"Das hast du gut gemacht. Der Konrad schaut plötzlich gar nicht mehr so sicher. Aber er gibt nicht auf. Beim nächsten Mal geht es um etwas Größeres.
+
+Horst","You did that well. Konrad suddenly does not look so sure any more. But he will not give up. Next time it will be about something bigger.
+
+Horst","Bunu iyi yaptın. Konrad birden o kadar emin görünmüyor. Ama pes etmez. Bir dahaki sefere daha büyük bir şey söz konusu olacak.
+
+Horst"
+MAIL_M3_06_BETREFF,Das war nicht nett,That was not nice,Bu hoş değildi
+MAIL_M3_06_TEXT,"Vor allen Leuten. Das vergesse ich dir nicht. Wir sehen uns beim Bier, Sepps Patenkind. – K.","In front of everyone. I will not forget that. See you over a beer, Sepp's godchild. – K.","Herkesin içinde. Bunu unutmayacağım. Bira başında görüşürüz, Sepp'in vaftiz çocuğu. – K."
+CHEF_ZETTEL_1_DU,Ein Zettel? Zeig mal her.,A note? Let me see.,Bir not mu? Göster bakalım.
+CHEF_ZETTEL_1_IHR,Ein Zettel? Zeigt mal her.,A note? Let me see.,Bir not mu? Gösterin bakalım.
+CHEF_ZETTEL_2_DU,"Das ist Konrads Handschrift, ich erkenn sie unter hundert. Der Kerl hat den Saboteur geschickt.","That is Konrad's handwriting, I would know it among a hundred. He sent the saboteur.","Bu Konrad'ın el yazısı, yüzün arasında tanırım. Sabotajcıyı o gönderdi."
+CHEF_ZETTEL_2_IHR,"Das ist Konrads Handschrift, ich erkenn sie unter hundert. Der Kerl hat den Saboteur geschickt.","That is Konrad's handwriting, I would know it among a hundred. He sent the saboteur.","Bu Konrad'ın el yazısı, yüzün arasında tanırım. Sabotajcıyı o gönderdi."
+CHEF_ZETTEL_3_DU,"Geh zu ihm und stell ihn zur Rede. Aber bleib ruhig, das zahlen wir ihm anders heim.","Go to him and confront him. But stay calm, we will pay him back in another way.","Ona git ve hesap sor. Ama sakin ol, bunun acısını başka türlü çıkaracağız."
+CHEF_ZETTEL_3_IHR,"Geht zu ihm und stellt ihn zur Rede. Aber bleibt ruhig, das zahlen wir ihm anders heim.","Go to him and confront him. But stay calm, we will pay him back in another way.","Ona gidin ve hesap sorun. Ama sakin olun, bunun acısını başka türlü çıkaracağız."
+KONRAD_REDE_1_DU,Was willst du denn mit dem Zettel? Das ist nicht meine Schrift.,What do you want with that note? That is not my handwriting.,O notla ne yapmak istiyorsun? Bu benim yazım değil.
+KONRAD_REDE_1_IHR,Was wollt ihr denn mit dem Zettel? Das ist nicht meine Schrift.,What do you want with that note? That is not my handwriting.,O notla ne yapmak istiyorsunuz? Bu benim yazım değil.
+KONRAD_REDE_2_DU,… Na gut. Dann war das eben ein Missverständnis. Mein Name steht nirgends drauf.,... Fine. Then it was a misunderstanding. My name is nowhere on it.,... Peki. O zaman bir yanlış anlaşılmaydı. Adım hiçbir yerde yazmıyor.
+KONRAD_REDE_2_IHR,… Na gut. Dann war das eben ein Missverständnis. Mein Name steht nirgends drauf.,... Fine. Then it was a misunderstanding. My name is nowhere on it.,... Peki. O zaman bir yanlış anlaşılmaydı. Adım hiçbir yerde yazmıyor.
+KONRAD_REDE_3_DU,"Aber glaub nicht, dass das das letzte Wort war. Das Fest ist noch lang.",But do not think that was the last word. The fair is still long.,Ama bunun son söz olduğunu sanma. Fuar hâlâ uzun.
+KONRAD_REDE_3_IHR,"Aber glaubt nicht, dass das das letzte Wort war. Das Fest ist noch lang.",But do not think that was the last word. The fair is still long.,Ama bunun son söz olduğunu sanmayın. Fuar hâlâ uzun.

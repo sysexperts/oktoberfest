@@ -333,5 +333,54 @@
     }
    }
   ]
+ },
+ {
+  "id": "M3-01",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M3_01_BETREFF",
+  "text": "MAIL_M3_01_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M3-02",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M3_02_BETREFF",
+  "text": "MAIL_M3_02_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M3_02_A1",
+    "folge": {
+     "konrad_wette": true
+    }
+   },
+   {
+    "text": "MAIL_M3_02_A2",
+    "folge": {
+     "konrad_wette": false
+    }
+   }
+  ],
+  "mehrfach": true
+ },
+ {
+  "id": "M3-04",
+  "absender": "HORST",
+  "betreff": "MAIL_M3_04_BETREFF",
+  "text": "MAIL_M3_04_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M3-05",
+  "absender": "HORST",
+  "betreff": "MAIL_M3_05_BETREFF",
+  "text": "MAIL_M3_05_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M3-06",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M3_06_BETREFF",
+  "text": "MAIL_M3_06_TEXT",
+  "antworten": []
  }
 ]

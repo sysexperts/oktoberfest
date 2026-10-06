@@ -279,7 +279,7 @@ static func look_festleiter() -> Dictionary:
 ## Berufskleidung: Gesicht, Haare und Geschlecht kommen wie bei jedem Zufalls-NPC aus der ID, Kleidung und Hut richten sich
 ## nach dem Beruf. Berufe: koch, kellner, zapfer, reinigung, security, bude (Budenbesitzer), kuenstler
 ## Frauen und Männer tragen im selben Beruf dieselbe Kleidung (uniform), nur Gesicht und Frisur unterscheiden sich.
-const BERUF_ROLLE := {1: "koch", 2: "kellner", 3: "reinigung", 4: "zapfer"}
+const BERUF_ROLLE := {1: "koch", 2: "kellner", 3: "reinigung", 4: "zapfer", 5: "security"}
 
 static func _stueck(l: Dictionary, art: String, id: String, farbe: Color, muster: Color) -> void:
 	l[art] = id

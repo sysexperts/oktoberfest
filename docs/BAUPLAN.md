@@ -14,8 +14,9 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P2 Computer-Desktop | ✔ fertig (Apps, Laptop mit begehbarem Wohnwagen) | v322 bis v324 |
 | P3 Kapitel 1 | ✔ fertig (spielbar bis zum ersten Feierabend) | v325 |
 | P4 Kapitel 2 | ✔ fertig bis auf die Nebenquest „Happy Hour" | v329 bis v332 |
-| P5 Gefallen und Security | ◐ System plus sechs Gefallen (Spanner, Taschendieb, Sau, Konrads Spion, Sturmwarnung, Brand) und vier Security-Posten fertig; 5 weitere Gefallen (Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen), Security als Personal offen | v330 bis v333 |
-| P6 bis P11 | ☐ offen | |
+| P5 Gefallen und Security | ◐ (Security als Personal ✔ v334) System plus sechs Gefallen (Spanner, Taschendieb, Sau, Konrads Spion, Sturmwarnung, Brand) und vier Security-Posten fertig; 5 weitere Gefallen (Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen), Security als Personal offen | v330 bis v333 |
+| P6 Kapitel 3 | ◐ Streiche und Quests 3.1 bis 3.6 spielbar (ohne Casino); Konrads Zelt, Casino, Sabotage-System, Frau Wagner offen | v334 |
+| P7 bis P11 | ☐ offen | |
 
 ---
 
@@ -119,7 +120,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 6 von 11 | M |
 | ✔ **Täter-Figuren** (Spanner, Taschendieb, Betrunkener, Raufbolde, Fälscher, Dieb) über den Creator | M |
 | ✔ **Packen, Tragen, Übergeben** an Security (vorhandene Raufbold-Mechanik erweitern) | M |
-| ◐ **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |
+| ✔ **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |
 | ◐ Gefallen-Quests umsetzen (Sau, Brand, Sturm, Reporter, Lieferung usw.) | XL |
 | ✔ **Neue Modelle:** Sau (Tier, Blender), Brunnen, Feuer-Effekt, Planen, Gehege | M |
 
@@ -127,14 +128,14 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur, Abwerben; Code vorhanden) | M |
+| ◐ **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur ✔; Abwerben ☐) | M |
 | **Überraschungskontrolle** (Frau Wagner als Figur im Zelt) | M |
 | **Social-Media-Fake-Bewertungen** und Melden | S |
 | **Konrads Zelt umbauen:** gleiche Tische/Theke/Ausgabe/Küche wie unser Zelt, anderes Layout, Konrad läuft zufällig durchs Zelt, Gäste und Personal | XL |
 | **Casino im Keller:** Treppe/Kellertür, Türsteher, saubere Kollision, kein Clipping | L |
 | **Casino-Spiele:** Roulette, Blackjack, Karten, weitere einfache Spiele | XL |
 | **Händler Gustav** und **Sabotage-System:** Werkzeuge, Tarnung (Mantel, Komplettset, Schnauzer-Brille), Blickfeld und Verdächtig-Balken, Bußgeld, Kunden verschieben | XL |
-| Quests 3.1 bis 3.6, Mails M3-xx, Horsts Erinnerung 2 | M |
+| ◐ Quests 3.1 bis 3.6, Mails M3-xx (✔ ohne 3.4b Casino, ohne Horsts Erinnerung 2) | M |
 | **Neue Modelle/Figuren:** Gustav, Türsteher, Croupier, Frau Wagner, Roulette-/Kartentische, Sicherungskasten, Kellertreppe | L |
 
 **Risiko:** Konrads Zelt und das Casino sind die größten Posten. Wir sollten sie in Etappen bauen (erst Zelt, dann Keller, dann Spiele).

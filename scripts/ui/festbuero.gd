@@ -32,6 +32,7 @@ const PERSONAL := {
 	2: ["Kellner", "person", "STAFF_WAITER", "STAFF_INFO_WAITER"],
 	3: ["Reinigung", "besen", "STAFF_CLEANER", "STAFF_INFO_CLEANER"],
 	4: ["Zapfer", "bier", "STAFF_TAPSTER", "STAFF_INFO_TAPSTER"],
+	5: ["Security", "person", "STAFF_SECURITY", "STAFF_INFO_SECURITY"],
 }
 ## Stufe -> [Zeile, Symbolname]
 const KUENSTLER := {1: ["Strassenmusiker", "musik"], 2: ["Blaskapelle", "musik"], 3: ["StarAct", "stern"]}
@@ -261,8 +262,8 @@ func _reiter_lizenzen() -> void:
 
 func _reiter_personal() -> void:
 	_team_liste()
-	var stufen := {1: [], 2: [], 3: [], 4: []}
-	var eigen := {1: [], 2: [], 3: [], 4: []}
+	var stufen := {1: [], 2: [], 3: [], 4: [], 5: []}
+	var eigen := {1: [], 2: [], 3: [], 4: [], 5: []}
 	for e: Array in _z.get("staff", []):
 		if stufen.has(int(e[0])):
 			(stufen[int(e[0])] as Array).append(int(e[1]))
@@ -271,6 +272,8 @@ func _reiter_personal() -> void:
 	for rolle: int in PERSONAL:
 		var d: Array = PERSONAL[rolle]
 		var z := _zeile(d[0])
+		# Security gibt es erst ab Kapitel 3
+		z.visible = rolle != 5 or int((_z.get("story", {}) as Dictionary).get("kapitel", 1)) >= 3
 		var lv: Array = stufen[rolle]
 		lv.sort()
 		var im_dienst: String = tr("STAFF_NONE") if lv.is_empty() else \
