@@ -1504,10 +1504,28 @@ func net_set_bierpreis(schritte: int) -> void:
 	_broadcast_meta()
 
 func open_computer_ui() -> void:
-	_hud.open_computer()
+	_hud.open_desktop()
+
+func open_desktop_ui() -> void:
+	_hud.open_desktop()
+
+## Quest-Angebot annehmen oder ablehnen (Server entscheidet)
+@rpc("any_peer", "reliable", "call_local")
+func net_quest_annehmen(id: String) -> void:
+	if not multiplayer.is_server():
+		return
+	if _story.annehmen(id):
+		_broadcast_meta()
+
+@rpc("any_peer", "reliable", "call_local")
+func net_quest_ablehnen(id: String) -> void:
+	if not multiplayer.is_server():
+		return
+	_story.ablehnen(id)
+	_broadcast_meta()
 
 func open_booking_ui() -> void:
-	_hud.open_booking()
+	_hud.open_desktop()
 
 ## Wo der Gast an seinem Platz ist: sitzend auf der Bank, Stehgäste (Figuren.ist_stehgast)
 ## ein Stück dahinter — mit Blick zum Tisch wie die Sitzenden.

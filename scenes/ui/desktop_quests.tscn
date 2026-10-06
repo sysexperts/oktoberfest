@@ -1,0 +1,297 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/desktop_quests.gd" id="1_q"]
+[ext_resource type="PackedScene" path="res://scenes/ui/quest_zeile.tscn" id="2_zeile"]
+
+[sub_resource type="StyleBoxFlat" id="Leer"]
+bg_color = Color(0, 0, 0, 0)
+
+
+[sub_resource type="StyleBoxFlat" id="Fenster"]
+bg_color = Color(0.925, 0.918, 0.894, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.11, 0.29, 0.66, 1)
+content_margin_left = 4
+content_margin_top = 4
+content_margin_right = 4
+content_margin_bottom = 4
+
+
+[sub_resource type="StyleBoxFlat" id="Flaeche"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.6, 0.72, 1)
+content_margin_left = 10
+content_margin_top = 8
+content_margin_right = 10
+content_margin_bottom = 8
+
+
+[sub_resource type="StyleBoxFlat" id="Linie"]
+bg_color = Color(0.7, 0.72, 0.78, 1)
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfNormal"]
+bg_color = Color(0.96, 0.955, 0.93, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.44, 0.6, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+content_margin_left = 14
+content_margin_top = 6
+content_margin_right = 14
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfHover"]
+bg_color = Color(1, 0.97, 0.84, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.88, 0.62, 0.14, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+content_margin_left = 14
+content_margin_top = 6
+content_margin_right = 14
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
+bg_color = Color(0.84, 0.83, 0.79, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.36, 0.52, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+content_margin_left = 14
+content_margin_top = 6
+content_margin_right = 14
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfAus"]
+bg_color = Color(0.9, 0.9, 0.88, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.72, 0.78, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+content_margin_left = 14
+content_margin_top = 6
+content_margin_right = 14
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileNormal"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.86, 0.87, 0.9, 1)
+content_margin_left = 10
+content_margin_top = 6
+content_margin_right = 10
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileHover"]
+bg_color = Color(0.9, 0.94, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.8, 0.95, 1)
+content_margin_left = 10
+content_margin_top = 6
+content_margin_right = 10
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileWahl"]
+bg_color = Color(0.23, 0.47, 0.87, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.11, 0.29, 0.66, 1)
+content_margin_left = 10
+content_margin_top = 6
+content_margin_right = 10
+content_margin_bottom = 6
+
+
+[sub_resource type="StyleBoxFlat" id="IconHover"]
+bg_color = Color(0.25, 0.45, 0.9, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.55)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+
+[sub_resource type="StyleBoxFlat" id="IconGedrueckt"]
+bg_color = Color(0.25, 0.45, 0.9, 0.55)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.8)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+
+[sub_resource type="StyleBoxFlat" id="StartMenue"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.11, 0.29, 0.66, 1)
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+
+
+[sub_resource type="StyleBoxFlat" id="StartPunktHover"]
+bg_color = Color(0.23, 0.47, 0.87, 1)
+content_margin_left = 14
+content_margin_top = 7
+content_margin_right = 14
+content_margin_bottom = 7
+
+
+[sub_resource type="StyleBoxFlat" id="StartPunkt"]
+bg_color = Color(1, 1, 1, 1)
+content_margin_left = 14
+content_margin_top = 7
+content_margin_right = 14
+content_margin_bottom = 7
+
+
+[sub_resource type="StyleBoxFlat" id="Eintrag"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.82, 0.88, 1)
+content_margin_left = 12
+content_margin_top = 10
+content_margin_right = 12
+content_margin_bottom = 10
+
+
+[node name="DesktopQuests" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_q")
+
+[node name="Rahmen" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_styles/panel = SubResource("Flaeche")
+
+[node name="Scroll" type="ScrollContainer" parent="Rahmen"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Spalte" type="VBoxContainer" parent="Rahmen/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Kapitel" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.11, 0.29, 0.66, 1)
+theme_override_font_sizes/font_size = 34
+
+[node name="HauptTitel" type="Label" parent="Rahmen/Scroll/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.38, 0.44, 1)
+theme_override_font_sizes/font_size = 22
+text = "QUESTS_HAUPT"
+
+[node name="Haupt" type="VBoxContainer" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AuftraegeTitel" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.38, 0.44, 1)
+theme_override_font_sizes/font_size = 22
+text = "QUESTS_NEBEN"
+
+[node name="Auftraege" type="VBoxContainer" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AngeboteTitel" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.38, 0.44, 1)
+theme_override_font_sizes/font_size = 22
+text = "QUESTS_ANGEBOTE"
+
+[node name="Angebote" type="VBoxContainer" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Leer" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.38, 0.44, 1)
+theme_override_font_sizes/font_size = 24
+text = "QUESTS_LEER"
+autowrap_mode = 3
+
+[node name="Erledigt" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.38, 0.44, 1)
+theme_override_font_sizes/font_size = 22

@@ -282,6 +282,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			hud.close_vote()
 		elif hud and hud.has_method("is_lobby_open") and hud.is_lobby_open():
 			hud.close_lobby()
+		elif hud and hud.has_method("is_desktop_open") and hud.is_desktop_open():
+			hud.close_desktop()
 		elif hud and hud.has_method("is_computer_open") and hud.is_computer_open():
 			hud.close_computer()
 		elif hud and hud.has_method("is_popup_open") and hud.is_popup_open():
@@ -1100,17 +1102,12 @@ func _handle_interaction(delta: float) -> void:
 				_world.open_rent_ui()
 			_sfx("pop")
 		elif _current_target is OfficeDesk:
-			# Festbüro: Zelt/Lizenzen/Personal (nur wenn Zelt geschlossen)
-			if _world.has_method("buero_offen") and _world.buero_offen():
-				if _world.has_method("open_booking_ui"):
-					_world.open_booking_ui()
-			else:
-				_sfx("pop")
+			# Schreibtisch und Computer öffnen beide den Desktop (Shop und Personal nur bei geschlossenem Zelt)
+			if _world.has_method("open_desktop_ui"):
+				_world.open_desktop_ui()
 		elif _current_target is BookingKiosk:
-			# Zelt buchen / Tisch stellen / upgrade (sadece molada)
-			if _world.has_method("buero_offen") and _world.buero_offen():
-				if _world.has_method("open_booking_ui"):
-					_world.open_booking_ui()
+			if _world.has_method("open_desktop_ui"):
+				_world.open_desktop_ui()
 		elif _current_target is Gaerfass:
 			# Sud mit Hefe ins Fass — danach gärt es fünf Minuten
 			if _world.has_method("net_gaerfass_fuellen"):

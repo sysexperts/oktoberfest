@@ -27,6 +27,7 @@ const WEISS := Color(0.949, 0.933, 0.902)
 @onready var _hinweisfenster: Control = %Hinweisfenster
 @onready var _buero: Control = %Festbuero
 @onready var _computer: Control = %Zeltcomputer
+@onready var _desktop: Control = %Desktop
 @onready var _mieten: Control = %ZeltMieten
 @onready var _abstimmung: Control = %Abstimmung
 @onready var _lobby: Control = %Lobby
@@ -93,6 +94,7 @@ func _ready() -> void:
 	_einfliegen()
 	_buero.einrichten(get_parent())
 	_computer.einrichten(get_parent())
+	_desktop.einrichten(get_parent(), self)
 	_mieten.einrichten(get_parent())
 	_abstimmung.einrichten(get_parent())
 	_lobby.einrichten(get_parent())
@@ -547,7 +549,7 @@ func show_popup(text: String) -> void:
 
 func close_popup() -> void:
 	_hinweisfenster.visible = false
-	if not _computer.ist_offen() and not _buero.ist_offen() and not _mieten.ist_offen() and not _lobby.ist_offen():
+	if not _desktop.ist_offen() and not _computer.ist_offen() and not _buero.ist_offen() and not _mieten.ist_offen() and not _lobby.ist_offen():
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func is_popup_open() -> bool:
@@ -589,6 +591,15 @@ func close_booking() -> void:
 
 func is_booking_open() -> bool:
 	return _buero.ist_offen()
+
+func open_desktop() -> void:
+	_desktop.oeffnen()
+
+func close_desktop() -> void:
+	_desktop.escape()
+
+func is_desktop_open() -> bool:
+	return _desktop.ist_offen()
 
 func open_computer() -> void:
 	_computer.oeffnen()

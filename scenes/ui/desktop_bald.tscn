@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[node name="DesktopBald" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Text" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(0.36, 0.38, 0.44, 1)
+theme_override_font_sizes/font_size = 28
+text = "DESKTOP_BALD"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

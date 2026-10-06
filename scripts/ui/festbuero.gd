@@ -131,6 +131,14 @@ func oeffnen() -> void:
 	# Controller: in der Seitenleiste mit dem Steuerkreuz hoch/runter
 	_nav_knoepfe()[_reiter.current_tab].grab_focus.call_deferred()
 
+## Reiter wählen (Desktop-Apps Shop, Personal, Bilanz öffnen das Fenster direkt auf ihrem Reiter)
+func reiter_waehlen(tab: int) -> void:
+	if tab < 0 or tab >= _reiter.get_tab_count():
+		return
+	_reiter.current_tab = tab
+	_nav_markieren(tab)
+	_nav_knoepfe()[tab].grab_focus.call_deferred()
+
 func schliessen() -> void:
 	visible = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED

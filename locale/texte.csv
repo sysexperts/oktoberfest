@@ -1338,3 +1338,159 @@ CREATOR_RANDOM,Zufall,Random,Rastgele
 CREATOR_CANCEL,Abbrechen,Cancel,İptal
 CREATOR_DONE,Fertig,Done,Tamam
 MENU_CHARACTER,Charakter,Character,Karakter
+DESKTOP_TITLE,Festbüro-Computer,Fair office computer,Fuar ofisi bilgisayarı
+DESKTOP_HINWEIS,Wähle eine App.,Choose an app.,Bir uygulama seç.
+DESKTOP_STATUS,Tag %d · Konto %s,Day %d · Balance %s,Gün %d · Bakiye %s
+DESKTOP_ZURUECK,‹ Zum Desktop,‹ Back to desktop,‹ Masaüstüne dön
+DESKTOP_BALD,Diese App ist noch nicht freigeschaltet.,This app is not unlocked yet.,Bu uygulamanın kilidi henüz açılmadı.
+DESKTOP_APP_MAIL,E-Mail,Mail,E-posta
+DESKTOP_APP_SHOP,Shop,Shop,Mağaza
+DESKTOP_APP_QUESTS,Quests,Quests,Görevler
+DESKTOP_APP_BANK,Bank,Bank,Banka
+DESKTOP_APP_PERSONAL,Personal,Staff,Personel
+DESKTOP_APP_BILANZ,Bilanz,Balance sheet,Bilanço
+DESKTOP_APP_BIERPREIS,Bierpreis & Ware,Beer price & goods,Bira fiyatı ve mal
+DESKTOP_APP_KALENDER,Kalender,Calendar,Takvim
+DESKTOP_APP_WETTER,Wetter & Amt,Weather & office,Hava ve resmi daire
+DESKTOP_APP_SOCIAL,Social Media,Social media,Sosyal medya
+MAIL_LEER,Keine Nachrichten.,No messages.,Mesaj yok.
+MAIL_WAEHLEN,Wähle links eine Nachricht.,Pick a message on the left.,Soldan bir mesaj seç.
+MAIL_ANTWORTEN,Antworten:,Reply:,Yanıtla:
+MAIL_BEANTWORTET,Du hast geantwortet: %s,You replied: %s,Yanıtın: %s
+MAIL_TAG,Tag %d,Day %d,Gün %d
+QUESTS_KAPITEL,Kapitel %d,Chapter %d,Bölüm %d
+QUESTS_HAUPT,Hauptquest,Main quest,Ana görev
+QUESTS_NEBEN,Laufende Aufträge,Active jobs,Süren işler
+QUESTS_ANGEBOTE,Neue Angebote,New offers,Yeni teklifler
+QUESTS_LEER,Gerade keine Quests. Horst meldet sich per Mail.,No quests right now. Horst will write you.,Şu an görev yok. Horst sana e-posta atacak.
+QUESTS_FRIST,Noch %d Tage,%d days left,%d gün kaldı
+QUESTS_ANNEHMEN,Annehmen,Accept,Kabul et
+QUESTS_ABLEHNEN,Ablehnen,Decline,Reddet
+QUESTS_VOLL,Du hast schon genug Aufträge.,You already have enough jobs.,Zaten yeterince işin var.
+QUESTS_ERLEDIGT,%d erledigt,%d done,%d tamamlandı
+QUESTS_QUEST,Quest,Quest,Görev
+ABSENDER_HORST,Festleiter Horst,Fair manager Horst,Fuar müdürü Horst
+ABSENDER_KONRAD,Konrad,Konrad,Konrad
+ABSENDER_SCHNEIDER,Herr Schneider (Bank),Mr. Schneider (bank),Bay Schneider (banka)
+ABSENDER_WAGNER,Frau Wagner (Amt),Ms. Wagner (office),Bayan Wagner (daire)
+ABSENDER_MAIER,Dieter Maier (Brauerei),Dieter Maier (brewery),Dieter Maier (bira fabrikası)
+ABSENDER_GERHARD,Gerhard (Bräumeister),Gerhard (brewmaster),Gerhard (bira ustası)
+ABSENDER_STEFAN,Stefan (Kellner),Stefan (waiter),Stefan (garson)
+ABSENDER_SABINE,Sabine (Zapferin),Sabine (tapster),Sabine (fıçıcı)
+ABSENDER_WETTERDIENST,Wetterdienst,Weather service,Hava durumu servisi
+ABSENDER_SYSTEM,Computer,Computer,Bilgisayar
+MAIL_M1_01_BETREFF,Willkommen im Geschäft,Welcome to the business,İşe hoş geldin
+MAIL_M1_01_TEXT_DU,"Servus,
+
+das war schon mal ein sauberer Anfang. Jetzt brauchst du Tische und Bier. Geh in den Shop und kauf dir zwei Tische (je 200 €) und ein Paket Bier. Ein Paket reicht für zehn Maß. Wenn mehr Gäste kommen, bestell gleich mehrere.
+
+Prost,
+Horst","Hi,
+
+that was a clean start. Now you need tables and beer. Go to the shop and buy two tables (€200 each) and one pack of beer. One pack is enough for ten mugs. If more guests come, order several at once.
+
+Cheers,
+Horst","Selam,
+
+temiz bir başlangıç oldu. Şimdi masalara ve biraya ihtiyacın var. Mağazaya git, iki masa (her biri 200 €) ve bir paket bira al. Bir paket on bardağa yeter. Daha çok misafir gelirse hemen birkaç paket sipariş et.
+
+Şerefe,
+Horst"
+MAIL_M1_01_TEXT_IHR,"Servus,
+
+das war schon mal ein sauberer Anfang. Jetzt braucht ihr Tische und Bier. Geht in den Shop und kauft zwei Tische (je 200 €) und ein Paket Bier. Ein Paket reicht für zehn Maß. Wenn mehr Gäste kommen, bestellt gleich mehrere.
+
+Prost,
+Horst","Hi,
+
+that was a clean start. Now you need tables and beer. Go to the shop and buy two tables (€200 each) and one pack of beer. One pack is enough for ten mugs. If more guests come, order several at once.
+
+Cheers,
+Horst","Selam,
+
+temiz bir başlangıç oldu. Şimdi masalara ve biraya ihtiyacınız var. Mağazaya gidin, iki masa (her biri 200 €) ve bir paket bira alın. Bir paket on bardağa yeter. Daha çok misafir gelirse hemen birkaç paket sipariş edin.
+
+Şerefe,
+Horst"
+MAIL_M1_02_BETREFF,Na?,Well?,Eee?
+MAIL_M1_02_TEXT_DU,"Ah, Sepps Patenkind. Ich geb dir zwei Wochen, dann kauf ich dir das Zelt ab.
+– K.","Ah, Sepp's godchild. I give you two weeks, then I'll buy the tent from you.
+– K.","Ah, Sepp'in vaftiz çocuğu. Sana iki hafta veriyorum, sonra çadırı senden satın alırım.
+– K."
+MAIL_M1_02_TEXT_IHR,"Ah, Sepps Erben. Ich geb euch zwei Wochen, dann kauf ich euch das Zelt ab.
+– K.","Ah, Sepp's heirs. I give you two weeks, then I'll buy the tent from you.
+– K.","Ah, Sepp'in mirasçıları. Size iki hafta veriyorum, sonra çadırı sizden satın alırım.
+– K."
+MAIL_M1_03_BETREFF,Gut gemacht,Well done,Aferin
+MAIL_M1_03_TEXT_DU,"Das war ein guter erster Tag. Der Sepp wäre stolz. Morgen schick ich dir die nächsten Aufträge. Schlaf gut.
+
+Prost,
+Horst","That was a good first day. Sepp would be proud. Tomorrow I'll send you the next jobs. Sleep well.
+
+Cheers,
+Horst","İyi bir ilk gündü. Sepp gurur duyardı. Yarın sana yeni işleri gönderirim. İyi uykular.
+
+Şerefe,
+Horst"
+MAIL_M1_03_TEXT_IHR,"Das war ein guter erster Tag. Der Sepp wäre stolz. Morgen schick ich euch die nächsten Aufträge. Schlaft gut.
+
+Prost,
+Horst","That was a good first day. Sepp would be proud. Tomorrow I'll send you the next jobs. Sleep well.
+
+Cheers,
+Horst","İyi bir ilk gündü. Sepp gurur duyardı. Yarın size yeni işleri gönderirim. İyi uykular.
+
+Şerefe,
+Horst"
+MAIL_M2_01_BETREFF,Du kannst nicht alles allein machen,You can't do everything alone,Her şeyi tek başına yapamazsın
+MAIL_M2_01_TEXT_DU,"Servus,
+
+der erste Tag war ein Anfang. Aber allein hältst du das keine Woche durch, glaub mir. Stell dir einen Kellner ein. Du findest ihn auf dem Computer unter Personal.
+
+Prost,
+Horst","Hi,
+
+the first day was a start. But you won't last a week alone, believe me. Hire a waiter. You'll find them on the computer under Staff.
+
+Cheers,
+Horst","Selam,
+
+ilk gün bir başlangıçtı. Ama tek başına bir hafta dayanamazsın, inan bana. Bir garson işe al. Bilgisayarda Personel bölümünde bulursun.
+
+Şerefe,
+Horst"
+MAIL_M2_01_TEXT_IHR,"Servus,
+
+der erste Tag war ein Anfang. Aber allein haltet ihr das keine Woche durch, glaubt mir. Stellt einen Kellner ein. Ihr findet ihn auf dem Computer unter Personal.
+
+Prost,
+Horst","Hi,
+
+the first day was a start. But you won't last a week alone, believe me. Hire a waiter. You'll find them on the computer under Staff.
+
+Cheers,
+Horst","Selam,
+
+ilk gün bir başlangıçtı. Ama tek başınıza bir hafta dayanamazsınız, inanın bana. Bir garson işe alın. Bilgisayarda Personel bölümünde bulursunuz.
+
+Şerefe,
+Horst"
+MAIL_M_VERFALLEN_BETREFF,Zu spät,Too late,Çok geç
+MAIL_M_VERFALLEN_TEXT_DU,"Zu spät, der Konrad hat es schon erledigt. Auch wenn ich dich mag: Manche Dinge haben Priorität.
+
+Horst","Too late, Konrad already took care of it. Even though I like you: some things take priority.
+
+Horst","Çok geç, Konrad bunu çoktan halletti. Seni sevsem de: bazı şeylerin önceliği var.
+
+Horst"
+MAIL_M_VERFALLEN_TEXT_IHR,"Zu spät, der Konrad hat es schon erledigt. Auch wenn ich euch mag: Manche Dinge haben Priorität.
+
+Horst","Too late, Konrad already took care of it. Even though I like you: some things take priority.
+
+Horst","Çok geç, Konrad bunu çoktan halletti. Sizi sevsem de: bazı şeylerin önceliği var.
+
+Horst"
+DESKTOP_START,Prost,Cheers,Şerefe
+DESKTOP_STARTMENUE,Sloptoberfest,Sloptoberfest,Sloptoberfest
+DESKTOP_AUSSCHALTEN,Computer verlassen,Leave computer,Bilgisayardan ayrıl
+DESKTOP_TAG,Tag,Day,Gün
