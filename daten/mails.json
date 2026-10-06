@@ -196,5 +196,25 @@
     }
    }
   ]
+ },
+ {
+  "id": "M-G2",
+  "absender": "HORST",
+  "betreff": "MAIL_G2_BETREFF",
+  "text": "MAIL_G2_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G2_A1",
+    "folge": {
+     "quest_annehmen": "G-2"
+    }
+   },
+   {
+    "text": "MAIL_G2_A2",
+    "folge": {
+     "quest_ablehnen": "G-2"
+    }
+   }
+  ]
  }
 ]

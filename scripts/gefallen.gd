@@ -85,11 +85,19 @@ func _starten(id: String) -> void:
 			frei.append(i)
 	if frei.is_empty():
 		return
-	_lauf = {"id": id, "phase": "suchen", "traeger": -1}
-	net_start.rpc(id, frei.pick_random())
+	var art := str((Daten.quest(id).get("gefallen", {}) as Dictionary).get("art", "spanner"))
+	_lauf = {"id": id, "phase": "suchen", "traeger": -1, "art": art}
+	var start := Vector3.ZERO
+	if art == "dieb" and _gm._crowd != null:
+		_dieb_knoten = _gm._crowd.weg_start()
+		start = _gm._crowd.punkt(_dieb_knoten)
+		_dieb_pos = start
+		_dieb_richtung = Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
+		_hetze = 0.0
+	net_start.rpc(id, art, frei.pick_random(), start)
 
 @rpc("authority", "reliable", "call_local")
-func net_start(_id: String, ort: int) -> void:
+func net_start(_id: String, art: String, ort: int, start: Vector3) -> void:
 	_taeter_weg()
 	if _orte.is_empty():
 		_orte_sammeln()
@@ -98,8 +106,9 @@ func net_start(_id: String, ort: int) -> void:
 	_phase = "suchen"
 	_traeger = -1
 	_taeter = TAETER.instantiate() as Node3D
+	_taeter.set("art", art)
 	get_tree().current_scene.add_child(_taeter)
-	_taeter.global_position = _orte[ort]
+	_taeter.global_position = start if art == "dieb" else _orte[ort]
 
 @rpc("any_peer", "reliable", "call_local")
 func net_packen() -> void:
@@ -133,7 +142,8 @@ func net_uebergeben() -> void:
 	# „fertig" hält den Ablauf fest, bis die Story die Quest abgeschlossen hat (sonst startet _abgleich ihn neu)
 	_lauf.phase = "fertig"
 	_story.ereignis("gefallen_" + id)
-	_gm._melde("MSG_GEFALLEN_UEBERGEBEN", [], 2)
+	var lohn := int((Daten.quest(id).get("belohnung", {}) as Dictionary).get("geld", 0))
+	_gm._melde("MSG_GEFALLEN_UEBERGEBEN", [_gm._eur(lohn)], 2)
 	_gm._broadcast_meta()
 	_lauf = {}
 	net_ende.rpc()
@@ -153,9 +163,77 @@ func _taeter_weg() -> void:
 		_taeter.queue_free()
 	_taeter = null
 
+# ------------------------------------------------------------------ Dieb (Server)
+## Der Dieb läuft die Wege der Menge entlang (scripts/crowd.gd). Kommt ein Spieler nah, rennt er vom Spieler weg,
+## wird aber nach einer Weile müde (so lange rennt er, danach japst er) — mit Sprint ist er einzuholen.
+const DIEB_GEHEN := 1.6
+const DIEB_RENNEN := 5.0
+const DIEB_MUEDE := 2.6
+const DIEB_AUSDAUER := 7.0
+const DIEB_ALARM := 14.0
+var _dieb_knoten := -1
+var _dieb_pos := Vector3.ZERO
+var _dieb_richtung := Vector3.FORWARD
+var _hetze := 0.0
+var _melde_t := 0.0
+
+func _naechster_spieler(von: Vector3) -> Vector3:
+	var bester := Vector3(INF, INF, INF)
+	var d := INF
+	for sp in _gm._players_nodes.values():
+		if sp is Node3D and is_instance_valid(sp):
+			var a := von.distance_squared_to((sp as Node3D).global_position)
+			if a < d:
+				d = a
+				bester = (sp as Node3D).global_position
+	return bester
+
+func _dieb_schritt(delta: float) -> void:
+	var cr: Node = _gm._crowd
+	if cr == null or _dieb_knoten < 0:
+		return
+	var sp_pos := _naechster_spieler(_dieb_pos)
+	var nah := sp_pos.is_finite() and _dieb_pos.distance_to(sp_pos) < DIEB_ALARM
+	if nah:
+		_hetze += delta
+	else:
+		_hetze = maxf(0.0, _hetze - delta * 0.7)
+	var tempo := DIEB_GEHEN
+	if nah:
+		tempo = DIEB_RENNEN if _hetze < DIEB_AUSDAUER else DIEB_MUEDE
+	var ziel: Vector3 = cr.punkt(_dieb_knoten)
+	var zu := ziel - _dieb_pos
+	zu.y = 0.0
+	if zu.length() < 0.5:
+		var neu: int = cr.weiter(_dieb_knoten, _dieb_richtung)
+		if nah and sp_pos.is_finite():
+			# nicht dem Verfolger entgegen: dann lieber andersherum
+			if cr.punkt(neu).distance_to(sp_pos) < cr.punkt(_dieb_knoten).distance_to(sp_pos):
+				neu = cr.weiter(_dieb_knoten, -_dieb_richtung)
+		var d: Vector3 = cr.punkt(neu) - cr.punkt(_dieb_knoten)
+		d.y = 0.0
+		if d.length() > 0.01:
+			_dieb_richtung = d.normalized()
+		_dieb_knoten = neu
+	else:
+		_dieb_pos += zu.normalized() * minf(tempo * delta, zu.length())
+		_dieb_pos.y = ziel.y
+	_melde_t -= delta
+	if _melde_t <= 0.0:
+		_melde_t = 0.1
+		var richt := ziel - _dieb_pos
+		net_dieb.rpc(_dieb_pos, atan2(-richt.x, -richt.z), tempo)
+
+@rpc("authority", "unreliable_ordered", "call_local")
+func net_dieb(pos: Vector3, yaw: float, tempo: float) -> void:
+	if _taeter != null and is_instance_valid(_taeter) and _phase == "suchen" and _taeter.has_method("ziel_setzen"):
+		_taeter.ziel_setzen(pos, yaw, tempo)
+
 # ------------------------------------------------------------------ Darstellung
 ## Wird getragen, hängt der Täter über der Schulter des Trägers
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if multiplayer.is_server() and not _lauf.is_empty() and str(_lauf.get("art", "")) == "dieb" and str(_lauf.phase) == "suchen":
+		_dieb_schritt(delta)
 	if _phase != "getragen" or _taeter == null or not is_instance_valid(_taeter):
 		return
 	var sp := _gm._players_nodes.get(_traeger) as Node3D if "_players_nodes" in _gm else null

@@ -1748,4 +1748,25 @@ MAIL_G1_A2,Heute nicht.,Not today.,Bugün olmaz.
 HINT_TAETER_PACKEN,{interact} Packen,{interact} Grab,{interact} Yakala
 HINT_SECURITY_UEBERGEBEN,{interact} Täter übergeben,{interact} Hand over the culprit,{interact} Suçluyu teslim et
 HINT_SECURITY_HALLO,Security-Posten,Security post,Güvenlik noktası
-MSG_GEFALLEN_UEBERGEBEN,Der Security führt den Kerl ab. Horst legt 250 € auf dein Konto,Security takes the guy away. Horst adds €250 to your account,Güvenlik adamı götürüyor. Horst hesabına 250 € ekliyor
+MSG_GEFALLEN_UEBERGEBEN,Der Security führt den Kerl ab. Horst legt %s auf dein Konto,Security takes the guy away. Horst adds %s to your account,Güvenlik adamı götürüyor. Horst hesabına %s ekliyor
+Q_G-2_TITLE,Der Taschendieb,The pickpocket,Yankesici
+Q_G-2_TEXT,"Ein Taschendieb treibt sich in der Menge herum und rennt weg, sobald jemand näher kommt. Verfolg ihn (mit Sprint holst du ihn ein), pack ihn mit E und trag ihn zu einem Security-Posten.","A pickpocket is working the crowd and runs as soon as someone gets close. Chase him (sprinting will catch him), grab him with E and carry him to a security post.","Bir yankesici kalabalıkta dolanıyor ve biri yaklaşınca kaçıyor. Onu kovala (koşarak yetişirsin), E ile yakala ve bir güvenlik noktasına taşı."
+MAIL_G2_BETREFF,Haltet den Dieb!,Stop thief!,Hırsız var!
+MAIL_G2_TEXT,"Servus,
+
+auf der Kirmes klaut einer den Leuten die Geldbeutel aus der Tasche. Er mischt sich unter die Menge und rennt los, sobald man ihm zu nahe kommt. Schnapp ihn dir und bring ihn zu einem Security-Posten. Du musst nur schneller sein als er, mit Sprint schaffst du das.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+someone is stealing wallets from people's pockets at the fair. He mixes into the crowd and runs as soon as you get too close. Catch him and bring him to a security post. You just have to be faster than him, sprinting will do it.
+I will add €300.
+
+Horst","Selam,
+
+fuarda biri insanların ceplerinden cüzdan çalıyor. Kalabalığa karışıyor ve fazla yaklaşınca kaçıyor. Onu yakala ve bir güvenlik noktasına getir. Sadece ondan hızlı olman lazım, koşarak yetişirsin.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G2_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G2_A2,Heute nicht.,Not today.,Bugün olmaz.

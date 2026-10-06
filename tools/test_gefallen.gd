@@ -48,5 +48,28 @@ class Lauf extends Node:
 		_check("Quest erfüllt", story.zustand("G-1") == "erfuellt", story.zustand("G-1"))
 		_check("250 € Belohnung", Game.money == geld0 + 250, "%d -> %d" % [geld0, Game.money])
 		_check("Täter weg, Spieler frei", g._taeter == null and not bool(sp.traegt_taeter))
+		# Taschendieb
+		story._freischalten(g.Daten.quest("G-2"))
+		story.annehmen("G-2")
+		await _warten(0.6)
+		_check("Dieb taucht auf", g._taeter != null and str(g._lauf.get("art", "")) == "dieb", str(g._lauf))
+		var start: Vector3 = g._dieb_pos
+		for i in 40:
+			g._dieb_schritt(0.1)
+		_check("Dieb läuft von selbst", g._dieb_pos.distance_to(start) > 1.0, "%.1f m" % g._dieb_pos.distance_to(start))
+		sp.global_position = g._dieb_pos + Vector3(4, 0, 0)
+		var d0: float = sp.global_position.distance_to(g._dieb_pos)
+		for i in 30:
+			g._dieb_schritt(0.1)
+		var d1: float = sp.global_position.distance_to(g._dieb_pos)
+		_check("Dieb rennt vor dem Spieler weg", d1 > d0 + 3.0, "%.1f -> %.1f m" % [d0, d1])
+		await _warten(0.5)
+		_check("Dieb-Figur folgt der Meldung", g._taeter.global_position.distance_to(g._dieb_pos) < 3.0, "")
+		sp.global_position = g._taeter.global_position + Vector3(0.5, 0, 0)
+		g.net_packen()
+		await _warten(0.3)
+		g.net_uebergeben()
+		await _warten(0.5)
+		_check("Dieb übergeben: Quest erfüllt", story.zustand("G-2") == "erfuellt", story.zustand("G-2"))
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN")
 		get_tree().quit(fehler)

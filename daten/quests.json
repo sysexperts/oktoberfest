@@ -377,6 +377,35 @@
   "frist_tage": 2,
   "belohnung": {
    "geld": 250
+  },
+  "gefallen": {
+   "art": "spanner"
+  }
+ },
+ {
+  "id": "G-2",
+  "typ": "gefallen",
+  "kapitel": 2,
+  "titel": "Q_G-2_TITLE",
+  "text": "Q_G-2_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.35
+   },
+   "mail": "M-G2"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-2"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "dieb"
   }
  }
 ]
