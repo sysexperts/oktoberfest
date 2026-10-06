@@ -2,299 +2,439 @@
 
 [ext_resource type="Script" path="res://scripts/ui/desktop.gd" id="1_desk"]
 [ext_resource type="Texture2D" path="res://assets/ui/desktop/hintergrund.png" id="2_bg"]
-[ext_resource type="Texture2D" path="res://assets/ui/desktop/taskleiste.png" id="3_task"]
-[ext_resource type="Texture2D" path="res://assets/ui/desktop/start_normal.png" id="4_s1"]
-[ext_resource type="Texture2D" path="res://assets/ui/desktop/start_hover.png" id="5_s2"]
-[ext_resource type="Texture2D" path="res://assets/ui/desktop/start_gedrueckt.png" id="6_s3"]
-[ext_resource type="Texture2D" path="res://assets/ui/desktop/startmenue_kopf.png" id="7_kopf"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/bier.svg" id="8_bier"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/papier.svg" id="9_mail"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/ein_aus.svg" id="10_aus"]
-[ext_resource type="Theme" path="res://scenes/ui/desktop_theme.tres" id="11_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/papier.svg" id="i_mail"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/kiste.svg" id="i_shop"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/buch.svg" id="i_quests"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/bank.svg" id="i_bank"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/person.svg" id="i_personal"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/diagramm.svg" id="i_bilanz"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/bier.svg" id="i_bierpreis"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/kalender.svg" id="i_kalender"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/ausruf.svg" id="i_wetter"]
-[ext_resource type="Texture2D" path="res://assets/ui/symbole/megafon.svg" id="i_social"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/bier.svg" id="3_bier"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/ein_aus.svg" id="4_aus"]
+[ext_resource type="Texture2D" path="res://assets/ui/symbole/papier.svg" id="5_tray"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_start.png" id="i_start"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_mail.png" id="i_mail"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_shop.png" id="i_shop"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_quests.png" id="i_quests"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_bank.png" id="i_bank"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_personal.png" id="i_personal"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_bilanz.png" id="i_bilanz"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_bierpreis.png" id="i_bierpreis"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_kalender.png" id="i_kalender"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_wetter.png" id="i_wetter"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_social.png" id="i_social"]
 
 [sub_resource type="StyleBoxFlat" id="Leer"]
 bg_color = Color(0, 0, 0, 0)
+corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="Fenster"]
-bg_color = Color(0.925, 0.918, 0.894, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.11, 0.29, 0.66, 1)
-content_margin_left = 4
-content_margin_top = 4
-content_margin_right = 4
-content_margin_bottom = 4
-
-
-[sub_resource type="StyleBoxFlat" id="Flaeche"]
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color(0.07, 0.058, 0.046, 0.985)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.5, 0.6, 0.72, 1)
-content_margin_left = 10
-content_margin_top = 8
-content_margin_right = 10
-content_margin_bottom = 8
-
-
-[sub_resource type="StyleBoxFlat" id="Linie"]
-bg_color = Color(0.7, 0.72, 0.78, 1)
-
-
-[sub_resource type="StyleBoxFlat" id="KnopfNormal"]
-bg_color = Color(0.96, 0.955, 0.93, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.38, 0.44, 0.6, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-content_margin_left = 14
-content_margin_top = 6
-content_margin_right = 14
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="KnopfHover"]
-bg_color = Color(1, 0.97, 0.84, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.88, 0.62, 0.14, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-content_margin_left = 14
-content_margin_top = 6
-content_margin_right = 14
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
-bg_color = Color(0.84, 0.83, 0.79, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.3, 0.36, 0.52, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-content_margin_left = 14
-content_margin_top = 6
-content_margin_right = 14
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="KnopfAus"]
-bg_color = Color(0.9, 0.9, 0.88, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.7, 0.72, 0.78, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-content_margin_left = 14
-content_margin_top = 6
-content_margin_right = 14
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="ZeileNormal"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.86, 0.87, 0.9, 1)
-content_margin_left = 10
-content_margin_top = 6
-content_margin_right = 10
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="ZeileHover"]
-bg_color = Color(0.9, 0.94, 1, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.7, 0.8, 0.95, 1)
-content_margin_left = 10
-content_margin_top = 6
-content_margin_right = 10
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="ZeileWahl"]
-bg_color = Color(0.23, 0.47, 0.87, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.11, 0.29, 0.66, 1)
-content_margin_left = 10
-content_margin_top = 6
-content_margin_right = 10
-content_margin_bottom = 6
-
-
-[sub_resource type="StyleBoxFlat" id="IconHover"]
-bg_color = Color(0.25, 0.45, 0.9, 0.35)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 0.55)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-
-[sub_resource type="StyleBoxFlat" id="IconGedrueckt"]
-bg_color = Color(0.25, 0.45, 0.9, 0.55)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 0.8)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-
-[sub_resource type="StyleBoxFlat" id="StartMenue"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.11, 0.29, 0.66, 1)
+border_color = Color(0.58, 0.42, 0.24, 0.55)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
 content_margin_left = 0
 content_margin_top = 0
 content_margin_right = 0
 content_margin_bottom = 0
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 26
+shadow_offset = Vector2(0, 8)
+corner_detail = 12
 
 
-[sub_resource type="StyleBoxFlat" id="StartPunktHover"]
-bg_color = Color(0.23, 0.47, 0.87, 1)
-content_margin_left = 14
-content_margin_top = 7
-content_margin_right = 14
-content_margin_bottom = 7
+[sub_resource type="StyleBoxFlat" id="Titelleiste"]
+bg_color = Color(0.125, 0.105, 0.082, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+content_margin_left = 16
+content_margin_top = 8
+content_margin_right = 12
+content_margin_bottom = 8
+corner_detail = 12
 
 
-[sub_resource type="StyleBoxFlat" id="StartPunkt"]
-bg_color = Color(1, 1, 1, 1)
-content_margin_left = 14
-content_margin_top = 7
-content_margin_right = 14
-content_margin_bottom = 7
-
-
-[sub_resource type="StyleBoxFlat" id="Eintrag"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxFlat" id="Flaeche"]
+bg_color = Color(0.105, 0.088, 0.068, 0.96)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.8, 0.82, 0.88, 1)
-content_margin_left = 12
+border_color = Color(0.58, 0.42, 0.24, 0.3)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 16
+content_margin_top = 12
+content_margin_right = 16
+content_margin_bottom = 12
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Eintrag"]
+bg_color = Color(0.135, 0.113, 0.088, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.3)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 16
+content_margin_top = 12
+content_margin_right = 16
+content_margin_bottom = 12
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Linie"]
+bg_color = Color(0.58, 0.42, 0.24, 0.4)
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfNormal"]
+bg_color = Color(0.18, 0.15, 0.112, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.45)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 18
 content_margin_top = 10
-content_margin_right = 12
+content_margin_right = 18
 content_margin_bottom = 10
+corner_detail = 12
 
 
-[sub_resource type="StyleBoxTexture" id="TaskleisteStil"]
-texture = ExtResource("3_task")
-texture_margin_left = 0.0
-texture_margin_top = 0.0
-texture_margin_right = 0.0
-texture_margin_bottom = 0.0
-content_margin_left = 6.0
-content_margin_top = 4.0
-content_margin_right = 8.0
-content_margin_bottom = 2.0
+[sub_resource type="StyleBoxFlat" id="KnopfHover"]
+bg_color = Color(0.26, 0.21, 0.14, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+corner_detail = 12
 
-[sub_resource type="StyleBoxTexture" id="StartNormal"]
-texture = ExtResource("4_s1")
-texture_margin_left = 14.0
-texture_margin_top = 12.0
-texture_margin_right = 14.0
-texture_margin_bottom = 12.0
-content_margin_left = 14.0
-content_margin_top = 4.0
-content_margin_right = 18.0
-content_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StartHover"]
-texture = ExtResource("5_s2")
-texture_margin_left = 14.0
-texture_margin_top = 12.0
-texture_margin_right = 14.0
-texture_margin_bottom = 12.0
-content_margin_left = 14.0
-content_margin_top = 4.0
-content_margin_right = 18.0
-content_margin_bottom = 4.0
+[sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
+bg_color = Color(0.32, 0.255, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.9)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+corner_detail = 12
 
-[sub_resource type="StyleBoxTexture" id="StartGedrueckt"]
-texture = ExtResource("6_s3")
-texture_margin_left = 14.0
-texture_margin_top = 12.0
-texture_margin_right = 14.0
-texture_margin_bottom = 12.0
-content_margin_left = 14.0
-content_margin_top = 4.0
-content_margin_right = 18.0
-content_margin_bottom = 4.0
 
-[sub_resource type="StyleBoxTexture" id="StartKopfStil"]
-texture = ExtResource("7_kopf")
-texture_margin_left = 0.0
-texture_margin_top = 0.0
-texture_margin_right = 0.0
-texture_margin_bottom = 0.0
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
+[sub_resource type="StyleBoxFlat" id="KnopfAus"]
+bg_color = Color(0.1, 0.085, 0.066, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.15)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileNormal"]
+bg_color = Color(0.135, 0.113, 0.088, 0.0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.22)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14
+content_margin_top = 10
+content_margin_right = 14
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileHover"]
+bg_color = Color(1, 0.839, 0.349, 0.09)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.4)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14
+content_margin_top = 10
+content_margin_right = 14
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileWahl"]
+bg_color = Color(0.3, 0.24, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.85)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14
+content_margin_top = 10
+content_margin_right = 14
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="IconHover"]
+bg_color = Color(1, 1, 1, 0.12)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.25)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="IconGedrueckt"]
+bg_color = Color(1, 0.839, 0.349, 0.2)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.839, 0.349, 0.6)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Dock"]
+bg_color = Color(0.05, 0.042, 0.034, 0.93)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.55)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+content_margin_left = 12
+content_margin_top = 8
+content_margin_right = 14
+content_margin_bottom = 8
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 20
+shadow_offset = Vector2(0, 6)
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="StartGold"]
+bg_color = Color(0.97, 0.78, 0.3, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.92, 0.6, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 16
+content_margin_top = 6
+content_margin_right = 20
+content_margin_bottom = 6
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="StartGoldHover"]
+bg_color = Color(1, 0.86, 0.45, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.95, 0.7, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 16
+content_margin_top = 6
+content_margin_right = 20
+content_margin_bottom = 6
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="StartGoldDruck"]
+bg_color = Color(0.85, 0.65, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.92, 0.6, 0.9)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 16
+content_margin_top = 6
+content_margin_right = 20
+content_margin_bottom = 6
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="TaskAktiv"]
+bg_color = Color(1, 1, 1, 0.14)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 8
+content_margin_top = 6
+content_margin_right = 8
+content_margin_bottom = 6
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="TaskHover"]
+bg_color = Color(1, 1, 1, 0.09)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 8
+content_margin_top = 6
+content_margin_right = 8
+content_margin_bottom = 6
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Chip"]
+bg_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 14
+content_margin_top = 4
+content_margin_right = 14
+content_margin_bottom = 4
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="StartMenue"]
+bg_color = Color(0.06, 0.05, 0.04, 0.985)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.42, 0.24, 0.55)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+content_margin_left = 20
+content_margin_top = 18
+content_margin_right = 20
+content_margin_bottom = 18
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 26
+shadow_offset = Vector2(0, 10)
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KachelHover"]
+bg_color = Color(1, 1, 1, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.2)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KleinKnopf"]
+bg_color = Color(1, 1, 1, 0.08)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KleinHover"]
+bg_color = Color(1, 1, 1, 0.18)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="SchliessenHover"]
+bg_color = Color(0.78, 0.22, 0.18, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 12
+
 
 [node name="Desktop" type="Control"]
-texture_filter = 1
+texture_filter = 4
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("11_theme")
 script = ExtResource("1_desk")
 
 [node name="Hintergrund" type="TextureRect" parent="."]
@@ -313,28 +453,31 @@ stretch_mode = 6
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_left = 14.0
-offset_top = 14.0
-offset_right = 270.0
-offset_bottom = -58.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 300.0
+offset_bottom = -96.0
 grow_vertical = 2
-theme_override_constants/h_separation = 6
-theme_override_constants/v_separation = 6
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
 
 [node name="IconMail" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_MAIL"
 icon = ExtResource("i_mail")
@@ -345,18 +488,21 @@ autowrap_mode = 3
 
 [node name="IconShop" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_SHOP"
 icon = ExtResource("i_shop")
@@ -367,18 +513,21 @@ autowrap_mode = 3
 
 [node name="IconQuests" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_QUESTS"
 icon = ExtResource("i_quests")
@@ -389,18 +538,21 @@ autowrap_mode = 3
 
 [node name="IconBank" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_BANK"
 icon = ExtResource("i_bank")
@@ -411,18 +563,21 @@ autowrap_mode = 3
 
 [node name="IconPersonal" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_PERSONAL"
 icon = ExtResource("i_personal")
@@ -433,18 +588,21 @@ autowrap_mode = 3
 
 [node name="IconBilanz" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_BILANZ"
 icon = ExtResource("i_bilanz")
@@ -455,18 +613,21 @@ autowrap_mode = 3
 
 [node name="IconBierpreis" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_BIERPREIS"
 icon = ExtResource("i_bierpreis")
@@ -477,18 +638,21 @@ autowrap_mode = 3
 
 [node name="IconKalender" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_KALENDER"
 icon = ExtResource("i_kalender")
@@ -499,18 +663,21 @@ autowrap_mode = 3
 
 [node name="IconWetter" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_WETTER"
 icon = ExtResource("i_wetter")
@@ -521,18 +688,21 @@ autowrap_mode = 3
 
 [node name="IconSocial" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 92)
+custom_minimum_size = Vector2(128, 124)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
-theme_override_constants/outline_size = 6
-theme_override_constants/icon_max_width = 40
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 72
+theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("IconHover")
 theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("IconHover")
 text = "DESKTOP_APP_SOCIAL"
 icon = ExtResource("i_social")
@@ -547,43 +717,45 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -44.0
+offset_bottom = -84.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
 [node name="Taskleiste" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(420, 0)
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -44.0
+offset_left = -210.0
+offset_top = -82.0
+offset_right = 210.0
+offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_styles/panel = SubResource("TaskleisteStil")
+theme_override_styles/panel = SubResource("Dock")
 
 [node name="Zeile" type="HBoxContainer" parent="Taskleiste"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="StartKnopf" type="Button" parent="Taskleiste/Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(124, 0)
+custom_minimum_size = Vector2(60, 54)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.14, 0.0, 1)
-theme_override_colors/font_hover_color = Color(0.23, 0.14, 0.0, 1)
-theme_override_colors/font_pressed_color = Color(0.23, 0.14, 0.0, 1)
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("StartNormal")
-theme_override_styles/hover = SubResource("StartHover")
-theme_override_styles/pressed = SubResource("StartGedrueckt")
-theme_override_styles/focus = SubResource("StartHover")
+theme_override_constants/icon_max_width = 48
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("TaskHover")
+theme_override_styles/pressed = SubResource("TaskAktiv")
+theme_override_styles/focus = SubResource("TaskHover")
 toggle_mode = true
-text = "DESKTOP_START"
-icon = ExtResource("8_bier")
+tooltip_text = "DESKTOP_START"
+icon = ExtResource("i_start")
+icon_alignment = 1
 expand_icon = true
 
 [node name="Trenner" type="VSeparator" parent="Taskleiste/Zeile"]
@@ -593,17 +765,18 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
 [node name="TrayMail" type="Button" parent="Taskleiste/Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
+theme_override_constants/icon_max_width = 30
 theme_override_styles/normal = SubResource("Leer")
-theme_override_styles/hover = SubResource("IconHover")
-theme_override_styles/pressed = SubResource("IconGedrueckt")
-theme_override_styles/focus = SubResource("Leer")
-icon = ExtResource("9_mail")
+theme_override_styles/hover = SubResource("TaskHover")
+theme_override_styles/pressed = SubResource("TaskAktiv")
+theme_override_styles/focus = SubResource("TaskHover")
+icon = ExtResource("i_mail")
 icon_alignment = 1
 expand_icon = true
 tooltip_text = "DESKTOP_APP_MAIL"
@@ -615,273 +788,295 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -18.0
+offset_left = -22.0
 offset_top = -2.0
 offset_right = 2.0
-offset_bottom = 18.0
+offset_bottom = 22.0
 grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 22
-text = "0"
-horizontal_alignment = 1
-
-[node name="Uhr" type="Label" parent="Taskleiste/Zeile"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(170, 0)
-layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 18
+text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Konto" type="Label" parent="Taskleiste/Zeile"]
+[node name="Chip" type="PanelContainer" parent="Taskleiste/Zeile"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Chip")
+
+[node name="Uhr" type="Label" parent="Taskleiste/Zeile/Chip"]
 unique_name_in_owner = true
 auto_translate_mode = 2
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.88, 0.45, 1)
-theme_override_font_sizes/font_size = 24
-horizontal_alignment = 2
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Startmenue" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(340, 0)
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = -520.0
-offset_right = 344.0
-offset_bottom = -44.0
-grow_vertical = 0
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 0
+offset_right = 500.0
+offset_bottom = 520.0
 theme_override_styles/panel = SubResource("StartMenue")
 
 [node name="Spalte" type="VBoxContainer" parent="Startmenue"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 12
 
-[node name="KopfLeiste" type="PanelContainer" parent="Startmenue/Spalte"]
+[node name="Titel" type="Label" parent="Startmenue/Spalte"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StartKopfStil")
-
-[node name="Titel" type="Label" parent="Startmenue/Spalte/KopfLeiste"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 32
 text = "DESKTOP_STARTMENUE"
 
-[node name="StartMail" type="Button" parent="Startmenue/Spalte"]
-unique_name_in_owner = true
+[node name="Linie" type="HSeparator" parent="Startmenue/Spalte"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_styles/separator = SubResource("Linie")
+
+[node name="Raster" type="GridContainer" parent="Startmenue/Spalte"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="StartMail" type="Button" parent="Startmenue/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_MAIL"
 icon = ExtResource("i_mail")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartShop" type="Button" parent="Startmenue/Spalte"]
+[node name="StartShop" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_SHOP"
 icon = ExtResource("i_shop")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartQuests" type="Button" parent="Startmenue/Spalte"]
+[node name="StartQuests" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_QUESTS"
 icon = ExtResource("i_quests")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartBank" type="Button" parent="Startmenue/Spalte"]
+[node name="StartBank" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_BANK"
 icon = ExtResource("i_bank")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartPersonal" type="Button" parent="Startmenue/Spalte"]
+[node name="StartPersonal" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_PERSONAL"
 icon = ExtResource("i_personal")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartBilanz" type="Button" parent="Startmenue/Spalte"]
+[node name="StartBilanz" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_BILANZ"
 icon = ExtResource("i_bilanz")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartBierpreis" type="Button" parent="Startmenue/Spalte"]
+[node name="StartBierpreis" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_BIERPREIS"
 icon = ExtResource("i_bierpreis")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartKalender" type="Button" parent="Startmenue/Spalte"]
+[node name="StartKalender" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_KALENDER"
 icon = ExtResource("i_kalender")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartWetter" type="Button" parent="Startmenue/Spalte"]
+[node name="StartWetter" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_WETTER"
 icon = ExtResource("i_wetter")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="StartSocial" type="Button" parent="Startmenue/Spalte"]
+[node name="StartSocial" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(108, 112)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.6, 0.6, 0.62, 1)
-theme_override_constants/icon_max_width = 26
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StartPunkt")
-theme_override_styles/hover = SubResource("StartPunktHover")
-theme_override_styles/pressed = SubResource("StartPunktHover")
-theme_override_styles/disabled = SubResource("StartPunkt")
-theme_override_styles/focus = SubResource("StartPunktHover")
-alignment = 0
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 58
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_SOCIAL"
 icon = ExtResource("i_social")
+icon_alignment = 1
+vertical_icon_alignment = 0
 expand_icon = true
+autowrap_mode = 3
 
-[node name="Fuss" type="PanelContainer" parent="Startmenue/Spalte"]
+[node name="Linie2" type="HSeparator" parent="Startmenue/Spalte"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StartKopfStil")
+theme_override_styles/separator = SubResource("Linie")
 
-[node name="StartAus" type="Button" parent="Startmenue/Spalte/Fuss"]
+[node name="StartAus" type="Button" parent="Startmenue/Spalte"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.88, 0.45, 1)
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 0.839, 0.349, 1)
 theme_override_constants/icon_max_width = 24
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("Leer")
-theme_override_styles/hover = SubResource("Leer")
-theme_override_styles/pressed = SubResource("Leer")
-theme_override_styles/focus = SubResource("Leer")
-alignment = 2
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("KnopfNormal")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/focus = SubResource("KnopfHover")
 text = "DESKTOP_AUSSCHALTEN"
-icon = ExtResource("10_aus")
+icon = ExtResource("4_aus")
 expand_icon = true

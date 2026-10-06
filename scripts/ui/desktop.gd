@@ -1,20 +1,19 @@
 extends Control
 ## Computer-Desktop im Festbüro (Plan: docs/PLAN_STORY.md, Bauplan P2). Aufbau in scenes/ui/desktop.tscn.
 ## Sieht aus wie ein PC: Hintergrundbild, Symbole links, verschiebbare Fenster, unten eine Taskleiste mit Startmenü, Mail-Anzeige,
-## Uhr und Konto. Eigene Optik (bayerisches Rautenmuster, Holz und Gold), nichts von einem fremden Betriebssystem.
+## und Uhr. Eigene Optik (bayerisches Rautenmuster, Holz und Gold), nichts von einem fremden Betriebssystem.
 ## E-Mail und Quests laufen als eigene Apps in den Fenstern. Festbüro (Shop, Personal, Bilanz) und Zeltcomputer (Bierpreis & Ware)
 ## sind die bestehenden Fenster und werden zum Öffnen in ein Desktop-Fenster eingebettet. Der Kalender öffnet wie bisher.
 ## Beim Öffnen fährt die Kamera kurz auf den Bildschirm zu.
 
 const Fokus := preload("res://scripts/ui/fokus.gd")
 const Texte := preload("res://scripts/ui/texte.gd")
-const Symbole := preload("res://scripts/ui/symbole.gd")
+const ICON_PFAD := "res://assets/ui/desktop/icon_%s.png"
 const FENSTER := preload("res://scenes/ui/desktop_fenster.tscn")
 const TASK := preload("res://scenes/ui/task_knopf.tscn")
 const MAIL := preload("res://scenes/ui/desktop_mail.tscn")
 const QUESTS := preload("res://scenes/ui/desktop_quests.tscn")
 const BALD := preload("res://scenes/ui/desktop_bald.tscn")
-const Klassisch := preload("res://scripts/ui/klassisch.gd")
 
 ## App → [Titel-Schlüssel, Symbolname, Größe des Inhalts, Art]; Art: intern = eigene Szene, legacy = bestehendes Fenster, bald = Platzhalter
 const APPS := {
@@ -58,7 +57,7 @@ func _ready() -> void:
 		var start := get_node("%Start" + name) as Button
 		start.pressed.connect(_start_geklickt.bind(name.to_lower()))
 	%TrayMail.pressed.connect(app_oeffnen.bind("mail"))
-	%StartKnopf.toggled.connect(func(an: bool) -> void: %Startmenue.visible = an)
+	%StartKnopf.toggled.connect(_start_umschalten)
 	%StartAus.pressed.connect(schliessen)
 	%Hintergrund.gui_input.connect(_hintergrund_eingabe)
 	%Hintergrund.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -130,6 +129,20 @@ func _zoom(hinein: bool) -> void:
 		_tween.tween_property(_kamera, "fov", _fov_vorher, ZOOM_DAUER * 0.7)
 
 # ------------------------------------------------------------------ Symbole und Startmenü
+func _start_umschalten(an: bool) -> void:
+	%Startmenue.visible = an
+	if an:
+		_menue_platzieren.call_deferred()
+
+## Das Menü klappt über dem Startknopf auf
+func _menue_platzieren() -> void:
+	var menue: Control = %Startmenue
+	menue.size = menue.get_combined_minimum_size()
+	var knopf: Control = %StartKnopf
+	var ziel := Vector2(knopf.global_position.x - 6.0, %Taskleiste.global_position.y - menue.size.y - 10.0)
+	ziel.x = clampf(ziel.x, 8.0, size.x - menue.size.x - 8.0)
+	menue.position = ziel
+
 func _symbol_geklickt(name: String) -> void:
 	app_oeffnen(name)
 
@@ -187,7 +200,7 @@ func app_oeffnen(name: String) -> void:
 	var fenster := FENSTER.instantiate()
 	%Fenster.add_child(fenster)
 	fenster.app = name
-	fenster.einrichten(str(def[0]), Symbole.bild(str(def[1])), def[2])
+	fenster.einrichten(str(def[0]), _icon(name), def[2])
 	fenster.fokussiert.connect(_vorn)
 	fenster.schliessen_angefordert.connect(_fenster_schliessen)
 	fenster.minimiert.connect(_fenster_minimieren)
@@ -208,14 +221,19 @@ func app_oeffnen(name: String) -> void:
 	_offen[name] = fenster
 	var knopf := TASK.instantiate() as Button
 	%Laufende.add_child(knopf)
-	knopf.icon = Symbole.bild(str(def[1]))
-	knopf.text = tr(str(def[0]))
+	knopf.icon = _icon(name)
+	knopf.tooltip_text = tr(str(def[0]))
 	knopf.pressed.connect(_task_geklickt.bind(name))
 	_tasks[name] = knopf
 	var frei := _freier_platz()
 	fenster.anpassen(frei)
 	fenster.mittig(Vector2(26, 22) * float(_offen.size() - 1))
 	_vorn(fenster)
+
+## Buntes App-Icon (assets/ui/desktop/icon_<app>.png, gezeichnet mit tools/bake_desktop_icons.py)
+func _icon(app: String) -> Texture2D:
+	var pfad := ICON_PFAD % app
+	return load(pfad) as Texture2D if ResourceLoader.exists(pfad) else null
 
 func _freier_platz() -> Vector2:
 	return %Fenster.size
@@ -224,9 +242,9 @@ func _titel_und_task(name: String) -> void:
 	var def: Array = APPS[name]
 	var f: Control = _offen[name]
 	f.titel_setzen(str(def[0]))
-	(_tasks[name] as Button).text = tr(str(def[0]))
-	(_tasks[name] as Button).icon = Symbole.bild(str(def[1]))
-	f.get_node("%Symbol").texture = Symbole.bild(str(def[1]))
+	(_tasks[name] as Button).tooltip_text = tr(str(def[0]))
+	(_tasks[name] as Button).icon = _icon(name)
+	f.get_node("%Symbol").texture = _icon(name)
 
 func _vorn(f: Control) -> void:
 	%Fenster.move_child(f, %Fenster.get_child_count() - 1)
@@ -288,9 +306,7 @@ func _legacy_einbetten(name: String, fenster: Control) -> void:
 	var dunkel := alt.get_node_or_null("Abdunkeln") as CanvasItem
 	if dunkel:
 		dunkel.visible = false
-	Klassisch.anwenden(alt)
 	alt.oeffnen()
-	Klassisch.anwenden(alt)
 	if name in BUERO_APPS:
 		_buero_reiter(name)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -348,11 +364,6 @@ func _process(delta: float) -> void:
 	if _takt <= 0.0:
 		_takt = 0.5
 		_uhr()
-		# neu entstandene Zeilen der eingebetteten Fenster nachziehen
-		for name: String in _offen.keys():
-			var alt := _legacy_knoten(name) if str(APPS[name][3]) == "legacy" else null
-			if alt != null:
-				Klassisch.anwenden(alt)
 
 func _uhr() -> void:
 	if _gm == null:
@@ -362,7 +373,6 @@ func _uhr() -> void:
 	if stunde < 0.0:
 		stunde = 8.0   # vor Schichtbeginn zeigt die Uhr die Öffnungszeit
 	%Uhr.text = "%s %d · %02d:%02d" % [tr("DESKTOP_TAG"), tag, int(stunde), int((stunde - floor(stunde)) * 60.0)]
-	%Konto.text = Texte.euro(Game.money)
 
 func _aktualisieren() -> void:
 	if _gm == null:
