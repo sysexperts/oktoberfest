@@ -484,6 +484,8 @@ const CLEAN_TIP_MAX := 12
 var _clean_tips := 0
 var _interest_paid := 0
 var _last_report := {}   # Zahlen der letzten Tagesbilanz (siehe _end_shift)
+## Die letzten Tagesabrechnungen für den Kontoauszug der Bank-App (bei allen Mitspielern)
+var konto_verlauf: Array = []
 # E4: Bestand + Lieferungen
 var _stock := {1: 0, 2: 0}      # WARE_BIER / WARE_ESSEN
 var _goods_cost := 0            # Wareneinsatz des Tages (für die Bilanz)
@@ -6177,6 +6179,11 @@ func net_sleep_fade(tag: int = 0) -> void:
 @rpc("authority", "reliable", "call_local")
 func net_report(bilanz: Dictionary) -> void:
 	_last_report = bilanz
+	if not konto_verlauf.is_empty() and int((konto_verlauf[-1] as Dictionary).get("day", -1)) == int(bilanz.get("day", -2)):
+		konto_verlauf.pop_back()
+	konto_verlauf.append(bilanz)
+	if konto_verlauf.size() > 30:
+		konto_verlauf.pop_front()
 	if _hud:
 		_hud.set_report(bilanz)
 

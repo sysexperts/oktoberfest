@@ -413,8 +413,8 @@ corner_detail = 12
 
 
 [node name="TaskKnopf" type="Button"]
-custom_minimum_size = Vector2(54, 48)
-theme_override_constants/icon_max_width = 36
+custom_minimum_size = Vector2(60, 54)
+theme_override_constants/icon_max_width = 44
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("TaskHover")
 theme_override_styles/pressed = SubResource("TaskAktiv")

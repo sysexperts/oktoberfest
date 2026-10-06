@@ -41,13 +41,8 @@ func _ready() -> void:
 		(k as Button).gewaehlt.connect(_detail_zeigen)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if InputMap.has_action("kalender") and event.is_action_pressed("kalender"):
-		if visible:
-			schliessen()
-		elif Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			zeigen()
-		get_viewport().set_input_as_handled()
-	elif visible and event.is_action_pressed("ui_cancel"):
+	# Taste K öffnet den Kalender nicht mehr: er ist eine App am Büro-Computer (scripts/ui/desktop_kalender.gd)
+	if visible and event.is_action_pressed("ui_cancel"):
 		schliessen()
 		get_viewport().set_input_as_handled()
 

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/minus.svg" id="2_min"]
 [ext_resource type="Texture2D" path="res://assets/ui/symbole/kreuz.svg" id="3_x"]
 [ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_mail.png" id="4_sym"]
+[ext_resource type="PackedScene" path="res://scenes/ui/desktop_banner.tscn" id="5_ban"]
 
 [sub_resource type="StyleBoxFlat" id="Leer"]
 bg_color = Color(0, 0, 0, 0)
@@ -11,30 +12,30 @@ corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="Fenster"]
-bg_color = Color(0.07, 0.058, 0.046, 0.985)
+bg_color = Color(0.07, 0.08, 0.145, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.55)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
+border_color = Color(1, 1, 1, 0.14)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 content_margin_left = 0
 content_margin_top = 0
 content_margin_right = 0
 content_margin_bottom = 0
 shadow_color = Color(0, 0, 0, 0.55)
-shadow_size = 26
-shadow_offset = Vector2(0, 8)
+shadow_size = 34
+shadow_offset = Vector2(0, 12)
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="Titelleiste"]
-bg_color = Color(0.125, 0.105, 0.082, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
+bg_color = Color(0.105, 0.12, 0.2, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 0
 content_margin_left = 16
@@ -45,30 +46,30 @@ corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="Flaeche"]
-bg_color = Color(0.105, 0.088, 0.068, 0.96)
+bg_color = Color(0.115, 0.13, 0.215, 0.96)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.3)
+border_color = Color(1, 1, 1, 0.1)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
-content_margin_left = 16
-content_margin_top = 12
-content_margin_right = 16
-content_margin_bottom = 12
+content_margin_left = 18
+content_margin_top = 14
+content_margin_right = 18
+content_margin_bottom = 14
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="Eintrag"]
-bg_color = Color(0.135, 0.113, 0.088, 0.95)
+bg_color = Color(0.145, 0.165, 0.26, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.3)
+border_color = Color(1, 1, 1, 0.07)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
@@ -81,89 +82,115 @@ corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="Linie"]
-bg_color = Color(0.58, 0.42, 0.24, 0.4)
+bg_color = Color(1, 1, 1, 0.12)
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="KnopfNormal"]
-bg_color = Color(0.18, 0.15, 0.112, 0.95)
+bg_color = Color(0.165, 0.185, 0.29, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.45)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+border_color = Color(1, 1, 1, 0.16)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 content_margin_left = 18
-content_margin_top = 10
+content_margin_top = 9
 content_margin_right = 18
-content_margin_bottom = 10
+content_margin_bottom = 9
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="KnopfHover"]
-bg_color = Color(0.26, 0.21, 0.14, 1)
+bg_color = Color(0.18, 0.42, 0.88, 0.3)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.7)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+border_color = Color(0.18, 0.42, 0.88, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 content_margin_left = 18
-content_margin_top = 10
+content_margin_top = 9
 content_margin_right = 18
-content_margin_bottom = 10
+content_margin_bottom = 9
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
-bg_color = Color(0.32, 0.255, 0.16, 1)
+bg_color = Color(0.18, 0.42, 0.88, 0.5)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.9)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+border_color = Color(0.18, 0.42, 0.88, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 content_margin_left = 18
-content_margin_top = 10
+content_margin_top = 9
 content_margin_right = 18
-content_margin_bottom = 10
+content_margin_bottom = 9
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="KnopfAus"]
-bg_color = Color(0.1, 0.085, 0.066, 0.6)
+bg_color = Color(0.1, 0.11, 0.17, 0.7)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.15)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+border_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 content_margin_left = 18
-content_margin_top = 10
+content_margin_top = 9
 content_margin_right = 18
+content_margin_bottom = 9
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Primaer"]
+bg_color = Color(0.18, 0.42, 0.88, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 20
+content_margin_top = 10
+content_margin_right = 20
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="PrimaerHover"]
+bg_color = Color(0.28, 0.52, 0.98, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 20
+content_margin_top = 10
+content_margin_right = 20
 content_margin_bottom = 10
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="ZeileNormal"]
-bg_color = Color(0.135, 0.113, 0.088, 0.0)
+bg_color = Color(0.145, 0.165, 0.26, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.22)
+border_color = Color(1, 1, 1, 0.07)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -176,12 +203,12 @@ corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="ZeileHover"]
-bg_color = Color(1, 0.839, 0.349, 0.09)
+bg_color = Color(0.18, 0.42, 0.88, 0.2)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.4)
+border_color = Color(0.18, 0.42, 0.88, 0.6)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -194,12 +221,12 @@ corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="ZeileWahl"]
-bg_color = Color(0.3, 0.24, 0.15, 1)
+bg_color = Color(0.18, 0.42, 0.88, 0.34)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.85)
+border_color = Color(0.18, 0.42, 0.88, 0.95)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -211,207 +238,30 @@ content_margin_bottom = 10
 corner_detail = 12
 
 
-[sub_resource type="StyleBoxFlat" id="IconHover"]
-bg_color = Color(1, 1, 1, 0.12)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 0.25)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="IconGedrueckt"]
-bg_color = Color(1, 0.839, 0.349, 0.2)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.6)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="Dock"]
-bg_color = Color(0.05, 0.042, 0.034, 0.93)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.55)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-content_margin_left = 12
-content_margin_top = 8
-content_margin_right = 14
-content_margin_bottom = 8
-shadow_color = Color(0, 0, 0, 0.55)
-shadow_size = 20
-shadow_offset = Vector2(0, 6)
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="StartGold"]
-bg_color = Color(0.97, 0.78, 0.3, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.92, 0.6, 0.9)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-content_margin_left = 16
-content_margin_top = 6
-content_margin_right = 20
-content_margin_bottom = 6
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="StartGoldHover"]
-bg_color = Color(1, 0.86, 0.45, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.95, 0.7, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-content_margin_left = 16
-content_margin_top = 6
-content_margin_right = 20
-content_margin_bottom = 6
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="StartGoldDruck"]
-bg_color = Color(0.85, 0.65, 0.2, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 0.92, 0.6, 0.9)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-content_margin_left = 16
-content_margin_top = 6
-content_margin_right = 20
-content_margin_bottom = 6
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="TaskAktiv"]
-bg_color = Color(1, 1, 1, 0.14)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-content_margin_left = 8
-content_margin_top = 6
-content_margin_right = 8
-content_margin_bottom = 6
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="TaskHover"]
-bg_color = Color(1, 1, 1, 0.09)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-content_margin_left = 8
-content_margin_top = 6
-content_margin_right = 8
-content_margin_bottom = 6
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="Chip"]
-bg_color = Color(1, 1, 1, 0.07)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-content_margin_left = 14
-content_margin_top = 4
-content_margin_right = 14
-content_margin_bottom = 4
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="StartMenue"]
-bg_color = Color(0.06, 0.05, 0.04, 0.985)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.55)
-corner_radius_top_left = 22
-corner_radius_top_right = 22
-corner_radius_bottom_right = 22
-corner_radius_bottom_left = 22
-content_margin_left = 20
-content_margin_top = 18
-content_margin_right = 20
-content_margin_bottom = 18
-shadow_color = Color(0, 0, 0, 0.55)
-shadow_size = 26
-shadow_offset = Vector2(0, 10)
-corner_detail = 12
-
-
-[sub_resource type="StyleBoxFlat" id="KachelHover"]
-bg_color = Color(1, 1, 1, 0.1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(1, 1, 1, 0.2)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-corner_detail = 12
-
-
 [sub_resource type="StyleBoxFlat" id="KleinKnopf"]
 bg_color = Color(1, 1, 1, 0.08)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="KleinHover"]
-bg_color = Color(1, 1, 1, 0.18)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+bg_color = Color(1, 1, 1, 0.2)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 corner_detail = 12
 
 
 [sub_resource type="StyleBoxFlat" id="SchliessenHover"]
-bg_color = Color(0.78, 0.22, 0.18, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+bg_color = Color(0.86, 0.24, 0.22, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 corner_detail = 12
 
 
@@ -449,7 +299,7 @@ auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
 theme_override_font_sizes/font_size = 26
 text_overrun_behavior = 3
 
@@ -463,6 +313,7 @@ theme_override_styles/normal = SubResource("KleinKnopf")
 theme_override_styles/hover = SubResource("KleinHover")
 theme_override_styles/pressed = SubResource("KleinHover")
 theme_override_styles/focus = SubResource("KleinHover")
+theme_override_colors/icon_normal_color = Color(0.85, 0.88, 0.95, 1)
 icon = ExtResource("2_min")
 icon_alignment = 1
 expand_icon = true
@@ -477,9 +328,17 @@ theme_override_styles/normal = SubResource("KleinKnopf")
 theme_override_styles/hover = SubResource("SchliessenHover")
 theme_override_styles/pressed = SubResource("SchliessenHover")
 theme_override_styles/focus = SubResource("SchliessenHover")
+theme_override_colors/icon_normal_color = Color(0.85, 0.88, 0.95, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
 icon = ExtResource("3_x")
 icon_alignment = 1
 expand_icon = true
+
+[node name="Banner" parent="Spalte" instance=ExtResource("5_ban")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 
 [node name="Inhalt" type="Control" parent="Spalte"]
 unique_name_in_owner = true

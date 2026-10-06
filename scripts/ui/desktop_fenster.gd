@@ -26,6 +26,10 @@ func einrichten(titel_schluessel: String, symbol: Texture2D, groesse: Vector2) -
 	inhalt_groesse = groesse
 	%Inhalt.custom_minimum_size = groesse
 
+func banner_setzen(icon: Texture2D, titel: String, untertitel: String, oben: Color, unten: Color, hell: Color) -> void:
+	%Banner.setze(icon, titel, untertitel, oben, unten, hell)
+	%Banner.visible = true
+
 func titel_setzen(schluessel: String) -> void:
 	%Titel.text = tr(schluessel)
 

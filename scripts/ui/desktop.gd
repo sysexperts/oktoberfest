@@ -13,19 +13,31 @@ const FENSTER := preload("res://scenes/ui/desktop_fenster.tscn")
 const TASK := preload("res://scenes/ui/task_knopf.tscn")
 const MAIL := preload("res://scenes/ui/desktop_mail.tscn")
 const QUESTS := preload("res://scenes/ui/desktop_quests.tscn")
+const BANK := preload("res://scenes/ui/desktop_bank.tscn")
+const WETTER := preload("res://scenes/ui/desktop_wetter.tscn")
+const SOCIAL := preload("res://scenes/ui/desktop_social.tscn")
+const KALENDER := preload("res://scenes/ui/desktop_kalender.tscn")
 const BALD := preload("res://scenes/ui/desktop_bald.tscn")
 
 ## App → [Titel-Schlüssel, Symbolname, Größe des Inhalts, Art]; Art: intern = eigene Szene, legacy = bestehendes Fenster, bald = Platzhalter
 const APPS := {
 	"mail": ["DESKTOP_APP_MAIL", "papier", Vector2(980, 620), "intern"],
 	"quests": ["DESKTOP_APP_QUESTS", "buch", Vector2(780, 620), "intern"],
-	"shop": ["DESKTOP_APP_SHOP", "kiste", Vector2(1210, 740), "legacy"],
-	"personal": ["DESKTOP_APP_PERSONAL", "person", Vector2(1210, 740), "legacy"],
-	"bilanz": ["DESKTOP_APP_BILANZ", "diagramm", Vector2(1210, 740), "legacy"],
-	"bierpreis": ["DESKTOP_APP_BIERPREIS", "bier", Vector2(1220, 760), "legacy"],
-	"bank": ["DESKTOP_APP_BANK", "bank", Vector2(640, 420), "bald"],
-	"wetter": ["DESKTOP_APP_WETTER", "ausruf", Vector2(640, 420), "bald"],
-	"social": ["DESKTOP_APP_SOCIAL", "megafon", Vector2(640, 420), "bald"],
+	"shop": ["DESKTOP_APP_SHOP", "kiste", Vector2(1210, 770), "legacy"],
+	"personal": ["DESKTOP_APP_PERSONAL", "person", Vector2(1210, 770), "legacy"],
+	"bilanz": ["DESKTOP_APP_BILANZ", "diagramm", Vector2(1210, 770), "legacy"],
+	"bierpreis": ["DESKTOP_APP_BIERPREIS", "bier", Vector2(1260, 880), "legacy"],
+	"kalender": ["DESKTOP_APP_KALENDER", "kalender", Vector2(980, 780), "intern"],
+	"bank": ["DESKTOP_APP_BANK", "bank", Vector2(960, 780), "intern"],
+	"wetter": ["DESKTOP_APP_WETTER", "ausruf", Vector2(980, 780), "intern"],
+	"social": ["DESKTOP_APP_SOCIAL", "megafon", Vector2(980, 760), "intern"],
+}
+## Banner der Büro-Apps: [Farbe oben, Farbe unten, Untertitel-Farbe, Untertitel-Schlüssel]
+const BANNER := {
+	"shop": [Color(0.86, 0.42, 0.1), Color(0.3, 0.13, 0.08), Color(1, 0.88, 0.7), "SHOP_SUB"],
+	"personal": [Color(0.1, 0.55, 0.52), Color(0.04, 0.17, 0.2), Color(0.75, 0.97, 0.94), "PERSONAL_SUB"],
+	"bilanz": [Color(0.78, 0.2, 0.36), Color(0.22, 0.07, 0.15), Color(1, 0.82, 0.88), "BILANZ_SUB"],
+	"bierpreis": [Color(0.78, 0.5, 0.08), Color(0.24, 0.14, 0.05), Color(1, 0.92, 0.7), "BIERPREIS_SUB"],
 }
 ## Reiter im Festbüro-Fenster (scenes/ui/festbuero.tscn)
 const REITER := {"shop": 0, "personal": 2, "bilanz": 5}
@@ -169,9 +181,6 @@ func _input(event: InputEvent) -> void:
 
 # ------------------------------------------------------------------ Apps und Fenster
 func app_oeffnen(name: String) -> void:
-	if name == "kalender":
-		_kalender()
-		return
 	if not APPS.has(name):
 		return
 	if name in BUERO_APPS and not _buero_offen():
@@ -206,17 +215,18 @@ func app_oeffnen(name: String) -> void:
 	fenster.minimiert.connect(_fenster_minimieren)
 	match str(def[3]):
 		"intern":
-			var szene := MAIL if name == "mail" else QUESTS
+			var szene: PackedScene = {"mail": MAIL, "quests": QUESTS, "bank": BANK, "wetter": WETTER, "social": SOCIAL, "kalender": KALENDER}[name]
 			var app: Control = szene.instantiate()
 			fenster.inhalt().add_child(app)
 			app.set_anchors_preset(Control.PRESET_FULL_RECT)
-			app.einrichten(_gm, _story)
+			app.einrichten(_gm, _hud if name in ["bank", "wetter", "social", "kalender"] else _story)
 			app.zeigen()
 		"bald":
 			var platzhalter: Control = BALD.instantiate()
 			fenster.inhalt().add_child(platzhalter)
 			platzhalter.set_anchors_preset(Control.PRESET_FULL_RECT)
 		"legacy":
+			_banner(name, fenster)
 			_legacy_einbetten(name, fenster)
 	_offen[name] = fenster
 	var knopf := TASK.instantiate() as Button
@@ -242,6 +252,7 @@ func _titel_und_task(name: String) -> void:
 	var def: Array = APPS[name]
 	var f: Control = _offen[name]
 	f.titel_setzen(str(def[0]))
+	_banner(name, f)
 	(_tasks[name] as Button).tooltip_text = tr(str(def[0]))
 	(_tasks[name] as Button).icon = _icon(name)
 	f.get_node("%Symbol").texture = _icon(name)
@@ -313,6 +324,11 @@ func _legacy_einbetten(name: String, fenster: Control) -> void:
 	# Schließt sich das alte Fenster selbst (sein eigener Knopf), schließt auch das Desktop-Fenster
 	if not alt.visibility_changed.is_connected(_legacy_zu):
 		alt.visibility_changed.connect(_legacy_zu.bind(name))
+
+func _banner(name: String, fenster: Control) -> void:
+	var b: Array = BANNER.get(name, [])
+	if not b.is_empty():
+		fenster.banner_setzen(_icon(name), tr(str(APPS[name][0])), tr(str(b[3])), b[0], b[1], b[2])
 
 func _buero_reiter(name: String) -> void:
 	var buero := _hud.get("_buero") as Control

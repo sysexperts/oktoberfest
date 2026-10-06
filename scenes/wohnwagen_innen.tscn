@@ -1,0 +1,212 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/wohnwagen_ding.gd" id="1_ding"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
+[ext_resource type="PackedScene" path="res://scenes/wohnwagen_laptop.tscn" id="3_laptop"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/dielen.tres" id="4_dielen"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/creme_lack.tres" id="5_creme"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="6_holz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="7_rot"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="8_weiss"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/orange_lack.tres" id="9_orange"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/stoff.tres" id="10_stoff"]
+
+[sub_resource type="BoxMesh" id="Boden"]
+size = Vector3(6.4, 0.2, 5.4)
+
+[sub_resource type="BoxMesh" id="WandLang"]
+size = Vector3(6.4, 2.8, 0.2)
+
+[sub_resource type="BoxMesh" id="WandKurz"]
+size = Vector3(0.2, 2.8, 5.0)
+
+[sub_resource type="BoxMesh" id="Decke"]
+size = Vector3(6.4, 0.2, 5.4)
+
+[sub_resource type="BoxShape3D" id="FormBoden"]
+size = Vector3(6.4, 0.2, 5.4)
+
+[sub_resource type="BoxShape3D" id="FormWandLang"]
+size = Vector3(6.4, 2.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="FormWandKurz"]
+size = Vector3(0.2, 2.8, 5.0)
+
+[sub_resource type="BoxMesh" id="BettRahmen"]
+size = Vector3(2.0, 0.35, 1.1)
+
+[sub_resource type="BoxMesh" id="BettMatratze"]
+size = Vector3(1.92, 0.2, 1.02)
+
+[sub_resource type="BoxMesh" id="BettDecke"]
+size = Vector3(1.3, 0.08, 1.06)
+
+[sub_resource type="BoxMesh" id="BettKissen"]
+size = Vector3(0.5, 0.12, 0.8)
+
+[sub_resource type="BoxShape3D" id="FormBett"]
+size = Vector3(2.0, 0.6, 1.1)
+
+[sub_resource type="BoxMesh" id="Teppich"]
+size = Vector3(2.4, 0.02, 1.5)
+
+[sub_resource type="BoxMesh" id="TuerBlatt"]
+size = Vector3(0.95, 2.05, 0.06)
+
+[sub_resource type="BoxMesh" id="Fenster"]
+size = Vector3(1.0, 0.7, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="FensterLicht"]
+albedo_color = Color(0.7, 0.85, 1, 1)
+emission_enabled = true
+emission = Color(0.6, 0.78, 1, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="BoxShape3D" id="FormAusgang"]
+size = Vector3(1.0, 2.0, 0.2)
+
+[node name="WohnwagenInnen" type="Node3D"]
+
+[node name="Huelle" type="StaticBody3D" parent="."]
+
+[node name="Boden" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+mesh = SubResource("Boden")
+surface_material_override/0 = ExtResource("4_dielen")
+
+[node name="FormBoden" type="CollisionShape3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("FormBoden")
+
+[node name="Decke" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 2.9, 0)
+mesh = SubResource("Decke")
+surface_material_override/0 = ExtResource("5_creme")
+
+[node name="FormDecke" type="CollisionShape3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.9, 0)
+shape = SubResource("FormBoden")
+
+[node name="WandNord" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -2.6)
+mesh = SubResource("WandLang")
+surface_material_override/0 = ExtResource("5_creme")
+
+[node name="FormNord" type="CollisionShape3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -2.6)
+shape = SubResource("FormWandLang")
+
+[node name="WandSued" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 2.6)
+mesh = SubResource("WandLang")
+surface_material_override/0 = ExtResource("5_creme")
+
+[node name="FormSued" type="CollisionShape3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 2.6)
+shape = SubResource("FormWandLang")
+
+[node name="WandWest" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 1.4, 0)
+mesh = SubResource("WandKurz")
+surface_material_override/0 = ExtResource("5_creme")
+
+[node name="FormWest" type="CollisionShape3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 1.4, 0)
+shape = SubResource("FormWandKurz")
+
+[node name="WandOst" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 1.4, 0)
+mesh = SubResource("WandKurz")
+surface_material_override/0 = ExtResource("5_creme")
+
+[node name="FormOst" type="CollisionShape3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 1.4, 0)
+shape = SubResource("FormWandKurz")
+
+[node name="Teppich" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0.011, 0.2)
+mesh = SubResource("Teppich")
+surface_material_override/0 = ExtResource("7_rot")
+
+[node name="FensterNord1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 1.6, -2.48)
+mesh = SubResource("Fenster")
+surface_material_override/0 = SubResource("FensterLicht")
+
+[node name="FensterNord2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 1.6, -2.48)
+mesh = SubResource("Fenster")
+surface_material_override/0 = SubResource("FensterLicht")
+
+[node name="Bett" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.9)
+script = ExtResource("1_ding")
+art = "bett"
+
+[node name="Rahmen" type="MeshInstance3D" parent="Bett"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
+mesh = SubResource("BettRahmen")
+surface_material_override/0 = ExtResource("6_holz")
+
+[node name="Matratze" type="MeshInstance3D" parent="Bett"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("BettMatratze")
+surface_material_override/0 = ExtResource("8_weiss")
+
+[node name="Decke" type="MeshInstance3D" parent="Bett"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.58, 0)
+mesh = SubResource("BettDecke")
+surface_material_override/0 = ExtResource("9_orange")
+
+[node name="Kissen" type="MeshInstance3D" parent="Bett"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.6, 0)
+mesh = SubResource("BettKissen")
+surface_material_override/0 = ExtResource("10_stoff")
+
+[node name="Body" type="StaticBody3D" parent="Bett"]
+
+[node name="Form" type="CollisionShape3D" parent="Bett/Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("FormBett")
+
+[node name="Label" type="Label3D" parent="Bett"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 40
+modulate = Color(1, 0.9, 0.6, 1)
+text = "WORLD_BETT"
+script = ExtResource("2_wt")
+schluessel = "WORLD_BETT"
+
+[node name="Laptop" parent="." instance=ExtResource("3_laptop")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.3, 0, 0.3)
+
+[node name="Ausgang" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0, 2.47)
+script = ExtResource("1_ding")
+art = "ausgang"
+
+[node name="Blatt" type="MeshInstance3D" parent="Ausgang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.025, -0.03)
+mesh = SubResource("TuerBlatt")
+surface_material_override/0 = ExtResource("9_orange")
+
+[node name="Label" type="Label3D" parent="Ausgang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, -0.1)
+billboard = 1
+pixel_size = 0.005
+font_size = 40
+modulate = Color(1, 0.9, 0.6, 1)
+text = "WORLD_WAGEN_AUSGANG"
+script = ExtResource("2_wt")
+schluessel = "WORLD_WAGEN_AUSGANG"
+
+[node name="Eingang" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.1, 1.6)
+
+[node name="Lampe" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+light_color = Color(1, 0.88, 0.7, 1)
+light_energy = 0.7
+omni_range = 9.0

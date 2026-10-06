@@ -1,5 +1,6 @@
-[gd_scene format=3 uid="uid://htava2tet720"]
+[gd_scene format=3]
 
+[ext_resource type="Theme" path="res://assets/ui/app_theme_preis.tres" id="app_theme"]
 [ext_resource type="Script" uid="uid://c467s05xxmt8g" path="res://scripts/ui/zeltcomputer.gd" id="1_comp"]
 [ext_resource type="Texture2D" uid="uid://egohgl63ogyr" path="res://assets/ui/symbole/bier.svg" id="2_bier"]
 [ext_resource type="Texture2D" uid="uid://qfd1njllo226" path="res://assets/ui/symbole/kreuz.svg" id="3_kreuz"]
@@ -14,28 +15,26 @@
 [ext_resource type="Script" path="res://scripts/ui/passend.gd" id="passend_s"]
 
 [sub_resource type="StyleBoxFlat" id="Fenster"]
-content_margin_left = 30.0
-content_margin_top = 26.0
-content_margin_right = 30.0
-content_margin_bottom = 26.0
-bg_color = Color(0.043, 0.035, 0.027, 0.985)
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.5)
+border_color = Color(0.513, 0.543, 0.625, 0)
 corner_radius_top_left = 22
 corner_radius_top_right = 22
 corner_radius_bottom_right = 22
 corner_radius_bottom_left = 22
 corner_detail = 12
-shadow_color = Color(0, 0, 0, 0.55)
-shadow_size = 18
 
 [sub_resource type="StyleBoxEmpty" id="Leer"]
 
 [sub_resource type="StyleBoxFlat" id="Kreis"]
-bg_color = Color(1, 0.839, 0.349, 0.16)
+bg_color = Color(1, 0.82, 0.3, 0.16)
 corner_radius_top_left = 30
 corner_radius_top_right = 30
 corner_radius_bottom_right = 30
@@ -43,19 +42,19 @@ corner_radius_bottom_left = 30
 corner_detail = 12
 
 [sub_resource type="StyleBoxLine" id="Linie"]
-color = Color(0.58, 0.42, 0.24, 0.45)
+color = Color(0.513, 0.543, 0.625, 0.45)
 
 [sub_resource type="StyleBoxFlat" id="Karte"]
 content_margin_left = 20.0
 content_margin_top = 18.0
 content_margin_right = 20.0
 content_margin_bottom = 18.0
-bg_color = Color(0.082, 0.068, 0.053, 0.6)
+bg_color = Color(0.075, 0.091, 0.149, 0.6)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.28)
+border_color = Color(0.513, 0.543, 0.625, 0.28)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -67,12 +66,12 @@ content_margin_left = 16.0
 content_margin_top = 12.0
 content_margin_right = 16.0
 content_margin_bottom = 12.0
-bg_color = Color(0.129, 0.107, 0.082, 0.85)
+bg_color = Color(0.115, 0.14, 0.229, 0.85)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.35)
+border_color = Color(0.513, 0.543, 0.625, 0.35)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -84,12 +83,12 @@ content_margin_left = 16.0
 content_margin_top = 12.0
 content_margin_right = 16.0
 content_margin_bottom = 12.0
-bg_color = Color(0.243, 0.196, 0.129, 1)
+bg_color = Color(0.212, 0.258, 0.423, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.8)
+border_color = Color(1, 0.82, 0.3, 0.8)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -101,12 +100,12 @@ content_margin_left = 16.0
 content_margin_top = 12.0
 content_margin_right = 16.0
 content_margin_bottom = 12.0
-bg_color = Color(0.2, 0.163, 0.113, 0.95)
+bg_color = Color(0.175, 0.213, 0.35, 0.95)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1, 0.839, 0.349, 0.55)
+border_color = Color(1, 0.82, 0.3, 0.55)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -118,12 +117,12 @@ content_margin_left = 16.0
 content_margin_top = 12.0
 content_margin_right = 16.0
 content_margin_bottom = 12.0
-bg_color = Color(0.082, 0.07, 0.058, 0.5)
+bg_color = Color(0.075, 0.091, 0.149, 0.5)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.12)
+border_color = Color(0.513, 0.543, 0.625, 0.12)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -135,12 +134,12 @@ content_margin_left = 18.0
 content_margin_top = 14.0
 content_margin_right = 18.0
 content_margin_bottom = 14.0
-bg_color = Color(0.113, 0.094, 0.072, 0.8)
+bg_color = Color(0.101, 0.123, 0.202, 0.8)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.58, 0.42, 0.24, 0.22)
+border_color = Color(0.513, 0.543, 0.625, 0.22)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -148,6 +147,7 @@ corner_radius_bottom_left = 14
 corner_detail = 10
 
 [node name="Zeltcomputer" type="Control" unique_id=2069397370]
+theme = ExtResource("app_theme")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -187,6 +187,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="Titelsymbol" type="TextureRect" parent="Panel/Spalte/Kopf" unique_id=351603369]
+visible = false
 custom_minimum_size = Vector2(56, 56)
 layout_mode = 2
 size_flags_vertical = 4
@@ -201,8 +202,9 @@ size_flags_vertical = 4
 theme_override_constants/separation = 2
 
 [node name="Titel" type="Label" parent="Panel/Spalte/Kopf/Kopftext" unique_id=867550229]
+visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_color = Color(1, 0.82, 0.3, 1)
 theme_override_font_sizes/font_size = 36
 text = "COMP_TITLE"
 
@@ -210,7 +212,7 @@ text = "COMP_TITLE"
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_colors/font_color = Color(0.637, 0.674, 0.775, 1)
 theme_override_font_sizes/font_size = 17
 
 [node name="Kopfrechts" type="VBoxContainer" parent="Panel/Spalte/Kopf" unique_id=1772124172]
@@ -231,7 +233,7 @@ icon = ExtResource("3_kreuz")
 expand_icon = true
 
 [node name="Aehre" type="TextureRect" parent="Panel/Spalte/Kopf/Kopfrechts" unique_id=2017017674]
-modulate = Color(1, 0.839, 0.349, 0.45)
+modulate = Color(1, 0.82, 0.3, 0.45)
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_horizontal = 8
@@ -284,7 +286,7 @@ text = "COMP_PRICE"
 
 [node name="Info" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Kopfzeile/Text" unique_id=587693113]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_colors/font_color = Color(0.637, 0.674, 0.775, 1)
 theme_override_font_sizes/font_size = 15
 text = "COMP_PRICE_INFO"
 autowrap_mode = 3
@@ -335,7 +337,7 @@ columns = 2
 
 [node name="NameMass" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=1586675715]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_BIER"
 
@@ -350,7 +352,7 @@ horizontal_alignment = 2
 
 [node name="NameSnack" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=778025257]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_SNACK"
 
@@ -365,7 +367,7 @@ horizontal_alignment = 2
 
 [node name="NameFaktor" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=885577652]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_FACTOR"
 
@@ -380,7 +382,7 @@ horizontal_alignment = 2
 
 [node name="NameEssen" type="Label" parent="Panel/Spalte/KartePreis/Spalte/Reihe/Werte/Zeile/Raster" unique_id=26874558]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.85, 0.81, 0.76, 1)
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_ROW_FOOD"
 
@@ -484,7 +486,7 @@ text = "COMP_GOODS"
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_colors/font_color = Color(0.637, 0.674, 0.775, 1)
 theme_override_font_sizes/font_size = 15
 
 [node name="Reihe" type="HBoxContainer" parent="Panel/Spalte/KarteWare/Spalte" unique_id=1965942444]
@@ -540,7 +542,7 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
 [node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierEins/Inhalt" unique_id=762721938]
-modulate = Color(0.72, 0.67, 0.61, 1)
+modulate = Color(0.637, 0.674, 0.775, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -598,7 +600,7 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
 [node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/BierFuenf/Inhalt" unique_id=1492154862]
-modulate = Color(0.72, 0.67, 0.61, 1)
+modulate = Color(0.637, 0.674, 0.775, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -655,7 +657,7 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
 [node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenEins/Inhalt" unique_id=938385894]
-modulate = Color(0.72, 0.67, 0.61, 1)
+modulate = Color(0.637, 0.674, 0.775, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -712,7 +714,7 @@ theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_font_sizes/font_size = 21
 
 [node name="Pfeil" type="TextureRect" parent="Panel/Spalte/KarteWare/Spalte/Reihe/EssenFuenf/Inhalt" unique_id=769144162]
-modulate = Color(0.72, 0.67, 0.61, 1)
+modulate = Color(0.637, 0.674, 0.775, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 size_flags_vertical = 4
@@ -770,7 +772,7 @@ unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_colors/font_color = Color(0.637, 0.674, 0.775, 1)
 theme_override_font_sizes/font_size = 15
 autowrap_mode = 3
 
@@ -796,7 +798,7 @@ theme_override_constants/separation = 6
 alignment = 1
 
 [node name="Sym" type="TextureRect" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen/Inhalt" unique_id=902461663]
-modulate = Color(0.72, 0.67, 0.61, 1)
+modulate = Color(0.637, 0.674, 0.775, 1)
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -808,7 +810,7 @@ stretch_mode = 5
 [node name="Text" type="Label" parent="Panel/Spalte/KarteBilanz/Spalte/ZeltSchliessen/Inhalt" unique_id=1532674348]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_colors/font_color = Color(0.637, 0.674, 0.775, 1)
 theme_override_font_sizes/font_size = 17
 text = "COMP_CLOSE_TENT"
 
@@ -816,7 +818,7 @@ text = "COMP_CLOSE_TENT"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.67, 0.61, 1)
+theme_override_colors/font_color = Color(0.637, 0.674, 0.775, 1)
 theme_override_font_sizes/font_size = 17
 theme_override_styles/normal = SubResource("Feld")
 theme_override_styles/pressed = SubResource("KnopfGedrueckt")
@@ -830,7 +832,7 @@ layout_mode = 2
 theme_override_constants/separation = 18
 
 [node name="AehreLinks" type="TextureRect" parent="Panel/Spalte/Fuss" unique_id=1705845742]
-modulate = Color(1, 0.839, 0.349, 0.45)
+modulate = Color(1, 0.82, 0.3, 0.45)
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_vertical = 4
@@ -861,7 +863,7 @@ size_flags_vertical = 4
 theme_override_styles/separator = SubResource("Linie")
 
 [node name="AehreRechts" type="TextureRect" parent="Panel/Spalte/Fuss" unique_id=2129616624]
-modulate = Color(1, 0.839, 0.349, 0.45)
+modulate = Color(1, 0.82, 0.3, 0.45)
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_vertical = 4

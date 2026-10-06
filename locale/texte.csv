@@ -1213,8 +1213,8 @@ MSG_PERSONAL_HUBER,Konrad will %s abwerben! Halten kostet +%s pro Tag — Festb�
 MSG_PERSONAL_ABGEWORBEN,%s (%s) ist zu Konrad gewechselt.,%s (%s) has switched to Konrad.,%s (%s) Konrad'a geçti.
 MSG_PERSONAL_ZUFRIEDEN,%s ist zufrieden und bleibt.,%s is happy and stays.,%s memnun ve kalıyor.
 MSG_PERSONAL_ENTLASSEN,%s wurde entlassen.,%s has been dismissed.,%s işten çıkarıldı.
-CHEF_ENDE_3_DU,"Ein Tipp noch: Im Festkalender (Taste K) siehst du, was dich erwartet — Sondertage, Bankraten und wann der Konrad zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Konrad calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Konrad'ın düelloya ne zaman çağıracağı."
-CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Festkalender (Taste K) seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Konrad zum Duell ruft.","One more tip: the fair calendar (K key) shows what lies ahead — special days, bank instalments and when Konrad calls for the duel.","Bir ipucu daha: Fuar takviminde (K tuşu) sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Konrad'ın düelloya ne zaman çağıracağı."
+CHEF_ENDE_3_DU,"Ein Tipp noch: Im Kalender auf dem Büro-Computer siehst du, was dich erwartet — Sondertage, Bankraten und wann der Konrad zum Duell ruft.","One more tip: the calendar on the office computer shows what lies ahead — special days, bank instalments and when Konrad calls for the duel.","Bir ipucu daha: Büro bilgisayarındaki takvimde seni neyin beklediğini görürsün — özel günler, banka taksitleri ve Konrad'ın düelloya ne zaman çağıracağı."
+CHEF_ENDE_3_IHR,"Ein Tipp noch: Im Kalender auf dem Büro-Computer seht ihr, was euch erwartet — Sondertage, Bankraten und wann der Konrad zum Duell ruft.","One more tip: the calendar on the office computer shows what lies ahead — special days, bank instalments and when Konrad calls for the duel.","Bir ipucu daha: Büro bilgisayarındaki takvimde sizi neyin beklediğini görürsünüz — özel günler, banka taksitleri ve Konrad'ın düelloya ne zaman çağıracağı."
 MSG_EHRE_BEDIENT,Bester Kellner heute: %s (%d Gäste bedient),Best waiter today: %s (%d guests served),Bugünün en iyi garsonu: %s (%d misafir)
 MSG_EHRE_GEZAPFT,Schnellster Zapfer heute: %s (%d Maß gezapft),Fastest tapster today: %s (%d steins poured),Bugünün en hızlı fıçıcısı: %s (%d kupa)
 MSG_EHRE_GEPUTZT,Putzteufel des Tages: %s (%d Flecken weg),Cleaning champion of the day: %s (%d messes gone),Günün temizlik şampiyonu: %s (%d leke)
@@ -1314,7 +1314,7 @@ ZEITUNG_BILD_3,"Kühl, golden, gerecht eingeschenkt — Sinnbild eines guten Fes
 ZEITUNG_ANZEIGE_1,ANZEIGE|Frische Brezn!|Täglich knusprig bei Festleiter Horst. Nur solange der Vorrat reicht.,ADVERT|Fresh pretzels!|Crispy every day at fair manager Horst's. While stocks last.,İLAN|Taze simit!|Her gün fuar müdürü Horst'ta çıtır çıtır. Stoklarla sınırlı.
 ZEITUNG_ANZEIGE_2,"ANZEIGE|Suche Aushilfe|Kellner gesucht, flinke Hände, wenig Durst. Bewerbung im Festbüro.","ADVERT|Help wanted|Waiter sought, quick hands, little thirst. Apply at the fair office.","İLAN|Eleman aranıyor|Garson aranıyor, çevik eller, az susuzluk. Başvuru fuar ofisine."
 ZEITUNG_ANZEIGE_3,ANZEIGE|Verloren: Zapfhahn|Goldener Zapfhahn nahe der Blaskapelle verloren. Finder erhält eine Maß.,ADVERT|Lost: tap|Golden tap lost near the brass band. Finder gets a stein.,İLAN|Kayıp: musluk|Bando yakınında altın musluk kayboldu. Bulana bir bira.
-ZEITUNG_NUMMER,Nr. %d · Wiesn-Blatt,No. %d · Fair Gazette,No. %d · Şenlik Gazetesi
+ZEITUNG_NUMMER,Nr. %d · Festblatt,No. %d · Fair Gazette,No. %d · Şenlik Gazetesi
 SPIELERLISTE_EREIGNISSE,Heute passiert,Today,Bugün olanlar
 ACTION_SPIELERLISTE,Spielerliste,Player list,Oyuncu listesi
 KALENDER_FORTSCHRITT,Tag %d von %d,Day %d of %d,Gün %d / %d
@@ -1494,3 +1494,79 @@ DESKTOP_START,Prost,Cheers,Şerefe
 DESKTOP_STARTMENUE,Sloptoberfest,Sloptoberfest,Sloptoberfest
 DESKTOP_AUSSCHALTEN,Computer verlassen,Leave computer,Bilgisayardan ayrıl
 DESKTOP_TAG,Tag,Day,Gün
+BANK_NAME,Festbank,Fest Bank,Fest Bankası
+BANK_KONTO,Festkonto,Fair account,Fuar hesabı
+BANK_KONTOSTAND,Kontostand,Balance,Bakiye
+BANK_LETZTER_TAG,Letzte Abrechnung: %s,Last settlement: %s,Son hesap: %s
+BANK_KREDIT,Rettungskredit,Emergency loan,Kurtarma kredisi
+BANK_KREDIT_KEINER,Kein Kredit,No loan,Kredi yok
+BANK_KREDIT_INFO,"Alles im grünen Bereich. Wer pleitegeht, bekommt Hilfe von der Brauerei.","All good. If you go broke, the brewery will help out.",Her şey yolunda. İflas edersen bira fabrikası yardım eder.
+BANK_KREDIT_OFFEN,"%d %% jeder Einnahme gehen an die Brauerei, bis der Kredit getilgt ist. Ausbauten sind solange gesperrt.",%d %% of every income goes to the brewery until the loan is repaid. Upgrades are locked until then.,Kredi ödenene kadar her gelirin %%%d'i bira fabrikasına gider. O zamana kadar yatırımlar kilitli.
+BANK_AUSZUG,Kontoauszug,Statement,Hesap özeti
+BANK_TAG_KOPF,Tag,Day,Gün
+BANK_TAG,Tag %d,Day %d,Gün %d
+BANK_EINNAHMEN,Einnahmen,Income,Gelir
+BANK_AUSGABEN,Ausgaben,Expenses,Gider
+BANK_ERGEBNIS,Ergebnis,Result,Sonuç
+BANK_LEER,Noch keine Buchungen. Nach dem ersten Feierabend steht hier die Tagesabrechnung.,No transactions yet. After the first closing time the daily settlement appears here.,Henüz işlem yok. İlk kapanıştan sonra günlük hesap burada görünür.
+BANK_DIAGRAMM,Ergebnis je Tag,Result per day,Günlük sonuç
+MAIL_SUB,Posteingang,Inbox,Gelen kutusu
+QUESTS_SUB,Aufträge und Ziele,Jobs and goals,İşler ve hedefler
+SHOP_SUB,"Zelt, Lizenzen und Ausbauten","Tent, licences and upgrades","Çadır, lisanslar ve geliştirmeler"
+PERSONAL_SUB,Mitarbeiter und Künstler,Staff and acts,Çalışanlar ve sanatçılar
+BILANZ_SUB,"Zahlen, Ziele und Tipps","Numbers, goals and tips","Rakamlar, hedefler ve ipuçları"
+BIERPREIS_SUB,"Preise, Ware und Keller","Prices, goods and cellar","Fiyatlar, mal ve kiler"
+WETTER_SUB,Wetterdienst und Gewerbeamt,Weather service and trade office,Hava durumu ve ticaret dairesi
+WETTER_HEUTE,Heute,Today,Bugün
+WETTER_TAG,Tag %d,Day %d,Gün %d
+WETTER_TEMP,%d °C,%d °C,%d °C
+WETTER_SONNE,Sonnig,Sunny,Güneşli
+WETTER_WOLKIG,Wolkig,Cloudy,Bulutlu
+WETTER_REGEN,Regen,Rain,Yağmurlu
+WETTER_NORMAL,Kein besonderes Ereignis,Nothing special planned,Özel bir olay yok
+WETTER_VORHERSAGE,Vorhersage,Forecast,Tahmin
+AMT_TITEL,Amt: Genehmigungen,Office: permits,Daire: izinler
+AMT_ZELT,Zelt angemeldet,Tent registered,Çadır kayıtlı
+AMT_TOILETTE,Toiletten (Hygieneauflage),Toilets (hygiene rule),Tuvalet (hijyen şartı)
+AMT_LIZENZEN,Ausschanklizenzen,Serving licences,Servis lisansları
+AMT_OK,In Ordnung,All good,Tamam
+AMT_FEHLT,Fehlt,Missing,Eksik
+AMT_LIZ_STAND,%d von %d,%d of %d,%d / %d
+AMT_KONTROLLE,Frau Wagner vom Amt hat sich angekündigt: Hygienekontrolle an Tag %d. Das Zelt muss sauber sein!,Mrs. Wagner from the office has announced a hygiene inspection on day %d. Keep the tent clean!,Daireden Bayan Wagner %d. gün hijyen kontrolü duyurdu. Çadır temiz olmalı!
+SOCIAL_SUB,Dein Zelt im Netz,Your tent online,Çadırın internette
+SOCIAL_ZELT_OHNE,Dein Zelt,Your tent,Senin çadırın
+SOCIAL_BEWERTUNG,Bewertung,Rating,Puan
+SOCIAL_BELIEBTHEIT,Beliebtheit,Popularity,Popülerlik
+SOCIAL_BEITRAEGE,Beiträge der Gäste,Guest posts,Misafir yorumları
+SOCIAL_LEER,Noch keine Beiträge. Nach dem ersten Festtag melden sich die Gäste.,No posts yet. After the first fair day your guests will chime in.,Henüz yorum yok. İlk fuar gününden sonra misafirler yazacak.
+SOCIAL_GUT_1,"Kaltes Bier, flinke Bedienung und gute Stimmung. Wir kommen wieder!","Cold beer, quick service and a great mood. We'll be back!","Soğuk bira, hızlı servis ve harika bir ortam. Tekrar geleceğiz!"
+SOCIAL_GUT_2,"Bestes Zelt weit und breit. Das Bier schmeckt, die Leute sind nett.",Best tent around. The beer is good and the people are nice.,"Çevredeki en iyi çadır. Bira lezzetli, insanlar çok nazik."
+SOCIAL_GUT_3,"Prost! Der Abend war hervorragend, nur der Platz am Tisch wurde knapp.","Cheers! The evening was great, only the table got a bit crowded.","Şerefe! Akşam harikaydı, sadece masada yer biraz daraldı."
+SOCIAL_MITTEL_1,"Ganz ordentlich. Das Bier war okay, ein bisschen mehr Tempo wäre schön.","Quite decent. The beer was fine, a bit more speed would be nice.","Fena değil. Bira idare eder, biraz daha hız iyi olurdu."
+SOCIAL_MITTEL_2,"Nettes Zelt, aber es ging nicht alles glatt. Mit Luft nach oben.","Nice tent, but not everything went smoothly. Room to improve.",Güzel çadır ama her şey yolunda gitmedi. Gelişmeye açık.
+SOCIAL_MITTEL_3,Passt schon. Für einen Abend mit Freunden reicht es.,Good enough. Fine for an evening with friends.,İdare eder. Arkadaşlarla bir akşam için yeterli.
+SOCIAL_WARTEN_1,"Eine Ewigkeit auf das Bier gewartet. Schade, die Stimmung war gut.","Waited forever for the beer. Too bad, the mood was good.","Bira için çok bekledik. Yazık, ortam güzeldi."
+SOCIAL_WARTEN_2,"Wir saßen ewig durstig am Tisch. Mehr Personal, bitte!","We sat thirsty at the table for ages. More staff, please!",Masada uzun süre susuz oturduk. Daha fazla personel lütfen!
+SOCIAL_WARTEN_3,"Lange Wartezeit, der Kellner war überfordert.","Long wait, the waiter was overwhelmed.","Uzun bekleme, garson yetişemedi."
+SOCIAL_DRECK_1,Der Boden war nicht gerade sauber. Da hilft ein Besen.,The floor wasn't exactly clean. A broom would help.,Zemin pek temiz değildi. Bir süpürge işe yarar.
+SOCIAL_DRECK_2,"Pfützen unterm Tisch, da vergeht einem der Durst.","Puddles under the table, that kills the thirst.","Masanın altında su birikintileri, susuzluk kaçıyor."
+SOCIAL_DRECK_3,Das Zelt könnte dringend geputzt werden.,The tent badly needs cleaning.,Çadırın acilen temizlenmesi gerekiyor.
+SOCIAL_BESCHWERDEN_1,Hier läuft einiges schief. Bei so viel Ärger macht Feiern keinen Spaß.,A lot is going wrong here. Partying is no fun with so much trouble.,Burada bir sürü şey ters gidiyor. Bu kadar sorunla eğlence olmaz.
+SOCIAL_BESCHWERDEN_2,"Schlechte Laune am Tisch, so haben wir uns das nicht vorgestellt.","Bad mood at the table, that's not what we expected.","Masada keyifler kaçtı, böyle düşünmemiştik."
+SOCIAL_BESCHWERDEN_3,Leider enttäuschend. Das muss besser werden!,Sadly disappointing. This has to get better!,Maalesef hayal kırıklığı. Bunun düzelmesi lazım!
+KALENDER_SUB,Festtage und Termine,Fair days and dates,Fuar günleri ve tarihler
+WORLD_LAPTOP,"Laptop
+({interact}: Zuhause)","Laptop
+({interact}: home)","Dizüstü
+({interact}: ev)"
+HINT_LAPTOP,{interact} Laptop,{interact} Laptop,{interact} Dizüstü bilgisayar
+WORLD_BETT,"Bett
+({interact}: schlafen)","Bed
+({interact}: sleep)","Yatak
+({interact}: uyu)"
+WORLD_WAGEN_AUSGANG,"Ausgang
+({interact}: nach draußen)","Exit
+({interact}: go outside)","Çıkış
+({interact}: dışarı çık)"
+HINT_WAGEN_RAUS,{interact} Wohnwagen verlassen,{interact} Leave caravan,{interact} Karavandan çık
+HINT_WAGEN_REIN,{interact} Wohnwagen betreten,{interact} Enter caravan,{interact} Karavana gir

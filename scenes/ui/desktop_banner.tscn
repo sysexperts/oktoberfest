@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/desktop_banner.gd" id="1_b"]
+
+[sub_resource type="Gradient" id="GradBand"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.2, 0.2, 0.2, 1, 0.1, 0.1, 0.1, 1)
+
+[sub_resource type="GradientTexture2D" id="TexBand"]
+gradient = SubResource("GradBand")
+fill_from = Vector2(0, 0)
+fill_to = Vector2(1, 0.35)
+width = 512
+height = 128
+
+[sub_resource type="StyleBoxTexture" id="Band"]
+texture = SubResource("TexBand")
+content_margin_left = 26.0
+content_margin_top = 14.0
+content_margin_right = 26.0
+content_margin_bottom = 14.0
+
+[sub_resource type="StyleBoxFlat" id="BandPille"]
+bg_color = Color(1, 1, 1, 0.2)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+content_margin_left = 16.0
+content_margin_top = 5.0
+content_margin_right = 16.0
+content_margin_bottom = 5.0
+
+
+[node name="DesktopBanner" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 96)
+theme_override_styles/panel = SubResource("Band")
+script = ExtResource("1_b")
+
+[node name="Zeile" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Icon" type="TextureRect" parent="Zeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Namen" type="VBoxContainer" parent="Zeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="Zeile/Namen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 38
+
+[node name="Sub" type="Label" parent="Zeile/Namen"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22

@@ -1,0 +1,307 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/konto_zeile.gd" id="1_kz"]
+
+[sub_resource type="StyleBoxFlat" id="Leer"]
+bg_color = Color(0, 0, 0, 0)
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Fenster"]
+bg_color = Color(0.07, 0.08, 0.145, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.14)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 0
+content_margin_top = 0
+content_margin_right = 0
+content_margin_bottom = 0
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 34
+shadow_offset = Vector2(0, 12)
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Titelleiste"]
+bg_color = Color(0.105, 0.12, 0.2, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+content_margin_left = 16
+content_margin_top = 8
+content_margin_right = 12
+content_margin_bottom = 8
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Flaeche"]
+bg_color = Color(0.115, 0.13, 0.215, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 18
+content_margin_top = 14
+content_margin_right = 18
+content_margin_bottom = 14
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Eintrag"]
+bg_color = Color(0.145, 0.165, 0.26, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 16
+content_margin_top = 12
+content_margin_right = 16
+content_margin_bottom = 12
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Linie"]
+bg_color = Color(1, 1, 1, 0.12)
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfNormal"]
+bg_color = Color(0.165, 0.185, 0.29, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.16)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 18
+content_margin_top = 9
+content_margin_right = 18
+content_margin_bottom = 9
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfHover"]
+bg_color = Color(0.06, 0.62, 0.43, 0.3)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.06, 0.62, 0.43, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 18
+content_margin_top = 9
+content_margin_right = 18
+content_margin_bottom = 9
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfGedrueckt"]
+bg_color = Color(0.06, 0.62, 0.43, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.06, 0.62, 0.43, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 18
+content_margin_top = 9
+content_margin_right = 18
+content_margin_bottom = 9
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KnopfAus"]
+bg_color = Color(0.1, 0.11, 0.17, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 18
+content_margin_top = 9
+content_margin_right = 18
+content_margin_bottom = 9
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="Primaer"]
+bg_color = Color(0.06, 0.62, 0.43, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 20
+content_margin_top = 10
+content_margin_right = 20
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="PrimaerHover"]
+bg_color = Color(0.16, 0.72, 0.53, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 20
+content_margin_top = 10
+content_margin_right = 20
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileNormal"]
+bg_color = Color(0.145, 0.165, 0.26, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.07)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14
+content_margin_top = 10
+content_margin_right = 14
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileHover"]
+bg_color = Color(0.06, 0.62, 0.43, 0.2)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.06, 0.62, 0.43, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14
+content_margin_top = 10
+content_margin_right = 14
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="ZeileWahl"]
+bg_color = Color(0.06, 0.62, 0.43, 0.34)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.06, 0.62, 0.43, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14
+content_margin_top = 10
+content_margin_right = 14
+content_margin_bottom = 10
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KleinKnopf"]
+bg_color = Color(1, 1, 1, 0.08)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="KleinHover"]
+bg_color = Color(1, 1, 1, 0.2)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 12
+
+
+[sub_resource type="StyleBoxFlat" id="SchliessenHover"]
+bg_color = Color(0.86, 0.24, 0.22, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 12
+
+
+[node name="KontoZeile" type="PanelContainer"]
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Eintrag")
+script = ExtResource("1_kz")
+
+[node name="Zeile" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Tag" type="Label" parent="Zeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
+theme_override_font_sizes/font_size = 25
+
+[node name="Einnahmen" type="Label" parent="Zeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
+theme_override_font_sizes/font_size = 25
+horizontal_alignment = 2
+
+[node name="Ausgaben" type="Label" parent="Zeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.69, 0.73, 0.84, 1)
+theme_override_font_sizes/font_size = 25
+horizontal_alignment = 2
+
+[node name="Ergebnis" type="Label" parent="Zeile"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
+theme_override_font_sizes/font_size = 27
+horizontal_alignment = 2
+

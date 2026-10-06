@@ -80,12 +80,18 @@ func ziel_suchen() -> Node3D:
 			var paket := _naechstes(sp, func(n: Node) -> bool: return n is Package)
 			return paket if paket else _naechstes(sp, func(n: Node) -> bool: return n is Lager)
 		7:
-			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan) if geschlossen else null
+			return _schlafziel(sp) if geschlossen else null
 		8:
 			if geschlossen:
-				return _naechstes(sp, func(n: Node) -> bool: return n is Caravan)
+				return _schlafziel(sp)
 			return _ziel_bedienen(sp)
 	return null
+
+## Schlafen: draußen zeigt der Pfeil auf die Wohnwagentür, drinnen auf das Bett
+func _schlafziel(sp: Node3D) -> Node3D:
+	if sp.global_position.z > 300.0:
+		return _naechstes(sp, func(n: Node) -> bool: return n.has_method("wohnwagen_aktion") and str(n.get("art")) == "bett")
+	return _naechstes(sp, func(n: Node) -> bool: return n is Caravan)
 
 ## Schritt "Bediene einen Gast": Krug holen → zapfen → zum wartenden Gast.
 func _ziel_bedienen(sp: Node) -> Node3D:

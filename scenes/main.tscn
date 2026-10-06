@@ -38,6 +38,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/kalender.tscn" id="110_kalender"]
 [ext_resource type="Script" path="res://scripts/story/story.gd" id="111_story"]
 
+[ext_resource type="PackedScene" path="res://scenes/wohnwagen_innen.tscn" id="wohnwagen_innen_s"]
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
 
@@ -214,6 +215,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 7)
 
 [node name="Braukeller" parent="." instance=ExtResource("102_keller")]
+
+[node name="WohnwagenInnen" parent="." instance=ExtResource("wohnwagen_innen_s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 600)
 
 [node name="Tables" type="Node3D" parent="." unique_id=594528377]
 

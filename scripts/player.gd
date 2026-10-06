@@ -863,7 +863,7 @@ func _hint_for(t: Node3D) -> String:
 			return "HINT_KEIN_ESSEN"
 		return "HINT_COOK" if carry_state == 0 or kocht else ""
 	if t is Computer:
-		return "HINT_COMPUTER"
+		return (t as Computer).hinweis
 	if t is Package:
 		return "HINT_PICKUP" if carry_state == 0 else ""
 	if t is Muellplatz:
@@ -881,8 +881,10 @@ func _hint_for(t: Node3D) -> String:
 		return "HINT_RENT_TENT"
 	if t is OfficeDesk or t is BookingKiosk:
 		return "HINT_OFFICE" if aufbau else "HINT_OFFICE_SHIFT"
+	if t.has_method("hinweis_text"):
+		return t.hinweis_text(geschlossen)
 	if t is Caravan:
-		return "HINT_SLEEP" if geschlossen else "HINT_SLEEP_SHIFT"
+		return "HINT_WAGEN_REIN"
 	if t is Mess and t.ist_plane():
 		return "HINT_PLANE"
 	if t is Mess and t.ist_fuss():
@@ -1114,11 +1116,15 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_gaerfass_fuellen.rpc_id(1, _world.gaerfass_index(_current_target))
 				_sfx("pop")
 		elif _current_target is Caravan:
-			# Uyu → sonraki gün (sadece molada)
-			if _world.has_method("in_intermission") and _world.in_intermission():
-				_world.net_sleep.rpc_id(1)
-				if _sfx_node:
-					_sfx_node.play_oder("tuer", "pop")
+			# Tür des Wohnwagens: hineingehen (Schlafen geht am Bett drinnen)
+			wohnwagen_betreten()
+			if _sfx_node:
+				_sfx_node.play_oder("tuer", "pop")
+		elif _current_target.has_method("wohnwagen_aktion"):
+			# Bett (schlafen) oder Ausgang im Wohnwagen
+			_current_target.wohnwagen_aktion(self)
+			if _sfx_node:
+				_sfx_node.play_oder("tuer", "pop")
 	# Brauen: Halten ruehrt im Bottich bzw. kocht im Kessel (Server rechnet)
 	if Input.is_action_pressed("interact") and _current_target is Braustation:
 		if _world.has_method("net_brauen"):
@@ -1559,6 +1565,29 @@ func _geschleudert() -> bool:
 ## ohne dieses Merkmal ("RPC 'versetzen' on yourself is not allowed"). Der Host
 ## blieb deshalb nach dem Schlafen stehen, wo er eingeschlafen ist, statt vor dem
 ## Wohnwagen aufzuwachen (gefunden im Bot-Lauf tools/sim_saison, 25.09.2026).
+## Wohnwagen: Der Innenraum liegt weit weg (scenes/wohnwagen_innen.tscn). Hineingehen merkt sich, wo man stand.
+var _draussen := Vector3.ZERO
+var _draussen_yaw := 0.0
+
+func wohnwagen_betreten() -> void:
+	var innen := _world.get_node_or_null("WohnwagenInnen") as Node3D
+	var eingang := innen.get_node_or_null("Eingang") as Node3D if innen else null
+	if eingang == null:
+		return
+	_draussen = global_position
+	_draussen_yaw = rotation.y
+	_ort_setzen(eingang.global_position, 0.0)
+
+func wohnwagen_verlassen() -> void:
+	_ort_setzen(_draussen, _draussen_yaw)
+
+func _ort_setzen(pos: Vector3, yaw: float) -> void:
+	global_position = pos
+	rotation.y = yaw
+	velocity = Vector3.ZERO
+	_net_pos = pos
+	_net_yaw = yaw
+
 @rpc("any_peer", "reliable", "call_local")
 func versetzen(pos: Vector3, yaw: float) -> void:
 	if multiplayer.get_remote_sender_id() not in [0, 1]:

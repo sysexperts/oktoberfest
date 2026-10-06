@@ -455,15 +455,15 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 300.0
-offset_bottom = -96.0
+offset_right = 320.0
+offset_bottom = -104.0
 grow_vertical = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 
 [node name="IconMail" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -471,7 +471,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -488,7 +488,7 @@ autowrap_mode = 3
 
 [node name="IconShop" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -496,7 +496,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -513,7 +513,7 @@ autowrap_mode = 3
 
 [node name="IconQuests" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -521,7 +521,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -538,7 +538,7 @@ autowrap_mode = 3
 
 [node name="IconBank" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -546,7 +546,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -563,7 +563,7 @@ autowrap_mode = 3
 
 [node name="IconPersonal" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -571,7 +571,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -588,7 +588,7 @@ autowrap_mode = 3
 
 [node name="IconBilanz" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -596,7 +596,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -613,7 +613,7 @@ autowrap_mode = 3
 
 [node name="IconBierpreis" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -621,7 +621,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -638,7 +638,7 @@ autowrap_mode = 3
 
 [node name="IconKalender" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -646,7 +646,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -663,7 +663,7 @@ autowrap_mode = 3
 
 [node name="IconWetter" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -671,7 +671,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -688,7 +688,7 @@ autowrap_mode = 3
 
 [node name="IconSocial" type="Button" parent="Symbole"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(128, 124)
+custom_minimum_size = Vector2(142, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
@@ -696,7 +696,7 @@ theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
 theme_override_constants/outline_size = 7
-theme_override_constants/icon_max_width = 72
+theme_override_constants/icon_max_width = 90
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("Leer")
@@ -717,7 +717,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -84.0
+offset_bottom = -94.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -732,7 +732,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -210.0
-offset_top = -82.0
+offset_top = -90.0
 offset_right = 210.0
 offset_bottom = -14.0
 grow_horizontal = 2
@@ -745,9 +745,9 @@ theme_override_constants/separation = 8
 
 [node name="StartKnopf" type="Button" parent="Taskleiste/Zeile"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(60, 54)
+custom_minimum_size = Vector2(66, 60)
 layout_mode = 2
-theme_override_constants/icon_max_width = 48
+theme_override_constants/icon_max_width = 54
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("TaskHover")
 theme_override_styles/pressed = SubResource("TaskAktiv")
@@ -771,7 +771,7 @@ theme_override_constants/separation = 6
 unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
-theme_override_constants/icon_max_width = 30
+theme_override_constants/icon_max_width = 36
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("TaskHover")
 theme_override_styles/pressed = SubResource("TaskAktiv")
@@ -844,13 +844,13 @@ columns = 4
 
 [node name="StartMail" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -866,13 +866,13 @@ autowrap_mode = 3
 
 [node name="StartShop" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -888,13 +888,13 @@ autowrap_mode = 3
 
 [node name="StartQuests" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -910,13 +910,13 @@ autowrap_mode = 3
 
 [node name="StartBank" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -932,13 +932,13 @@ autowrap_mode = 3
 
 [node name="StartPersonal" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -954,13 +954,13 @@ autowrap_mode = 3
 
 [node name="StartBilanz" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -976,13 +976,13 @@ autowrap_mode = 3
 
 [node name="StartBierpreis" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -998,13 +998,13 @@ autowrap_mode = 3
 
 [node name="StartKalender" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -1020,13 +1020,13 @@ autowrap_mode = 3
 
 [node name="StartWetter" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")
@@ -1042,13 +1042,13 @@ autowrap_mode = 3
 
 [node name="StartSocial" type="Button" parent="Startmenue/Spalte/Raster"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(108, 112)
+custom_minimum_size = Vector2(122, 128)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
-theme_override_constants/icon_max_width = 58
+theme_override_constants/icon_max_width = 70
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("Leer")
 theme_override_styles/hover = SubResource("KachelHover")

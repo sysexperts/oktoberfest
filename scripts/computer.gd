@@ -3,6 +3,9 @@ extends Node3D
 ## Zelt-Computer auf dem Schreibtisch im Büroraum (scenes/bueroraum.tscn).
 ## Öffnet Bierpreis, Warenbestellung und Bilanz — die Logik steht im GameManager.
 
+## Hinweistext beim Anschauen (Laptop im Wohnwagen setzt einen eigenen)
+@export var hinweis := "HINT_COMPUTER"
+
 const Modell := preload("res://scripts/modell_material.gd")
 
 func _ready() -> void:

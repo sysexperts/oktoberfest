@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/computer.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="3_holz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="4_metall"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schwarz_lack.tres" id="5_schwarz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="6_blau"]
+
+[sub_resource type="BoxMesh" id="TischPlatte"]
+size = Vector3(1.0, 0.05, 0.66)
+
+[sub_resource type="BoxMesh" id="TischBein"]
+size = Vector3(0.05, 0.7, 0.05)
+
+[sub_resource type="BoxMesh" id="LaptopBasis"]
+size = Vector3(0.36, 0.022, 0.25)
+
+[sub_resource type="BoxMesh" id="LaptopDeckel"]
+size = Vector3(0.36, 0.25, 0.012)
+
+[sub_resource type="StandardMaterial3D" id="Bildschirm"]
+albedo_color = Color(0.25, 0.55, 0.95, 1)
+emission_enabled = true
+emission = Color(0.2, 0.5, 1, 1)
+emission_energy_multiplier = 1.6
+
+[sub_resource type="BoxMesh" id="LaptopBild"]
+size = Vector3(0.32, 0.21, 0.004)
+
+[sub_resource type="BoxMesh" id="StuhlSitz"]
+size = Vector3(0.46, 0.04, 0.44)
+
+[sub_resource type="BoxMesh" id="StuhlLehne"]
+size = Vector3(0.46, 0.4, 0.04)
+
+[sub_resource type="BoxMesh" id="StuhlBein"]
+size = Vector3(0.04, 0.44, 0.04)
+
+[sub_resource type="BoxShape3D" id="Kollision"]
+size = Vector3(1.0, 0.76, 0.66)
+
+[node name="Laptop" type="Node3D"]
+script = ExtResource("1")
+hinweis = "HINT_LAPTOP"
+
+[node name="Tisch" type="Node3D" parent="."]
+
+[node name="Platte" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+mesh = SubResource("TischPlatte")
+surface_material_override/0 = ExtResource("3_holz")
+
+[node name="Bein1" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.35, -0.28)
+mesh = SubResource("TischBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Bein2" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.35, -0.28)
+mesh = SubResource("TischBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Bein3" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.35, 0.28)
+mesh = SubResource("TischBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Bein4" type="MeshInstance3D" parent="Tisch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.35, 0.28)
+mesh = SubResource("TischBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Geraet" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.761, 0.02)
+
+[node name="Basis" type="MeshInstance3D" parent="Geraet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011, 0)
+mesh = SubResource("LaptopBasis")
+surface_material_override/0 = ExtResource("5_schwarz")
+
+[node name="Deckel" type="Node3D" parent="Geraet"]
+transform = Transform3D(1, 0, 0, 0, 0.9063, -0.4226, 0, 0.4226, 0.9063, 0, 0.022, -0.12)
+
+[node name="Gehaeuse" type="MeshInstance3D" parent="Geraet/Deckel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
+mesh = SubResource("LaptopDeckel")
+surface_material_override/0 = ExtResource("5_schwarz")
+
+[node name="Bild" type="MeshInstance3D" parent="Geraet/Deckel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0.008)
+mesh = SubResource("LaptopBild")
+surface_material_override/0 = SubResource("Bildschirm")
+
+[node name="Stuhl" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.95)
+
+[node name="Sitz" type="MeshInstance3D" parent="Stuhl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("StuhlSitz")
+surface_material_override/0 = ExtResource("6_blau")
+
+[node name="Lehne" type="MeshInstance3D" parent="Stuhl"]
+transform = Transform3D(1, 0, 0, 0, 0.9659, 0.2588, 0, -0.2588, 0.9659, 0, 0.68, 0.24)
+mesh = SubResource("StuhlLehne")
+surface_material_override/0 = ExtResource("6_blau")
+
+[node name="Bein1" type="MeshInstance3D" parent="Stuhl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.22, -0.19)
+mesh = SubResource("StuhlBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Bein2" type="MeshInstance3D" parent="Stuhl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.22, -0.19)
+mesh = SubResource("StuhlBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Bein3" type="MeshInstance3D" parent="Stuhl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.22, 0.19)
+mesh = SubResource("StuhlBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Bein4" type="MeshInstance3D" parent="Stuhl"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.22, 0.19)
+mesh = SubResource("StuhlBein")
+surface_material_override/0 = ExtResource("4_metall")
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+shape = SubResource("Kollision")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+billboard = 1
+pixel_size = 0.005
+font_size = 40
+modulate = Color(0.6, 0.85, 1, 1)
+text = "WORLD_LAPTOP"
+script = ExtResource("2_wt")
+schluessel = "WORLD_LAPTOP"
