@@ -40,6 +40,12 @@ func ziel_suchen() -> Node3D:
 	var duell := get_tree().get_first_node_in_group("wettschleppen")
 	if duell and duell.has_method("naechstes_tor") and duell.naechstes_tor():
 		return duell.naechstes_tor()
+	# Gefallen von Horst: Täter suchen, dann zum Security-Posten
+	var gefallen := get_tree().get_first_node_in_group("gefallen")
+	if gefallen and sp and gefallen.has_method("ziel_fuer"):
+		var z: Node3D = gefallen.ziel_fuer(sp)
+		if z != null:
+			return z
 	if sp == null or not gm.has_method("tutorial_active") or not gm.tutorial_active():
 		return null
 	var geschlossen: bool = gm.in_intermission()

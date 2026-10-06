@@ -176,5 +176,25 @@
   "text": "MAIL_M_VERFALLEN_TEXT",
   "antworten": [],
   "mehrfach": true
+ },
+ {
+  "id": "M-G1",
+  "absender": "HORST",
+  "betreff": "MAIL_G1_BETREFF",
+  "text": "MAIL_G1_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G1_A1",
+    "folge": {
+     "quest_annehmen": "G-1"
+    }
+   },
+   {
+    "text": "MAIL_G1_A2",
+    "folge": {
+     "quest_ablehnen": "G-1"
+    }
+   }
+  ]
  }
 ]

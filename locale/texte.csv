@@ -1724,3 +1724,28 @@ Horst","Buğday birası her zaman gider. Bugün 25 tane servis et, ben de bir ş
 Horst"
 MAIL_M2_16_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_M2_16_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_G-1_TITLE,Der Spanner,The peeper,Röntgenci
+Q_G-1_TEXT,"Auf der Kirmes treibt sich ein Kerl mit Sonnenbrille und Cap herum und schaut den Leuten zu lange hinterher. Such ihn zwischen den Buden, pack ihn mit E und trag ihn zu einem Security-Posten.","A guy in sunglasses and a cap is hanging around the fair, staring at people for too long. Find him between the stalls, grab him with E and carry him to a security post.","Fuarda güneş gözlüklü ve şapkalı biri dolanıp insanlara fazla uzun bakıyor. Onu tezgâhların arasında bul, E ile yakala ve bir güvenlik noktasına taşı."
+MAIL_G1_BETREFF,Ärger auf der Kirmes,Trouble at the fair,Fuarda sorun
+MAIL_G1_TEXT,"Servus,
+
+auf der Kirmes treibt sich ein Spanner herum, die Leute beschweren sich schon. Kannst du den Kerl suchen? Sonnenbrille, Cap, steht verdächtig oft rum. Pack ihn und bring ihn zu einem von den Security-Posten, die kümmern sich dann.
+Ich leg dir 250 € drauf.
+
+Horst","Hi,
+
+there is a peeper hanging around the fair and people are already complaining. Can you look for him? Sunglasses, cap, stands around suspiciously often. Grab him and bring him to one of the security posts, they will take care of the rest.
+I will add €250.
+
+Horst","Selam,
+
+fuarda bir röntgenci dolanıyor, insanlar şimdiden şikâyet ediyor. Onu arayabilir misin? Güneş gözlüğü, şapka, şüpheli şekilde sürekli duruyor. Yakala ve güvenlik noktalarından birine getir, gerisini onlar halleder.
+Üstüne 250 € koyarım.
+
+Horst"
+MAIL_G1_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G1_A2,Heute nicht.,Not today.,Bugün olmaz.
+HINT_TAETER_PACKEN,{interact} Packen,{interact} Grab,{interact} Yakala
+HINT_SECURITY_UEBERGEBEN,{interact} Täter übergeben,{interact} Hand over the culprit,{interact} Suçluyu teslim et
+HINT_SECURITY_HALLO,Security-Posten,Security post,Güvenlik noktası
+MSG_GEFALLEN_UEBERGEBEN,Der Security führt den Kerl ab. Horst legt 250 € auf dein Konto,Security takes the guy away. Horst adds €250 to your account,Güvenlik adamı götürüyor. Horst hesabına 250 € ekliyor

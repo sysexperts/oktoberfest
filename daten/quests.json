@@ -355,5 +355,28 @@
   "belohnung": {
    "geld": 150
   }
+ },
+ {
+  "id": "G-1",
+  "typ": "gefallen",
+  "kapitel": 2,
+  "titel": "Q_G-1_TITLE",
+  "text": "Q_G-1_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.35
+   },
+   "mail": "M-G1"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-1"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 250
+  }
  }
 ]

@@ -1120,6 +1120,11 @@ func _handle_interaction(delta: float) -> void:
 			wohnwagen_betreten()
 			if _sfx_node:
 				_sfx_node.play_oder("tuer", "pop")
+		elif _current_target.has_method("gefallen_aktion"):
+			# Täter packen oder beim Security-Posten abgeben (scripts/gefallen.gd)
+			_current_target.gefallen_aktion(self)
+			if _sfx_node:
+				_sfx_node.play("pop")
 		elif _current_target.has_method("wohnwagen_aktion"):
 			# Bett (schlafen) oder Ausgang im Wohnwagen
 			_current_target.wohnwagen_aktion(self)
@@ -1565,6 +1570,9 @@ func _geschleudert() -> bool:
 ## ohne dieses Merkmal ("RPC 'versetzen' on yourself is not allowed"). Der Host
 ## blieb deshalb nach dem Schlafen stehen, wo er eingeschlafen ist, statt vor dem
 ## Wohnwagen aufzuwachen (gefunden im Bot-Lauf tools/sim_saison, 25.09.2026).
+## Gefallen: trägt dieser Spieler gerade einen Täter? (setzt scripts/gefallen.gd)
+var traegt_taeter := false
+
 ## Wohnwagen: Der Innenraum liegt weit weg (scenes/wohnwagen_innen.tscn). Hineingehen merkt sich, wo man stand.
 var _draussen := Vector3.ZERO
 var _draussen_yaw := 0.0

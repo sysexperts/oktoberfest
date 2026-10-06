@@ -39,6 +39,7 @@
 [ext_resource type="Script" path="res://scripts/story/story.gd" id="111_story"]
 
 [ext_resource type="PackedScene" path="res://scenes/wohnwagen_innen.tscn" id="wohnwagen_innen_s"]
+[ext_resource type="Script" path="res://scripts/gefallen.gd" id="gefallen_s"]
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
 
@@ -485,3 +486,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 0, 13.2)
 
 [node name="Story" type="Node" parent="."]
 script = ExtResource("111_story")
+
+[node name="Gefallen" type="Node" parent="."]
+script = ExtResource("gefallen_s")
