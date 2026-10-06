@@ -639,5 +639,124 @@
    "M3-05",
    "M3-06"
   ]
+ },
+ {
+  "id": "4.1",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_1_TITLE",
+  "text": "Q_4_1_TEXT",
+  "ausloeser": {
+   "nach": "3.6",
+   "kapitel": 4,
+   "mail": "M4-01"
+  },
+  "bedingung": {
+   "flag": "schluessel_erhalten"
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "4.2",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_2_TITLE",
+  "text": "Q_4_2_TEXT",
+  "ausloeser": {
+   "nach": "4.1"
+  },
+  "bedingung": {
+   "mw": "keller_offen",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "4.3",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_3_TITLE",
+  "text": "Q_4_3_TEXT",
+  "ausloeser": {
+   "nach": "4.2"
+  },
+  "bedingung": {
+   "mw": "zutaten_gekauft",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "4.4",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_4_TITLE",
+  "text": "Q_4_4_TEXT",
+  "ausloeser": {
+   "nach": "4.3"
+  },
+  "bedingung": {
+   "mw": "suds_gebraut",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "4.5",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_5_TITLE",
+  "text": "Q_4_5_TEXT",
+  "ausloeser": {
+   "nach": "4.4"
+  },
+  "bedingung": {
+   "mw": "faesser_abgefuellt",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "4.6",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_6_TITLE",
+  "text": "Q_4_6_TEXT",
+  "ausloeser": {
+   "nach": "4.5",
+   "mail": "M4-02"
+  },
+  "bedingung": {
+   "flag": "hopfen_besorgt"
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "4.7",
+  "typ": "haupt",
+  "kapitel": 4,
+  "titel": "Q_4_7_TITLE",
+  "text": "Q_4_7_TEXT",
+  "ausloeser": {
+   "nach": "4.6"
+  },
+  "bedingung": {
+   "mw": "eigenbier_bedient",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "geld": 200
+  },
+  "kapitelabschluss": 4,
+  "mail_erfuellt": [
+   "M4-03"
+  ]
  }
 ]

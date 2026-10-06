@@ -16,7 +16,8 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P4 Kapitel 2 | ✔ fertig bis auf die Nebenquest „Happy Hour" | v329 bis v332 |
 | P5 Gefallen und Security | ◐ (Security als Personal ✔ v334) System plus sechs Gefallen (Spanner, Taschendieb, Sau, Konrads Spion, Sturmwarnung, Brand) und vier Security-Posten fertig; 5 weitere Gefallen (Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen), Security als Personal offen | v330 bis v333 |
 | P6 Kapitel 3 | ◐ Streiche und Quests 3.1 bis 3.6 spielbar (ohne Casino); Konrads Zelt, Casino, Sabotage-System, Frau Wagner offen | v334 |
-| P7 bis P11 | ☐ offen | |
+| P7 Kapitel 4 | ◐ Quests 4.1 bis 4.7 spielbar (ohne Qualität und Bräumeister) | v335 |
+| P8 bis P11 | ☐ offen | |
 
 ---
 
@@ -144,11 +145,11 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| Braukeller überarbeiten (aufräumen, Rezepttafel, Tür) | M |
-| Qualitätsstufen und drei Rezeptseiten, Rezeptbuch in der Quests-App | M |
-| Eigenes Bier: Preis, Kosten, Geduld, Premium-Verkauf | S |
-| Bräumeister Gerhard als Personal (Rolle sechs) | M |
-| Quests 4.1 bis 4.7, Mails, Streiche (Zutaten blockieren, Lieferwagen, Diebe, Stromausfall) | M |
+| ◐ Braukeller überarbeiten (aufräumen, Rezepttafel, Tür) — Keller und Brauen laufen wie zuvor, Abfüllen neu | M |
+| ☐ Qualitätsstufen und drei Rezeptseiten, Rezeptbuch in der Quests-App | M |
+| ◐ Eigenes Bier (✔ Abfüllen, Lager, Zählung; ☐ Premiumpreis, Geduld) | S |
+| ☐ Bräumeister Gerhard als Personal (Rolle sechs) | M |
+| ◐ Quests 4.1 bis 4.7, Mails (✔); Streiche: Zutaten blockieren ✔, Lieferwagen, Diebe, Stromausfall ☐ | M |
 
 ## P8 · Kapitel 5 (L)
 

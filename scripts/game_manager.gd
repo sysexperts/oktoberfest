@@ -970,7 +970,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden,
+		"schulden": _schulden, "eigenbier": _eigenbier,
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1098,6 +1098,7 @@ func _load_game() -> bool:
 	# Sepps Schulden: ältere Spielstände (vor Version 175) haben keine — dort gilt alles als bezahlt
 	_bank_bezahlt = clampi(int(d.get("bank", Wirtschaft.BANK_RATEN.size())), 0, Wirtschaft.BANK_RATEN.size())
 	_schulden = maxi(0, int(d.get("schulden", SCHULDEN_START)))
+	_eigenbier = maxi(0, int(d.get("eigenbier", 0)))
 	var wette_gespeichert: Variant = d.get("huber_wette", {})
 	_huber_wette = wette_gespeichert if wette_gespeichert is Dictionary else {}
 	_letzte_sabotage = int(d.get("sabotage_tag", 0))
@@ -1954,6 +1955,8 @@ func _story_messwerte() -> Dictionary:
 		"feierabend": _shift_num >= 1 and _phase == Phase.INTERMISSION,
 		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
 		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": _schulden,
+		"keller_offen": keller_offen(), "zutaten_gekauft": int(_stats.get("zutat_malz", 0)) > 0 and int(_stats.get("zutat_hopfen", 0)) > 0,
+		"suds_gebraut": int(_stats.get("suds", 0)), "faesser_abgefuellt": int(_stats.get("faesser", 0)), "eigenbier_bedient": int(_stats.get("eigenbier_bedient", 0)),
 	}
 
 func _staff_anzahl(role: int) -> int:
@@ -3047,8 +3050,13 @@ func net_selbst_getrunken() -> void:
 		return
 	_consume_stock(1)
 
+var _eigenbier := 0   # So viel selbstgebrautes Bier liegt noch im Lager
+
 func _consume_stock(okind: int) -> void:
 	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
+	if w == WARE_BIER and _eigenbier > 0:
+		_eigenbier -= 1
+		_stats["eigenbier_bedient"] = int(_stats.get("eigenbier_bedient", 0)) + 1
 	_stock[w] = maxi(0, int(_stock.get(w, 0)) - 1)
 	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 
@@ -4320,6 +4328,9 @@ func net_buy_zutat(art: String, menge: int) -> void:
 	if _tent_stage < KELLER_AB_STUFE:
 		_popup_to_sender("POPUP_KELLER_ZU")
 		return
+	if art == "hopfen" and _story.aktiv and _story.zustand("4.6") == "offen" and not bool(_story.flags.get("hopfen_besorgt", false)):
+		_fehler("MSG_HOPFEN_BLOCKIERT")   # Konrad hat den Hopfen aufgekauft
+		return
 	var anzahl := clampi(menge, 1, 10)
 	var kosten: int = int(ZUTAT_PREIS[art]) * anzahl
 	if not _afford(kosten):
@@ -4328,6 +4339,7 @@ func net_buy_zutat(art: String, menge: int) -> void:
 	Game.add_money(-kosten)
 	_goods_cost += kosten
 	_zutat[art] = int(_zutat.get(art, 0)) + anzahl
+	_stats["zutat_" + art] = int(_stats.get("zutat_" + art, 0)) + anzahl
 	_melde("MSG_ZUTAT_GEKAUFT", [anzahl, "ZUTAT_%s" % art.to_upper(), _eur(kosten)], 2)
 	_brau_senden()
 
@@ -4369,6 +4381,7 @@ func net_brauen(schritt: int) -> void:
 			_melde("MSG_HOPFEN_DRIN", [], 2)
 		if _sud >= 1.0:
 			_sud_fertig = true
+			_stats["suds"] = int(_stats.get("suds", 0)) + 1
 			_maische = 0.0
 			_maische_fertig = false
 			_melde("MSG_SUD_FERTIG", [], 2)
@@ -4382,6 +4395,21 @@ func net_gaerfass_fuellen(index: int) -> void:
 	if index < 0 or index >= _gaerfaesser.size():
 		return
 	var fass: Dictionary = _gaerfaesser[index]
+	# Fertig vergoren: das Bier ins Lager abfüllen (eigenes Bier, wird getrennt gezählt)
+	if int(fass.zustand) == 2:
+		var menge := int(fass.menge)
+		_stock[WARE_BIER] = int(_stock[WARE_BIER]) + menge
+		_eigenbier += menge
+		_stats["faesser"] = int(_stats.get("faesser", 0)) + 1
+		fass.zustand = 0
+		fass.menge = 0
+		fass.rest = 0.0
+		_gaerfaesser[index] = fass
+		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+		_melde("MSG_FASS_ABGEFUELLT", [menge], 2)
+		_brau_senden()
+		_broadcast_meta()
+		return
 	if int(fass.zustand) != 0 or not _sud_fertig:
 		return
 	if int(_zutat.get("hefe", 0)) <= 0:
@@ -6312,8 +6340,11 @@ func _hinweis(ausloeser: String) -> void:
 ## Story-Flaggen, die Spieler per Gespräch setzen (Horst nimmt den Zettel, Konrad wird zur Rede gestellt)
 @rpc("any_peer", "reliable", "call_local")
 func net_story_flag(name: String) -> void:
-	if not multiplayer.is_server() or not name in ["zettel_uebergeben", "konrad_zur_rede"]:
+	if not multiplayer.is_server() or not name in ["zettel_uebergeben", "konrad_zur_rede", "schluessel_erhalten", "hopfen_besorgt"]:
 		return
+	if name == "hopfen_besorgt":
+		_zutat["hopfen"] = int(_zutat.get("hopfen", 0)) + 3   # Horst hat Hopfen von einem Bauern
+		_brau_senden()
 	_story.ereignis(name)
 	_broadcast_meta()
 

@@ -382,5 +382,26 @@
   "betreff": "MAIL_M3_06_BETREFF",
   "text": "MAIL_M3_06_TEXT",
   "antworten": []
+ },
+ {
+  "id": "M4-01",
+  "absender": "HORST",
+  "betreff": "MAIL_M4_01_BETREFF",
+  "text": "MAIL_M4_01_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M4-02",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M4_02_BETREFF",
+  "text": "MAIL_M4_02_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M4-03",
+  "absender": "HORST",
+  "betreff": "MAIL_M4_03_BETREFF",
+  "text": "MAIL_M4_03_TEXT",
+  "antworten": []
  }
 ]

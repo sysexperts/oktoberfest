@@ -19,6 +19,12 @@ extends Node3D
 const Figuren := preload("res://scripts/figuren.gd")
 const Texte := preload("res://scripts/ui/texte.gd")
 const TEMPO := 1.7
+## Story-Gespräche mit Horst: Quest → [Textschlüssel, Flagge die danach gesetzt wird, Flagge die vorher da sein muss ("" = keine)]
+const STORY_GESPRAECHE := {
+	"3.5": [["CHEF_ZETTEL_1", "CHEF_ZETTEL_2", "CHEF_ZETTEL_3"], "zettel_uebergeben", "zettel_da"],
+	"4.1": [["CHEF_SCHLUESSEL_1", "CHEF_SCHLUESSEL_2"], "schluessel_erhalten", ""],
+	"4.6": [["CHEF_HOPFEN_1", "CHEF_HOPFEN_2"], "hopfen_besorgt", ""],
+}
 
 ## Welche Figur (Index in Figuren.ALLE)
 @export var figur_nr := 2
@@ -112,14 +118,18 @@ func ansprechen() -> void:
 		rotation.y = atan2(zu.x, zu.z)
 	geste()
 	var wer := String(TranslationServer.translate("FESTLEITER_NAME"))
-	# Kapitel 3: den Zettel des Saboteurs an Horst übergeben (Quest 3.5)
+	# Story-Gespräche: offene Quest mit passender Tabellenzeile → Horst erzählt und setzt die Flagge
 	var story := welt.get_node_or_null("Story")
-	if story != null and story.aktiv and story.zustand("3.5") == "offen" and bool(story.flags.get("zettel_da", false)):
-		var zettel: Array[String] = []
-		for k in ["CHEF_ZETTEL_1", "CHEF_ZETTEL_2", "CHEF_ZETTEL_3"]:
-			zettel.append(String(TranslationServer.translate(k + a)))
-		dialog.zeigen(wer, zettel, func() -> void: welt.net_story_flag.rpc_id(1, "zettel_uebergeben"))
-		return
+	if story != null and story.aktiv:
+		for qid: String in STORY_GESPRAECHE:
+			var g: Array = STORY_GESPRAECHE[qid]
+			if story.zustand(qid) == "offen" and (str(g[2]) == "" or bool(story.flags.get(str(g[2]), false))):
+				var texte_story: Array[String] = []
+				for k: String in g[0]:
+					texte_story.append(String(TranslationServer.translate(k + a)))
+				var flagge := str(g[1])
+				dialog.zeigen(wer, texte_story, func() -> void: welt.net_story_flag.rpc_id(1, flagge))
+				return
 	if _station == null and _schritt() == 0:
 		_frage_stellen(dialog, welt, wer, a)
 		return

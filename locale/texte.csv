@@ -193,7 +193,7 @@ HINT_BRAU_HOPFEN_FEHLT,"Kein Hopfen da (Festbuero, Reiter Ware)","No hops left (
 HINT_GAERFASS_FUELLEN,"{interact}: Sud mit Hefe einfuellen","{interact}: fill in the wort with yeast","{interact}: sirayi mayayla doldur"
 HINT_GAERFASS_LEER,"Leeres Gaerfass","Empty fermentation barrel","Bos fermentasyon ficisi"
 HINT_GAERT,"Gaert noch","Still fermenting","Hala fermente oluyor"
-HINT_GAERFASS_FERTIG,"Hausbier fertig — Transportfass holen","House beer ready - fetch the transport keg","Ev birasi hazir - tasima ficisini getir"
+HINT_GAERFASS_FERTIG,"{interact}: Bier ins Lager abfüllen","{interact}: fill the beer into storage","{interact}: birayı depoya doldur"
 MSG_ZUTAT_GEKAUFT,"%d x %s gekauft (%s)","%d x %s bought (%s)","%d x %s alindi (%s)"
 MSG_MAISCHE_FERTIG,"Maische fertig — jetzt im Sudkessel kochen","Mash is ready - boil it in the kettle now","Mayse hazir - simdi kazanda kaynat"
 MSG_HOPFEN_DRIN,"Hopfen ist drin","Hops are in","Sahmaran eklendi"
@@ -1948,3 +1948,45 @@ KONRAD_REDE_2_DU,… Na gut. Dann war das eben ein Missverständnis. Mein Name s
 KONRAD_REDE_2_IHR,… Na gut. Dann war das eben ein Missverständnis. Mein Name steht nirgends drauf.,... Fine. Then it was a misunderstanding. My name is nowhere on it.,... Peki. O zaman bir yanlış anlaşılmaydı. Adım hiçbir yerde yazmıyor.
 KONRAD_REDE_3_DU,"Aber glaub nicht, dass das das letzte Wort war. Das Fest ist noch lang.",But do not think that was the last word. The fair is still long.,Ama bunun son söz olduğunu sanma. Fuar hâlâ uzun.
 KONRAD_REDE_3_IHR,"Aber glaubt nicht, dass das das letzte Wort war. Das Fest ist noch lang.",But do not think that was the last word. The fair is still long.,Ama bunun son söz olduğunu sanmayın. Fuar hâlâ uzun.
+Q_4_1_TITLE,Der Schlüssel,The key,Anahtar
+Q_4_1_TEXT,Horst hat Sepps Kellerschlüssel. Hol ihn dir im Festbüro ab.,Horst has Sepp's cellar key. Pick it up at the fair office.,Horst'ta Sepp'in kiler anahtarı var. Fuar ofisinden al.
+Q_4_2_TITLE,Sepps Braukeller,Sepp's brewery cellar,Sepp'in bira mahzeni
+Q_4_2_TEXT,Bau dein Zelt auf mindestens mittlere Größe aus und öffne die Kellertür im Zelt. Darunter liegt Sepps Braukeller.,Expand your tent to at least medium size and open the cellar door in the tent. Sepp's brewery lies below.,Çadırını en az orta boya genişlet ve çadırdaki kiler kapısını aç. Altında Sepp'in bira fabrikası var.
+Q_4_3_TITLE,Zutaten,Ingredients,Malzemeler
+Q_4_3_TEXT,Kauf am Computer im Shop (Reiter Ware) Malz und Hopfen für den ersten Sud. Hefe brauchst du später auch.,Buy malt and hops for the first brew on the computer in the shop (Goods tab). You will need yeast later too.,Bilgisayarda mağazadan (Mal sekmesi) ilk demleme için malt ve şerbetçiotu satın al. Daha sonra mayaya da ihtiyacın olacak.
+Q_4_4_TITLE,Der erste Sud,The first brew,İlk demleme
+Q_4_4_TEXT,"Geh in den Braukeller: Maische im Bottich rühren, im Kessel kochen (Hopfen bei 60 %) und den fertigen Sud mit Hefe ins Gärfass füllen. Dann dauert es fünf Minuten.","Go to the brewery: stir the mash in the vat, boil it in the kettle (hops at 60 %) and fill the finished wort with yeast into the fermenting barrel. Then wait five minutes.","Bira fabrikasına git: hamuru fıçıda karıştır, kazanda kaynat (şerbetçiotunu %60'ta ekle) ve bitmiş şırayı mayayla fermantasyon fıçısına doldur. Sonra beş dakika bekle."
+Q_4_5_TITLE,Probe,Tasting,Tadım
+Q_4_5_TEXT,"Wenn das Gärfass fertig ist, füll das Bier mit E ins Lager ab. Dann kannst du es ausschenken.","When the fermenting barrel is ready, press E to fill the beer into the store. Then you can serve it.",Fermantasyon fıçısı hazır olunca E ile birayı depoya doldur. Sonra servis edebilirsin.
+Q_4_6_TITLE,Konrads Blockade,Konrad's blockade,Konrad'ın ablukası
+Q_4_6_TEXT,"Konrad hat den ganzen Hopfen aufgekauft, im Shop gibt es keinen mehr. Sprich mit Horst, er kennt einen Bauern.","Konrad bought up all the hops, there is none left in the shop. Talk to Horst, he knows a farmer.","Konrad bütün şerbetçiotunu satın aldı, mağazada kalmadı. Horst'la konuş, bir çiftçi tanıyor."
+Q_4_7_TITLE,Ein Fass für alle,A barrel for everyone,Herkes için bir fıçı
+Q_4_7_TEXT,"Schenk dein eigenes Bier aus. Sobald ein Gast ein Maß deines Festbiers trinkt, ist das Kapitel geschafft.","Serve your own beer. As soon as a guest drinks a mug of your fest beer, the chapter is done.",Kendi birani servis et. Bir misafir festival birandan bir kupa içer içmez bölüm tamam.
+MAIL_M4_01_BETREFF,Sepps Schlüssel,Sepp's key,Sepp'in anahtarı
+MAIL_M4_01_TEXT,"Komm mal im Festbüro vorbei. Ich hab noch etwas von Sepp für dich: den Schlüssel zu seinem Braukeller.
+
+Horst","Drop by the fair office. I still have something from Sepp for you: the key to his brewery cellar.
+
+Horst","Fuar ofisine uğra. Sepp'ten sana kalan bir şey daha var: bira mahzeninin anahtarı.
+
+Horst"
+MAIL_M4_02_BETREFF,Der Hopfen ist leider aus,"Sadly, the hops are gone",Maalesef şerbetçiotu bitti
+MAIL_M4_02_TEXT,"Hopfen? Tut mir leid, der ist leider aus. Gerade habe ich den ganzen Vorrat gekauft. Pech gehabt, Sepps Patenkind. – K.","Hops? Sorry, they are gone. I just bought the whole stock. Bad luck, Sepp's godchild. – K.","Şerbetçiotu mu? Üzgünüm, bitti. Bütün stoğu ben aldım. Şanssızlık, Sepp'in vaftiz çocuğu. – K."
+MAIL_M4_03_BETREFF,Dein eigenes Bier,Your own beer,Kendi biran
+MAIL_M4_03_TEXT,"Dein erstes eigenes Bier! Der Sepp hätte geweint vor Stolz. Es gibt nur noch das letzte große Ding: das Fest. Wir reden morgen.
+
+Horst","Your very own beer! Sepp would have wept with pride. There is only one big thing left: the festival. We will talk tomorrow.
+
+Horst","Kendi biran! Sepp gururdan ağlardı. Geriye tek büyük şey kaldı: festival. Yarın konuşuruz.
+
+Horst"
+CHEF_SCHLUESSEL_1_DU,Den hier hat der Sepp ganz hinten in seiner Schublade versteckt. Der Schlüssel zu seinem Braukeller.,Sepp hid this at the very back of his drawer. The key to his brewery cellar.,Bunu Sepp çekmecesinin en arkasına saklamıştı. Bira mahzeninin anahtarı.
+CHEF_SCHLUESSEL_1_IHR,Den hier hat der Sepp ganz hinten in seiner Schublade versteckt. Der Schlüssel zu seinem Braukeller.,Sepp hid this at the very back of his drawer. The key to his brewery cellar.,Bunu Sepp çekmecesinin en arkasına saklamıştı. Bira mahzeninin anahtarı.
+CHEF_SCHLUESSEL_2_DU,Das Festbier hat drei Seiten Rezept. Zwei hat der Sepp aufgeschrieben. Die dritte … die hatte der Konrad. Aber das ist eine andere Geschichte.,The fest beer recipe has three pages. Sepp wrote down two. The third ... Konrad had that one. But that is another story.,Festival birasının tarifi üç sayfa. İkisini Sepp yazmış. Üçüncüsü ... Konrad'daydı. Ama o başka bir hikâye.
+CHEF_SCHLUESSEL_2_IHR,Das Festbier hat drei Seiten Rezept. Zwei hat der Sepp aufgeschrieben. Die dritte … die hatte der Konrad. Aber das ist eine andere Geschichte.,The fest beer recipe has three pages. Sepp wrote down two. The third ... Konrad had that one. But that is another story.,Festival birasının tarifi üç sayfa. İkisini Sepp yazmış. Üçüncüsü ... Konrad'daydı. Ama o başka bir hikâye.
+CHEF_HOPFEN_1_DU,Der Konrad hat den Hopfen aufgekauft? Dieser Halunke.,Konrad bought up the hops? That rascal.,Konrad şerbetçiotunu mu topladı? O hergele.
+CHEF_HOPFEN_1_IHR,Der Konrad hat den Hopfen aufgekauft? Dieser Halunke.,Konrad bought up the hops? That rascal.,Konrad şerbetçiotunu mu topladı? O hergele.
+CHEF_HOPFEN_2_DU,"Ich kenne einen Bauern, der baut selbst welchen an. Hier, drei Dolden, die reichen für den ersten Sud.","I know a farmer who grows his own. Here, three cones, that is enough for the first brew.","Kendi yetiştiren bir çiftçi tanıyorum. Al, üç salkım, ilk demleme için yeter."
+CHEF_HOPFEN_2_IHR,"Ich kenne einen Bauern, der baut selbst welchen an. Hier, drei Dolden, die reichen für den ersten Sud.","I know a farmer who grows his own. Here, three cones, that is enough for the first brew.","Kendi yetiştiren bir çiftçi tanıyorum. Al, üç salkım, ilk demleme için yeter."
+MSG_HOPFEN_BLOCKIERT,Der Hopfen ist ausverkauft: Konrad hat alles aufgekauft,The hops are sold out: Konrad bought everything,Şerbetçiotu tükendi: Konrad hepsini satın aldı
+MSG_FASS_ABGEFUELLT,Das Bier ist im Lager: %d Maß eigenes Festbier,The beer is in storage: %d mugs of your own fest beer,Bira depoda: %d kupa kendi festival birası
