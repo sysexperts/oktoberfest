@@ -27,7 +27,7 @@ const MAX_ANGEBOTE := 2
 const MAIL_VERFALLEN := "M-VERFALLEN"
 
 ## Aus: nichts läuft, nichts wird ausgezahlt (das alte Tutorial bleibt, bis P3 umschaltet).
-@export var aktiv := false
+@export var aktiv := true
 
 var kapitel := 1
 ## id → {"z": "angeboten"|"offen"|"erfuellt"|"verfallen", "start": Tag, "rest": Tage bis Verfall (0 = keine Frist)}

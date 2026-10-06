@@ -452,7 +452,7 @@ ACTION_DETAILS,Bestellungen als Text,Show orders as text,Siparişleri yazıyla g
 ACTION_CAMERA,Schulterkamera,Shoulder camera,Omuz kamerası
 HELP_STICK_L,Linker Stick,Left stick,Sol çubuk
 HELP_STICK_R,Rechter Stick,Right stick,Sağ çubuk
-HUD_HELP_HINT,{help} Hilfe · {kalender} Kalender · {spielerliste} Spieler,{help} Help · {kalender} Calendar · {spielerliste} Players,{help} Yardım · {kalender} Takvim · {spielerliste} Oyuncular
+HUD_HELP_HINT,{help} Hilfe · {spielerliste} Spieler,{help} Help · {spielerliste} Players,{help} Yardım · {spielerliste} Oyuncular
 PAUSE_HELP,Hilfe und Steuerung,Help and controls,Yardım ve kontroller
 HELP_FLOW_TITLE,So läuft ein Tag,How a day works,Bir gün nasıl geçer
 HELP_FLOW,"1. Festbüro: Zelt mieten, Tische aufstellen, Bier bestellen.\n2. Auf den Lieferwagen warten und die Pakete ins Lager tragen.\n3. Im Wohnwagen schlafen — der Tag beginnt um 07:00, Gäste kommen ab 08:00.\n4. Hinten Krug nehmen, am Fass zapfen, vorne auf die Ausgabe stellen — dort holen Kellner ab und bedienen. Pfützen und Erbrochenes putzen.\n5. Um 22:00 ist Feierabend: Bilanz lesen, Ware nachkaufen, Zelt ausbauen, schlafen.","1. Fair Office: rent a tent, place tables, order beer.\n2. Wait for the delivery van and carry the packages into storage.\n3. Sleep in your caravan — the day starts at 7:00, guests arrive from 8:00.\n4. Grab a mug at the back, pour at a keg, put it on the pass up front — waiters pick up there and serve. Clean up puddles and vomit.\n5. Closing time is 22:00: read the report, restock, expand the tent, sleep.","1. Fuar Ofisi: çadır kirala, masa kur, bira sipariş et.\n2. Teslimat aracını bekle ve paketleri depoya taşı.\n3. Karavanında uyu — gün 07:00'de başlar, misafirler 08:00'den itibaren gelir.\n4. Arkada kupa al, fıçıda doldur, öndeki servis yerine koy — garsonlar oradan alıp servis yapar. Birikinti ve kusmukları temizle.\n5. Kapanış 22:00: bilançoyu oku, malzeme al, çadırı büyüt, uyu."
@@ -886,20 +886,20 @@ if you are reading this, the last beer got me. Forty years I poured at the Slopt
 bu mektubu okuyorsanız son bira beni yakaladı demektir. Kırk yıl Sloptoberfest'te bira doldurdum — şimdi festival çadırımı size bırakıyorum."
 BRIEF_2_DU,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass du aufgibst. Tu ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Konrad pes etmeni bekliyor. Ona bu iyiliği yapma."
 BRIEF_2_IHR,"Ich will ehrlich sein: Das Zelt ist verstaubt, und ein paar Schulden hängen auch dran. Der Konrad vom Nachbarzelt wartet nur darauf, dass ihr aufgebt. Tut ihm den Gefallen nicht.","I will be honest: the tent is dusty, and there are a few debts attached. Konrad from the tent next door is just waiting for you to give up. Do not do him that favour.","Dürüst olayım: çadır tozlu, üstüne biraz da borç var. Yan çadırdaki Konrad pes etmenizi bekliyor. Ona bu iyiliği yapmayın."
-BRIEF_3_DU,"Festleiter Horst erwartet dich in seinem Festbüro, ganz im Osten der Kirmes. Such ihn auf, er zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+BRIEF_3_DU,"Der Horst, mein alter Freund, zeigt dir alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat di,
-dein Onkel Sepp","Fair manager Horst is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
+dein Onkel Sepp","Horst, my old friend, will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
 
 Cheers and farewell,
-your Uncle Sepp","Fuar müdürü Horst seni fuarın en doğusundaki ofisinde bekliyor. Onu bul, sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
+your Uncle Sepp","Eski dostum Horst sana her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
 
 Şerefe ve hoşça kal,
 Sepp Amcan"
-BRIEF_3_IHR,"Festleiter Horst erwartet euch in seinem Festbüro, ganz im Osten der Kirmes. Sucht ihn auf, er zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
+BRIEF_3_IHR,"Der Horst, mein alter Freund, zeigt euch alles. Kalte Maß, heißes Hendl, sauberes Klo — mehr braucht's nicht.
 
 Prost und pfiat eich,
-euer Onkel Sepp","Fair manager Horst is expecting you at his fair office, at the far east of the fair. Go find him, he will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
+euer Onkel Sepp","Horst, my old friend, will show you everything. Cold beer, hot chicken, clean toilets — that is all it takes.
 
 Cheers and farewell,
 your Uncle Sepp","Fuar müdürü Horst sizi fuarın en doğusundaki ofisinde bekliyor. Onu bulun, size her şeyi gösterecek. Soğuk bira, sıcak tavuk, temiz tuvalet — başka bir şey gerekmez.
@@ -920,12 +920,12 @@ DIALOG_ENDE,Linksklick / E beenden,Left click / E to finish,Bitirmek için sol t
 FESTLEITER_NAME,Festleiter Horst,Fair manager Horst,Fuar müdürü Horst
 CHEF_7_DU,"Unterschreib vorne am roten Schild, dann gehört das Zelt dir. Danach komm zu mir — ich zeig dir, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzala, çadır senin olsun. Sonra yanıma gel — devamını göstereyim."
 CHEF_7_IHR,"Unterschreibt vorne am roten Schild, dann gehört das Zelt euch. Danach kommt zu mir — ich zeig euch, wie's weitergeht.","Sign at the red board up front and the tent is yours. Then come to me — I will show you what comes next.","Öndeki kırmızı tabelada imzalayın, çadır sizin olsun. Sonra yanıma gelin — devamını göstereyim."
-CHEF_BUERO_1_DU,"Das ist mein Festbüro. Hier am Schreibtisch kaufst du alles, was dein Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırının ihtiyacı olan her şeyi bu masadan alırsın."
-CHEF_BUERO_1_IHR,"Das ist mein Festbüro. Hier am Schreibtisch kauft ihr alles, was euer Zelt braucht.","This is my fair office. At this desk you buy everything your tent needs.","Burası benim fuar ofisim. Çadırınızın ihtiyacı olan her şeyi bu masadan alırsınız."
-CHEF_BUERO_2_DU,"Ein leeres Zelt lockt keinen. Reiter Zelt: Stell zuerst zwei Tische auf.","An empty tent attracts nobody. Tent tab: first put up two tables.","Boş çadır kimseyi çekmez. Çadır sekmesi: önce iki masa kur."
-CHEF_BUERO_2_IHR,"Ein leeres Zelt lockt keinen. Reiter Zelt: Stellt zuerst zwei Tische auf.","An empty tent attracts nobody. Tent tab: first put up two tables.","Boş çadır kimseyi çekmez. Çadır sekmesi: önce iki masa kurun."
-CHEF_BUERO_3_DU,"Und ohne Bier kein Geschäft: Reiter Ware, ein Paket Bier bestellen. Der Lieferwagen bringt's dann zum Zelt.","And no beer, no business: Goods tab, order a parcel of beer. The van brings it to the tent.","Bira yoksa iş de yok: Mal sekmesi, bir paket bira sipariş et. Kamyonet çadıra getirir."
-CHEF_BUERO_3_IHR,"Und ohne Bier kein Geschäft: Reiter Ware, ein Paket Bier bestellen. Der Lieferwagen bringt's dann zum Zelt.","And no beer, no business: Goods tab, order a parcel of beer. The van brings it to the tent.","Bira yoksa iş de yok: Mal sekmesi, bir paket bira sipariş edin. Kamyonet çadıra getirir."
+CHEF_BUERO_1_DU,"Das ist dein Festbüro. Und das hier ist dein Computer. Darauf läuft alles, was dein Zelt braucht.",This is your fair office. And this is your computer. Everything your tent needs runs on it.,Burası senin fuar ofisin. Ve bu senin bilgisayarın. Çadırının ihtiyacı olan her şey bunun üzerinde çalışır.
+CHEF_BUERO_1_IHR,"Das ist euer Festbüro. Und das hier ist euer Computer. Darauf läuft alles, was euer Zelt braucht.",This is your fair office. And this is your computer. Everything your tent needs runs on it.,Burası senin fuar ofisin. Ve bu senin bilgisayarın. Çadırının ihtiyacı olan her şey bunun üzerinde çalışır.
+CHEF_BUERO_2_DU,Tritt ran und drück E. Dann fährt die Kamera auf den Bildschirm.,Step up and press E. The camera will move to the screen.,Yaklaş ve E'ye bas. Kamera ekrana yaklaşacak.
+CHEF_BUERO_2_IHR,Tretet ran und drückt E. Dann fährt die Kamera auf den Bildschirm.,Step up and press E. The camera will move to the screen.,Yaklaş ve E'ye bas. Kamera ekrana yaklaşacak.
+CHEF_BUERO_3_DU,Ich hab dir schon geschrieben. Schau in dein Postfach!,I have already written to you. Check your inbox!,Sana zaten yazdım. Gelen kutuna bak!
+CHEF_BUERO_3_IHR,Ich hab euch schon geschrieben. Schaut in euer Postfach!,I have already written to you. Check your inbox!,Sana zaten yazdım. Gelen kutuna bak!
 CHEF_LAGER_1_DU,"Hier ist dein Lager. Gleich hält der Lieferwagen vorm Zelt und lädt die Pakete ab.","This is your storage. The van will stop outside the tent shortly and unload the parcels.","Burası deponun. Kamyonet birazdan çadırın önünde durup paketleri indirecek."
 CHEF_LAGER_1_IHR,"Hier ist euer Lager. Gleich hält der Lieferwagen vorm Zelt und lädt die Pakete ab.","This is your storage. The van will stop outside the tent shortly and unload the parcels.","Burası deponuz. Kamyonet birazdan çadırın önünde durup paketleri indirecek."
 CHEF_LAGER_2_DU,"Nimm jedes Paket mit E und stell es hier ins Regal. Erst dann kannst du zapfen.","Pick up each parcel with E and put it on the shelf here. Only then can you pour.","Her paketi E ile al ve buradaki rafa koy. Ancak o zaman bira doldurabilirsin."
@@ -990,8 +990,8 @@ QUEST_0_TITLE,Sprich mit Festleiter Horst,Talk to fair manager Horst,Fuar müdü
 QUEST_0_TEXT,"Festleiter Horst wartet vor seinem Festbüro im Osten der Kirmes. Hör dir an, was er zu Sepps Zelt sagt.","Fair manager Horst is waiting outside his fair office in the east of the fair. Hear what he has to say about Sepp's tent.","Fuar müdürü Horst fuarın doğusundaki ofisinin önünde bekliyor. Sepp'in çadırı hakkında ne dediğini dinle."
 CHEF_1_DU,"Na so was — du musst Sepps Patenkind sein! Er hat mir so viel von dir erzählt. Mein Beileid.","Well I never — you must be Sepp's godchild! He told me so much about you. My condolences.","Vay — sen Sepp'in vaftiz çocuğu olmalısın! Bana senden çok bahsetti. Başın sağ olsun."
 CHEF_1_IHR,"Na so was — ihr müsst Sepps Erben sein! Er hat mir so viel von euch erzählt. Mein Beileid.","Well I never — you must be Sepp's heirs! He told me so much about you. My condolences.","Vay — siz Sepp'in varisleri olmalısınız! Bana sizden çok bahsetti. Başınız sağ olsun."
-CHEF_2_DU,"Ich muss ehrlich sein: Sepps Zelt stand ein ganzes Jahr leer und ist völlig verdreckt. Und die Bank will noch %s von seinen Schulden.","I have to be honest: Sepp's tent stood empty for a whole year and is filthy. And the bank still wants %s of his debts.","Dürüst olmalıyım: Sepp'in çadırı koca bir yıl boş kaldı ve berbat halde. Banka da onun borçlarından hâlâ %s istiyor."
-CHEF_2_IHR,"Ich muss ehrlich sein: Sepps Zelt stand ein ganzes Jahr leer und ist völlig verdreckt. Und die Bank will noch %s von seinen Schulden.","I have to be honest: Sepp's tent stood empty for a whole year and is filthy. And the bank still wants %s of his debts.","Dürüst olmalıyım: Sepp'in çadırı koca bir yıl boş kaldı ve berbat halde. Banka da onun borçlarından hâlâ %s istiyor."
+CHEF_2_DU,"Ich muss ehrlich sein: Sepps Zelt stand ein ganzes Jahr leer und ist völlig verdreckt. Und die Bank will noch einiges von seinen Schulden.","I have to be honest: Sepp's tent stood empty for a whole year and is filthy. And the bank still wants a good deal of his debts.","Dürüst olmalıyım: Sepp'in çadırı koca bir yıl boş kaldı ve berbat halde. Banka da onun borçlarından hâlâ epey istiyor."
+CHEF_2_IHR,"Ich muss ehrlich sein: Sepps Zelt stand ein ganzes Jahr leer und ist völlig verdreckt. Und die Bank will noch einiges von seinen Schulden.","I have to be honest: Sepp's tent stood empty for a whole year and is filthy. And the bank still wants a good deal of his debts.","Dürüst olmalıyım: Sepp'in çadırı koca bir yıl boş kaldı ve berbat halde. Banka da onun borçlarından hâlâ epey istiyor."
 CHEF_3_DU,"Aber ohne Festzelt kommt kein Mensch aufs Sloptoberfest. Ich bräuchte jemanden, der's wieder aufmacht.","But without a beer tent nobody comes to the Sloptoberfest. I need someone to open it up again.","Ama bira çadırı olmadan kimse Sloptoberfest'e gelmez. Onu yeniden açacak birine ihtiyacım var."
 CHEF_3_IHR,"Aber ohne Festzelt kommt kein Mensch aufs Sloptoberfest. Ich bräuchte jemanden, der's wieder aufmacht.","But without a beer tent nobody comes to the Sloptoberfest. I need someone to open it up again.","Ama bira çadırı olmadan kimse Sloptoberfest'e gelmez. Onu yeniden açacak birine ihtiyacım var."
 CHEF_BRIEF_EIN_DU,"Sepp hat mir einen Brief für dich hinterlassen. Ich les ihn dir vor — er wollte, dass du seine Worte von mir hörst.","Sepp left me a letter for you. I will read it to you — he wanted you to hear his words from me.","Sepp bana senin için bir mektup bıraktı. Sana okuyacağım — sözlerini benden duymanı istedi."
@@ -1570,3 +1570,21 @@ WORLD_WAGEN_AUSGANG,"Ausgang
 ({interact}: dışarı çık)"
 HINT_WAGEN_RAUS,{interact} Wohnwagen verlassen,{interact} Leave caravan,{interact} Karavandan çık
 HINT_WAGEN_REIN,{interact} Wohnwagen betreten,{interact} Enter caravan,{interact} Karavana gir
+MSG_KAPITEL_FERTIG,Kapitel abgeschlossen: %s,Chapter completed: %s,Bölüm tamamlandı: %s
+KAPITEL_1_NAME,Das Erbe,The Inheritance,Miras
+KAPITEL_2_NAME,Das Zelt läuft,The Tent Is Running,Çadır Çalışıyor
+KAPITEL_3_NAME,Konrads Spiele,Konrad's Games,Konrad'ın Oyunları
+KAPITEL_4_NAME,Das eigene Bier,Our Own Beer,Kendi Birammız
+KAPITEL_5_NAME,Das große Zelt,The Big Tent,Büyük Çadır
+INTRO_TITEL,Sloptoberfest,Sloptoberfest,Sloptoberfest
+INTRO_UNTER,Das größte Bierfest der Welt. Und du bist gerade angekommen.,The biggest beer festival in the world. And you have just arrived.,Dünyanın en büyük bira festivali. Ve sen yeni geldin.
+INTRO_UNTER_IHR,Das größte Bierfest der Welt. Und ihr seid gerade angekommen.,The biggest beer festival in the world. And you have just arrived.,Dünyanın en büyük bira festivali. Ve siz yeni geldiniz.
+INTRO_SKIP,Klick: überspringen,Click: skip,Tıkla: atla
+CHEF_1B_DU,"Ich bin der Horst, Festleiter hier auf dem Sloptoberfest. Der Sepp war mein ältester Freund.","I am Horst, fair manager here at the Sloptoberfest. Sepp was my oldest friend.","Ben Horst, burada Sloptoberfest'in fuar müdürüyüm. Sepp benim en eski dostumdu."
+CHEF_1B_IHR,"Ich bin der Horst, Festleiter hier auf dem Sloptoberfest. Der Sepp war mein ältester Freund.","I am Horst, fair manager here at the Sloptoberfest. Sepp was my oldest friend.","Ben Horst, burada Sloptoberfest'in fuar müdürüyüm. Sepp benim en eski dostumdu."
+CHEF_UEBERGABE_DU,"Der hier ist für dich. Er hat ihn mir gegeben, bevor … na ja. Lies ihn in Ruhe.",This one is for you. He gave it to me before … well. Read it in peace.,"Bu senin için. Bana vermişti, şeyden önce … neyse. Rahatça oku."
+CHEF_UEBERGABE_IHR,"Der hier ist für euch. Er hat ihn mir gegeben, bevor … na ja. Lest ihn in Ruhe.",This one is for you. He gave it to me before … well. Read it in peace.,"Bu sizin için. Bana vermişti, şeyden önce … neyse. Rahatça okuyun."
+HINT_DESKTOP_1,Hier findest du alle Apps. Klick auf E-Mail.,Here you find all apps. Click on Mail.,Tüm uygulamalar burada. E-postaya tıkla.
+HINT_PFUETZE_1,"Pfützen und Dreck wischst du mit E gedrückt halten auf, sonst sinkt die Sauberkeit.","Hold E to wipe up puddles and dirt, or cleanliness drops.","Su birikintilerini ve kiri E'ye basılı tutarak sil, yoksa temizlik düşer."
+HINT_BLASE_1,"Die Blase über dem Gast zeigt, was er bestellt hat.",The bubble above the guest shows what they ordered.,Misafirin üstündeki balon ne sipariş ettiğini gösterir.
+HINT_PERSONAL_APP,"In der Personal-App stellst du Leute ein und siehst, wie es ihnen geht.",In the staff app you hire people and see how they are doing.,Personel uygulamasında insan işe alır ve durumlarını görürsün.

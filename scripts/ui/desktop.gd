@@ -39,6 +39,12 @@ const BANNER := {
 	"bilanz": [Color(0.78, 0.2, 0.36), Color(0.22, 0.07, 0.15), Color(1, 0.82, 0.88), "BILANZ_SUB"],
 	"bierpreis": [Color(0.78, 0.5, 0.08), Color(0.24, 0.14, 0.05), Color(1, 0.92, 0.7), "BIERPREIS_SUB"],
 }
+## Freigeschaltete Apps je Kapitel (Plan: docs/PLAN_STORY.md): Kapitel 1 nur E-Mail und Shop, Kapitel 2 der Rest, Kapitel 3 Social Media
+const FREI := {
+	1: ["mail", "shop"],
+	2: ["mail", "shop", "quests", "kalender", "bank", "personal", "bilanz", "bierpreis", "wetter"],
+	3: ["mail", "shop", "quests", "kalender", "bank", "personal", "bilanz", "bierpreis", "wetter", "social"],
+}
 ## Reiter im Festbüro-Fenster (scenes/ui/festbuero.tscn)
 const REITER := {"shop": 0, "personal": 2, "bilanz": 5}
 ## Diese Apps teilen sich das Festbüro-Fenster
@@ -91,6 +97,11 @@ func oeffnen() -> void:
 	_aktualisieren()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_zoom(true)
+	# Einmaliger Hinweis beim ersten Mal (daten/hinweise.json)
+	if _story and _hud and _hud.has_method("melde_text"):
+		var h: String = _story.hinweis_zeigen("desktop_erstmals")
+		if h != "":
+			_hud.melde_text(tr(h), 0)
 
 func schliessen() -> void:
 	if not visible:
@@ -180,7 +191,13 @@ func _input(event: InputEvent) -> void:
 			return
 
 # ------------------------------------------------------------------ Apps und Fenster
+func app_frei(app: String) -> bool:
+	var kapitel := int(_story.kapitel) if _story else 3
+	return app in FREI[clampi(kapitel, 1, 3)]
+
 func app_oeffnen(name: String) -> void:
+	if not app_frei(name):
+		return
 	if not APPS.has(name):
 		return
 	if name in BUERO_APPS and not _buero_offen():
@@ -395,6 +412,10 @@ func _aktualisieren() -> void:
 		return
 	_uhr()
 	var offen := _buero_offen()
+	for app: String in ["Mail", "Quests", "Shop", "Personal", "Bilanz", "Bierpreis", "Bank", "Wetter", "Social", "Kalender"]:
+		var frei := app_frei(app.to_lower())
+		(get_node("%Icon" + app) as Button).visible = frei
+		(get_node("%Start" + app) as Button).visible = frei
 	for n: String in ["Shop", "Personal"]:
 		(get_node("%Icon" + n) as Button).disabled = not offen
 		(get_node("%Start" + n) as Button).disabled = not offen

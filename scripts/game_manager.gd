@@ -582,6 +582,8 @@ func _ready() -> void:
 	_lager_standard_merken()
 	Game.reset()
 	_hud = $HUD
+	_story.verbinden(self)
+	_story.kapitel_gewechselt.connect(_kapitel_gewechselt)
 	_sfx_node = $Sfx
 	_players_container = $Players
 	_customers_container = $Customers
@@ -1800,6 +1802,7 @@ func _update_bladder(g: Dictionary, id: int, delta: float) -> void:
 			g.pfuetze = true
 			_spawn_mess_at((g.tgt as Vector3) + Vector3(randf_range(-0.4, 0.4), 0.0, randf_range(-0.4, 0.4)), 1)
 			_urin_count += 1
+			_hinweis("erste_pfuetze")
 		g.pee_t = float(g.pee_t) - delta
 		if float(g.pee_t) <= 0.0:
 			g.mode = 1
@@ -1987,7 +1990,7 @@ func net_post_gelesen(nr: int) -> void:
 # ---- Tutorial ----
 ## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
 ## übersetzt wird beim Spieler — gesendet wird nur die Schrittnummer.
-const QUEST_COUNT := 14
+const QUEST_COUNT := 10
 ## Seit Version 4 gibt es Schritt 2 „Putze das Zelt" — ältere Stände ab Schritt 2
 ## rücken eins weiter.
 ## Seit Version 3 führt Schritt 0 über das Gespräch mit dem Festleiter (Einleitung).
@@ -5557,6 +5560,7 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		g.cooldown -= delta
 		if g.cooldown <= 0.0:
 			g.ostate = 1
+			_hinweis("erste_blase")
 			var foods: Array = _foods_avail()
 			var typ := str(g.get("typ", ""))
 			# Ohne Essenslizenz nur Getränke; Touristen essen gern, Trachtler trinken nur Helles
@@ -6050,6 +6054,9 @@ func _buero_state() -> Dictionary:
 
 func _broadcast_meta() -> void:
 	_check_quest()
+	# Alte Stände und „Tutorial überspringen": die Zusage an Horst gilt, sobald das Tutorial weiter ist
+	if _quest_step >= 1 and not _story.flags.has("horst_zusage"):
+		_story.ereignis("horst_zusage")
 	_story.pruefen(_story_messwerte(), _day)
 	net_meta.rpc(_phase, _day, _tent_stage, _active_count, _quest_step, _buero_state())
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
@@ -6253,7 +6260,21 @@ func net_chef_zusage() -> void:
 	if not multiplayer.is_server() or _folge_geschafft:
 		return
 	_folge_geschafft = true
+	_story.ereignis("horst_zusage")
 	_broadcast_meta()
+
+## Einmaliger Hinweis beim ersten Auftreten (daten/hinweise.json), als Meldung an alle
+func _hinweis(ausloeser: String) -> void:
+	if not multiplayer.is_server() or not _story.aktiv:
+		return
+	var k: String = _story.hinweis_zeigen(ausloeser)
+	if k != "":
+		_melde(k, [], 0)
+
+## Kapitel geschafft: Meldung an alle (nur der Server setzt Kapitel)
+func _kapitel_gewechselt(nr: int) -> void:
+	if multiplayer.is_server() and nr > 1:
+		_melde("MSG_KAPITEL_FERTIG", ["KAPITEL_%d_NAME" % (nr - 1)], 2)
 
 # ================================================= Tagesziele + Sepps Schulden
 ## Wie viele Bankraten (Wirtschaft.BANK_RATEN) schon bezahlt sind

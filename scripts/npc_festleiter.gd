@@ -26,10 +26,10 @@ const TEMPO := 1.7
 ## Texte (<Schlüssel>_DU / _IHR): erstes Gespräch am Büro, und wenn er nichts Neues hat
 ## Festleiter Horst begrüßt und stellt die Frage. Sepps Brief wird nur noch einmal gezeigt (Brief-Fenster,
 ## scripts/ui/kino.gd) — Horst liest ihn nicht mehr vor (Doppelbrief entfernt, v320).
-@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_2", "CHEF_3", "CHEF_HUBER", "CHEF_FRAGE"]
+@export var zeilen_start: Array[String] = ["CHEF_1", "CHEF_1B", "CHEF_UEBERGABE"]
+## Nach dem Brief: die Lage und die Frage
+@export var zeilen_frage: Array[String] = ["CHEF_2", "CHEF_3", "CHEF_FRAGE"]
 @export var zeilen_spaeter: Array[String] = ["CHEF_8"]
-## Onkel Sepps Brief, vor der ersten Frage. Texte wie oben mit _DU / _IHR.
-@export var zeilen_brief: Array[String] = []
 
 @onready var _ausruf: Label3D = get_node_or_null("Ausruf")
 
@@ -132,27 +132,26 @@ func ansprechen() -> void:
 			texte.append(String(TranslationServer.translate(k + a)))
 	dialog.zeigen(wer, texte, Callable())
 
-## Erstes Gespräch im Büro: Lage erklären (Dreck, Schulden) und fragen, ob man
-## Sepps Zelt übernimmt. Ja → net_chef_zusage (Schritt 0 erledigt, er geht vor),
-## Nein → er ist traurig, man kann jederzeit wiederkommen.
+## Erstes Gespräch: Horst begrüßt, übergibt Sepps Brief (Brief-Fenster, scripts/ui/kino.gd) und fragt dann, ob man
+## Sepps Zelt übernimmt. Ja → net_chef_zusage (Schritt 0 erledigt, er geht vor), Nein → er ist traurig,
+## man kann jederzeit wiederkommen (der Brief kommt dann nicht noch einmal).
 func _frage_stellen(dialog: Node, welt: Node, wer: String, a: String) -> void:
-	# Erst der Brief von Onkel Sepp, dann die Frage — als eigenes Gespräch mit
-	# ihm als Sprecher, damit klar ist, wer da redet.
-	if not _brief_gelesen and not zeilen_brief.is_empty():
-		_brief_gelesen = true
-		var brief: Array[String] = []
-		for k in zeilen_brief:
-			brief.append(String(TranslationServer.translate(k + a)))
-		dialog.zeigen(String(TranslationServer.translate("BRIEF_TITEL")), brief,
-			func() -> void: _frage_stellen(dialog, welt, wer, a))
+	if not _brief_gelesen:
+		var kino := welt.get_node_or_null("Kino")
+		var begruessung: Array[String] = []
+		for k in zeilen_start:
+			begruessung.append(String(TranslationServer.translate(k + a)))
+		dialog.zeigen(wer, begruessung, func() -> void:
+			_brief_gelesen = true
+			if kino and kino.has_method("brief_zeigen"):
+				kino.beendet.connect(func() -> void: _frage_stellen(dialog, welt, wer, a), CONNECT_ONE_SHOT)
+				kino.brief_zeigen(a == "_IHR", "BRIEF", 3, "BRIEF_TITEL")
+			else:
+				_frage_stellen(dialog, welt, wer, a))
 		return
-	var schulden := 0
-	if welt and "_hud" in welt and welt._hud:
-		schulden = int(welt._hud._zustand.get("bank_rest", 0))
 	var texte: Array[String] = []
-	for k in zeilen_start:
-		var t := String(TranslationServer.translate(k + a))
-		texte.append(t % Texte.euro(schulden) if t.contains("%s") else t)
+	for k in zeilen_frage:
+		texte.append(String(TranslationServer.translate(k + a)))
 	var wahl: Array[String] = [String(TranslationServer.translate("CHEF_WAHL_JA" + a)),
 		String(TranslationServer.translate("CHEF_WAHL_NEIN" + a))]
 	dialog.zeigen(wer, texte, func(i: int) -> void:

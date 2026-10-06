@@ -41,11 +41,14 @@ class Lauf extends Node:
 		# Erst liest der Chef Onkel Sepps Brief vor, dann kommt seine Frage — so
 		# lange durchblättern, bis die Auswahl steht (feste Klickzahl bricht,
 		# sobald jemand eine Zeile ergänzt).
-		for _i in 30:
+		for _i in 40:
 			await _warten(0.3)
 			if dialog._auswahl.visible:
 				break
-			dialog._weiter()
+			if kino.aktiv:
+				kino._weiter()
+			elif dialog.aktiv:
+				dialog._weiter()
 		await _warten(1.0)
 		_bild(dir + "/tut_frage.png")
 		_check("Frage mit Ja/Nein", dialog._auswahl.visible, dialog._text.text)
@@ -58,8 +61,10 @@ class Lauf extends Node:
 		await _warten(1.0)
 		_check("Nein: bleibt im Büro", gm._quest_step == 0 and not chef.unterwegs(), "")
 		chef.ansprechen()
-		for i in 4:
+		for _i in 20:
 			await _warten(0.4)
+			if dialog._auswahl.visible:
+				break
 			dialog._weiter()
 		await _warten(0.5)
 		dialog._waehlen(0)
