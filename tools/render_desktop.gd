@@ -25,6 +25,8 @@ class Lauf extends Node:
 		story.post_senden("M2-01")
 		story.post_senden("M1-03")
 		var hud: Node = gm.get_node("HUD")
+		story.kapitel_setzen(3)
+		hud._zustand["schulden"] = 5000
 		hud.open_desktop()
 		await _bild("start")
 		var d: Control = hud.get("_desktop")

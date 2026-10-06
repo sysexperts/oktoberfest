@@ -511,6 +511,7 @@ func _aufgabe_erledigt(schritt: int) -> void:
 
 # ------------------------------------------------------------ Meldungen
 const MELDUNG := preload("res://scenes/ui/meldung.tscn")
+const StoryDaten := preload("res://scripts/story/daten.gd")
 const MAX_MELDUNGEN := 4
 ## Alle Meldungen des aktuellen Tages zum Nachlesen (Tab): {text, art, zeit, tag}, neueste zuletzt
 const MAX_VERLAUF := 24
@@ -657,12 +658,19 @@ func _ziel_anzeigen() -> void:
 		return
 	var ziel: Dictionary = _zustand.get("tagesziel", {})
 	var bank: Array = _zustand.get("bank_naechste", [])
-	_aufgabe.visible = not ziel.is_empty() or not bank.is_empty() or not (_zustand.get("huber_wette", {}) as Dictionary).is_empty()
+	var haupt := _haupt_quest()
+	_aufgabe.visible = haupt != "" or not ziel.is_empty() or not bank.is_empty() or not (_zustand.get("huber_wette", {}) as Dictionary).is_empty()
 	if not _aufgabe.visible:
 		return
 	%AufgabeSkip.visible = false
 	%AufgabeNummer.text = tr("HUD_TAGESZIEL") % int(_zustand.get("day", 1))
-	if ziel.is_empty():
+	if haupt != "":
+		# Nach dem Tutorial führt die Hauptquest der Story (daten/quests.json) durch das Spiel
+		var story := get_parent().get_node("Story")
+		var q: Dictionary = StoryDaten.quest(haupt)
+		%AufgabeNummer.text = tr("QUESTS_KAPITEL") % int(story.kapitel)
+		%AufgabeTitel.text = tr(str(q.get("titel", "")))
+	elif ziel.is_empty():
 		%AufgabeTitel.text = tr("HUD_ZIEL_MORGEN")
 	else:
 		var titel := Texte.tagesziel_text(ziel)
@@ -684,7 +692,25 @@ func _ziel_anzeigen() -> void:
 			zeilen.append(tr("HUD_HUBER_WETTE") % [Texte.huber_wette_text(wette), Texte.euro(int(wette.get("einsatz", 0)))])
 		else:
 			zeilen.append(tr("HUD_HUBER_ANGEBOT"))
+	if haupt != "":
+		zeilen.push_front(Texte.mit_tasten(_quest_text(StoryDaten.quest(haupt))))
 	%AufgabeText.text = "\n".join(zeilen)
+
+## Offene Hauptquest der Story ("" = keine oder Story aus)
+func _haupt_quest() -> String:
+	var story := get_parent().get_node_or_null("Story")
+	if story == null or not story.aktiv:
+		return ""
+	return story.haupt_offen()
+
+## Schlüssel des Quest-Textes in der Du- oder Ihr-Form (Koop)
+func _quest_text(q: Dictionary) -> String:
+	var k := str(q.get("text", ""))
+	var mehrere := multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0
+	for v in [k + ("_IHR" if mehrere else "_DU"), k + "_DU", k]:
+		if tr(v) != v:
+			return v
+	return k
 
 ## Fertiger Text als Meldung (schon übersetzt)
 func melde_text(text: String, art := 0) -> void:

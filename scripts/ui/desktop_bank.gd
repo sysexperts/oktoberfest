@@ -13,13 +13,22 @@ var _gruen_text: Color
 var _hud: Node
 var _stand := -999999999
 var _kredit := -1
+var _schulden := -1
 var _zeilen := -1
 
 func einrichten(gm: Node, hud: Node) -> void:
+	%Zahlen1.pressed.connect(_zahlen.bind(500))
+	%Zahlen2.pressed.connect(_zahlen.bind(1000))
+	%ZahlenAlles.pressed.connect(_zahlen.bind(1000000))
 	_gruen = %Kredit.get_theme_stylebox("panel")
 	_gruen_text = %KreditStand.get_theme_color("font_color")
 	_gm = gm
 	_hud = hud
+
+## Schulden abzahlen: der Server prüft Kontostand und Rest (GameManager.net_schulden_zahlen)
+func _zahlen(betrag: int) -> void:
+	if _gm != null:
+		_gm.net_schulden_zahlen.rpc_id(1, betrag)
 
 func zeigen() -> void:
 	_stand = -999999999
@@ -38,7 +47,9 @@ func _pruefen() -> void:
 	var verlauf := _verlauf()
 	var zustand: Dictionary = _hud.get("_zustand") if _hud != null else {}
 	var kredit := int(zustand.get("kredit", 0))
-	if Game.money != _stand or kredit != _kredit or verlauf.size() != _zeilen:
+	var schulden := int(zustand.get("schulden", 0))
+	if Game.money != _stand or kredit != _kredit or verlauf.size() != _zeilen or schulden != _schulden:
+		_schulden = schulden
 		_stand = Game.money
 		_kredit = kredit
 		_zeilen = verlauf.size()
@@ -46,6 +57,14 @@ func _pruefen() -> void:
 
 func _anzeigen(verlauf: Array) -> void:
 	%Stand.text = Texte.euro(_stand)
+	%Schulden.visible = _schulden > 0
+	%SchuldenStand.text = Texte.euro(_schulden)
+	%Zahlen1.text = Texte.euro(500)
+	%Zahlen2.text = Texte.euro(1000)
+	%ZahlenAlles.text = tr("BANK_ALLES")
+	%Zahlen1.disabled = _stand < 500 or _schulden < 1
+	%Zahlen2.disabled = _stand < 1000 or _schulden < 1
+	%ZahlenAlles.disabled = _stand < _schulden
 	%Tag.text = tr("BANK_TAG") % int(_gm.get("_day"))
 	%TrendPille.visible = not verlauf.is_empty()
 	if not verlauf.is_empty():

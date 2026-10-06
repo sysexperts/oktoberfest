@@ -1588,3 +1588,139 @@ HINT_DESKTOP_1,Hier findest du alle Apps. Klick auf E-Mail.,Here you find all ap
 HINT_PFUETZE_1,"Pfützen und Dreck wischst du mit E gedrückt halten auf, sonst sinkt die Sauberkeit.","Hold E to wipe up puddles and dirt, or cleanliness drops.","Su birikintilerini ve kiri E'ye basılı tutarak sil, yoksa temizlik düşer."
 HINT_BLASE_1,"Die Blase über dem Gast zeigt, was er bestellt hat.",The bubble above the guest shows what they ordered.,Misafirin üstündeki balon ne sipariş ettiğini gösterir.
 HINT_PERSONAL_APP,"In der Personal-App stellst du Leute ein und siehst, wie es ihnen geht.",In the staff app you hire people and see how they are doing.,Personel uygulamasında insan işe alır ve durumlarını görürsün.
+BANK_SCHULDEN,Sepps Schulden bei der Bank,Sepp's debt at the bank,Sepp'in bankadaki borcu
+BANK_ALLES,Alles zahlen,Pay all,Hepsini öde
+MSG_SCHULDEN_BEZAHLT,"%s an die Bank gezahlt, noch %s Schulden","%s paid to the bank, %s debt left","Bankaya %s ödendi, %s borç kaldı"
+MSG_SCHULDEN_ZU_WENIG,"Zu wenig Geld, um %s abzuzahlen",Not enough money to pay %s,%s ödemek için yeterli para yok
+Q_1_0_TITLE,Sprich mit Festleiter Horst,Talk to fair manager Horst,Fuar müdürü Horst'la konuş
+Q_1_0_TEXT,"Festleiter Horst wartet vor seinem Festbüro im Osten der Kirmes. Hör dir an, was er zu Sepps Zelt sagt.",Fair manager Horst is waiting outside his fair office in the east of the fair. Hear what he has to say about Sepp's tent.,Fuar müdürü Horst fuarın doğusundaki ofisinin önünde bekliyor. Sepp'in çadırı hakkında ne dediğini dinle.
+Q_1_1_TITLE,Übernimm Sepps Zelt,Take over Sepp's tent,Sepp'in çadırını devral
+Q_1_1_TEXT,"Folge Festleiter Horst zum Festzelt. Am Eingang steht das rote Schild — dort mit {interact} unterschreiben und dem Zelt einen Namen geben (500 € Gebühr, die ersten 5 Tage ohne Miete).","Follow fair manager Horst to the beer tent. The red board is at the entrance — sign there with {interact} and name the tent (500 € fee, the first 5 days rent-free).","Fuar müdürü Horst'u bira çadırına kadar takip et. Girişte kırmızı tabela var — orada {interact} ile imzala ve çadıra bir isim ver (500 € ücret, ilk 5 gün kira yok)."
+Q_1_2_TITLE,Putze das Zelt,Clean the tent,Çadırı temizle
+Q_1_2_TEXT,"Zieh die Planen ab, fege den Dreck zusammen (je {interact} halten) und wirf die Müllsäcke in die Mülltonne links neben der Zelttür. Danach ab ins Festbüro.","Pull off the covers, sweep up the dirt (hold {interact} for each) and throw the rubbish bags into the bin left of the tent door. Then off to the fair office.","Örtüleri çek, pislikleri süpür (her biri için {interact} basılı tut) ve çöp torbalarını çadır kapısının solundaki çöp kutusuna at. Sonra fuar ofisine git."
+Q_1_3_TITLE,Stelle 2 Tische auf,Set up 2 tables,2 masa kur
+Q_1_3_TEXT,Festbüro (im Osten) Zelt Tisch aufstellen (200 € pro Tisch).,Fair Office (in the east) Tent Place table (€200 each).,Fuar Ofisi (doğuda) Çadır Masa koy (masa başı 200 €).
+Q_1_4_TITLE,Bestelle Bier,Order beer,Bira sipariş et
+Q_1_4_TEXT,"Ohne Bier kann niemand bedient werden. Im Festbüro Reiter Ware ein Paket Bier bestellen: Ein Paket reicht für 10 Maß. Kommen später mehr Gäste, bestell gleich mehrere.","Nobody can be served without beer. In the Fair Office Supplies tab, order a package of beer: one package fills 10 mugs. When more guests come later, order several at once.",Bira olmadan kimseye servis yapılamaz. Fuar Ofisi Malzeme sekmesinden bir paket bira sipariş et: Bir paket 10 kupa eder. Sonra daha çok misafir gelince birkaç paket birden al.
+Q_1_5_TITLE,Warte auf den Lieferwagen,Wait for the delivery van,Teslimat aracını bekle
+Q_1_5_TEXT,"Deine Bestellung ist unterwegs. In etwa 30 Sekunden fährt der Lieferwagen vor, hupt und lädt die Pakete ab. Der Pfeil zeigt schon das Lagerregal im Zelt, wo sie hingehören.","Your order is on its way. In about 30 seconds the delivery van pulls up, honks and unloads the packages. The arrow already shows the storage shelf in the tent where they belong.","Siparişin yolda. Yaklaşık 30 saniye içinde teslimat aracı gelir, korna çalar ve paketleri indirir. Ekrandaki ok, paketlerin koyulacağı çadırdaki depo rafını şimdiden gösteriyor."
+Q_1_6_TITLE,Pakete ins Regal räumen,Stock the shelf,Paketleri rafa diz
+Q_1_6_TEXT,"Nimm jedes Paket mit {interact}, trag es ins Zelt zum Lagerregal und räume es dort mit {interact} ein. Erst eingeräumtes Bier kann gezapft werden.","Pick up each package with {interact}, carry it into the tent to the storage shelf and stock it there with {interact}. Only stocked beer can be poured.","Her paketi {interact} ile al, çadırdaki depo rafına taşı ve orada {interact} ile yerleştir. Sadece rafa konan bira doldurulabilir."
+Q_1_7_TITLE,Schlafe im Wohnwagen,Sleep in your caravan,Karavanında uyu
+Q_1_7_TEXT,"Dein Wohnwagen steht in der Gasse im Süden. Schlafen startet den Tag um 07:00, die ersten Gäste kommen nach ein bis zwei Minuten durchs Haupttor.",Your caravan is in the lane to the south. Sleeping starts the day at 7:00; the first guests come through the main gate after a minute or two.,"Karavanın güneydeki sokakta. Uyumak günü 07:00'de başlatır, ilk misafirler bir iki dakika sonra ana kapıdan gelir."
+Q_1_8_TITLE,Bediene einen Gast,Serve a guest,Bir misafire servis yap
+Q_1_8_TEXT,"Krug nehmen, am Fass {interact} gedrückt halten, dann zum Gast und {interact}.","Grab a mug, hold {interact} at a keg, then go to a guest and press {interact}.","Bir kupa al, fıçıda {interact} tuşunu basılı tut, sonra misafire gidip {interact} bas."
+Q_1_9_TITLE,Halte bis 22:00 durch,Keep going until 22:00,22:00'ye kadar dayan
+Q_1_9_TEXT,"Gäste schleppen Dreck ins Zelt: wisch die Fußspuren regelmäßig weg ({interact} halten), sonst sinkt die Sauberkeit. Danach kommt die Tagesbilanz.",Guests drag dirt into the tent: wipe up the footprints regularly (hold {interact}) or cleanliness drops. Then you get the daily report.,"Misafirler çadıra pislik taşır: ayak izlerini düzenli sil ({interact} basılı tut), yoksa temizlik düşer. Ardından günlük bilanço gelir."
+Q_2_1_TITLE,Hilfe muss her,Help wanted,Yardım lazım
+Q_2_1_TEXT,Allein schaffst du das nicht. Stell am Computer unter Personal einen Kellner ein. Er bedient die Gäste für dich.,You cannot do this alone. Hire a waiter on the computer under Staff. He serves the guests for you.,Bunu tek başına yapamazsın. Bilgisayarda Personel bölümünden bir garson işe al. Misafirlere o servis yapar.
+Q_2_2_TITLE,Mehr auf der Karte,More on the menu,Menüde daha fazlası
+Q_2_2_TEXT,"Mehr Auswahl bringt mehr Umsatz. Kauf im Shop eine Lizenz, zum Beispiel Weizen.","More choice brings more sales. Buy a licence in the shop, for example wheat beer.","Daha çok seçenek daha çok satış getirir. Mağazadan bir lisans al, örneğin buğday birası."
+Q_2_3_TITLE,Das stille Örtchen,The quiet little room,Sessiz köşe
+Q_2_3_TEXT,"Ohne Klo pinkeln die Gäste in die Ecke, und das riecht man. Bau im Shop eine Toilette ein.","Without a toilet the guests pee in the corner, and you can smell it. Build a toilet in the shop.",Tuvalet yoksa misafirler köşeye işer ve kokusu çıkar. Mağazadan bir tuvalet kur.
+Q_2_4_TITLE,Musik!,Music!,Müzik!
+Q_2_4_TEXT,Musik lockt mehr Gäste an. Buch im Shop einen Künstler. Eine Blaskapelle zieht die Leute an wie Honig.,Music attracts more guests. Book an act in the shop. A brass band draws people like honey.,Müzik daha çok misafir çeker. Mağazadan bir sanatçı tut. Bir bando insanları bal gibi çeker.
+Q_2_5_TITLE,Die erste Rate,The first instalment,İlk taksit
+Q_2_5_TEXT,Sepps Schulden drücken. Zahle am Computer unter Bank die ersten 1.500 € zurück.,"Sepp's debts weigh heavily. Pay back the first €1,500 on the computer under Bank.",Sepp'in borçları ağır basıyor. Bilgisayarda Banka bölümünden ilk 1.500 €'yu öde.
+Q_2_6_TITLE,Mehr Platz,More space,Daha fazla yer
+Q_2_6_TEXT,"Dein Zelt ist noch klein. Bau im Shop auf die mittlere Größe aus. Mehr Tische, mehr Gäste, mehr Umsatz.","Your tent is still small. Expand it to medium size in the shop. More tables, more guests, more sales.","Çadırın hâlâ küçük. Mağazadan orta boya genişlet. Daha çok masa, daha çok misafir, daha çok satış."
+Q_N-2-1_TITLE,Der Andrang,The rush,Yoğunluk
+Q_N-2-1_TEXT,Heute soll es voll werden. Bediene an einem Tag 30 Gäste.,Today it should get busy. Serve 30 guests in one day.,Bugün kalabalık olacak. Bir günde 30 misafire servis yap.
+Q_N-2-2_TITLE,Sauber bleiben,Staying clean,Temiz kal
+Q_N-2-2_TEXT,"Ein Tag ohne eine einzige Pfütze im Zelt. Die Gäste schauen auf den Boden, bevor sie aufs Bier schauen.",One day without a single puddle in the tent. Guests look at the floor before they look at the beer.,Çadırda tek bir su birikintisi olmayan bir gün. Misafirler biraya bakmadan önce zemine bakar.
+Q_N-2-5_TITLE,Der Hit des Tages,The hit of the day,Günün hiti
+Q_N-2-5_TEXT,Schenke an einem Tag 25 Weizen aus.,Pour 25 wheat beers in one day.,Bir günde 25 buğday birası servis et.
+MAIL_M2_02_BETREFF,Der erste Mitarbeiter,The first employee,İlk çalışan
+MAIL_M2_02_TEXT,"Gut gemacht. Ein guter Kellner ist Gold wert, ein schlechter ein Loch im Geldbeutel. Beobachte ihn die ersten Tage.
+Als Nächstes: Die Gäste wollen mehr als nur ein Helles. Kauf eine Lizenz.
+
+Horst","Well done. A good waiter is worth his weight in gold, a bad one a hole in your wallet. Keep an eye on him for the first few days.
+Next: guests want more than just a lager. Buy a licence.
+
+Horst","Aferin. İyi bir garson altın değerindedir, kötüsü cüzdanda delik. İlk günlerde onu izle.
+Sıradaki: Misafirler sadece bir Helles istemez. Bir lisans al.
+
+Horst"
+MAIL_M2_03_BETREFF,Das Klo,The toilet,Tuvalet
+MAIL_M2_03_TEXT,"Eine saubere Toilette hat schon manches Fest gerettet. Und manches ruiniert. Und noch was: Die Gäste wollen Musik.
+
+Horst","A clean toilet has saved many a fair. And ruined some. One more thing: the guests want music.
+
+Horst","Temiz bir tuvalet birçok fuarı kurtardı. Birkaçını da batırdı. Bir şey daha: Misafirler müzik istiyor.
+
+Horst"
+MAIL_M2_04_BETREFF,Die Schulden von Herrn Sepp,Mr. Sepp's debts,Bay Sepp'in borçları
+MAIL_M2_04_TEXT,"Sehr geehrte Herren und Damen,
+
+zum aktuellen Stand sind noch Verbindlichkeiten offen. Eine Rückzahlung ist jederzeit über die Bank-App möglich. Wir bitten um zeitnahe Beachtung.
+
+Mit freundlichen Grüßen
+Schneider, Kundenberatung","Dear Sir or Madam,
+
+there are still liabilities outstanding. Repayment is possible at any time via the bank app. We ask for your prompt attention.
+
+Kind regards
+Schneider, customer service","Sayın yetkililer,
+
+hâlâ ödenmemiş yükümlülükler bulunmaktadır. Geri ödeme her zaman banka uygulamasından yapılabilir. Yakın zamanda ilginizi rica ederiz.
+
+Saygılarımızla
+Schneider, müşteri hizmetleri"
+MAIL_M2_05_BETREFF,Pass auf dich auf,Watch your back,Kendine dikkat et
+MAIL_M2_05_TEXT,"Ich hab ein ungutes Gefühl. Der Konrad war heute Nachmittag verdächtig freundlich.
+Halt die Augen offen. Morgen reden wir.
+
+Horst","I have a bad feeling. Konrad was suspiciously friendly this afternoon.
+Keep your eyes open. We will talk tomorrow.
+
+Horst","İçimde kötü bir his var. Konrad bu öğleden sonra şüpheli derecede cana yakındı.
+Gözlerini açık tut. Yarın konuşuruz.
+
+Horst"
+MAIL_M2_06_BETREFF,Ein Angebot,An offer,Bir teklif
+MAIL_M2_06_TEXT,"Wie läuft's, Sepps Patenkind? Ich zahle dir 2.000 € fürs Zelt. Freundschaftspreis.
+Überleg's dir, bevor es dich was kostet. – K.","How is it going, Sepp's godchild? I will pay you €2,000 for the tent. Friendly price.
+Think it over before it costs you. – K.","Nasıl gidiyor, Sepp'in vaftiz çocuğu? Çadır için sana 2.000 € veririm. Dostluk fiyatı.
+Sana pahalıya patlamadan düşün. – K."
+MAIL_M2_06_A1,"Nein, danke.","No, thanks.","Hayır, teşekkürler."
+MAIL_M2_06_A2,Ich denk drüber nach.,I will think about it.,Düşüneceğim.
+MAIL_M2_06_A3,Vergiss es.,Forget it.,Boş ver.
+MAIL_M2_07_BETREFF,Respekt?,Respect?,Saygı?
+MAIL_M2_07_TEXT,"Die erste Rate bezahlt? Na schau an. Das hätte ich dir nicht zugetraut.
+Aber vergiss nicht: Das Fest ist lang. – K.","First instalment paid? Well, look at that. I would not have thought you could.
+But do not forget: the fair is long. – K.","İlk taksiti ödedin mi? Bak sen. Bunu sana yakıştıramazdım.
+Ama unutma: Fuar uzun. – K."
+MAIL_M2_08_BETREFF,Mich hat's erwischt,I caught something,Hastalandım
+MAIL_M2_08_TEXT,"Hallo Chef, mich hat's erwischt: Fieber und Kopfweh, ich kann heute nicht arbeiten. Tut mir wirklich leid!","Hello boss, I caught something: fever and a headache, I cannot work today. I am really sorry!","Merhaba patron, hastalandım: ateş ve baş ağrısı, bugün çalışamam. Gerçekten çok üzgünüm!"
+MAIL_M2_08_A1,"Gute Besserung, bleib im Bett.","Get well soon, stay in bed.","Geçmiş olsun, yatakta kal."
+MAIL_M2_08_A2,"Bitte komm trotzdem, wir brauchen dich.","Please come anyway, we need you.","Lütfen yine de gel, sana ihtiyacımız var."
+MAIL_M2_13_BETREFF,Der Andrang,The rush,Yoğunluk
+MAIL_M2_13_TEXT,"Heute soll es voll werden. Schaffst du 30 Gäste, spendier ich dir was.
+
+Horst","Today it should get busy. If you manage 30 guests, I will treat you.
+
+Horst","Bugün kalabalık olacak. 30 misafire yetişirsen sana bir şey ısmarlarım.
+
+Horst"
+MAIL_M2_13_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_M2_13_A2,Heute nicht.,Not today.,Bugün olmaz.
+MAIL_M2_14_BETREFF,Sauber bleiben,Staying clean,Temiz kal
+MAIL_M2_14_TEXT,"Die Gäste schauen auf den Boden, bevor sie aufs Bier schauen. Schaffst du einen Tag ohne eine einzige Pfütze?
+
+Horst","Guests look at the floor before they look at the beer. Can you manage a day without a single puddle?
+
+Horst","Misafirler biraya bakmadan önce zemine bakar. Tek bir su birikintisi olmayan bir gün başarabilir misin?
+
+Horst"
+MAIL_M2_14_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_M2_14_A2,Heute nicht.,Not today.,Bugün olmaz.
+MAIL_M2_16_BETREFF,Der Hit des Tages,The hit of the day,Günün hiti
+MAIL_M2_16_TEXT,"Weizen geht immer. Schenk heute 25 Stück davon aus, dann leg ich was drauf.
+
+Horst","Wheat beer always works. Pour 25 of them today and I will add something.
+
+Horst","Buğday birası her zaman gider. Bugün 25 tane servis et, ben de bir şey eklerim.
+
+Horst"
+MAIL_M2_16_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_M2_16_A2,Heute nicht.,Not today.,Bugün olmaz.

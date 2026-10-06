@@ -968,6 +968,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
+		"schulden": _schulden,
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1094,6 +1095,7 @@ func _load_game() -> bool:
 	_kredit_rest = maxi(0, int(d.get("kredit", 0)))
 	# Sepps Schulden: ältere Spielstände (vor Version 175) haben keine — dort gilt alles als bezahlt
 	_bank_bezahlt = clampi(int(d.get("bank", Wirtschaft.BANK_RATEN.size())), 0, Wirtschaft.BANK_RATEN.size())
+	_schulden = maxi(0, int(d.get("schulden", SCHULDEN_START)))
 	var wette_gespeichert: Variant = d.get("huber_wette", {})
 	_huber_wette = wette_gespeichert if wette_gespeichert is Dictionary else {}
 	_letzte_sabotage = int(d.get("sabotage_tag", 0))
@@ -1946,10 +1948,10 @@ func _story_messwerte() -> Dictionary:
 		"pakete_eingeraeumt": int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty(),
 		"geschlafen": _shift_num >= 1,
 		"gaeste_bedient": maxi(int(_stats.get("served", 0)), _served),
-		"gaeste_heute": _served,
+		"gaeste_heute": _served, "weizen_heute": _weizen_heute,
 		"feierabend": _shift_num >= 1 and _phase == Phase.INTERMISSION,
 		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
-		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": bank_rest(),
+		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": _schulden,
 	}
 
 func _staff_anzahl(role: int) -> int:
@@ -1969,8 +1971,17 @@ func story_belohnung(b: Dictionary) -> void:
 		_popularity = clampf(_popularity + float(b["beliebtheit"]), POP_MIN, 100.0)
 
 ## Folgen, die die Story nicht selbst kennt (mitarbeiter_fehlt_tage, lohn_faktor_tag …) — kommen in späteren Phasen
-func story_folge(_f: Dictionary) -> void:
-	pass
+func story_folge(f: Dictionary) -> void:
+	if not multiplayer.is_server():
+		return
+	# Krankmeldung: der Mitarbeiter fehlt (arbeitet kaum) oder Ersatz kostet heute mehr Lohn
+	if f.has("mitarbeiter_fehlt_tage") and _krank_sid >= 0 and _staff_sim.has(_krank_sid):
+		(_staff_sim[_krank_sid] as Dictionary)["krank_bis"] = _day + int(f["mitarbeiter_fehlt_tage"])
+		(_staff_sim[_krank_sid] as Dictionary)["energie"] = KRANK_ENERGIE
+	if f.has("lohn_faktor_tag"):
+		_lohn_faktor_tag = float(f["lohn_faktor_tag"])
+	_krank_sid = -1
+	_broadcast_meta()
 
 ## Antwort auf eine Mail im Postfach (Server entscheidet, alle sehen das Ergebnis über den Büro-Zustand)
 @rpc("any_peer", "reliable", "call_local")
@@ -3580,6 +3591,8 @@ func _serve_by_staff(gid: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
 	_served += 1
+	if int(g.okind) == 1 and int(g.otype) == 2:
+		_weizen_heute += 1
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_rausch_nach_bedienung(g)
@@ -4606,6 +4619,8 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[id] = g
 	_served += 1
+	if int(g.okind) == 1 and int(g.otype) == 2:
+		_weizen_heute += 1
 	_stats.served += 1
 	g.drinks = int(g.get("drinks", 0)) + 1
 	_rausch_nach_bedienung(g)
@@ -5232,6 +5247,7 @@ func _start_shift() -> void:
 	_phase = Phase.SHIFT
 	_phase_time = SHIFT_TIME
 	_served = 0
+	_weizen_heute = 0
 	_missed = 0
 	_pop_verlust_heute = 0.0
 	_ohne_ware_s = 0.0
@@ -5331,7 +5347,8 @@ func _end_shift(reason := 0) -> void:
 	# Günlük bilanço: kira + personel maaşları
 	_eigenschaften_nacht()
 	var rent := _daily_rent()
-	var wages := _total_wages()
+	var wages := roundi(float(_total_wages()) * _lohn_faktor_tag)
+	_lohn_faktor_tag = 1.0
 	_wages_last = wages
 	Game.add_money(-rent - wages)
 	var goods := _goods_cost      # schon beim Bestellen bezahlt, hier nur ausgewiesen
@@ -5365,6 +5382,7 @@ func _end_shift(reason := 0) -> void:
 	_saison.pop_summe = int(_saison.pop_summe) + roundi(_popularity)
 	_saison.tage = int(_saison.tage) + 1
 	# Tag ohne eine einzige Pfütze (und mit Betrieb) — Meilenstein SAUBER_5
+	_story.ereignis("pfuetzenfreier_tag", _urin_count == 0 and _served >= 10)
 	if _urin_count == 0 and _served >= 10:
 		_stats.tage_sauber = int(_stats.get("tage_sauber", 0)) + 1
 	if ist_finale():
@@ -6040,7 +6058,7 @@ func _buero_state() -> Dictionary:
 		"ereignis": _ereignis, "saison_nr": _saison_nr,
 		"shift": _phase == Phase.SHIFT,
 		"stats": _stats.duplicate(), "ms": _meilensteine.duplicate(), "day": _day,
-		"kredit": _kredit_rest,
+		"kredit": _kredit_rest, "schulden": _schulden,
 		"bank_naechste": bank_naechste(), "bank_rest": bank_rest(),
 		"muell": _muell_stapel,
 		"huber_wette": _huber_wette,
@@ -6277,6 +6295,30 @@ func _kapitel_gewechselt(nr: int) -> void:
 		_melde("MSG_KAPITEL_FERTIG", ["KAPITEL_%d_NAME" % (nr - 1)], 2)
 
 # ================================================= Tagesziele + Sepps Schulden
+## Sepps Schulden bei der Bank (seit Kapitel 2 zahlt man sie selbst ab, wann und wie viel man will, Bank-App)
+const SCHULDEN_START := 5000
+var _schulden := SCHULDEN_START
+
+## Bank-App: einen Teil der Schulden abzahlen. Der Server prüft Kontostand und Rest.
+@rpc("any_peer", "reliable", "call_local")
+func net_schulden_zahlen(betrag: int) -> void:
+	if not multiplayer.is_server():
+		return
+	var b := mini(betrag, _schulden)
+	if b <= 0:
+		return
+	if Game.money < b:
+		_fehler("MSG_SCHULDEN_ZU_WENIG", [_eur(b)])
+		return
+	Game.add_money(-b)
+	_schulden -= b
+	_stats["schulden_bezahlt"] = int(_stats.get("schulden_bezahlt", 0)) + b
+	if _schulden <= 0:
+		net_popup.rpc("POPUP_BANK_FREI", [_eur(b)])
+	else:
+		_melde("MSG_SCHULDEN_BEZAHLT", [_eur(b), _eur(_schulden)], 2)
+	_broadcast_meta()
+
 ## Wie viele Bankraten (Wirtschaft.BANK_RATEN) schon bezahlt sind
 var _bank_bezahlt := 0
 ## Heutiges Ziel: {typ, ziel, lohn}; leer = keins (Tutorial läuft noch)
@@ -6788,12 +6830,31 @@ func _personal_name() -> String:
 	var frei := PERSONAL_NAMEN.filter(func(n: String) -> bool: return not vergeben.has(n))
 	return str(frei.pick_random()) if not frei.is_empty() else str(PERSONAL_NAMEN.pick_random())
 
+## Story ab Kapitel 2: gelegentlich meldet sich jemand krank (Mail mit Antwort), Konrad macht sein Angebot
+const KRANK_ENERGIE := 0.25
+const KRANK_CHANCE := 0.2
+var _krank_sid := -1
+var _lohn_faktor_tag := 1.0
+var _weizen_heute := 0
+
+func _story_morgen() -> void:
+	if not _story.aktiv or _story.kapitel < 2:
+		return
+	if _story.kapitel == 2 and _day >= 4 and not _story.flags.has("konrad_m206"):
+		_story.flags["konrad_m206"] = true
+		_story.post_senden("M2-06")
+	if _krank_sid < 0 and not _staff_sim.is_empty() and randf() < KRANK_CHANCE:
+		var ids := _staff_sim.keys()
+		_krank_sid = int(ids.pick_random())
+		_story.post_senden("M2-08")
+
 ## Morgens: ausgeschlafen, offene Anliegen werden ernst, neue kommen dazu
 func _personal_morgen() -> void:
+	_story_morgen()
 	var weg := []
 	for sid: int in _staff_sim:
 		var s: Dictionary = _staff_sim[sid]
-		s.energie = 1.0
+		s.energie = KRANK_ENERGIE if _day <= int(s.get("krank_bis", 0)) else 1.0
 		match str(s.get("anliegen", "")):
 			"huber":
 				weg.append(sid)

@@ -28,7 +28,7 @@ const APPS := {
 	"bilanz": ["DESKTOP_APP_BILANZ", "diagramm", Vector2(1210, 770), "legacy"],
 	"bierpreis": ["DESKTOP_APP_BIERPREIS", "bier", Vector2(1260, 880), "legacy"],
 	"kalender": ["DESKTOP_APP_KALENDER", "kalender", Vector2(980, 780), "intern"],
-	"bank": ["DESKTOP_APP_BANK", "bank", Vector2(960, 780), "intern"],
+	"bank": ["DESKTOP_APP_BANK", "bank", Vector2(960, 860), "intern"],
 	"wetter": ["DESKTOP_APP_WETTER", "ausruf", Vector2(980, 780), "intern"],
 	"social": ["DESKTOP_APP_SOCIAL", "megafon", Vector2(980, 760), "intern"],
 }
