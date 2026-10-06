@@ -327,18 +327,30 @@ func _process(delta: float) -> void:
 		if _neu_bauen < 0.0:
 			_build_points()
 	if _visitors.size() != _target:
-		_sync_step()
+		_sync_step(delta)
 
-func _sync_step() -> void:
-	var budget := 4
-	while _visitors.size() < _target and budget > 0:
-		var v := VISITOR.instantiate()
-		add_child(v)
-		v.setup(self)
-		_visitors.append(v)
-		budget -= 1
-	while _visitors.size() > _target and budget > 0:
+## So lange darf das Bauen von Besuchern in einem Bild dauern. Ein Besucher aus dem Creator kostet je nach Rechner
+## 10 bis 40 ms — vier pro Bild (früher) ließen das Spiel nach dem Start etwa 15 Sekunden auf 8 Bilder pro Sekunde
+## einbrechen. Jetzt mindestens einer pro Bild, weitere nur, solange es billig bleibt, und gar keiner,
+## wenn das Bild ohnehin schon lang dauert.
+const BAU_MS := 10.0
+const BAU_PAUSE_AB := 0.05
+
+func _sync_step(delta: float) -> void:
+	var t0 := Time.get_ticks_usec()
+	var gebaut := 0
+	if _visitors.size() < _target and delta < BAU_PAUSE_AB:
+		while _visitors.size() < _target and gebaut < 4:
+			if gebaut > 0 and float(Time.get_ticks_usec() - t0) / 1000.0 > BAU_MS:
+				break
+			var v := VISITOR.instantiate()
+			add_child(v)
+			v.setup(self)
+			_visitors.append(v)
+			gebaut += 1
+	var weg := 4
+	while _visitors.size() > _target and weg > 0:
 		var v = _visitors.pop_back()
 		if is_instance_valid(v):
 			v.queue_free()
-		budget -= 1
+		weg -= 1
