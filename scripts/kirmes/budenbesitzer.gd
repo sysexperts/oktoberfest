@@ -37,6 +37,10 @@ func besetzt_setzen(an: bool, mitte: Vector3, seite: Vector3) -> void:
 	_figur.gehen()
 
 func _process(delta: float) -> void:
+	_lod_t -= delta
+	if _lod_t <= 0.0:
+		_lod_t = randf_range(0.4, 0.8)
+		_lod()
 	if not _geht:
 		return
 	var zu := _ziel - position
@@ -50,6 +54,29 @@ func _process(delta: float) -> void:
 		return
 	position += zu.normalized() * minf(TEMPO * delta, zu.length())
 	rotation.y = atan2(zu.x, zu.z)
+
+## Leistung: über hundert Budenbesitzer stehen mit Skelett und Animation auf der Karte. Weit weg wird die
+## Animation angehalten, noch weiter weg wird die Figur nicht mehr gezeichnet (Messung 06.10.: rund 10 ms pro Bild).
+const LOD_ANIMATION := 30.0
+const LOD_SICHTBAR := 60.0
+var _lod_t := randf() * 0.5
+var _nah := true
+
+func _lod() -> void:
+	var kamera := get_viewport().get_camera_3d()
+	if kamera == null or _figur == null:
+		return
+	var abstand := global_position.distance_to(kamera.global_position)
+	_figur.visible = abstand < LOD_SICHTBAR
+	var nah := abstand < LOD_ANIMATION
+	if nah == _nah or _figur.anim == null:
+		return
+	_nah = nah
+	if nah:
+		_figur.anim.active = true
+	else:
+		_figur.anim.advance(0.0)   # Pose einfrieren, sonst T-Pose
+		_figur.anim.active = false
 
 ## Nach Feierabend geht der Budenbesitzer heim: weg, Bude zu (Ziele stehen still).
 ## Morgens (nach dem Schlafen) ist er wieder da. GameManager._apply_daylight.

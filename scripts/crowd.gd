@@ -335,11 +335,16 @@ func _process(delta: float) -> void:
 ## wenn das Bild ohnehin schon lang dauert.
 const BAU_MS := 10.0
 const BAU_PAUSE_AB := 0.05
+## Auch bei zähen Bildern wenigstens alle 0,3 s einen Besucher, sonst füllt sich die Kirmes nie
+const BAU_NOTFALL := 0.3
+var _bau_wartet := 0.0
 
 func _sync_step(delta: float) -> void:
 	var t0 := Time.get_ticks_usec()
 	var gebaut := 0
-	if _visitors.size() < _target and delta < BAU_PAUSE_AB:
+	_bau_wartet += delta
+	if _visitors.size() < _target and (delta < BAU_PAUSE_AB or _bau_wartet > BAU_NOTFALL):
+		_bau_wartet = 0.0
 		while _visitors.size() < _target and gebaut < 4:
 			if gebaut > 0 and float(Time.get_ticks_usec() - t0) / 1000.0 > BAU_MS:
 				break

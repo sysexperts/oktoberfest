@@ -6,10 +6,10 @@ extends Node3D
 
 const Figuren := preload("res://scripts/figuren.gd")
 const BesucherSperre := preload("res://scripts/besucher_sperre.gd")
-const LOD_DIST := 42.0      # weiter weg: Animation aus (Leistung)
+const LOD_DIST := 34.0      # weiter weg: Animation aus (Leistung)
 ## Noch weiter weg: gar nicht zeichnen. Dazwischen stehen Buden und Bäume,
 ## zu sehen sind so ferne Besucher kaum — gezeichnet wurden sie trotzdem.
-const SICHTBAR_BIS := 65.0
+const SICHTBAR_BIS := 55.0
 ## Veränderbar für Aufnahmen (Trailer zeichnet alle)
 static var sichtbar_bis := SICHTBAR_BIS
 const TURN_SPEED := 6.0

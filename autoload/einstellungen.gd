@@ -648,8 +648,19 @@ func speichern() -> void:
 		cfg.set_value("tasten", aktion, tasten[aktion])
 	cfg.save(PFAD)
 
+## Erster Start (noch keine gespeicherte Stufe): Grafikstufe nach Grafikkarte wählen.
+## Integrierte Grafik → Niedrig, dedizierte → Hoch, unbekannt → Mittel.
+func _auto_grafik() -> int:
+	match RenderingServer.get_video_adapter_type():
+		RenderingDevice.DEVICE_TYPE_INTEGRATED_GPU:
+			return 0
+		RenderingDevice.DEVICE_TYPE_DISCRETE_GPU:
+			return 2
+	return 1
+
 func _lade() -> void:
 	var cfg := ConfigFile.new()
+	grafik = _auto_grafik()
 	if cfg.load(PFAD) != OK:
 		return
 	sprache = str(cfg.get_value("allgemein", "sprache", sprache))

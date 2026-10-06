@@ -1,8 +1,8 @@
 extends Node
 ## Grafikstufe (Plan 4.4) — schaltet die teuren Dinge je nach Einstellung:
-##   Niedrig: 120 Besucher, jedes dritte Kirmeslicht, kein Glow, Nebel, SSAO,
+##   Niedrig: 90 Besucher, jedes dritte Kirmeslicht, kein Glow, Nebel, SSAO,
 ##            keine Farbkorrektur, harte Schatten, kein Detail-Shader, kein Bildfilter
-##   Mittel:  250 Besucher, zwei von drei Lichtern, Glow, Nebel, Farbkorrektur,
+##   Mittel:  200 Besucher, zwei von drei Lichtern, Glow, Nebel, Farbkorrektur,
 ##            weiche Schatten, Detail-Shader und Bildfilter, kein SSAO
 ##   Hoch:    alles, wie gebaut, dazu SSIL
 ## Kantenglättung: Niedrig keine, Mittel FXAA (rund 5 % GPU), Hoch MSAA 2× plus FXAA
@@ -14,7 +14,13 @@ extends Node
 ## Detail-Shader als zweiter Durchgang auf Kirmes-, Zelt- und Tischmaterialien.
 ## Werte messen: tools/grafik_messen.tscn. Liegt als Knoten in main.tscn.
 
-const BESUCHER := [150, 300, 450]
+const BESUCHER := [90, 200, 320]
+## Sichtweite der Kleinteile (scripts/sichtweite.gd) je Stufe: auf schwächerer Grafik früher ausblenden
+const SICHT_FAKTOR := [0.55, 0.8, 1.0]
+## Schattenstufen der Sonne: Niedrig eine, Mittel zwei, Hoch vier (Schatten zeichnen die Karte mehrfach neu)
+const SCHATTEN_STUFEN := [DirectionalLight3D.SHADOW_ORTHOGONAL, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS]
+const SCHATTEN_WEITE := [50.0, 80.0, 0.0]
+var _schatten_weite0 := -1.0
 ## Ab dieser Entfernung blenden Kirmeslichter aus (0 = nie)
 const LICHT_AUSBLENDEN := [25.0, 45.0, 0.0]
 const DETAIL := preload("res://assets/shader/detail.gdshader")
@@ -79,6 +85,11 @@ func anwenden() -> void:
 	var s := get_node_or_null(sonne) as DirectionalLight3D
 	if s:
 		s.light_angular_distance = SONNE_WINKEL if stufe >= 1 else 0.0
+		s.directional_shadow_mode = SCHATTEN_STUFEN[stufe]
+		if _schatten_weite0 < 0.0:
+			_schatten_weite0 = s.directional_shadow_max_distance
+		s.directional_shadow_max_distance = SCHATTEN_WEITE[stufe] if SCHATTEN_WEITE[stufe] > 0.0 else _schatten_weite0
+	_sichtweiten(SICHT_FAKTOR[stufe])
 	var f := get_node_or_null(bildfilter) as CanvasLayer
 	if f:
 		f.visible = stufe >= 1
@@ -94,6 +105,19 @@ func anwenden() -> void:
 		l.distance_fade_enabled = LICHT_AUSBLENDEN[stufe] > 0.0
 		l.distance_fade_begin = LICHT_AUSBLENDEN[stufe]
 		l.distance_fade_length = 10.0
+
+## Sichtweiten der Kleinteile mit dem Faktor der Stufe skalieren (Ursprungswert steht in der Meta "vr0")
+func _sichtweiten(faktor: float) -> void:
+	var wurzel := get_node_or_null(kirmes)
+	if wurzel == null:
+		return
+	for g in wurzel.find_children("*", "GeometryInstance3D", true, false):
+		var gi := g as GeometryInstance3D
+		if gi.visibility_range_end <= 0.0 and not gi.has_meta("vr0"):
+			continue
+		if not gi.has_meta("vr0"):
+			gi.set_meta("vr0", gi.visibility_range_end)
+		gi.visibility_range_end = float(gi.get_meta("vr0")) * faktor
 
 func lichter_gesamt() -> int:
 	return _lichter.size()
