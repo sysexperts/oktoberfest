@@ -1,0 +1,180 @@
+[
+ {
+  "id": "M1-01",
+  "absender": "HORST",
+  "betreff": "MAIL_M1_01_BETREFF",
+  "text": "MAIL_M1_01_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M1-02",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M1_02_BETREFF",
+  "text": "MAIL_M1_02_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M1-03",
+  "absender": "HORST",
+  "betreff": "MAIL_M1_03_BETREFF",
+  "text": "MAIL_M1_03_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-01",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_01_BETREFF",
+  "text": "MAIL_M2_01_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-02",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_02_BETREFF",
+  "text": "MAIL_M2_02_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-03",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_03_BETREFF",
+  "text": "MAIL_M2_03_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-04",
+  "absender": "SCHNEIDER",
+  "betreff": "MAIL_M2_04_BETREFF",
+  "text": "MAIL_M2_04_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-05",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_05_BETREFF",
+  "text": "MAIL_M2_05_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-06",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M2_06_BETREFF",
+  "text": "MAIL_M2_06_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_06_A1",
+    "folge": {
+     "flag": "konrad_angebot_nein"
+    }
+   },
+   {
+    "text": "MAIL_M2_06_A2",
+    "folge": {
+     "flag": "konrad_angebot_vielleicht"
+    }
+   },
+   {
+    "text": "MAIL_M2_06_A3",
+    "folge": {
+     "flag": "konrad_angebot_vergiss"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M2-07",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M2_07_BETREFF",
+  "text": "MAIL_M2_07_TEXT",
+  "antworten": []
+ },
+ {
+  "id": "M2-08",
+  "absender": "STEFAN",
+  "betreff": "MAIL_M2_08_BETREFF",
+  "text": "MAIL_M2_08_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_08_A1",
+    "folge": {
+     "mitarbeiter_fehlt_tage": 2
+    }
+   },
+   {
+    "text": "MAIL_M2_08_A2",
+    "folge": {
+     "lohn_faktor_tag": 1.2
+    }
+   }
+  ],
+  "mehrfach": true
+ },
+ {
+  "id": "M2-13",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_13_BETREFF",
+  "text": "MAIL_M2_13_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_13_A1",
+    "folge": {
+     "quest_annehmen": "N-2-1"
+    }
+   },
+   {
+    "text": "MAIL_M2_13_A2",
+    "folge": {
+     "quest_ablehnen": "N-2-1"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M2-14",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_14_BETREFF",
+  "text": "MAIL_M2_14_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_14_A1",
+    "folge": {
+     "quest_annehmen": "N-2-2"
+    }
+   },
+   {
+    "text": "MAIL_M2_14_A2",
+    "folge": {
+     "quest_ablehnen": "N-2-2"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M2-16",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_16_BETREFF",
+  "text": "MAIL_M2_16_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_16_A1",
+    "folge": {
+     "quest_annehmen": "N-2-5"
+    }
+   },
+   {
+    "text": "MAIL_M2_16_A2",
+    "folge": {
+     "quest_ablehnen": "N-2-5"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-VERFALLEN",
+  "absender": "HORST",
+  "betreff": "MAIL_M_VERFALLEN_BETREFF",
+  "text": "MAIL_M_VERFALLEN_TEXT",
+  "antworten": [],
+  "mehrfach": true
+ }
+]

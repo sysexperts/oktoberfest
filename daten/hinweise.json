@@ -1,0 +1,22 @@
+[
+ {
+  "id": "H-DESKTOP",
+  "ausloeser": "desktop_erstmals",
+  "text": "HINT_DESKTOP_1"
+ },
+ {
+  "id": "H-PFUETZE",
+  "ausloeser": "erste_pfuetze",
+  "text": "HINT_PFUETZE_1"
+ },
+ {
+  "id": "H-BLASE",
+  "ausloeser": "erste_blase",
+  "text": "HINT_BLASE_1"
+ },
+ {
+  "id": "H-PERSONAL",
+  "ausloeser": "personal_app_erstmals",
+  "text": "HINT_PERSONAL_APP"
+ }
+]

@@ -1,0 +1,359 @@
+[
+ {
+  "id": "1.0",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_0_TITLE",
+  "text": "Q_1_0_TEXT",
+  "ausloeser": {
+   "start": true
+  },
+  "bedingung": {
+   "flag": "horst_zusage"
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.1",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_1_TITLE",
+  "text": "Q_1_1_TEXT",
+  "ausloeser": {
+   "nach": "1.0"
+  },
+  "bedingung": {
+   "mw": "zelt_stufe",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.2",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_2_TITLE",
+  "text": "Q_1_2_TEXT",
+  "ausloeser": {
+   "nach": "1.1"
+  },
+  "bedingung": {
+   "mw": "zelt_sauber",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.3",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_3_TITLE",
+  "text": "Q_1_3_TEXT",
+  "ausloeser": {
+   "nach": "1.2",
+   "mail": "M1-01"
+  },
+  "bedingung": {
+   "mw": "tische",
+   "min": 2
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.4",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_4_TITLE",
+  "text": "Q_1_4_TEXT",
+  "ausloeser": {
+   "nach": "1.3"
+  },
+  "bedingung": {
+   "mw": "bier_bestellt",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.5",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_5_TITLE",
+  "text": "Q_1_5_TEXT",
+  "ausloeser": {
+   "nach": "1.4"
+  },
+  "bedingung": {
+   "mw": "lieferung_da",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.6",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_6_TITLE",
+  "text": "Q_1_6_TEXT",
+  "ausloeser": {
+   "nach": "1.5"
+  },
+  "bedingung": {
+   "mw": "pakete_eingeraeumt",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.7",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_7_TITLE",
+  "text": "Q_1_7_TEXT",
+  "ausloeser": {
+   "nach": "1.6"
+  },
+  "bedingung": {
+   "mw": "geschlafen",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.8",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_8_TITLE",
+  "text": "Q_1_8_TEXT",
+  "ausloeser": {
+   "nach": "1.7"
+  },
+  "bedingung": {
+   "mw": "gaeste_bedient",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
+  "id": "1.9",
+  "typ": "haupt",
+  "kapitel": 1,
+  "titel": "Q_1_9_TITLE",
+  "text": "Q_1_9_TEXT",
+  "ausloeser": {
+   "nach": "1.8"
+  },
+  "bedingung": {
+   "mw": "feierabend",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {},
+  "kapitelabschluss": 1,
+  "mail_erfuellt": [
+   "M1-02",
+   "M1-03",
+   "M2-01"
+  ]
+ },
+ {
+  "id": "2.1",
+  "typ": "haupt",
+  "kapitel": 2,
+  "titel": "Q_2_1_TITLE",
+  "text": "Q_2_1_TEXT",
+  "ausloeser": {
+   "nach": "1.9",
+   "kapitel": 2
+  },
+  "bedingung": {
+   "mw": "personal_kellner",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "geld": 100
+  },
+  "mail_erfuellt": [
+   "M2-02"
+  ]
+ },
+ {
+  "id": "2.2",
+  "typ": "haupt",
+  "kapitel": 2,
+  "titel": "Q_2_2_TITLE",
+  "text": "Q_2_2_TEXT",
+  "ausloeser": {
+   "nach": "2.1"
+  },
+  "bedingung": {
+   "mw": "lizenzen",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {},
+  "mail_erfuellt": []
+ },
+ {
+  "id": "2.3",
+  "typ": "haupt",
+  "kapitel": 2,
+  "titel": "Q_2_3_TITLE",
+  "text": "Q_2_3_TEXT",
+  "ausloeser": {
+   "nach": "2.2"
+  },
+  "bedingung": {
+   "mw": "toilette",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "geld": 150
+  },
+  "mail_erfuellt": [
+   "M2-03"
+  ]
+ },
+ {
+  "id": "2.4",
+  "typ": "haupt",
+  "kapitel": 2,
+  "titel": "Q_2_4_TITLE",
+  "text": "Q_2_4_TEXT",
+  "ausloeser": {
+   "nach": "2.3"
+  },
+  "bedingung": {
+   "mw": "kuenstler",
+   "min": 1
+  },
+  "frist_tage": 0,
+  "belohnung": {
+   "beliebtheit": 5
+  },
+  "mail_erfuellt": [
+   "M2-04"
+  ]
+ },
+ {
+  "id": "2.5",
+  "typ": "haupt",
+  "kapitel": 2,
+  "titel": "Q_2_5_TITLE",
+  "text": "Q_2_5_TEXT",
+  "ausloeser": {
+   "nach": "2.4"
+  },
+  "bedingung": {
+   "mw": "schulden_bezahlt",
+   "min": 1500
+  },
+  "frist_tage": 0,
+  "belohnung": {},
+  "mail_erfuellt": [
+   "M2-07"
+  ]
+ },
+ {
+  "id": "2.6",
+  "typ": "haupt",
+  "kapitel": 2,
+  "titel": "Q_2_6_TITLE",
+  "text": "Q_2_6_TEXT",
+  "ausloeser": {
+   "nach": "2.5"
+  },
+  "bedingung": {
+   "mw": "zelt_stufe",
+   "min": 2
+  },
+  "frist_tage": 0,
+  "belohnung": {},
+  "kapitelabschluss": 2,
+  "mail_erfuellt": [
+   "M2-05"
+  ]
+ },
+ {
+  "id": "N-2-1",
+  "typ": "neben",
+  "kapitel": 2,
+  "titel": "Q_N-2-1_TITLE",
+  "text": "Q_N-2-1_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 2,
+    "chance": 0.5
+   },
+   "mail": "M2-13"
+  },
+  "bedingung": {
+   "mw": "gaeste_heute",
+   "min": 30
+  },
+  "frist_tage": 3,
+  "belohnung": {
+   "geld": 200
+  }
+ },
+ {
+  "id": "N-2-2",
+  "typ": "neben",
+  "kapitel": 2,
+  "titel": "Q_N-2-2_TITLE",
+  "text": "Q_N-2-2_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 2,
+    "chance": 0.5
+   },
+   "mail": "M2-14"
+  },
+  "bedingung": {
+   "flag": "pfuetzenfreier_tag"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "beliebtheit": 3
+  }
+ },
+ {
+  "id": "N-2-5",
+  "typ": "neben",
+  "kapitel": 2,
+  "titel": "Q_N-2-5_TITLE",
+  "text": "Q_N-2-5_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 2,
+    "chance": 0.4
+   },
+   "mail": "M2-16"
+  },
+  "bedingung": {
+   "mw": "weizen_heute",
+   "min": 25
+  },
+  "frist_tage": 3,
+  "belohnung": {
+   "geld": 150
+  }
+ }
+]

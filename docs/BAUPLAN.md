@@ -39,7 +39,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 |---|---|---|
 | Namen angleichen: **Konrad**, **Festleiter Horst** (in EN/TR übersetzen), Stammgäste **Ludwig, Veronika, Katharina** | `locale/texte.csv`, `game_manager.gd` (STAMMGAESTE), Zeitung | S |
 | Saison und Finale vollständig ausbauen (toter Code, Taste K, Abschlussbrief am Saisonende, Saison-Meilensteine) | `wirtschaft.gd`, `kalender.gd`, `game_manager.gd` | S |
-| Datenformat für Quests und Mails festlegen (CSV oder JSON, mit Schlüsseln der Übersetzungstabelle) | neu `data/` | S |
+| Datenformat für Quests und Mails festlegen (CSV oder JSON, mit Schlüsseln der Übersetzungstabelle) | neu `daten/` | S |
 | Tutorial-Doppelbrief beheben (Vorarbeit für Kapitel 1) | `intro.gd`, `npc_festleiter.gd` | S |
 
 **Test:** Spiel startet, Tutorial läuft wie vorher, keine Saison-Meldung mehr.

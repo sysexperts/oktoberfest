@@ -1,56 +1,65 @@
-# Datenformat für Quests und Mails (P0, Entwurf)
+# Datenformat für Quests, Mails und Hinweise (P1, umgesetzt)
 
-Stand 06.10.2026. Quests und Mails liegen als **JSON-Dateien** unter `data/` (neu, wird in P1 angelegt). Alle Texte stehen **nicht** in den JSON-Dateien, sondern in `locale/texte.csv` unter einem Schlüssel (DE, EN, TR, Du/Ihr wie bisher mit `_DU`/`_IHR`). Das JSON enthält nur Struktur, Auslöser und Bedingungen.
+Stand 06.10.2026. Die Daten liegen als **JSON** unter `daten/` (`quests.json`, `mails.json`, `hinweise.json`) und werden von `scripts/story/daten.gd` geladen. Die Logik steht in `scripts/story/story.gd` (Node „Story" in `scenes/main.tscn`).
+Alle **Texte** stehen nicht im JSON, sondern in `locale/texte.csv` unter Schlüsseln (DE, EN, TR, Du/Ihr mit `_DU`/`_IHR`). Das JSON hat nur Struktur, Auslöser und Bedingungen.
+Das System ist mit `aktiv = false` abgeschaltet (das alte Tutorial läuft weiter) und wird in **P3** eingeschaltet.
 
-## Quests (`data/quests.json`)
+## Quests (`daten/quests.json`)
 
 ```json
 {
   "id": "2.1",
-  "typ": "haupt",            // haupt | neben | gefallen | kirmes
+  "typ": "haupt",                 // haupt | neben | gefallen | kirmes
   "kapitel": 2,
-  "titel": "QUEST_2_1_TITLE",
-  "text": "QUEST_2_1_TEXT",
-  "ausloeser": {"nach": "1.9", "mail": "M2-01"},   // Quest erfüllt, Zeitpunkt (abend/morgen), zufällig, Ereignis
-  "bedingung": {"art": "personal", "rolle": "kellner", "anzahl": 1},
-  "frist_tage": 0,           // 0 = keine Frist (Hauptquests)
-  "belohnung": {"geld": 100, "beliebtheit": 0, "gegenstand": ""},
-  "danach": ["2.2"]
+  "titel": "Q_2_1_TITLE",
+  "text": "Q_2_1_TEXT",
+  "ausloeser": {"nach": "1.9", "kapitel": 2},
+  "bedingung": {"mw": "personal_kellner", "min": 1},
+  "frist_tage": 0,                // 0 = keine Frist (Hauptquests haben nie eine)
+  "belohnung": {"geld": 100},     // geld, beliebtheit
+  "mail_erfuellt": ["M2-02"],     // Mails, die nach Erfüllung kommen
+  "kapitelabschluss": 2           // optional: erfüllt = Kapitel 2 ist zu Ende, Kapitel 3 beginnt
 }
 ```
 
-**Bedingungsarten** (Messgrößen, die der Server prüft): `personal`, `lizenz`, `toilette`, `kuenstler`, `zelt_stufe`, `schulden_abbezahlt`, `gaeste_bedient`, `umsatz`, `serviert_sorte`, `sauber_tag`, `gespraech`, `gegenstand_geliefert`, `wettschleppen`, `sud_gebraut`, `sud_qualitaet`, `sabotage_erledigt`, `person_getragen_zu`, `ort_betreten`, `casino_runde`, `fest_ausgerichtet`.
+**Auslöser** (alle genannten Schlüssel müssen zutreffen): `{"start": true}` · `{"nach": "1.9"}` (Quest erfüllt) · `{"kapitel": 2}` · `{"flag": "name"}` · `{"mw": "schluessel", "min": n}` · `{"zufall": {"ab_kapitel": 2, "bis_kapitel": 2, "chance": 0.5}}` (täglich gewürfelt, nur Neben, Gefallen, Kirmes) · `{"mail": "M1-01"}` (Mail beim Freischalten senden).
 
-## Mails (`data/mails.json`)
+**Bedingungen:** `{"mw": "zelt_stufe", "min": 2}` (Messwert aus dem Spiel) · `{"flag": "geschlafen"}` (Ereignis gemeldet, bei Zahl `"min"`) · `{"quest": "1.9"}` · `{"alle": [...]}` · `{"einer": [...]}` · `{"nicht": {...}}`.
+
+**Messwerte** (`_story_messwerte()` im GameManager): `zelt_stufe`, `tische`, `personal_koch/kellner/reinigung/zapfer`, `lizenzen`, `toilette`, `kuenstler`, `bier_bestellt`, `lieferung_da`, `pakete_eingeraeumt`, `geschlafen`, `gaeste_bedient`, `gaeste_heute`, `feierabend`, `zelt_sauber`, `schulden_bezahlt`, `schulden_rest`. Neue Messwerte kommen mit den späteren Phasen dazu.
+**Ereignisse** (`story.ereignis("name", wert)`): z. B. `horst_zusage`, `pfuetzenfreier_tag`.
+
+**Zustände:** `angeboten` (Neben/Gefallen/Kirmes, wartet auf Antwort) · `offen` · `erfuellt` · `verfallen`. Hauptquests starten sofort als `offen`.
+**Limits:** eine Hauptquest und höchstens drei andere gleichzeitig offen (`MAX_HAUPT`, `MAX_ANDERE`), höchstens zwei Angebote warten (`MAX_ANGEBOTE`).
+**Fristen:** `frist_tage` zählt ab Angebot in Spieltagen herunter, bei 0 verfällt die Quest und die Mail `M-VERFALLEN` („Zu spät …") kommt.
+
+## Mails (`daten/mails.json`)
 
 ```json
 {
-  "id": "M2-08",
-  "absender": "STEFAN",          // Schlüssel für den Absendernamen (ABSENDER_STEFAN)
-  "betreff": "MAIL_M2_08_BETREFF",
-  "text": "MAIL_M2_08_TEXT",
-  "ausloeser": {"art": "ereignis", "name": "krank"},
+  "id": "M2-13",
+  "absender": "HORST",             // Schlüssel für den Absender (ABSENDER_HORST)
+  "betreff": "MAIL_M2_13_BETREFF",
+  "text": "MAIL_M2_13_TEXT",
   "antworten": [
-    {"text": "MAIL_M2_08_A1", "folge": {"mitarbeiter_fehlt_tage": 2}},
-    {"text": "MAIL_M2_08_A2", "folge": {"lohn_faktor": 1.2}}
-  ]
+    {"text": "MAIL_M2_13_A1", "folge": {"quest_annehmen": "N-2-1"}},
+    {"text": "MAIL_M2_13_A2", "folge": {"quest_ablehnen": "N-2-1"}}
+  ],
+  "mehrfach": true                 // optional: darf mehrfach kommen
 }
 ```
 
-- `antworten` leer = keine Antwort nötig.
-- Folgen sind Schlüssel mit festem Verhalten im Code (z. B. `geld`, `lohn_faktor`, `quest_starten`, `beliebtheit`).
+**Folgen einer Antwort:** `quest_annehmen`, `quest_ablehnen`, `quest_starten`, `flag`, `mail`, `kapitel` (von der Story selbst), `geld`, `beliebtheit` (Belohnung, GameManager) und alle anderen Schlüssel (`mitarbeiter_fehlt_tage`, `lohn_faktor_tag` …) gehen an `story_folge()` im GameManager und kommen in späteren Phasen.
 
-## Hinweise im Moment (`data/hinweise.json`)
+## Hinweise (`daten/hinweise.json`)
 
 ```json
 {"id": "H-PFUETZE", "ausloeser": "erste_pfuetze", "text": "HINT_PFUETZE_1"}
 ```
+`story.hinweis_zeigen("erste_pfuetze")` gibt den Text-Schlüssel genau einmal zurück.
 
-## Absender (`ABSENDER_*` in `locale/texte.csv`)
+## Netz und Speichern
+Der Server rechnet. Der Stand (Kapitel, Quests, Post, Hinweise, Flaggen) steht im Spielstand unter `story` und im Büro-Zustand (`net_meta`) für die Clients. Antworten auf Mails laufen über `net_post_antwort(nr, antwort)` und `net_post_gelesen(nr)` am Server.
 
-HORST („Festleiter Horst"), KONRAD, SCHNEIDER („Herr Schneider, Bank"), WAGNER („Frau Wagner, Amt"), MAIER („Dieter Maier, Brauerei"), GERHARD („Gerhard, Bräumeister"), STEFAN, SABINE, WETTERDIENST.
-
-## Regeln
-- IDs wie in `docs/QUEST_LISTE.md` und `docs/MAIL_LISTE.md`.
-- Beträge in den Dateien sind Platzhalter, das Balancing legt sie fest.
-- Keine neuen `class_name`, Laden per `preload` in einem Skript `scripts/daten.gd` (P1).
+## Test
+`godot --headless --path . res://tools/test_story.tscn` (Kapitel 1 bis 2, Zufallsangebote, Fristen, Mails, Speichern, Hinweise, Datenprüfung).

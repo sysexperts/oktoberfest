@@ -36,6 +36,7 @@
 [ext_resource type="PackedScene" path="res://scenes/muellplatz.tscn" id="108_muellplatz"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zeitung.tscn" id="109_zeitung"]
 [ext_resource type="PackedScene" path="res://scenes/ui/kalender.tscn" id="110_kalender"]
+[ext_resource type="Script" path="res://scripts/story/story.gd" id="111_story"]
 
 [sub_resource type="ShaderMaterial" id="SkyMat"]
 shader = ExtResource("95_himmel")
@@ -477,3 +478,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 0, 13.2)
 [node name="Zeitung" parent="." instance=ExtResource("109_zeitung")]
 
 [node name="Kalender" parent="." instance=ExtResource("110_kalender")]
+
+[node name="Story" type="Node" parent="."]
+script = ExtResource("111_story")

@@ -513,6 +513,8 @@ var _complaints := 0
 var _left_guests := 0
 # Tutorial-Fortschritt
 var _quest_step := 0
+## Kapitel, Quests, Post und Hinweise (scripts/story/story.gd, Plan P1). Abgeschaltet (aktiv = false), bis P3 das Tutorial umstellt.
+@onready var _story: Node = $Story
 ## Einleitung gelaufen und dem Festleiter zum Zelt gefolgt (Schritt 0)
 var _folge_geschafft := false
 var _quest_served_once := false
@@ -954,6 +956,7 @@ func _save_game() -> void:
 		"toilet": _has_toilet,
 		"quest": _quest_step,
 		"folge": _folge_geschafft,
+		"story": _story.speichern(),
 		"quest_version": QUEST_VERSION,
 		"ever_artist": _ever_artist,
 		"stats": _stats,
@@ -1061,6 +1064,7 @@ func _load_game() -> bool:
 	_has_toilet = bool(d.get("toilet", false))
 	_quest_step = int(d.get("quest", 0))
 	_folge_geschafft = bool(d.get("folge", false))
+	_story.laden(d.get("story", {}))
 	_dreck_nachlegen = true   # Flecken werden nicht gespeichert — im Putzschritt neu auslegen
 	# Alte Stände: Schritte ab 3 sind durch die zwei neuen Liefer-Schritte eins weiter
 	var quest_alt := int(d.get("quest_version", 1))
@@ -1901,6 +1905,64 @@ func _reserve_ok(cost: int) -> bool:
 		return true
 	_popup_to_sender("POPUP_RESERVE", [_eur(GOODS_RESERVE)])
 	return false
+
+# ---- Story (Kapitel, Quests, Post) ----
+## Messwerte, gegen die scripts/story/story.gd die Quest-Bedingungen prüft (Schlüssel siehe docs/DATENFORMAT.md)
+func _story_messwerte() -> Dictionary:
+	var lizenzen := 0
+	for v in _lic.values():
+		if bool(v):
+			lizenzen += 1
+	return {
+		"zelt_stufe": _tent_stage, "tische": _active_count,
+		"personal_koch": _staff_anzahl(ROLE_KOCH), "personal_kellner": _staff_anzahl(ROLE_KELLNER),
+		"personal_reinigung": _staff_anzahl(ROLE_REINIGUNG), "personal_zapfer": _staff_anzahl(ROLE_ZAPFER),
+		"lizenzen": lizenzen, "toilette": _has_toilet, "kuenstler": _ever_artist,
+		"bier_bestellt": int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty(),
+		"lieferung_da": not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0,
+		"pakete_eingeraeumt": int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty(),
+		"geschlafen": _shift_num >= 1,
+		"gaeste_bedient": maxi(int(_stats.get("served", 0)), _served),
+		"gaeste_heute": _served,
+		"feierabend": _shift_num >= 1 and _phase == Phase.INTERMISSION,
+		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
+		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": bank_rest(),
+	}
+
+func _staff_anzahl(role: int) -> int:
+	var n := 0
+	for s in _staff_sim.values():
+		if int(s.role) == role:
+			n += 1
+	return n
+
+## Belohnung einer Quest oder Mail-Antwort (Server). Schlüssel: geld, beliebtheit
+func story_belohnung(b: Dictionary) -> void:
+	if not multiplayer.is_server():
+		return
+	if b.has("geld"):
+		Game.add_money(int(b["geld"]))
+	if b.has("beliebtheit"):
+		_popularity = clampf(_popularity + float(b["beliebtheit"]), POP_MIN, 100.0)
+
+## Folgen, die die Story nicht selbst kennt (mitarbeiter_fehlt_tage, lohn_faktor_tag …) — kommen in späteren Phasen
+func story_folge(_f: Dictionary) -> void:
+	pass
+
+## Antwort auf eine Mail im Postfach (Server entscheidet, alle sehen das Ergebnis über den Büro-Zustand)
+@rpc("any_peer", "reliable", "call_local")
+func net_post_antwort(nr: int, antwort: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if _story.post_antworten(nr, antwort):
+		_broadcast_meta()
+
+@rpc("any_peer", "reliable", "call_local")
+func net_post_gelesen(nr: int) -> void:
+	if not multiplayer.is_server():
+		return
+	_story.post_lesen(nr)
+	_broadcast_meta()
 
 # ---- Tutorial ----
 ## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
@@ -3643,6 +3705,7 @@ func net_sleep() -> void:
 func _tag_starten() -> void:
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
 	_stats.days += 1
+	_story.tag_wechsel(_day)
 	_broadcast_meta()
 	net_sleep_fade.rpc(_day)
 	_spieler_zum_wohnwagen()
@@ -5962,10 +6025,12 @@ func _buero_state() -> Dictionary:
 		"duell_gewonnen": _duell_saison == _saison_nr,
 		"tagesziel": _tagesziel,
 		"zelt_name": _zelt_name,
+		"story": _story.netz(),
 	}
 
 func _broadcast_meta() -> void:
 	_check_quest()
+	_story.pruefen(_story_messwerte(), _day)
 	net_meta.rpc(_phase, _day, _tent_stage, _active_count, _quest_step, _buero_state())
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
 
@@ -5981,6 +6046,8 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_klo_anzeigen()
 	_zeltname_anzeigen()
 	_quest_step = quest_step   # auch bei Clients — der Zielmarker braucht ihn
+	if not multiplayer.is_server():
+		_story.netz_setzen(buero.get("story", {}))
 	_theke_anzeigen(buero.get("lic", {}))
 	_muellplatz_zeigen(int(buero.get("muell", 0)))
 	_haelt_deko = buero.get("haelt", {})
