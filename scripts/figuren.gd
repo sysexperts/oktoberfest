@@ -266,6 +266,21 @@ static func look_huber() -> Dictionary:
 	l["hose_muster"] = Color(0.3, 0.28, 0.28).to_html(false)
 	return l
 
+## Schwarzmarkt-Haendler Gustav: Filzhut, Schnauzer, langer dunkler Janker, zwielichtig
+static func look_gustav() -> Dictionary:
+	var l := npc_look(hash("gustav"), 9, "m")
+	l["haar"] = Color.from_hsv(0.07, 0.3, 0.2).to_html(false)
+	l["bart"] = "schnauzer"
+	l["hut"] = "filzhut"
+	l["hut_farbe"] = Color(0.12, 0.1, 0.09).to_html(false)
+	l["emotion"] = "skeptisch"
+	Look._kleid_setzen(l, "jacke", "jacke_janker")
+	l["jacke_farbe"] = Color(0.16, 0.16, 0.18).to_html(false)
+	l["jacke_muster"] = Color(0.3, 0.3, 0.33).to_html(false)
+	Look._kleid_setzen(l, "schuhe", "schuh_halb")
+	l["schuhe_farbe"] = Color(0.07, 0.06, 0.06).to_html(false)
+	return l
+
 ## Frau Wagner vom Amt (Hygienekontrolle): Dutt, Lesebrille, weiße Bluse, dunkle Weste
 static func look_wagner() -> Dictionary:
 	var l := npc_look(hash("wagner"), 5, "w")

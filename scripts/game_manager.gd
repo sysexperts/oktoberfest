@@ -409,6 +409,11 @@ const FAKE_MAX := 4
 const FAKE_POP := 1.5
 var _fakes: Array = []   # {"id", "autor", "text" (1-3), "tag"}
 var _fake_next := 1
+## Schwarzmarkt (Haendler Gustav, ab Kapitel 3): Tarnung und Werkzeuge fuer Streiche in Konrads Zelt
+const SAB_WAREN := {"mantel": 150, "komplett": 400, "fassbohrer": 120, "zange": 100, "stinkbombe": 80, "juckpulver": 90}
+var _sab_inv := {}          # Werkzeug-ID -> Anzahl
+var _tarnung_stufe := 0     # 0 keine, 1 Mantel, 2 Komplettset
+var _tarnung_an := false
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -985,7 +990,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1060,6 +1065,10 @@ func _load_game() -> bool:
 	if zut is Dictionary:
 		for art: String in _zutat.keys():
 			_zutat[art] = int((zut as Dictionary).get(art, 0))
+	var si: Variant = d.get("sab_inv", {})
+	_sab_inv = (si as Dictionary).duplicate() if si is Dictionary else {}
+	_tarnung_stufe = clampi(int(d.get("tarnung_stufe", 0)), 0, 2)
+	_tarnung_an = bool(d.get("tarnung_an", false))
 	var fk: Variant = d.get("fakes", [])
 	_fakes = (fk as Array).duplicate(true) if fk is Array else []
 	var gf: Variant = d.get("gaerfaesser", [])
@@ -6221,6 +6230,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an,
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -6917,6 +6927,41 @@ func _fakes_abend() -> void:
 		_fakes.append({"id": _fake_next, "autor": namen.pick_random() + " K.", "text": randi() % 3 + 1, "tag": _day})
 		_fake_next += 1
 		_melde("MSG_FAKE_NEU", [], 1)
+
+## Gustavs Koffer: Tarnung (Mantel, Komplettset) und Werkzeuge kaufen
+@rpc("any_peer", "reliable", "call_local")
+func net_sab_kauf(id: String) -> void:
+	if not multiplayer.is_server() or not SAB_WAREN.has(id):
+		return
+	if not _story.aktiv or _story.kapitel < 3:
+		return
+	var preis: int = SAB_WAREN[id]
+	if (id == "mantel" and _tarnung_stufe >= 1) or (id == "komplett" and _tarnung_stufe >= 2):
+		return   # schon vorhanden
+	if not _afford(preis):
+		_fehler("MSG_NO_MONEY", ["SAB_" + id.to_upper(), _eur(preis)])
+		return
+	Game.add_money(-preis)
+	match id:
+		"mantel":
+			_tarnung_stufe = maxi(_tarnung_stufe, 1)
+			_tarnung_an = true
+		"komplett":
+			_tarnung_stufe = 2
+			_tarnung_an = true
+		_:
+			_sab_inv[id] = int(_sab_inv.get(id, 0)) + 1
+	_stats["sab_gekauft"] = int(_stats.get("sab_gekauft", 0)) + 1
+	_melde("MSG_SAB_GEKAUFT", ["SAB_" + id.to_upper(), _eur(preis)], 2)
+	_broadcast_meta()
+
+## Tarnung an- oder ausziehen
+@rpc("any_peer", "reliable", "call_local")
+func net_tarnung_wechseln() -> void:
+	if not multiplayer.is_server() or _tarnung_stufe <= 0:
+		return
+	_tarnung_an = not _tarnung_an
+	_broadcast_meta()
 
 ## Spieler meldet eine Fake-Bewertung in der Social-App
 @rpc("any_peer", "reliable", "call_local")

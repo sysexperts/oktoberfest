@@ -2055,3 +2055,20 @@ SOCIAL_FAKE_2,Nur Ärger hier. Das Rote Zelt nebenan ist viel besser. Hingehen!,
 SOCIAL_FAKE_3,Eine Katastrophe. Ich warte seit drei Tagen auf mein Bier. Null Sterne wenn ich könnte.,A disaster. I have been waiting three days for my beer. Zero stars if I could.,Tam bir felaket. Üç gündür biramı bekliyorum. Yapabilsem sıfır yıldız verirdim.
 MSG_FAKE_NEU,Eine neue Ein-Sterne-Bewertung in der Social-App sieht verdächtig aus. Schau nach und melde sie!,A new one-star review in the social app looks suspicious. Check it and report it!,Sosyal uygulamadaki yeni tek yıldızlı yorum şüpheli görünüyor. Bak ve bildir!
 MSG_FAKE_GELOESCHT,Fake-Bewertung gemeldet und gelöscht. Beliebtheit +2 %,Fake review reported and deleted. Popularity +2 %,Sahte yorum bildirildi ve silindi. Popülerlik +%2
+HINT_GUSTAV,{interact} Mit Gustav reden,{interact} Talk to Gustav,{interact} Gustav ile konuş
+GUSTAV_NAME,Gustav,Gustav,Gustav
+GUSTAV_NOCH_NICHT,Kenn ich dich? Nein. Ich kenn dich nicht. Und ich weiß von nix.,Do I know you? No. I don't know you. And I know nothing.,Seni tanıyor muyum? Hayır. Seni tanımıyorum. Ve hiçbir şey bilmiyorum.
+GUSTAV_HALLO,"Pst. Du hast mich nie gesehen. Schau in meinen Koffer, aber red leise. Bezahlt wird bar.","Psst. You never saw me. Take a look in my case, but keep your voice down. Cash only.",Pst. Beni hiç görmedin. Çantama bak ama sessiz konuş. Ödeme nakit.
+SAB_TITEL,Gustavs Koffer,Gustav's case,Gustav'ın çantası
+SAB_INFO,Kasse: %d €,Cash: %d €,Kasa: %d €
+SAB_BESITZ,hast: %d,owned: %d,sende: %d
+SAB_MANTEL,Mantel,Coat,Palto
+SAB_KOMPLETT,Komplettset mit Maske,Full disguise with mask,Maskeli tam kostüm
+SAB_FASSBOHRER,Fassbohrer,Barrel drill,Fıçı matkabı
+SAB_ZANGE,Zange,Pliers,Pense
+SAB_STINKBOMBE,Stinkbombe,Stink bomb,Kokulu bomba
+SAB_JUCKPULVER,Juckpulver,Itching powder,Kaşıntı tozu
+SAB_TARNUNG_AN,Tarnung ausziehen,Take off disguise,Kılığı çıkar
+SAB_TARNUNG_AUS,Tarnung anziehen,Put on disguise,Kılığı giy
+SAB_SCHLIESSEN,Schließen (Esc),Close (Esc),Kapat (Esc)
+MSG_SAB_GEKAUFT,Bei Gustav gekauft: %s für %s,Bought from Gustav: %s for %s,Gustav'dan alındı: %s için %s
