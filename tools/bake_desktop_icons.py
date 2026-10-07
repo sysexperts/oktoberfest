@@ -193,6 +193,15 @@ def zeichen_wagen(d, farbe):
     d.line([(130, 560), (200, 560)], fill=WEISS, width=24)
 
 
+def zeichen_ausbau(d, farbe):
+    # Hammer und Zelt
+    d.polygon([(512, 250), (260, 560), (764, 560)], fill=WEISS)
+    d.rounded_rectangle((300, 560, 724, 760), radius=24, fill=WEISS)
+    d.polygon([(512, 560), (440, 760), (584, 760)], fill=farbe + (255,))
+    d.line([(512, 250), (512, 170)], fill=WEISS, width=22)
+    d.polygon([(512, 170), (620, 200), (512, 230)], fill=WEISS)
+
+
 ICONS = [
     ('mail', 'quadrat', '#4f9bff', '#1b48c4', zeichen_mail),
     ('shop', 'kreis', '#ffa04d', '#e0501a', zeichen_shop),
@@ -206,6 +215,7 @@ ICONS = [
     ('social', 'kreis', '#ff7cc4', '#b81a78', zeichen_social),
     ('fest', 'sechseck', '#ffd34a', '#d6361e', zeichen_fest),
     ('wagen', 'kreis', '#8fd0a0', '#2c7a52', zeichen_wagen),
+    ('ausbau', 'schild', '#ffb347', '#a8431a', zeichen_ausbau),
 ]
 
 for name, form, oben, unten, zeichner in ICONS:

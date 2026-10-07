@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_social.png" id="i_social"]
 [ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_fest.png" id="i_fest"]
 [ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_wagen.png" id="i_wagen"]
+[ext_resource type="Texture2D" path="res://assets/ui/desktop/icon_ausbau.png" id="i_ausbau"]
 
 [sub_resource type="StyleBoxFlat" id="Leer"]
 bg_color = Color(0, 0, 0, 0)
@@ -765,6 +766,32 @@ vertical_icon_alignment = 0
 expand_icon = true
 autowrap_mode = 3
 
+
+[node name="IconAusbau" type="Button" parent="Symbole"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(142, 140)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.9)
+theme_override_constants/outline_size = 7
+theme_override_constants/icon_max_width = 90
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("IconHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("IconHover")
+text = "DESKTOP_APP_AUSBAU"
+icon = ExtResource("i_ausbau")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+autowrap_mode = 3
+
 [node name="Fenster" type="Control" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -1157,6 +1184,29 @@ theme_override_styles/disabled = SubResource("Leer")
 theme_override_styles/focus = SubResource("KachelHover")
 text = "DESKTOP_APP_WAGEN"
 icon = ExtResource("i_wagen")
+icon_alignment = 1
+vertical_icon_alignment = 0
+expand_icon = true
+autowrap_mode = 3
+
+
+[node name="StartAusbau" type="Button" parent="Startmenue/Spalte/Raster"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(122, 128)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.4)
+theme_override_constants/icon_max_width = 70
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("Leer")
+theme_override_styles/hover = SubResource("KachelHover")
+theme_override_styles/pressed = SubResource("IconGedrueckt")
+theme_override_styles/disabled = SubResource("Leer")
+theme_override_styles/focus = SubResource("KachelHover")
+text = "DESKTOP_APP_AUSBAU"
+icon = ExtResource("i_ausbau")
 icon_alignment = 1
 vertical_icon_alignment = 0
 expand_icon = true

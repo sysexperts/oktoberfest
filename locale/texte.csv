@@ -2260,3 +2260,25 @@ WAGEN_KAUFEN,%s kaufen · %s,Buy %s · %s,%s satın al · %s
 WAGEN_GEKAUFT,"%s (gekauft, steht im Wohnwagen)","%s (bought, in the caravan)","%s (satın alındı, karavanda)"
 MSG_WAGEN_GEKAUFT,Für den Wohnwagen gekauft: %s für %s,Bought for the caravan: %s for %s,Karavan için alındı: %s için %s
 MEISTER_WAGEN,Wohnwagen komplett ausgebaut,Caravan fully fitted out,Karavan tamamen döşendi
+DESKTOP_APP_AUSBAU,Ausbau,Expansion,Genişleme
+AUSBAU_SUB,Große Investitionen fürs Zelt,Big investments for the tent,Çadır için büyük yatırımlar
+AUSBAU_INFO,Jeder Ausbau gilt dauerhaft. Kaufen geht nach Feierabend.,Every expansion is permanent. Buy after closing time.,Her genişleme kalıcıdır. Mesai bitiminden sonra satın al.
+AUSBAU_BIERGARTEN,Biergarten,Beer garden,Bira bahçesi
+AUSBAU_VIP,VIP-Lounge,VIP lounge,VIP salonu
+AUSBAU_THEKE2,Zweite Theke,Second bar,İkinci bar
+AUSBAU_BUEHNE,Größere Bühne,Bigger stage,Daha büyük sahne
+AUSBAU_HANDEL,Bierhandel,Beer trade,Bira ticareti
+AUSBAU_KONRAD,Konrads Zelt aufkaufen,Buy out Konrad's tent,Konrad'ın çadırını satın al
+AUSBAU_BIERGARTEN_INFO,12 % mehr Andrang,12 % more guests,%12 daha fazla misafir
+AUSBAU_VIP_INFO,dreimal so viele VIP-Gäste mit dickem Trinkgeld,three times as many VIP guests with fat tips,bol bahşişli üç kat VIP misafir
+AUSBAU_THEKE2_INFO,Zapfer arbeiten 30 % schneller,Bartenders work 30 % faster,Barmenler %30 daha hızlı çalışır
+AUSBAU_BUEHNE_INFO,Beliebtheitsgrenze +5 %,Popularity cap +5 %,Popülerlik sınırı +%5
+AUSBAU_HANDEL_INFO,Nachts gehen bis zu 12 Maß eigenes Bier an andere Zelte (mit Aufschlag),At night up to 12 mugs of your own beer go to other tents (at a premium),Geceleri en fazla 12 kupa kendi biran diğer çadırlara gider (fiyat farkıyla)
+AUSBAU_KONRAD_INFO,"Konrad ärgert dich nicht mehr, sein Zelt bringt täglich Pacht","Konrad stops bothering you, his tent pays rent every day","Konrad seni rahatsız etmez, çadırı her gün kira öder"
+AUSBAU_KAUFEN,Kaufen · %s,Buy · %s,Satın al · %s
+AUSBAU_DA,Gebaut,Built,İnşa edildi
+MSG_AUSBAU_GEKAUFT,Ausgebaut: %s für %s,Expanded: %s for %s,Genişletildi: %s için %s
+MSG_AUSBAU_KONRAD,Konrads Zelt gehört jetzt dir. Er hat keine Streiche mehr übrig.,Konrad's tent is yours now. He is out of pranks.,Konrad'ın çadırı artık senin. Şakaları bitti.
+MSG_AUSBAU_HANDEL,Bierhandel: %d Maß an andere Zelte verkauft für %s,Beer trade: sold %d mugs to other tents for %s,Bira ticareti: %d kupa diğer çadırlara %s karşılığında satıldı
+MSG_AUSBAU_PACHT,Pacht von Konrads Zelt: +%s,Rent from Konrad's tent: +%s,Konrad'ın çadırından kira: +%s
+MEISTER_AUSBAU,Alle Ausbauten gebaut,Built every expansion,Tüm genişlemeleri yap

@@ -444,6 +444,13 @@ var _fest_feuer_gezuendet := false
 const WAGEN_BETT_PREIS := {2: 400, 3: 900}
 const WAGEN_ITEMS := {"sofa": 300, "poster": 100, "pflanze": 120, "regal": 250}
 var _wagen := {"bett": 1, "items": []}
+## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
+##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
+##   handel: verkauft nachts eigenes Bier an andere Zelte · konrad: Konrads Zelt aufgekauft (keine Streiche mehr, Pacht)
+const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "konrad": 20000}
+const AUSBAU_HANDEL_MASS := 12
+const AUSBAU_KONRAD_PACHT := 150
+var _ausbau: Array = []
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -812,6 +819,8 @@ func gemuetlichkeit() -> float:
 func _pop_grenze() -> float:
 	var g := POP_NATUR_MAX + float(POP_KUENSTLER_GRENZE.get(_artist_tier, 0.0))
 	g += minf(POP_DEKO_GRENZE_MAX, POP_DEKO_GRENZE * float(_einrichtung.size()))
+	if _ausbau.has("buehne"):
+		g += 5.0
 	# Festliche Tagesereignisse (Promi, Prosit, Freibierfass, Happy Hour, Finale)
 	# ziehen die Grenze ebenfalls hoch — Regen, Kontrolle und Bus nicht
 	if _ereignis in POP_EREIGNIS_GRENZE:
@@ -1022,7 +1031,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "wagen": _wagen.duplicate(true), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1105,6 +1114,8 @@ func _load_game() -> bool:
 	_sab_tag = (sabtag as Dictionary).duplicate() if sabtag is Dictionary else {}
 	_rache_tag = int(d.get("rache_tag", -1))
 	_casino_tag = int(d.get("casino_tag", -1))
+	var ab: Variant = d.get("ausbau", [])
+	_ausbau = (ab as Array).map(func(x: Variant) -> String: return str(x)) if ab is Array else []
 	var wg: Variant = d.get("wagen", {})
 	if wg is Dictionary and (wg as Dictionary).has("bett"):
 		_wagen = {"bett": clampi(int((wg as Dictionary).bett), 1, 3), "items": ((wg as Dictionary).get("items", []) as Array).duplicate()}
@@ -3513,7 +3524,7 @@ func _update_zapfer(s: Dictionary, delta: float) -> void:
 	if float(s.timer) > 0.0:
 		return
 	var lv := int(s.level)
-	s.timer = ZAPF_ZEIT / (1.0 + 0.25 * float(lv - 1))
+	s.timer = ZAPF_ZEIT / (1.0 + 0.25 * float(lv - 1)) / (1.3 if _ausbau.has("theke2") else 1.0)
 	var platz := mini(12, AUSGABE_MAX_KRUEGE + 2 * (lv - 1))
 	if _ausgabe_gesamt(1) >= mini(platz, int(_stock[WARE_BIER])):
 		return
@@ -4934,6 +4945,8 @@ func _shift_process(delta: float) -> void:
 		andrang *= Wirtschaft.preis_andrang(_bierpreis)
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
 		andrang *= _ereignis_andrang()
+		if _ausbau.has("biergarten"):
+			andrang *= 1.12
 		andrang *= float(ANDRANG_FAKTOR[_schwierigkeit])
 		# Koop: mit mehr Spielern kommen mehr Gäste, sonst ist es zu leicht
 		andrang *= 1.0 + KOOP_ANDRANG_JE_SPIELER * float(maxi(1, _players_nodes.size()) - 1)
@@ -4964,12 +4977,15 @@ func _gast_typ_waehlen() -> String:
 		return "tracht"
 	if _ereignis == "italiener" and randf() < 0.45:
 		return "tourist"
+	var typen: Dictionary = GAST_TYPEN.duplicate()
+	if _ausbau.has("vip"):
+		typen["vip"] = int(typen["vip"]) * 3   # die VIP-Lounge zieht Gäste mit Trinkgeld an
 	var summe := 0
-	for w in GAST_TYPEN.values():
+	for w in typen.values():
 		summe += int(w)
 	var r := randi() % summe
-	for t: String in GAST_TYPEN:
-		r -= int(GAST_TYPEN[t])
+	for t: String in typen:
+		r -= int(typen[t])
 		if r < 0:
 			return t
 	return ""
@@ -5563,6 +5579,7 @@ func _end_shift(reason := 0) -> void:
 	# Dreck bleibt nach Feierabend liegen — putzen geht jetzt auch außerhalb der
 	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
 	_fest_auswerten()
+	_ausbau_abend()
 	_meister_pruefen()
 	_clear_artists()          # E5: Auftritt vorbei
 	# Übriges bleibt auf der Ausgabe stehen — auch außerhalb der Schicht abgestellte
@@ -6294,7 +6311,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -6883,6 +6900,11 @@ var _strom_t := 0.0
 
 func _huber_morgen() -> void:
 	_huber_wette = {}
+	if _ausbau.has("konrad"):
+		_sabotage_t = -1.0
+		_streich_art = ""
+		_streich_t = -1.0
+		return   # Konrads Zelt gehört dir, er ärgert dich nicht mehr
 	_sabotage_t = -1.0
 	# Konrads Streiche (Wette, Saboteur) gibt es ab Kapitel 3 der Story
 	if not _story.aktiv or _story.kapitel < 3 or tutorial_active():
@@ -7142,6 +7164,7 @@ func meister_liste() -> Array:
 		["MEISTER_KONTROLLE", kontrolle, 1],
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
 		["MEISTER_WAGEN", wagen_prestige(), 6],
+		["MEISTER_AUSBAU", _ausbau.size(), 6],
 	]
 
 func meister_fertig() -> bool:
@@ -7187,6 +7210,40 @@ func net_wagen_kauf(id: String) -> void:
 		(_wagen.items as Array).append(id)
 	_melde("MSG_WAGEN_GEKAUFT", ["WAGEN_" + id.to_upper(), _eur(preis)], 2)
 	_broadcast_meta()
+
+## Ausbau kaufen (App „Ausbau“). Nach Feierabend, ab Kapitel 5.
+@rpc("any_peer", "reliable", "call_local")
+func net_ausbau_kauf(id: String) -> void:
+	if not multiplayer.is_server() or not buero_offen() or not _story.aktiv or _story.kapitel < 5:
+		return
+	if not AUSBAU.has(id) or _ausbau.has(id):
+		return
+	var preis: int = AUSBAU[id]
+	if not _afford(preis):
+		_fehler("MSG_NO_MONEY", ["AUSBAU_" + id.to_upper(), _eur(preis)])
+		return
+	Game.add_money(-preis)
+	_ausbau.append(id)
+	_melde("MSG_AUSBAU_GEKAUFT", ["AUSBAU_" + id.to_upper(), _eur(preis)], 2)
+	if id == "konrad":
+		_melde("MSG_AUSBAU_KONRAD", [], 2)
+		_story.ereignis("konrad_gekauft")
+	_broadcast_meta()
+
+## Abends: Bierhandel mit anderen Zelten und Pacht von Konrads Zelt
+func _ausbau_abend() -> void:
+	if _ausbau.has("handel") and _eigenbier > 0:
+		var menge := mini(_eigenbier, mini(AUSBAU_HANDEL_MASS, int(_stock[WARE_BIER])))
+		if menge > 0:
+			var erlos := roundi(float(menge) * float(_reward_for(1, 1)) * 1.4)
+			_eigenbier -= menge
+			_stock[WARE_BIER] = int(_stock[WARE_BIER]) - menge
+			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+			_add_income(erlos)
+			_melde("MSG_AUSBAU_HANDEL", [menge, _eur(erlos)], 2)
+	if _ausbau.has("konrad"):
+		_add_income(AUSBAU_KONRAD_PACHT)
+		_melde("MSG_AUSBAU_PACHT", [_eur(AUSBAU_KONRAD_PACHT)], 2)
 
 ## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
 @rpc("any_peer", "reliable", "call_local")
