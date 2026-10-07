@@ -73,7 +73,13 @@ class Lauf extends Node:
 			dialog._weiter()
 			await _warten(0.3)
 		await _warten(1.0)
-		_check("Ja: Schritt 1 (Wohnwagen aussuchen), er bleibt stehen", gm._quest_step == 1 and not chef.unterwegs(), "Schritt %d" % gm._quest_step)
+		_check("Ja: Schritt 1 (Wohnwagen aussuchen), er läuft los", gm._quest_step == 1 and chef.unterwegs(), "Schritt %d" % gm._quest_step)
+		var tw := 0.0
+		while chef.unterwegs() and tw < 90.0:
+			await _warten(0.5)
+			tw += 0.5
+		var gasse := Vector3(-2.25, 0.0, -42.5)
+		_check("Er steht in der Wohnwagengasse", not chef.unterwegs() and chef.global_position.distance_to(gasse) < 0.5, "%s nach %.0f s" % [chef.global_position, tw])
 		_check("Wahl ist offen", gm.wagen_wahl_offen(), "")
 		gm.net_wagen_waehlen.rpc_id(1, 2)
 		await _warten(1.0)
