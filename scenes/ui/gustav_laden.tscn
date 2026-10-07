@@ -85,6 +85,12 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 
+[node name="Dietrich" type="Button" parent="Mitte/Panel/Rand/Spalte/Liste"]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
 [node name="Tarnung" type="Button" parent="Mitte/Panel/Rand/Spalte"]
 unique_name_in_owner = true
 auto_translate_mode = 2

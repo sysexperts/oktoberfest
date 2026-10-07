@@ -39,5 +39,28 @@ class Lauf extends Node:
 		gm._day += 1
 		gm._huber_morgen()
 		_check("Rache: Streich ist gesetzt", gm._streich_art != "", gm._streich_art)
+		gm._sab_tag = {}
+		gm._sab_inv = {"zange": 1}
+		story.kapitel_setzen(5)
+		var geld_s: int = Game.money
+		gm.net_sabotage("strom", false)
+		_check("Sicherungskasten ab Kapitel 5 ohne Dietrich zu", Game.money == geld_s and int(gm._sab_inv.zange) == 1)
+		gm._sab_inv["dietrich"] = 1
+		gm.net_sabotage("strom", false)
+		_check("Mit Dietrich geht es, beides verbraucht", Game.money == geld_s + gm.SAB_ERFOLG and int(gm._sab_inv.zange) == 0 and int(gm._sab_inv.dietrich) == 0, str(gm._sab_inv))
+		var kam := (load("res://scenes/sab_kamera.tscn") as PackedScene).instantiate() as Node3D
+		add_child(kam)
+		kam.global_position = Vector3(0, 2.8, 0)
+		kam.get_node("Kopf").rotation.y = 0.0
+		kam._aktiv = false
+		_check("Kamera ohne Kapitel 4 sieht nichts", not kam.sieht(Vector3(0, 0, 3), 0))
+		kam._aktiv = true
+		_check("Kamera sieht geradeaus", kam.sieht(Vector3(0, 0, 3), 0))
+		_check("Kamera sieht nicht zur Seite", not kam.sieht(Vector3(3, 0, 0.5), 0))
+		_check("Kamera sieht nicht weit weg", not kam.sieht(Vector3(0, 0, 14), 0))
+		_check("Mantel verkürzt die Reichweite", kam.sieht(Vector3(0, 0, 6), 0) and not kam.sieht(Vector3(0, 0, 9), 1))
+		_check("Komplettset: nur ganz nah", not kam.sieht(Vector3(0, 0, 5), 2) and kam.sieht(Vector3(0, 0, 2), 2))
+		var zelt := get_tree().get_first_node_in_group("huber_zelt")
+		_check("Drei Kameras in Konrads Zelt", zelt != null and zelt.find_children("Kamera*", "Node3D", true, false).size() == 3)
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit()

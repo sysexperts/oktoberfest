@@ -1,0 +1,58 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/sab_kamera.gd" id="1_k"]
+
+[sub_resource type="StandardMaterial3D" id="Grau"]
+albedo_color = Color(0.2, 0.21, 0.24, 1)
+metallic = 0.6
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Rot"]
+albedo_color = Color(0.4, 0.05, 0.05, 1)
+emission_enabled = true
+emission = Color(1, 0.1, 0.05, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="BoxMesh" id="Halter"]
+size = Vector3(0.08, 0.3, 0.08)
+
+[sub_resource type="BoxMesh" id="Gehaeuse"]
+size = Vector3(0.22, 0.2, 0.42)
+
+[sub_resource type="CylinderMesh" id="Linse"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.06
+radial_segments = 12
+rings = 1
+
+[sub_resource type="SphereMesh" id="LedMesh"]
+radius = 0.03
+height = 0.06
+radial_segments = 8
+rings = 4
+
+[node name="SabKamera" type="Node3D"]
+script = ExtResource("1_k")
+
+[node name="Halter" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+mesh = SubResource("Halter")
+surface_material_override/0 = SubResource("Grau")
+
+[node name="Kopf" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, 0)
+
+[node name="Gehaeuse" type="MeshInstance3D" parent="Kopf"]
+mesh = SubResource("Gehaeuse")
+surface_material_override/0 = SubResource("Grau")
+
+[node name="Linse" type="MeshInstance3D" parent="Kopf"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0.23)
+mesh = SubResource("Linse")
+surface_material_override/0 = SubResource("Rot")
+
+[node name="Led" type="MeshInstance3D" parent="Kopf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.12, 0.15)
+mesh = SubResource("LedMesh")
+surface_material_override/0 = SubResource("Rot")

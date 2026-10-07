@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" path="res://scenes/sab_ziel.tscn" id="19_ziel"]
 [ext_resource type="PackedScene" path="res://scenes/casino.tscn" id="20_casino"]
 [ext_resource type="PackedScene" path="res://scenes/konrad_tanzflaeche.tscn" id="23_tanz"]
+[ext_resource type="PackedScene" path="res://scenes/sab_kamera.tscn" id="24_kamera"]
 
 [node name="HuberZelt" type="Node3D"]
 script = ExtResource("1_huber")
@@ -208,6 +209,15 @@ art = "stink"
 [node name="ZielJuck" parent="Innen" instance=ExtResource("19_ziel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 1)
 art = "juck"
+
+[node name="KameraA" parent="Innen" instance=ExtResource("24_kamera")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -5.35, 2.8, -4.5)
+
+[node name="KameraB" parent="Innen" instance=ExtResource("24_kamera")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.0, 2.8, 4.2)
+
+[node name="KameraC" parent="Innen" instance=ExtResource("24_kamera")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 7.3, 2.8, -4.2)
 
 [node name="Casino" parent="." instance=ExtResource("20_casino")]
 

@@ -418,7 +418,7 @@ const FAKE_POP := 1.5
 var _fakes: Array = []   # {"id", "autor", "text" (1-3), "tag"}
 var _fake_next := 1
 ## Schwarzmarkt (Haendler Gustav, ab Kapitel 3): Tarnung und Werkzeuge fuer Streiche in Konrads Zelt
-const SAB_WAREN := {"mantel": 150, "komplett": 400, "fassbohrer": 120, "zange": 100, "stinkbombe": 80, "juckpulver": 90}
+const SAB_WAREN := {"mantel": 150, "komplett": 400, "fassbohrer": 120, "zange": 100, "stinkbombe": 80, "juckpulver": 90, "dietrich": 70}
 var _sab_inv := {}          # Werkzeug-ID -> Anzahl
 var _tarnung_stufe := 0     # 0 keine, 1 Mantel, 2 Komplettset
 var _tarnung_an := false
@@ -426,6 +426,8 @@ var _tarnung_an := false
 ## Konrad schlägt am nächsten Tag zurück (Eskalation).
 const SAB_BUSSE := 200
 const SAB_ERFOLG := 120
+## Ab diesem Kapitel ist Konrads Sicherungskasten abgeschlossen (Dietrich von Gustav nötig)
+const SAB_SCHLOSS_AB := 5
 const SAB_WERKZEUG := {"fass": "fassbohrer", "strom": "zange", "stink": "stinkbombe", "juck": "juckpulver"}
 var _sab_tag := {}          # Ziel-Art -> Spieltag der letzten Sabotage
 var _rache_tag := -1        # Konrad schlägt an diesem Tag zurück
@@ -7199,6 +7201,13 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 	if int(_sab_tag.get(art, -1)) == _day:
 		_fehler("MSG_SAB_HEUTE_SCHON")
 		return
+	# Ab Kapitel 5 hat Konrad den Sicherungskasten abgeschlossen: ohne Dietrich kommt man nicht heran
+	var schloss: bool = art == "strom" and int(_story.kapitel) >= SAB_SCHLOSS_AB
+	if schloss and int(_sab_inv.get("dietrich", 0)) <= 0:
+		_fehler("MSG_SAB_SCHLOSS")
+		return
+	if schloss:
+		_sab_inv["dietrich"] = int(_sab_inv["dietrich"]) - 1
 	_sab_inv[werkzeug] = int(_sab_inv[werkzeug]) - 1
 	_sab_tag[art] = _day
 	if erwischt:

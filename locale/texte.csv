@@ -2725,3 +2725,5 @@ orkestra birazdan prova yapmak istiyor ve rüzgar bütün nota sehpalarını dev
 Horst"
 MAIL_G16_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_G16_A2,Heute nicht.,Not today.,Bugün olmaz.
+SAB_DIETRICH,Dietrich,Lock pick,Maymuncuk
+MSG_SAB_SCHLOSS,Der Sicherungskasten ist abgeschlossen. Dazu brauchst du einen Dietrich von Gustav.,The fuse box is locked. You need a lock pick from Gustav.,Sigorta kutusu kilitli. Gustav'dan bir maymuncuk almalısın.
