@@ -465,6 +465,8 @@ var _fest_feuer_gezuendet := false
 const WAGEN_BETT_PREIS := {2: 400, 3: 900}
 const WAGEN_ITEMS := {"sofa": 300, "poster": 100, "pflanze": 120, "regal": 250}
 var _wagen := {"bett": 1, "items": [], "farben": ["blau"], "farbe": "blau"}
+## Farbe des Wagens je Mitspieler (Host steht in _wagen.farbe, andere hier); nicht gespeichert, Peers wechseln.
+var _wagen_farbe_peer := {}
 const WAGEN_FARBEN := {"blau": 0, "rot": 200, "gruen": 200}
 ## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
 ##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
@@ -3991,20 +3993,24 @@ func _spieler_zum_wohnwagen() -> void:
 	var wagen := _eigener_wohnwagen()
 	if wagen == null:
 		return
-	var tuer := wagen.interact_point() - Vector3(0, 1.0, 0)
-	var seitwaerts := wagen.global_transform.basis.x
-	var anzahl := _players_nodes.size()
-	var i := 0
-	for peer: int in _players_nodes.keys():
+	# Jeder wacht vor seinem eigenen Wagen auf (Platz = Beitrittsreihenfolge), gibt es zu wenige Wagen, bei dem des Hosts.
+	var plaetze := Caravan.plaetze(get_tree())
+	var peers: Array = _players_nodes.keys()
+	peers.sort()
+	var anzahl_am_wagen := {}
+	for peer: int in peers:
 		var p: Node = _players_nodes[peer]
 		if p == null or not is_instance_valid(p):
 			continue
-		var versatz := seitwaerts * (float(i) - float(anzahl - 1) * 0.5) * 1.2
+		var nr := peers.find(peer)
+		var mein: Caravan = plaetze[nr] if nr < plaetze.size() else wagen
+		var i: int = int(anzahl_am_wagen.get(mein, 0))
+		anzahl_am_wagen[mein] = i + 1
+		var tuer := mein.interact_point() - Vector3(0, 1.0, 0)
+		var versatz := mein.global_transform.basis.x * float(i) * 1.2
 		var ziel: Vector3 = tuer + versatz
-		# Blick zum Wagen: so sieht man morgens gleich die Tür
-		var hin: Vector3 = wagen.global_position - ziel
+		var hin: Vector3 = mein.global_position - ziel
 		p.versetzen.rpc_id(peer, Vector3(ziel.x, 0.2, ziel.z), atan2(-hin.x, -hin.z))
-		i += 1
 
 func _eigener_wohnwagen() -> Caravan:
 	for n in get_tree().get_nodes_in_group("interactable"):
@@ -6439,7 +6445,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_plaetze": wagen_plaetze(), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
 		"staff_max": staff_max_level(), "anstich_offen": _anstich_offen, "eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -7400,8 +7406,22 @@ func net_wagen_farbe(farbe: String) -> void:
 		Game.add_money(-preis)
 		(_wagen.farben as Array).append(farbe)
 		_melde("MSG_WAGEN_GEKAUFT", ["WAGEN_FARBE_" + farbe.to_upper(), _eur(preis)], 2)
-	_wagen.farbe = farbe
+	var wer := multiplayer.get_remote_sender_id()
+	if wer == 0 or wer == 1:
+		_wagen.farbe = farbe
+	else:
+		_wagen_farbe_peer[wer] = farbe
 	_broadcast_meta()
+
+## Wohnwagenplätze der Spieler: Reihenfolge = Beitritt (Host zuerst), je Platz Besitzer und Farbe.
+func wagen_plaetze() -> Array:
+	var liste: Array = []
+	var peers: Array = _players_nodes.keys()
+	peers.sort()
+	for peer: int in peers:
+		var farbe: String = str(_wagen.farbe) if peer == 1 else str(_wagen_farbe_peer.get(peer, "blau"))
+		liste.append({"peer": peer, "name": _spieler_bezeichnung(peer), "farbe": farbe})
+	return liste
 
 ## Wohnwagen-Ausbau kaufen: "bett" (nächste Stufe) oder ein Einrichtungsstück. Nur nach Feierabend und mit Zelt.
 @rpc("any_peer", "reliable", "call_local")

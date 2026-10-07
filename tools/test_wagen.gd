@@ -53,6 +53,14 @@ class Lauf extends Node:
 		gm.net_wagen_farbe("rot")
 		_check("Gekaufte Farbe wechselt frei", Game.money == geld_f - 200 and str(gm._wagen.farbe) == "rot")
 		_check("Farbe zählt als Prestige", gm.wagen_prestige() == 4, str(gm.wagen_prestige()))
+		gm._players_nodes[2] = Node3D.new()
+		gm._wagen_farbe_peer[2] = "gruen"
+		var plaetze: Array = gm.wagen_plaetze()
+		_check("Zwei Wagenplätze, Host rot, Gast grün", plaetze.size() == 2 and str(plaetze[0].farbe) == "rot" and str(plaetze[1].farbe) == "gruen" and int(plaetze[1].peer) == 2, str(plaetze))
+		gm._players_nodes.erase(2)
+		_check("Plätze gehen mit dem Spieler", gm.wagen_plaetze().size() == 1)
+		var wagen_reihe := Caravan.plaetze(get_tree())
+		_check("Wohnwagenplätze gefunden, eigener zuerst", wagen_reihe.size() >= 2 and (wagen_reihe[0] as Caravan).is_mine, str(wagen_reihe.size()))
 		story.kapitel_setzen(2)
 		var geld: int = Game.money
 		gm.net_wagen_kauf("regal")

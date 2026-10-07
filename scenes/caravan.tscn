@@ -26,3 +26,12 @@ modulate = Color(1, 0.9, 0.6, 1)
 text = "WORLD_CARAVAN"
 script = ExtResource("2_wt")
 schluessel = "WORLD_CARAVAN"
+
+[node name="Besitzer" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, 0)
+visible = false
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+modulate = Color(1, 0.9, 0.6, 1)
+outline_size = 8

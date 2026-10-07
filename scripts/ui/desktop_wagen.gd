@@ -59,7 +59,7 @@ func _anzeigen() -> void:
 	for f: String in FARBEN:
 		var fk: Button = get_node("%Farbe" + FARB_KNOEPFE[f])
 		var fname := tr("WAGEN_FARBE_" + f.to_upper())
-		if str(wagen.get("farbe", "blau")) == f:
+		if _meine_farbe(z, wagen) == f:
 			fk.text = tr("WAGEN_FARBE_AKTIV") % fname
 			fk.disabled = true
 		elif besitz.has(f):
@@ -68,3 +68,11 @@ func _anzeigen() -> void:
 		else:
 			fk.text = tr("WAGEN_KAUFEN") % [fname, Texte.euro(int(_gm.WAGEN_FARBEN[f]))]
 			fk.disabled = false
+
+## Farbe des eigenen Wagens: der Host steht in „wagen.farbe“, Mitspieler in „wagen_plaetze“
+func _meine_farbe(z: Dictionary, wagen: Dictionary) -> String:
+	var ich := multiplayer.get_unique_id()
+	for e: Dictionary in z.get("wagen_plaetze", []):
+		if int(e.get("peer", 0)) == ich:
+			return str(e.get("farbe", "blau"))
+	return str(wagen.get("farbe", "blau"))
