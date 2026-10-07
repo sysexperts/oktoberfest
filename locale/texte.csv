@@ -2603,4 +2603,5 @@ WAGEN_FARBE_BLAU,Außenfarbe Blau,Exterior colour blue,Dış renk mavi
 WAGEN_FARBE_ROT,Außenfarbe Rot,Exterior colour red,Dış renk kırmızı
 WAGEN_FARBE_GRUEN,Außenfarbe Grün,Exterior colour green,Dış renk yeşil
 WAGEN_FARBE_AKTIV,%s (aktiv),%s (active),%s (aktif)
+WAGEN_SPIEGEL,Spiegel: Aussehen ändern,Mirror: change your look,Ayna: görünümünü değiştir
 WAGEN_FARBE_WECHSELN,Wechseln zu: %s,Switch to: %s,Geç: %s

@@ -3,6 +3,8 @@ extends Control
 ## der Server bucht (GameManager.net_wagen_kauf). Aufbau: scenes/ui/desktop_wagen.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
+const Look := preload("res://scripts/charakter_look.gd")
+const CreatorSkript := preload("res://scripts/ui/charakter_creator.gd")
 const ITEMS := ["sofa", "poster", "pflanze", "regal"]
 const FARBEN := ["blau", "rot", "gruen"]
 const FARB_KNOEPFE := {"blau": "Blau", "rot": "Rot", "gruen": "Gruen"}
@@ -18,6 +20,8 @@ func _ready() -> void:
 	for f: String in FARBEN:
 		var fk: Button = get_node("%Farbe" + FARB_KNOEPFE[f])
 		fk.pressed.connect(func() -> void: _gm.net_wagen_farbe.rpc_id(1, f))
+	%Spiegel.text = tr("WAGEN_SPIEGEL")
+	%Spiegel.pressed.connect(_spiegel)
 
 func einrichten(gm: Node, hud: Node) -> void:
 	_gm = gm
@@ -76,3 +80,9 @@ func _meine_farbe(z: Dictionary, wagen: Dictionary) -> String:
 		if int(e.get("peer", 0)) == ich:
 			return str(e.get("farbe", "blau"))
 	return str(wagen.get("farbe", "blau"))
+
+## Spiegel im Wohnwagen: der Creator öffnet sich, der neue Look geht an den Server und an alle Mitspieler
+func _spiegel() -> void:
+	CreatorSkript.zeigen(get_tree().root, func() -> void:
+		if _gm and _gm.has_method("net_look_setzen"):
+			_gm.net_look_setzen.rpc_id(1, Look.zu_code(Look.laden())))

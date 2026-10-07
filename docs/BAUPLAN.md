@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v383.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v384.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v383.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v384.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -218,7 +218,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ✔ **Fest-App** (ab Kapitel 6: Motto, Band, Feuerwerk, Dekoration, Werbung, Aushilfen planen und bezahlen, v355) | L |
 | ◐ **Festtag-System:** ✔ Ereignis „Fest“ alle 10 Tage (mehr Gäste, Band, Feuerwerk um 21 Uhr), Festruhm und fünf Festränge, Konrads Festruhm als Vergleich (v355); ✔ Festtag-Wettbewerb (ein Kirmesspiel mit Mindestergebnis, Festruhm-Bonus, v373); ✔ Katastrophen am Festtag (Unwetter, Stromausfall, knappes Bier) mit Schutz zum Mitkaufen (Regenplane, Notstrom, Extra-Fässer), Festruhm ±5 (v374); ✔ Motto bestimmt die Gäste (Tracht, Tourist, VIP, Stammgäste, v377); ✔ Fassanstich (Festfass vor der Bühne, drei Schläge mit Zeitleiste, Festruhm, v378) | L |
 | ✔ **Meister-Liste** (13 Einträge in der Quests-App, 100 % = Titel Fest-Meister, v356; goldener Krug am Wohnwagen ✔ v357) | S |
-| ◐ **Wohnwagen-Ausbau** (✔ ein Wagen fürs Team: App „Wohnwagen“ mit Bett-Stufen = mehr Tempo, Sofa, Poster, Zimmerpflanze, Trophäenregal mit goldenem Krug, Prestige zählt beim Festruhm, v357; ✔ Außenfarbe (v380); ✔ Wagen je Spieler (Platz = Beitrittsreihenfolge, eigene Farbe, Name am Wagen, morgens vor dem eigenen Wagen, v381); ☐ Spiegel/Creator) | XL |
+| ◐ **Wohnwagen-Ausbau** (✔ ein Wagen fürs Team: App „Wohnwagen“ mit Bett-Stufen = mehr Tempo, Sofa, Poster, Zimmerpflanze, Trophäenregal mit goldenem Krug, Prestige zählt beim Festruhm, v357; ✔ Außenfarbe (v380); ✔ Wagen je Spieler (Platz = Beitrittsreihenfolge, eigene Farbe, Name am Wagen, morgens vor dem eigenen Wagen, v381); ✔ Spiegel (Creator in der Wagen-App, Look geht an alle, v384)) | XL |
 | ◐ **Late-Game-Ausgaben** (✔ App „Ausbau“ ab Kapitel 5: Biergarten, VIP-Lounge, zweite Theke, größere Bühne, Bierhandel mit anderen Zelten, Konrads Zelt aufkaufen mit Pacht, v358; ✔ Personal-Akademie (Mitarbeiter bis Stufe 10, größere Tabletts, v375); ✔ Schutz vor Konrad: Schloss, Kamera, Alarmanlage, Versicherung (v376); ✔ drei eigene Buden und die Filiale (Zweitzelt) mit Abendgewinn, v379) | XL |
 
 ## P10 · Kirmes-Quests, Meilensteine, Zeitung (L)

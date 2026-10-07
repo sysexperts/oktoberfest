@@ -61,6 +61,10 @@ class Lauf extends Node:
 		_check("Plätze gehen mit dem Spieler", gm.wagen_plaetze().size() == 1)
 		var wagen_reihe := Caravan.plaetze(get_tree())
 		_check("Wohnwagenplätze gefunden, eigener zuerst", wagen_reihe.size() >= 2 and (wagen_reihe[0] as Caravan).is_mine, str(wagen_reihe.size()))
+		var app := (load("res://scenes/ui/desktop_wagen.tscn") as PackedScene).instantiate()
+		add_child(app)
+		_check("Wagen-App hat den Spiegel-Knopf", app.get_node_or_null("%Spiegel") is Button and (app.get_node("%Spiegel") as Button).text != "")
+		app.queue_free()
 		story.kapitel_setzen(2)
 		var geld: int = Game.money
 		gm.net_wagen_kauf("regal")
