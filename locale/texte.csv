@@ -2539,3 +2539,14 @@ WORLD_KISTEN,"Kistenstapel
 ({interact}: Kiste nehmen)","Crate stack
 ({interact}: take a crate)","Kasa yığını
 ({interact}: kasayı al)"
+WB_SPIEL_STEMMEN,Maßkrugstemmen,Mug holding,Kupa tutma
+WB_SPIEL_HAU_DEN_LUKAS,Hau den Lukas,Strongman game,Lukas'ı vur
+WB_SPIEL_KEGELN,Kegeln,Bowling,Bowling
+MSG_FEST_WETTBEWERB,Festwettbewerb: Spiele heute %s an der Bude und erreiche mindestens %d Punkte für extra Festruhm.,Festival contest: play %s at the stall today and score at least %d points for extra festival fame.,"Şenlik yarışması: Bugün %s oyununda büfede en az %d puan yap, ekstra şenlik şöhreti kazan."
+MSG_FEST_WB_GESCHAFFT,Wettbewerb geschafft! Das gibt Festruhm am Abend.,Contest won! That earns festival fame tonight.,Yarışma kazanıldı! Bu akşam şenlik şöhreti getirir.
+MSG_FEST_WB_GEWONNEN,Wettbewerb gewonnen: +%d Festruhm.,Contest won: +%d festival fame.,Yarışma kazanıldı: +%d şenlik şöhreti.
+MSG_FEST_WB_VERLOREN,Wettbewerb verpasst (%d von %d Punkten). Beim nächsten Fest klappt es.,Contest missed (%d of %d points). Next festival.,Yarışma kaçırıldı (%d / %d puan). Bir sonraki şenlikte.
+MS_WETTBEWERB_3_TITLE,Festmeister der Buden,Festival stall champion,Şenlik büfe şampiyonu
+MS_WETTBEWERB_3_TEXT,Gewinne drei Festtag-Wettbewerbe.,Win three festival contests.,Üç şenlik yarışması kazan.
+EREIGNIS_FEST_TITEL,Festtag,Festival day,Şenlik günü
+EREIGNIS_FEST_START,"Heute ist Festtag: Band, Feuerwerk um 21 Uhr und ein Wettbewerb an den Buden!","Today is festival day: band, fireworks at 9 pm and a contest at the stalls!","Bugün şenlik günü: grup, saat 21'de havai fişek ve büfelerde bir yarışma!"

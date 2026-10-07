@@ -434,6 +434,10 @@ const FEST_FEUER_PREIS := [0, 200, 500, 1000]
 const FEST_DEKO_PREIS := 150
 const FEST_WERBUNG_PREIS := 300
 const FEST_HILFE_PREIS := 250
+## Festtag-Wettbewerb: ein Kirmesspiel, in dem am Festtag ein Mindestergebnis erreicht werden soll (Festruhm-Bonus)
+const FEST_WETTBEWERBE := [["stemmen", 6], ["hau_den_lukas", 8], ["kegeln", 7]]
+const FEST_WB_BONUS := 15
+var _fest_wb := {}           # {"spiel": Name, "ziel": Punkte, "best": Punkte heute}
 const FEST_RAENGE := [0, 100, 250, 500, 1000]   # Dorffest, Stadtfest, Landesfest, Festival-Highlight, Weltfest
 var _fest := {}              # geplantes Fest: tag, motto, band, feuer, deko, werbung, hilfe, kosten
 var _fest_ruhm := 0
@@ -2395,6 +2399,10 @@ func net_schiessen_ende(treffer: int) -> void:
 	# Bestleistung je Spiel (Kirmes-Quests „Rekord“)
 	var spiel := _spiel_name(stand_n)
 	_stats["rekord_" + spiel] = maxi(int(_stats.get("rekord_" + spiel, 0)), treffer)
+	if _ereignis == "fest" and not _fest_wb.is_empty() and spiel == str(_fest_wb.spiel):
+		_fest_wb.best = maxi(int(_fest_wb.best), treffer)
+		if int(_fest_wb.best) >= int(_fest_wb.ziel):
+			_melde("MSG_FEST_WB_GESCHAFFT", [], 2)
 	for gewinn: Array in SCHIESS_GEWINNE:
 		if treffer >= int(gewinn[0]):
 			Game.add_money(int(gewinn[1]))
@@ -6391,7 +6399,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
-		"eigenbier": _eigenbier, "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
+		"eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
@@ -7186,6 +7194,9 @@ func _fest_morgen() -> bool:
 		return false
 	_ereignis = "fest"
 	_fest_feuer_gezuendet = false
+	var wb: Array = FEST_WETTBEWERBE.pick_random()
+	_fest_wb = {"spiel": wb[0], "ziel": wb[1], "best": 0}
+	_melde("MSG_FEST_WETTBEWERB", ["WB_SPIEL_" + str(wb[0]).to_upper(), int(wb[1])], 2)
 	_artist_tier = maxi(_artist_tier, int(_fest.band))
 	_popularity = minf(100.0, _popularity + (6.0 if bool(_fest.get("deko", false)) else 0.0))
 	_melde("MSG_FEST_HEUTE", ["FEST_MOTTO_%d" % int(_fest.motto)], 2)
@@ -7197,6 +7208,14 @@ func _fest_auswerten() -> void:
 	if _ereignis != "fest" or _fest.is_empty():
 		return
 	var ruhm := _served / 2 + roundi(_popularity / 2.0) + int(_fest.band) * 10 + int(_fest.feuer) * 8 - _complaints * 3
+	if not _fest_wb.is_empty():
+		if int(_fest_wb.best) >= int(_fest_wb.ziel):
+			ruhm += FEST_WB_BONUS
+			_stats["wettbewerbe"] = int(_stats.get("wettbewerbe", 0)) + 1
+			_melde("MSG_FEST_WB_GEWONNEN", [FEST_WB_BONUS], 2)
+		else:
+			_melde("MSG_FEST_WB_VERLOREN", [int(_fest_wb.best), int(_fest_wb.ziel)], 0)
+		_fest_wb = {}
 	ruhm = maxi(ruhm + wagen_prestige(), 0)
 	_fest_ruhm += ruhm
 	_fest_letzter = _day

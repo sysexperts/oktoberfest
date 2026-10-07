@@ -56,6 +56,12 @@ def main():
             if k.endswith("_") and any(x.startswith(k) for x in schluessel):
                 continue
             fehlend.setdefault(k, os.path.relpath(d, ROOT))
+    # Zusammengesetzte Schlüssel (im Code per "%s" gebaut): Tagesereignisse brauchen Titel und Starttext
+    for e in ["BUS", "KONTROLLE", "HAPPY", "FASS", "PROSIT", "PROMI", "REGEN", "FINALE", "ANSTICH", "TRACHT", "FAMILIE", "ITALIENER", "FEST"]:
+        for suffix in ["TITEL", "START"]:
+            k = f"EREIGNIS_{e}_{suffix}"
+            if k not in schluessel:
+                fehlend.setdefault(k, "scripts/game_manager.gd (Tagesereignis)")
     for k, d in sorted(fehlend.items()):
         probleme.append(f"Schlüssel fehlt in der Tabelle: {k} (benutzt in {d})")
     for p in probleme:
