@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v360.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v361.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -226,7 +226,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 |---|---|
 | ✔ Kirmes-Quests (7 Rekord-Aufgaben an Lukas, Dosenwurf, Schießbude, Entenangeln, Kegeln, Pfeilwurf, Ringwurf, Mail vom Budenbesitzer, v359; ☐ Gäste lotsen, Bude retten, Lieferung) | M |
 | ✔ Meilensteine neu (22 neue: Kapitel, Gefallen, Kirmes, Sabotage, Casino, Meisterbier, Fest, Personal, Wohnwagen, Ausbau, Fest-Meister; insgesamt 42, v360); ◐ **Steam-Errungenschaften**: jede Meilenstein-ID ruft `SteamDienst.errungenschaft(id)`, die IDs müssen in Steamworks angelegt werden (Liste in `scripts/meilensteine.gd`) | M |
-| Zeitung (Wiesn-Blatt) mit neuen Themen | S |
+| ✔ Zeitung (Festkurier) mit neuen Themen: Festtag-Titelseite, Konrads Streiche, Casino-Gerücht, Gefallen, Kirmes-Rekorde, Braukunst, Konrad aufgekauft (v361) | S |
 | **Brabbelton** je Figur im Dialog | M |
 | Gäste: Gruppen, Wunschlieder, mehr Chaos | L |
 

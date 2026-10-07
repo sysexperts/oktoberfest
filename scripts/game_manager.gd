@@ -5563,6 +5563,7 @@ func _start_shift() -> void:
 
 ## Günü bitir. reason: 0 = 22:00 normal, 1 = çok şikayet, 2 = oyuncu erken kapattı.
 func _end_shift(reason := 0) -> void:
+	var ereignis_heute := _ereignis   # fürs Festblatt (das Ereignis wird weiter unten zurückgesetzt)
 	if schlaegerei_laeuft():
 		_schlaegerei_beenden()
 	for streit: Dictionary in _einzelstreits.duplicate():
@@ -5635,6 +5636,8 @@ func _end_shift(reason := 0) -> void:
 		# für die Tipps in der Bilanz (Texte.tipps)
 		"toilet": _has_toilet, "kellner": _has_staff(ROLE_KELLNER), "zapfer": _has_staff(ROLE_ZAPFER),
 		"reinigung": _has_staff(ROLE_REINIGUNG), "ohne_ware": roundi(_ohne_ware_s), "pop": roundi(_popularity),
+		# fürs Festblatt (scripts/ui/zeitung.gd)
+		"ereignis": ereignis_heute, "streich": _streich_art, "fest_rang": fest_rang(), "kontrolle": _kontrolle_ueberraschung or ereignis_heute == "kontrolle",
 	}
 	match reason:
 		1:
@@ -6322,7 +6325,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
-		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
+		"eigenbier": _eigenbier, "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),

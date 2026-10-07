@@ -2412,3 +2412,14 @@ MS_AUSBAU_ALLE_TITLE,Imperium,Empire,İmparatorluk
 MS_AUSBAU_ALLE_TEXT,"Kaufe alle Ausbauten, auch Konrads Zelt.","Buy every expansion, including Konrad's tent.","Tüm genişlemeleri, Konrad'ın çadırı dahil, satın al."
 MS_FEST_MEISTER_TITLE,Fest-Meister,Festival Master,Şenlik Ustası
 MS_FEST_MEISTER_TEXT,Schließe die Meister-Liste ab.,Complete the master list.,Usta listesini tamamla.
+ZEITUNG_FEST,Fest im Zelt „%s“: %d Gäste feiern,Festival at „%s“: %d guests celebrate,„%s“ çadırında şenlik: %d misafir kutluyor
+ZEITUNG_FEST_UNTER,Festrang: %s. Konrad schäumt vor Neid.,Festival rank: %s. Konrad is green with envy.,Şenlik rütbesi: %s. Konrad kıskançlıktan köpürüyor.
+ZEITUNG_M_FEST_FEUERWERK,Feuerwerk: Um 21 Uhr erleuchtet der Himmel über dem Zelt.,Fireworks: at 9 pm the sky above the tent lights up.,Havai fişek: Saat 21'de çadırın üzerindeki gökyüzü aydınlanıyor.
+ZEITUNG_M_STREICH_LASTER,"Verkehr: Ein Laster blockiert die Einfahrt, Lieferungen werden teurer.","Traffic: a truck blocks the entrance, deliveries get pricier.","Trafik: Bir kamyon girişi kapattı, teslimatlar pahalanıyor."
+ZEITUNG_M_STREICH_STROM,Stromausfall: Im Zelt ging für Minuten das Licht aus. Wer war's?,Power cut: the lights went out in the tent for minutes. Who did it?,Elektrik kesintisi: Çadırda dakikalarca ışıklar söndü. Kim yaptı?
+ZEITUNG_M_STREICH_DIEB,Diebe: Nachts schleichen Diebe ums Fasslager. Ein Wachmann wäre gut.,Thieves: thieves sneak around the barrel store at night. A guard would help.,Hırsızlar: Geceleri hırsızlar fıçı deposunda dolaşıyor. Bir bekçi iyi olurdu.
+ZEITUNG_M_CASINO,Gerücht: Hinter dem Konrad-Zelt hat jemand im Casino gespielt. Verkleidet.,Rumour: someone played in the casino behind Konrad's tent. In disguise.,Söylenti: Konrad'ın çadırının arkasındaki kumarhanede biri oynadı. Kılık değiştirmiş.
+ZEITUNG_M_GEFALLEN,Kirmes: Schon %d Gefallen für den Festleiter erledigt. Das Zelt hilft.,Fair: already %d favours done for the fair manager. The tent helps.,Fuar: Fuar müdürü için şimdiden %d iyilik yapıldı. Çadır yardım ediyor.
+ZEITUNG_M_KIRMES,Buden: %d Rekorde an den Kirmesbuden geknackt.,Stalls: %d records cracked at the fair stalls.,Büfeler: Fuar büfelerinde %d rekor kırıldı.
+ZEITUNG_M_BRAU,Braukunst: Im Zelt lagern %d Maß eigenes Festbier.,Brewing: %d mugs of the tent's own fest beer are in storage.,Biracılık: Çadırda %d kupa kendi festival birası depoda.
+ZEITUNG_M_KONRAD_GEKAUFT,Übernahme: Das Konrad-Zelt gehört jetzt dem Festzelt. Kein Zylinder mehr.,Takeover: the Konrad-Zelt now belongs to the festival tent. No more top hat.,Devralma: Konrad çadırı artık şenlik çadırına ait. Silindir şapka yok.

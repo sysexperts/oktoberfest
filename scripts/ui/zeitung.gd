@@ -72,6 +72,9 @@ static func _meldung_setzen(t: String) -> String:
 static func schlagzeile(b: Dictionary, zelt: String) -> Array[String]:
 	var bedient := int(b.get("served", 0))
 	var t := func(k: String) -> String: return TranslationServer.translate(k)
+	# Festtag: die Titelseite gehört dem Fest
+	if str(b.get("ereignis", "")) == "fest" and bedient > 0:
+		return [t.call("ZEITUNG_FEST") % [zelt, bedient], t.call("ZEITUNG_FEST_UNTER") % t.call("FEST_RANG_%d" % int(b.get("fest_rang", 0)))]
 	if bedient == 0:
 		return [t.call("ZEITUNG_LEER") % zelt, t.call("ZEITUNG_LEER_UNTER")]
 	if int(b.get("complaints", 0)) >= 5:
@@ -114,9 +117,39 @@ static func meldungen(b: Dictionary, z: Dictionary) -> Array[String]:
 		m.append("• " + t.call("ZEITUNG_M_RAUSWURF") % raus)
 	for e: Array in b.get("ehren", []):
 		m.append("• " + String(TranslationServer.translate("MSG_EHRE_" + str(e[0]).to_upper())) % [str(e[1]), int(e[2])])
-	var huber := ["ZEITUNG_M_HUBER_1", "ZEITUNG_M_HUBER_2", "ZEITUNG_M_HUBER_3", "ZEITUNG_M_HUBER_4"]
-	m.append("• " + t.call(huber[int(b.get("day", 1)) % huber.size()]))
-	return m
+	# Neue Themen der Geschichte: Konrads Streiche, Casino, Gefallen, Kirmes, Brauen, Fest (stehen vorn im Blatt)
+	var top: Array[String] = []
+	var kapitel := int((z.get("story", {}) as Dictionary).get("kapitel", 1))
+	var streich := str(b.get("streich", ""))
+	if streich != "" and kapitel >= 3:
+		top.append("• " + t.call("ZEITUNG_M_STREICH_" + streich.to_upper()))
+	if int(z.get("casino_tag", -1)) == int(b.get("day", 0)):
+		top.append("• " + t.call("ZEITUNG_M_CASINO"))
+	var gefallen := 0
+	var kirmes := 0
+	for e: Array in z.get("meister", []):
+		if str(e[0]) == "MEISTER_GEFALLEN":
+			gefallen = int(e[1])
+		elif str(e[0]) == "MEISTER_KIRMES":
+			kirmes = int(e[1])
+	if gefallen > 0:
+		top.append("• " + t.call("ZEITUNG_M_GEFALLEN") % gefallen)
+	if kirmes > 0:
+		top.append("• " + t.call("ZEITUNG_M_KIRMES") % kirmes)
+	if int(z.get("eigenbier", 0)) > 0:
+		top.append("• " + t.call("ZEITUNG_M_BRAU") % int(z.get("eigenbier", 0)))
+	if (z.get("ausbau", []) as Array).has("konrad"):
+		top.append("• " + t.call("ZEITUNG_M_KONRAD_GEKAUFT"))
+	elif kapitel >= 3 and str(b.get("ereignis", "")) != "fest":
+		var huber := ["ZEITUNG_M_HUBER_1", "ZEITUNG_M_HUBER_2", "ZEITUNG_M_HUBER_3", "ZEITUNG_M_HUBER_4"]
+		top.append("• " + t.call(huber[int(b.get("day", 1)) % huber.size()]))
+	if kapitel < 3:
+		var huber2 := ["ZEITUNG_M_HUBER_1", "ZEITUNG_M_HUBER_2", "ZEITUNG_M_HUBER_3", "ZEITUNG_M_HUBER_4"]
+		top.append("• " + t.call(huber2[int(b.get("day", 1)) % huber2.size()]))
+	if str(b.get("ereignis", "")) == "fest":
+		top.append("• " + t.call("ZEITUNG_M_FEST_FEUERWERK"))
+	top.append_array(m)
+	return top.slice(0, 6)
 
 func eingabe(event: InputEvent) -> void:
 	if _t < 0.4:

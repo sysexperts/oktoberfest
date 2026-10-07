@@ -23,8 +23,15 @@ class Lauf extends Node:
 		gm._zelt_name = "Sepps Festzelt"
 		gm._broadcast_meta()
 		await _warten(0.3)
+		var story: Node = gm.get_node("Story")
+		story.kapitel_setzen(5)
+		gm._stats["rekord_dosenwurf"] = 9
+		gm._ausbau = ["vip"]
+		gm._eigenbier = 24
+		gm._broadcast_meta()
+		await _warten(0.3)
 		gm.net_report.rpc({"day": 3, "served": 112, "earn": 2450, "net": 900, "pop": 71, "missed": 2, "toilet": false,
-			"kellner": true, "gekocht": 38, "rausgeworfen": 3})
+			"kellner": true, "gekocht": 38, "rausgeworfen": 3, "ereignis": "fest", "fest_rang": 1, "streich": "strom"})
 		await _warten(4.5)
 		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/zeitung.png")
 		print("  Zeitung offen: ", gm.get_node("Zeitung").aktiv)
