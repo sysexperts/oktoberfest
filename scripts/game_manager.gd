@@ -426,6 +426,20 @@ const ROULETTE_EINSATZ := 50
 const ROULETTE_ROT := [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 var _casino_tag := -1       # Spieltag, an dem der Türsteher uns eingelassen hat
 var _bj := {}               # Peer -> {"spieler": [Karten], "bank": [Karten]} (Blackjack im Casino)
+## Das Fest (ab Kapitel 6, alle 10 Spieltage): Motto, Band, Feuerwerk, Deko, Werbung, Aushilfen am Desktop planen.
+## Am Festtag kommen mehr Gäste, um 21 Uhr zündet das Feuerwerk, abends zählt der Festruhm.
+const FEST_PAUSE := 10
+const FEST_BAND_PREIS := {0: 0, 1: 150, 2: 400, 3: 900}
+const FEST_FEUER_PREIS := [0, 200, 500, 1000]
+const FEST_DEKO_PREIS := 150
+const FEST_WERBUNG_PREIS := 300
+const FEST_HILFE_PREIS := 250
+const FEST_RAENGE := [0, 100, 250, 500, 1000]   # Dorffest, Stadtfest, Landesfest, Festival-Highlight, Weltfest
+var _fest := {}              # geplantes Fest: tag, motto, band, feuer, deko, werbung, hilfe, kosten
+var _fest_ruhm := 0
+var _fest_letzter := -100    # Tag des letzten Fests
+var _konrad_ruhm := 40
+var _fest_feuer_gezuendet := false
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -1004,7 +1018,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1087,6 +1101,11 @@ func _load_game() -> bool:
 	_sab_tag = (sabtag as Dictionary).duplicate() if sabtag is Dictionary else {}
 	_rache_tag = int(d.get("rache_tag", -1))
 	_casino_tag = int(d.get("casino_tag", -1))
+	var fst: Variant = d.get("fest", {})
+	_fest = (fst as Dictionary).duplicate() if fst is Dictionary else {}
+	_fest_ruhm = int(d.get("fest_ruhm", 0))
+	_fest_letzter = int(d.get("fest_letzter", -100))
+	_konrad_ruhm = int(d.get("konrad_ruhm", 40))
 	var fk: Variant = d.get("fakes", [])
 	_fakes = (fk as Array).duplicate(true) if fk is Array else []
 	var gf: Variant = d.get("gaerfaesser", [])
@@ -5106,6 +5125,8 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 	_kontrolle_t = -1.0
 	_prosit_timer = PROSIT_ALLE
 	_fass_kaputt = 0
+	if erzwingen == "" and _fest_morgen():
+		return
 	# Letzter Festtag: immer Finale mit Star-Act gratis
 	if erzwingen == "" and ist_finale():
 		_ereignis = "finale"
@@ -5156,6 +5177,8 @@ func _ereignis_andrang() -> float:
 		"anstich", "tracht": return 1.3
 		"familie": return 1.1
 		"italiener": return 1.35
+	if _ereignis == "fest":
+		return 1.4 + (0.25 if bool(_fest.get("werbung", false)) else 0.0)
 	if _ereignis == "bus":
 		return 1.5
 	if _ereignis == "finale":
@@ -5167,6 +5190,13 @@ func _ereignis_andrang() -> float:
 	return 1.0
 
 func _update_ereignis(delta: float) -> void:
+	if _ereignis == "fest" and not _fest_feuer_gezuendet and _clock_hour() >= 21.0:
+		_fest_feuer_gezuendet = true
+		var stufe := int(_fest.get("feuer", 0))
+		if stufe > 0:
+			_popularity = minf(100.0, _popularity + 3.0 * float(stufe))
+			_melde("MSG_FEST_FEUERWERK_ZEIT", [], 2)
+			_net_feuerwerk.rpc(6 + stufe * 6, false)
 	# Überraschungskontrolle (nicht angekündigt) und das Urteil, wenn Frau Wagner fertig ist
 	if _kontrolle_ueberraschung and not _ereignis_erledigt and _clock_hour() >= _kontrolle_start:
 		_ereignis_erledigt = true
@@ -5524,6 +5554,7 @@ func _end_shift(reason := 0) -> void:
 	_net_feierabend.rpc()
 	# Dreck bleibt nach Feierabend liegen — putzen geht jetzt auch außerhalb der
 	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
+	_fest_auswerten()
 	_clear_artists()          # E5: Auftritt vorbei
 	# Übriges bleibt auf der Ausgabe stehen — auch außerhalb der Schicht abgestellte
 	# Krüge verschwinden nicht mehr (Test 13.09.)
@@ -6254,7 +6285,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag,
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(),
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -7012,6 +7043,68 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 		_rache_tag = _day + 1
 	_broadcast_meta()
 
+func fest_moeglich() -> bool:
+	return _story != null and _story.aktiv and _story.kapitel >= 6 and _fest.is_empty() and _day - _fest_letzter >= FEST_PAUSE
+
+func fest_kosten(band: int, feuer: int, deko: bool, werbung: bool, hilfe: bool) -> int:
+	var summe: int = int(FEST_BAND_PREIS.get(band, 0)) + int(FEST_FEUER_PREIS[clampi(feuer, 0, 3)])
+	summe += FEST_DEKO_PREIS if deko else 0
+	summe += FEST_WERBUNG_PREIS if werbung else 0
+	summe += FEST_HILFE_PREIS if hilfe else 0
+	return summe
+
+## Fest für morgen planen und bezahlen (Desktop-App „Fest“)
+@rpc("any_peer", "reliable", "call_local")
+func net_fest_planen(motto: int, band: int, feuer: int, deko: bool, werbung: bool, hilfe: bool) -> void:
+	if not multiplayer.is_server() or not buero_offen() or not fest_moeglich():
+		return
+	if motto < 0 or motto > 4 or band < 1 or band > 3 or feuer < 0 or feuer > 3:
+		return
+	var kosten := fest_kosten(band, feuer, deko, werbung, hilfe)
+	if not _afford(kosten):
+		_fehler("MSG_NO_MONEY", ["DESKTOP_APP_FEST", _eur(kosten)])
+		return
+	Game.add_money(-kosten)
+	_fest = {"tag": _day + 1, "motto": motto, "band": band, "feuer": feuer, "deko": deko, "werbung": werbung, "hilfe": hilfe, "kosten": kosten}
+	_melde("MSG_FEST_GEPLANT", [_eur(kosten)], 2)
+	_broadcast_meta()
+
+## Morgens: ist heute Festtag? Dann Ereignis „fest“, die Band steht auf der Bühne
+func _fest_morgen() -> bool:
+	if _fest.is_empty() or int(_fest.get("tag", -1)) != _day:
+		return false
+	_ereignis = "fest"
+	_fest_feuer_gezuendet = false
+	_artist_tier = maxi(_artist_tier, int(_fest.band))
+	_popularity = minf(100.0, _popularity + (6.0 if bool(_fest.get("deko", false)) else 0.0))
+	_melde("MSG_FEST_HEUTE", ["FEST_MOTTO_%d" % int(_fest.motto)], 2)
+	_stats.ereignisse = int(_stats.get("ereignisse", 0)) + 1
+	return true
+
+## Abends: Festruhm aus Gästen, Beliebtheit, Band, Feuerwerk und Beschwerden
+func _fest_auswerten() -> void:
+	if _ereignis != "fest" or _fest.is_empty():
+		return
+	var ruhm := _served / 2 + roundi(_popularity / 2.0) + int(_fest.band) * 10 + int(_fest.feuer) * 8 - _complaints * 3
+	ruhm = maxi(ruhm, 0)
+	_fest_ruhm += ruhm
+	_fest_letzter = _day
+	var rang := 0
+	for i in FEST_RAENGE.size():
+		if _fest_ruhm >= FEST_RAENGE[i]:
+			rang = i
+	_konrad_ruhm += randi_range(5, 20)
+	_melde("MSG_FEST_BILANZ", [ruhm, "FEST_RANG_%d" % rang], 2)
+	_story.ereignis("fest_gefeiert_k6")
+	_fest = {}
+
+func fest_rang() -> int:
+	var rang := 0
+	for i in FEST_RAENGE.size():
+		if _fest_ruhm >= FEST_RAENGE[i]:
+			rang = i
+	return rang
+
 ## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
 @rpc("any_peer", "reliable", "call_local")
 func net_casino_tuer() -> void:
@@ -7581,7 +7674,7 @@ func net_saboteur_fangen() -> void:
 
 ## Das große Fest: Feuerwerk über dem Zelt, kurze Kamerafahrt, danach Konrads Auftritt (bei allen Spielern).
 @rpc("authority", "reliable", "call_local")
-func _net_feuerwerk() -> void:
+func _net_feuerwerk(anzahl := 12, auftritt := true) -> void:
 	var spieler_kamera := get_viewport().get_camera_3d()
 	if spieler_kamera == null:
 		return
@@ -7589,7 +7682,9 @@ func _net_feuerwerk() -> void:
 	var fw: Node3D = preload("res://scenes/effekte/feuerwerk.tscn").instantiate()
 	spieler_kamera.get_tree().current_scene.add_child(fw)
 	fw.global_position = mitte
-	fw.ausloesen()
+	fw.ausloesen(anzahl)
+	if not auftritt:
+		return
 	# Kamerafahrt: langsam zurück und hoch, Blick in den Himmel
 	var kino := Camera3D.new()
 	spieler_kamera.get_tree().current_scene.add_child(kino)

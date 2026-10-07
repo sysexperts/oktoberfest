@@ -2193,3 +2193,39 @@ yarın bir mutlu saat yapıyoruz: ucuz bira, dolu çadır. O bir saatte 40 kupa 
 Horst"
 MAIL_M2_17_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_M2_17_A2,Heute nicht.,Not today.,Bugün olmaz.
+DESKTOP_APP_FEST,Fest,Festival,Şenlik
+FEST_SUB,Plane das große Fest,Plan the big festival,Büyük şenliği planla
+FEST_STATUS_MOEGLICH,Du kannst ein Fest für morgen planen.,You can plan a festival for tomorrow.,Yarın için bir şenlik planlayabilirsin.
+FEST_STATUS_PAUSE,Das nächste Fest ist ab Tag %d möglich.,The next festival is possible from day %d.,Bir sonraki şenlik %d. günden itibaren mümkün.
+FEST_STATUS_GEPLANT,Fest geplant für Tag %d: %s,Festival planned for day %d: %s,Şenlik %d. gün için planlandı: %s
+FEST_RUHM,Festruhm: %d · Rang: %s · Konrads Festruhm: %d,Festival fame: %d · Rank: %s · Konrad's fame: %d,Şenlik şöhreti: %d · Rütbe: %s · Konrad'ın şöhreti: %d
+FEST_MOTTO_TITEL,Motto,Theme,Tema
+FEST_BAND_TITEL,Band,Band,Grup
+FEST_FEUER_TITEL,Feuerwerk,Fireworks,Havai fişek
+FEST_EXTRAS_TITEL,Extras,Extras,Ekstralar
+FEST_MOTTO_0,Trachtenfest,Costume festival,Kıyafet şenliği
+FEST_MOTTO_1,Bierfest,Beer festival,Bira şenliği
+FEST_MOTTO_2,Italienische Nacht,Italian night,İtalyan gecesi
+FEST_MOTTO_3,Rockabend,Rock night,Rock gecesi
+FEST_MOTTO_4,Familienfest,Family festival,Aile şenliği
+FEST_BAND_1,Straßenmusiker · %s,Street musician · %s,Sokak müzisyeni · %s
+FEST_BAND_2,Blaskapelle · %s,Brass band · %s,Bando · %s
+FEST_BAND_3,Star-Act · %s,Star act · %s,Yıldız grup · %s
+FEST_FEUER_0,Keins,None,Yok
+FEST_FEUER_1,Klein · %s,Small · %s,Küçük · %s
+FEST_FEUER_2,Mittel · %s,Medium · %s,Orta · %s
+FEST_FEUER_3,Groß · %s,Large · %s,Büyük · %s
+FEST_DEKO,Dekoration · %s,Decoration · %s,Dekorasyon · %s
+FEST_WERBUNG,Werbung und Plakate · %s,Advertising and posters · %s,Reklam ve afişler · %s
+FEST_HILFE,Aushilfen · %s,Temporary staff · %s,Geçici personel · %s
+FEST_SUMME,Summe: %s,Total: %s,Toplam: %s
+FEST_PLANEN,Fest für morgen planen,Plan the festival for tomorrow,Yarınki şenliği planla
+FEST_RANG_0,Dorffest,Village fair,Köy şenliği
+FEST_RANG_1,Stadtfest,City festival,Şehir şenliği
+FEST_RANG_2,Landesfest,State festival,Eyalet şenliği
+FEST_RANG_3,Festival-Highlight,Festival highlight,Şenlik doruğu
+FEST_RANG_4,Weltfest,World festival,Dünya şenliği
+MSG_FEST_GEPLANT,Fest für morgen geplant und bezahlt: %s,Festival planned and paid for tomorrow: %s,Yarınki şenlik planlandı ve ödendi: %s
+MSG_FEST_HEUTE,Heute ist Festtag: %s! Die Band steht bereit.,Today is festival day: %s! The band is ready.,Bugün şenlik günü: %s! Grup hazır.
+MSG_FEST_FEUERWERK_ZEIT,21 Uhr: Das Feuerwerk beginnt! Die Gäste jubeln.,9 pm: the fireworks begin! The guests cheer.,Saat 21: Havai fişek başlıyor! Misafirler tezahürat yapıyor.
+MSG_FEST_BILANZ,Festbilanz: +%d Festruhm. Rang: %s,Festival result: +%d fame. Rank: %s,Şenlik sonucu: +%d şöhret. Rütbe: %s

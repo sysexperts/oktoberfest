@@ -171,6 +171,18 @@ def zeichen_social(d, farbe):
     d.polygon(pts, fill=farbe + (255,))
 
 
+def zeichen_fest(d, farbe):
+    # Feuerwerksstern
+    import math as m
+    mx, my = 512, 480
+    for k in range(10):
+        a = m.radians(36 * k)
+        d.line([(mx + 90 * m.cos(a), my + 90 * m.sin(a)), (mx + 250 * m.cos(a), my + 250 * m.sin(a))], fill=WEISS, width=34)
+        d.ellipse((mx + 270 * m.cos(a) - 30, my + 270 * m.sin(a) - 30, mx + 270 * m.cos(a) + 30, my + 270 * m.sin(a) + 30), fill=WEISS)
+    d.ellipse((mx - 70, my - 70, mx + 70, my + 70), fill=farbe + (255,))
+    d.rounded_rectangle((470, 700, 554, 820), radius=20, fill=WEISS)
+
+
 ICONS = [
     ('mail', 'quadrat', '#4f9bff', '#1b48c4', zeichen_mail),
     ('shop', 'kreis', '#ffa04d', '#e0501a', zeichen_shop),
@@ -182,6 +194,7 @@ ICONS = [
     ('kalender', 'quadrat', '#9fb4cf', '#5a6f8f', zeichen_kalender),
     ('wetter', 'raute', '#52c8ff', '#0b6fbe', zeichen_wetter),
     ('social', 'kreis', '#ff7cc4', '#b81a78', zeichen_social),
+    ('fest', 'sechseck', '#ffd34a', '#d6361e', zeichen_fest),
 ]
 
 for name, form, oben, unten, zeichner in ICONS:

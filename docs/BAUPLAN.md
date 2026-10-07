@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v354.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v355.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -21,11 +21,11 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - Godot: `"C:/Users/vase/OneDrive - Intelego GmbH/Desktop/Godot.exe"` (Version 4.7.2). Nach Änderungen an Szenen/Skripten zuerst `... --headless --import`, dann Tests. Zufällige „Could not preload"-Fehler beim Headless-Start sind ein bekannter Fehlalarm bei parallelen Godot-Prozessen: einfach wiederholen.
 - **Heredocs in der Bash-Shell zerstören Backslashes** (`\n` wird zu einem Zeilenumbruch). Längere Skripte immer mit dem Write-Werkzeug als Datei schreiben und ausführen, nicht per Heredoc. Python-Patch-Skripte liegen als Beispiele in `build/p*_*.py`.
 - Keine neuen `class_name`s (Server-Klassencache). Einbinden per `preload`. Neue Dinge in der Welt erkennt der Spieler **per Methoden** (Duck-Typing): `hinweis_text(geschlossen)`, `gefallen_aktion(spieler)`, `wohnwagen_aktion(spieler)`, `interact_point()`. Beispiele: `scripts/gefallen_taeter.gd`, `scripts/security_posten.gd`, `scripts/wohnwagen_ding.gd`.
-- Desktop-Oberflächen werden von `build/gen_desktop4.py` erzeugt (Teile in `build/gen_*_teil.py`). Die alten Fenster (Festbüro, Zeltcomputer) kommen aus `build/orig/*.tscn` über `build/p2_legacy.py` und `tools/remap_app_farben.py`: **Quelle in `build/orig` ändern, dann `python build/p2_legacy.py`**. Look: nachtblaues Glas, Akzentfarbe je App, Farbbanner (siehe Speicher `desktop-app-look`).
+- **Achtung:** Seit v341 sind einige Desktop-Szenen von Hand geändert (Rezeptbuch in `desktop_quests.tscn`, Melden-Knopf in `social_post.tscn`, Fest-App `desktop_fest.tscn` mit eigenem Generator-Skript im Scratchpad, Icons/Kacheln in `desktop.tscn`). Den Generator `build/gen_desktop4.py` nicht mehr ausführen, sonst gehen diese Änderungen verloren. Ursprünglich: Desktop-Oberflächen werden von `build/gen_desktop4.py` erzeugt (Teile in `build/gen_*_teil.py`). Die alten Fenster (Festbüro, Zeltcomputer) kommen aus `build/orig/*.tscn` über `build/p2_legacy.py` und `tools/remap_app_farben.py`: **Quelle in `build/orig` ändern, dann `python build/p2_legacy.py`**. Look: nachtblaues Glas, Akzentfarbe je App, Farbbanner (siehe Speicher `desktop-app-look`).
 - Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
 
 ### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`)
-`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
+`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
 
 ### Wo was liegt
 - **Story-Kern:** `scripts/story/story.gd` (Kapitel, Quests mit Zuständen angeboten/offen/erfüllt/verfallen, Post, Hinweise, Flaggen), Daten in `daten/quests.json`, `daten/mails.json`, `daten/hinweise.json` (Texte per Schlüssel in der CSV). Messwerte für Quest-Bedingungen: `GameManager._story_messwerte()`. Neue Quest = Eintrag in `quests.json` (+ Mail + Texte), Flaggen setzt `_story.ereignis("name")`. Gespräche, die Flaggen setzen: Tabellen `STORY_GESPRAECHE` in `scripts/npc_festleiter.gd`, Konrad-Dialoge in `scripts/npc_huber.gd`, Server-RPC `net_story_flag` (Whitelist im GameManager).
@@ -214,8 +214,8 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| **Fest-App:** Motto, Band, Feuerwerk, Dekoration, Werbung, Aushilfen | L |
-| **Festtag-System:** Ereignis, Wettbewerbe (Fassanstich, Maßkrug-Stemmen), Katastrophen und Gegenmittel, Festruhm, Festränge | L |
+| ✔ **Fest-App** (ab Kapitel 6: Motto, Band, Feuerwerk, Dekoration, Werbung, Aushilfen planen und bezahlen, v355) | L |
+| ◐ **Festtag-System:** ✔ Ereignis „Fest“ alle 10 Tage (mehr Gäste, Band, Feuerwerk um 21 Uhr), Festruhm und fünf Festränge, Konrads Festruhm als Vergleich (v355); ☐ Wettbewerbe (Fassanstich, Maßkrug-Stemmen), Katastrophen und Gegenmittel, Motto-Gäste | L |
 | **Meister-Liste** (100 %) | S |
 | **Wohnwagen je Spieler** (Wohnwagenplatz, Anpassung innen/außen, Schlafqualität, Status) | XL |
 | **Late-Game-Ausgaben:** Zelt-Ausbauten (Empore, VIP-Lounge, Biergarten), Brauerei verkaufen, Buden und Zweitzelt | XL |
