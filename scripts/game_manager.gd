@@ -7118,18 +7118,30 @@ func net_saboteur_fangen() -> void:
 	_melde("MSG_SABOTEUR_ERWISCHT", [_eur(SABOTEUR_LOHN)], 2)
 	_net_saboteur_weg.rpc()
 
-## Feuerwerk über dem Zelt (großes Fest), bei allen Spielern über der Kamera.
+## Das große Fest: Feuerwerk über dem Zelt, kurze Kamerafahrt, danach Konrads Auftritt (bei allen Spielern).
 @rpc("authority", "reliable", "call_local")
 func _net_feuerwerk() -> void:
-	var kamera := get_viewport().get_camera_3d()
-	if kamera == null:
+	var spieler_kamera := get_viewport().get_camera_3d()
+	if spieler_kamera == null:
 		return
+	var mitte := (ZELT_MIN + ZELT_MAX) * 0.5   # Feuerwerk über dem Zelt, egal wo der Spieler steht
 	var fw: Node3D = preload("res://scenes/effekte/feuerwerk.tscn").instantiate()
-	kamera.get_tree().current_scene.add_child(fw)
-	fw.global_position = Vector3(kamera.global_position.x, 0.0, kamera.global_position.z)
+	spieler_kamera.get_tree().current_scene.add_child(fw)
+	fw.global_position = mitte
 	fw.ausloesen()
+	# Kamerafahrt: langsam zurück und hoch, Blick in den Himmel
+	var kino := Camera3D.new()
+	spieler_kamera.get_tree().current_scene.add_child(kino)
+	kino.global_position = mitte + Vector3(0, 4.0, 34.0)
+	kino.look_at(mitte + Vector3(0, 12.0, 0))
+	kino.make_current()
+	var fahrt := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	fahrt.tween_property(kino, "global_position", mitte + Vector3(0, 12.0, 50.0), 7.0)
+	await get_tree().create_timer(7.0).timeout
+	if is_instance_valid(spieler_kamera):
+		spieler_kamera.make_current()
+	kino.queue_free()
 	# Konrads Auftritt: kommt zum Feuerwerk vorbei
-	await get_tree().create_timer(3.0).timeout
 	var dialog := get_tree().get_first_node_in_group("dialog")
 	if dialog == null:
 		return

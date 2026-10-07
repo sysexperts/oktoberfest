@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v339.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v340.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -36,7 +36,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - **Tutorial:** Schritte 0 bis 9 = Kapitel 1 (`QUEST_COUNT := 10` im GameManager), danach führt die Story-Hauptquest (Anzeige im HUD).
 
 ### Nächste Schritte (Vorschlag, in dieser Reihenfolge)
-1. **Kapitel 5 abrunden:** Cutscene fürs große Fest (Feuerwerk, Konrads Auftritt und Stufenanzeige sind fertig).
+1. ✔ **Kapitel 5 abgerundet** (Feuerwerk, Kamerafahrt, Konrads Auftritt, Stufenanzeige, v340).
 2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino im Keller samt Türsteher und Spielen (XL), Händler Gustav und Sabotage-System mit Tarnung (XL), Frau Wagner als Figur im Zelt (Hygiene-Überraschungskontrolle), Konrad wirbt Mitarbeiter ab, Quest 3.4b „Das Hinterzimmer", Fake-Bewertungen in der Social-App.
 3. **P7 Rest:** Qualitätsstufen und Rezeptbuch (drei Seiten), Premiumpreis fürs eigene Bier, Bräumeister Gerhard als Personal (Rolle 6), weitere Streiche.
 4. **P5 Rest:** Gefallen Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen (Muster siehe `gefallen.gd`).
@@ -208,7 +208,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 |---|---|
 | ◐ **Duell-Turnier** reaktivieren (✔ in der Story ab 5.2 wiederholbar, Konrad wird je Sieg schneller; ✔ Stufenanzeige „Runde x von 5“ (v339)) | M |
 | ✔ Riesenzelt (Zeltstufe 4, vorhanden), Quests 5.1 bis 5.7 | M |
-| ◐ **Großes Fest:** ✔ Star-Act-Bedingung, Brief, Meldung; ✔ Feuerwerk (v337), Konrads Auftritt (v338); ☐ Cutscene | L |
+| ◐ **Großes Fest:** ✔ Star-Act-Bedingung, Brief, Meldung; ✔ Feuerwerk (v337), Konrads Auftritt (v338), Kamerafahrt (v340) | L |
 
 ## P9 · Endgame (XL)
 
