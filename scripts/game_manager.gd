@@ -208,7 +208,6 @@ const MIETE_FAKTOR := [0.75, 1.0, 1.3]
 ## Koop (Spaß-Plan 5.1): je weiterer Spieler so viel mehr Andrang
 const KOOP_ANDRANG_JE_SPIELER := 0.2   # vorher 0.5 — zu viert war das nur noch Schleppen
 ## Abstimmung „Nächster Tag?": so lange läuft sie (Sekunden)
-const ABSTIMMUNG_ZEIT := 30.0
 ## Klo: so lange wartet ein Gast vor besetztem Klo, dann geht er irgendwo ins Zelt
 const KLO_WARTEN := 8.0
 const SPIELERNAME_MAX := 16
@@ -571,7 +570,8 @@ var _zelt_name := ""
 ## Gast auf dem Klo (-1 = frei) — eine Person gleichzeitig
 var _klo_gast := -1
 ## Laufende Abstimmung: {starter, ja: {peer: true}, nein: {peer: true}, rest: Sekunden}
-var _abstimmung := {}
+## Wer gerade im Bett liegt (Peer → true). Der Tag beginnt, sobald die Mehrheit der Spieler schläft.
+var _schlaefer := {}
 ## Spieler aus der Lobby: {peer: {name, farbe, figur}}
 var _spieler_info := {}
 const ZELTNAME_MAX := 24
@@ -1638,8 +1638,9 @@ func _on_peer_left(peer_id: int) -> void:
 		_spieler_info.erase(peer_id)
 		_net_spieler_info.rpc(_spieler_info)
 	_broadcast_meta()
-	# Laufende Abstimmung neu auswerten — ohne den Spieler kann die Mehrheit kippen
-	_abstimmung_pruefen(false)
+	# Ohne den Spieler kann die Mehrheit im Bett kippen
+	_schlaefer.erase(peer_id)
+	_schlafen_pruefen(false)
 
 # ================================================= Bierpreis
 ## Zelt-Computer: Bierpreis in 10-%-Schritten ändern — auch während der Schicht.
@@ -3975,30 +3976,57 @@ func _sichere_wohnwagen() -> void:
 func net_sleep() -> void:
 	if not multiplayer.is_server() or _phase != Phase.INTERMISSION:
 		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	# Nochmal E: wieder aufstehen
+	if _schlaefer.has(s):
+		_schlaefer.erase(s)
+		_net_schlafen.rpc_id(s, false)
+		_schlafen_pruefen(true)
+		return
 	if _tent_stage == 0:
 		_fehler("MSG_SLEEP_NEED_TENT")
 		return
 	if _active_count <= 0:
 		_fehler("MSG_SLEEP_NEED_TABLE")
 		return
-	# Allein (oder nur ein Spieler auf dem Server): sofort. Sonst stimmen alle ab.
-	if _players_nodes.size() <= 1:
-		_tag_starten()
+	_schlaefer[s] = true
+	_net_schlafen.rpc_id(s, true)
+	_schlafen_pruefen(true)
+
+## Mehrheit im Bett? Dann beginnt der nächste Tag (allein: sofort). Sonst sehen alle, wie viele schon liegen.
+func _schlafen_pruefen(melden: bool) -> void:
+	for peer in _schlaefer.keys():
+		if not _players_nodes.has(peer):
+			_schlaefer.erase(peer)
+	if _schlaefer.is_empty() or _phase != Phase.INTERMISSION:
 		return
-	if not _abstimmung.is_empty():
-		return   # läuft schon
-	var s := multiplayer.get_remote_sender_id()
-	if s == 0:
-		s = 1
-	_abstimmung = {"starter": s, "ja": {s: true}, "nein": {}, "rest": ABSTIMMUNG_ZEIT}
-	_melde("MSG_VOTE_STARTED", [_spieler_bezeichnung(s)])
-	_abstimmung_pruefen(false)
+	var gesamt := maxi(1, _players_nodes.size())
+	var liegen := _schlaefer.size()
+	if schlafen_mehrheit(liegen, gesamt):
+		_tag_starten()
+	elif melden:
+		_melde("MSG_SCHLAFEN_STAND", [liegen, gesamt])
+
+## Mehr als die Hälfte aller Spieler liegt im Bett
+static func schlafen_mehrheit(liegen: int, gesamt: int) -> bool:
+	return liegen * 2 > gesamt
+
+## Beim Spieler: ins Bett legen oder aufstehen (scripts/player.gd schlafen_setzen)
+@rpc("authority", "reliable", "call_local")
+func _net_schlafen(an: bool) -> void:
+	var sp := _players_nodes.get(multiplayer.get_unique_id()) as Node
+	if sp and sp.has_method("schlafen_setzen"):
+		sp.schlafen_setzen(an)
 
 ## Uyu → ertesi sabah 08:00. Die Uhr steht, bis ein Spieler das Zelt eröffnet.
 ## Der Tag wechselt erst hier, beim Schlafen — vorher stand nach Feierabend
 ## schon der nächste Tag im Kalender und oben in der Leiste, obwohl niemand
 ## geschlafen hatte.
 func _tag_starten() -> void:
+	_schlaefer.clear()
+	_net_schlafen.rpc(false)
 	_day += 1   # endlos: Tag 17, 18, 19 … — kein Rücksprung mehr
 	_stats.days += 1
 	_story.tag_wechsel(_day)
@@ -4106,70 +4134,6 @@ func _net_spieler_info(info: Dictionary) -> void:
 			p.set_info(str(d.get("name", "")), int(d.get("farbe", 0)), int(d.get("figur", 0)))
 	if _hud and _hud.has_method("lobby_aktualisieren"):
 		_hud.lobby_aktualisieren(info)
-
-## Ergebnis einer Abstimmung: 1 = Tag starten, -1 = abbrechen, 0 = noch offen.
-## Mehrheit aller Spieler — wer nicht abstimmt, zählt nicht als Ja.
-static func abstimmung_ergebnis(ja: int, nein: int, gesamt: int, abgelaufen: bool) -> int:
-	if ja * 2 > gesamt:
-		return 1
-	if nein * 2 >= gesamt or abgelaufen:
-		return -1
-	return 0
-
-@rpc("any_peer", "reliable", "call_local")
-func net_abstimmen(ja: bool) -> void:
-	if not multiplayer.is_server() or _abstimmung.is_empty():
-		return
-	var s := multiplayer.get_remote_sender_id()
-	if s == 0:
-		s = 1
-	var dafuer: Dictionary = _abstimmung.ja
-	var dagegen: Dictionary = _abstimmung.nein
-	dafuer.erase(s)
-	dagegen.erase(s)
-	if ja:
-		dafuer[s] = true
-	else:
-		dagegen[s] = true
-	_abstimmung_pruefen(false)
-
-## Auswerten und allen den Stand schicken. Aufgerufen bei jeder Stimme, jede Sekunde
-## und wenn ein Spieler das Spiel verlässt.
-func _abstimmung_pruefen(abgelaufen: bool) -> void:
-	if _abstimmung.is_empty():
-		return
-	# Nur Stimmen von Spielern zählen, die noch da sind
-	for liste: Dictionary in [_abstimmung.ja, _abstimmung.nein]:
-		for peer in liste.keys():
-			if not _players_nodes.has(peer):
-				liste.erase(peer)
-	var gesamt := maxi(1, _players_nodes.size())
-	var ja := (_abstimmung.ja as Dictionary).size()
-	var nein := (_abstimmung.nein as Dictionary).size()
-	var ergebnis := abstimmung_ergebnis(ja, nein, gesamt, abgelaufen)
-	var starter := _spieler_bezeichnung(int(_abstimmung.starter))
-	if ergebnis == 0:
-		# Jeder bekommt seinen eigenen Stand (hat er schon abgestimmt?)
-		var rest := ceili(float(_abstimmung.rest))
-		for peer in _players_nodes.keys():
-			var gestimmt: bool = (_abstimmung.ja as Dictionary).has(peer) or (_abstimmung.nein as Dictionary).has(peer)
-			if peer == multiplayer.get_unique_id():
-				_net_abstimmung(true, starter, ja, nein, gesamt, rest, gestimmt)
-			else:
-				_net_abstimmung.rpc_id(peer, true, starter, ja, nein, gesamt, rest, gestimmt)
-		return
-	_abstimmung = {}
-	_net_abstimmung.rpc(false, "", ja, nein, gesamt, 0, false)
-	if ergebnis == 1 and _phase == Phase.INTERMISSION:
-		_melde("MSG_VOTE_YES", [ja, gesamt])
-		_tag_starten()
-	else:
-		_melde("MSG_VOTE_NO", [ja, gesamt])
-
-@rpc("authority", "reliable", "call_local")
-func _net_abstimmung(aktiv: bool, starter: String, ja: int, nein: int, gesamt: int, rest: int, gestimmt: bool) -> void:
-	if _hud and _hud.has_method("zeige_abstimmung"):
-		_hud.zeige_abstimmung(aktiv, starter, ja, nein, gesamt, rest, gestimmt)
 
 ## Kiosk: Tisch verkaufen (yarı fiyat iade).
 @rpc("any_peer", "reliable", "call_local")
@@ -4974,14 +4938,6 @@ func _process(delta: float) -> void:
 		_dreck_nachlegen = false
 		if _quest_step == 3 and _tent_stage > 0 and not _dreck_uebrig():
 			_dreck_verteilen()
-	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
-	if not _abstimmung.is_empty():
-		var vorher := ceili(float(_abstimmung.rest))
-		_abstimmung.rest = float(_abstimmung.rest) - delta
-		if float(_abstimmung.rest) <= 0.0:
-			_abstimmung_pruefen(true)
-		elif ceili(float(_abstimmung.rest)) != vorher:
-			_abstimmung_pruefen(false)
 	if _phase == Phase.SHIFT:
 		# Die Uhr läuft erst ab der Eröffnung: vorher ist Zeit zum Einräumen,
 		# Putzen und Bauen, ohne dass der Tag wegläuft.

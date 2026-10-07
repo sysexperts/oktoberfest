@@ -1067,12 +1067,9 @@ class Lauf extends Node:
 		_check("Klo-Container in der Szene", gm.get_node_or_null("KloContainer") != null, "")
 		_check("Tanzplätze vor der Bühne frei", not gm.buehnen_tanzplaetze().is_empty(), str(gm.buehnen_tanzplaetze().size()))
 
-		print("  -- Abstimmung und Klo")
-		_check("Abstimmung: Mehrheit entscheidet", gm.abstimmung_ergebnis(2, 0, 3, false) == 1
-			and gm.abstimmung_ergebnis(1, 0, 3, false) == 0
-			and gm.abstimmung_ergebnis(1, 1, 2, false) == -1
-			and gm.abstimmung_ergebnis(1, 0, 3, true) == -1
-			and gm.abstimmung_ergebnis(3, 1, 4, false) == 1, "")
+		print("  -- Schlafen und Klo")
+		_check("Schlafen: Mehrheit im Bett", gm.schlafen_mehrheit(2, 3) and not gm.schlafen_mehrheit(1, 3)
+			and not gm.schlafen_mehrheit(1, 2) and gm.schlafen_mehrheit(1, 1) and gm.schlafen_mehrheit(3, 4), "")
 		var klo_vorher: bool = gm._has_toilet
 		gm._has_toilet = true
 		gm._klo_gast = -1

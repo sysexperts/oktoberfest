@@ -223,7 +223,7 @@ HINT_STORE,{interact} Paket einlagern,{interact} Store package,{interact} Paketi
 HINT_STORAGE,Lager — Pakete hierher bringen,Storage — bring packages here,Depo — paketleri buraya getir
 HINT_OFFICE,{interact} Festbüro öffnen,{interact} Open Fair Office,{interact} Fuar Ofisini aç
 HINT_OFFICE_SHIFT,Festbüro ist bei offenem Zelt geschlossen,The Fair Office is closed while the tent is open,Çadır açıkken fuar ofisi kapalı
-HINT_SLEEP,{interact} Schlafen — neuer Tag,{interact} Sleep — next day,{interact} Uyu — yeni gün
+HINT_SLEEP,{interact} Ins Bett legen (nochmal: aufstehen),{interact} Go to bed (again: get up),{interact} Yatağa yat (tekrar: kalk)
 HINT_SLEEP_SHIFT,Schlafen erst nach Feierabend,You can sleep after closing time,Kapanıştan sonra uyuyabilirsin
 HINT_MOVE_TABLE,{interact} Tisch verschieben,{interact} Move table,{interact} Masayı taşı
 HINT_COMPUTER,{interact} Zelt-Computer,{interact} Tent computer,{interact} Çadır bilgisayarı
@@ -264,15 +264,6 @@ LOBBY_OTHERS,Schon dabei: %s,Already here: %s,Şimdiden burada: %s
 LOBBY_HOWTO_TITLE,So spielt ihr,How to play,Nasıl oynanır
 LOBBY_HOWTO,"1. Festbüro: Zelt mieten und taufen, Tische aufstellen, Bier bestellen.\n2. Um 8 Uhr kommen die Gäste. Jeder packt dort an, wo es gerade brennt.\n3. Um 22 Uhr ist Feierabend: im Wohnwagen schlafen — alle stimmen ab, die Mehrheit startet den nächsten Tag.\n{help} zeigt jederzeit die Hilfe.","1. Fair office: rent and name your tent, set up tables, order beer.\n2. Guests arrive at 8:00. Everyone jumps in wherever it gets busy.\n3. Closing time is 22:00: sleep in the caravan — everyone votes, the majority starts the next day.\n{help} shows the help at any time.","1. Fuar ofisi: çadırı kirala ve adlandır, masa kur, bira sipariş et.\n2. Misafirler 8:00'de gelir. Herkes yoğunluk olan yere yardım eder.\n3. Kapanış 22:00: karavanda uyu — herkes oy verir, çoğunluk sonraki günü başlatır.\n{help} her zaman yardımı gösterir."
 LOBBY_GO,Start,Start,Başla
-VOTE_TITLE,Feierabend?,Call it a night?,Paydos mu?
-VOTE_TEXT,%s will schlafen gehen und den nächsten Tag starten.,%s wants to go to bed and start the next day.,%s yatmak ve sonraki günü başlatmak istiyor.
-VOTE_COUNT,Ja %d · Nein %d · %d Spieler · noch %d s,Yes %d · No %d · %d players · %d s left,Evet %d · Hayır %d · %d oyuncu · %d sn kaldı
-VOTE_YES,Ja,Yes,Evet
-VOTE_NO,"Nein, noch eine Maß","No, one more round","Hayır, bir kupa daha"
-VOTE_DONE,Abgestimmt — warte auf die anderen …,Voted — waiting for the others …,Oy verildi — diğerleri bekleniyor …
-MSG_VOTE_STARTED,%s will schlafen gehen — stimmt ab!,%s wants to go to bed — vote now!,%s yatmak istiyor — oy verin!
-MSG_VOTE_YES,Mehrheit dafür (%d von %d) — gute Nacht!,Majority agrees (%d of %d) — good night!,Çoğunluk kabul etti (%d / %d) — iyi geceler!
-MSG_VOTE_NO,Keine Mehrheit (%d von %d) — es wird weitergefeiert!,No majority (%d of %d) — the party goes on!,Çoğunluk yok (%d / %d) — parti devam!
 WORLD_MESS,Putzen ({interact}),Clean up ({interact}),Temizle ({interact})
 WORLD_PACKAGE_1,"Bierfass ×%d\n({interact}: aufnehmen)","Beer keg ×%d\n({interact}: pick up)","Bira fıçısı ×%d\n({interact}: al)"
 WORLD_PACKAGE_2,"Zutaten ×%d\n({interact}: aufnehmen)","Ingredients ×%d\n({interact}: pick up)","Malzemeler ×%d\n({interact}: al)"
@@ -2751,3 +2742,4 @@ HINT_WAGEN_FREI,Wohnwagen (noch niemandem zugeteilt),Caravan (not assigned yet),
 HINT_WAGEN_BESUCH,{interact} Wohnwagen besuchen,{interact} Visit caravan,{interact} Karavanı ziyaret et
 MSG_WAGEN_GEWAEHLT,%s hat sich einen Wohnwagen ausgesucht,%s picked a caravan,%s bir karavan seçti
 MSG_WAGEN_BELEGT,Dieser Wohnwagen gehört schon jemandem,This caravan is already taken,Bu karavan zaten başkasının
+MSG_SCHLAFEN_STAND,Im Bett: %d von %d — der Tag beginnt, sobald die Mehrheit schläft (Leertaste: aufstehen),In bed: %d of %d — the day starts once most players are asleep (Space: get up),Yatakta: %d / %d — oyuncuların çoğu uyuyunca gün başlar (Boşluk: kalk)

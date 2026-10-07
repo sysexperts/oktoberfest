@@ -278,8 +278,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		var hud := _world.get_node_or_null("HUD")
 		if hud and hud.has_method("is_rent_open") and hud.is_rent_open():
 			hud.close_rent()
-		elif hud and hud.has_method("is_vote_open") and hud.is_vote_open():
-			hud.close_vote()
 		elif hud and hud.has_method("is_lobby_open") and hud.is_lobby_open():
 			hud.close_lobby()
 		elif hud and hud.has_method("is_desktop_open") and hud.is_desktop_open():
@@ -624,13 +622,26 @@ func _tippt() -> bool:
 	var hud := _world.get_node_or_null("HUD") if _world else null
 	if hud == null:
 		return false
-	# Auch während der Abstimmung: Maus ist frei, Tasten sollen nichts auslösen
 	return (hud.has_method("is_rent_open") and hud.is_rent_open()) \
-		or (hud.has_method("is_vote_open") and hud.is_vote_open()) \
 		or (hud.has_method("is_lobby_open") and hud.is_lobby_open())
+
+## Liegt im Bett (Schlafen im Wohnwagen): der Tag beginnt, sobald die Mehrheit der Spieler liegt.
+## Aufstehen mit Leertaste oder noch einmal E am Bett (GameManager.net_sleep schaltet um).
+var schlaeft := false
+
+func schlafen_setzen(an: bool) -> void:
+	schlaeft = an
+	velocity = Vector3.ZERO
+	if _is_local:
+		_sfx("pop")
 
 func _handle_movement(delta: float) -> void:
 	if _geschleudert():
+		return
+	if schlaeft:
+		velocity = Vector3.ZERO
+		if InputMap.has_action("springen") and Input.is_action_just_pressed("springen") and _world != null:
+			_world.net_sleep.rpc_id(1)
 		return
 	# Auf dem Arm eines Mitspielers: keine eigene Bewegung, nur zappeln
 	if wird_getragen():

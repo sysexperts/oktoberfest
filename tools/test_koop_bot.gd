@@ -192,30 +192,19 @@ class Lauf extends Node:
 		ok = await _bis(func() -> bool: return _putzkraefte() == 1, 10.0)
 		_pruefe("Spieler stellt Personal ein", ok, "%d Putzkräfte, Geld %d" % [_putzkraefte(), _hud()._money])
 
-		# 6 Abstimmung 1: Chef will schlafen, Koch und Lager sagen Nein → kein Tag
+		# 6 Schlafen: der Chef legt sich allein hin → keine Mehrheit, kein neuer Tag
 		await _warte(1.0)
 		if rolle == "chef":
 			gm.net_sleep.rpc_id(1)
-		ok = await _bis(func() -> bool: return _hud().is_vote_open(), 15.0)
-		_pruefe("Abstimmung 1 erscheint", ok, "")
-		if rolle in ["koch", "lager"]:
-			await _warte(1.0)
-			gm.net_abstimmen.rpc_id(1, false)
-		ok = await _bis(func() -> bool: return not _hud().is_vote_open(), 40.0)
-		await _warte(1.0)
-		_pruefe("Mehrheit Nein: kein neuer Tag", ok and gm._phase == gm.Phase.INTERMISSION, "Phase %d" % gm._phase)
+		await _warte(4.0)
+		_pruefe("Einer im Bett: kein neuer Tag", gm._phase == gm.Phase.INTERMISSION, "Phase %d" % gm._phase)
 
-		# 7 Abstimmung 2: Koch und Lager sagen Ja → Tag startet für alle
-		await _warte(2.0)
-		if rolle == "chef":
-			gm.net_sleep.rpc_id(1)
-		ok = await _bis(func() -> bool: return _hud().is_vote_open(), 15.0)
-		_pruefe("Abstimmung 2 erscheint", ok, "")
+		# 7 Koch und Lager legen sich dazu: drei von vier → Tag startet für alle
 		if rolle in ["koch", "lager"]:
 			await _warte(1.0)
-			gm.net_abstimmen.rpc_id(1, true)
+			gm.net_sleep.rpc_id(1)
 		ok = await _bis(func() -> bool: return gm._phase == gm.Phase.SHIFT, 20.0)
-		_pruefe("Mehrheit Ja: Schicht beginnt", ok, "Phase %d" % gm._phase)
+		_pruefe("Mehrheit im Bett: Schicht beginnt", ok, "Phase %d" % gm._phase)
 		var t_schicht := Time.get_ticks_msec()
 
 		# 7b Zelt ist nach dem Aufstehen noch zu — der Chef sticht am Eingang an

@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/desktop.tscn" id="92_desktop"]
 [ext_resource type="PackedScene" path="res://scenes/ui/zelt_mieten.tscn" id="4_mieten"]
 [ext_resource type="PackedScene" path="res://scenes/ui/emote_rad.tscn" id="90_emote"]
-[ext_resource type="PackedScene" path="res://scenes/ui/abstimmung.tscn" id="5_abst"]
 [ext_resource type="PackedScene" path="res://scenes/ui/lobby.tscn" id="6_lobby"]
 [ext_resource type="PackedScene" path="res://scenes/ui/spielerliste.tscn" id="91_sl"]
 [ext_resource type="PackedScene" path="res://scenes/ui/schicht_intro.tscn" id="7_intro"]
@@ -850,9 +849,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="ZeltMieten" parent="." instance=ExtResource("4_mieten")]
-unique_name_in_owner = true
-
-[node name="Abstimmung" parent="." instance=ExtResource("5_abst")]
 unique_name_in_owner = true
 
 [node name="Lobby" parent="." instance=ExtResource("6_lobby")]
