@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="1_gold"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="2_rot"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="3_holz"]
+
+[sub_resource type="CylinderMesh" id="Rand"]
+top_radius = 2.35
+bottom_radius = 2.35
+height = 0.14
+radial_segments = 32
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Boden"]
+top_radius = 2.15
+bottom_radius = 2.15
+height = 0.18
+radial_segments = 32
+rings = 1
+
+[sub_resource type="BoxMesh" id="Teppich"]
+size = Vector3(1.5, 0.03, 7.5)
+
+[sub_resource type="CylinderMesh" id="Stab"]
+top_radius = 0.04
+bottom_radius = 0.04
+height = 1.1
+radial_segments = 8
+rings = 1
+
+[node name="Tanzflaeche" type="Node3D"]
+
+[node name="Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0)
+mesh = SubResource("Rand")
+surface_material_override/0 = ExtResource("1_gold")
+
+[node name="Boden" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+mesh = SubResource("Boden")
+surface_material_override/0 = ExtResource("3_holz")
+
+[node name="Teppich" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 6.0)
+mesh = SubResource("Teppich")
+surface_material_override/0 = ExtResource("2_rot")
+
+[node name="Stab1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0.55, 2.4)
+mesh = SubResource("Stab")
+surface_material_override/0 = ExtResource("1_gold")
+
+[node name="Stab2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.55, 2.4)
+mesh = SubResource("Stab")
+surface_material_override/0 = ExtResource("1_gold")
+
+[node name="Licht" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+light_color = Color(1, 0.75, 0.45, 1)
+light_energy = 1.2
+omni_range = 5.5

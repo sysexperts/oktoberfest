@@ -32,7 +32,7 @@ class Lauf extends Node:
 		sp.global_position = zelt.to_global(Vector3(0, 0.1, 30))
 		var kam := Camera3D.new()
 		gm.add_child(kam)
-		kam.look_at_from_position(zelt.to_global(Vector3(0.5, 1.9, 5.5)), zelt.to_global(Vector3(2.5, 1.1, -8.0)))
+		kam.look_at_from_position(zelt.to_global(Vector3(0.0, 2.8, 6.4)), zelt.to_global(Vector3(0.0, 0.4, -3.0)))
 		kam.make_current()
 		await _warten(2.0)
 		await _warten(1.0)
