@@ -2574,3 +2574,16 @@ MSG_SCHUTZ_SCHLOSS,Diebe am Fasslager: Das Schloss hält. Sie ziehen unverrichte
 MSG_SCHUTZ_VERSICHERUNG_LASTER,"Konrads Laster blockiert die Einfahrt, aber die Versicherung übernimmt den Aufschlag.","Konrad's truck blocks the entrance, but the insurance covers the surcharge.",Konrad'ın kamyonu girişi tıkıyor ama sigorta farkı karşılıyor.
 MSG_STROM_AUS_KAMERA,"Stromausfall! Die Kamera zeigt: Das waren Konrads Leute. Ärgerlich, aber ihr wisst Bescheid.","Power cut! The camera shows: it was Konrad's people. Annoying, but you know.",Elektrik kesintisi! Kamera gösteriyor: Konrad'ın adamlarıydı. Can sıkıcı ama biliyorsunuz.
 MSG_DIEB_BIER_VERSICHERT,Diebe waren am Fasslager und haben %d Maß Bier gestohlen. Die Versicherung zahlt %s.,Thieves hit the barrel store and stole %d mugs of beer. The insurance pays %s.,Hırsızlar fıçı deposuna girip %d kupa bira çaldı. Sigorta %s ödüyor.
+HINT_FASSANSTICH,{interact} Das Festfass anstechen,{interact} Tap the festival barrel,{interact} Şenlik fıçısını delmek
+WORLD_FESTFASS,"Festfass
+({interact}: anstechen)","Festival barrel
+({interact}: tap it)","Şenlik fıçısı
+({interact}: delmek)"
+ANSTICH_TITEL,Fassanstich,Barrel tapping,Fıçı delme
+ANSTICH_START,Drei Schläge. Triff den Hahn in der grünen Mitte der Leiste!,Three strikes. Hit the tap in the green middle of the bar!,Üç vuruş. Musluğu çubuğun yeşil ortasına vur!
+ANSTICH_INFO,Noch %d Schläge · bisheriger Durchschnitt %d von 10,%d strikes left · average so far %d out of 10,%d vuruş kaldı · şimdiye kadar ortalama 10 üzerinden %d
+ANSTICH_HINWEIS,Linksklick oder E zum Schlagen · Esc bricht ab,Left click or E to strike · Esc cancels,Vurmak için sol tık veya E · Esc iptal eder
+MSG_ANSTICH_GUT,O'zapft is! Sauber angestochen (%d von 10): +%d Festruhm und die Gäste jubeln.,Tapped! A clean strike (%d out of 10): +%d festival fame and the guests cheer.,Delindi! Temiz bir vuruş (10 üzerinden %d): +%d şenlik şöhreti ve misafirler tezahürat yapıyor.
+MSG_ANSTICH_SCHLECHT,Daneben! Das Bier spritzt überall hin (%d von 10). Aufwischen nicht vergessen.,Missed! Beer sprays everywhere (%d out of 10). Do not forget to mop up.,Iskaladın! Bira her yere sıçradı (10 üzerinden %d). Silmeyi unutma.
+MS_ANSTICH_5_TITLE,Sicherer Schlag,Steady hand,Sağlam vuruş
+MS_ANSTICH_5_TEXT,Steche fünfmal ein Festfass sauber an.,Tap a festival barrel cleanly five times.,Beş kez temiz bir şekilde şenlik fıçısı del.

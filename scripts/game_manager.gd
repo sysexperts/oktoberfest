@@ -451,6 +451,10 @@ const FEST_SCHUTZ_PREIS := {"plane": 200, "notstrom": 300, "vorrat": 250}
 const FEST_KATA_CHANCE := 0.7
 var _fest_kata := ""         # heute geplante Katastrophe ("regen", "strom", "knapp"), leer = keine
 var _fest_kata_zeit := 17.0
+## Fassanstich: am Festtag steht ein Festfass vor der Bühne. Gutes Anstechen gibt Festruhm und Beliebtheit.
+const ANSTICH_RUHM := 10
+const ANSTICH_ZIEL := 6
+var _anstich_offen := false
 const FEST_RAENGE := [0, 100, 250, 500, 1000]   # Dorffest, Stadtfest, Landesfest, Festival-Highlight, Weltfest
 var _fest := {}              # geplantes Fest: tag, motto, band, feuer, deko, werbung, hilfe, kosten
 var _fest_ruhm := 0
@@ -5652,6 +5656,7 @@ func _end_shift(reason := 0) -> void:
 	_karaoke_t = 0.0
 	_zwischenfall_t = randf_range(90.0, 180.0)
 	_gruppen.clear()
+	_anstich_offen = false
 	_fest_auswerten()
 	_ausbau_abend()
 	_meister_pruefen()
@@ -6429,7 +6434,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
-		"staff_max": staff_max_level(), "eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
+		"staff_max": staff_max_level(), "anstich_offen": _anstich_offen, "eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
@@ -7231,6 +7236,7 @@ func _fest_morgen() -> bool:
 		return false
 	_ereignis = "fest"
 	_fest_feuer_gezuendet = false
+	_anstich_offen = true
 	var wb: Array = FEST_WETTBEWERBE.pick_random()
 	_fest_wb = {"spiel": wb[0], "ziel": wb[1], "best": 0}
 	_melde("MSG_FEST_WETTBEWERB", ["WB_SPIEL_" + str(wb[0]).to_upper(), int(wb[1])], 2)
@@ -7241,6 +7247,23 @@ func _fest_morgen() -> bool:
 	_melde("MSG_FEST_HEUTE", ["FEST_MOTTO_%d" % int(_fest.motto)], 2)
 	_stats.ereignisse = int(_stats.get("ereignisse", 0)) + 1
 	return true
+
+## Fassanstich am Festfass: punkte 0 bis 10 vom Spieler (Durchschnitt von drei Schlägen)
+@rpc("any_peer", "reliable", "call_local")
+func net_fassanstich(punkte: int) -> void:
+	if not multiplayer.is_server() or not _anstich_offen or _ereignis != "fest":
+		return
+	_anstich_offen = false
+	punkte = clampi(punkte, 0, 10)
+	if punkte >= ANSTICH_ZIEL:
+		_fest["anstich_ruhm"] = ANSTICH_RUHM
+		_pop_erhoehen(3.0)
+		_stats["anstiche"] = int(_stats.get("anstiche", 0)) + 1
+		_melde("MSG_ANSTICH_GUT", [punkte, ANSTICH_RUHM], 2)
+	else:
+		_spawn_mess_at(Vector3(7.0, 0.0, 3.0), 0)
+		_melde("MSG_ANSTICH_SCHLECHT", [punkte], 1)
+	_broadcast_meta()
 
 ## Die Katastrophe des Festtags schlägt zu — oder wird vom gekauften Schutz abgewehrt (Festruhm: +5 abgewehrt, −5 sonst)
 func _fest_katastrophe() -> void:
@@ -7273,7 +7296,7 @@ func _fest_auswerten() -> void:
 	if _ereignis != "fest" or _fest.is_empty():
 		return
 	var ruhm := _served / 2 + roundi(_popularity / 2.0) + int(_fest.band) * 10 + int(_fest.feuer) * 8 - _complaints * 3
-	ruhm += int(_fest.get("kata_ruhm", 0))
+	ruhm += int(_fest.get("kata_ruhm", 0)) + int(_fest.get("anstich_ruhm", 0))
 	if not _fest_wb.is_empty():
 		if int(_fest_wb.best) >= int(_fest_wb.ziel):
 			ruhm += FEST_WB_BONUS

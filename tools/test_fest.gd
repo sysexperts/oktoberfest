@@ -60,6 +60,11 @@ class Lauf extends Node:
 		_check("Ohne Notstrom: Stromausfall", gm._strom_t > 0.0)
 		gm._strom_t = 0.0
 		_check("Schutz kostet extra", gm.fest_kosten(1, 0, false, false, false, 7) == 150 + 200 + 300 + 250, str(gm.fest_kosten(1, 0, false, false, false, 7)))
+		_check("Festfass wartet auf den Anstich", gm._anstich_offen)
+		gm.net_fassanstich(9)
+		_check("Guter Anstich: Festruhm und Beliebtheit", not gm._anstich_offen and int(gm._fest.get("anstich_ruhm", 0)) == gm.ANSTICH_RUHM and int(gm._stats.get("anstiche", 0)) == 1)
+		gm.net_fassanstich(9)
+		_check("Nur ein Anstich pro Fest", int(gm._stats.get("anstiche", 0)) == 1)
 		_check("Wettbewerb ist gewählt", not gm._fest_wb.is_empty() and int(gm._fest_wb.ziel) > 0, str(gm._fest_wb))
 		# Wettbewerb: das gewählte Spiel mit dem Ziel schaffen
 		var wb_spiel: String = gm._fest_wb.spiel

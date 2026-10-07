@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/festfass.gd" id="1_ff"]
+[ext_resource type="PackedScene" path="res://scenes/zelt/fass.tscn" id="2_fass"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="3_wt"]
+
+[node name="Festfass" type="Node3D"]
+script = ExtResource("1_ff")
+
+[node name="Fass" parent="." instance=ExtResource("2_fass")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 0, 0)
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+billboard = 1
+pixel_size = 0.006
+font_size = 40
+modulate = Color(1, 0.88, 0.5, 1)
+text = "WORLD_FESTFASS"
+script = ExtResource("3_wt")
+schluessel = "WORLD_FESTFASS"
