@@ -530,6 +530,30 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
+[node name="AkademieText" type="Label" parent="Spalte/Rand/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Akademie" type="Button" parent="Spalte/Rand/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("KnopfNormal")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("KnopfHover")
+
 [node name="KonradText" type="Label" parent="Spalte/Rand/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2

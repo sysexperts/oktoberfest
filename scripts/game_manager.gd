@@ -289,6 +289,14 @@ const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400, 4: 450, 5: 550, 6: 700}
 const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80, 4: 90, 5: 110, 6: 130}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 5
+const STAFF_MAX_LEVEL_AKADEMIE := 10   # mit der Personal-Akademie (App „Ausbau“) lassen sich Mitarbeiter bis Stufe 10 trainieren
+
+func staff_max_level() -> int:
+	return STAFF_MAX_LEVEL_AKADEMIE if _ausbau.has("akademie") else STAFF_MAX_LEVEL
+
+## Tabletts: bis Stufe 5 aus der Tabelle, danach jede Stufe ein Krug mehr
+func kellner_kapazitaet(level: int) -> int:
+	return int(WAITER_CAPACITY.get(level, 12 + maxi(0, level - 5)))
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
 ## Stufe 1 trug nur 1 Krug — mit 4 Tischen blieben 20–35 Bestellungen am Tag liegen (Spielbot).
 const WAITER_CAPACITY := {1: 2, 2: 3, 3: 5, 4: 8, 5: 12}
@@ -456,7 +464,7 @@ var _wagen := {"bett": 1, "items": []}
 ## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
 ##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
 ##   handel: verkauft nachts eigenes Bier an andere Zelte · konrad: Konrads Zelt aufgekauft (keine Streiche mehr, Pacht)
-const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "konrad": 20000}
+const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "akademie": 6000, "konrad": 20000}
 const AUSBAU_HANDEL_MASS := 12
 const AUSBAU_KONRAD_PACHT := 150
 var _ausbau: Array = []
@@ -3260,7 +3268,7 @@ func net_upgrade_staff(role: int) -> void:
 	var low := 999
 	for sid in _staff_sim.keys():
 		var s: Dictionary = _staff_sim[sid]
-		if int(s.role) == role and int(s.level) < low and int(s.level) < STAFF_MAX_LEVEL:
+		if int(s.role) == role and int(s.level) < low and int(s.level) < staff_max_level():
 			low = int(s.level)
 			target = sid
 	if target < 0:
@@ -3278,7 +3286,7 @@ func net_upgrade_staff(role: int) -> void:
 	_staff_sim[target] = s2
 	_set_staff_info.rpc(target, role, int(s2.level))
 	if role == ROLE_KELLNER:
-		_melde("MSG_WAITER_UP", [int(s2.level), int(WAITER_CAPACITY.get(int(s2.level), 1))], 2)
+		_melde("MSG_WAITER_UP", [int(s2.level), kellner_kapazitaet(int(s2.level))], 2)
 	else:
 		_melde("MSG_STAFF_UP", [STAFF_KEYS[role], int(s2.level)], 2)
 	_broadcast_meta()
@@ -3301,13 +3309,13 @@ func _restore_staff(role: int, level: int, eig := "normal", mehr: Dictionary = {
 	_staff_next += 1
 	var start: Vector3 = _staff_start(role)
 	_staff_sim[id] = {
-		"role": role, "level": clampi(level, 1, STAFF_MAX_LEVEL), "pos": start, "tgt": start,
+		"role": role, "level": clampi(level, 1, staff_max_level()), "pos": start, "tgt": start,
 		"yaw": 0.0, "state": 0, "timer": 0.0, "orders": [], "idx": 0, "eig": eig,
 		"name": str(mehr.get("name", _personal_name())), "seit": int(mehr.get("seit", _day)),
 		"lohn": float(mehr.get("lohn", 1.0)), "anliegen": str(mehr.get("anliegen", "")), "energie": 1.0,
 		"unzufrieden": bool(mehr.get("unzufrieden", false)),
 	}
-	_add_staff.rpc(id, start, role, clampi(level, 1, STAFF_MAX_LEVEL))
+	_add_staff.rpc(id, start, role, clampi(level, 1, staff_max_level()))
 
 func _staff_wage(role: int, level: int, eig := "normal") -> int:
 	return int(round(float(STAFF_WAGE_BASE[role]) * (1.0 + 0.3 * (float(level) - 1.0))
@@ -3480,7 +3488,7 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 	match int(s.state):
 		0:
 			var picked := []
-			var cap: int = int(WAITER_CAPACITY.get(int(s.level), 1))
+			var cap: int = kellner_kapazitaet(int(s.level))
 			for gid in _guest_sim.keys():
 				if picked.size() >= cap:
 					break
@@ -6406,7 +6414,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
-		"eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
+		"staff_max": staff_max_level(), "eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
@@ -7306,7 +7314,7 @@ func meister_liste() -> Array:
 		["MEISTER_KONTROLLE", kontrolle, 1],
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
 		["MEISTER_WAGEN", wagen_prestige(), 6],
-		["MEISTER_AUSBAU", _ausbau.size(), 6],
+		["MEISTER_AUSBAU", _ausbau.size(), 7],
 		["MEISTER_KIRMES", _kirmes_erfuellt(), 8],
 	]
 

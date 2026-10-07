@@ -295,7 +295,7 @@ func _reiter_personal() -> void:
 		if rolle == 1 and not _hat_essenslizenz():
 			grund_einstellen = tr("WHY_COOK_LICENSE")
 		z.knopf(0, tr("BTN_HIRE") % Texte.euro(einstellen), grund_einstellen != "")
-		var aufstufbar := lv.filter(func(x: int) -> bool: return x < int(_gm.STAFF_MAX_LEVEL))
+		var aufstufbar := lv.filter(func(x: int) -> bool: return x < int(_z.get("staff_max", _gm.STAFF_MAX_LEVEL)))
 		var grund_aufstufen := ""
 		if lv.is_empty():
 			grund_aufstufen = tr("WHY_NO_STAFF")

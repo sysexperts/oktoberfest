@@ -2560,3 +2560,5 @@ MSG_KATA_ABGEWEHRT_KNAPP,"Das Bier wird knapp, aber die extra Fässer aus dem Vo
 MSG_KATA_TREFFER_REGEN,Unwetter über dem Fest! Ohne Plane werden die Gäste nass und schlecht gelaunt.,A storm over the festival! Without a tarp the guests get wet and grumpy.,Şenliğin üstünde fırtına! Brandasız misafirler ıslanıp huysuzlanıyor.
 MSG_KATA_TREFFER_STROM,Stromausfall mitten im Fest! Ohne Notstrom steht alles still.,Power cut in the middle of the festival! Without backup power everything stands still.,Şenliğin ortasında elektrik kesintisi! Yedek güç olmadan her şey duruyor.
 MSG_KATA_TREFFER_KNAPP,"Das Bier wird knapp! Fässer sind leer, ohne Vorrat fehlt Ware.","Beer runs short! Barrels are empty, without a reserve goods are missing.","Bira azalıyor! Fıçılar boş, yedek olmadan mal eksik."
+AUSBAU_AKADEMIE,Personal-Akademie,Staff academy,Personel akademisi
+AUSBAU_AKADEMIE_INFO,Mitarbeiter lassen sich bis Stufe 10 trainieren (statt 5),Staff can be trained up to level 10 (instead of 5),Personel 10. seviyeye kadar eğitilebilir (5 yerine)

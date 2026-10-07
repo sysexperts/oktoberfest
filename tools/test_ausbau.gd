@@ -42,6 +42,9 @@ class Lauf extends Node:
 		var geld: int = Game.money
 		gm._ausbau_abend()
 		_check("Bierhandel verkauft 12 Maß", gm._eigenbier == 8 and Game.money > geld, "%d -> %d" % [geld, Game.money])
+		_check("Ohne Akademie: höchstens Stufe 5", gm.staff_max_level() == 5 and gm.kellner_kapazitaet(5) == 12)
+		gm.net_ausbau_kauf("akademie")
+		_check("Mit Akademie: Stufe 10, größeres Tablett", gm.staff_max_level() == 10 and gm.kellner_kapazitaet(8) == 15, "%d" % gm.kellner_kapazitaet(8))
 		gm.net_ausbau_kauf("konrad")
 		_check("Konrads Zelt gekauft", gm._ausbau.has("konrad"))
 		gm._streich_art = "dieb"
