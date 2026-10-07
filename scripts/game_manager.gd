@@ -6190,6 +6190,9 @@ func _fleck_neben_tisch(p: Vector3, ebene: int) -> Vector3:
 			break
 	return p
 
+## Höhe von Kotze, Urin, Dreck und Spuren auf dem Zeltboden im Erdgeschoss
+const MESS_BODEN_Y := 0.075
+
 func _spawn_mess_at(p: Vector3, kind: int) -> void:
 	# Abdeckplanen liegen absichtlich auf den Möbeln, alles andere bleibt neben den Tischen
 	if kind < Mess.DECKE or kind >= Mess.DECKE + 10:
@@ -6201,7 +6204,9 @@ func _spawn_mess_at(p: Vector3, kind: int) -> void:
 	var ebene := ebene_von(p)
 	if ebene > 0:
 		p.x = signf(p.x) * clampf(absf(p.x), EMPORE_KANTE + 0.3, EMPORE_LAUF_MAX)
-	_add_mess.rpc(id, Vector3(p.x, ebene_boden(ebene) + 0.02, p.z), kind)
+	# Der Dielenboden im Zelt liegt bei 0,07 (tools/bake_zelt.gd) — Flecken knapp darüber, sonst versinken sie
+	var hoehe := ebene_boden(ebene) + 0.02 if ebene > 0 else MESS_BODEN_Y
+	_add_mess.rpc(id, Vector3(p.x, hoehe, p.z), kind)
 
 @rpc("authority", "reliable", "call_local")
 func _add_mess(id: int, pos: Vector3, kind: int = 0) -> void:
