@@ -11,6 +11,8 @@ const SAU := preload("res://assets/models/sau.glb")
 
 ## Muss vor add_child gesetzt werden
 var art := "spanner"
+## Aussehen des Täters (aus dem Quest-Feld gefallen.figur): "", "faelscher", "kruege", "reporter"
+var figur := ""
 var _figur: Figur
 var _umschau := 0.0
 var _ziel := Vector3.ZERO
@@ -45,6 +47,25 @@ func _ready() -> void:
 		l["hut_farbe"] = Color(0.12, 0.12, 0.14).to_html(false)
 		l["brille"] = "sonnenbrille_eckig"
 		l["brille_farbe"] = Color(0.05, 0.05, 0.06).to_html(false)
+	match figur:
+		"faelscher":
+			l = Figuren.npc_look(7004, 11, "m")
+			l["hut"] = "melone"
+			l["hut_farbe"] = Color(0.12, 0.12, 0.14).to_html(false)
+			l["brille"] = "monokel"
+			l["brille_farbe"] = Color(0.75, 0.6, 0.2).to_html(false)
+			l["bart"] = "schnauzer"
+		"kruege":
+			l = Figuren.npc_look(7005, 13, "m")
+			l["hut"] = "fischerhut"
+			l["hut_farbe"] = Color(0.3, 0.32, 0.2).to_html(false)
+			l["bart"] = "vollbart"
+		"reporter":
+			l = Figuren.npc_look(7006, 17, "w")
+			l["hut"] = "schiebermuetze"
+			l["hut_farbe"] = Color(0.45, 0.3, 0.2).to_html(false)
+			l["brille"] = "wayfarer"
+			l["brille_farbe"] = Color(0.1, 0.1, 0.12).to_html(false)
 	_figur = Figuren.einsetzen_look(self, l)
 	# Die Figuren schauen nicht in Godots Standardrichtung (wie bei den Besuchern)
 	_figur.rotation.y = deg_to_rad(180.0)

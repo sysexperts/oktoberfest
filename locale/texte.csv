@@ -2112,3 +2112,66 @@ BJ_GEWONNEN,Gewonnen: %s aus Konrads Bank.,You win %s from Konrad's bank.,Konrad
 BJ_UNENTSCHIEDEN,Unentschieden: der Einsatz bleibt bei dir (%s).,A tie: your stake stays with you (%s).,Berabere: bahsin sende kalır (%s).
 BJ_VERLOREN,Verloren: %s an Konrads Bank.,You lose %s to Konrad's bank.,Konrad'ın bankasına %s kaybettin.
 BJ_UEBERKAUFT,Überkauft! %s an Konrads Bank.,Bust! %s to Konrad's bank.,Patladın! Konrad'ın bankasına %s.
+Q_G-7_TITLE,Falschgeld,Counterfeit money,Sahte para
+Q_G-7_TEXT,"Ein Fälscher bringt falsche Scheine unter die Leute und flüchtet, sobald jemand näher kommt. Hol ihn ein (mit Sprint), pack ihn mit E und trag ihn zu einem Security-Posten.","A forger spreads fake notes and runs as soon as someone gets close. Catch him (sprint), grab him with E and carry him to a security post.","Bir sahtekâr sahte banknotları dağıtıyor ve biri yaklaşınca kaçıyor. Onu yakala (koşarak), E ile tut ve bir güvenlik noktasına taşı."
+MAIL_G7_BETREFF,Falsche Fuffziger,Fake fifties,Sahte ellilikler
+MAIL_G7_TEXT,"Servus,
+
+auf der Kirmes tauchen falsche Scheine auf. Ein Kerl mit Melone und Monokel bezahlt überall damit und verschwindet. Schnapp ihn dir, bevor er unser Zelt erreicht, und bring ihn zu einem Security-Posten. Er rennt, sobald du näher kommst.
+Ich leg dir 350 € drauf.
+
+Horst","Hi,
+
+fake banknotes are showing up at the fair. A guy with a bowler hat and a monocle pays with them everywhere and disappears. Catch him before he reaches our tent and bring him to a security post. He runs as soon as you get close.
+I will add €350.
+
+Horst","Selam,
+
+fuarda sahte banknotlar çıkıyor. Melon şapkalı ve monokollü biri her yerde bunlarla ödeme yapıp kayboluyor. Çadırımıza varmadan onu yakala ve bir güvenlik noktasına getir. Yaklaşınca kaçıyor.
+Üstüne 350 € koyarım.
+
+Horst"
+MAIL_G7_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G7_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_G-8_TITLE,Gestohlene Krüge,Stolen mugs,Çalınan kupalar
+Q_G-8_TEXT,"Jemand klaut Maßkrüge von den Tischen und rennt damit durch die Menge. Verfolg ihn (mit Sprint), pack ihn mit E und trag ihn zu einem Security-Posten.","Someone is stealing mugs from the tables and running through the crowd. Chase him (sprint), grab him with E and carry him to a security post.","Biri masalardan kupa çalıp kalabalığın içinden kaçıyor. Onu kovala (koşarak), E ile tut ve bir güvenlik noktasına taşı."
+MAIL_G8_BETREFF,Wo sind die Krüge hin?,Where did the mugs go?,Kupalar nereye gitti?
+MAIL_G8_TEXT,"Servus,
+
+an den Buden fehlen Maßkrüge, und die Wirte sind sauer. Ein Kerl mit grünem Fischerhut räumt die Tische ab und läuft davon. Fang ihn und bring ihn zu einem Security-Posten. Mit Sprint holst du ihn ein.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+mugs are missing at the stalls and the landlords are angry. A guy with a green fisherman's hat clears the tables and runs off. Catch him and bring him to a security post. You can catch him by sprinting.
+I will add €300.
+
+Horst","Selam,
+
+büfelerde kupalar eksik ve işletmeciler kızgın. Yeşil balıkçı şapkalı biri masaları boşaltıp kaçıyor. Onu yakala ve bir güvenlik noktasına getir. Koşarak yetişirsin.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G8_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G8_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_G-9_TITLE,Der Reporter,The reporter,Muhabir
+Q_G-9_TEXT,"Eine Reporterin schleicht mit Kamera über die Kirmes und sucht Skandale. Such sie, pack sie mit E und trag sie zu einem Security-Posten, bevor etwas in der Zeitung steht.","A reporter sneaks around the fair with a camera looking for scandals. Find her, grab her with E and carry her to a security post before anything makes the paper.","Bir muhabir kamerayla fuarda skandal arıyor. Onu bul, E ile tut ve gazeteye bir şey çıkmadan bir güvenlik noktasına taşı."
+MAIL_G9_BETREFF,Presse auf der Kirmes,Press at the fair,Fuarda basın
+MAIL_G9_TEXT,"Servus,
+
+eine Reporterin mit Schiebermütze und Kamera schnüffelt auf der Kirmes herum. Konrad hat sie bestimmt geschickt. Such sie, pack sie und bring sie zu einem Security-Posten, bevor sie etwas Peinliches fotografiert.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+a reporter with a flat cap and a camera is snooping around the fair. Konrad surely sent her. Find her, grab her and bring her to a security post before she photographs something embarrassing.
+I will add €300.
+
+Horst","Selam,
+
+işçi şapkalı ve kameralı bir muhabir fuarda dolaşıyor. Onu kesin Konrad gönderdi. Utanç verici bir şey çekmeden önce onu bul, tut ve bir güvenlik noktasına getir.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G9_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G9_A2,Heute nicht.,Not today.,Bugün olmaz.

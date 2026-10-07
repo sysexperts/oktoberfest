@@ -890,5 +890,86 @@
   "mail_erfuellt": [
    "M5-02"
   ]
+ },
+ {
+  "id": "G-7",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-7_TITLE",
+  "text": "Q_G-7_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G7"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-7"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 350
+  },
+  "gefallen": {
+   "art": "dieb",
+   "figur": "faelscher"
+  }
+ },
+ {
+  "id": "G-8",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-8_TITLE",
+  "text": "Q_G-8_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G8"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-8"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "dieb",
+   "figur": "kruege"
+  }
+ },
+ {
+  "id": "G-9",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-9_TITLE",
+  "text": "Q_G-9_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G9"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-9"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "spanner",
+   "figur": "reporter"
+  }
  }
 ]

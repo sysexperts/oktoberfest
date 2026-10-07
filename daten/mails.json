@@ -436,5 +436,65 @@
   "betreff": "MAIL_M5_02_BETREFF",
   "text": "MAIL_M5_02_TEXT",
   "antworten": []
+ },
+ {
+  "id": "M-G7",
+  "absender": "HORST",
+  "betreff": "MAIL_G7_BETREFF",
+  "text": "MAIL_G7_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G7_A1",
+    "folge": {
+     "quest_annehmen": "G-7"
+    }
+   },
+   {
+    "text": "MAIL_G7_A2",
+    "folge": {
+     "quest_ablehnen": "G-7"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G8",
+  "absender": "HORST",
+  "betreff": "MAIL_G8_BETREFF",
+  "text": "MAIL_G8_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G8_A1",
+    "folge": {
+     "quest_annehmen": "G-8"
+    }
+   },
+   {
+    "text": "MAIL_G8_A2",
+    "folge": {
+     "quest_ablehnen": "G-8"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G9",
+  "absender": "HORST",
+  "betreff": "MAIL_G9_BETREFF",
+  "text": "MAIL_G9_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G9_A1",
+    "folge": {
+     "quest_annehmen": "G-9"
+    }
+   },
+   {
+    "text": "MAIL_G9_A2",
+    "folge": {
+     "quest_ablehnen": "G-9"
+    }
+   }
+  ]
  }
 ]

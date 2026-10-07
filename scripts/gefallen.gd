@@ -123,6 +123,7 @@ func net_start(_id: String, art: String, ort: int, start: Vector3, ort2: int) ->
 	_traeger = -1
 	_taeter = TAETER.instantiate() as Node3D
 	_taeter.set("art", art)
+	_taeter.set("figur", str((Daten.quest(_id).get("gefallen", {}) as Dictionary).get("figur", "")))
 	get_tree().current_scene.add_child(_taeter)
 	_art = art
 	_taeter.global_position = start if art != "spanner" else _orte[ort]

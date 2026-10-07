@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v352.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v353.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -39,7 +39,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 1. ✔ **Kapitel 5 abgerundet** (Feuerwerk, Kamerafahrt, Konrads Auftritt, Stufenanzeige, v340).
 2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino-Kartentisch und weitere Spiele, Händler Gustav und Sabotage-System mit Tarnung (XL).
 3. ✔ **P7 fertig** (Qualität, Rezeptbuch, Gerhard, Streiche; offen nur Geduld-Bonus fürs eigene Bier).
-4. **P5 Rest:** Gefallen Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen (Muster siehe `gefallen.gd`).
+4. **P5 Rest:** Gefallen Hochzeit und Wettessen (Muster siehe `gefallen.gd`; Falschgeld, Krüge, Reporter sind seit v353 drin).
 5. **P4 Rest:** Nebenquest „Happy Hour" (40 Maß in einer Stunde).
 6. **P9 bis P11:** Fest-App und Festtag-System, Meister-Liste, Wohnwagen je Spieler, Late-Game-Ausgaben, Kirmes-Quests, Meilensteine, Zeitung, Brabbelton, Balancing mit `tools/sim_saison`, **Koop-Test aller Systeme** (bisher nur Einzelspieler-Tests!), Übersetzungen prüfen, Leistung.
 7. Vor jedem Steam-Upload: alle Tests oben laufen lassen, Version hochzählen, `git push`.
@@ -169,7 +169,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 6 von 11 | M |
+| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 9 von 11 | M |
 | ✔ **Täter-Figuren** (Spanner, Taschendieb, Betrunkener, Raufbolde, Fälscher, Dieb) über den Creator | M |
 | ✔ **Packen, Tragen, Übergeben** an Security (vorhandene Raufbold-Mechanik erweitern) | M |
 | ✔ **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |
