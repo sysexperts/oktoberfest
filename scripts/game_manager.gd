@@ -7136,6 +7136,7 @@ func _fest_auswerten() -> void:
 		if _fest_ruhm >= FEST_RAENGE[i]:
 			rang = i
 	_konrad_ruhm += randi_range(5, 20)
+	_stats["feste"] = int(_stats.get("feste", 0)) + 1
 	_melde("MSG_FEST_BILANZ", [ruhm, "FEST_RANG_%d" % rang], 2)
 	_story.ereignis("fest_gefeiert_k6")
 	_fest = {}

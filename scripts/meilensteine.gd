@@ -28,6 +28,28 @@ const LISTE := [
 	{"id": "DEKO_10", "wert": "einrichtung", "ziel": 10, "belohnung": 500},
 	{"id": "EREIGNIS_10", "wert": "ereignisse", "ziel": 10, "belohnung": 700},
 	{"id": "PERSONAL_8", "wert": "personal", "ziel": 8, "belohnung": 1000},
+	{"id": "KAPITEL_2", "wert": "kapitel", "ziel": 2, "belohnung": 300},
+	{"id": "KAPITEL_3", "wert": "kapitel", "ziel": 3, "belohnung": 500},
+	{"id": "KAPITEL_4", "wert": "kapitel", "ziel": 4, "belohnung": 700},
+	{"id": "KAPITEL_5", "wert": "kapitel", "ziel": 5, "belohnung": 1000},
+	{"id": "GESCHICHTE_FERTIG", "wert": "kapitel", "ziel": 6, "belohnung": 2000},
+	{"id": "GEFALLEN_5", "wert": "meister:MEISTER_GEFALLEN", "ziel": 5, "belohnung": 500},
+	{"id": "GEFALLEN_9", "wert": "meister:MEISTER_GEFALLEN", "ziel": 9, "belohnung": 1500},
+	{"id": "KIRMES_3", "wert": "meister:MEISTER_KIRMES", "ziel": 3, "belohnung": 500},
+	{"id": "KIRMES_7", "wert": "meister:MEISTER_KIRMES", "ziel": 7, "belohnung": 1500},
+	{"id": "SABOTAGE_1", "wert": "sab_ok", "ziel": 1, "belohnung": 400},
+	{"id": "SABOTAGE_10", "wert": "sab_ok", "ziel": 10, "belohnung": 1500},
+	{"id": "CASINO_ROULETTE", "wert": "roulette", "ziel": 1, "belohnung": 300},
+	{"id": "CASINO_BLACKJACK", "wert": "blackjack", "ziel": 1, "belohnung": 300},
+	{"id": "MEISTERBIER", "wert": "meisterfaesser", "ziel": 1, "belohnung": 1000},
+	{"id": "FEST_1", "wert": "feste", "ziel": 1, "belohnung": 800},
+	{"id": "FEST_WELT", "wert": "meister:MEISTER_FEST", "ziel": 4, "belohnung": 3000},
+	{"id": "FAKE_GEMELDET", "wert": "fakes_gemeldet", "ziel": 1, "belohnung": 300},
+	{"id": "PERSONAL_ALLE", "wert": "meister:MEISTER_PERSONAL", "ziel": 6, "belohnung": 1500},
+	{"id": "WAGEN_VOLL", "wert": "meister:MEISTER_WAGEN", "ziel": 6, "belohnung": 1000},
+	{"id": "AUSBAU_1", "wert": "meister:MEISTER_AUSBAU", "ziel": 1, "belohnung": 800},
+	{"id": "AUSBAU_ALLE", "wert": "meister:MEISTER_AUSBAU", "ziel": 6, "belohnung": 4000},
+	{"id": "FEST_MEISTER", "wert": "meister_titel", "ziel": 1, "belohnung": 5000},
 ]
 
 ## Lebenszeit-Zähler, die der Spielstand mitführt (GameManager._stats).
@@ -37,7 +59,15 @@ const ZAEHLER := ["served", "earned", "days", "cleaned", "saisons", "beste_wertu
 ## Aktuelle Zahl zu einer Meilenstein-Art.
 ## stats: Lebenszeit-Zähler · zustand: GameManager._buero_state (Zelt, Personal, Lizenzen).
 static func wert_von(art: String, stats: Dictionary, zustand: Dictionary) -> int:
+	# Meister-Liste: "meister:MEISTER_SCHLUESSEL" liefert den erreichten Stand dieses Eintrags
+	if art.begins_with("meister:"):
+		for e: Array in zustand.get("meister", []):
+			if str(e[0]) == art.substr(8):
+				return int(e[1])
+		return 0
 	match art:
+		"kapitel":
+			return int((zustand.get("story", {}) as Dictionary).get("kapitel", 1))
 		"tent_stage":
 			return int(zustand.get("stage", 0))
 		"waiter_level":

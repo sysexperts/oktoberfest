@@ -2368,3 +2368,47 @@ See you at the fair","Selam, halka atmadan! Hiçbir halka takılmıyor. En az 7 
 Fuarda görüşürüz"
 MAIL_K7_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
 MAIL_K7_A2,Heute nicht.,Not today.,Bugün olmaz.
+MS_KAPITEL_2_TITLE,Das Zelt läuft,The tent is running,Çadır işliyor
+MS_KAPITEL_2_TEXT,Schließe Kapitel 1 ab.,Finish chapter 1.,1. bölümü bitir.
+MS_KAPITEL_3_TITLE,Konrads Spiele,Konrad's games,Konrad'ın oyunları
+MS_KAPITEL_3_TEXT,Schließe Kapitel 2 ab.,Finish chapter 2.,2. bölümü bitir.
+MS_KAPITEL_4_TITLE,Das eigene Bier,Your own beer,Kendi biran
+MS_KAPITEL_4_TEXT,Schließe Kapitel 3 ab.,Finish chapter 3.,3. bölümü bitir.
+MS_KAPITEL_5_TITLE,Das große Zelt,The big tent,Büyük çadır
+MS_KAPITEL_5_TEXT,Schließe Kapitel 4 ab.,Finish chapter 4.,4. bölümü bitir.
+MS_GESCHICHTE_FERTIG_TITLE,Geschichte abgeschlossen,Story complete,Hikâye tamam
+MS_GESCHICHTE_FERTIG_TEXT,Feiere das große Fest und schließe Kapitel 5 ab.,Celebrate the great festival and finish chapter 5.,Büyük şenliği kutla ve 5. bölümü bitir.
+MS_GEFALLEN_5_TITLE,Horsts Helfer,Horst's helper,Horst'un yardımcısı
+MS_GEFALLEN_5_TEXT,Erledige fünf verschiedene Gefallen.,Do five different favours.,Beş farklı iyilik yap.
+MS_GEFALLEN_9_TITLE,Immer zur Stelle,Always there,Her zaman yanında
+MS_GEFALLEN_9_TEXT,Erledige alle neun Gefallen.,Do all nine favours.,Dokuz iyiliğin hepsini yap.
+MS_KIRMES_3_TITLE,Kirmes-Held,Fair hero,Fuar kahramanı
+MS_KIRMES_3_TEXT,Schaffe drei Rekord-Aufgaben an den Buden.,Beat three record challenges at the stalls.,Büfelerde üç rekor görevini geç.
+MS_KIRMES_7_TITLE,Kirmes-Meister,Fair master,Fuar ustası
+MS_KIRMES_7_TEXT,Schaffe alle sieben Rekord-Aufgaben.,Beat all seven record challenges.,Yedi rekor görevinin hepsini geç.
+MS_SABOTAGE_1_TITLE,Kleiner Streich,A little prank,Küçük şaka
+MS_SABOTAGE_1_TEXT,Sabotiere Konrads Zelt zum ersten Mal.,Sabotage Konrad's tent for the first time.,Konrad'ın çadırını ilk kez sabote et.
+MS_SABOTAGE_10_TITLE,Meister der Streiche,Master of pranks,Şaka ustası
+MS_SABOTAGE_10_TEXT,Sabotiere Konrads Zelt zehnmal.,Sabotage Konrad's tent ten times.,Konrad'ın çadırını on kez sabote et.
+MS_CASINO_ROULETTE_TITLE,Rien ne va plus,Rien ne va plus,Rien ne va plus
+MS_CASINO_ROULETTE_TEXT,Spiele eine Runde Roulette.,Play a round of roulette.,Bir tur rulet oyna.
+MS_CASINO_BLACKJACK_TITLE,Einundzwanzig,Twenty-one,Yirmi bir
+MS_CASINO_BLACKJACK_TEXT,Spiele eine Runde Blackjack.,Play a round of blackjack.,Bir tur blackjack oyna.
+MS_MEISTERBIER_TITLE,Meisterbräu,Master brew,Usta birası
+MS_MEISTERBIER_TEXT,Fülle ein Fass Meisterbräu ab.,Bottle a barrel of master brew.,Bir fıçı usta birası doldur.
+MS_FEST_1_TITLE,Das erste Fest,The first festival,İlk şenlik
+MS_FEST_1_TEXT,Feiere dein erstes Fest.,Celebrate your first festival.,İlk şenliğini kutla.
+MS_FEST_WELT_TITLE,Weltfest,World festival,Dünya şenliği
+MS_FEST_WELT_TEXT,Erreiche den höchsten Festrang.,Reach the highest festival rank.,En yüksek şenlik rütbesine ulaş.
+MS_FAKE_GEMELDET_TITLE,Sauber gemeldet,Reported clean,Temiz bildirim
+MS_FAKE_GEMELDET_TEXT,Melde eine Fake-Bewertung.,Report a fake review.,Bir sahte yorumu bildir.
+MS_PERSONAL_ALLE_TITLE,Das ganze Team,The whole team,Tüm ekip
+MS_PERSONAL_ALLE_TEXT,Stelle jede Personalrolle einmal ein.,Hire every staff role once.,Her personel rolünü bir kez işe al.
+MS_WAGEN_VOLL_TITLE,Zuhause,Home sweet home,Evim güzel evim
+MS_WAGEN_VOLL_TEXT,Baue den Wohnwagen komplett aus.,Fully fit out the caravan.,Karavanı tamamen döşe.
+MS_AUSBAU_1_TITLE,Es wächst,Growing,Büyüyor
+MS_AUSBAU_1_TEXT,Kaufe deinen ersten Ausbau.,Buy your first expansion.,İlk genişlemeni satın al.
+MS_AUSBAU_ALLE_TITLE,Imperium,Empire,İmparatorluk
+MS_AUSBAU_ALLE_TEXT,"Kaufe alle Ausbauten, auch Konrads Zelt.","Buy every expansion, including Konrad's tent.","Tüm genişlemeleri, Konrad'ın çadırı dahil, satın al."
+MS_FEST_MEISTER_TITLE,Fest-Meister,Festival Master,Şenlik Ustası
+MS_FEST_MEISTER_TEXT,Schließe die Meister-Liste ab.,Complete the master list.,Usta listesini tamamla.
