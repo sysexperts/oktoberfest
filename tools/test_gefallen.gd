@@ -140,7 +140,7 @@ class Lauf extends Node:
 			g.net_punkt(i)
 		await _warten(0.5)
 		_check("Wettessen: Quest erfüllt", story.zustand("G-11") == "erfuellt", story.zustand("G-11"))
-		for qid2 in [["G-12", "fahne", 4], ["G-13", "laterne", 5], ["G-14", "ballon", 6]]:
+		for qid2 in [["G-12", "fahne", 4], ["G-13", "laterne", 5], ["G-14", "ballon", 6], ["G-15", "pfuetze", 5], ["G-16", "noten", 4]]:
 			story._freischalten(g.Daten.quest(qid2[0]))
 			story.annehmen(qid2[0])
 			await _warten(0.6)

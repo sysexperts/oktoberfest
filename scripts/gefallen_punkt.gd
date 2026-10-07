@@ -10,6 +10,8 @@ extends Node3D
 ##   variante "fahne": Fahnenmast, an dem die Fahne für den Ehrengast gehisst werden muss
 ##   variante "laterne": dunkle Laterne, die vor der Dämmerung angezündet werden muss
 ##   variante "ballon": Luftballons fürs Kinderfest, die eingesammelt werden müssen
+##   variante "pfuetze": Pfütze vom Wasserrohrbruch, die aufgewischt werden muss
+##   variante "noten": umgekippter Notenständer der Kapelle, der aufgestellt werden muss
 ## Aufbau: scenes/gefallen/punkt.tscn (alle Teile sind Knoten, das Skript blendet nur die der Variante ein).
 
 var variante := "sturm"
@@ -27,6 +29,11 @@ func _ready() -> void:
 	$Fahne.visible = variante == "fahne"
 	$Laterne.visible = variante == "laterne"
 	$Ballons.visible = variante == "ballon"
+	$Pfuetze.visible = variante == "pfuetze"
+	$Noten.visible = variante == "noten"
+	if variante == "noten":
+		$Noten.rotation.z = 1.4   # liegt umgekippt am Boden
+		$Noten.position.y = 0.2
 	$Ziel.visible = variante == "lieferung"
 	$Lager.visible = variante == "lager"
 	var etikett := get_node_or_null("Label") as Label3D
@@ -60,6 +67,11 @@ func erledigt_setzen() -> void:
 			$Laterne/Schein.visible = true
 		"ballon":
 			$Ballons.visible = false
+		"pfuetze":
+			$Pfuetze.visible = false
+		"noten":
+			$Noten.rotation.z = 0.0
+			$Noten.position.y = 0.0
 		"lieferung":
 			$Ziel.scale = Vector3(0.6, 0.6, 0.6)
 
@@ -81,6 +93,10 @@ func hinweis_text(_geschlossen: bool) -> String:
 			return "HINT_LATERNE_ANZUENDEN"
 		"ballon":
 			return "HINT_BALLON_SAMMELN"
+		"pfuetze":
+			return "HINT_PFUETZE_WISCHEN"
+		"noten":
+			return "HINT_NOTEN_AUFSTELLEN"
 		"lieferung":
 			var sp2 := _spieler()
 			return "HINT_KISTE_ABGEBEN" if sp2 != null and bool(sp2.get("traegt_wasser")) else "HINT_KISTE_HOLEN"

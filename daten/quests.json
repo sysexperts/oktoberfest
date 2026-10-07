@@ -1310,6 +1310,64 @@
   }
  },
  {
+  "id": "G-15",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-15_TITLE",
+  "text": "Q_G-15_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G15"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-15"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "pfuetze",
+   "anzahl": 5,
+   "zeit": 150
+  }
+ },
+ {
+  "id": "G-16",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-16_TITLE",
+  "text": "Q_G-16_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G16"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-16"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 350
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "noten",
+   "anzahl": 4,
+   "zeit": 120
+  }
+ },
+ {
   "id": "K-8",
   "typ": "kirmes",
   "kapitel": 2,

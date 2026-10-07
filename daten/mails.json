@@ -758,6 +758,46 @@
   ]
  },
  {
+  "id": "M-G15",
+  "absender": "HORST",
+  "betreff": "MAIL_G15_BETREFF",
+  "text": "MAIL_G15_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G15_A1",
+    "folge": {
+     "quest_annehmen": "G-15"
+    }
+   },
+   {
+    "text": "MAIL_G15_A2",
+    "folge": {
+     "quest_ablehnen": "G-15"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G16",
+  "absender": "HORST",
+  "betreff": "MAIL_G16_BETREFF",
+  "text": "MAIL_G16_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G16_A1",
+    "folge": {
+     "quest_annehmen": "G-16"
+    }
+   },
+   {
+    "text": "MAIL_G16_A2",
+    "folge": {
+     "quest_ablehnen": "G-16"
+    }
+   }
+  ]
+ },
+ {
   "id": "M-K8",
   "absender": "BUDE",
   "betreff": "MAIL_K8_BETREFF",

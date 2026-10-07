@@ -2681,3 +2681,47 @@ Horst","Selam,
 Horst"
 MAIL_G14_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_G14_A2,Heute nicht.,Not today.,Bugün olmaz.
+HINT_PFUETZE_WISCHEN,{interact} Pfütze aufwischen,{interact} Mop up the puddle,{interact} Su birikintisini sil
+HINT_NOTEN_AUFSTELLEN,{interact} Notenständer aufstellen,{interact} Set up the music stand,{interact} Nota sehpasını kur
+Q_G-15_TITLE,Wasserrohrbruch,Burst water pipe,Su borusu patladı
+Q_G-15_TEXT,"Ein Wasserrohr ist geplatzt und die Wege stehen unter Wasser. Wisch fünf Pfützen an den Buden auf (E), bevor die Zeit abläuft.",A water pipe has burst and the paths are flooded. Mop up five puddles at the stalls (E) before time runs out.,Bir su borusu patladı ve yolları su bastı. Süre dolmadan büfelerde beş su birikintisini sil (E).
+Q_G-16_TITLE,Die Kapelle probt,The band rehearses,Orkestra prova yapıyor
+Q_G-16_TEXT,"Die Kapelle spielt gleich und alle Notenständer sind umgekippt. Stell vier Notenständer an den Buden auf (E), bevor die Zeit abläuft.",The band plays soon and all the music stands have fallen over. Set up four music stands at the stalls (E) before time runs out.,Orkestra birazdan çalacak ve bütün nota sehpaları devrildi. Süre dolmadan büfelerde dört nota sehpasını kur (E).
+MAIL_G15_BETREFF,Wasser auf den Wegen,Water on the paths,Yollarda su var
+MAIL_G15_TEXT,"Servus,
+
+bei der Kirmes ist ein Wasserrohr geplatzt. Wisch an den Buden fünf Pfützen auf, bevor jemand ausrutscht und sich das Bein bricht.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+a water pipe has burst at the fair. Mop up five puddles at the stalls before someone slips and breaks a leg.
+I will add €300.
+
+Horst","Selam,
+
+fuarda bir su borusu patladı. Biri kayıp bacağını kırmadan büfelerde beş su birikintisini sil.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G15_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G15_A2,Heute nicht.,Not today.,Bugün olmaz.
+MAIL_G16_BETREFF,Probe der Kapelle,Band rehearsal,Orkestra provası
+MAIL_G16_TEXT,"Servus,
+
+die Kapelle will gleich proben und der Wind hat alle Notenständer umgeworfen. Stell an den Buden vier Notenständer wieder auf, sonst spielen die Herren nach Gehör.
+Ich leg dir 350 € drauf.
+
+Horst","Hi,
+
+the band wants to rehearse soon and the wind has knocked over all the music stands. Set up four music stands at the stalls again or the gentlemen will play by ear.
+I will add €350.
+
+Horst","Selam,
+
+orkestra birazdan prova yapmak istiyor ve rüzgar bütün nota sehpalarını devirdi. Büfelerde dört nota sehpasını yeniden kur, yoksa beyler kulaktan çalacak.
+Üstüne 350 € koyarım.
+
+Horst"
+MAIL_G16_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G16_A2,Heute nicht.,Not today.,Bugün olmaz.
