@@ -1,4 +1,5 @@
 extends CanvasLayer
+const Brabbel := preload("res://scripts/ui/brabbel.gd")
 ## Gespräch mit einem NPC: Name und Text unten im Pergamentkasten, Linksklick
 ## oder E/Enter zur nächsten Zeile. Hält den Spieler wie ein Minispiel fest.
 ## Läuft nur beim Spieler, der redet. Aufbau: scenes/ui/dialog.tscn.
@@ -21,6 +22,10 @@ var _t := 0.0
 var _spieler: Node = null
 var _fertig := Callable()
 var _wahl: Array[String] = []
+## Brabbelton: wie viele Buchstaben des Textes schon „gesprochen“ wurden
+var _gebrabbelt := 0
+var _silben := 0
+var _sprecher_name := ""
 
 func _ready() -> void:
 	add_to_group("dialog")
@@ -45,6 +50,7 @@ func zeigen(sprecher: String, zeilen: Array[String], fertig := Callable(), auswa
 	_fertig = fertig
 	_wahl = auswahl
 	_sprecher.text = sprecher
+	_sprecher_name = sprecher
 	_spieler.minispiel = self
 	_nr = -1
 	_weiter()
@@ -76,6 +82,7 @@ func _weiter() -> void:
 		beenden()
 		return
 	_text.text = _zeilen[_nr]
+	_gebrabbelt = 0
 	var frage := _frage_offen()
 	_auswahl.visible = frage
 	_hinweis.visible = not frage
@@ -101,6 +108,7 @@ func _process(delta: float) -> void:
 		return
 	_t += delta
 	_text.visible_ratio = minf(1.0, _t * 60.0 / maxf(1.0, _text.text.length()))
+	_brabbeln()
 	_kasten.modulate.a = minf(1.0, (_t + (0.0 if _nr == 0 else 1.0)) * 5.0)
 
 func beenden() -> void:
@@ -114,3 +122,16 @@ func beenden() -> void:
 		_spieler.minispiel_beendet()
 	if _fertig.is_valid() and _wahl.is_empty():
 		_fertig.call()
+
+## Zum Tippen des Textes alle drei sichtbaren Buchstaben eine Silbe (nicht bei Leerzeichen und Satzzeichen)
+func _brabbeln() -> void:
+	var sichtbar := int(_text.visible_ratio * float(_text.text.length()))
+	while _gebrabbelt < sichtbar:
+		var c := _text.text.substr(_gebrabbelt, 1)
+		_gebrabbelt += 1
+		if c in [" ", ".", ",", "!", "?", "\n"] or _gebrabbelt % 3 != 0:
+			continue
+		_silben += 1
+		var p: AudioStreamPlayer = %Brabbel
+		p.stream = Brabbel.silbe(_sprecher_name, _silben)
+		p.play()

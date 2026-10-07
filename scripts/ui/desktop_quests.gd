@@ -80,8 +80,7 @@ func _rezeptbuch() -> void:
 			zeilen.append("● " + tr("REZEPT_SEITE_%d" % (i + 1)))
 		else:
 			zeilen.append("○ " + tr("REZEPT_SEITE_GESPERRT") % (i + 1))
-	%Rezeptbuch.text = "
-".join(zeilen)
+	%Rezeptbuch.text = "\n".join(zeilen)
 
 ## Meister-Liste: alles, was es im Spiel zu schaffen gibt (GameManager.meister_liste)
 func _meister() -> void:
