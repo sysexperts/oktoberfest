@@ -438,6 +438,11 @@ const FEST_HILFE_PREIS := 250
 const FEST_WETTBEWERBE := [["stemmen", 6], ["hau_den_lukas", 8], ["kegeln", 7]]
 const FEST_WB_BONUS := 15
 var _fest_wb := {}           # {"spiel": Name, "ziel": Punkte, "best": Punkte heute}
+## Festtag-Katastrophen: Unwetter, Stromausfall oder knappes Bier. Schutz wird bei der Planung mitgekauft (Plane, Notstrom, Vorrat).
+const FEST_SCHUTZ_PREIS := {"plane": 200, "notstrom": 300, "vorrat": 250}
+const FEST_KATA_CHANCE := 0.7
+var _fest_kata := ""         # heute geplante Katastrophe ("regen", "strom", "knapp"), leer = keine
+var _fest_kata_zeit := 17.0
 const FEST_RAENGE := [0, 100, 250, 500, 1000]   # Dorffest, Stadtfest, Landesfest, Festival-Highlight, Weltfest
 var _fest := {}              # geplantes Fest: tag, motto, band, feuer, deko, werbung, hilfe, kosten
 var _fest_ruhm := 0
@@ -5250,6 +5255,8 @@ func _ereignis_andrang() -> float:
 	return 1.0
 
 func _update_ereignis(delta: float) -> void:
+	if _ereignis == "fest" and _fest_kata != "" and _clock_hour() >= _fest_kata_zeit:
+		_fest_katastrophe()
 	_zwischenfall_takt(delta)
 	_wunsch_takt(delta)
 	if _ereignis == "fest" and not _fest_feuer_gezuendet and _clock_hour() >= 21.0:
@@ -7165,26 +7172,33 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 func fest_moeglich() -> bool:
 	return _story != null and _story.aktiv and _story.kapitel >= 6 and _fest.is_empty() and _day - _fest_letzter >= FEST_PAUSE
 
-func fest_kosten(band: int, feuer: int, deko: bool, werbung: bool, hilfe: bool) -> int:
+func fest_kosten(band: int, feuer: int, deko: bool, werbung: bool, hilfe: bool, schutz := 0) -> int:
 	var summe: int = int(FEST_BAND_PREIS.get(band, 0)) + int(FEST_FEUER_PREIS[clampi(feuer, 0, 3)])
 	summe += FEST_DEKO_PREIS if deko else 0
 	summe += FEST_WERBUNG_PREIS if werbung else 0
 	summe += FEST_HILFE_PREIS if hilfe else 0
+	if schutz & 1:
+		summe += int(FEST_SCHUTZ_PREIS.plane)
+	if schutz & 2:
+		summe += int(FEST_SCHUTZ_PREIS.notstrom)
+	if schutz & 4:
+		summe += int(FEST_SCHUTZ_PREIS.vorrat)
 	return summe
 
 ## Fest für morgen planen und bezahlen (Desktop-App „Fest“)
 @rpc("any_peer", "reliable", "call_local")
-func net_fest_planen(motto: int, band: int, feuer: int, deko: bool, werbung: bool, hilfe: bool) -> void:
+func net_fest_planen(motto: int, band: int, feuer: int, deko: bool, werbung: bool, hilfe: bool, schutz := 0) -> void:
 	if not multiplayer.is_server() or not buero_offen() or not fest_moeglich():
 		return
 	if motto < 0 or motto > 4 or band < 1 or band > 3 or feuer < 0 or feuer > 3:
 		return
-	var kosten := fest_kosten(band, feuer, deko, werbung, hilfe)
+	schutz = clampi(schutz, 0, 7)
+	var kosten := fest_kosten(band, feuer, deko, werbung, hilfe, schutz)
 	if not _afford(kosten):
 		_fehler("MSG_NO_MONEY", ["DESKTOP_APP_FEST", _eur(kosten)])
 		return
 	Game.add_money(-kosten)
-	_fest = {"tag": _day + 1, "motto": motto, "band": band, "feuer": feuer, "deko": deko, "werbung": werbung, "hilfe": hilfe, "kosten": kosten}
+	_fest = {"tag": _day + 1, "motto": motto, "band": band, "feuer": feuer, "deko": deko, "werbung": werbung, "hilfe": hilfe, "schutz": schutz, "kosten": kosten}
 	_melde("MSG_FEST_GEPLANT", [_eur(kosten)], 2)
 	_broadcast_meta()
 
@@ -7197,17 +7211,46 @@ func _fest_morgen() -> bool:
 	var wb: Array = FEST_WETTBEWERBE.pick_random()
 	_fest_wb = {"spiel": wb[0], "ziel": wb[1], "best": 0}
 	_melde("MSG_FEST_WETTBEWERB", ["WB_SPIEL_" + str(wb[0]).to_upper(), int(wb[1])], 2)
+	_fest_kata = ["regen", "strom", "knapp"].pick_random() if randf() < FEST_KATA_CHANCE else ""
+	_fest_kata_zeit = randf_range(16.0, 19.5)
 	_artist_tier = maxi(_artist_tier, int(_fest.band))
 	_popularity = minf(100.0, _popularity + (6.0 if bool(_fest.get("deko", false)) else 0.0))
 	_melde("MSG_FEST_HEUTE", ["FEST_MOTTO_%d" % int(_fest.motto)], 2)
 	_stats.ereignisse = int(_stats.get("ereignisse", 0)) + 1
 	return true
 
+## Die Katastrophe des Festtags schlägt zu — oder wird vom gekauften Schutz abgewehrt (Festruhm: +5 abgewehrt, −5 sonst)
+func _fest_katastrophe() -> void:
+	var art := _fest_kata
+	_fest_kata = ""
+	var schutz := int(_fest.get("schutz", 0))
+	var bit: int = {"regen": 1, "strom": 2, "knapp": 4}[art]
+	var abgewehrt: bool = (schutz & bit) != 0
+	_stats["kata_" + ("ok" if abgewehrt else "treffer")] = int(_stats.get("kata_" + ("ok" if abgewehrt else "treffer"), 0)) + 1
+	_fest["kata_ruhm"] = int(_fest.get("kata_ruhm", 0)) + (5 if abgewehrt else -5)
+	if abgewehrt:
+		_pop_erhoehen(1.0)
+		_melde("MSG_KATA_ABGEWEHRT_" + art.to_upper(), [], 2)
+		return
+	match art:
+		"regen":
+			_popularity = maxf(POP_MIN, _popularity - 4.0)
+		"strom":
+			_strom_t = STROM_DAUER
+			_popularity = maxf(POP_MIN, _popularity - 3.0)
+			_net_strom.rpc(true)
+		"knapp":
+			var weg := maxi(10, int(float(_stock[WARE_BIER]) * 0.25))
+			_stock[WARE_BIER] = maxi(0, int(_stock[WARE_BIER]) - weg)
+			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	_melde("MSG_KATA_TREFFER_" + art.to_upper(), [], 1)
+
 ## Abends: Festruhm aus Gästen, Beliebtheit, Band, Feuerwerk und Beschwerden
 func _fest_auswerten() -> void:
 	if _ereignis != "fest" or _fest.is_empty():
 		return
 	var ruhm := _served / 2 + roundi(_popularity / 2.0) + int(_fest.band) * 10 + int(_fest.feuer) * 8 - _complaints * 3
+	ruhm += int(_fest.get("kata_ruhm", 0))
 	if not _fest_wb.is_empty():
 		if int(_fest_wb.best) >= int(_fest_wb.ziel):
 			ruhm += FEST_WB_BONUS

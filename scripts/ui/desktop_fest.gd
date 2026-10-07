@@ -21,7 +21,7 @@ func _ready() -> void:
 		_baende[i].pressed.connect(_band_waehlen.bind(i + 1))
 	for i in _feuer_knoepfe.size():
 		_feuer_knoepfe[i].pressed.connect(_feuer_waehlen.bind(i))
-	for k: Button in [%Deko, %Werbung, %Hilfe]:
+	for k: Button in [%Deko, %Werbung, %Hilfe, %Plane, %Notstrom, %Vorrat]:
 		k.toggled.connect(func(_an: bool) -> void: _anzeigen())
 	%Planen.pressed.connect(_planen)
 
@@ -59,8 +59,11 @@ func _feuer_waehlen(i: int) -> void:
 		_feuer_knoepfe[k].set_pressed_no_signal(k == i)
 	_anzeigen()
 
+func _schutz() -> int:
+	return (1 if %Plane.button_pressed else 0) + (2 if %Notstrom.button_pressed else 0) + (4 if %Vorrat.button_pressed else 0)
+
 func _kosten() -> int:
-	return int(_gm.fest_kosten(_band, _feuer, %Deko.button_pressed, %Werbung.button_pressed, %Hilfe.button_pressed))
+	return int(_gm.fest_kosten(_band, _feuer, %Deko.button_pressed, %Werbung.button_pressed, %Hilfe.button_pressed, _schutz()))
 
 func _anzeigen() -> void:
 	if _gm == null:
@@ -91,8 +94,11 @@ func _anzeigen() -> void:
 	%Deko.text = tr("FEST_DEKO") % Texte.euro(int(_gm.FEST_DEKO_PREIS))
 	%Werbung.text = tr("FEST_WERBUNG") % Texte.euro(int(_gm.FEST_WERBUNG_PREIS))
 	%Hilfe.text = tr("FEST_HILFE") % Texte.euro(int(_gm.FEST_HILFE_PREIS))
+	%Plane.text = tr("FEST_PLANE") % Texte.euro(int(_gm.FEST_SCHUTZ_PREIS.plane))
+	%Notstrom.text = tr("FEST_NOTSTROM") % Texte.euro(int(_gm.FEST_SCHUTZ_PREIS.notstrom))
+	%Vorrat.text = tr("FEST_VORRAT") % Texte.euro(int(_gm.FEST_SCHUTZ_PREIS.vorrat))
 	%Summe.text = tr("FEST_SUMME") % Texte.euro(_kosten())
 	%Planen.disabled = not moeglich
 
 func _planen() -> void:
-	_gm.net_fest_planen.rpc_id(1, _motto, _band, _feuer, %Deko.button_pressed, %Werbung.button_pressed, %Hilfe.button_pressed)
+	_gm.net_fest_planen.rpc_id(1, _motto, _band, _feuer, %Deko.button_pressed, %Werbung.button_pressed, %Hilfe.button_pressed, _schutz())

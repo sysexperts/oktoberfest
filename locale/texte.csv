@@ -2550,3 +2550,13 @@ MS_WETTBEWERB_3_TITLE,Festmeister der Buden,Festival stall champion,Şenlik büf
 MS_WETTBEWERB_3_TEXT,Gewinne drei Festtag-Wettbewerbe.,Win three festival contests.,Üç şenlik yarışması kazan.
 EREIGNIS_FEST_TITEL,Festtag,Festival day,Şenlik günü
 EREIGNIS_FEST_START,"Heute ist Festtag: Band, Feuerwerk um 21 Uhr und ein Wettbewerb an den Buden!","Today is festival day: band, fireworks at 9 pm and a contest at the stalls!","Bugün şenlik günü: grup, saat 21'de havai fişek ve büfelerde bir yarışma!"
+FEST_SCHUTZ_TITEL,Schutz vor Katastrophen,Protection against disasters,Felaketlere karşı koruma
+FEST_PLANE,Regenplane · %s,Rain tarp · %s,Yağmur brandası · %s
+FEST_NOTSTROM,Notstromaggregat · %s,Emergency generator · %s,Acil durum jeneratörü · %s
+FEST_VORRAT,Extra Bierfässer · %s,Extra beer barrels · %s,Ekstra bira fıçıları · %s
+MSG_KATA_ABGEWEHRT_REGEN,"Unwetter über dem Fest, aber die Plane hält: Alle bleiben trocken und feiern weiter.","A storm over the festival, but the tarp holds: everyone stays dry and keeps celebrating.","Şenliğin üstünde fırtına, ama branda dayandı: Herkes kuru kalıp kutlamaya devam ediyor."
+MSG_KATA_ABGEWEHRT_STROM,"Stromausfall! Das Notstromaggregat springt an, kaum jemand merkt es.","Power cut! The emergency generator kicks in, hardly anyone notices.","Elektrik kesintisi! Acil durum jeneratörü devreye giriyor, neredeyse kimse fark etmiyor."
+MSG_KATA_ABGEWEHRT_KNAPP,"Das Bier wird knapp, aber die extra Fässer aus dem Vorrat retten den Abend.","Beer runs short, but the extra barrels from storage save the evening.",Bira azalıyor ama depodaki ekstra fıçılar akşamı kurtarıyor.
+MSG_KATA_TREFFER_REGEN,Unwetter über dem Fest! Ohne Plane werden die Gäste nass und schlecht gelaunt.,A storm over the festival! Without a tarp the guests get wet and grumpy.,Şenliğin üstünde fırtına! Brandasız misafirler ıslanıp huysuzlanıyor.
+MSG_KATA_TREFFER_STROM,Stromausfall mitten im Fest! Ohne Notstrom steht alles still.,Power cut in the middle of the festival! Without backup power everything stands still.,Şenliğin ortasında elektrik kesintisi! Yedek güç olmadan her şey duruyor.
+MSG_KATA_TREFFER_KNAPP,"Das Bier wird knapp! Fässer sind leer, ohne Vorrat fehlt Ware.","Beer runs short! Barrels are empty, without a reserve goods are missing.","Bira azalıyor! Fıçılar boş, yedek olmadan mal eksik."

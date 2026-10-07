@@ -37,6 +37,22 @@ class Lauf extends Node:
 		gm._ereignis_waehlen()
 		_check("Festtag: Ereignis und Band", gm._ereignis == "fest" and gm._artist_tier == 2, "%s %d" % [gm._ereignis, gm._artist_tier])
 		_check("Andrang erhöht", gm._ereignis_andrang() > 1.5, "%.2f" % gm._ereignis_andrang())
+		# Katastrophe ohne und mit Schutz
+		gm._fest.schutz = 0
+		gm._fest_kata = "knapp"
+		gm._stock[gm.WARE_BIER] = 100
+		gm._fest_katastrophe()
+		_check("Ohne Vorrat: Bier wird knapp", int(gm._stock[gm.WARE_BIER]) < 100 and int(gm._fest.kata_ruhm) == -5, str(gm._stock[gm.WARE_BIER]))
+		gm._fest.schutz = 2
+		gm._fest_kata = "strom"
+		gm._fest_katastrophe()
+		_check("Mit Notstrom abgewehrt, kein Stromausfall", gm._strom_t == 0.0 and int(gm._fest.kata_ruhm) == 0, str(gm._fest.kata_ruhm))
+		gm._fest.schutz = 0
+		gm._fest_kata = "strom"
+		gm._fest_katastrophe()
+		_check("Ohne Notstrom: Stromausfall", gm._strom_t > 0.0)
+		gm._strom_t = 0.0
+		_check("Schutz kostet extra", gm.fest_kosten(1, 0, false, false, false, 7) == 150 + 200 + 300 + 250, str(gm.fest_kosten(1, 0, false, false, false, 7)))
 		_check("Wettbewerb ist gewählt", not gm._fest_wb.is_empty() and int(gm._fest_wb.ziel) > 0, str(gm._fest_wb))
 		# Wettbewerb: das gewählte Spiel mit dem Ziel schaffen
 		var wb_spiel: String = gm._fest_wb.spiel

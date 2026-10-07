@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v373.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v374.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -40,7 +40,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 2. **Echter Koop-Test:** `bash tools/test_netz.sh` und `bash tools/test_koop_bots.sh` (Letzteres läuft gegen den Live-Server) — die neuen Systeme wurden bisher nur im Einzelspieler-Test und per Codeprüfung auf korrekte Server/Client-Aufteilung geprüft.
 3. **Texte:** Türkisch und Englisch der vielen neuen Texte von Muttersprachlern lesen lassen. Automatische Prüfung: `python tools/pruefe_texte.py`.
 4. **Steamworks:** Die 42 Meilenstein-IDs aus `scripts/meilensteine.gd` als Errungenschaften anlegen (`SteamDienst.errungenschaft(id)` ist schon verdrahtet).
-5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
+5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
 6. Vor jedem Steam-Upload: `bash tools/test_alle.sh`, Version hochzählen, `git push`.
 
 ### Bekannte Lücken und Risiken
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v373.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v374.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -67,7 +67,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P6 Kapitel 3 | ◐ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; offen: eigenes Layout in Konrads Zelt, Kameras und Schlösser | v334 bis v352 |
 | P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche (Geduld-Bonus offen) | v343 |
 | P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
-| P9 Endgame | ◐ Fest-App und Festtag, Meister-Liste, Wohnwagen-Ausbau (ein Wagen fürs Team), Late-Game-Ausbauten; offen: Wettbewerbe und Katastrophen am Festtag, Wagen je Spieler, Buden betreiben, Zweitzelt | v355 bis v358 |
+| P9 Endgame | ◐ Fest-App und Festtag, Meister-Liste, Wohnwagen-Ausbau (ein Wagen fürs Team), Late-Game-Ausbauten; offen: Fassanstich und Motto-Gäste am Festtag, Wagen je Spieler, Buden betreiben, Zweitzelt | v355 bis v358 |
 | P10 Kirmes, Meilensteine, Zeitung | ◐ sieben Kirmes-Rekord-Quests, 42 Meilensteine, Festkurier mit neuen Themen, Brabbelton, Gäste in Gruppen und Wunschlieder; offen: Steam-Errungenschaften in Steamworks anlegen | v359 bis v363 |
 | P11 Balancing und Politur | ◐ alle 24 Tests grün (`bash tools/test_alle.sh`), Textprüfung, Leistungsmessung; offen: Balancing mit Testspielen, echter Koop-Test, Türkisch von Muttersprachlern lesen | v364 bis v366 |
 
@@ -216,7 +216,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | Aufgabe | Aufwand |
 |---|---|
 | ✔ **Fest-App** (ab Kapitel 6: Motto, Band, Feuerwerk, Dekoration, Werbung, Aushilfen planen und bezahlen, v355) | L |
-| ◐ **Festtag-System:** ✔ Ereignis „Fest“ alle 10 Tage (mehr Gäste, Band, Feuerwerk um 21 Uhr), Festruhm und fünf Festränge, Konrads Festruhm als Vergleich (v355); ✔ Festtag-Wettbewerb (ein Kirmesspiel mit Mindestergebnis, Festruhm-Bonus, v373); ☐ Fassanstich, Katastrophen und Gegenmittel, Motto-Gäste | L |
+| ◐ **Festtag-System:** ✔ Ereignis „Fest“ alle 10 Tage (mehr Gäste, Band, Feuerwerk um 21 Uhr), Festruhm und fünf Festränge, Konrads Festruhm als Vergleich (v355); ✔ Festtag-Wettbewerb (ein Kirmesspiel mit Mindestergebnis, Festruhm-Bonus, v373); ✔ Katastrophen am Festtag (Unwetter, Stromausfall, knappes Bier) mit Schutz zum Mitkaufen (Regenplane, Notstrom, Extra-Fässer), Festruhm ±5 (v374); ☐ Fassanstich, Motto-Gäste | L |
 | ✔ **Meister-Liste** (13 Einträge in der Quests-App, 100 % = Titel Fest-Meister, v356; goldener Krug am Wohnwagen ✔ v357) | S |
 | ◐ **Wohnwagen-Ausbau** (✔ ein Wagen fürs Team: App „Wohnwagen“ mit Bett-Stufen = mehr Tempo, Sofa, Poster, Zimmerpflanze, Trophäenregal mit goldenem Krug, Prestige zählt beim Festruhm, v357; ☐ Wagen je Spieler, Wohnwagenplatz, Außen-Anpassung, Spiegel/Creator) | XL |
 | ◐ **Late-Game-Ausgaben** (✔ App „Ausbau“ ab Kapitel 5: Biergarten, VIP-Lounge, zweite Theke, größere Bühne, Bierhandel mit anderen Zelten, Konrads Zelt aufkaufen mit Pacht, v358; ☐ Buden betreiben, Zweitzelt, Personal-Akademie) | XL |
