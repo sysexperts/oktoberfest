@@ -2283,7 +2283,6 @@ MSG_AUSBAU_HANDEL,Bierhandel: %d Maß an andere Zelte verkauft für %s,Beer trad
 MSG_AUSBAU_PACHT,Pacht von Konrads Zelt: +%s,Rent from Konrad's tent: +%s,Konrad'ın çadırından kira: +%s
 MEISTER_AUSBAU,Alle Ausbauten gebaut,Built every expansion,Tüm genişlemeleri yap
 ABSENDER_BUDE,Budenbesitzer,Stall owner,Büfe sahibi
-MEISTER_KIRMES,Alle sieben Rekord-Aufgaben der Kirmes,All seven record challenges at the fair,Fuarın yedi rekor görevinin hepsi
 Q_K-1_TITLE,Rekord: Hau den Lukas,Record: Strongman game,Rekor: Lukas'ı vur
 Q_K-1_TEXT,Erreiche an der Bude 9 oder mehr Punkte (Hau den Lukas). Dein bestes Ergebnis zählt.,Reach 9 or more points at the stall (Strongman game). Your best score counts.,Büfede 9 veya daha fazla puan yap (Lukas'ı vur). En iyi skorun sayılır.
 MAIL_K1_BETREFF,Rekord gesucht: Hau den Lukas,Record wanted: Strongman game,Rekor aranıyor: Lukas'ı vur
@@ -2513,3 +2512,26 @@ bugün simit yeme yarışması var ve tabaklar büfelere dağılmış durumda. A
 Horst"
 MAIL_G11_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_G11_A2,Heute nicht.,Not today.,Bugün olmaz.
+HINT_KISTE_NEHMEN,{interact} Kiste nehmen,{interact} Take a crate,{interact} Kasayı al
+HINT_KISTE_HOLEN,{interact} Erst am Kistenstapel eine Kiste holen,{interact} Get a crate from the stack first,{interact} Önce yığından bir kasa al
+HINT_KISTE_ABGEBEN,{interact} Kiste abliefern,{interact} Deliver the crate,{interact} Kasayı teslim et
+MSG_KISTE_GENOMMEN,Kiste aufgeladen. Ab zur Bude!,Crate picked up. Off to the stall!,Kasa alındı. Büfeye!
+Q_K-8_TITLE,Lieferung für die Buden,Delivery for the stalls,Büfeler için teslimat
+Q_K-8_TEXT,"Drei Buden brauchen Nachschub. Hol am Kistenstapel eine Kiste (E) und bring sie zur markierten Bude, dreimal.","Three stalls need supplies. Take a crate from the stack (E) and bring it to the marked stall, three times.","Üç büfenin malzemeye ihtiyacı var. Yığından bir kasa al (E) ve işaretli büfeye götür, üç kez."
+MAIL_K8_BETREFF,Nachschub gesucht,Supplies wanted,Malzeme aranıyor
+MAIL_K8_TEXT,"Servus,
+
+bei uns drei Buden ist der Nachschub ausgegangen und die Lieferung steht auf einem Stapel am Rand. Trag drei Kisten zu uns, dann zahl ich dir was.
+
+Bis bald auf der Kirmes","Hi,
+
+three of us stalls ran out of supplies and the delivery sits in a stack at the edge. Carry three crates to us and I will pay you.
+
+See you at the fair","Selam,
+
+bizim üç büfede malzeme bitti ve teslimat kenarda bir yığın halinde duruyor. Bize üç kasa taşı, sana ödeme yapayım.
+
+Fuarda görüşürüz"
+MAIL_K8_A1,"Gern, ich trag.","Gladly, I will carry.",Memnuniyetle taşırım.
+MAIL_K8_A2,Heute nicht.,Not today.,Bugün olmaz.
+MEISTER_KIRMES,Alle acht Kirmes-Aufgaben der Buden,All eight fair challenges at the stalls,Büfelerin sekiz fuar görevinin hepsi

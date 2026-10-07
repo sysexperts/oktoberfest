@@ -47,7 +47,7 @@ class Lauf extends Node:
 		gm._stats["fakes_gemeldet"] = 1
 		for r in range(1, 7):
 			gm._stats["hire_%d" % r] = 1
-		for i in range(1, 8):
+		for i in range(1, 9):
 			story.quests["K-%d" % i] = {"z": "erfuellt"}
 		gm._ausbau = ["biergarten", "vip", "theke2", "buehne", "handel", "konrad"]
 		gm._wagen = {"bett": 3, "items": ["sofa", "poster", "pflanze", "regal"]}

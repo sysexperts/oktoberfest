@@ -17,7 +17,7 @@ func _ready() -> void:
 	ebene.size = Vector2(30, 30)
 	boden.mesh = ebene
 	add_child(boden)
-	var varianten := ["sturm", "feuer", "quelle", "hochzeit", "teller"]
+	var varianten := ["lager", "lieferung", "hochzeit", "teller", "quelle"]
 	for i in varianten.size():
 		var p: Node3D = (load("res://scenes/gefallen/punkt.tscn") as PackedScene).instantiate()
 		p.set("variante", varianten[i])

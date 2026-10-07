@@ -696,5 +696,25 @@
     }
    }
   ]
+ },
+ {
+  "id": "M-K8",
+  "absender": "BUDE",
+  "betreff": "MAIL_K8_BETREFF",
+  "text": "MAIL_K8_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K8_A1",
+    "folge": {
+     "quest_annehmen": "K-8"
+    }
+   },
+   {
+    "text": "MAIL_K8_A2",
+    "folge": {
+     "quest_ablehnen": "K-8"
+    }
+   }
+  ]
  }
 ]

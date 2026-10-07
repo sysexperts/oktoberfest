@@ -78,7 +78,7 @@ func _abgleich() -> void:
 			net_ende.rpc()
 		return
 	for id: String in _story.quests.keys():
-		if str(Daten.quest(id).get("typ", "")) == "gefallen" and _story.zustand(id) == "offen":
+		if str(Daten.quest(id).get("typ", "")) in ["gefallen", "kirmes"] and Daten.quest(id).has("gefallen") and _story.zustand(id) == "offen":
 			_starten(id)
 			return
 
@@ -213,7 +213,7 @@ func _punkte_starten(id: String, frei: Array[int]) -> void:
 	for i in anzahl:
 		orte.append(frei[i])
 	var quelle := -1
-	if variante == "feuer" and frei.size() > anzahl:
+	if variante in ["feuer", "lieferung"] and frei.size() > anzahl:
 		quelle = frei[anzahl]
 	_lauf = {"id": id, "phase": "suchen", "traeger": -1, "art": "punkte", "variante": variante, "offen": anzahl,
 		"zeit": float(d.get("zeit", 150.0)), "wasser": {}}
@@ -238,7 +238,7 @@ func net_punkte_start(_id: String, variante: String, orte: PackedInt32Array, que
 		_punkte.append(p)
 	if quelle >= 0 and quelle < _orte.size():
 		_quelle = PUNKT.instantiate() as Node3D
-		_quelle.set("variante", "quelle")
+		_quelle.set("variante", "lager" if variante == "lieferung" else "quelle")
 		get_tree().current_scene.add_child(_quelle)
 		_quelle.global_position = _orte[quelle]
 
@@ -252,7 +252,7 @@ func net_wasser() -> void:
 		peer = 1
 	(_lauf.wasser as Dictionary)[peer] = true
 	net_wasser_stand.rpc(peer, true)
-	_gm._melde("MSG_EIMER_VOLL", [], 0)
+	_gm._melde("MSG_KISTE_GENOMMEN" if str(_lauf.get("variante", "")) == "lieferung" else "MSG_EIMER_VOLL", [], 0)
 
 @rpc("authority", "reliable", "call_local")
 func net_wasser_stand(peer: int, voll: bool) -> void:
@@ -270,7 +270,7 @@ func net_punkt(i: int) -> void:
 		peer = 1
 	if i < 0 or i >= _punkte.size() or bool(_punkte[i].get("erledigt")):
 		return
-	if str(_lauf.variante) == "feuer":
+	if str(_lauf.variante) in ["feuer", "lieferung"]:
 		if not bool((_lauf.wasser as Dictionary).get(peer, false)):
 			return
 		(_lauf.wasser as Dictionary)[peer] = false
@@ -387,7 +387,7 @@ func _process(delta: float) -> void:
 ## Für den Zielpfeil (scripts/ui/zielmarker.gd): wohin gerade?
 func ziel_fuer(spieler: Node3D) -> Node3D:
 	if _art == "punkte" and _phase == "suchen":
-		if _variante == "feuer" and not bool(spieler.get("traegt_wasser")) and _quelle != null and is_instance_valid(_quelle):
+		if _variante in ["feuer", "lieferung"] and not bool(spieler.get("traegt_wasser")) and _quelle != null and is_instance_valid(_quelle):
 			return _quelle
 		var bester_punkt: Node3D = null
 		var abstand_min := INF

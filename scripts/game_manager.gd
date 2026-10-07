@@ -7245,12 +7245,12 @@ func meister_liste() -> Array:
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
 		["MEISTER_WAGEN", wagen_prestige(), 6],
 		["MEISTER_AUSBAU", _ausbau.size(), 6],
-		["MEISTER_KIRMES", _kirmes_erfuellt(), 7],
+		["MEISTER_KIRMES", _kirmes_erfuellt(), 8],
 	]
 
 func _kirmes_erfuellt() -> int:
 	var n := 0
-	for i in range(1, 8):
+	for i in range(1, 9):
 		if _story != null and _story.zustand("K-%d" % i) == "erfuellt":
 			n += 1
 	return n

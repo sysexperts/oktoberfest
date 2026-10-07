@@ -1221,5 +1221,34 @@
    "anzahl": 6,
    "zeit": 120
   }
+ },
+ {
+  "id": "K-8",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-8_TITLE",
+  "text": "Q_K-8_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K8"
+  },
+  "bedingung": {
+   "flag": "gefallen_K-8"
+  },
+  "frist_tage": 3,
+  "belohnung": {
+   "geld": 250
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "lieferung",
+   "anzahl": 3,
+   "zeit": 150
+  }
  }
 ]

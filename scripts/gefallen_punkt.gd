@@ -3,6 +3,8 @@ extends Node3D
 ##   variante "sturm":  lose Plane, die vor dem Sturm gesichert werden muss
 ##   variante "feuer":  Feuer an einer Bude, braucht einen Eimer Wasser
 ##   variante "quelle": Brunnen, an dem man den Eimer füllt
+##   variante "lieferung": Ziel einer Kistenlieferung (die Kiste holt man am „lager“)
+##   variante "lager": Kistenstapel, an dem man die Kiste nimmt
 ##   variante "hochzeit": Girlande fürs Brautpaar, die aufgehängt werden muss
 ##   variante "teller": Brezn-Teller für das Wettessen, der eingesammelt werden muss
 ## Aufbau: scenes/gefallen/punkt.tscn (alle Teile sind Knoten, das Skript blendet nur die der Variante ein).
@@ -19,9 +21,11 @@ func _ready() -> void:
 	$Brunnen.visible = variante == "quelle"
 	$Girlande.visible = variante == "hochzeit"
 	$Teller.visible = variante == "teller"
+	$Ziel.visible = variante == "lieferung"
+	$Lager.visible = variante == "lager"
 	var etikett := get_node_or_null("Label") as Label3D
 	if etikett:
-		etikett.visible = variante == "quelle"
+		etikett.visible = variante == "quelle" or variante == "lager"
 
 func interact_point() -> Vector3:
 	return global_position + Vector3(0, 1.0, 0)
@@ -40,6 +44,8 @@ func erledigt_setzen() -> void:
 			$Girlande.position.y = 2.3   # hängt jetzt oben
 		"teller":
 			$Teller.visible = false
+		"lieferung":
+			$Ziel.scale = Vector3(0.6, 0.6, 0.6)
 
 func _spieler() -> Node:
 	var gm := get_tree().current_scene
@@ -53,6 +59,11 @@ func hinweis_text(_geschlossen: bool) -> String:
 			return "HINT_HOCHZEIT_AUFHAENGEN"
 		"teller":
 			return "HINT_TELLER_SAMMELN"
+		"lieferung":
+			var sp2 := _spieler()
+			return "HINT_KISTE_ABGEBEN" if sp2 != null and bool(sp2.get("traegt_wasser")) else "HINT_KISTE_HOLEN"
+		"lager":
+			return "HINT_KISTE_NEHMEN"
 		"feuer":
 			var sp := _spieler()
 			return "HINT_FEUER_LOESCHEN" if sp != null and bool(sp.get("traegt_wasser")) else "HINT_FEUER_WASSER"
@@ -62,7 +73,7 @@ func gefallen_aktion(_spieler_knoten: Node) -> void:
 	var g := get_tree().get_first_node_in_group("gefallen")
 	if g == null:
 		return
-	if variante == "quelle":
+	if variante == "quelle" or variante == "lager":
 		g.net_wasser.rpc_id(1)
 	else:
 		g.net_punkt.rpc_id(1, index)
