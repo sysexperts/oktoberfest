@@ -22,7 +22,7 @@ func _ready() -> void:
 	var kamera := Camera3D.new()
 	add_child(kamera)
 	kamera.current = true
-	kamera.look_at_from_position(Vector3(0.0, 1.9, -17.6), Vector3(0.0, 0.8, -12.5))
+	kamera.look_at_from_position(Vector3(4.5, 2.3, -10.0), Vector3(0.0, 0.7, -16.0))
 	await get_tree().create_timer(3.5).timeout
 	get_viewport().get_texture().get_image().save_png("res://build/casino.png")
 	print("RENDER FERTIG")

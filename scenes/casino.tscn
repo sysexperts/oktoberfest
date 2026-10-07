@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://assets/models/roulette.glb" id="2_roulette"]
 [ext_resource type="Script" path="res://scripts/kasino/kasino_ding.gd" id="3_kd"]
 [ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="4_figur"]
+[ext_resource type="PackedScene" path="res://assets/models/kartentisch.glb" id="5_karten"]
 
 [sub_resource type="StandardMaterial3D" id="Teppich"]
 albedo_color = Color(0.32, 0.04, 0.08, 1)
@@ -97,7 +98,7 @@ size = Vector3(2.2, 2.6, 0.3)
 script = ExtResource("1_cas")
 
 [node name="Boden" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, -14)
 
 [node name="Mesh" type="MeshInstance3D" parent="Boden"]
 mesh = SubResource("MBoden")
@@ -222,6 +223,17 @@ art = "roulette"
 transform = Transform3D(-0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, -0.0000, 1.4, 0, -13.0)
 beruf = "kellner"
 nr = 21
+
+
+[node name="Kartentisch" parent="." instance=ExtResource("5_karten")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
+script = ExtResource("3_kd")
+art = "blackjack"
+
+[node name="CroupierKarten" parent="." instance=ExtResource("4_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.8)
+beruf = "kellner"
+nr = 22
 
 
 [node name="Tuersteher" parent="." instance=ExtResource("4_figur")]

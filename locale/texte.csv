@@ -2097,3 +2097,18 @@ MSG_ROULETTE_GEWONNEN,"Roulette: die %d, %s. Gewonnen: +%s aus Konrads Bank!","R
 MSG_ROULETTE_VERLOREN,"Roulette: die %d, %s. Verloren: -%s an Konrads Bank.","Roulette: %d, %s. You lose -%s to Konrad's bank.","Rulet: %d, %s. Konrad'ın bankasına -%s kaybettin."
 Q_3_4B_TITLE,Das Hinterzimmer,The back room,Arka oda
 Q_3_4B_TEXT,"Der Saboteur ist zu Konrads Zelt geflohen. Hinter seinem Zelt gibt es ein Casino. Kauf bei Gustav ein Komplettset als Tarnung, lass dich vom Türsteher einlassen und spiel eine Runde Roulette.","The saboteur fled to Konrad's tent. There is a casino behind his tent. Buy a full disguise from Gustav, get past the doorman and play a round of roulette.","Sabotajcı Konrad'ın çadırına kaçtı. Çadırının arkasında bir kumarhane var. Gustav'dan tam kılık al, kapıcıdan geç ve bir tur rulet oyna."
+HINT_CASINO_BLACKJACK,{interact} Blackjack spielen,{interact} Play blackjack,{interact} Blackjack oyna
+BJ_FRAGE,"Blackjack gegen die Bank. Einsatz 50 €. Wer 21 am nächsten kommt, ohne drüber zu gehen, gewinnt.",Blackjack against the bank. Stake 50 €. Whoever gets closest to 21 without going over wins.,Banka karşı blackjack. Bahis 50 €. 21'e en çok yaklaşan ve geçmeyen kazanır.
+BJ_SPIELEN,Spielen,Play,Oyna
+BJ_NEIN,Lieber nicht,Better not,Boş ver
+BJ_KARTE,Karte,Hit,Kart
+BJ_HALTEN,Halten,Stand,Dur
+BJ_STAND,"Bank: %s (%d)
+Du: %s (%d)","Bank: %s (%d)
+You: %s (%d)","Banka: %s (%d)
+Sen: %s (%d)"
+BJ_BLACKJACK,Blackjack! Du gewinnst %s.,Blackjack! You win %s.,Blackjack! %s kazandın.
+BJ_GEWONNEN,Gewonnen: %s aus Konrads Bank.,You win %s from Konrad's bank.,Konrad'ın bankasından %s kazandın.
+BJ_UNENTSCHIEDEN,Unentschieden: der Einsatz bleibt bei dir (%s).,A tie: your stake stays with you (%s).,Berabere: bahsin sende kalır (%s).
+BJ_VERLOREN,Verloren: %s an Konrads Bank.,You lose %s to Konrad's bank.,Konrad'ın bankasına %s kaybettin.
+BJ_UEBERKAUFT,Überkauft! %s an Konrads Bank.,Bust! %s to Konrad's bank.,Patladın! Konrad'ın bankasına %s.

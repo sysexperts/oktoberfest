@@ -425,6 +425,7 @@ var _rache_tag := -1        # Konrad schlägt an diesem Tag zurück
 const ROULETTE_EINSATZ := 50
 const ROULETTE_ROT := [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 var _casino_tag := -1       # Spieltag, an dem der Türsteher uns eingelassen hat
+var _bj := {}               # Peer -> {"spieler": [Karten], "bank": [Karten]} (Blackjack im Casino)
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -7037,6 +7038,106 @@ func net_roulette(farbe: int) -> void:
 	var farbname := "CROUPIER_GRUEN" if zahl == 0 else ("CROUPIER_ROT" if rot else "CROUPIER_SCHWARZ")
 	_melde("MSG_ROULETTE_GEWONNEN" if gewonnen else "MSG_ROULETTE_VERLOREN", [zahl, farbname, _eur(ROULETTE_EINSATZ)], 2 if gewonnen else 1)
 	_broadcast_meta()
+
+## Blackjack gegen Konrads Bank: aktion 0 = neue Runde (50 € Einsatz), 1 = Karte, 2 = Halten.
+## Blackjack zahlt 3:2, Bank zieht bis 17, Gleichstand bringt den Einsatz zurück.
+@rpc("any_peer", "reliable", "call_local")
+func net_blackjack(aktion: int) -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+		return
+	var peer := multiplayer.get_remote_sender_id()
+	if peer == 0:
+		peer = 1
+	if aktion == 0:
+		if not _afford(ROULETTE_EINSATZ):
+			_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+			return
+		_bj[peer] = {"spieler": [_bj_karte(), _bj_karte()], "bank": [_bj_karte(), _bj_karte()]}
+		_story.ereignis("casino_gespielt")
+		var h: Dictionary = _bj[peer]
+		if _bj_wert(h.spieler) == 21:
+			_bj_ende(peer)
+			return
+		_bj_senden(peer, true)
+		return
+	if not _bj.has(peer):
+		return
+	var h2: Dictionary = _bj[peer]
+	if aktion == 1:
+		(h2.spieler as Array).append(_bj_karte())
+		if _bj_wert(h2.spieler) >= 21:
+			_bj_ende(peer)
+		else:
+			_bj_senden(peer, true)
+	elif aktion == 2:
+		_bj_ende(peer)
+
+func _bj_karte() -> int:
+	return randi() % 13 + 1   # 1 = Ass, 11 bis 13 = Bube, Dame, König
+
+func _bj_wert(karten: Array) -> int:
+	var summe := 0
+	var asse := 0
+	for k in karten:
+		var w := mini(int(k), 10)
+		if w == 1:
+			asse += 1
+			w = 11
+		summe += w
+	while summe > 21 and asse > 0:
+		summe -= 10
+		asse -= 1
+	return summe
+
+func _bj_text(karten: Array) -> String:
+	var teile: PackedStringArray = []
+	for k in karten:
+		var kk := int(k)
+		teile.append("A" if kk == 1 else ("B" if kk == 11 else ("D" if kk == 12 else ("K" if kk == 13 else str(kk)))))
+	return " ".join(teile)
+
+func _bj_senden(peer: int, offen: bool, ergebnis := "") -> void:
+	var h: Dictionary = _bj[peer]
+	var bank_zeigt: Array = h.bank if not offen else [h.bank[0]]
+	var text := String(TranslationServer.translate("BJ_STAND")) % [_bj_text(bank_zeigt) + ("  ?" if offen else ""), _bj_wert(bank_zeigt) if not offen else _bj_wert([h.bank[0]]), _bj_text(h.spieler), _bj_wert(h.spieler)]
+	if ergebnis != "":
+		text += "\n" + ergebnis
+	_net_bj.rpc_id(peer, text, offen)
+
+func _bj_ende(peer: int) -> void:
+	var h: Dictionary = _bj[peer]
+	var spieler := _bj_wert(h.spieler)
+	if spieler <= 21:
+		while _bj_wert(h.bank) < 17:
+			(h.bank as Array).append(_bj_karte())
+	var bank := _bj_wert(h.bank)
+	var blackjack: bool = spieler == 21 and (h.spieler as Array).size() == 2
+	var betrag := 0
+	var key := "BJ_VERLOREN"
+	if spieler > 21:
+		betrag = -ROULETTE_EINSATZ
+		key = "BJ_UEBERKAUFT"
+	elif blackjack and not (bank == 21 and (h.bank as Array).size() == 2):
+		betrag = ROULETTE_EINSATZ * 3 / 2
+		key = "BJ_BLACKJACK"
+	elif bank > 21 or spieler > bank:
+		betrag = ROULETTE_EINSATZ
+		key = "BJ_GEWONNEN"
+	elif spieler == bank:
+		key = "BJ_UNENTSCHIEDEN"
+	else:
+		betrag = -ROULETTE_EINSATZ
+	if betrag != 0:
+		Game.add_money(betrag)
+	_stats["blackjack"] = int(_stats.get("blackjack", 0)) + 1
+	_bj_senden(peer, false, String(TranslationServer.translate(key)) % _eur(absi(betrag)))
+	_bj.erase(peer)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_bj(text: String, offen: bool) -> void:
+	for c in get_tree().get_nodes_in_group("casino"):
+		c.bj_zeigen(text, offen)
 
 @rpc("authority", "reliable", "call_local")
 func _net_roulette_dreh() -> void:
