@@ -340,7 +340,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 6)
 [node name="3_Buero" type="Node3D" parent="Rundgang" unique_id=1163681136]
 script = ExtResource("76_station")
 schritt = 3
-zeilen = Array[String](["CHEF_BUERO_1", "CHEF_BUERO_2", "CHEF_BUERO_3"])
+zeilen = Array[String](["CHEF_BUERO_1", "CHEF_BUERO_3"])
 
 [node name="W1" type="Marker3D" parent="Rundgang/3_Buero"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.1, 0, 4.5)
