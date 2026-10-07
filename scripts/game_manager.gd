@@ -7221,7 +7221,7 @@ func fest_rang() -> int:
 ## Ein Eintrag ist [Schlüssel, erreicht, Ziel].
 func meister_liste() -> Array:
 	var gefallen := 0
-	for i in range(1, 10):
+	for i in range(1, 12):
 		if _story != null and _story.zustand("G-%d" % i) == "erfuellt":
 			gefallen += 1
 	var rollen := 0
@@ -7231,7 +7231,7 @@ func meister_liste() -> Array:
 	var kontrolle := 1 if (_story != null and bool(_story.flags.get("kontrolle_bestanden", false))) else 0
 	return [
 		["MEISTER_STORY", 1 if (_story != null and _story.kapitel >= 6) else 0, 1],
-		["MEISTER_GEFALLEN", gefallen, 9],
+		["MEISTER_GEFALLEN", gefallen, 11],
 		["MEISTER_TURNIER", mini(int(_stats.get("duell_siege", 0)), 5), 5],
 		["MEISTER_REZEPT", rezeptseiten(), 3],
 		["MEISTER_MEISTERBIER", mini(int(_stats.get("meisterfaesser", 0)), 1), 1],

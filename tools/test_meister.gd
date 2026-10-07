@@ -53,7 +53,7 @@ class Lauf extends Node:
 		gm._wagen = {"bett": 3, "items": ["sofa", "poster", "pflanze", "regal"]}
 		story.flags["kontrolle_bestanden"] = true
 		story.flags["rezeptseite3"] = true
-		for i in range(1, 10):
+		for i in range(1, 12):
 			story.quests["G-%d" % i] = {"z": "erfuellt"}
 		_check("Liste komplett", gm.meister_fertig(), str(gm.meister_liste()))
 		gm._meister_pruefen()

@@ -2381,7 +2381,7 @@ MS_GESCHICHTE_FERTIG_TEXT,Feiere das große Fest und schließe Kapitel 5 ab.,Cel
 MS_GEFALLEN_5_TITLE,Horsts Helfer,Horst's helper,Horst'un yardımcısı
 MS_GEFALLEN_5_TEXT,Erledige fünf verschiedene Gefallen.,Do five different favours.,Beş farklı iyilik yap.
 MS_GEFALLEN_9_TITLE,Immer zur Stelle,Always there,Her zaman yanında
-MS_GEFALLEN_9_TEXT,Erledige alle neun Gefallen.,Do all nine favours.,Dokuz iyiliğin hepsini yap.
+MS_GEFALLEN_9_TEXT,Erledige neun Gefallen.,Do all nine favours.,Dokuz iyiliğin hepsini yap.
 MS_KIRMES_3_TITLE,Kirmes-Held,Fair hero,Fuar kahramanı
 MS_KIRMES_3_TEXT,Schaffe drei Rekord-Aufgaben an den Buden.,Beat three record challenges at the stalls.,Büfelerde üç rekor görevini geç.
 MS_KIRMES_7_TITLE,Kirmes-Meister,Fair master,Fuar ustası
@@ -2469,3 +2469,47 @@ WATTEN_R4,Unter,Jack,Vale
 WATTEN_R5,Ober,Queen,Kız
 WATTEN_R6,König,King,Papaz
 WATTEN_R7,Ass,Ace,As
+HINT_HOCHZEIT_AUFHAENGEN,{interact} Girlande aufhängen,{interact} Hang the garland,{interact} Çelengi as
+HINT_TELLER_SAMMELN,{interact} Brezn-Teller einsammeln,{interact} Collect the pretzel plate,{interact} Simit tabağını topla
+Q_G-10_TITLE,Hochzeit auf der Kirmes,Wedding at the fair,Fuarda düğün
+Q_G-10_TEXT,"Ein Brautpaar feiert auf der Kirmes. Hänge vier Girlanden an den Buden auf (E), bevor die Zeit abläuft.",A bride and groom are celebrating at the fair. Hang four garlands at the stalls (E) before time runs out.,Bir gelin ve damat fuarda kutluyor. Süre dolmadan büfelere dört çelenk as (E).
+MAIL_G10_BETREFF,Hochzeit im Anmarsch,A wedding is coming,Düğün geliyor
+MAIL_G10_TEXT,"Servus,
+
+heute Nachmittag heiratet ein Paar bei uns auf der Kirmes und niemand hat geschmückt. Häng an den Buden vier Girlanden auf, bevor die Gesellschaft kommt. Du hast nicht ewig Zeit.
+Ich leg dir 350 € drauf.
+
+Horst","Hi,
+
+this afternoon a couple gets married at our fair and nobody has decorated. Hang four garlands at the stalls before the party arrives. You do not have forever.
+I will add €350.
+
+Horst","Selam,
+
+bu öğleden sonra fuarımızda bir çift evleniyor ve kimse süslememiş. Davetliler gelmeden büfelere dört çelenk as. Sonsuz vaktin yok.
+Üstüne 350 € koyarım.
+
+Horst"
+MAIL_G10_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G10_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_G-11_TITLE,Brezn-Wettessen,Pretzel eating contest,Simit yeme yarışması
+Q_G-11_TEXT,"Die Kirmes veranstaltet ein Brezn-Wettessen. Sammle sechs Brezn-Teller an den Buden ein (E), bevor die Zeit abläuft.",The fair holds a pretzel eating contest. Collect six pretzel plates (E) before time runs out.,Fuar bir simit yeme yarışması düzenliyor. Süre dolmadan altı simit tabağı topla (E).
+MAIL_G11_BETREFF,Wettessen!,Eating contest!,Yeme yarışması!
+MAIL_G11_TEXT,"Servus,
+
+heute ist Brezn-Wettessen und die Teller liegen verstreut an den Buden. Sammle sechs davon ein, ich brauche sie am Start. Schnell sein.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+today is the pretzel eating contest and the plates are scattered around the stalls. Collect six of them, I need them at the start. Be quick.
+I will add €300.
+
+Horst","Selam,
+
+bugün simit yeme yarışması var ve tabaklar büfelere dağılmış durumda. Altısını topla, başlangıçta lazım. Çabuk ol.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G11_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G11_A2,Heute nicht.,Not today.,Bugün olmaz.

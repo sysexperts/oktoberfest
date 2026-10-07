@@ -123,5 +123,22 @@ class Lauf extends Node:
 			await _warten(0.2)
 		await _warten(0.4)
 		_check("Feuer gelöscht, Quest erfüllt", story.zustand("G-6") == "erfuellt", story.zustand("G-6"))
+		# Hochzeit: vier Girlanden, Wettessen: sechs Teller
+		story._freischalten(g.Daten.quest("G-10"))
+		story.annehmen("G-10")
+		await _warten(0.6)
+		_check("Hochzeit: vier Girlanden", g._punkte.size() == 4 and g._variante == "hochzeit", str(g._punkte.size()))
+		for i in 4:
+			g.net_punkt(i)
+		await _warten(0.5)
+		_check("Hochzeit: Quest erfüllt", story.zustand("G-10") == "erfuellt", story.zustand("G-10"))
+		story._freischalten(g.Daten.quest("G-11"))
+		story.annehmen("G-11")
+		await _warten(0.6)
+		_check("Wettessen: sechs Teller", g._punkte.size() == 6 and g._variante == "teller", str(g._punkte.size()))
+		for i in 6:
+			g.net_punkt(i)
+		await _warten(0.5)
+		_check("Wettessen: Quest erfüllt", story.zustand("G-11") == "erfuellt", story.zustand("G-11"))
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN")
 		get_tree().quit(fehler)

@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v368.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v369.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -40,7 +40,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 2. **Echter Koop-Test:** `bash tools/test_netz.sh` und `bash tools/test_koop_bots.sh` (Letzteres läuft gegen den Live-Server) — die neuen Systeme wurden bisher nur im Einzelspieler-Test und per Codeprüfung auf korrekte Server/Client-Aufteilung geprüft.
 3. **Texte:** Türkisch und Englisch der vielen neuen Texte von Muttersprachlern lesen lassen. Automatische Prüfung: `python tools/pruefe_texte.py`.
 4. **Steamworks:** Die 42 Meilenstein-IDs aus `scripts/meilensteine.gd` als Errungenschaften anlegen (`SteamDienst.errungenschaft(id)` ist schon verdrahtet).
-5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Hochzeit und Wettessen als Gefallen, Kirmes-Quests Lotsen/Retten/Lieferung, Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
+5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Kirmes-Quests Lotsen/Retten/Lieferung, Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
 6. Vor jedem Steam-Upload: `bash tools/test_alle.sh`, Version hochzählen, `git push`.
 
 ### Bekannte Lücken und Risiken
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v368.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v369.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -63,7 +63,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P2 Computer-Desktop | ✔ fertig (Apps, Laptop mit begehbarem Wohnwagen) | v322 bis v324 |
 | P3 Kapitel 1 | ✔ fertig (spielbar bis zum ersten Feierabend) | v325 |
 | P4 Kapitel 2 | ✔ fertig | v329 bis v354 |
-| P5 Gefallen und Security | ◐ neun Gefallen, vier Security-Posten, Security als Personal; offen: Hochzeit, Wettessen | v330 bis v353 |
+| P5 Gefallen und Security | ✔ elf Gefallen (neu: Hochzeit mit Girlanden, Brezn-Wettessen mit Tellern), vier Security-Posten, Security als Personal | v330 bis v353 |
 | P6 Kapitel 3 | ◐ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; offen: Küche und Layout in Konrads Zelt, Kameras und Schlösser | v334 bis v352 |
 | P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche (Geduld-Bonus offen) | v343 |
 | P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
@@ -170,7 +170,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 9 von 11 | M |
+| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 11 von 11 (v369) | M |
 | ✔ **Täter-Figuren** (Spanner, Taschendieb, Betrunkener, Raufbolde, Fälscher, Dieb) über den Creator | M |
 | ✔ **Packen, Tragen, Übergeben** an Security (vorhandene Raufbold-Mechanik erweitern) | M |
 | ✔ **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |

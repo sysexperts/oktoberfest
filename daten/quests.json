@@ -1163,5 +1163,63 @@
   "belohnung": {
    "geld": 200
   }
+ },
+ {
+  "id": "G-10",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-10_TITLE",
+  "text": "Q_G-10_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G10"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-10"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 350
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "hochzeit",
+   "anzahl": 4,
+   "zeit": 150
+  }
+ },
+ {
+  "id": "G-11",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-11_TITLE",
+  "text": "Q_G-11_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G11"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-11"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "teller",
+   "anzahl": 6,
+   "zeit": 120
+  }
  }
 ]

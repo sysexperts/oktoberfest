@@ -656,5 +656,45 @@
     }
    }
   ]
+ },
+ {
+  "id": "M-G10",
+  "absender": "HORST",
+  "betreff": "MAIL_G10_BETREFF",
+  "text": "MAIL_G10_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G10_A1",
+    "folge": {
+     "quest_annehmen": "G-10"
+    }
+   },
+   {
+    "text": "MAIL_G10_A2",
+    "folge": {
+     "quest_ablehnen": "G-10"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G11",
+  "absender": "HORST",
+  "betreff": "MAIL_G11_BETREFF",
+  "text": "MAIL_G11_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G11_A1",
+    "folge": {
+     "quest_annehmen": "G-11"
+    }
+   },
+   {
+    "text": "MAIL_G11_A2",
+    "folge": {
+     "quest_ablehnen": "G-11"
+    }
+   }
+  ]
  }
 ]

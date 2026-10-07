@@ -3,6 +3,8 @@ extends Node3D
 ##   variante "sturm":  lose Plane, die vor dem Sturm gesichert werden muss
 ##   variante "feuer":  Feuer an einer Bude, braucht einen Eimer Wasser
 ##   variante "quelle": Brunnen, an dem man den Eimer füllt
+##   variante "hochzeit": Girlande fürs Brautpaar, die aufgehängt werden muss
+##   variante "teller": Brezn-Teller für das Wettessen, der eingesammelt werden muss
 ## Aufbau: scenes/gefallen/punkt.tscn (alle Teile sind Knoten, das Skript blendet nur die der Variante ein).
 
 var variante := "sturm"
@@ -15,6 +17,8 @@ func _ready() -> void:
 	$Plane.visible = variante == "sturm"
 	$Feuer.visible = variante == "feuer"
 	$Brunnen.visible = variante == "quelle"
+	$Girlande.visible = variante == "hochzeit"
+	$Teller.visible = variante == "teller"
 	var etikett := get_node_or_null("Label") as Label3D
 	if etikett:
 		etikett.visible = variante == "quelle"
@@ -32,6 +36,10 @@ func erledigt_setzen() -> void:
 			$Plane.position.y = 1.4
 		"feuer":
 			$Feuer.visible = false
+		"hochzeit":
+			$Girlande.position.y = 2.3   # hängt jetzt oben
+		"teller":
+			$Teller.visible = false
 
 func _spieler() -> Node:
 	var gm := get_tree().current_scene
@@ -41,6 +49,10 @@ func hinweis_text(_geschlossen: bool) -> String:
 	match variante:
 		"sturm":
 			return "HINT_STURM_SICHERN"
+		"hochzeit":
+			return "HINT_HOCHZEIT_AUFHAENGEN"
+		"teller":
+			return "HINT_TELLER_SAMMELN"
 		"feuer":
 			var sp := _spieler()
 			return "HINT_FEUER_LOESCHEN" if sp != null and bool(sp.get("traegt_wasser")) else "HINT_FEUER_WASSER"
