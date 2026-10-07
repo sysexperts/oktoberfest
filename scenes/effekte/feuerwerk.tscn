@@ -1,0 +1,64 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/effekte/feuerwerk.gd" id="1_fw"]
+
+[sub_resource type="Gradient" id="Verlauf"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.8, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="VerlaufTextur"]
+gradient = SubResource("Verlauf")
+
+[sub_resource type="ParticleProcessMaterial" id="SternProzess"]
+particle_flag_align_y = false
+direction = Vector3(0, 1, 0)
+spread = 180.0
+initial_velocity_min = 7.0
+initial_velocity_max = 11.0
+gravity = Vector3(0, -3.5, 0)
+damping_min = 1.5
+damping_max = 2.5
+scale_min = 0.6
+scale_max = 1.0
+color_ramp = SubResource("VerlaufTextur")
+
+[sub_resource type="Gradient" id="FunkeVerlauf"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="FunkeTextur"]
+gradient = SubResource("FunkeVerlauf")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StandardMaterial3D" id="FunkeMaterial"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("FunkeTextur")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+
+[sub_resource type="QuadMesh" id="Funke"]
+material = SubResource("FunkeMaterial")
+size = Vector2(0.45, 0.45)
+
+[node name="Feuerwerk" type="Node3D"]
+script = ExtResource("1_fw")
+
+[node name="Stern" type="GPUParticles3D" parent="."]
+unique_name_in_owner = true
+emitting = false
+amount = 90
+lifetime = 2.2
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+visibility_aabb = AABB(-30, -30, -30, 60, 60, 60)
+process_material = SubResource("SternProzess")
+draw_pass_1 = SubResource("Funke")

@@ -5433,6 +5433,8 @@ func _end_shift(reason := 0) -> void:
 	_story.ereignis("pfuetzenfreier_tag", _urin_count == 0 and _served >= 10)
 	if _artist_tier >= 3 and _served >= 20 and _story.zustand("5.7") == "offen":
 		_story.ereignis("fest_gefeiert")   # das große Fest: Star-Act, volles Zelt, Feierabend
+		_melde("MSG_FEST_FEUERWERK", [], 2)
+		_net_feuerwerk.rpc()
 	if _urin_count == 0 and _served >= 10:
 		_stats.tage_sauber = int(_stats.get("tage_sauber", 0)) + 1
 	if ist_finale():
@@ -7115,6 +7117,17 @@ func net_saboteur_fangen() -> void:
 	_pop_erhoehen(SABOTEUR_POP)
 	_melde("MSG_SABOTEUR_ERWISCHT", [_eur(SABOTEUR_LOHN)], 2)
 	_net_saboteur_weg.rpc()
+
+## Feuerwerk über dem Zelt (großes Fest), bei allen Spielern über der Kamera.
+@rpc("authority", "reliable", "call_local")
+func _net_feuerwerk() -> void:
+	var kamera := get_viewport().get_camera_3d()
+	if kamera == null:
+		return
+	var fw: Node3D = preload("res://scenes/effekte/feuerwerk.tscn").instantiate()
+	kamera.get_tree().current_scene.add_child(fw)
+	fw.global_position = Vector3(kamera.global_position.x, 0.0, kamera.global_position.z)
+	fw.ausloesen()
 
 @rpc("authority", "reliable", "call_local")
 func _net_saboteur_weg() -> void:
