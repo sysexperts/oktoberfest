@@ -5026,6 +5026,21 @@ func _gast_typ_waehlen() -> String:
 		return "tracht"
 	if _ereignis == "italiener" and randf() < 0.45:
 		return "tourist"
+	# Festtag: das Motto bestimmt die Gäste (0 Tracht, 1 Bier, 2 Italienische Nacht, 3 Rock, 4 Familie)
+	if _ereignis == "fest" and not _fest.is_empty():
+		match int(_fest.get("motto", 1)):
+			0:
+				if randf() < 0.55:
+					return "tracht"
+			2:
+				if randf() < 0.45:
+					return "tourist"
+			3:
+				if randf() < 0.3:
+					return "vip"   # Rock-Fans mit dickem Geldbeutel
+			4:
+				if randf() < 0.4:
+					return "stamm"
 	var typen: Dictionary = GAST_TYPEN.duplicate()
 	if _ausbau.has("vip"):
 		typen["vip"] = int(typen["vip"]) * 3   # die VIP-Lounge zieht Gäste mit Trinkgeld an

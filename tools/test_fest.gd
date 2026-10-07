@@ -36,6 +36,13 @@ class Lauf extends Node:
 		gm._day = 13
 		gm._ereignis_waehlen()
 		_check("Festtag: Ereignis und Band", gm._ereignis == "fest" and gm._artist_tier == 2, "%s %d" % [gm._ereignis, gm._artist_tier])
+		gm._fest.motto = 0
+		var tracht := 0
+		for i in 400:
+			if gm._gast_typ_waehlen() == "tracht":
+				tracht += 1
+		_check("Motto Trachtenfest: viele Trachtengäste", tracht > 150, "%d von 400" % tracht)
+		gm._fest.motto = 1
 		_check("Andrang erhöht", gm._ereignis_andrang() > 1.5, "%.2f" % gm._ereignis_andrang())
 		# Katastrophe ohne und mit Schutz
 		gm._fest.schutz = 0
