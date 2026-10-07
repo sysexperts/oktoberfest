@@ -8,3 +8,8 @@ func setze(autor: String, tag: String, sterne: float, text: String, farbe: Color
 	%Tag.text = tag
 	%Sterne.setze(sterne)
 	%Text.text = text
+
+## Fake-Bewertung: Knopf „Melden“ zeigen
+func als_fake(melden: Callable) -> void:
+	%Melden.visible = true
+	%Melden.pressed.connect(melden)

@@ -407,3 +407,10 @@ theme_override_colors/font_color = Color(0.95, 0.96, 0.99, 1)
 theme_override_font_sizes/font_size = 22
 autowrap_mode = 3
 
+[node name="Melden" type="Button" parent="Zeile/Inhalt"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "SOCIAL_MELDEN"

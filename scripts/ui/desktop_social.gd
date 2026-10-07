@@ -28,7 +28,7 @@ func _pruefen() -> void:
 	var verlauf: Array = _gm.get("konto_verlauf") if _gm != null else []
 	var pop := roundi(float(_hud.get("_pop"))) if _hud != null else 0
 	var z: Dictionary = _hud.get("_zustand") if _hud != null else {}
-	var stand := "%d|%d|%s" % [pop, verlauf.size(), z.get("zelt_name", "")]
+	var stand := "%d|%d|%s|%d" % [pop, verlauf.size(), z.get("zelt_name", ""), (z.get("fakes", []) as Array).size()]
 	if stand == _stand:
 		return
 	_stand = stand
@@ -47,7 +47,16 @@ func _anzeigen(verlauf: Array, pop: int, zelt: String) -> void:
 	for k in %Liste.get_children():
 		k.queue_free()
 	var beitraege := _beitraege(verlauf)
-	%Leer.visible = beitraege.is_empty()
+	var z: Dictionary = _hud.get("_zustand") if _hud != null else {}
+	var fakes: Array = z.get("fakes", [])
+	%Leer.visible = beitraege.is_empty() and fakes.is_empty()
+	# Konrads Fake-Bewertungen stehen oben und lassen sich melden
+	for f: Dictionary in fakes:
+		var fp := POST.instantiate()
+		%Liste.add_child(fp)
+		fp.setze(str(f.autor), tr("BANK_TAG") % int(f.tag), 1.0, tr("SOCIAL_FAKE_%d" % int(f.text)), Color(0.75, 0.75, 0.8))
+		var fid := int(f.id)
+		fp.als_fake(func() -> void: _gm.net_fake_melden.rpc_id(1, fid))
 	for b: Dictionary in beitraege:
 		var p := POST.instantiate()
 		%Liste.add_child(p)

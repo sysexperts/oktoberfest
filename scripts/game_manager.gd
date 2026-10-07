@@ -402,6 +402,13 @@ const EREIGNIS_CHANCE := 0.7
 const HAPPY_VON := 18.0
 const HAPPY_BIS := 19.0
 const KONTROLLE_UM := 15.0
+## Fake-Bewertungen (Kapitel 3+): Konrad lässt abends manchmal Ein-Sterne-Beiträge schreiben.
+## Jede ungemeldete kostet jeden Abend Beliebtheit. In der Social-App melden (net_fake_melden).
+const FAKE_CHANCE := 0.4
+const FAKE_MAX := 4
+const FAKE_POP := 1.5
+var _fakes: Array = []   # {"id", "autor", "text" (1-3), "tag"}
+var _fake_next := 1
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -978,7 +985,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1053,6 +1060,8 @@ func _load_game() -> bool:
 	if zut is Dictionary:
 		for art: String in _zutat.keys():
 			_zutat[art] = int((zut as Dictionary).get(art, 0))
+	var fk: Variant = d.get("fakes", [])
+	_fakes = (fk as Array).duplicate(true) if fk is Array else []
 	var gf: Variant = d.get("gaerfaesser", [])
 	if gf is Array:
 		for i in mini((gf as Array).size(), _gaerfaesser.size()):
@@ -5543,6 +5552,7 @@ func _end_shift(reason := 0) -> void:
 	# Tag ohne eine einzige Pfütze (und mit Betrieb) — Meilenstein SAUBER_5
 	_story.ereignis("pfuetzenfreier_tag", _urin_count == 0 and _served >= 10)
 	_dieb_nacht()
+	_fakes_abend()
 	if _artist_tier >= 3 and _served >= 20 and _story.zustand("5.7") == "offen":
 		_story.ereignis("fest_gefeiert")   # das große Fest: Star-Act, volles Zelt, Feierabend
 		_melde("MSG_FEST_FEUERWERK", [], 2)
@@ -6211,6 +6221,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
+		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
@@ -6894,6 +6905,32 @@ func _huber_schicht(delta: float) -> void:
 		if int(_stock[WARE_BIER]) > 0:
 			_stock[WARE_BIER] = int(_stock[WARE_BIER]) - 1
 			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+
+## Abends: ungemeldete Fakes kosten Beliebtheit, manchmal kommt ein neuer dazu
+func _fakes_abend() -> void:
+	if not _story.aktiv or _story.kapitel < 3:
+		return
+	if not _fakes.is_empty():
+		_popularity = maxf(POP_MIN, _popularity - FAKE_POP * float(_fakes.size()))
+	if _fakes.size() < FAKE_MAX and randf() < FAKE_CHANCE:
+		var namen := ["Dieter", "Gabi", "Uwe", "Heike", "Rolf", "Sabine"]
+		_fakes.append({"id": _fake_next, "autor": namen.pick_random() + " K.", "text": randi() % 3 + 1, "tag": _day})
+		_fake_next += 1
+		_melde("MSG_FAKE_NEU", [], 1)
+
+## Spieler meldet eine Fake-Bewertung in der Social-App
+@rpc("any_peer", "reliable", "call_local")
+func net_fake_melden(id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	for i in _fakes.size():
+		if int((_fakes[i] as Dictionary).id) == id:
+			_fakes.remove_at(i)
+			_popularity = minf(100.0, _popularity + 2.0)
+			_story.ereignis("fake_gemeldet")
+			_melde("MSG_FAKE_GELOESCHT", [], 2)
+			_broadcast_meta()
+			return
 
 ## Konrads Streiche aus Kapitel 4, während der Schicht
 func _streich_ausloesen() -> void:
