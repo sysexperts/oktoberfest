@@ -402,6 +402,11 @@ const EREIGNIS_CHANCE := 0.7
 const HAPPY_VON := 18.0
 const HAPPY_BIS := 19.0
 const KONTROLLE_UM := 15.0
+const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
+const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
+var _kontrolle_ueberraschung := false
+var _kontrolle_start := KONTROLLE_UM
+var _kontrolle_t := -1.0
 const KONTROLLE_GRENZE := 60.0
 const KONTROLLE_STRAFE := 300
 const KONTROLLE_BONUS := 10.0
@@ -5057,6 +5062,9 @@ func _saison_abschluss() -> void:
 func _ereignis_waehlen(erzwingen := "") -> void:
 	_ereignis = ""
 	_ereignis_erledigt = false
+	_kontrolle_ueberraschung = false
+	_kontrolle_start = KONTROLLE_UM
+	_kontrolle_t = -1.0
 	_prosit_timer = PROSIT_ALLE
 	_fass_kaputt = 0
 	# Letzter Festtag: immer Finale mit Star-Act gratis
@@ -5065,6 +5073,11 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 		_artist_tier = 3
 		_melde("EREIGNIS_FINALE_START", [], 2)
 		return
+	# Ab Kapitel 3 kommt Frau Wagner manchmal ohne Ankündigung zur Kontrolle
+	var ueberraschung: bool = erzwingen == "" and _story.aktiv and _story.kapitel >= 3 and _tent_stage > 0
+	if ueberraschung and not tutorial_active() and plan_fuer(_day) != "kontrolle" and randf() < UEBERRASCHUNG_CHANCE:
+		_kontrolle_ueberraschung = true
+		_kontrolle_start = randf_range(13.0, 19.0)
 	# Laut Kalender (Plan für die Saison)
 	var geplant := plan_fuer(_day) if erzwingen == "" else erzwingen
 	if geplant == "" or (geplant == "fass" and _drinks_avail().size() < 2):
@@ -5112,18 +5125,19 @@ func _ereignis_andrang() -> float:
 	return 1.0
 
 func _update_ereignis(delta: float) -> void:
+	# Überraschungskontrolle (nicht angekündigt) und das Urteil, wenn Frau Wagner fertig ist
+	if _kontrolle_ueberraschung and not _ereignis_erledigt and _clock_hour() >= _kontrolle_start:
+		_ereignis_erledigt = true
+		_kontrolle_beginnen()
+	if _kontrolle_t > 0.0:
+		_kontrolle_t -= delta
+		if _kontrolle_t <= 0.0:
+			_kontrolle_auswerten()
 	match _ereignis:
 		"kontrolle":
 			if not _ereignis_erledigt and _clock_hour() >= KONTROLLE_UM:
 				_ereignis_erledigt = true
-				if _hygiene < KONTROLLE_GRENZE:
-					Game.add_money(-KONTROLLE_STRAFE)
-					_popularity = maxf(POP_MIN, _popularity - 5.0)
-					_melde("MSG_KONTROLLE_STRAFE", [_eur(KONTROLLE_STRAFE)], 1)
-				else:
-					_popularity = minf(100.0, _popularity + KONTROLLE_BONUS)
-					_melde("MSG_KONTROLLE_OK", [int(KONTROLLE_BONUS)], 2)
-					_story.ereignis("kontrolle_bestanden")
+				_kontrolle_beginnen()
 		"prosit":
 			if _clock_hour() < GUEST_START_HOUR:
 				return
@@ -5137,6 +5151,28 @@ func _update_ereignis(delta: float) -> void:
 						g.cooldown = randf_range(0.0, 2.0)
 						_guest_sim[id] = g
 				_melde("MSG_PROSIT", [], 2)
+
+## Frau Wagner kommt zur Hygienekontrolle, geht ihre Runde und fällt danach das Urteil.
+func _kontrolle_beginnen() -> void:
+	_kontrolle_t = preload("res://scripts/frau_wagner.gd").dauer()
+	_melde("MSG_KONTROLLE_DA", [], 0)
+	_net_wagner.rpc()
+
+func _kontrolle_auswerten() -> void:
+	if _hygiene < KONTROLLE_GRENZE:
+		Game.add_money(-KONTROLLE_STRAFE)
+		_popularity = maxf(POP_MIN, _popularity - 5.0)
+		_melde("MSG_KONTROLLE_STRAFE", [_eur(KONTROLLE_STRAFE)], 1)
+	else:
+		_popularity = minf(100.0, _popularity + KONTROLLE_BONUS)
+		_melde("MSG_KONTROLLE_OK", [int(KONTROLLE_BONUS)], 2)
+		_story.ereignis("kontrolle_bestanden")
+
+@rpc("authority", "reliable", "call_local")
+func _net_wagner() -> void:
+	for w in get_tree().get_nodes_in_group("wagner"):
+		w.queue_free()
+	add_child(WAGNER_SCENE.instantiate())
 
 ## Feierabend bei allen: großer Text oben, die Musik blendet aus (net_meta).
 @rpc("authority", "reliable", "call_local")

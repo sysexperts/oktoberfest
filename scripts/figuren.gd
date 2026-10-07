@@ -266,6 +266,21 @@ static func look_huber() -> Dictionary:
 	l["hose_muster"] = Color(0.3, 0.28, 0.28).to_html(false)
 	return l
 
+## Frau Wagner vom Amt (Hygienekontrolle): Dutt, Lesebrille, weiße Bluse, dunkle Weste
+static func look_wagner() -> Dictionary:
+	var l := npc_look(hash("wagner"), 5, "w")
+	l["haar"] = Color.from_hsv(0.08, 0.1, 0.45).to_html(false)
+	l["frisur"] = "dutt"
+	l["brille"] = "lesebrille"
+	l["brille_farbe"] = Color(0.12, 0.12, 0.14).to_html(false)
+	l["uniform"] = true
+	_stueck(l, "schuhe", "schuh_halb", Color(0.08, 0.08, 0.1), Color(0.2, 0.2, 0.22))
+	_stueck(l, "hemd", "bluse_lang", Color(0.95, 0.95, 0.96), Color(0.85, 0.86, 0.9))
+	_stueck(l, "jacke", "jacke_weste", Color(0.14, 0.17, 0.26), Color(0.7, 0.72, 0.8))
+	_stueck(l, "hose", "hose_kniebund", Color(0.14, 0.15, 0.2), Color(0.3, 0.3, 0.36))
+	l["emotion"] = "skeptisch_w"
+	return l
+
 ## Festbetreiber Horst: Glatze, grauer Walross-Schnauzer, blaue Weste, Lederhose (das Aussehen, das früher Opa Alois hatte)
 static func look_festleiter() -> Dictionary:
 	var l := npc_look(hash("alois"), 7, "m")
