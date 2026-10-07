@@ -67,5 +67,14 @@ class Lauf extends Node:
 		gm._consume_stock(1)
 		gm._broadcast_meta()
 		_check("Eigenes Bier getrunken: Kapitel 4 geschafft", story.zustand("4.7") == "erfuellt" and story.kapitel == 5, "Kapitel %d" % story.kapitel)
+		gm._eigenbier = 3
+		gm._eigenbier_q = [0, 1, 2]
+		var gu1: int = gm._consume_stock(1, false)
+		var gu2: int = gm._consume_stock(1, false)
+		var gu3: int = gm._consume_stock(1, false)
+		var gu4: int = gm._consume_stock(1, false)
+		_check("Eigenbier: erst Meisterbräu, dann Festbier, dann Fremdbier", gu1 == 2 and gu2 == 2 and gu3 == 1 and gu4 == -1, "%d %d %d %d" % [gu1, gu2, gu3, gu4])
+		var gg := {"typ": "", "geduld_bonus": 1.0 + gm.EIGENBIER_GEDULD * 2.0}
+		_check("Meisterbräu macht 30 % geduldiger", is_equal_approx(gm._geduld_max(gg), gm._geduld_max({"typ": ""}) * 1.3))
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN")
 		get_tree().quit(fehler)

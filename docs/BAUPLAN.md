@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v382.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v383.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v382.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v383.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -65,7 +65,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P4 Kapitel 2 | ✔ fertig | v329 bis v354 |
 | P5 Gefallen und Security | ✔ elf Gefallen (neu: Hochzeit mit Girlanden, Brezn-Wettessen mit Tellern), vier Security-Posten, Security als Personal | v330 bis v353 |
 | P6 Kapitel 3 | ◐ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; Konrads Zelt hat jetzt ein eigenes Layout | v334 bis v352 |
-| P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche (Geduld-Bonus offen) | v343 |
+| P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche, Geduld-Bonus fürs eigene Bier | v343 |
 | P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
 | P9 Endgame | ◐ Fest-App und Festtag, Meister-Liste, Wohnwagen-Ausbau (ein Wagen fürs Team), Late-Game-Ausbauten; offen: Wagen je Spieler | v355 bis v358 |
 | P10 Kirmes, Meilensteine, Zeitung | ◐ sieben Kirmes-Rekord-Quests, 42 Meilensteine, Festkurier mit neuen Themen, Brabbelton, Gäste in Gruppen und Wunschlieder; offen: Steam-Errungenschaften in Steamworks anlegen | v359 bis v363 |
@@ -199,7 +199,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 |---|---|
 | ◐ Braukeller überarbeiten (aufräumen, Rezepttafel, Tür) — Keller und Brauen laufen wie zuvor, Abfüllen neu | M |
 | ✔ Qualitätsstufen (Hausbier, Festbier, Meisterbräu je Rezeptseite) und Rezeptbuch in der Quests-App (v341) | M |
-| ◐ Eigenes Bier (✔ Abfüllen, Lager, Zählung, Aufschlag je Maß nach Güte; ☐ Geduld) | S |
+| ◐ Eigenes Bier (✔ Abfüllen, Lager, Zählung, Aufschlag je Maß nach Güte; ✔ Geduld: Festbier +15 %, Meisterbräu +30 % Geduld bei der nächsten Bestellung, v383) | S |
 | ✔ Bräumeister Gerhard als Personal (Rolle sechs, braut von allein im Keller, v342) | M |
 | ◐ Quests 4.1 bis 4.7, Mails (✔); Streiche: Zutaten blockieren ✔, Lieferwagen, Diebe, Stromausfall ✔ (v343) | M |
 

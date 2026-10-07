@@ -3199,6 +3199,8 @@ var _eigenbier := 0   # So viel selbstgebrautes Bier liegt noch im Lager
 var _eigenbier_q := [0, 0, 0]
 ## Aufschlag je Maß und Qualitätsstufe über dem Hausbier (in €)
 const BIER_AUFSCHLAG := 2
+## Gute Biere machen geduldig: je Güte-Stufe (Festbier 1, Meisterbräu 2) so viel mehr Geduld bei der nächsten Bestellung
+const EIGENBIER_GEDULD := 0.15
 
 ## Seiten von Sepps Rezeptbuch: 1 von Anfang an, 2 nach Kapitel 4, 3 von Konrad (Quest 5.3).
 ## Jede Seite macht das Bier besser (Hausbier, Festbier, Meisterbräu).
@@ -3212,7 +3214,9 @@ func rezeptseiten() -> int:
 		n += 1
 	return n
 
-func _consume_stock(okind: int, verkauf := true) -> void:
+## Gibt die Güte des ausgeschenkten Eigenbiers zurück (0 Hausbier, 1 Festbier, 2 Meisterbräu), sonst -1.
+func _consume_stock(okind: int, verkauf := true) -> int:
+	var guete := -1
 	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
 	if w == WARE_BIER and verkauf and _happy_hour():
 		_happy_masse += 1
@@ -3222,12 +3226,14 @@ func _consume_stock(okind: int, verkauf := true) -> void:
 		for i in [2, 1, 0]:
 			if int(_eigenbier_q[i]) > 0:
 				_eigenbier_q[i] = int(_eigenbier_q[i]) - 1
+				guete = i
 				if verkauf and i > 0:
 					_add_income(i * BIER_AUFSCHLAG)
 				break
 		_stats["eigenbier_bedient"] = int(_stats.get("eigenbier_bedient", 0)) + 1
 	_stock[w] = maxi(0, int(_stock.get(w, 0)) - 1)
 	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	return guete
 
 
 # ================================================= E3: Personal
@@ -3822,7 +3828,7 @@ func _serve_by_staff(gid: int) -> void:
 		return
 	if not _has_stock(int(g.okind)):
 		return
-	_consume_stock(int(g.okind))
+	g.geduld_bonus = 1.0 + EIGENBIER_GEDULD * float(maxi(_consume_stock(int(g.okind)), 0))
 	g.ostate = 2
 	_stamm_bedient(g)
 	g.served_t = SERVED_SHOW
@@ -4881,7 +4887,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	if not _has_stock(int(g.okind)):
 		_melde("MSG_STOCK_EMPTY", [WARE_KEYS[WARE_ESSEN if int(g.okind) == 2 else WARE_BIER]], 1)
 		return
-	_consume_stock(int(g.okind))
+	g.geduld_bonus = 1.0 + EIGENBIER_GEDULD * float(maxi(_consume_stock(int(g.okind)), 0))
 	g.ostate = 2
 	g.served_t = SERVED_SHOW
 	_guest_sim[id] = g
@@ -5073,7 +5079,7 @@ func _gast_typ_waehlen() -> String:
 ## Volle Geduld dieses Gasts (Grundgeduld × Typ).
 func _geduld_max(g: Dictionary) -> float:
 	var betrunken := BETRUNKEN_GEDULD if rausch_stufe(g) >= 2 else 1.0
-	return _geduld() * float(TYP_GEDULD.get(str(g.get("typ", "")), 1.0)) * betrunken
+	return _geduld() * float(TYP_GEDULD.get(str(g.get("typ", "")), 1.0)) * betrunken * float(g.get("geduld_bonus", 1.0))
 
 ## Getränk steigt zu Kopf, Essen macht nüchterner. Betrunkene werfen manchmal den
 ## Krug um: Pfütze, und sie bestellen gleich wieder.
