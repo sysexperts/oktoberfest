@@ -73,7 +73,11 @@ class Lauf extends Node:
 			dialog._weiter()
 			await _warten(0.3)
 		await _warten(1.0)
-		_check("Ja: Schritt 1, er läuft los", gm._quest_step == 1 and chef.unterwegs(), "Schritt %d" % gm._quest_step)
+		_check("Ja: Schritt 1 (Wohnwagen aussuchen), er bleibt stehen", gm._quest_step == 1 and not chef.unterwegs(), "Schritt %d" % gm._quest_step)
+		_check("Wahl ist offen", gm.wagen_wahl_offen(), "")
+		gm.net_wagen_waehlen.rpc_id(1, 2)
+		await _warten(1.0)
+		_check("Gewählt: Schritt 2, er läuft los", gm._quest_step == 2 and chef.unterwegs() and gm.wagen_platz_von(1) == 2, "Schritt %d, Platz %d" % [gm._quest_step, gm.wagen_platz_von(1)])
 		var t := 0.0
 		while chef.unterwegs() and t < 60.0:
 			await _warten(0.5)
@@ -84,7 +88,7 @@ class Lauf extends Node:
 		for m in gm._messes.values():
 			if m.ist_dreck():
 				dreck += 1
-		_check("Nach dem Mieten: Schritt 2 und Dreck im Zelt", gm._quest_step == 2 and dreck >= 10, "Schritt %d, Dreck %d" % [gm._quest_step, dreck])
+		_check("Nach dem Mieten: Schritt 3 und Dreck im Zelt", gm._quest_step == 3 and dreck >= 10, "Schritt %d, Dreck %d" % [gm._quest_step, dreck])
 		t = 0.0
 		while chef.unterwegs() and t < 60.0:
 			await _warten(0.5)
@@ -131,7 +135,7 @@ class Lauf extends Node:
 				gm.net_clean(id)
 			await _warten(0.05)
 		await _warten(1.0)
-		_check("Noch Säcke offen: Schritt bleibt 2", gm._quest_step == 2, "Schritt %d, Säcke %d" % [gm._quest_step, gm._muell_erzeugt])
+		_check("Noch Säcke offen: Schritt bleibt 3", gm._quest_step == 3, "Schritt %d, Säcke %d" % [gm._quest_step, gm._muell_erzeugt])
 		# Säcke zum Müllplatz tragen
 		for id in gm._packages.keys().duplicate():
 			if gm._packages[id].kind == 3:
@@ -143,7 +147,7 @@ class Lauf extends Node:
 		sp.look_at(Vector3(-5, 0.4, 16.3), Vector3.UP)
 		await _warten(0.6)
 		_bild(dir + "/tut_muellplatz.png")
-		_check("Sauber: Schritt 3, er geht ins Büro", gm._quest_step == 3 and chef.unterwegs(), "Schritt %d" % gm._quest_step)
+		_check("Sauber: Schritt 4, er geht ins Büro", gm._quest_step == 4 and chef.unterwegs(), "Schritt %d" % gm._quest_step)
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit()
 

@@ -12,7 +12,13 @@ func _process(delta: float) -> void:
 	var welt := get_tree().current_scene
 	var hud: Object = welt.get("_hud")
 	var z: Dictionary = hud.get("_zustand") if hud != null else {}
-	var items: Array = (z.get("wagen", {}) as Dictionary).get("items", [])
+	# Gezeigt wird der Ausbau des Spielers, dem dieser Innenraum gehört
+	var nr := int(get_parent().get_meta("platz", 0))
+	var wer := -1
+	for e: Dictionary in z.get("wagen_plaetze", []):
+		if int(e.get("platz", -1)) == nr:
+			wer = int(e.get("peer", 1))
+	var items: Array = Caravan.zustand_von(z, wer).get("items", []) if wer >= 0 else []
 	for k in get_children():
 		(k as Node3D).visible = items.has(String(k.name).to_lower())
 	var krug := get_node_or_null("Regal/GoldKrug") as Node3D

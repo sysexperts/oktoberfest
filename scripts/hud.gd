@@ -477,7 +477,7 @@ const PUTZ_FARBE_OFFEN := Color(0.9, 0.86, 0.78)
 const PUTZ_FARBE_FERTIG := Color(0.55, 0.85, 0.45)
 
 func set_putz_stand(stand: Array) -> void:
-	%Teilziele.visible = stand.size() == 6 and _quest_step == 2
+	%Teilziele.visible = stand.size() == 6 and _quest_step == 3
 	if not %Teilziele.visible:
 		return
 	var zeilen := [

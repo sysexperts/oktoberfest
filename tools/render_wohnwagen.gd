@@ -22,7 +22,7 @@ func _ready() -> void:
 	# Zweites Bild von innen (mit Dach), erstes ohne Dach und Südwand
 	var innen := Camera3D.new()
 	add_child(innen)
-	innen.look_at_from_position(Vector3(2.9, 1.6, 0.9), Vector3(-1.5, 1.1, -0.6))
+	innen.look_at_from_position(Vector3(-2.2, 1.7, 0.6), Vector3(2.6, 0.8, -0.3))
 	innen.current = true
 	for i in 6:
 		await get_tree().process_frame

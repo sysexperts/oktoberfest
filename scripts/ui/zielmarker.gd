@@ -62,12 +62,18 @@ func ziel_suchen() -> Node3D:
 				return chef
 			return _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
 		1:
+			# Wohnwagen aussuchen: der nächste freie; wer schon einen hat, wartet auf die anderen
+			var ich := multiplayer.get_unique_id()
+			if _naechstes(sp, func(n: Node) -> bool: return n is Caravan and (n as Caravan).besitzer == ich):
+				return null
+			return _naechstes(sp, func(n: Node) -> bool: return n is Caravan and (n as Caravan).besitzer == 0)
+		2:
 			# Das Schild am Zelteingang — ist es weg (gemietet), bleibt das Festbüro
 			var schild := _naechstes(sp, func(n: Node) -> bool: return n is ZeltVermietung)
 			if schild:
 				return schild
 			return _naechstes(sp, func(n: Node) -> bool: return n is Computer) if buero else null
-		2:
+		3:
 			# Zelt putzen: Sack in der Hand → Müllplatz, sonst Plane/Dreck, dann liegende Säcke
 			if sp.carry_state == 3 and sp.carry_pkg_kind == 3:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Muellplatz)
@@ -75,19 +81,19 @@ func ziel_suchen() -> Node3D:
 			if dreck:
 				return dreck
 			return _naechstes(sp, func(n: Node) -> bool: return n is Package and n.kind == 3)
-		3, 4, 10, 11, 12, 13:
+		4, 5, 11, 12, 13, 14:
 			return _naechstes(sp, func(n: Node) -> bool: return n is Computer) if buero else null
-		5:
+		6:
 			# Lieferwagen unterwegs — schon zeigen, wohin die Pakete später gehören
 			return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-		6:
+		7:
 			if sp.carry_state == 3:
 				return _naechstes(sp, func(n: Node) -> bool: return n is Lager)
 			var paket := _naechstes(sp, func(n: Node) -> bool: return n is Package)
 			return paket if paket else _naechstes(sp, func(n: Node) -> bool: return n is Lager)
-		7:
-			return _schlafziel(sp) if geschlossen else null
 		8:
+			return _schlafziel(sp) if geschlossen else null
+		9:
 			if geschlossen:
 				return _schlafziel(sp)
 			return _ziel_bedienen(sp)
@@ -97,7 +103,8 @@ func ziel_suchen() -> Node3D:
 func _schlafziel(sp: Node3D) -> Node3D:
 	if sp.global_position.z > 300.0:
 		return _naechstes(sp, func(n: Node) -> bool: return n.has_method("wohnwagen_aktion") and str(n.get("art")) == "bett")
-	return _naechstes(sp, func(n: Node) -> bool: return n is Caravan)
+	var ich := multiplayer.get_unique_id()
+	return _naechstes(sp, func(n: Node) -> bool: return n is Caravan and (n as Caravan).besitzer == ich)
 
 ## Schritt "Bediene einen Gast": Krug holen → zapfen → zum wartenden Gast.
 func _ziel_bedienen(sp: Node) -> Node3D:

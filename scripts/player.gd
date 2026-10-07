@@ -449,7 +449,7 @@ func _tarnung_pruefen(delta: float) -> void:
 	_tarnung_t = 0.5
 	var hud: Object = _world.get("_hud")
 	var z: Dictionary = hud.get("_zustand") if hud != null else {}
-	var bett := int((z.get("wagen", {}) as Dictionary).get("bett", 1))
+	var bett := int(Caravan.zustand_von(z, multiplayer.get_unique_id()).get("bett", 1))
 	_ausgeschlafen = 1.0 + 0.03 * float(bett - 1)
 	var stufe := int(z.get("tarnung_stufe", 0)) if bool(z.get("tarnung_an", false)) else 0
 	if stufe != _tarnung_stufe:
@@ -1192,10 +1192,17 @@ func _handle_interaction(delta: float) -> void:
 				_world.net_gaerfass_fuellen.rpc_id(1, _world.gaerfass_index(_current_target))
 				_sfx("pop")
 		elif _current_target is Caravan:
-			# Tür des Wohnwagens: hineingehen (Schlafen geht am Bett drinnen)
-			wohnwagen_betreten()
-			if _sfx_node:
-				_sfx_node.play_oder("tuer", "pop")
+			var wagen := _current_target as Caravan
+			if wagen.besitzer == 0:
+				# Freier Wagen: im Tutorial-Schritt aussuchen (kostenlos), sonst nichts
+				if wagen.wahl_offen and _world.has_method("net_wagen_waehlen"):
+					_world.net_wagen_waehlen.rpc_id(1, wagen.nummer)
+					_sfx("ding")
+			else:
+				# Tür des Wohnwagens: hineingehen, auch in fremde (Schlafen geht am Bett drinnen)
+				wohnwagen_betreten(wagen)
+				if _sfx_node:
+					_sfx_node.play_oder("tuer", "pop")
 		elif _current_target.has_method("gefallen_aktion"):
 			# Täter packen oder beim Security-Posten abgeben (scripts/gefallen.gd)
 			_current_target.gefallen_aktion(self)
@@ -1667,8 +1674,10 @@ var traegt_wasser := false
 var _draussen := Vector3.ZERO
 var _draussen_yaw := 0.0
 
-func wohnwagen_betreten() -> void:
-	var innen := _world.get_node_or_null("WohnwagenInnen") as Node3D
+func wohnwagen_betreten(wagen: Caravan = null) -> void:
+	# Jeder vergebene Wohnwagenplatz hat seinen Innenraum (GameManager._wagen_innen_abgleichen)
+	var nr := wagen.nummer if wagen != null else 0
+	var innen := _world.get_node_or_null("WohnwagenInnen" if nr <= 0 else "WohnwagenInnen%d" % nr) as Node3D
 	var eingang := innen.get_node_or_null("Eingang") as Node3D if innen else null
 	if eingang == null:
 		return

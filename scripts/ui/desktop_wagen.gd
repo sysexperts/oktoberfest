@@ -38,7 +38,7 @@ func _anzeigen() -> void:
 	if _gm == null:
 		return
 	var z: Dictionary = _hud.get("_zustand") if _hud != null else {}
-	var wagen: Dictionary = z.get("wagen", {"bett": 1, "items": []})
+	var wagen: Dictionary = Caravan.zustand_von(z, multiplayer.get_unique_id())
 	var bett := int(wagen.get("bett", 1))
 	var items: Array = wagen.get("items", [])
 	%Prestige.text = tr("WAGEN_PRESTIGE") % int(z.get("wagen_prestige", 0))
@@ -75,10 +75,6 @@ func _anzeigen() -> void:
 
 ## Farbe des eigenen Wagens: der Host steht in „wagen.farbe“, Mitspieler in „wagen_plaetze“
 func _meine_farbe(z: Dictionary, wagen: Dictionary) -> String:
-	var ich := multiplayer.get_unique_id()
-	for e: Dictionary in z.get("wagen_plaetze", []):
-		if int(e.get("peer", 0)) == ich:
-			return str(e.get("farbe", "blau"))
 	return str(wagen.get("farbe", "blau"))
 
 ## Spiegel im Wohnwagen: der Creator öffnet sich, der neue Look geht an den Server und an alle Mitspieler

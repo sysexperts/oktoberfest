@@ -467,8 +467,10 @@ var _fest_feuer_gezuendet := false
 const WAGEN_BETT_PREIS := {2: 400, 3: 900}
 const WAGEN_ITEMS := {"sofa": 300, "poster": 100, "pflanze": 120, "regal": 250}
 var _wagen := {"bett": 1, "items": [], "farben": ["blau"], "farbe": "blau"}
-## Farbe des Wagens je Mitspieler (Host steht in _wagen.farbe, andere hier); nicht gespeichert, Peers wechseln.
-var _wagen_farbe_peer := {}
+## Wohnwagen der Mitspieler (Host: _wagen): Bett, Einrichtung und Farben gehören jedem Spieler allein. Nicht gespeichert.
+var _wagen_peer := {}
+## Welchen Wohnwagenplatz (Nummer in Caravan.sortiert) sich ein Spieler ausgesucht hat: Peer → Nummer
+var _wagen_wahl := {}
 const WAGEN_FARBEN := {"blau": 0, "rot": 200, "gruen": 200}
 ## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
 ##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
@@ -1076,7 +1078,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_platz": int(_wagen_wahl.get(1, -1)), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1166,6 +1168,8 @@ func _load_game() -> bool:
 		var farben_geladen: Array = ((wg as Dictionary).get("farben", ["blau"]) as Array).duplicate()
 		_wagen = {"bett": clampi(int((wg as Dictionary).bett), 1, 3), "items": ((wg as Dictionary).get("items", []) as Array).duplicate(),
 			"farben": farben_geladen, "farbe": str((wg as Dictionary).get("farbe", "blau"))}
+	if int(d.get("wagen_platz", -1)) >= 0:
+		_wagen_wahl[1] = int(d.get("wagen_platz", -1))
 	var fst: Variant = d.get("fest", {})
 	_fest = (fst as Dictionary).duplicate() if fst is Dictionary else {}
 	_fest_ruhm = int(d.get("fest_ruhm", 0))
@@ -1215,6 +1219,8 @@ func _load_game() -> bool:
 			_quest_step += 1   # Putzschritt (Version 4)
 		_quest_step += 1
 		_folge_geschafft = true
+	if quest_alt < 5 and _quest_step >= 1:
+		_quest_step += 1   # Wohnwagen aussuchen (Version 5)
 	_ever_artist = bool(d.get("ever_artist", false))
 	var gespeicherte_stats: Variant = d.get("stats", {})
 	if gespeicherte_stats is Dictionary:
@@ -1789,7 +1795,7 @@ func net_book_tent(zelt_name := "") -> void:
 	_zelt_name = zeltname_pruefen(zelt_name)
 	_apply_tent()
 	_melde("MSG_TENT_RENTED", [_zelt_name if _zelt_name != "" else "TENT_NAME_DEFAULT"], 2)
-	if tutorial_active() and _quest_step <= 2:
+	if tutorial_active() and _quest_step <= 3:
 		_dreck_verteilen()
 	_broadcast_meta()
 
@@ -2149,34 +2155,39 @@ func net_post_gelesen(nr: int) -> void:
 # ---- Tutorial ----
 ## Anzahl der Schritte. Texte liegen in locale/texte.csv (QUEST_<n>_TITLE/_TEXT),
 ## übersetzt wird beim Spieler — gesendet wird nur die Schrittnummer.
-const QUEST_COUNT := 10
+const QUEST_COUNT := 11
 ## Seit Version 4 gibt es Schritt 2 „Putze das Zelt" — ältere Stände ab Schritt 2
 ## rücken eins weiter.
 ## Seit Version 3 führt Schritt 0 über das Gespräch mit dem Festleiter (Einleitung).
 ## Seit Version 2 gibt es die Schritte „auf den Lieferwagen warten" und „Pakete
 ## ins Regal räumen" — ältere Spielstände ab Schritt 3 rücken eins weiter.
-const QUEST_VERSION := 4
+## Seit Version 5 gibt es Schritt 1 „Such dir einen Wohnwagen aus" — ältere Stände ab Schritt 1 rücken eins weiter.
+const QUEST_VERSION := 5
+## Schritt, in dem sich jeder Spieler seinen Wohnwagen aussucht
+const WAGEN_SCHRITT := 1
 
 func _quest_done(step: int) -> bool:
 	match step:
 		# Dem Festleiter „Ja" gesagt (oder das Zelt schon gemietet)
 		0: return _folge_geschafft or _tent_stage > 0
-		1: return _tent_stage > 0
+		# Jeder Spieler hat sich einen eigenen Wohnwagen ausgesucht (oder das Tutorial wurde übersprungen)
+		1: return _wagen_alle_gewaehlt() or _tent_stage > 0
+		2: return _tent_stage > 0
 		# Der Dreck im übernommenen Zelt ist weggefegt
-		2: return _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen()
-		3: return _active_count >= 2
-		4: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
+		3: return _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen()
+		4: return _active_count >= 2
+		5: return int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty()
 		# Lieferwagen ist da: Pakete liegen vor dem Zelt (oder schon eingeräumt)
-		5: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
+		6: return not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0
 		# alle Pakete eingeräumt
-		6: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
-		7: return _shift_num >= 1
-		8: return _served >= 1 or _quest_served_once
-		9: return _shift_num >= 1 and _phase == Phase.INTERMISSION
-		10: return _has_staff(ROLE_KELLNER)
-		11: return _lic.values().has(true)
-		12: return _has_toilet
-		13: return _ever_artist
+		7: return int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty()
+		8: return _shift_num >= 1
+		9: return _served >= 1 or _quest_served_once
+		10: return _shift_num >= 1 and _phase == Phase.INTERMISSION
+		11: return _has_staff(ROLE_KELLNER)
+		12: return _lic.values().has(true)
+		13: return _has_toilet
+		14: return _ever_artist
 	return false
 
 ## Liegt noch Dreck aus dem verlassenen Zelt herum? (Mess.DRECK)
@@ -4005,7 +4016,7 @@ func _spieler_zum_wohnwagen() -> void:
 	if wagen == null:
 		return
 	# Jeder wacht vor seinem eigenen Wagen auf (Platz = Beitrittsreihenfolge), gibt es zu wenige Wagen, bei dem des Hosts.
-	var plaetze := Caravan.plaetze(get_tree())
+	var plaetze := Caravan.sortiert(get_tree())
 	var peers: Array = _players_nodes.keys()
 	peers.sort()
 	var anzahl_am_wagen := {}
@@ -4013,7 +4024,7 @@ func _spieler_zum_wohnwagen() -> void:
 		var p: Node = _players_nodes[peer]
 		if p == null or not is_instance_valid(p):
 			continue
-		var nr := peers.find(peer)
+		var nr := wagen_platz_von(peer)
 		var mein: Caravan = plaetze[nr] if nr < plaetze.size() else wagen
 		var i: int = int(anzahl_am_wagen.get(mein, 0))
 		anzahl_am_wagen[mein] = i + 1
@@ -4961,7 +4972,7 @@ func _process(delta: float) -> void:
 	_putz_senden(delta)
 	if _dreck_nachlegen and _messes_container:
 		_dreck_nachlegen = false
-		if _quest_step == 2 and _tent_stage > 0 and not _dreck_uebrig():
+		if _quest_step == 3 and _tent_stage > 0 and not _dreck_uebrig():
 			_dreck_verteilen()
 	# Abstimmung „Nächster Tag?": Restzeit jede Sekunde an alle, am Ende auswerten
 	if not _abstimmung.is_empty():
@@ -6436,6 +6447,12 @@ func _net_env(money: int, score: int, clock: float, hygiene: float, pop: float, 
 
 ## Alles, was Festbüro, Zelt-Computer und HUD anzeigen — als Zahlen, nicht
 ## als Text: übersetzt wird beim Spieler (scripts/ui/texte.gd, festbuero.gd).
+func _wagen_alle_zustand() -> Dictionary:
+	var alle := {1: _wagen.duplicate(true)}
+	for peer: int in _wagen_peer:
+		alle[peer] = (_wagen_peer[peer] as Dictionary).duplicate(true)
+	return alle
+
 func _buero_state() -> Dictionary:
 	var staff := []
 	for sid: int in _staff_sim:
@@ -6456,7 +6473,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_plaetze": wagen_plaetze(), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_alle": _wagen_alle_zustand(), "wagen_wahl_offen": wagen_wahl_offen(), "wagen_plaetze": wagen_plaetze(), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
 		"staff_max": staff_max_level(), "anstich_offen": _anstich_offen, "eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -6527,6 +6544,7 @@ func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_st
 	_active_count = active_count
 	_hud.set_phase(phase == Phase.SHIFT)
 	_hud.set_buero(buero)
+	_wagen_innen_abgleichen(buero.get("wagen_plaetze", []))
 	# Statusanzeige in der Steam-Freundesliste (tut außerhalb des Steam-Builds nichts)
 	var status := "#Status_Offen" if phase == Phase.SHIFT else ("#Status_Solo" if Net.solo else "#Status_Koop")
 	SteamDienst.status_setzen(status, day)
@@ -6943,7 +6961,7 @@ func _putz_senden(delta: float) -> void:
 	_putz_takt = 0.5
 	var stand: Array = []
 	# Solange der Dreck erst ausgelegt wird, wären alle Zähler 0 — nichts zeigen
-	if _quest_step == 2 and _tent_stage > 0 and not _dreck_nachlegen:
+	if _quest_step == 3 and _tent_stage > 0 and not _dreck_nachlegen:
 		var planen := 0
 		var dreck := 0
 		for k in _mess_kind.values():
@@ -7457,14 +7475,30 @@ func _meister_pruefen() -> void:
 		_melde("MSG_MEISTER_TITEL", [], 2)
 
 func wagen_prestige() -> int:
-	return int(_wagen.bett) - 1 + (_wagen.items as Array).size() + (_wagen.farben as Array).size() - 1
+	var summe := _wagen_prestige_von(_wagen)
+	for w: Dictionary in _wagen_peer.values():
+		summe += _wagen_prestige_von(w)
+	return summe
+
+func _wagen_prestige_von(w: Dictionary) -> int:
+	return int(w.bett) - 1 + (w.items as Array).size() + (w.farben as Array).size() - 1
+
+## Der Wohnwagen eines Spielers (Host = _wagen). Mitspieler bekommen beim ersten Zugriff einen leeren.
+func _wagen_von(peer: int) -> Dictionary:
+	if peer == 0 or peer == 1:
+		return _wagen
+	if not _wagen_peer.has(peer):
+		_wagen_peer[peer] = {"bett": 1, "items": [], "farben": ["blau"], "farbe": "blau"}
+	return _wagen_peer[peer]
 
 ## Wohnwagen-Außenfarbe: eine neue Farbe kostet einmal, danach wechselt man frei zwischen den gekauften
 @rpc("any_peer", "reliable", "call_local")
 func net_wagen_farbe(farbe: String) -> void:
 	if not multiplayer.is_server() or not WAGEN_FARBEN.has(farbe) or not _story.aktiv or _story.kapitel < 3:
 		return
-	if not (_wagen.farben as Array).has(farbe):
+	var wer := multiplayer.get_remote_sender_id()
+	var w := _wagen_von(wer)
+	if not (w.farben as Array).has(farbe):
 		if not buero_offen():
 			return
 		var preis: int = WAGEN_FARBEN[farbe]
@@ -7472,38 +7506,109 @@ func net_wagen_farbe(farbe: String) -> void:
 			_fehler("MSG_NO_MONEY", ["WAGEN_FARBE_" + farbe.to_upper(), _eur(preis)])
 			return
 		Game.add_money(-preis)
-		(_wagen.farben as Array).append(farbe)
+		(w.farben as Array).append(farbe)
 		_melde("MSG_WAGEN_GEKAUFT", ["WAGEN_FARBE_" + farbe.to_upper(), _eur(preis)], 2)
-	var wer := multiplayer.get_remote_sender_id()
-	if wer == 0 or wer == 1:
-		_wagen.farbe = farbe
-	else:
-		_wagen_farbe_peer[wer] = farbe
+	w.farbe = farbe
 	_broadcast_meta()
 
-## Wohnwagenplätze der Spieler: Reihenfolge = Beitritt (Host zuerst), je Platz Besitzer und Farbe.
+## Wohnwagenplätze der Spieler (Beitrittsreihenfolge, Host zuerst): Besitzer, Farbe, Platznummer.
+## "fest" = der Spieler hat den Platz selbst ausgesucht, sonst ist er nur vorläufig zugeteilt.
 func wagen_plaetze() -> Array:
 	var liste: Array = []
 	var peers: Array = _players_nodes.keys()
 	peers.sort()
+	var plaetze := _wagen_zuteilung()
 	for peer: int in peers:
-		var farbe: String = str(_wagen.farbe) if peer == 1 else str(_wagen_farbe_peer.get(peer, "blau"))
-		liste.append({"peer": peer, "name": _spieler_bezeichnung(peer), "farbe": farbe})
+		liste.append({"peer": peer, "name": _spieler_bezeichnung(peer), "farbe": str(_wagen_von(peer).farbe),
+			"platz": int(plaetze.get(peer, 0)), "fest": _wagen_wahl.has(peer)})
 	return liste
+
+## Peer → Wohnwagenplatz: die eigene Wahl, sonst der erste freie Platz in Beitrittsreihenfolge
+func _wagen_zuteilung() -> Dictionary:
+	var anzahl := maxi(Caravan.sortiert(get_tree()).size(), 1)
+	var peers: Array = _players_nodes.keys()
+	peers.sort()
+	var belegt := {}
+	var zuteilung := {}
+	for peer: int in peers:
+		if _wagen_wahl.has(peer):
+			zuteilung[peer] = int(_wagen_wahl[peer])
+			belegt[int(_wagen_wahl[peer])] = true
+	for peer: int in peers:
+		if zuteilung.has(peer):
+			continue
+		var nr := 0
+		while belegt.has(nr) and nr < anzahl - 1:
+			nr += 1
+		zuteilung[peer] = nr
+		belegt[nr] = true
+	return zuteilung
+
+func wagen_platz_von(peer: int) -> int:
+	return int(_wagen_zuteilung().get(peer, 0))
+
+## Läuft gerade der Schritt „Such dir einen Wohnwagen aus"?
+func wagen_wahl_offen() -> bool:
+	return tutorial_active() and _quest_step == WAGEN_SCHRITT
+
+## Haben alle Spieler im Spiel einen Wohnwagen ausgesucht?
+func _wagen_alle_gewaehlt() -> bool:
+	if _players_nodes.is_empty():
+		return _wagen_wahl.has(1)
+	for peer: int in _players_nodes.keys():
+		if not _wagen_wahl.has(peer):
+			return false
+	return true
+
+## Einen Wohnwagen aussuchen (kostenlos). Nur im Tutorial-Schritt und nur ein freier Platz; man kann umentscheiden.
+@rpc("any_peer", "reliable", "call_local")
+func net_wagen_waehlen(nr: int) -> void:
+	if not multiplayer.is_server() or not wagen_wahl_offen():
+		return
+	var wer := multiplayer.get_remote_sender_id()
+	if wer == 0:
+		wer = 1
+	if nr < 0 or nr >= Caravan.sortiert(get_tree()).size():
+		return
+	for peer: int in _wagen_wahl:
+		if peer != wer and int(_wagen_wahl[peer]) == nr:
+			_fehler("MSG_WAGEN_BELEGT")
+			return
+	_wagen_wahl[wer] = nr
+	_melde("MSG_WAGEN_GEWAEHLT", [_spieler_bezeichnung(wer)], 2)
+	_broadcast_meta()
+
+## Für jeden vergebenen Wohnwagenplatz steht ein Innenraum in der Welt (Platz 0 ist der aus main.tscn).
+## Läuft bei allen Spielern, sobald der Büro-Zustand ankommt.
+func _wagen_innen_abgleichen(plaetze: Array) -> void:
+	var vorlage := load("res://scenes/wohnwagen_innen.tscn") as PackedScene
+	var null_raum := get_node_or_null("WohnwagenInnen") as Node3D
+	if null_raum:
+		null_raum.set_meta("platz", 0)
+	for e: Dictionary in plaetze:
+		var nr := int(e.get("platz", 0))
+		if nr <= 0 or get_node_or_null("WohnwagenInnen%d" % nr) != null:
+			continue
+		var raum := vorlage.instantiate() as Node3D
+		raum.name = "WohnwagenInnen%d" % nr
+		raum.set_meta("platz", nr)
+		add_child(raum)
+		raum.global_position = Vector3(float(nr) * 14.0, 0.0, 600.0)
 
 ## Wohnwagen-Ausbau kaufen: "bett" (nächste Stufe) oder ein Einrichtungsstück. Nur nach Feierabend und mit Zelt.
 @rpc("any_peer", "reliable", "call_local")
 func net_wagen_kauf(id: String) -> void:
 	if not multiplayer.is_server() or not buero_offen() or not _story.aktiv or _story.kapitel < 3:
 		return
+	var w := _wagen_von(multiplayer.get_remote_sender_id())
 	var preis := 0
 	if id == "bett":
-		var naechste := int(_wagen.bett) + 1
+		var naechste := int(w.bett) + 1
 		if not WAGEN_BETT_PREIS.has(naechste):
 			return
 		preis = int(WAGEN_BETT_PREIS[naechste])
 	elif WAGEN_ITEMS.has(id):
-		if (_wagen.items as Array).has(id):
+		if (w.items as Array).has(id):
 			return
 		preis = int(WAGEN_ITEMS[id])
 	else:
@@ -7513,9 +7618,9 @@ func net_wagen_kauf(id: String) -> void:
 		return
 	Game.add_money(-preis)
 	if id == "bett":
-		_wagen.bett = int(_wagen.bett) + 1
+		w.bett = int(w.bett) + 1
 	else:
-		(_wagen.items as Array).append(id)
+		(w.items as Array).append(id)
 	_melde("MSG_WAGEN_GEKAUFT", ["WAGEN_" + id.to_upper(), _eur(preis)], 2)
 	_broadcast_meta()
 

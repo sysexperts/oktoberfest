@@ -1047,7 +1047,7 @@ surface_material_override/0 = ExtResource("m_holz")
 
 
 [node name="Laptop" parent="." instance=ExtResource("laptop")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.4, 0, -0.5)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 2.75, 0, -0.3)
 
 
 [node name="Ausgang" type="Node3D" parent="."]
@@ -1159,7 +1159,7 @@ surface_material_override/0 = ExtResource("m_dunkel")
 
 
 [node name="Pflanze" type="Node3D" parent="Ausbau"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, -1.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0, -1.15)
 
 
 [node name="Topf" type="MeshInstance3D" parent="Ausbau/Pflanze"]
