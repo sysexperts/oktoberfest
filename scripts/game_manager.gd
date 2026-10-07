@@ -462,6 +462,10 @@ const WUNSCH_TITEL := 5
 const WUNSCH_ZEIT := 60.0
 var _wunsch := {}           # {"titel": Nr, "rest": Sekunden}
 var _wunsch_t := 80.0
+## Zwischenfälle während der Schicht (Chancen und Probleme): Heiratsantrag, Karaoke-Runde, Flirt am Tisch, verschüttetes Bier.
+const ZWISCHENFALL_ARTEN := ["heirat", "karaoke", "flirt", "verschuettet"]
+var _zwischenfall_t := 150.0
+var _karaoke_t := 0.0
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -5237,6 +5241,7 @@ func _ereignis_andrang() -> float:
 	return 1.0
 
 func _update_ereignis(delta: float) -> void:
+	_zwischenfall_takt(delta)
 	_wunsch_takt(delta)
 	if _ereignis == "fest" and not _fest_feuer_gezuendet and _clock_hour() >= 21.0:
 		_fest_feuer_gezuendet = true
@@ -5605,6 +5610,8 @@ func _end_shift(reason := 0) -> void:
 	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
 	_wunsch = {}
 	_wunsch_t = randf_range(40.0, 90.0)
+	_karaoke_t = 0.0
+	_zwischenfall_t = randf_range(90.0, 180.0)
 	_gruppen.clear()
 	_fest_auswerten()
 	_ausbau_abend()
@@ -7324,6 +7331,56 @@ func _ausbau_abend() -> void:
 	if _ausbau.has("konrad"):
 		_add_income(AUSBAU_KONRAD_PACHT)
 		_melde("MSG_AUSBAU_PACHT", [_eur(AUSBAU_KONRAD_PACHT)], 2)
+
+## Alle zwei bis vier Minuten ein Zwischenfall (nur mit Gästen im Zelt, nicht im Tutorial)
+func _zwischenfall_takt(delta: float) -> void:
+	if _phase != Phase.SHIFT or not _story.aktiv or tutorial_active() or _guest_sim.size() < 4:
+		return
+	if _karaoke_t > 0.0:
+		_karaoke_t -= delta
+		# Während der Karaoke-Runde wollen die Sitzenden schneller nachbestellen
+		for id in _guest_sim.keys():
+			var g: Dictionary = _guest_sim[id]
+			if int(g.mode) == 1 and int(g.ostate) == 0 and float(g.cooldown) > 4.0:
+				g.cooldown = float(g.cooldown) * 0.5
+				_guest_sim[id] = g
+		if _karaoke_t <= 0.0:
+			_melde("MSG_ZW_KARAOKE_ENDE", [], 0)
+	_zwischenfall_t -= delta
+	if _zwischenfall_t > 0.0:
+		return
+	_zwischenfall_t = randf_range(120.0, 240.0)
+	_zwischenfall_ausloesen(ZWISCHENFALL_ARTEN.pick_random())
+
+func _zwischenfall_ausloesen(art: String) -> void:
+	var sitzende: Array = []
+	for id in _guest_sim.keys():
+		var g: Dictionary = _guest_sim[id]
+		if int(g.mode) == 1:
+			sitzende.append(id)
+	if sitzende.is_empty():
+		return
+	_stats["zwischenfaelle"] = int(_stats.get("zwischenfaelle", 0)) + 1
+	match art:
+		"heirat":
+			var mit_band := _artist_tier > 0
+			_pop_erhoehen(2.0)
+			_add_income(60 if mit_band else 30)
+			_melde("MSG_ZW_HEIRAT_BAND" if mit_band else "MSG_ZW_HEIRAT", [_eur(60 if mit_band else 30)], 2)
+		"karaoke":
+			_karaoke_t = 60.0
+			_melde("MSG_ZW_KARAOKE", [], 2)
+		"flirt":
+			for id in sitzende:
+				var g: Dictionary = _guest_sim[id]
+				g.patience = _geduld_max(g)
+				_guest_sim[id] = g
+			_melde("MSG_ZW_FLIRT", [], 2)
+		"verschuettet":
+			var id2: int = sitzende.pick_random()
+			var sitz: int = int((_guest_sim[id2] as Dictionary).seat)
+			_spawn_mess_at(_seats[sitz].pos, 0)
+			_melde("MSG_ZW_VERSCHUETTET", [], 1)
 
 ## Wunschlieder: Takt in der Schicht. Nur mit Künstler auf der Bühne.
 func _wunsch_takt(delta: float) -> void:

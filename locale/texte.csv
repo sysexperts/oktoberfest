@@ -2442,3 +2442,11 @@ MS_WUNSCH_5_TITLE,Wunschkonzert,Request show,İstek konseri
 MS_WUNSCH_5_TEXT,Gib fünf Wunschlieder an die Band weiter.,Pass five song requests to the band.,Gruba beş şarkı isteği ilet.
 MS_GRUPPEN_10_TITLE,Gruppendynamik,Group dynamics,Grup dinamiği
 MS_GRUPPEN_10_TEXT,Bediene zehn Gruppen komplett.,Fully serve ten groups.,On grubu tamamen servis et.
+MSG_ZW_HEIRAT,"Heiratsantrag am Tisch! Alle jubeln, das Paar lässt %s springen.","A marriage proposal at a table! Everyone cheers, the couple tips %s.","Masada evlilik teklifi! Herkes tezahürat yapıyor, çift %s bahşiş bırakıyor."
+MSG_ZW_HEIRAT_BAND,"Heiratsantrag am Tisch, die Band spielt dazu! Das Paar lässt %s springen.","A marriage proposal at a table, the band plays along! The couple tips %s.","Masada evlilik teklifi, grup eşlik ediyor! Çift %s bahşiş bırakıyor."
+MSG_ZW_KARAOKE,Karaoke-Runde! Eine Minute lang bestellen alle schneller nach.,Karaoke round! For a minute everyone orders more quickly.,Karaoke turu! Bir dakika boyunca herkes daha hızlı sipariş veriyor.
+MSG_ZW_KARAOKE_ENDE,Die Karaoke-Runde ist vorbei. Die Kehlen sind trocken.,The karaoke round is over. Throats are dry.,Karaoke turu bitti. Boğazlar kurudu.
+MSG_ZW_FLIRT,"Flirt am Tisch: Die Stimmung steigt, alle warten geduldiger.","Flirting at a table: the mood rises, everyone waits more patiently.","Masada flört: Hava yükseliyor, herkes daha sabırlı bekliyor."
+MSG_ZW_VERSCHUETTET,"Hoppla: Jemand hat Bier verschüttet. Schnell aufwischen, sonst rutscht noch wer aus.",Oops: someone spilled beer. Mop it up before someone slips.,Eyvah: Biri bira döktü. Biri kaymadan sil.
+MS_ZWISCHENFALL_10_TITLE,Immer was los,Always something going on,Hep bir şey oluyor
+MS_ZWISCHENFALL_10_TEXT,Erlebe zehn Zwischenfälle im Zelt.,Experience ten incidents in the tent.,Çadırda on olay yaşa.

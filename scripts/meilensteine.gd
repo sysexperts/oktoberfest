@@ -51,6 +51,7 @@ const LISTE := [
 	{"id": "AUSBAU_ALLE", "wert": "meister:MEISTER_AUSBAU", "ziel": 6, "belohnung": 4000},
 	{"id": "WUNSCH_5", "wert": "wuensche", "ziel": 5, "belohnung": 500},
 	{"id": "GRUPPEN_10", "wert": "gruppen", "ziel": 10, "belohnung": 600},
+	{"id": "ZWISCHENFALL_10", "wert": "zwischenfaelle", "ziel": 10, "belohnung": 500},
 	{"id": "FEST_MEISTER", "wert": "meister_titel", "ziel": 1, "belohnung": 5000},
 ]
 

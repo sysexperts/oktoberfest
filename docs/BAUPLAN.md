@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v366.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v367.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -25,7 +25,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
 
 ### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`; alle auf einmal: `bash tools/test_alle.sh`, aktuell 24 von 24 grün)
-`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_kirmesquests`, `test_meilensteine`, `test_gaeste`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
+`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_kirmesquests`, `test_meilensteine`, `test_gaeste`, `test_zwischenfaelle`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
 
 ### Wo was liegt
 - **Story-Kern:** `scripts/story/story.gd` (Kapitel, Quests mit Zuständen angeboten/offen/erfüllt/verfallen, Post, Hinweise, Flaggen), Daten in `daten/quests.json`, `daten/mails.json`, `daten/hinweise.json` (Texte per Schlüssel in der CSV). Messwerte für Quest-Bedingungen: `GameManager._story_messwerte()`. Neue Quest = Eintrag in `quests.json` (+ Mail + Texte), Flaggen setzt `_story.ereignis("name")`. Gespräche, die Flaggen setzen: Tabellen `STORY_GESPRAECHE` in `scripts/npc_festleiter.gd`, Konrad-Dialoge in `scripts/npc_huber.gd`, Server-RPC `net_story_flag` (Whitelist im GameManager).
@@ -40,7 +40,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 2. **Echter Koop-Test:** `bash tools/test_netz.sh` und `bash tools/test_koop_bots.sh` (Letzteres läuft gegen den Live-Server) — die neuen Systeme wurden bisher nur im Einzelspieler-Test und per Codeprüfung auf korrekte Server/Client-Aufteilung geprüft.
 3. **Texte:** Türkisch und Englisch der vielen neuen Texte von Muttersprachlern lesen lassen. Automatische Prüfung: `python tools/pruefe_texte.py`.
 4. **Steamworks:** Die 42 Meilenstein-IDs aus `scripts/meilensteine.gd` als Errungenschaften anlegen (`SteamDienst.errungenschaft(id)` ist schon verdrahtet).
-5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Kartenspiele im Casino, Hochzeit und Wettessen als Gefallen, Kirmes-Quests Lotsen/Retten/Lieferung, Chaos-Zwischenfälle (Flirt, Heiratsantrag, Karaoke), Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
+5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Kartenspiele im Casino, Hochzeit und Wettessen als Gefallen, Kirmes-Quests Lotsen/Retten/Lieferung, Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
 6. Vor jedem Steam-Upload: `bash tools/test_alle.sh`, Version hochzählen, `git push`.
 
 ### Bekannte Lücken und Risiken
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v366.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v367.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -68,7 +68,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche (Geduld-Bonus offen) | v343 |
 | P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
 | P9 Endgame | ◐ Fest-App und Festtag, Meister-Liste, Wohnwagen-Ausbau (ein Wagen fürs Team), Late-Game-Ausbauten; offen: Wettbewerbe und Katastrophen am Festtag, Wagen je Spieler, Buden betreiben, Zweitzelt | v355 bis v358 |
-| P10 Kirmes, Meilensteine, Zeitung | ◐ sieben Kirmes-Rekord-Quests, 42 Meilensteine, Festkurier mit neuen Themen, Brabbelton, Gäste in Gruppen und Wunschlieder; offen: Kirmes-Quests Lotsen/Retten/Lieferung, Chaos-Zwischenfälle, Steam-Errungenschaften in Steamworks anlegen | v359 bis v363 |
+| P10 Kirmes, Meilensteine, Zeitung | ◐ sieben Kirmes-Rekord-Quests, 42 Meilensteine, Festkurier mit neuen Themen, Brabbelton, Gäste in Gruppen und Wunschlieder; offen: Kirmes-Quests Lotsen/Retten/Lieferung, Steam-Errungenschaften in Steamworks anlegen | v359 bis v363 |
 | P11 Balancing und Politur | ◐ alle 24 Tests grün (`bash tools/test_alle.sh`), Textprüfung, Leistungsmessung; offen: Balancing mit Testspielen, echter Koop-Test, Türkisch von Muttersprachlern lesen | v364 bis v366 |
 
 ---
@@ -229,7 +229,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ✔ Meilensteine neu (22 neue: Kapitel, Gefallen, Kirmes, Sabotage, Casino, Meisterbier, Fest, Personal, Wohnwagen, Ausbau, Fest-Meister; insgesamt 42, v360); ◐ **Steam-Errungenschaften**: jede Meilenstein-ID ruft `SteamDienst.errungenschaft(id)`, die IDs müssen in Steamworks angelegt werden (Liste in `scripts/meilensteine.gd`) | M |
 | ✔ Zeitung (Festkurier) mit neuen Themen: Festtag-Titelseite, Konrads Streiche, Casino-Gerücht, Gefallen, Kirmes-Rekorde, Braukunst, Konrad aufgekauft (v361) | S |
 | ✔ **Brabbelton** je Figur im Dialog (weiche Silben zum Tippen des Textes, Stimmlage aus dem Namen, Horst tief, Frau Wagner hoch, v362) | M |
-| ◐ Gäste: ✔ Gruppen (Familie, Stammtisch, Verein, Junggesellenabschied: sitzen zusammen, Bonus wenn alle bedient sind) und Wunschlieder (Wunsch erscheint, E an der Bühne gibt ihn weiter, Beliebtheit und Trinkgeld), v363; ☐ mehr Chaos (Flirt, Heiratsantrag, Karaoke) | L |
+| ◐ Gäste: ✔ Gruppen (Familie, Stammtisch, Verein, Junggesellenabschied: sitzen zusammen, Bonus wenn alle bedient sind) und Wunschlieder (Wunsch erscheint, E an der Bühne gibt ihn weiter, Beliebtheit und Trinkgeld), v363; ✔ mehr Chaos: Zwischenfälle alle 2 bis 4 Minuten (Heiratsantrag, Karaoke-Runde, Flirt, verschüttetes Bier, v367) | L |
 
 ## P11 · Balancing und Politur (L)
 
