@@ -496,5 +496,25 @@
     }
    }
   ]
+ },
+ {
+  "id": "M2-17",
+  "absender": "HORST",
+  "betreff": "MAIL_M2_17_BETREFF",
+  "text": "MAIL_M2_17_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M2_17_A1",
+    "folge": {
+     "quest_annehmen": "N-2-4"
+    }
+   },
+   {
+    "text": "MAIL_M2_17_A2",
+    "folge": {
+     "quest_ablehnen": "N-2-4"
+    }
+   }
+  ]
  }
 ]

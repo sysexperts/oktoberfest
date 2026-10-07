@@ -473,6 +473,8 @@ var _tanz_timer := 0.0
 var _ohne_ware_s := 0.0   # Sekunden heute, in denen Gäste warteten, das Lager aber leer war
 var _ereignis := ""          # heutiges Tagesereignis ("" = keins)
 var _ereignis_erledigt := false
+## Maß Bier, die in der Happy Hour von heute verkauft wurden (Nebenquest N-2-4)
+var _happy_masse := 0
 var _prosit_timer := 0.0
 var _fass_kaputt := 0        # Sorte, die heute fehlt (Ereignis "fass")
 var _kombo := {}             # Peer -> {n, t}: Kombo beim Bedienen
@@ -1997,7 +1999,7 @@ func _story_messwerte() -> Dictionary:
 		"pakete_eingeraeumt": int(_stock.get(WARE_BIER, 0)) > 0 and _packages.is_empty(),
 		"geschlafen": _shift_num >= 1,
 		"gaeste_bedient": maxi(int(_stats.get("served", 0)), _served),
-		"gaeste_heute": _served, "weizen_heute": _weizen_heute,
+		"gaeste_heute": _served, "weizen_heute": _weizen_heute, "happy_masse": _happy_masse,
 		"feierabend": _shift_num >= 1 and _phase == Phase.INTERMISSION,
 		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
 		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": _schulden,
@@ -3116,6 +3118,8 @@ func rezeptseiten() -> int:
 
 func _consume_stock(okind: int, verkauf := true) -> void:
 	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
+	if w == WARE_BIER and verkauf and _happy_hour():
+		_happy_masse += 1
 	if w == WARE_BIER and _eigenbier > 0:
 		_eigenbier -= 1
 		# bestes Bier zuerst: Meisterbräu und Festbier bringen einen Aufschlag je Maß
@@ -5096,6 +5100,7 @@ func _saison_abschluss() -> void:
 func _ereignis_waehlen(erzwingen := "") -> void:
 	_ereignis = ""
 	_ereignis_erledigt = false
+	_happy_masse = 0
 	_kontrolle_ueberraschung = false
 	_kontrolle_start = KONTROLLE_UM
 	_kontrolle_t = -1.0
@@ -5114,6 +5119,9 @@ func _ereignis_waehlen(erzwingen := "") -> void:
 		_kontrolle_start = randf_range(13.0, 19.0)
 	# Laut Kalender (Plan für die Saison)
 	var geplant := plan_fuer(_day) if erzwingen == "" else erzwingen
+	# Die Nebenquest „Happy Hour“ braucht eine Happy Hour: sie kommt heute
+	if erzwingen == "" and _story.aktiv and _story.zustand("N-2-4") == "offen" and _drinks_avail().size() >= 1:
+		geplant = "happy"
 	if geplant == "" or (geplant == "fass" and _drinks_avail().size() < 2):
 		return
 	_ereignis = geplant

@@ -2175,3 +2175,21 @@ işçi şapkalı ve kameralı bir muhabir fuarda dolaşıyor. Onu kesin Konrad g
 Horst"
 MAIL_G9_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_G9_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_N-2-4_TITLE,Happy Hour,Happy hour,Mutlu saat
+Q_N-2-4_TEXT,Morgen gibt es eine Happy Hour mit billigem Bier. Verkaufe in dieser Stunde 40 Maß.,Tomorrow there is a happy hour with cheap beer. Sell 40 mugs in that hour.,Yarın ucuz biralı bir mutlu saat var. O saatte 40 kupa sat.
+MAIL_M2_17_BETREFF,Happy Hour,Happy hour,Mutlu saat
+MAIL_M2_17_TEXT,"Servus,
+
+morgen machen wir eine Happy Hour: billiges Bier, volles Zelt. Schaffst du in dieser einen Stunde 40 Maß, spendier ich dir was.
+
+Horst","Hi,
+
+tomorrow we run a happy hour: cheap beer, packed tent. If you sell 40 mugs in that one hour, I will treat you.
+
+Horst","Selam,
+
+yarın bir mutlu saat yapıyoruz: ucuz bira, dolu çadır. O bir saatte 40 kupa satarsan sana ikram ederim.
+
+Horst"
+MAIL_M2_17_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_M2_17_A2,Heute nicht.,Not today.,Bugün olmaz.

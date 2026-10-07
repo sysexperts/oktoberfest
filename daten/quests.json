@@ -971,5 +971,29 @@
    "art": "spanner",
    "figur": "reporter"
   }
+ },
+ {
+  "id": "N-2-4",
+  "typ": "neben",
+  "kapitel": 2,
+  "titel": "Q_N-2-4_TITLE",
+  "text": "Q_N-2-4_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 2,
+    "chance": 0.4
+   },
+   "mail": "M2-17"
+  },
+  "bedingung": {
+   "mw": "happy_masse",
+   "min": 40
+  },
+  "frist_tage": 3,
+  "belohnung": {
+   "geld": 200
+  }
  }
 ]
