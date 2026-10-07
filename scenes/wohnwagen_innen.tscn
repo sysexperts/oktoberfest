@@ -1,264 +1,1027 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/wohnwagen_ding.gd" id="1_ding"]
-[ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
-[ext_resource type="PackedScene" path="res://scenes/wohnwagen_laptop.tscn" id="3_laptop"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/dielen.tres" id="4_dielen"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/creme_lack.tres" id="5_creme"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="6_holz"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="7_rot"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="8_weiss"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/orange_lack.tres" id="9_orange"]
-[ext_resource type="Material" path="res://assets/zelt/materialien/stoff.tres" id="10_stoff"]
-[ext_resource type="Script" path="res://scripts/wagen_ausbau.gd" id="ab_skript"]
+[ext_resource type="Script" path="res://scripts/wohnwagen_ding.gd" id="ding"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt"]
+[ext_resource type="PackedScene" path="res://scenes/wohnwagen_laptop.tscn" id="laptop"]
+[ext_resource type="Script" path="res://scripts/wagen_ausbau.gd" id="ausbau"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/dielen.tres" id="m_dielen"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/vertaefelung.tres" id="m_vert"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/creme_lack.tres" id="m_creme"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="m_holz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="m_dunkel"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/rot.tres" id="m_rot"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/weiss.tres" id="m_weiss"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/orange_lack.tres" id="m_orange"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/stoff.tres" id="m_stoff"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/vorhang_rot.tres" id="m_vorhang"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/messing.tres" id="m_messing"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schwarz_lack.tres" id="m_schwarz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/metall.tres" id="m_metall"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/papier.tres" id="m_papier"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/blau.tres" id="m_blau"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/glas.tres" id="m_glas"]
 
-[sub_resource type="BoxMesh" id="Boden"]
+[sub_resource type="BoxMesh" id="S0"]
 size = Vector3(6.2, 0.2, 2.8)
 
-[sub_resource type="BoxMesh" id="WandLang"]
+[sub_resource type="BoxShape3D" id="S1"]
+size = Vector3(6.2, 0.2, 2.8)
+
+[sub_resource type="BoxShape3D" id="S2"]
 size = Vector3(6.2, 2.2, 0.1)
 
-[sub_resource type="BoxMesh" id="WandKurz"]
+[sub_resource type="BoxShape3D" id="S3"]
 size = Vector3(0.1, 2.2, 2.8)
 
-[sub_resource type="BoxMesh" id="Decke"]
+[sub_resource type="BoxMesh" id="S4"]
 size = Vector3(6.2, 0.08, 1.4)
 
-[sub_resource type="BoxMesh" id="DachSchraeg"]
+[sub_resource type="BoxMesh" id="S5"]
 size = Vector3(6.2, 0.08, 0.78)
 
-[sub_resource type="BoxMesh" id="Haengeschrank"]
-size = Vector3(1.7, 0.4, 0.38)
+[sub_resource type="BoxMesh" id="S6"]
+size = Vector3(6.2, 0.05, 0.06)
 
-[sub_resource type="BoxShape3D" id="FormBoden"]
-size = Vector3(6.2, 0.2, 2.8)
+[sub_resource type="BoxMesh" id="S7"]
+size = Vector3(0.08, 0.06, 2.8)
 
-[sub_resource type="BoxShape3D" id="FormDeckeS"]
-size = Vector3(6.2, 0.2, 2.8)
+[sub_resource type="BoxMesh" id="S8"]
+size = Vector3(0.1, 1, 2.8)
 
-[sub_resource type="BoxShape3D" id="FormWandLang"]
-size = Vector3(6.2, 2.2, 0.1)
+[sub_resource type="BoxMesh" id="S9"]
+size = Vector3(0.1, 1.2, 2.8)
 
-[sub_resource type="BoxShape3D" id="FormWandKurz"]
-size = Vector3(0.1, 2.2, 2.8)
+[sub_resource type="BoxMesh" id="S10"]
+size = Vector3(0.1, 0.46, 1.4)
 
-[sub_resource type="BoxMesh" id="BettRahmen"]
-size = Vector3(2.0, 0.35, 1.1)
+[sub_resource type="BoxMesh" id="S11"]
+size = Vector3(0.1, 0.42, 0.78)
 
-[sub_resource type="BoxMesh" id="BettMatratze"]
+[sub_resource type="BoxMesh" id="S12"]
+size = Vector3(0.7, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S13"]
+size = Vector3(0.7, 1.2, 0.1)
+
+[sub_resource type="BoxMesh" id="S14"]
+size = Vector3(1.5, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S15"]
+size = Vector3(1.5, 1.2, 0.1)
+
+[sub_resource type="BoxMesh" id="S16"]
+size = Vector3(2, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S17"]
+size = Vector3(2, 1.2, 0.1)
+
+[sub_resource type="BoxMesh" id="S18"]
+size = Vector3(1, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S19"]
+size = Vector3(1, 0.15, 0.1)
+
+[sub_resource type="BoxMesh" id="S20"]
+size = Vector3(1, 0.45, 0.1)
+
+[sub_resource type="BoxMesh" id="S21"]
+size = Vector3(0.06, 0.6, 0.14)
+
+[sub_resource type="BoxMesh" id="S22"]
+size = Vector3(1, 0.06, 0.14)
+
+[sub_resource type="BoxMesh" id="S23"]
+size = Vector3(0.04, 0.6, 0.08)
+
+[sub_resource type="BoxMesh" id="S24"]
+size = Vector3(0.9, 0.5, 0.02)
+
+[sub_resource type="BoxMesh" id="S25"]
+size = Vector3(0.28, 0.75, 0.03)
+
+[sub_resource type="BoxMesh" id="S26"]
+size = Vector3(1.1, 0.03, 0.03)
+
+[sub_resource type="BoxMesh" id="S27"]
+size = Vector3(1.12, 0.04, 0.12)
+
+[sub_resource type="BoxMesh" id="S28"]
+size = Vector3(6.2, 0.1, 0.03)
+
+[sub_resource type="BoxMesh" id="S29"]
+size = Vector3(6.2, 0.05, 0.04)
+
+[sub_resource type="BoxMesh" id="S30"]
+size = Vector3(0.6, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S31"]
+size = Vector3(0.6, 1.2, 0.1)
+
+[sub_resource type="BoxMesh" id="S32"]
+size = Vector3(0.8, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S33"]
+size = Vector3(0.8, 1.2, 0.1)
+
+[sub_resource type="BoxMesh" id="S34"]
+size = Vector3(0.9, 1, 0.1)
+
+[sub_resource type="BoxMesh" id="S35"]
+size = Vector3(0.9, 1.2, 0.1)
+
+[sub_resource type="BoxMesh" id="S36"]
+size = Vector3(1, 0.15, 0.1)
+
+[sub_resource type="BoxMesh" id="S37"]
+size = Vector3(0.06, 2.05, 0.14)
+
+[sub_resource type="BoxMesh" id="S38"]
+size = Vector3(0.03, 0.1, 2.7)
+
+[sub_resource type="BoxMesh" id="S39"]
+size = Vector3(0.04, 0.05, 2.7)
+
+[sub_resource type="BoxMesh" id="S40"]
+size = Vector3(2, 0.02, 0.9)
+
+[sub_resource type="BoxMesh" id="S41"]
+size = Vector3(2.1, 0.015, 1)
+
+[sub_resource type="BoxMesh" id="S42"]
+size = Vector3(0.7, 0.04, 0.7)
+
+[sub_resource type="BoxMesh" id="S43"]
+size = Vector3(0.56, 0.02, 0.56)
+
+[sub_resource type="BoxMesh" id="S44"]
+size = Vector3(1.8, 0.82, 0.55)
+
+[sub_resource type="BoxMesh" id="S45"]
+size = Vector3(0.55, 0.62, 0.02)
+
+[sub_resource type="BoxMesh" id="S46"]
+size = Vector3(1.84, 0.05, 0.58)
+
+[sub_resource type="BoxMesh" id="S47"]
+size = Vector3(0.5, 0.03, 0.36)
+
+[sub_resource type="BoxMesh" id="S48"]
+size = Vector3(0.04, 0.2, 0.04)
+
+[sub_resource type="BoxMesh" id="S49"]
+size = Vector3(0.2, 0.02, 0.2)
+
+[sub_resource type="BoxMesh" id="S50"]
+size = Vector3(1.8, 0.5, 0.34)
+
+[sub_resource type="BoxShape3D" id="S51"]
+size = Vector3(1.8, 0.85, 0.55)
+
+[sub_resource type="BoxMesh" id="S52"]
+size = Vector3(2, 0.35, 1.1)
+
+[sub_resource type="BoxMesh" id="S53"]
 size = Vector3(1.92, 0.2, 1.02)
 
-[sub_resource type="BoxMesh" id="BettDecke"]
+[sub_resource type="BoxMesh" id="S54"]
 size = Vector3(1.3, 0.08, 1.06)
 
-[sub_resource type="BoxMesh" id="BettKissen"]
+[sub_resource type="BoxMesh" id="S55"]
 size = Vector3(0.5, 0.12, 0.8)
 
-[sub_resource type="BoxShape3D" id="FormBett"]
-size = Vector3(2.0, 0.6, 1.1)
+[sub_resource type="BoxMesh" id="S56"]
+size = Vector3(0.08, 0.7, 1.1)
 
-[sub_resource type="BoxMesh" id="Teppich"]
-size = Vector3(2.0, 0.02, 1.2)
+[sub_resource type="BoxShape3D" id="S57"]
+size = Vector3(2, 0.6, 1.1)
 
-[sub_resource type="BoxMesh" id="TuerBlatt"]
+[sub_resource type="BoxMesh" id="S58"]
+size = Vector3(1.7, 0.4, 0.38)
+
+[sub_resource type="BoxMesh" id="S59"]
 size = Vector3(0.95, 2.05, 0.06)
 
-[sub_resource type="BoxMesh" id="Fenster"]
-size = Vector3(1.0, 0.7, 0.04)
+[sub_resource type="BoxMesh" id="S60"]
+size = Vector3(0.7, 0.8, 0.02)
 
-[sub_resource type="StandardMaterial3D" id="FensterLicht"]
-albedo_color = Color(0.7, 0.85, 1, 1)
-emission_enabled = true
-emission = Color(0.6, 0.78, 1, 1)
-emission_energy_multiplier = 1.2
+[sub_resource type="BoxMesh" id="S61"]
+size = Vector3(0.04, 0.04, 0.1)
 
-[sub_resource type="BoxShape3D" id="FormAusgang"]
-size = Vector3(1.0, 2.0, 0.2)
+[sub_resource type="BoxMesh" id="S62"]
+size = Vector3(0.3, 0.06, 0.3)
 
-[sub_resource type="BoxMesh" id="Ab_Sofa1"]
+[sub_resource type="BoxMesh" id="S63"]
 size = Vector3(1.8, 0.4, 0.8)
 
-[sub_resource type="BoxMesh" id="Ab_Sofa2"]
+[sub_resource type="BoxMesh" id="S64"]
 size = Vector3(1.8, 0.55, 0.22)
 
-[sub_resource type="BoxMesh" id="Ab_Sofa3"]
+[sub_resource type="BoxMesh" id="S65"]
 size = Vector3(0.22, 0.3, 0.8)
 
-[sub_resource type="StandardMaterial3D" id="Ab_Stoff"]
-albedo_color = Color(0.2, 0.32, 0.55, 1)
-roughness = 0.9
+[sub_resource type="BoxMesh" id="S66"]
+size = Vector3(0.4, 0.4, 0.12)
 
-[sub_resource type="QuadMesh" id="Ab_Poster"]
-size = Vector2(0.7, 0.9)
+[sub_resource type="BoxMesh" id="S67"]
+size = Vector3(0.7, 0.9, 0.02)
 
-[sub_resource type="StandardMaterial3D" id="Ab_PosterFarbe"]
-albedo_color = Color(0.9, 0.75, 0.3, 1)
-roughness = 0.8
+[sub_resource type="BoxMesh" id="S68"]
+size = Vector3(0.78, 0.98, 0.015)
 
-[sub_resource type="CylinderMesh" id="Ab_Topf"]
-top_radius = 0.16
-bottom_radius = 0.12
-height = 0.3
+[sub_resource type="BoxMesh" id="S69"]
+size = Vector3(0.3, 0.3, 0.3)
 
-[sub_resource type="SphereMesh" id="Ab_Laub"]
+[sub_resource type="BoxMesh" id="S70"]
+size = Vector3(0.3, 0.05, 1.2)
+
+[sub_resource type="SphereMesh" id="Laub"]
 radius = 0.32
 height = 0.64
 
-[sub_resource type="StandardMaterial3D" id="Ab_Terra"]
-albedo_color = Color(0.7, 0.35, 0.2, 1)
-
-[sub_resource type="StandardMaterial3D" id="Ab_Gruen"]
+[sub_resource type="StandardMaterial3D" id="Gruen"]
 albedo_color = Color(0.2, 0.55, 0.25, 1)
 
-[sub_resource type="BoxMesh" id="Ab_Brett"]
-size = Vector3(0.3, 0.05, 1.2)
-
-[sub_resource type="CylinderMesh" id="Ab_Krug"]
+[sub_resource type="CylinderMesh" id="Krug"]
 top_radius = 0.07
 bottom_radius = 0.06
 height = 0.16
 
-[sub_resource type="StandardMaterial3D" id="Ab_Gold"]
+[sub_resource type="StandardMaterial3D" id="Gold"]
 albedo_color = Color(0.95, 0.75, 0.2, 1)
 metallic = 0.9
 roughness = 0.25
 
-[sub_resource type="StandardMaterial3D" id="Ab_Holz"]
-albedo_color = Color(0.35, 0.2, 0.1, 1)
-
 [node name="WohnwagenInnen" type="Node3D"]
+
 
 [node name="Huelle" type="StaticBody3D" parent="."]
 
+
 [node name="Boden" type="MeshInstance3D" parent="Huelle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-mesh = SubResource("Boden")
-surface_material_override/0 = ExtResource("4_dielen")
+mesh = SubResource("S0")
+surface_material_override/0 = ExtResource("m_dielen")
+
 
 [node name="FormBoden" type="CollisionShape3D" parent="Huelle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-shape = SubResource("FormBoden")
+shape = SubResource("S1")
 
-[node name="Decke" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
-mesh = SubResource("Decke")
-surface_material_override/0 = ExtResource("5_creme")
 
 [node name="FormDecke" type="CollisionShape3D" parent="Huelle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
-shape = SubResource("FormDeckeS")
+shape = SubResource("S1")
 
-[node name="DachSued" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 0.9737, -0.3939, 0, 0.3939, 0.9737, 0, 2.35, 1.05)
-mesh = SubResource("DachSchraeg")
-surface_material_override/0 = ExtResource("5_creme")
-
-[node name="DachNord" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 0.9737, 0.3939, 0, -0.3939, 0.9737, 0, 2.35, -1.05)
-mesh = SubResource("DachSchraeg")
-surface_material_override/0 = ExtResource("5_creme")
-
-[node name="WandNord" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -1.45)
-mesh = SubResource("WandLang")
-surface_material_override/0 = ExtResource("5_creme")
 
 [node name="FormNord" type="CollisionShape3D" parent="Huelle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -1.45)
-shape = SubResource("FormWandLang")
+shape = SubResource("S2")
 
-[node name="WandSued" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 1.45)
-mesh = SubResource("WandLang")
-surface_material_override/0 = ExtResource("5_creme")
 
 [node name="FormSued" type="CollisionShape3D" parent="Huelle"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 1.45)
-shape = SubResource("FormWandLang")
+shape = SubResource("S2")
 
-[node name="WandWest" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 1.1, 0)
-mesh = SubResource("WandKurz")
-surface_material_override/0 = ExtResource("5_creme")
 
 [node name="FormWest" type="CollisionShape3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 1.1, 0)
-shape = SubResource("FormWandKurz")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 1.1, 0)
+shape = SubResource("S3")
 
-[node name="WandOst" type="MeshInstance3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 1.1, 0)
-mesh = SubResource("WandKurz")
-surface_material_override/0 = ExtResource("5_creme")
 
 [node name="FormOst" type="CollisionShape3D" parent="Huelle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 1.1, 0)
-shape = SubResource("FormWandKurz")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.15, 1.1, 0)
+shape = SubResource("S3")
+
+
+[node name="Decke" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("S4")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="DachSued" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 0.9191, -0.3939, 0, 0.3939, 0.9191, 0, 2.35, 1.05)
+mesh = SubResource("S5")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="DachNord" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 0.9191, 0.3939, 0, -0.3939, 0.9191, 0, 2.35, -1.05)
+mesh = SubResource("S5")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="LeisteMitte0" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -0.7)
+mesh = SubResource("S6")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="LeisteMitte1" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, 0.7)
+mesh = SubResource("S6")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Spant0" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 2.46, 0)
+mesh = SubResource("S7")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Spant1" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 2.46, 0)
+mesh = SubResource("S7")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Spant2" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 2.46, 0)
+mesh = SubResource("S7")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Spant3" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 2.46, 0)
+mesh = SubResource("S7")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="WandWestU" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 0.5, 0)
+mesh = SubResource("S8")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="WandWestO" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 1.6, 0)
+mesh = SubResource("S9")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="KappeWest" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 2.37, 0)
+mesh = SubResource("S10")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="KappeWestS" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 0.9191, -0.3939, 0, 0.3939, 0.9191, -3.15, 2.33, 1.05)
+mesh = SubResource("S11")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="KappeWestN" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 0.9191, 0.3939, 0, -0.3939, 0.9191, -3.15, 2.33, -1.05)
+mesh = SubResource("S11")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="WandOstU" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.15, 0.5, 0)
+mesh = SubResource("S8")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="WandOstO" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.15, 1.6, 0)
+mesh = SubResource("S9")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="KappeOst" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.15, 2.37, 0)
+mesh = SubResource("S10")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="KappeOstS" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 0.9191, -0.3939, 0, 0.3939, 0.9191, 3.15, 2.33, 1.05)
+mesh = SubResource("S11")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="KappeOstN" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 0.9191, 0.3939, 0, -0.3939, 0.9191, 3.15, 2.33, -1.05)
+mesh = SubResource("S11")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_0vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 0.5, -1.45)
+mesh = SubResource("S12")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Nord_0creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 1.6, -1.45)
+mesh = SubResource("S13")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_1vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0.5, -1.45)
+mesh = SubResource("S14")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Nord_1creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 1.6, -1.45)
+mesh = SubResource("S15")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_2vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 0.5, -1.45)
+mesh = SubResource("S16")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Nord_2creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 1.6, -1.45)
+mesh = SubResource("S17")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_Br3" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.5, -1.45)
+mesh = SubResource("S18")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Nord_Cr3" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.075, -1.45)
+mesh = SubResource("S19")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_Br4" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.975, -1.45)
+mesh = SubResource("S20")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_RahmenL5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.37, 1.45, -1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_RahmenR5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43, 1.45, -1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_RahmenO5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.72, -1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_RahmenU5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.18, -1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_Sprosse5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.45, -1.45)
+mesh = SubResource("S23")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_Scheibe5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.45, -1.45)
+mesh = SubResource("S24")
+surface_material_override/0 = ExtResource("m_glas")
+
+
+[node name="Nord_VorhangL5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26, 1.45, -1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Nord_VorhangR5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.54, 1.45, -1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Nord_Gardine5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.85, -1.37)
+mesh = SubResource("S26")
+surface_material_override/0 = ExtResource("m_messing")
+
+
+[node name="Nord_Sims5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.13, -1.37)
+mesh = SubResource("S27")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="Nord_Br6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0.5, -1.45)
+mesh = SubResource("S18")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Nord_Cr6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.075, -1.45)
+mesh = SubResource("S19")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_Br7" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.975, -1.45)
+mesh = SubResource("S20")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Nord_RahmenL8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, 1.45, -1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_RahmenR8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07, 1.45, -1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_RahmenO8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.72, -1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_RahmenU8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.18, -1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_Sprosse8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.45, -1.45)
+mesh = SubResource("S23")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_Scheibe8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.45, -1.45)
+mesh = SubResource("S24")
+surface_material_override/0 = ExtResource("m_glas")
+
+
+[node name="Nord_VorhangL8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 1.45, -1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Nord_VorhangR8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 1.45, -1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Nord_Gardine8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.85, -1.37)
+mesh = SubResource("S26")
+surface_material_override/0 = ExtResource("m_messing")
+
+
+[node name="Nord_Sims8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.13, -1.37)
+mesh = SubResource("S27")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="Nord_Fuss" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -1.385)
+mesh = SubResource("S28")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Nord_Zier" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.38)
+mesh = SubResource("S29")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_0vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.5, 1.45)
+mesh = SubResource("S30")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Sued_0creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 1.6, 1.45)
+mesh = SubResource("S31")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_1vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.5, 1.45)
+mesh = SubResource("S32")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Sued_1creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 1.6, 1.45)
+mesh = SubResource("S33")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_2vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.5, 1.45)
+mesh = SubResource("S34")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Sued_2creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 1.6, 1.45)
+mesh = SubResource("S35")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_3vert" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 0.5, 1.45)
+mesh = SubResource("S34")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Sued_3creme" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 1.6, 1.45)
+mesh = SubResource("S35")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_Br4" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, 1.45)
+mesh = SubResource("S18")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Sued_Cr4" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.075, 1.45)
+mesh = SubResource("S19")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_Br5" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.975, 1.45)
+mesh = SubResource("S20")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_RahmenL6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.47, 1.45, 1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenR6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53, 1.45, 1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenO6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.72, 1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenU6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.18, 1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_Sprosse6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.45, 1.45)
+mesh = SubResource("S23")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_Scheibe6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.45, 1.45)
+mesh = SubResource("S24")
+surface_material_override/0 = ExtResource("m_glas")
+
+
+[node name="Sued_VorhangL6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.36, 1.45, 1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Sued_VorhangR6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.64, 1.45, 1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Sued_Gardine6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.85, 1.37)
+mesh = SubResource("S26")
+surface_material_override/0 = ExtResource("m_messing")
+
+
+[node name="Sued_Sims6" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.13, 1.37)
+mesh = SubResource("S27")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="Sued_Br7" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0.5, 1.45)
+mesh = SubResource("S18")
+surface_material_override/0 = ExtResource("m_vert")
+
+
+[node name="Sued_Cr7" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.075, 1.45)
+mesh = SubResource("S19")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_Br8" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.975, 1.45)
+mesh = SubResource("S20")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_RahmenL9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.23, 1.45, 1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenR9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.17, 1.45, 1.45)
+mesh = SubResource("S21")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenO9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.72, 1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenU9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.18, 1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_Sprosse9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.45, 1.45)
+mesh = SubResource("S23")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_Scheibe9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.45, 1.45)
+mesh = SubResource("S24")
+surface_material_override/0 = ExtResource("m_glas")
+
+
+[node name="Sued_VorhangL9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.34, 1.45, 1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Sued_VorhangR9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.06, 1.45, 1.37)
+mesh = SubResource("S25")
+surface_material_override/0 = ExtResource("m_vorhang")
+
+
+[node name="Sued_Gardine9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.85, 1.37)
+mesh = SubResource("S26")
+surface_material_override/0 = ExtResource("m_messing")
+
+
+[node name="Sued_Sims9" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.13, 1.37)
+mesh = SubResource("S27")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="Sued_Br10" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 2.125, 1.45)
+mesh = SubResource("S36")
+surface_material_override/0 = ExtResource("m_creme")
+
+
+[node name="Sued_RahmenL11" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.67, 1.025, 1.45)
+mesh = SubResource("S37")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenR11" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 1.025, 1.45)
+mesh = SubResource("S37")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_RahmenO11" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 2.02, 1.45)
+mesh = SubResource("S22")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_Fuss" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 1.385)
+mesh = SubResource("S28")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Sued_Zier" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.38)
+mesh = SubResource("S29")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="FussWest" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.085, 0.05, 0)
+mesh = SubResource("S38")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="ZierWest" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.08, 1, 0)
+mesh = SubResource("S39")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="FussOst" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.085, 0.05, 0)
+mesh = SubResource("S38")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="ZierOst" type="MeshInstance3D" parent="Huelle"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.08, 1, 0)
+mesh = SubResource("S39")
+surface_material_override/0 = ExtResource("m_dunkel")
+
 
 [node name="Teppich" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.011, 0.45)
-mesh = SubResource("Teppich")
-surface_material_override/0 = ExtResource("7_rot")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.011, 0)
+mesh = SubResource("S40")
+surface_material_override/0 = ExtResource("m_rot")
 
-[node name="FensterNord1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 1.5, -1.38)
-mesh = SubResource("Fenster")
-surface_material_override/0 = SubResource("FensterLicht")
 
-[node name="FensterNord2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.5, -1.38)
-mesh = SubResource("Fenster")
-surface_material_override/0 = SubResource("FensterLicht")
+[node name="TeppichRand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.008, 0)
+mesh = SubResource("S41")
+surface_material_override/0 = ExtResource("m_orange")
 
-[node name="FensterSued1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 1.5, 1.38)
-mesh = SubResource("Fenster")
-surface_material_override/0 = SubResource("FensterLicht")
 
-[node name="FensterSued2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.5, 1.38)
-mesh = SubResource("Fenster")
-surface_material_override/0 = SubResource("FensterLicht")
+[node name="LukeRahmen" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 2.5, 0)
+mesh = SubResource("S42")
+surface_material_override/0 = ExtResource("m_dunkel")
 
-[node name="SchrankBett" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 1.85, -1.2)
-mesh = SubResource("Haengeschrank")
-surface_material_override/0 = ExtResource("6_holz")
 
-[node name="SchrankSofa" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.9, -1.2)
-mesh = SubResource("Haengeschrank")
-surface_material_override/0 = ExtResource("6_holz")
+[node name="LukeGlas" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 2.47, 0)
+mesh = SubResource("S43")
+surface_material_override/0 = ExtResource("m_glas")
+
+
+[node name="KuecheSockel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.41, 1.12)
+mesh = SubResource("S44")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="KuecheTuer0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.4, 0.84)
+mesh = SubResource("S45")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="KuecheTuer1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 0.4, 0.84)
+mesh = SubResource("S45")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="KuecheTuer2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.65, 0.4, 0.84)
+mesh = SubResource("S45")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="KuechePlatte" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.845, 1.1)
+mesh = SubResource("S46")
+surface_material_override/0 = ExtResource("m_weiss")
+
+
+[node name="Spuele" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.87, 1.12)
+mesh = SubResource("S47")
+surface_material_override/0 = ExtResource("m_metall")
+
+
+[node name="Hahn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.98, 1.3)
+mesh = SubResource("S48")
+surface_material_override/0 = ExtResource("m_messing")
+
+
+[node name="Herdplatte0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.88, 1)
+mesh = SubResource("S49")
+surface_material_override/0 = ExtResource("m_schwarz")
+
+
+[node name="Herdplatte1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55, 0.88, 1)
+mesh = SubResource("S49")
+surface_material_override/0 = ExtResource("m_schwarz")
+
+
+[node name="Herdplatte2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.88, 1.28)
+mesh = SubResource("S49")
+surface_material_override/0 = ExtResource("m_schwarz")
+
+
+[node name="Herdplatte3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.55, 0.88, 1.28)
+mesh = SubResource("S49")
+surface_material_override/0 = ExtResource("m_schwarz")
+
+
+[node name="KuechenSchrank" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.95, 1.23)
+mesh = SubResource("S50")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="KuecheBody" type="StaticBody3D" parent="."]
+
+
+[node name="KuecheForm" type="CollisionShape3D" parent="KuecheBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.425, 1.12)
+shape = SubResource("S51")
+
 
 [node name="Bett" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, -0.82)
-script = ExtResource("1_ding")
+script = ExtResource("ding")
 art = "bett"
+
 
 [node name="Rahmen" type="MeshInstance3D" parent="Bett"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
-mesh = SubResource("BettRahmen")
-surface_material_override/0 = ExtResource("6_holz")
+mesh = SubResource("S52")
+surface_material_override/0 = ExtResource("m_holz")
+
 
 [node name="Matratze" type="MeshInstance3D" parent="Bett"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
-mesh = SubResource("BettMatratze")
-surface_material_override/0 = ExtResource("8_weiss")
+mesh = SubResource("S53")
+surface_material_override/0 = ExtResource("m_weiss")
+
 
 [node name="Decke" type="MeshInstance3D" parent="Bett"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.58, 0)
-mesh = SubResource("BettDecke")
-surface_material_override/0 = ExtResource("9_orange")
+mesh = SubResource("S54")
+surface_material_override/0 = ExtResource("m_orange")
+
 
 [node name="Kissen" type="MeshInstance3D" parent="Bett"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.6, 0)
-mesh = SubResource("BettKissen")
-surface_material_override/0 = ExtResource("10_stoff")
+mesh = SubResource("S55")
+surface_material_override/0 = ExtResource("m_stoff")
+
+
+[node name="Kopfteil" type="MeshInstance3D" parent="Bett"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.04, 0.55, 0)
+mesh = SubResource("S56")
+surface_material_override/0 = ExtResource("m_dunkel")
+
 
 [node name="Body" type="StaticBody3D" parent="Bett"]
 
+
 [node name="Form" type="CollisionShape3D" parent="Bett/Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("FormBett")
+shape = SubResource("S57")
+
 
 [node name="Label" type="Label3D" parent="Bett"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
@@ -267,21 +1030,55 @@ pixel_size = 0.005
 font_size = 40
 modulate = Color(1, 0.9, 0.6, 1)
 text = "WORLD_BETT"
-script = ExtResource("2_wt")
+script = ExtResource("wt")
 schluessel = "WORLD_BETT"
 
-[node name="Laptop" parent="." instance=ExtResource("3_laptop")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.4, 0, 0.1)
+
+[node name="SchrankBett" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 2, -1.2)
+mesh = SubResource("S58")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="SchrankSofa" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 2, -1.2)
+mesh = SubResource("S58")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="Laptop" parent="." instance=ExtResource("laptop")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2.4, 0, -0.5)
+
 
 [node name="Ausgang" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 1.41)
-script = ExtResource("1_ding")
+script = ExtResource("ding")
 art = "ausgang"
+
 
 [node name="Blatt" type="MeshInstance3D" parent="Ausgang"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.025, -0.03)
-mesh = SubResource("TuerBlatt")
-surface_material_override/0 = ExtResource("9_orange")
+mesh = SubResource("S59")
+surface_material_override/0 = ExtResource("m_holz")
+
+
+[node name="TuerFuellung" type="MeshInstance3D" parent="Ausgang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.07)
+mesh = SubResource("S60")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="TuerFuellung2" type="MeshInstance3D" parent="Ausgang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -0.07)
+mesh = SubResource("S60")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+
+[node name="Griff" type="MeshInstance3D" parent="Ausgang"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 1, -0.1)
+mesh = SubResource("S61")
+surface_material_override/0 = ExtResource("m_messing")
+
 
 [node name="Label" type="Label3D" parent="Ausgang"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, -0.1)
@@ -290,71 +1087,103 @@ pixel_size = 0.005
 font_size = 40
 modulate = Color(1, 0.9, 0.6, 1)
 text = "WORLD_WAGEN_AUSGANG"
-script = ExtResource("2_wt")
+script = ExtResource("wt")
 schluessel = "WORLD_WAGEN_AUSGANG"
+
 
 [node name="Eingang" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.1, 0.7)
 
+
 [node name="Lampe" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
 light_color = Color(1, 0.88, 0.7, 1)
-light_energy = 0.7
+light_energy = 0.9
 omni_range = 5.0
 
+
+[node name="LampenSchirm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.44, 0)
+mesh = SubResource("S62")
+surface_material_override/0 = ExtResource("m_weiss")
+
+
 [node name="Ausbau" type="Node3D" parent="."]
-script = ExtResource("ab_skript")
+script = ExtResource("ausbau")
+
 
 [node name="Sofa" type="Node3D" parent="Ausbau"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0, -0.95)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, -0.95)
+
 
 [node name="Sitz" type="MeshInstance3D" parent="Ausbau/Sofa"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
-mesh = SubResource("Ab_Sofa1")
-surface_material_override/0 = SubResource("Ab_Stoff")
+mesh = SubResource("S63")
+surface_material_override/0 = ExtResource("m_stoff")
+
 
 [node name="Lehne" type="MeshInstance3D" parent="Ausbau/Sofa"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -0.3)
-mesh = SubResource("Ab_Sofa2")
-surface_material_override/0 = SubResource("Ab_Stoff")
+mesh = SubResource("S64")
+surface_material_override/0 = ExtResource("m_stoff")
+
 
 [node name="ArmL" type="MeshInstance3D" parent="Ausbau/Sofa"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.45, 0)
-mesh = SubResource("Ab_Sofa3")
-surface_material_override/0 = SubResource("Ab_Stoff")
+mesh = SubResource("S65")
+surface_material_override/0 = ExtResource("m_stoff")
+
 
 [node name="ArmR" type="MeshInstance3D" parent="Ausbau/Sofa"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.45, 0)
-mesh = SubResource("Ab_Sofa3")
-surface_material_override/0 = SubResource("Ab_Stoff")
+mesh = SubResource("S65")
+surface_material_override/0 = ExtResource("m_stoff")
+
+
+[node name="Kissen" type="MeshInstance3D" parent="Ausbau/Sofa"]
+transform = Transform3D(1, 0, 0, 0, 0.9781, 0.2079, 0, -0.2079, 0.9781, -0.55, 0.62, -0.12)
+mesh = SubResource("S66")
+surface_material_override/0 = ExtResource("m_orange")
+
 
 [node name="Poster" type="MeshInstance3D" parent="Ausbau"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 1.55, -1.38)
-mesh = SubResource("Ab_Poster")
-surface_material_override/0 = SubResource("Ab_PosterFarbe")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 1.55, -1.39)
+mesh = SubResource("S67")
+surface_material_override/0 = ExtResource("m_papier")
+
+
+[node name="PosterRahmen" type="MeshInstance3D" parent="Ausbau"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 1.55, -1.395)
+mesh = SubResource("S68")
+surface_material_override/0 = ExtResource("m_dunkel")
+
 
 [node name="Pflanze" type="Node3D" parent="Ausbau"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 0, 1.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, -1.1)
+
 
 [node name="Topf" type="MeshInstance3D" parent="Ausbau/Pflanze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
-mesh = SubResource("Ab_Topf")
-surface_material_override/0 = SubResource("Ab_Terra")
+mesh = SubResource("S69")
+surface_material_override/0 = ExtResource("m_orange")
+
 
 [node name="Laub" type="MeshInstance3D" parent="Ausbau/Pflanze"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
-mesh = SubResource("Ab_Laub")
-surface_material_override/0 = SubResource("Ab_Gruen")
+mesh = SubResource("Laub")
+surface_material_override/0 = SubResource("Gruen")
 
 [node name="Regal" type="Node3D" parent="Ausbau"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.85, 1.3, 0.55)
 
+
 [node name="Brett" type="MeshInstance3D" parent="Ausbau/Regal"]
-mesh = SubResource("Ab_Brett")
-surface_material_override/0 = SubResource("Ab_Holz")
+mesh = SubResource("S70")
+surface_material_override/0 = ExtResource("m_dunkel")
+
 
 [node name="GoldKrug" type="MeshInstance3D" parent="Ausbau/Regal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.105, 0)
 visible = false
-mesh = SubResource("Ab_Krug")
-surface_material_override/0 = SubResource("Ab_Gold")
+mesh = SubResource("Krug")
+surface_material_override/0 = SubResource("Gold")
