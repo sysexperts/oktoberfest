@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v389.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v390.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v389.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v390.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -181,12 +181,12 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur, Abwerben ✔) | M |
+| ✔ **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur, Abwerben ✔) | M |
 | ✔ **Überraschungskontrolle** (Frau Wagner als Figur im Zelt, geht ihre Runde, Urteil danach; ab Kapitel 3 auch unangekündigt, v344) | M |
 | ✔ **Social-Media-Fake-Bewertungen** und Melden (v345) | S |
-| ◐ **Konrads Zelt umbauen:** ✔ Schanktheke, Personal (Zapfer, 2 Kellner auf Runde) und 15 Gäste (v347); ✔ Kochtheke mit Koch und Regal, Konrad läuft selbst durch (v347), Anbau fürs Casino (v350), Zelt wächst mit der Geschichte (Gäste: 5 ab Kapitel 1, 10 ab 3, 15 ab 5, v372); ✔ eigenes Layout: runde Tanzfläche mit Goldrand statt mittlerer Tischreihe, roter Teppich vom Eingang, Gäste im Kreis (v382) | XL |
+| ✔ **Konrads Zelt umbauen:** ✔ Schanktheke, Personal (Zapfer, 2 Kellner auf Runde) und 15 Gäste (v347); ✔ Kochtheke mit Koch und Regal, Konrad läuft selbst durch (v347), Anbau fürs Casino (v350), Zelt wächst mit der Geschichte (Gäste: 5 ab Kapitel 1, 10 ab 3, 15 ab 5, v372); ✔ eigenes Layout: runde Tanzfläche mit Goldrand statt mittlerer Tischreihe, roter Teppich vom Eingang, Gäste im Kreis (v382) | XL |
 | ✔ **Casino hinter Konrads Zelt** (Anbau mit Wänden, Kollision, Tür gesperrt bis der Türsteher einlässt, Zutritt nur mit Tarnung, v350) | L |
-| ◐ **Casino-Spiele:** ✔ Roulette (Rot/Schwarz, 50 €, Kessel dreht sich, Modell aus Blender); ✔ Blackjack am Kartentisch (Modell aus Blender, Karte/Halten, Blackjack zahlt 3:2, v352); ✔ Watten (Mini-Version mit eigenem Fenster, Stiche, „Watten!“ verdoppelt den Einsatz, v368); ✔ Würfelbecher (Tief, Sieben 4:1, Hoch, v385); ✔ zwei Spielautomaten (drei Walzen, Hebel, Drei gleiche 10:1, Geldsäcke 20:1, v386) | XL |
+| ✔ **Casino-Spiele:** ✔ Roulette (Rot/Schwarz, 50 €, Kessel dreht sich, Modell aus Blender); ✔ Blackjack am Kartentisch (Modell aus Blender, Karte/Halten, Blackjack zahlt 3:2, v352); ✔ Watten (Mini-Version mit eigenem Fenster, Stiche, „Watten!“ verdoppelt den Einsatz, v368); ✔ Würfelbecher (Tief, Sieben 4:1, Hoch, v385); ✔ zwei Spielautomaten (drei Walzen, Hebel, Drei gleiche 10:1, Geldsäcke 20:1, v386) | XL |
 | ✔ **Händler Gustav** (✔ Figur am Riesenrad, Koffer mit Mantel, Komplettset, Fassbohrer, Zange, Stinkbombe, Juckpulver, Tarnung an/aus, v348) und **Sabotage-System** (✔ Einsatz in Konrads Zelt: vier Ziele, Konrad patrouilliert mit Blickfeld, Erwischt = Bußgeld und Rauswurf, Rache am nächsten Tag, v349; ✔ Mantel und Maske sichtbar am Spieler (Filzhut, Janker, Schnauzer, Brille, v351), ✔ Konrads Überwachungskameras ab Kapitel 4 (schwenken über die Stellen, Tarnung kürzt die Reichweite) und Schloss am Sicherungskasten ab Kapitel 5 (Dietrich von Gustav), v389): Werkzeuge, Tarnung (Mantel, Komplettset, Schnauzer-Brille), Blickfeld und Verdächtig-Balken, Bußgeld, Kunden verschieben | XL |
 | ✔ Quests 3.1 bis 3.6 und 3.4b „Das Hinterzimmer“, Mails M3-xx (ohne Horsts Erinnerung 2) | M |
 | **Neue Modelle/Figuren:** Gustav, Türsteher, Croupier, Frau Wagner, Roulette-/Kartentische, Sicherungskasten, Kellertreppe | L |
@@ -197,17 +197,17 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ Braukeller überarbeiten (aufräumen, Rezepttafel, Tür) — Keller und Brauen laufen wie zuvor, Abfüllen neu | M |
+| ✔ Braukeller überarbeitet (Rezepttafel „Brauanleitung“ an der Wand, v390; Tür und Aufräumen schon vorher) — Keller und Brauen laufen wie zuvor, Abfüllen neu | M |
 | ✔ Qualitätsstufen (Hausbier, Festbier, Meisterbräu je Rezeptseite) und Rezeptbuch in der Quests-App (v341) | M |
-| ◐ Eigenes Bier (✔ Abfüllen, Lager, Zählung, Aufschlag je Maß nach Güte; ✔ Geduld: Festbier +15 %, Meisterbräu +30 % Geduld bei der nächsten Bestellung, v383) | S |
+| ✔ Eigenes Bier (✔ Abfüllen, Lager, Zählung, Aufschlag je Maß nach Güte; ✔ Geduld: Festbier +15 %, Meisterbräu +30 % Geduld bei der nächsten Bestellung, v383) | S |
 | ✔ Bräumeister Gerhard als Personal (Rolle sechs, braut von allein im Keller, v342) | M |
-| ◐ Quests 4.1 bis 4.7, Mails (✔); Streiche: Zutaten blockieren ✔, Lieferwagen, Diebe, Stromausfall ✔ (v343) | M |
+| ✔ Quests 4.1 bis 4.7, Mails (✔); Streiche: Zutaten blockieren, Lieferwagen, Diebe, Stromausfall ✔ (v343) | M |
 
 ## P8 · Kapitel 5 (L)
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ **Duell-Turnier** reaktivieren (✔ in der Story ab 5.2 wiederholbar, Konrad wird je Sieg schneller; ✔ Stufenanzeige „Runde x von 5“ (v339)) | M |
+| ✔ **Duell-Turnier** reaktivieren (✔ in der Story ab 5.2 wiederholbar, Konrad wird je Sieg schneller; ✔ Stufenanzeige „Runde x von 5“ (v339)) | M |
 | ✔ Riesenzelt (Zeltstufe 4, vorhanden), Quests 5.1 bis 5.7 | M |
 | ✔ **Großes Fest:** ✔ Star-Act-Bedingung, Brief, Meldung; ✔ Feuerwerk (v337), Konrads Auftritt (v338), Kamerafahrt (v340) | L |
 
@@ -216,10 +216,10 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | Aufgabe | Aufwand |
 |---|---|
 | ✔ **Fest-App** (ab Kapitel 6: Motto, Band, Feuerwerk, Dekoration, Werbung, Aushilfen planen und bezahlen, v355) | L |
-| ◐ **Festtag-System:** ✔ Ereignis „Fest“ alle 10 Tage (mehr Gäste, Band, Feuerwerk um 21 Uhr), Festruhm und fünf Festränge, Konrads Festruhm als Vergleich (v355); ✔ Festtag-Wettbewerb (ein Kirmesspiel mit Mindestergebnis, Festruhm-Bonus, v373); ✔ Katastrophen am Festtag (Unwetter, Stromausfall, knappes Bier) mit Schutz zum Mitkaufen (Regenplane, Notstrom, Extra-Fässer), Festruhm ±5 (v374); ✔ Motto bestimmt die Gäste (Tracht, Tourist, VIP, Stammgäste, v377); ✔ Fassanstich (Festfass vor der Bühne, drei Schläge mit Zeitleiste, Festruhm, v378) | L |
+| ✔ **Festtag-System:** ✔ Ereignis „Fest“ alle 10 Tage (mehr Gäste, Band, Feuerwerk um 21 Uhr), Festruhm und fünf Festränge, Konrads Festruhm als Vergleich (v355); ✔ Festtag-Wettbewerb (ein Kirmesspiel mit Mindestergebnis, Festruhm-Bonus, v373); ✔ Katastrophen am Festtag (Unwetter, Stromausfall, knappes Bier) mit Schutz zum Mitkaufen (Regenplane, Notstrom, Extra-Fässer), Festruhm ±5 (v374); ✔ Motto bestimmt die Gäste (Tracht, Tourist, VIP, Stammgäste, v377); ✔ Fassanstich (Festfass vor der Bühne, drei Schläge mit Zeitleiste, Festruhm, v378) | L |
 | ✔ **Meister-Liste** (13 Einträge in der Quests-App, 100 % = Titel Fest-Meister, v356; goldener Krug am Wohnwagen ✔ v357) | S |
 | ✔ **Wohnwagen-Ausbau** (✔ ein Wagen fürs Team: App „Wohnwagen“ mit Bett-Stufen = mehr Tempo, Sofa, Poster, Zimmerpflanze, Trophäenregal mit goldenem Krug, Prestige zählt beim Festruhm, v357; ✔ Außenfarbe (v380); ✔ Wagen je Spieler (Platz = Beitrittsreihenfolge, eigene Farbe, Name am Wagen, morgens vor dem eigenen Wagen, v381); ✔ Spiegel (Creator in der Wagen-App, Look geht an alle, v384)) | XL |
-| ◐ **Late-Game-Ausgaben** (✔ App „Ausbau“ ab Kapitel 5: Biergarten, VIP-Lounge, zweite Theke, größere Bühne, Bierhandel mit anderen Zelten, Konrads Zelt aufkaufen mit Pacht, v358; ✔ Personal-Akademie (Mitarbeiter bis Stufe 10, größere Tabletts, v375); ✔ Schutz vor Konrad: Schloss, Kamera, Alarmanlage, Versicherung (v376); ✔ drei eigene Buden und die Filiale (Zweitzelt) mit Abendgewinn, v379) | XL |
+| ✔ **Late-Game-Ausgaben** (✔ App „Ausbau“ ab Kapitel 5: Biergarten, VIP-Lounge, zweite Theke, größere Bühne, Bierhandel mit anderen Zelten, Konrads Zelt aufkaufen mit Pacht, v358; ✔ Personal-Akademie (Mitarbeiter bis Stufe 10, größere Tabletts, v375); ✔ Schutz vor Konrad: Schloss, Kamera, Alarmanlage, Versicherung (v376); ✔ drei eigene Buden und die Filiale (Zweitzelt) mit Abendgewinn, v379) | XL |
 
 ## P10 · Kirmes-Quests, Meilensteine, Zeitung (L)
 
@@ -229,7 +229,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ✔ Meilensteine neu (22 neue: Kapitel, Gefallen, Kirmes, Sabotage, Casino, Meisterbier, Fest, Personal, Wohnwagen, Ausbau, Fest-Meister; insgesamt 42, v360); ◐ **Steam-Errungenschaften**: jede Meilenstein-ID ruft `SteamDienst.errungenschaft(id)`, die IDs müssen in Steamworks angelegt werden (Liste in `scripts/meilensteine.gd`) | M |
 | ✔ Zeitung (Festkurier) mit neuen Themen: Festtag-Titelseite, Konrads Streiche, Casino-Gerücht, Gefallen, Kirmes-Rekorde, Braukunst, Konrad aufgekauft (v361) | S |
 | ✔ **Brabbelton** je Figur im Dialog (weiche Silben zum Tippen des Textes, Stimmlage aus dem Namen, Horst tief, Frau Wagner hoch, v362) | M |
-| ◐ Gäste: ✔ Gruppen (Familie, Stammtisch, Verein, Junggesellenabschied: sitzen zusammen, Bonus wenn alle bedient sind) und Wunschlieder (Wunsch erscheint, E an der Bühne gibt ihn weiter, Beliebtheit und Trinkgeld), v363; ✔ mehr Chaos: Zwischenfälle alle 2 bis 4 Minuten (Heiratsantrag, Karaoke-Runde, Flirt, verschüttetes Bier, v367) | L |
+| ✔ Gäste: ✔ Gruppen (Familie, Stammtisch, Verein, Junggesellenabschied: sitzen zusammen, Bonus wenn alle bedient sind) und Wunschlieder (Wunsch erscheint, E an der Bühne gibt ihn weiter, Beliebtheit und Trinkgeld), v363; ✔ mehr Chaos: Zwischenfälle alle 2 bis 4 Minuten (Heiratsantrag, Karaoke-Runde, Flirt, verschüttetes Bier, v367) | L |
 
 ## P11 · Balancing und Politur (L)
 

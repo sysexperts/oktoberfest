@@ -2727,3 +2727,14 @@ MAIL_G16_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
 MAIL_G16_A2,Heute nicht.,Not today.,Bugün olmaz.
 SAB_DIETRICH,Dietrich,Lock pick,Maymuncuk
 MSG_SAB_SCHLOSS,Der Sicherungskasten ist abgeschlossen. Dazu brauchst du einen Dietrich von Gustav.,The fuse box is locked. You need a lock pick from Gustav.,Sigorta kutusu kilitli. Gustav'dan bir maymuncuk almalısın.
+REZEPTTAFEL_TITEL,Brauanleitung,Brewing guide,Bira yapımı
+REZEPTTAFEL_TEXT,"1. Malz und Wasser im Bottich rühren
+2. Im Sudkessel kochen, Hopfen dazu
+3. Mit Hefe ins Gärfass
+4. Reifen lassen, dann abfüllen","1. Stir malt and water in the tun
+2. Boil in the kettle, add hops
+3. Into a fermenter with yeast
+4. Let it mature, then bottle","1. Malt ve suyu teknede karıştır
+2. Kazanda kaynat, şerbetçiotu ekle
+3. Mayayla fermantasyon fıçısına
+4. Olgunlaşsın, sonra şişele"

@@ -65,6 +65,10 @@ class Lauf extends Node:
 		await _blick(sp, Vector3(-4.2, -3.4, -6.6), Vector3(-6.4, -2.6, -11.8))
 		await _bild("keller_gaerfaesser")
 
+		# 7 Die Rezepttafel an der Nordwand
+		await _blick(sp, Vector3(-6.5, -3.4, -3.4), Vector3(-6.5, -1.5, 0.3))
+		await _bild("keller_rezepttafel")
+
 		for pfad: String in DATEIEN:
 			var sich := ProjectSettings.globalize_path(pfad + ".renderbackup")
 			if _gab_es[pfad] and FileAccess.file_exists(pfad + ".renderbackup"):
