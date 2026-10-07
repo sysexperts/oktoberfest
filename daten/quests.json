@@ -1223,6 +1223,93 @@
   }
  },
  {
+  "id": "G-12",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-12_TITLE",
+  "text": "Q_G-12_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G12"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-12"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 350
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "fahne",
+   "anzahl": 4,
+   "zeit": 150
+  }
+ },
+ {
+  "id": "G-13",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-13_TITLE",
+  "text": "Q_G-13_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G13"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-13"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "laterne",
+   "anzahl": 5,
+   "zeit": 150
+  }
+ },
+ {
+  "id": "G-14",
+  "typ": "gefallen",
+  "kapitel": 3,
+  "titel": "Q_G-14_TITLE",
+  "text": "Q_G-14_TEXT",
+  "ausloeser": {
+   "kapitel": 3,
+   "zufall": {
+    "ab_kapitel": 3,
+    "bis_kapitel": 99,
+    "chance": 0.25
+   },
+   "mail": "M-G14"
+  },
+  "bedingung": {
+   "flag": "gefallen_G-14"
+  },
+  "frist_tage": 2,
+  "belohnung": {
+   "geld": 300
+  },
+  "gefallen": {
+   "art": "punkte",
+   "variante": "ballon",
+   "anzahl": 6,
+   "zeit": 120
+  }
+ },
+ {
   "id": "K-8",
   "typ": "kirmes",
   "kapitel": 2,

@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v386.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v387.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -24,7 +24,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - **Achtung:** Seit v341 sind einige Desktop-Szenen von Hand geändert (Rezeptbuch in `desktop_quests.tscn`, Melden-Knopf in `social_post.tscn`, Fest-App `desktop_fest.tscn` mit eigenem Generator-Skript im Scratchpad, Icons/Kacheln in `desktop.tscn`). Den Generator `build/gen_desktop4.py` nicht mehr ausführen, sonst gehen diese Änderungen verloren. Ursprünglich: Desktop-Oberflächen werden von `build/gen_desktop4.py` erzeugt (Teile in `build/gen_*_teil.py`). Die alten Fenster (Festbüro, Zeltcomputer) kommen aus `build/orig/*.tscn` über `build/p2_legacy.py` und `tools/remap_app_farben.py`: **Quelle in `build/orig` ändern, dann `python build/p2_legacy.py`**. Look: nachtblaues Glas, Akzentfarbe je App, Farbbanner (siehe Speicher `desktop-app-look`).
 - Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
 
-### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`; alle auf einmal: `bash tools/test_alle.sh`, aktuell 24 von 24 grün)
+### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`; alle auf einmal: `bash tools/test_alle.sh`, aktuell 27 von 27 grün)
 `test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_kirmesquests`, `test_meilensteine`, `test_gaeste`, `test_zwischenfaelle`, `test_watten`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
 
 ### Wo was liegt
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v386.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v387.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -63,13 +63,13 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P2 Computer-Desktop | ✔ fertig (Apps, Laptop mit begehbarem Wohnwagen) | v322 bis v324 |
 | P3 Kapitel 1 | ✔ fertig (spielbar bis zum ersten Feierabend) | v325 |
 | P4 Kapitel 2 | ✔ fertig | v329 bis v354 |
-| P5 Gefallen und Security | ✔ elf Gefallen (neu: Hochzeit mit Girlanden, Brezn-Wettessen mit Tellern), vier Security-Posten, Security als Personal | v330 bis v353 |
+| P5 Gefallen und Security | ✔ vierzehn Gefallen (neu: Hochzeit, Wettessen, Fahnen, Laternen, Ballons), vier Security-Posten, Security als Personal | v330 bis v353 |
 | P6 Kapitel 3 | ✔ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; Konrads Zelt hat jetzt ein eigenes Layout; Casino mit Roulette, Blackjack, Watten, Würfelbecher, Spielautomaten | v334 bis v386 |
 | P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche, Geduld-Bonus fürs eigene Bier | v343 |
 | P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
 | P9 Endgame | ✔ Fest-App und Festtag (Fassanstich, Motto, Katastrophen), Meister-Liste, Wohnwagen (Ausbau, Farbe, Wagen je Spieler, Spiegel), Late-Game-Ausbauten (Akademie, Schutz, Buden, Filiale) | v355 bis v384 |
 | P10 Kirmes, Meilensteine, Zeitung | ◐ sieben Kirmes-Rekord-Quests, 42 Meilensteine, Festkurier mit neuen Themen, Brabbelton, Gäste in Gruppen und Wunschlieder; offen: Steam-Errungenschaften in Steamworks anlegen | v359 bis v363 |
-| P11 Balancing und Politur | ◐ alle 24 Tests grün (`bash tools/test_alle.sh`), Textprüfung, Leistungsmessung; offen: Balancing mit Testspielen, echter Koop-Test, Türkisch von Muttersprachlern lesen | v364 bis v366 |
+| P11 Balancing und Politur | ◐ alle 27 Tests grün (`bash tools/test_alle.sh`), Textprüfung, Leistungsmessung; offen: Balancing mit Testspielen, echter Koop-Test, Türkisch von Muttersprachlern lesen | v364 bis v366 |
 
 ---
 
@@ -170,7 +170,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 11 von 11 (v369) | M |
+| ◐ **Gefallen-Generator** (alle paar Tage zufällig per Mail, Pool von 16) — Zufall und Mail laufen, Pool: 14 von 16 (v369, neu v387: Fahnen für den Ehrengast, Laternen vor der Dämmerung, Kinderfest-Ballons) | M |
 | ✔ **Täter-Figuren** (Spanner, Taschendieb, Betrunkener, Raufbolde, Fälscher, Dieb) über den Creator | M |
 | ✔ **Packen, Tragen, Übergeben** an Security (vorhandene Raufbold-Mechanik erweitern) | M |
 | ✔ **Security-Posten** verteilt auf der Kirmes (feste Figuren), **Security als Personal** (Rolle fünf) | M |

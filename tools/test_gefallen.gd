@@ -140,6 +140,16 @@ class Lauf extends Node:
 			g.net_punkt(i)
 		await _warten(0.5)
 		_check("Wettessen: Quest erfüllt", story.zustand("G-11") == "erfuellt", story.zustand("G-11"))
+		for qid2 in [["G-12", "fahne", 4], ["G-13", "laterne", 5], ["G-14", "ballon", 6]]:
+			story._freischalten(g.Daten.quest(qid2[0]))
+			story.annehmen(qid2[0])
+			await _warten(0.6)
+			_check("%s: %d Punkte" % [qid2[1], qid2[2]], g._punkte.size() == qid2[2] and g._variante == qid2[1], str(g._punkte.size()))
+			_check("%s: Hinweis" % qid2[1], g._punkte[0].hinweis_text(false) != "HINT_QUELLE")
+			for k in qid2[2]:
+				g.net_punkt(k)
+			await _warten(0.5)
+			_check("%s: Quest erfüllt" % qid2[1], story.zustand(qid2[0]) == "erfuellt", story.zustand(qid2[0]))
 		# Kirmes-Lieferung: Kiste holen, abliefern, dreimal
 		story._freischalten(g.Daten.quest("K-8"))
 		story.annehmen("K-8")

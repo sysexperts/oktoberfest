@@ -2615,3 +2615,69 @@ WAGEN_FARBE_GRUEN,Außenfarbe Grün,Exterior colour green,Dış renk yeşil
 WAGEN_FARBE_AKTIV,%s (aktiv),%s (active),%s (aktif)
 WAGEN_SPIEGEL,Spiegel: Aussehen ändern,Mirror: change your look,Ayna: görünümünü değiştir
 WAGEN_FARBE_WECHSELN,Wechseln zu: %s,Switch to: %s,Geç: %s
+HINT_FAHNE_HISSEN,{interact} Fahne hissen,{interact} Raise the flag,{interact} Bayrağı çek
+HINT_LATERNE_ANZUENDEN,{interact} Laterne anzünden,{interact} Light the lantern,{interact} Feneri yak
+HINT_BALLON_SAMMELN,{interact} Luftballons einsammeln,{interact} Collect the balloons,{interact} Balonları topla
+Q_G-12_TITLE,Fahnen für den Ehrengast,Flags for the guest of honour,Konuk için bayraklar
+Q_G-12_TEXT,"Ein Ehrengast kommt zur Kirmes. Hisse vier Fahnen an den Buden (E), bevor die Zeit abläuft.",A guest of honour is visiting the fair. Raise four flags at the stalls (E) before time runs out.,Fuara bir onur konuğu geliyor. Süre dolmadan büfelerde dört bayrak çek (E).
+Q_G-13_TITLE,Laternen vor der Dämmerung,Lanterns before dusk,Alacakaranlıktan önce fenerler
+Q_G-13_TEXT,"Es wird bald dunkel. Zünde fünf Laternen an den Buden an (E), bevor die Zeit abläuft.",It will be dark soon. Light five lanterns at the stalls (E) before time runs out.,Yakında hava kararacak. Süre dolmadan büfelerde beş feneri yak (E).
+Q_G-14_TITLE,Kinderfest: Ballons,Children's day: balloons,Çocuk şenliği: balonlar
+Q_G-14_TEXT,"Beim Kinderfest sind Luftballons ausgebüxt. Sammle sechs Ballonbündel an den Buden ein (E), bevor die Zeit abläuft.",Balloons have escaped at the children's day. Collect six balloon bunches at the stalls (E) before time runs out.,Çocuk şenliğinde balonlar kaçtı. Süre dolmadan büfelerde altı balon demetini topla (E).
+MAIL_G12_BETREFF,Ein Ehrengast kommt,A guest of honour is coming,Bir onur konuğu geliyor
+MAIL_G12_TEXT,"Servus,
+
+der Bürgermeister schaut heute Nachmittag auf der Kirmes vorbei. Häng an den Buden vier Fahnen auf, damit es nach etwas aussieht. Du hast nicht ewig Zeit.
+Ich leg dir 350 € drauf.
+
+Horst","Hi,
+
+the mayor is dropping by the fair this afternoon. Raise four flags at the stalls so that it looks like something. You do not have forever.
+I will add €350.
+
+Horst","Selam,
+
+belediye başkanı bu öğleden sonra fuara uğrayacak. Büfelerde dört bayrak çek ki göz doldursun. Sonsuz vaktin yok.
+Üstüne 350 € koyarım.
+
+Horst"
+MAIL_G12_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G12_A2,Heute nicht.,Not today.,Bugün olmaz.
+MAIL_G13_BETREFF,Gleich wird es dunkel,It is getting dark soon,Hava kararıyor
+MAIL_G13_TEXT,"Servus,
+
+in einer Stunde ist es dunkel und die Wege der Kirmes liegen im Finstern. Zünde an den Buden fünf Laternen an, bevor jemand stolpert.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+in an hour it will be dark and the fair paths will be pitch black. Light five lanterns at the stalls before anyone trips.
+I will add €300.
+
+Horst","Selam,
+
+bir saat sonra hava kararacak ve fuar yolları zifiri karanlık olacak. Biri düşmeden büfelerde beş feneri yak.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G13_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G13_A2,Heute nicht.,Not today.,Bugün olmaz.
+MAIL_G14_BETREFF,Kinderfest,Children's day,Çocuk şenliği
+MAIL_G14_TEXT,"Servus,
+
+beim Kinderfest sind uns Luftballons weggeflogen und hängen jetzt überall an den Buden. Sammle sechs Ballonbündel ein, sonst gibt es Tränen.
+Ich leg dir 300 € drauf.
+
+Horst","Hi,
+
+at the children's day balloons have floated away and are now stuck at the stalls. Collect six balloon bunches or there will be tears.
+I will add €300.
+
+Horst","Selam,
+
+çocuk şenliğinde balonlar uçtu ve şimdi büfelere takılı duruyor. Altı balon demetini topla, yoksa gözyaşı olur.
+Üstüne 300 € koyarım.
+
+Horst"
+MAIL_G14_A1,"Gern, mach ich.","Gladly, I will.",Memnuniyetle.
+MAIL_G14_A2,Heute nicht.,Not today.,Bugün olmaz.

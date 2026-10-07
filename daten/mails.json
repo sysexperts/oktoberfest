@@ -698,6 +698,66 @@
   ]
  },
  {
+  "id": "M-G12",
+  "absender": "HORST",
+  "betreff": "MAIL_G12_BETREFF",
+  "text": "MAIL_G12_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G12_A1",
+    "folge": {
+     "quest_annehmen": "G-12"
+    }
+   },
+   {
+    "text": "MAIL_G12_A2",
+    "folge": {
+     "quest_ablehnen": "G-12"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G13",
+  "absender": "HORST",
+  "betreff": "MAIL_G13_BETREFF",
+  "text": "MAIL_G13_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G13_A1",
+    "folge": {
+     "quest_annehmen": "G-13"
+    }
+   },
+   {
+    "text": "MAIL_G13_A2",
+    "folge": {
+     "quest_ablehnen": "G-13"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-G14",
+  "absender": "HORST",
+  "betreff": "MAIL_G14_BETREFF",
+  "text": "MAIL_G14_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_G14_A1",
+    "folge": {
+     "quest_annehmen": "G-14"
+    }
+   },
+   {
+    "text": "MAIL_G14_A2",
+    "folge": {
+     "quest_ablehnen": "G-14"
+    }
+   }
+  ]
+ },
+ {
   "id": "M-K8",
   "absender": "BUDE",
   "betreff": "MAIL_K8_BETREFF",
