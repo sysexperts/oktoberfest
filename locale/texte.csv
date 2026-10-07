@@ -2423,3 +2423,22 @@ ZEITUNG_M_GEFALLEN,Kirmes: Schon %d Gefallen für den Festleiter erledigt. Das Z
 ZEITUNG_M_KIRMES,Buden: %d Rekorde an den Kirmesbuden geknackt.,Stalls: %d records cracked at the fair stalls.,Büfeler: Fuar büfelerinde %d rekor kırıldı.
 ZEITUNG_M_BRAU,Braukunst: Im Zelt lagern %d Maß eigenes Festbier.,Brewing: %d mugs of the tent's own fest beer are in storage.,Biracılık: Çadırda %d kupa kendi festival birası depoda.
 ZEITUNG_M_KONRAD_GEKAUFT,Übernahme: Das Konrad-Zelt gehört jetzt dem Festzelt. Kein Zylinder mehr.,Takeover: the Konrad-Zelt now belongs to the festival tent. No more top hat.,Devralma: Konrad çadırı artık şenlik çadırına ait. Silindir şapka yok.
+HINT_WUNSCH,{interact} Wunschlied an die Band weitergeben,{interact} Pass the song request to the band,{interact} Şarkı isteğini gruba ilet
+MSG_WUNSCH,Eine Tischrunde wünscht sich ein Lied: „%s“. Sag der Band Bescheid (E an der Bühne)!,A table asks for a song: “%s”. Tell the band (E at the stage)!,Bir masa şarkı istiyor: “%s”. Gruba söyle (sahnede E)!
+MSG_WUNSCH_OK,"Wunsch erfüllt: „%s“! Die Gäste jubeln, Trinkgeld %s.","Request granted: “%s”! The guests cheer, tip %s.","İstek yerine getirildi: “%s”! Misafirler tezahürat yapıyor, bahşiş %s."
+MSG_WUNSCH_VERPASST,Der Wunsch ging unter. Ein paar Gäste murren.,The request was missed. A few guests grumble.,İstek unutuldu. Bazı misafirler homurdanıyor.
+WUNSCH_TITEL_0,Das Hoch auf den Wirt,A Toast to the Landlord,Ev Sahibine Kadeh
+WUNSCH_TITEL_1,Der Bierfass-Walzer,The Beer Barrel Waltz,Bira Fıçısı Valsi
+WUNSCH_TITEL_2,Schunkel-Polka,Swaying Polka,Sallanan Polka
+WUNSCH_TITEL_3,Zwiefacher für alle,Zwiefacher for Everyone,Herkes İçin Zwiefacher
+WUNSCH_TITEL_4,Das Maßkrug-Lied,The Beer Mug Song,Bira Kupası Şarkısı
+GRUPPE_0,Familie,Family,Aile
+GRUPPE_1,Stammtisch,Regulars' table,Müdavimler masası
+GRUPPE_2,Verein,Club,Dernek
+GRUPPE_3,Junggesellenabschied,Bachelor party,Bekârlığa veda
+MSG_GRUPPE_DA,Eine Gruppe von %d Gästen ist da: %s. Sie wollen zusammen bedient werden.,A group of %d guests has arrived: %s. They want to be served together.,%d kişilik bir grup geldi: %s. Birlikte servis istiyorlar.
+MSG_GRUPPE_BONUS,Gruppe %s komplett bedient: Bonus %s und mehr Stimmung.,Group %s fully served: bonus %s and a better mood.,Grup %s tamamen servis edildi: bonus %s ve daha iyi atmosfer.
+MS_WUNSCH_5_TITLE,Wunschkonzert,Request show,İstek konseri
+MS_WUNSCH_5_TEXT,Gib fünf Wunschlieder an die Band weiter.,Pass five song requests to the band.,Gruba beş şarkı isteği ilet.
+MS_GRUPPEN_10_TITLE,Gruppendynamik,Group dynamics,Grup dinamiği
+MS_GRUPPEN_10_TEXT,Bediene zehn Gruppen komplett.,Fully serve ten groups.,On grubu tamamen servis et.

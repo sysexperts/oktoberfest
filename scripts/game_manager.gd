@@ -451,6 +451,17 @@ const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500
 const AUSBAU_HANDEL_MASS := 12
 const AUSBAU_KONRAD_PACHT := 150
 var _ausbau: Array = []
+## Gäste in Gruppen (Familie, Stammtisch, Verein, Junggesellenabschied): sitzen zusammen, werden alle bedient = Bonus.
+const GRUPPE_CHANCE := 0.22
+const GRUPPE_BONUS := 15
+const GRUPPE_ARTEN := 4
+var _gruppen := {}          # Gruppen-ID -> {"n": Anzahl, "ids": {Gast-ID: true}, "art": Nummer}
+var _gruppe_next := 1
+## Wunschlieder: Mit Künstler auf der Bühne wünscht sich eine Gruppe ein Lied. Der Spieler gibt den Wunsch an der Bühne weiter.
+const WUNSCH_TITEL := 5
+const WUNSCH_ZEIT := 60.0
+var _wunsch := {}           # {"titel": Nr, "rest": Sekunden}
+var _wunsch_t := 80.0
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -3792,6 +3803,7 @@ func _serve_by_staff(gid: int) -> void:
 	Game.add_score(reward)
 	_add_income(reward)
 	_net_betrag.rpc(g.pos, reward, false)
+	_gruppe_bedient(gid, g)
 
 @rpc("authority", "reliable", "call_local")
 func _add_staff(id: int, pos: Vector3, role: int, level: int) -> void:
@@ -4868,6 +4880,7 @@ func net_serve_guest(id: int, kind: int, type: int) -> void:
 	Game.add_score(reward)
 	_add_income(reward + tip)
 	_net_betrag.rpc(g.pos, reward + tip, false)
+	_gruppe_bedient(id, g)
 
 ## Verkaufspreis je Bestellung. Einkauf: Bier 4€, Zutaten 5€ pro Einheit —
 ## damit bleibt genug Marge, um Miete und Löhne zu tragen.
@@ -5224,6 +5237,7 @@ func _ereignis_andrang() -> float:
 	return 1.0
 
 func _update_ereignis(delta: float) -> void:
+	_wunsch_takt(delta)
 	if _ereignis == "fest" and not _fest_feuer_gezuendet and _clock_hour() >= 21.0:
 		_fest_feuer_gezuendet = true
 		var stufe := int(_fest.get("feuer", 0))
@@ -5589,6 +5603,9 @@ func _end_shift(reason := 0) -> void:
 	_net_feierabend.rpc()
 	# Dreck bleibt nach Feierabend liegen — putzen geht jetzt auch außerhalb der
 	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
+	_wunsch = {}
+	_wunsch_t = randf_range(40.0, 90.0)
+	_gruppen.clear()
 	_fest_auswerten()
 	_ausbau_abend()
 	_meister_pruefen()
@@ -5725,8 +5742,8 @@ func _free_seat() -> int:
 	if free.is_empty():
 		return -1
 	return free.pick_random()
-func _spawn_guest() -> void:
-	var si := _free_seat()
+func _spawn_guest(sitz := -1, gruppe := 0) -> void:
+	var si := sitz if sitz >= 0 else _free_seat()
 	if si < 0:
 		return
 	var id := _guest_next
@@ -5744,7 +5761,7 @@ func _spawn_guest() -> void:
 		"ostate": 0, "okind": 1, "otype": 1, "patience": _geduld() * float(TYP_GEDULD.get(typ, 1.0)),
 		"cooldown": randf_range(8.0, 20.0), "served_t": 0.0,
 		"bladder": randf_range(BLADDER_MIN, BLADDER_MAX), "pee_t": 0.0,
-		"drinks": 0, "puke_t": 0.0, "puked": false
+		"drinks": 0, "puke_t": 0.0, "puked": false, "gruppe": gruppe
 	}
 	# Benannter Stammgast (Opa Alois, Veronika …) — einer pro Tag, nach dem Tutorial
 	var stamm := _stammgast_waehlen()
@@ -5756,6 +5773,45 @@ func _spawn_guest() -> void:
 		_melde("MSG_STAMM_" + stamm.to_upper() + "_DA", [], 0)
 		return
 	_add_guest.rpc(id, start, typ)
+	if gruppe == 0 and _story.aktiv and not tutorial_active() and randf() < GRUPPE_CHANCE:
+		_gruppe_nachziehen(id, si)
+
+## Zu einem neuen Gast kommen ein bis zwei Freunde, die sich an denselben Tisch setzen.
+func _gruppe_nachziehen(erster: int, si: int) -> void:
+	var tisch := int(_seats[si].get("table", 0))
+	var frei: Array[int] = []
+	for i in _seats.size():
+		if int(_seats[i].guest) == -1 and int(_seats[i].get("table", 0)) == tisch:
+			frei.append(i)
+	frei.shuffle()
+	var extra := mini(randi_range(1, 2), frei.size())
+	if extra <= 0:
+		return
+	var gid := _gruppe_next
+	_gruppe_next += 1
+	var art := randi() % GRUPPE_ARTEN
+	_gruppen[gid] = {"n": extra + 1, "ids": {}, "art": art}
+	(_guest_sim[erster] as Dictionary)["gruppe"] = gid
+	var vorher := _guest_next
+	for k in extra:
+		_spawn_guest(frei[k], gid)
+	# Nur die tatsächlich gestarteten zählen
+	_gruppen[gid].n = 1 + (_guest_next - vorher)
+	_melde("MSG_GRUPPE_DA", [_gruppen[gid].n, "GRUPPE_%d" % art], 0)
+
+## Ein Mitglied einer Gruppe wurde bedient: sind alle einmal dran, gibt es Bonus.
+func _gruppe_bedient(id: int, g: Dictionary) -> void:
+	var gid := int(g.get("gruppe", 0))
+	if gid <= 0 or not _gruppen.has(gid):
+		return
+	var gr: Dictionary = _gruppen[gid]
+	(gr.ids as Dictionary)[id] = true
+	if (gr.ids as Dictionary).size() >= int(gr.n) and not bool(gr.get("fertig", false)):
+		gr["fertig"] = true
+		_add_income(GRUPPE_BONUS * int(gr.n))
+		_pop_erhoehen(1.0)
+		_stats["gruppen"] = int(_stats.get("gruppen", 0)) + 1
+		_melde("MSG_GRUPPE_BONUS", ["GRUPPE_%d" % int(gr.art), _eur(GRUPPE_BONUS * int(gr.n))], 2)
 
 func _update_guests(delta: float) -> void:
 	for id in _guest_sim.keys().duplicate():
@@ -6325,7 +6381,7 @@ func _buero_state() -> Dictionary:
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
-		"eigenbier": _eigenbier, "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
+		"eigenbier": _eigenbier, "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
 		"deko_wert": deko_wert(), "gemuet": gemuetlichkeit(),
@@ -7266,6 +7322,39 @@ func _ausbau_abend() -> void:
 	if _ausbau.has("konrad"):
 		_add_income(AUSBAU_KONRAD_PACHT)
 		_melde("MSG_AUSBAU_PACHT", [_eur(AUSBAU_KONRAD_PACHT)], 2)
+
+## Wunschlieder: Takt in der Schicht. Nur mit Künstler auf der Bühne.
+func _wunsch_takt(delta: float) -> void:
+	if _artist_tier <= 0 or _phase != Phase.SHIFT:
+		return
+	if _wunsch.is_empty():
+		_wunsch_t -= delta
+		if _wunsch_t <= 0.0:
+			_wunsch = {"titel": randi() % WUNSCH_TITEL, "rest": WUNSCH_ZEIT}
+			_melde("MSG_WUNSCH", ["WUNSCH_TITEL_%d" % int(_wunsch.titel)], 0)
+			_broadcast_meta()
+		return
+	_wunsch.rest = float(_wunsch.rest) - delta
+	if float(_wunsch.rest) <= 0.0:
+		_wunsch = {}
+		_wunsch_t = randf_range(70.0, 140.0)
+		_popularity = maxf(POP_MIN, _popularity - 1.0)
+		_melde("MSG_WUNSCH_VERPASST", [], 1)
+		_broadcast_meta()
+
+## Spieler gibt den Wunsch an der Bühne weiter
+@rpc("any_peer", "reliable", "call_local")
+func net_wunsch_erfuellen() -> void:
+	if not multiplayer.is_server() or _wunsch.is_empty():
+		return
+	var titel := int(_wunsch.titel)
+	_wunsch = {}
+	_wunsch_t = randf_range(70.0, 140.0)
+	_pop_erhoehen(3.0)
+	_add_income(30)
+	_stats["wuensche"] = int(_stats.get("wuensche", 0)) + 1
+	_melde("MSG_WUNSCH_OK", ["WUNSCH_TITEL_%d" % titel, _eur(30)], 2)
+	_broadcast_meta()
 
 ## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
 @rpc("any_peer", "reliable", "call_local")

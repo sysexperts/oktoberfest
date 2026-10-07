@@ -44,8 +44,25 @@ const GLIEDER := {
 	"LeftUpLeg": "LeftLeg", "LeftLeg": "LeftFoot",
 }
 
+## Wunschlieder: mit E an der Bühne gibt man den Wunsch der Gäste weiter (GameManager.net_wunsch_erfuellen).
+## Der Spieler erkennt die Band an hinweis_text und buehne_aktion.
+func interact_point() -> Vector3:
+	return global_position + Vector3(0, 1.0, 0)
+
+func hinweis_text(_geschlossen: bool) -> String:
+	var welt := get_tree().current_scene
+	var hud: Object = welt.get("_hud")
+	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	return "HINT_WUNSCH" if not (z.get("wunsch", {}) as Dictionary).is_empty() else ""
+
+func buehne_aktion(_spieler: Node) -> void:
+	var welt := get_tree().current_scene
+	if welt.has_method("net_wunsch_erfuellen"):
+		welt.net_wunsch_erfuellen.rpc_id(1)
+
 func _ready() -> void:
 	add_to_group("artist")
+	add_to_group("interactable")
 	# Nur Figuren mit echter Tanzanimation auf die Bühne — der Reihe nach probieren
 	_figur = Figuren.einsetzen_beruf(self, String(name).hash(), "kuenstler")
 	if _figur.tanzen(randf_range(0.95, 1.05)):
