@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v346.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v347.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -183,7 +183,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ◐ **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur, Abwerben ✔) | M |
 | ✔ **Überraschungskontrolle** (Frau Wagner als Figur im Zelt, geht ihre Runde, Urteil danach; ab Kapitel 3 auch unangekündigt, v344) | M |
 | ✔ **Social-Media-Fake-Bewertungen** und Melden (v345) | S |
-| **Konrads Zelt umbauen:** gleiche Tische/Theke/Ausgabe/Küche wie unser Zelt, anderes Layout, Konrad läuft zufällig durchs Zelt, Gäste und Personal | XL |
+| ◐ **Konrads Zelt umbauen:** ✔ Schanktheke, Personal (Zapfer, 2 Kellner auf Runde) und 15 Gäste (v347); ☐ Küche, Layout, Konrad läuft selbst durchs Zelt, Anbau fürs Casino | XL |
 | **Casino im Keller:** Treppe/Kellertür, Türsteher, saubere Kollision, kein Clipping | L |
 | **Casino-Spiele:** Roulette, Blackjack, Karten, weitere einfache Spiele | XL |
 | **Händler Gustav** und **Sabotage-System:** Werkzeuge, Tarnung (Mantel, Komplettset, Schnauzer-Brille), Blickfeld und Verdächtig-Balken, Bußgeld, Kunden verschieben | XL |
