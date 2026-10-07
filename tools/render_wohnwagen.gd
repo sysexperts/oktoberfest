@@ -19,10 +19,13 @@ func _ready() -> void:
 	add_child(boden)
 	var wagen := (load("res://scenes/wohnwagen_innen.tscn") as PackedScene).instantiate()
 	add_child(wagen)
+	# Ohne Dach und Südwand, damit man hineinsieht
+	for n in ["Decke", "DachSued", "DachNord", "WandSued"]:
+		wagen.get_node("Huelle/" + n).visible = false
 	var kamera := Camera3D.new()
 	add_child(kamera)
 	kamera.current = true
-	kamera.look_at_from_position(Vector3(-2.2, 2.0, 2.2), Vector3(1.2, 0.7, -1.0))
+	kamera.look_at_from_position(Vector3(0.5, 4.2, 4.6), Vector3(0, 0.6, -0.3))
 	for i in 6:
 		await get_tree().process_frame
 	get_viewport().get_texture().get_image().save_png("res://build/wohnwagen_innen.png")
