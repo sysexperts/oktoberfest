@@ -49,7 +49,8 @@ class Lauf extends Node:
 		print("Fenster: ", get_viewport().get_visible_rect().size, "  Skalierung 3D: ", get_viewport().scaling_3d_scale)
 		var sp: Node3D = gm._players_nodes.get(1)
 		var orte := {"Tor": [Vector3(0, 0.1, 84), 0.0], "Mitte vor Zelt": [Vector3(0, 0.1, 25), 0.0],
-			"Im Zelt": [Vector3(0, 0.1, 8), 0.0], "Ost Buero": [Vector3(30, 0.1, 18), PI / 2], "Sued": [Vector3(0, 0.1, -40), PI]}
+			"Im Zelt": [Vector3(0, 0.1, 8), 0.0], "Ost Buero": [Vector3(30, 0.1, 18), PI / 2], "Sued": [Vector3(0, 0.1, -40), PI],
+			"Konrads Zelt (Blick Ost)": [Vector3(30, 0.1, -21), -PI / 2], "Konrads Zelt (Blick West)": [Vector3(58, 0.1, -21), PI / 2]}
 		for n in orte:
 			sp.global_position = orte[n][0]
 			sp.rotation.y = orte[n][1]

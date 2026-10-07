@@ -25,9 +25,15 @@ func _ready() -> void:
 	_start = position
 	_warte = randf_range(0.0, pause)
 	_figur.stehen()
-	set_process(not runde.is_empty())
+	set_process(true)
 
 func _process(delta: float) -> void:
+	_lod_t -= delta
+	if _lod_t <= 0.0:
+		_lod_t = randf_range(0.4, 0.8)
+		_lod()
+	if runde.is_empty():
+		return
 	if _warte > 0.0:
 		_warte -= delta
 		if _warte <= 0.0:
@@ -43,3 +49,26 @@ func _process(delta: float) -> void:
 		return
 	position += zu.normalized() * minf(tempo * delta, zu.length())
 	rotation.y = lerp_angle(rotation.y, atan2(zu.x, zu.z), minf(1.0, 8.0 * delta))
+
+## Leistung: weit weg wird die Animation angehalten, noch weiter weg wird die Figur nicht gezeichnet
+## (wie bei den Budenbesitzern, scripts/kirmes/budenbesitzer.gd). 22 Figuren in Konrads Zelt kosteten rund 900 Zeichenaufrufe.
+const LOD_ANIMATION := 25.0
+const LOD_SICHTBAR := 50.0
+var _lod_t := randf() * 0.5
+var _nah := true
+
+func _lod() -> void:
+	var kamera := get_viewport().get_camera_3d()
+	if kamera == null or _figur == null:
+		return
+	var abstand := global_position.distance_to(kamera.global_position)
+	_figur.visible = abstand < LOD_SICHTBAR
+	var nah := abstand < LOD_ANIMATION
+	if nah == _nah or _figur.anim == null:
+		return
+	_nah = nah
+	if nah:
+		_figur.anim.active = true
+	else:
+		_figur.anim.advance(0.0)
+		_figur.anim.active = false
