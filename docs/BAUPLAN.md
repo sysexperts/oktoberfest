@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v345.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v346.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -25,7 +25,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
 
 ### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`)
-`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
+`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
 
 ### Wo was liegt
 - **Story-Kern:** `scripts/story/story.gd` (Kapitel, Quests mit Zuständen angeboten/offen/erfüllt/verfallen, Post, Hinweise, Flaggen), Daten in `daten/quests.json`, `daten/mails.json`, `daten/hinweise.json` (Texte per Schlüssel in der CSV). Messwerte für Quest-Bedingungen: `GameManager._story_messwerte()`. Neue Quest = Eintrag in `quests.json` (+ Mail + Texte), Flaggen setzt `_story.ereignis("name")`. Gespräche, die Flaggen setzen: Tabellen `STORY_GESPRAECHE` in `scripts/npc_festleiter.gd`, Konrad-Dialoge in `scripts/npc_huber.gd`, Server-RPC `net_story_flag` (Whitelist im GameManager).
@@ -37,7 +37,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ### Nächste Schritte (Vorschlag, in dieser Reihenfolge)
 1. ✔ **Kapitel 5 abgerundet** (Feuerwerk, Kamerafahrt, Konrads Auftritt, Stufenanzeige, v340).
-2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino im Keller samt Türsteher und Spielen (XL), Händler Gustav und Sabotage-System mit Tarnung (XL), Konrad wirbt Mitarbeiter ab, Quest 3.4b „Das Hinterzimmer".
+2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino im Keller samt Türsteher und Spielen (XL), Händler Gustav und Sabotage-System mit Tarnung (XL), Quest 3.4b „Das Hinterzimmer".
 3. ✔ **P7 fertig** (Qualität, Rezeptbuch, Gerhard, Streiche; offen nur Geduld-Bonus fürs eigene Bier).
 4. **P5 Rest:** Gefallen Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen (Muster siehe `gefallen.gd`).
 5. **P4 Rest:** Nebenquest „Happy Hour" (40 Maß in einer Stunde).
@@ -180,7 +180,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| ◐ **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur ✔; Abwerben ☐) | M |
+| ◐ **Konrad-Streiche reaktivieren** (Wette, Fass-Leck, Stinkbombe, Saboteur, Abwerben ✔) | M |
 | ✔ **Überraschungskontrolle** (Frau Wagner als Figur im Zelt, geht ihre Runde, Urteil danach; ab Kapitel 3 auch unangekündigt, v344) | M |
 | ✔ **Social-Media-Fake-Bewertungen** und Melden (v345) | S |
 | **Konrads Zelt umbauen:** gleiche Tische/Theke/Ausgabe/Küche wie unser Zelt, anderes Layout, Konrad läuft zufällig durchs Zelt, Gäste und Personal | XL |

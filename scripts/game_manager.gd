@@ -7178,8 +7178,9 @@ func _personal_morgen() -> void:
 			_melde("MSG_PERSONAL_LOHNWUNSCH", [str(s.get("name", "")), _eur(_lohn_plus(sid, LOHN_PLUS))], 0)
 	for sid in weg:
 		_personal_weg(sid)
-	# Huber wirbt nicht mehr ab (Geschichte raus, 28.09.)
-	if false:
+	# Konrad wirbt ab Kapitel 3 Mitarbeiter ab: bis morgen früh mit Lohnerhöhung halten, sonst sind sie weg
+	var abwerben: bool = _story.aktiv and _story.kapitel >= 3 and not tutorial_active() and randf() < ABWERBEN_CHANCE
+	if abwerben:
 		var kandidaten := _staff_sim.keys().filter(func(k: int) -> bool: return str(_staff_sim[k].get("anliegen", "")) == "")
 		if not kandidaten.is_empty():
 			var sid: int = kandidaten.pick_random()
