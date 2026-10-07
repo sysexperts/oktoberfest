@@ -36,16 +36,15 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - **Tutorial:** Schritte 0 bis 9 = Kapitel 1 (`QUEST_COUNT := 10` im GameManager), danach führt die Story-Hauptquest (Anzeige im HUD).
 
 ### Nächste Schritte (Vorschlag, in dieser Reihenfolge)
-1. ✔ **Kapitel 5 abgerundet** (Feuerwerk, Kamerafahrt, Konrads Auftritt, Stufenanzeige, v340).
-2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino-Kartentisch und weitere Spiele, Händler Gustav und Sabotage-System mit Tarnung (XL).
-3. ✔ **P7 fertig** (Qualität, Rezeptbuch, Gerhard, Streiche; offen nur Geduld-Bonus fürs eigene Bier).
-4. **P5 Rest:** Gefallen Hochzeit und Wettessen (Muster siehe `gefallen.gd`; Falschgeld, Krüge, Reporter sind seit v353 drin).
-5. ✔ **P4 fertig** (Happy Hour v354).
-6. **P9 bis P11:** Fest-App und Festtag-System, Meister-Liste, Wohnwagen je Spieler, Late-Game-Ausgaben, Kirmes-Quests, Meilensteine, Zeitung, Brabbelton, Balancing mit `tools/sim_saison`, **Koop-Test aller Systeme** (bisher nur Einzelspieler-Tests!), Übersetzungen prüfen, Leistung.
-7. Vor jedem Steam-Upload: alle Tests oben laufen lassen, Version hochzählen, `git push`.
+1. **Testspielen und Balancing (Mensch nötig):** Geld, Preise und Fristen aller neuen Systeme (Ausbau, Fest, Casino, Sabotage, Bierhandel) sind **Platzhalter**. Der Spielbot `tools/sim_saison` geht im Late-Game pleite (er kauft zu früh 24 Tische), das sagt aber mehr über den Bot als über das Spiel.
+2. **Echter Koop-Test:** `bash tools/test_netz.sh` und `bash tools/test_koop_bots.sh` (Letzteres läuft gegen den Live-Server) — die neuen Systeme wurden bisher nur im Einzelspieler-Test und per Codeprüfung auf korrekte Server/Client-Aufteilung geprüft.
+3. **Texte:** Türkisch und Englisch der vielen neuen Texte von Muttersprachlern lesen lassen. Automatische Prüfung: `python tools/pruefe_texte.py`.
+4. **Steamworks:** Die 42 Meilenstein-IDs aus `scripts/meilensteine.gd` als Errungenschaften anlegen (`SteamDienst.errungenschaft(id)` ist schon verdrahtet).
+5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Kartenspiele im Casino, Hochzeit und Wettessen als Gefallen, Kirmes-Quests Lotsen/Retten/Lieferung, Chaos-Zwischenfälle (Flirt, Heiratsantrag, Karaoke), Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
+6. Vor jedem Steam-Upload: `bash tools/test_alle.sh`, Version hochzählen, `git push`.
 
 ### Bekannte Lücken und Risiken
-- Alle Kapitel sind **nur im Test** durchgespielt, nicht von Hand und nicht im Koop. Ein Bot-Durchlauf (`tools/sim_saison`) für die ganze Story fehlt.
+- Alle Kapitel und neuen Systeme sind **nur im Test** durchgespielt, nicht von Hand und nicht im echten Koop. Ein Bot-Durchlauf (`tools/sim_saison`) spielt die Wirtschaft, nicht die Story.
 - Quest 5.4 verlangt jetzt ein abgefülltes Fass Meisterbräu. Quest 3.4 fängt den Saboteur direkt statt ihn zu einem Security zu tragen.
 - Die Schulden stehen bei 5.000 € (`SCHULDEN_START`), Quest 2.5 verlangt davon 1.500 € zurück. Beträge sind Platzhalter fürs Balancing.
 - Bank-Texte, Mails und Quest-Texte sind Entwürfe: Ton warm und humorvoll, nach dem Testspielen glätten.
@@ -55,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v333.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v366.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -63,12 +62,14 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P1 Kern-Systeme | ✔ fertig | v321 |
 | P2 Computer-Desktop | ✔ fertig (Apps, Laptop mit begehbarem Wohnwagen) | v322 bis v324 |
 | P3 Kapitel 1 | ✔ fertig (spielbar bis zum ersten Feierabend) | v325 |
-| P4 Kapitel 2 | ✔ fertig | v329 bis v332 |
-| P5 Gefallen und Security | ◐ (Security als Personal ✔ v334) System plus sechs Gefallen (Spanner, Taschendieb, Sau, Konrads Spion, Sturmwarnung, Brand) und vier Security-Posten fertig; 5 weitere Gefallen (Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen), Security als Personal offen | v330 bis v333 |
-| P6 Kapitel 3 | ◐ Streiche und Quests 3.1 bis 3.6 spielbar (ohne Casino); Konrads Zelt, Casino, Sabotage-System, Frau Wagner offen | v334 |
+| P4 Kapitel 2 | ✔ fertig | v329 bis v354 |
+| P5 Gefallen und Security | ◐ neun Gefallen, vier Security-Posten, Security als Personal; offen: Hochzeit, Wettessen | v330 bis v353 |
+| P6 Kapitel 3 | ◐ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; offen: Küche und Layout in Konrads Zelt, Kartenspiele (Schafkopf, Watten), Kameras und Schlösser | v334 bis v352 |
 | P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche (Geduld-Bonus offen) | v343 |
-| P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v336 |
-| P9 bis P11 | ☐ offen | |
+| P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
+| P9 Endgame | ◐ Fest-App und Festtag, Meister-Liste, Wohnwagen-Ausbau (ein Wagen fürs Team), Late-Game-Ausbauten; offen: Wettbewerbe und Katastrophen am Festtag, Wagen je Spieler, Buden betreiben, Zweitzelt | v355 bis v358 |
+| P10 Kirmes, Meilensteine, Zeitung | ◐ sieben Kirmes-Rekord-Quests, 42 Meilensteine, Festkurier mit neuen Themen, Brabbelton, Gäste in Gruppen und Wunschlieder; offen: Kirmes-Quests Lotsen/Retten/Lieferung, Chaos-Zwischenfälle, Steam-Errungenschaften in Steamworks anlegen | v359 bis v363 |
+| P11 Balancing und Politur | ◐ alle 24 Tests grün (`bash tools/test_alle.sh`), Textprüfung, Leistungsmessung; offen: Balancing mit Testspielen, echter Koop-Test, Türkisch von Muttersprachlern lesen | v364 bis v366 |
 
 ---
 
