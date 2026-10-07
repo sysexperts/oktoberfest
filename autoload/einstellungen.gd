@@ -183,6 +183,19 @@ var tasten := {}
 func _ready() -> void:
 	_lade()
 	anwenden()
+	_spiel_zeiger()
+
+## Eigene Mauszeiger im Stil des Desktops (assets/ui/zeiger, gezeichnet mit tools/bake_zeiger.py):
+## Pfeil für alles, Hand über Knöpfen. Hotspot = die Spitze.
+func _spiel_zeiger() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var pfeil := load("res://assets/ui/zeiger/pfeil.png") as Texture2D
+	var hand := load("res://assets/ui/zeiger/hand.png") as Texture2D
+	if pfeil:
+		Input.set_custom_mouse_cursor(pfeil, Input.CURSOR_ARROW, Vector2(3, 2))
+	if hand:
+		Input.set_custom_mouse_cursor(hand, Input.CURSOR_POINTING_HAND, Vector2(13, 2))
 
 func _unhandled_input(event: InputEvent) -> void:
 	_eingabeart_merken(event)
@@ -250,8 +263,14 @@ func _zeiger_pruefen() -> void:
 	_zeiger_weg = soll
 	if _leeres_bild == null:
 		_leeres_bild = ImageTexture.create_from_image(Image.create_empty(2, 2, false, Image.FORMAT_RGBA8))
+	if not soll:
+		# Zeiger wieder da: erst die Standardformen zurück, dann unsere eigenen
+		for form in range(0, 17):
+			Input.set_custom_mouse_cursor(null, form as Input.CursorShape)
+		_spiel_zeiger()
+		return
 	for form in range(0, 17):
-		Input.set_custom_mouse_cursor(_leeres_bild if soll else null, form as Input.CursorShape)
+		Input.set_custom_mouse_cursor(_leeres_bild, form as Input.CursorShape)
 
 func _process(delta: float) -> void:
 	_zeiger_pruefen()
