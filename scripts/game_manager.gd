@@ -7128,6 +7128,16 @@ func _net_feuerwerk() -> void:
 	kamera.get_tree().current_scene.add_child(fw)
 	fw.global_position = Vector3(kamera.global_position.x, 0.0, kamera.global_position.z)
 	fw.ausloesen()
+	# Konrads Auftritt: kommt zum Feuerwerk vorbei
+	await get_tree().create_timer(3.0).timeout
+	var dialog := get_tree().get_first_node_in_group("dialog")
+	if dialog == null:
+		return
+	var a := "_IHR" if multiplayer.has_multiplayer_peer() and multiplayer.get_peers().size() > 0 else "_DU"
+	var zeilen: Array[String] = []
+	for k in ["KONRAD_FEST_1", "KONRAD_FEST_2", "KONRAD_FEST_3"]:
+		zeilen.append(String(TranslationServer.translate(k + a)))
+	dialog.zeigen(String(TranslationServer.translate("HUBER_NAME")), zeilen)
 
 @rpc("authority", "reliable", "call_local")
 func _net_saboteur_weg() -> void:
