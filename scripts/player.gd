@@ -345,7 +345,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			_world.net_ping.rpc_id(1, ziel, art)
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
-		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		# Ein Klick ins Leere holt die Maus ins Spiel zurück — aber nicht, solange ein Fenster (Computer, Desktop,
+		# Büro …) offen ist: sonst verschwindet der Zeiger mitten in der Bedienung
+		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE and not _fenster_offen():
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 ## Umschauen mit dem rechten Stick. Anders als die Maus liefert ein Stick keine
@@ -615,6 +617,16 @@ func _pad_b_unten() -> bool:
 
 func _pad_im_fenster() -> bool:
 	return Einstellungen.am_pad and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE
+
+## Ist ein Fenster mit Mauszeiger offen (Desktop, Computer, Festbüro, Pop-up)?
+func _fenster_offen() -> bool:
+	var hud := _world.get_node_or_null("HUD") if _world else null
+	if hud == null:
+		return false
+	for f: String in ["is_desktop_open", "is_computer_open", "is_booking_open", "is_popup_open", "is_rent_open", "is_lobby_open"]:
+		if hud.has_method(f) and hud.call(f):
+			return true
+	return false
 
 func _tippt() -> bool:
 	if minispiel != null and is_instance_valid(minispiel):

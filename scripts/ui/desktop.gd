@@ -405,6 +405,9 @@ func _buero_offen() -> bool:
 func _process(delta: float) -> void:
 	if not visible:
 		return
+	# Der Zeiger bleibt am Desktop immer sichtbar — andere Fenster und Klicks ins Leere dürfen die Maus nicht einfangen
+	if Input.mouse_mode != Input.MOUSE_MODE_VISIBLE:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_takt -= delta
 	if _takt <= 0.0:
 		_takt = 0.5
