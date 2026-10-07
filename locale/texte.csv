@@ -2456,6 +2456,9 @@ WUERFEL_SIEBEN,Sieben,Seven,Yedi
 WUERFEL_HOCH,Hoch (8 bis 12),High (8 to 12),Yüksek (8-12)
 MSG_WUERFEL_GEWONNEN,"Würfel: %d und %d, zusammen %d. Gewonnen: +%s aus Konrads Bank!","Dice: %d and %d, total %d. You win +%s from Konrad's bank!","Zar: %d ve %d, toplam %d. Konrad'ın bankasından +%s kazandın!"
 MSG_WUERFEL_VERLOREN,"Würfel: %d und %d, zusammen %d. Verloren: -%s an Konrads Bank.","Dice: %d and %d, total %d. You lose -%s to Konrad's bank.","Zar: %d ve %d, toplam %d. Konrad'ın bankasına -%s kaybettin."
+HINT_CASINO_SLOT,{interact} Hebel ziehen (50 €),{interact} Pull the lever (50 €),{interact} Kolu çek (50 €)
+MSG_SLOT_GEWONNEN,Automat: Treffer! +%s aus Konrads Bank.,Slot machine: a hit! +%s from Konrad's bank.,Slot makinesi: isabet! Konrad'ın bankasından +%s.
+MSG_SLOT_VERLOREN,Automat: nichts. -%s an Konrads Bank.,Slot machine: nothing. -%s to Konrad's bank.,Slot makinesi: boş. Konrad'ın bankasına -%s.
 HINT_CASINO_WATTEN,{interact} Watten spielen,{interact} Play Watten,{interact} Watten oyna
 WATTEN_TITEL,Watten,Watten,Watten
 WATTEN_WARTEN,Die Karten werden gemischt …,Shuffling the cards ...,Kartalar karıştırılıyor ...

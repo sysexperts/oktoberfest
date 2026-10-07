@@ -1,7 +1,7 @@
 extends Node
 const Spielstart := preload("res://tools/spielstart.gd")
 const Schuss := preload("res://tools/schuss.gd")
-## Fotografiert das Casino mit Würfeltisch (SHOT_DIR/casino_wuerfel.png).
+## Fotografiert das Casino mit Würfeltisch (SHOT_DIR/casino_slot.png).
 ##   SHOT_DIR=build godot --path . res://tools/shot_stromausfall.tscn --resolution 1280x720
 
 func _ready() -> void:
@@ -33,11 +33,11 @@ class Lauf extends Node:
 		var kam := Camera3D.new()
 		gm.add_child(kam)
 		var casino := get_tree().get_first_node_in_group("casino") as Node3D
-		kam.look_at_from_position(casino.to_global(Vector3(2.2, 2.4, -11.0)), casino.to_global(Vector3(-3.0, 0.7, -17.6)))
+		kam.look_at_from_position(casino.to_global(Vector3(-3.6, 1.7, -12.2)), casino.to_global(Vector3(-4.4, 1.3, -9.7)))
 		kam.make_current()
-		await _warten(2.0)
-		await _warten(1.0)
-		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/casino_wuerfel.png")
+		get_tree().call_group("slot", "drehen", [5, 5, 3])
+		await _warten(4.0)
+		Schuss.speichern(get_viewport(), OS.get_environment("SHOT_DIR") + "/casino_slot.png")
 		get_tree().quit()
 
 	func _warten(s: float) -> void:

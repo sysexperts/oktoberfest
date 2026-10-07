@@ -41,6 +41,13 @@ class Lauf extends Node:
 		var vorher: int = Game.money
 		gm.net_wuerfel(0)
 		_check("Ohne Geld kein Wurf", Game.money == vorher)
+		Game.add_money(1000 - Game.money)
+		_check("Drei gleiche 10:1", gm.slot_gewinn([2, 2, 2]) == gm.ROULETTE_EINSATZ * 10)
+		_check("Drei Geldsäcke 20:1", gm.slot_gewinn([5, 5, 5]) == gm.ROULETTE_EINSATZ * 20)
+		_check("Zwei gleiche +25 €", gm.slot_gewinn([1, 3, 1]) == 25)
+		_check("Nichts: Einsatz weg", gm.slot_gewinn([0, 1, 2]) == -gm.ROULETTE_EINSATZ)
+		gm._slot_auswerten([0, 1, 2])
+		_check("Automat bucht und zählt", Game.money == 1000 - gm.ROULETTE_EINSATZ and int(gm._stats.get("slot", 0)) == 1, str(Game.money))
 		var tisch := (load("res://scenes/casino.tscn") as PackedScene).instantiate()
 		add_child(tisch)
 		var da := false
@@ -48,5 +55,15 @@ class Lauf extends Node:
 			if n.get("art") == "wuerfel":
 				da = n.hinweis_text(false) == "HINT_CASINO_WUERFEL"
 		_check("Würfeltisch im Casino", da)
+		var automaten := 0
+		for n in tisch.get_children():
+			if str(n.name).begins_with("Slot") and n.get("art") == "slot" and n.hinweis_text(false) == "HINT_CASINO_SLOT":
+				automaten += 1
+		_check("Zwei Spielautomaten im Casino", automaten == 2, str(automaten))
+		get_tree().call_group("slot", "drehen", [1, 2, 3])
+		for _i in 200:
+			await get_tree().process_frame
+		var walze := tisch.get_node("Slot0/Kontrolle/Walzen/Walze2") as Sprite3D
+		_check("Walzen laufen aus", walze.texture == load("res://assets/ui/symbole/stern.svg"))
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit(fehler)

@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/kasino/kasino_ding.gd" id="3_kd"]
 [ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="4_figur"]
 [ext_resource type="PackedScene" path="res://assets/models/kartentisch.glb" id="5_karten"]
+[ext_resource type="PackedScene" path="res://scenes/kasino/slot.tscn" id="6_slot"]
 
 [sub_resource type="StandardMaterial3D" id="Teppich"]
 albedo_color = Color(0.32, 0.04, 0.08, 1)
@@ -256,6 +257,12 @@ art = "wuerfel"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -18.7)
 beruf = "kellner"
 nr = 24
+
+[node name="Slot0" parent="." instance=ExtResource("6_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4.4, 0, -9.7)
+
+[node name="Slot1" parent="." instance=ExtResource("6_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.4, 0, -9.7)
 
 [node name="Tuersteher" parent="." instance=ExtResource("4_figur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -20.3)

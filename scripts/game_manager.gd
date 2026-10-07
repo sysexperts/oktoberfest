@@ -7653,6 +7653,41 @@ func _wuerfel_auswerten(a: int, b: int, wahl: int) -> void:
 	_melde("MSG_WUERFEL_GEWONNEN" if gewonnen else "MSG_WUERFEL_VERLOREN", [a, b, summe, _eur(gewinn if gewonnen else ROULETTE_EINSATZ)], 2 if gewonnen else 1)
 	_broadcast_meta()
 
+## Spielautomat: drei Walzen mit sechs Symbolen (5 = Geldsack). Drei gleiche zahlen 10:1, drei Geldsäcke 20:1, zwei gleiche +25 €.
+@rpc("any_peer", "reliable", "call_local")
+func net_slot() -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+		return
+	if not _afford(ROULETTE_EINSATZ):
+		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+		return
+	_slot_auswerten([randi() % 6, randi() % 6, randi() % 6])
+
+## Gewinn eines Walzenbilds in € (Einsatz schon abgezogen gerechnet: negativ = verloren)
+func slot_gewinn(w: Array) -> int:
+	var a := int(w[0])
+	var b := int(w[1])
+	var c := int(w[2])
+	if a == b and b == c:
+		return ROULETTE_EINSATZ * (20 if a == 5 else 10)
+	if a == b or b == c or a == c:
+		return ROULETTE_EINSATZ / 2
+	return -ROULETTE_EINSATZ
+
+func _slot_auswerten(w: Array) -> void:
+	var gewinn := slot_gewinn(w)
+	Game.add_money(gewinn)
+	_stats["slot"] = int(_stats.get("slot", 0)) + 1
+	_story.ereignis("casino_gespielt")
+	_net_slot_dreh.rpc(w)
+	_melde("MSG_SLOT_GEWONNEN" if gewinn > 0 else "MSG_SLOT_VERLOREN", [_eur(absi(gewinn))], 2 if gewinn > 0 else 1)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_slot_dreh(w: Array) -> void:
+	for s in get_tree().get_nodes_in_group("slot"):
+		s.drehen(w)
+
 ## Blackjack gegen Konrads Bank: aktion 0 = neue Runde (50 € Einsatz), 1 = Karte, 2 = Halten.
 ## Blackjack zahlt 3:2, Bank zieht bis 17, Gleichstand bringt den Einsatz zurück.
 @rpc("any_peer", "reliable", "call_local")
