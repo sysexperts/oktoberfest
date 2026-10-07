@@ -260,7 +260,7 @@ class Lauf extends Node:
 			await _abzug()
 			_check("RT ohne Ziel: Krug abgestellt", spieler.carry_state == 0, "carry_state=%d" % spieler.carry_state)
 		# Fenster über die Welt öffnen
-		for f in [["computer", "A am Zeltcomputer", "is_computer_open"], ["office_desk", "A im Festbüro", "is_booking_open"],
+		for f in [["computer", "A am Zeltcomputer", "is_computer_open"], 
 				["zelt_vermietung", "A am Mietschild", "is_rent_open"]]:
 			spieler.carry_state = 0
 			if await _vor(spieler, ziele.get(f[0])):
