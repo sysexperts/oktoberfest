@@ -3178,6 +3178,7 @@ func net_hire_staff(role: int) -> void:
 		_fehler("MSG_NO_MONEY", [STAFF_KEYS[role], _eur(cost)])
 		return
 	Game.add_money(-cost)
+	_stats["hire_%d" % role] = int(_stats.get("hire_%d" % role, 0)) + 1
 	var id := _staff_next
 	_staff_next += 1
 	var start: Vector3 = _staff_start(role)
@@ -5555,6 +5556,7 @@ func _end_shift(reason := 0) -> void:
 	# Dreck bleibt nach Feierabend liegen — putzen geht jetzt auch außerhalb der
 	# Schicht; was bis zum nächsten Schichtstart übrig ist, räumt _start_shift weg
 	_fest_auswerten()
+	_meister_pruefen()
 	_clear_artists()          # E5: Auftritt vorbei
 	# Übriges bleibt auf der Ausgabe stehen — auch außerhalb der Schicht abgestellte
 	# Krüge verschwinden nicht mehr (Test 13.09.)
@@ -6285,7 +6287,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -7040,6 +7042,7 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 		_popularity = minf(100.0, _popularity + 3.0)
 		_melde("MSG_SAB_%s" % art.to_upper(), [_eur(SAB_ERFOLG)], 2)
 		_story.ereignis("sabotage_geschafft")
+		_stats["sab_ok"] = int(_stats.get("sab_ok", 0)) + 1
 		_rache_tag = _day + 1
 	_broadcast_meta()
 
@@ -7104,6 +7107,47 @@ func fest_rang() -> int:
 		if _fest_ruhm >= FEST_RAENGE[i]:
 			rang = i
 	return rang
+
+## Die Meister-Liste (Quests-App): alles, was es im Spiel zu schaffen gibt. Alles erledigt = Titel „Fest-Meister“.
+## Ein Eintrag ist [Schlüssel, erreicht, Ziel].
+func meister_liste() -> Array:
+	var gefallen := 0
+	for i in range(1, 10):
+		if _story != null and _story.zustand("G-%d" % i) == "erfuellt":
+			gefallen += 1
+	var rollen := 0
+	for r in range(1, 7):
+		if int(_stats.get("hire_%d" % r, 0)) > 0:
+			rollen += 1
+	var kontrolle := 1 if (_story != null and bool(_story.flags.get("kontrolle_bestanden", false))) else 0
+	return [
+		["MEISTER_STORY", 1 if (_story != null and _story.kapitel >= 6) else 0, 1],
+		["MEISTER_GEFALLEN", gefallen, 9],
+		["MEISTER_TURNIER", mini(int(_stats.get("duell_siege", 0)), 5), 5],
+		["MEISTER_REZEPT", rezeptseiten(), 3],
+		["MEISTER_MEISTERBIER", mini(int(_stats.get("meisterfaesser", 0)), 1), 1],
+		["MEISTER_ZELT", mini(_tent_stage, 4), 4],
+		["MEISTER_PERSONAL", rollen, 6],
+		["MEISTER_FEST", fest_rang(), 4],
+		["MEISTER_CASINO", (1 if int(_stats.get("roulette", 0)) > 0 else 0) + (1 if int(_stats.get("blackjack", 0)) > 0 else 0), 2],
+		["MEISTER_SABOTAGE", mini(int(_stats.get("sab_ok", 0)), 1), 1],
+		["MEISTER_FAKE", mini(int(_stats.get("fakes_gemeldet", 0)), 1), 1],
+		["MEISTER_KONTROLLE", kontrolle, 1],
+		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
+	]
+
+func meister_fertig() -> bool:
+	for e: Array in meister_liste():
+		if int(e[1]) < int(e[2]):
+			return false
+	return true
+
+## Nach jedem Tag prüfen: ist die Liste voll, gibt es den Titel (einmalig)
+func _meister_pruefen() -> void:
+	if int(_stats.get("meister_titel", 0)) == 0 and meister_fertig():
+		_stats["meister_titel"] = 1
+		_story.ereignis("fest_meister")
+		_melde("MSG_MEISTER_TITEL", [], 2)
 
 ## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
 @rpc("any_peer", "reliable", "call_local")
@@ -7272,6 +7316,7 @@ func net_fake_melden(id: int) -> void:
 			_fakes.remove_at(i)
 			_popularity = minf(100.0, _popularity + 2.0)
 			_story.ereignis("fake_gemeldet")
+			_stats["fakes_gemeldet"] = int(_stats.get("fakes_gemeldet", 0)) + 1
 			_melde("MSG_FAKE_GELOESCHT", [], 2)
 			_broadcast_meta()
 			return

@@ -67,6 +67,7 @@ func zeigen() -> void:
 			erledigt += 1
 	%Erledigt.text = tr("QUESTS_ERLEDIGT") % erledigt
 	_rezeptbuch()
+	_meister()
 
 ## Sepps Rezeptbuch: Seite 1 von Anfang an, 2 nach Kapitel 4, 3 von Konrad. Jede Seite hebt die Güte des Biers.
 func _rezeptbuch() -> void:
@@ -81,3 +82,24 @@ func _rezeptbuch() -> void:
 			zeilen.append("○ " + tr("REZEPT_SEITE_GESPERRT") % (i + 1))
 	%Rezeptbuch.text = "
 ".join(zeilen)
+
+## Meister-Liste: alles, was es im Spiel zu schaffen gibt (GameManager.meister_liste)
+func _meister() -> void:
+	var hud: Object = _gm.get("_hud") if _gm != null else null
+	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	var liste: Array = z.get("meister", [])
+	if liste.is_empty():
+		%MeisterTitel.visible = false
+		%Meister.visible = false
+		return
+	%MeisterTitel.visible = true
+	%Meister.visible = true
+	var fertig := 0
+	var zeilen: Array[String] = []
+	for e: Array in liste:
+		var ok := int(e[1]) >= int(e[2])
+		if ok:
+			fertig += 1
+		zeilen.append(("● " if ok else "○ ") + tr(str(e[0])) + ("" if ok or int(e[2]) <= 1 else "  %d/%d" % [int(e[1]), int(e[2])]))
+	%MeisterTitel.text = tr("QUESTS_MEISTER") % [fertig, liste.size()] + ("  ·  " + tr("MEISTER_TITEL") if int(z.get("meister_titel", 0)) > 0 else "")
+	%Meister.text = "\n".join(zeilen)

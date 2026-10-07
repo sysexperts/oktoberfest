@@ -2229,3 +2229,19 @@ MSG_FEST_GEPLANT,Fest für morgen geplant und bezahlt: %s,Festival planned and p
 MSG_FEST_HEUTE,Heute ist Festtag: %s! Die Band steht bereit.,Today is festival day: %s! The band is ready.,Bugün şenlik günü: %s! Grup hazır.
 MSG_FEST_FEUERWERK_ZEIT,21 Uhr: Das Feuerwerk beginnt! Die Gäste jubeln.,9 pm: the fireworks begin! The guests cheer.,Saat 21: Havai fişek başlıyor! Misafirler tezahürat yapıyor.
 MSG_FEST_BILANZ,Festbilanz: +%d Festruhm. Rang: %s,Festival result: +%d fame. Rank: %s,Şenlik sonucu: +%d şöhret. Rütbe: %s
+QUESTS_MEISTER,Meister-Liste %d/%d,Master list %d/%d,Usta listesi %d/%d
+MEISTER_TITEL,Titel: Fest-Meister,Title: Festival Master,Unvan: Şenlik Ustası
+MEISTER_STORY,Die Geschichte bis zum großen Fest,The story up to the great festival,Büyük şenliğe kadar hikâye
+MEISTER_GEFALLEN,Alle Gefallen von Horst erledigt,All of Horst's favours done,Horst'un tüm iyiliklerini yap
+MEISTER_TURNIER,Alle Turnierstufen gegen Konrad gewonnen,Won all tournament rounds against Konrad,Konrad'a karşı tüm turnuva turlarını kazan
+MEISTER_REZEPT,Alle drei Rezeptseiten,All three recipe pages,Üç tarif sayfasının hepsi
+MEISTER_MEISTERBIER,Ein Fass Meisterbräu abgefüllt,Bottled a barrel of master brew,Bir fıçı usta birası doldur
+MEISTER_ZELT,Das Riesenzelt (Zeltstufe 4),The giant tent (tent level 4),Dev çadır (çadır seviyesi 4)
+MEISTER_PERSONAL,Jede Personalrolle einmal eingestellt,Hired every staff role once,Her personel rolünü bir kez işe al
+MEISTER_FEST,Das Fest bis zum Weltfest ausgebaut,Built the festival up to the world festival,Şenliği dünya şenliğine kadar büyüt
+MEISTER_CASINO,Roulette und Blackjack gespielt,Played roulette and blackjack,Rulet ve blackjack oyna
+MEISTER_SABOTAGE,Konrad einmal sabotiert,Sabotaged Konrad once,Konrad'ı bir kez sabote et
+MEISTER_FAKE,Eine Fake-Bewertung gemeldet,Reported a fake review,Bir sahte yorumu bildir
+MEISTER_KONTROLLE,Hygienekontrolle bestanden,Passed a hygiene inspection,Hijyen denetimini geç
+MEISTER_SCHULDEN,Sepps Schulden bezahlt,Paid off Sepp's debts,Sepp'in borçlarını öde
+MSG_MEISTER_TITEL,Meister-Liste komplett: Du bist Fest-Meister!,Master list complete: you are Festival Master!,Usta listesi tamam: Şenlik Ustası oldun!
