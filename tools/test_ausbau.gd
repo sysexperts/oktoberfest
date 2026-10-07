@@ -23,14 +23,14 @@ class Lauf extends Node:
 		story.kapitel_setzen(4)
 		gm._tent_stage = 3
 		gm._phase = gm.Phase.INTERMISSION
-		Game.add_money(60000 - Game.money)
+		Game.add_money(120000 - Game.money)
 		gm.net_ausbau_kauf("biergarten")
 		_check("Vor Kapitel 5 nichts", gm._ausbau.is_empty())
 		story.kapitel_setzen(5)
 		gm.net_ausbau_kauf("vip")
-		_check("VIP-Lounge gekauft", gm._ausbau.has("vip") and Game.money == 60000 - 4000, str(Game.money))
+		_check("VIP-Lounge gekauft", gm._ausbau.has("vip") and Game.money == 120000 - 4000, str(Game.money))
 		gm.net_ausbau_kauf("vip")
-		_check("Nicht doppelt", Game.money == 60000 - 4000)
+		_check("Nicht doppelt", Game.money == 120000 - 4000)
 		var vip := 0
 		for i in 2000:
 			if gm._gast_typ_waehlen() == "vip":
@@ -45,6 +45,20 @@ class Lauf extends Node:
 		_check("Ohne Akademie: höchstens Stufe 5", gm.staff_max_level() == 5 and gm.kellner_kapazitaet(5) == 12)
 		gm.net_ausbau_kauf("akademie")
 		_check("Mit Akademie: Stufe 10, größeres Tablett", gm.staff_max_level() == 10 and gm.kellner_kapazitaet(8) == 15, "%d" % gm.kellner_kapazitaet(8))
+		var vor: int = Game.money
+		gm.net_ausbau_kauf("bude2")
+		_check("Bude 2 braucht Bude 1", not gm._ausbau.has("bude2") and Game.money == vor)
+		gm.net_ausbau_kauf("filiale")
+		_check("Filiale braucht das Riesenzelt", not gm._ausbau.has("filiale"))
+		gm.net_ausbau_kauf("bude1")
+		gm.net_ausbau_kauf("bude2")
+		gm._tent_stage = 4
+		gm.net_ausbau_kauf("filiale")
+		_check("Zwei Buden und Filiale gekauft", gm._ausbau.has("bude2") and gm._ausbau.has("filiale"))
+		gm._popularity = 50.0
+		var vor2: int = Game.money
+		gm._ausbau_abend()
+		_check("Abendgewinn von Buden und Filiale", Game.money - vor2 >= 2 * (gm.BUDE_GEWINN + 50) + gm.FILIALE_GEWINN + 200, "%d" % (Game.money - vor2))
 		gm.net_ausbau_kauf("konrad")
 		_check("Konrads Zelt gekauft", gm._ausbau.has("konrad"))
 		gm._streich_art = "dieb"

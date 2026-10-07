@@ -468,8 +468,11 @@ var _wagen := {"bett": 1, "items": []}
 ## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
 ##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
 ##   handel: verkauft nachts eigenes Bier an andere Zelte · konrad: Konrads Zelt aufgekauft (keine Streiche mehr, Pacht)
-const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "akademie": 6000, "schloss": 800, "kamera": 1200, "alarm": 1500, "versicherung": 2000, "konrad": 20000}
+const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "akademie": 6000, "schloss": 800, "kamera": 1200, "alarm": 1500, "versicherung": 2000, "bude1": 4000, "bude2": 6000, "bude3": 8000, "filiale": 25000, "konrad": 20000}
 const AUSBAU_HANDEL_MASS := 12
+## Eigene Kirmesbuden (nacheinander) und die Filiale (Zweitzelt) bringen jeden Abend Gewinn, der von der Beliebtheit abhängt
+const BUDE_GEWINN := 90
+const FILIALE_GEWINN := 300
 const AUSBAU_KONRAD_PACHT := 150
 var _ausbau: Array = []
 ## Gäste in Gruppen (Familie, Stammtisch, Verein, Junggesellenabschied): sitzen zusammen, werden alle bedient = Bonus.
@@ -7352,7 +7355,7 @@ func meister_liste() -> Array:
 		["MEISTER_KONTROLLE", kontrolle, 1],
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
 		["MEISTER_WAGEN", wagen_prestige(), 6],
-		["MEISTER_AUSBAU", _ausbau.size(), 11],
+		["MEISTER_AUSBAU", _ausbau.size(), 15],
 		["MEISTER_KIRMES", _kirmes_erfuellt(), 8],
 	]
 
@@ -7414,6 +7417,13 @@ func net_ausbau_kauf(id: String) -> void:
 		return
 	if not AUSBAU.has(id) or _ausbau.has(id):
 		return
+	var voraus := {"bude2": "bude1", "bude3": "bude2"}
+	if voraus.has(id) and not _ausbau.has(str(voraus[id])):
+		_fehler("MSG_AUSBAU_ERST_BUDE")
+		return
+	if id == "filiale" and _tent_stage < 4:
+		_fehler("MSG_AUSBAU_ERST_RIESENZELT")
+		return
 	var preis: int = AUSBAU[id]
 	if not _afford(preis):
 		_fehler("MSG_NO_MONEY", ["AUSBAU_" + id.to_upper(), _eur(preis)])
@@ -7437,6 +7447,18 @@ func _ausbau_abend() -> void:
 			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
 			_add_income(erlos)
 			_melde("MSG_AUSBAU_HANDEL", [menge, _eur(erlos)], 2)
+	var buden := 0
+	for b in ["bude1", "bude2", "bude3"]:
+		if _ausbau.has(b):
+			buden += 1
+	if buden > 0:
+		var gewinn := buden * (BUDE_GEWINN + roundi(_popularity))
+		_add_income(gewinn)
+		_melde("MSG_AUSBAU_BUDEN", [buden, _eur(gewinn)], 2)
+	if _ausbau.has("filiale"):
+		var fg := FILIALE_GEWINN + roundi(_popularity) * 4
+		_add_income(fg)
+		_melde("MSG_AUSBAU_FILIALE", [_eur(fg)], 2)
 	if _ausbau.has("konrad"):
 		_add_income(AUSBAU_KONRAD_PACHT)
 		_melde("MSG_AUSBAU_PACHT", [_eur(AUSBAU_KONRAD_PACHT)], 2)

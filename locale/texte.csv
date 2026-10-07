@@ -2587,3 +2587,15 @@ MSG_ANSTICH_GUT,O'zapft is! Sauber angestochen (%d von 10): +%d Festruhm und die
 MSG_ANSTICH_SCHLECHT,Daneben! Das Bier spritzt überall hin (%d von 10). Aufwischen nicht vergessen.,Missed! Beer sprays everywhere (%d out of 10). Do not forget to mop up.,Iskaladın! Bira her yere sıçradı (10 üzerinden %d). Silmeyi unutma.
 MS_ANSTICH_5_TITLE,Sicherer Schlag,Steady hand,Sağlam vuruş
 MS_ANSTICH_5_TEXT,Steche fünfmal ein Festfass sauber an.,Tap a festival barrel cleanly five times.,Beş kez temiz bir şekilde şenlik fıçısı del.
+AUSBAU_BUDE1,Eigene Bude 1,Own stall 1,Kendi büfem 1
+AUSBAU_BUDE2,Eigene Bude 2,Own stall 2,Kendi büfem 2
+AUSBAU_BUDE3,Eigene Bude 3,Own stall 3,Kendi büfem 3
+AUSBAU_BUDE1_INFO,"Eine Kirmesbude für dich: Jeden Abend Gewinn, je beliebter dein Zelt, desto mehr","A fair stall of your own: profit every evening, the more popular your tent the more","Sana ait bir fuar büfesi: Her akşam kâr, çadırın ne kadar popülerse o kadar fazla"
+AUSBAU_BUDE2_INFO,"Eine zweite Bude (braucht Bude 1), noch mehr Abendgewinn","A second stall (needs stall 1), even more evening profit","İkinci bir büfe (büfe 1 gerekir), daha fazla akşam kârı"
+AUSBAU_BUDE3_INFO,"Eine dritte Bude (braucht Bude 2), der Gewinn wächst weiter","A third stall (needs stall 2), profit keeps growing","Üçüncü bir büfe (büfe 2 gerekir), kâr büyümeye devam eder"
+AUSBAU_FILIALE,Filiale (Zweitzelt),Branch (second tent),Şube (ikinci çadır)
+AUSBAU_FILIALE_INFO,"Ein zweites Zelt auf einem anderen Platz mit eigenem Personal, bringt jeden Abend Gewinn (braucht das Riesenzelt)","A second tent at another site with its own staff, earns every evening (needs the giant tent)","Başka bir alanda kendi personeli olan ikinci çadır, her akşam kazanç getirir (dev çadır gerekir)"
+MSG_AUSBAU_ERST_BUDE,Dafür brauchst du zuerst die Bude davor.,You need the previous stall first.,Bunun için önce önceki büfeye ihtiyacın var.
+MSG_AUSBAU_ERST_RIESENZELT,"Eine Filiale gibt es erst, wenn dein Zelt zum Riesenzelt (Stufe 4) ausgebaut ist.",A branch is only possible once your tent is the giant tent (level 4).,"Şube, ancak çadırın dev çadıra (seviye 4) yükseltildikten sonra mümkün."
+MSG_AUSBAU_BUDEN,Deine %d Buden haben heute Abend %s verdient.,Your %d stalls earned %s this evening.,%d büfen bu akşam %s kazandı.
+MSG_AUSBAU_FILIALE,Die Filiale hat heute Abend %s eingebracht.,The branch brought in %s this evening.,Şube bu akşam %s getirdi.
