@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v350.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v351.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -186,7 +186,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ◐ **Konrads Zelt umbauen:** ✔ Schanktheke, Personal (Zapfer, 2 Kellner auf Runde) und 15 Gäste (v347); ☐ Küche, Layout, Konrad läuft selbst durchs Zelt, Anbau fürs Casino | XL |
 | ✔ **Casino hinter Konrads Zelt** (Anbau mit Wänden, Kollision, Tür gesperrt bis der Türsteher einlässt, Zutritt nur mit Tarnung, v350) | L |
 | ◐ **Casino-Spiele:** ✔ Roulette (Rot/Schwarz, 50 €, Kessel dreht sich, Modell aus Blender); ☐ Kartentisch (Schafkopf/Watten), weitere | XL |
-| ◐ **Händler Gustav** (✔ Figur am Riesenrad, Koffer mit Mantel, Komplettset, Fassbohrer, Zange, Stinkbombe, Juckpulver, Tarnung an/aus, v348) und **Sabotage-System** (✔ Einsatz in Konrads Zelt: vier Ziele, Konrad patrouilliert mit Blickfeld, Erwischt = Bußgeld und Rauswurf, Rache am nächsten Tag, v349; ☐ Mantel/Maske sichtbar am Spieler, ☐ Kameras/Schlösser): Werkzeuge, Tarnung (Mantel, Komplettset, Schnauzer-Brille), Blickfeld und Verdächtig-Balken, Bußgeld, Kunden verschieben | XL |
+| ◐ **Händler Gustav** (✔ Figur am Riesenrad, Koffer mit Mantel, Komplettset, Fassbohrer, Zange, Stinkbombe, Juckpulver, Tarnung an/aus, v348) und **Sabotage-System** (✔ Einsatz in Konrads Zelt: vier Ziele, Konrad patrouilliert mit Blickfeld, Erwischt = Bußgeld und Rauswurf, Rache am nächsten Tag, v349; ✔ Mantel und Maske sichtbar am Spieler (Filzhut, Janker, Schnauzer, Brille, v351), ☐ Kameras/Schlösser): Werkzeuge, Tarnung (Mantel, Komplettset, Schnauzer-Brille), Blickfeld und Verdächtig-Balken, Bußgeld, Kunden verschieben | XL |
 | ✔ Quests 3.1 bis 3.6 und 3.4b „Das Hinterzimmer“, Mails M3-xx (ohne Horsts Erinnerung 2) | M |
 | **Neue Modelle/Figuren:** Gustav, Türsteher, Croupier, Frau Wagner, Roulette-/Kartentische, Sicherungskasten, Kellertreppe | L |
 

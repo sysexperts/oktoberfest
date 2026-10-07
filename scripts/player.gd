@@ -401,6 +401,7 @@ func _physics_process(delta: float) -> void:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
 		rotation.y = lerp_angle(rotation.y, _net_yaw, t)
+	_tarnung_pruefen(delta)
 	_update_carry_visual()
 	_besen_zeigen()
 	_update_animation(delta)
@@ -412,12 +413,47 @@ func look_setzen(code: String) -> void:
 	var l := Look.aus_code(code)
 	look_code = Look.zu_code(l)
 	_fass_loesen()
-	var neu := Figuren.einsetzen_figur(self, Look.bauen(l))
-	Look.faerben(neu, l)
+	var gezeigt := _mit_tarnung(l)
+	var neu := Figuren.einsetzen_figur(self, Look.bauen(gezeigt))
+	Look.faerben(neu, gezeigt)
 	_model = neu
 	_fass_anheften()
 	_model.visible = not _is_local
 	_cur_anim = ""
+
+## Tarnung von Gustav (Mantel, Komplettset): nur sichtbar bei selbst gebauten Charakteren. Der Look in look_code
+## bleibt der echte, die Verkleidung wird beim Bauen der Figur darübergelegt.
+var _tarnung_stufe := 0
+var _tarnung_t := 0.0
+
+func _mit_tarnung(l: Dictionary) -> Dictionary:
+	if _tarnung_stufe <= 0:
+		return l
+	var t := l.duplicate()
+	t["hut"] = "filzhut"
+	t["hut_farbe"] = Color(0.12, 0.1, 0.09).to_html(false)
+	if _tarnung_stufe >= 1 and str(t.get("geschlecht", "m")) != "w":
+		t["jacke"] = "jacke_janker"
+		t["jacke_farbe"] = Color(0.16, 0.16, 0.18).to_html(false)
+		t["jacke_muster"] = Color(0.3, 0.3, 0.33).to_html(false)
+	if _tarnung_stufe >= 2:
+		t["bart"] = "schnauzer"
+		t["brille"] = "rund"
+		t["brille_farbe"] = Color(0.08, 0.08, 0.09).to_html(false)
+	return Look.pruefen(t)
+
+func _tarnung_pruefen(delta: float) -> void:
+	_tarnung_t -= delta
+	if _tarnung_t > 0.0 or _world == null:
+		return
+	_tarnung_t = 0.5
+	var hud: Object = _world.get("_hud")
+	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	var stufe := int(z.get("tarnung_stufe", 0)) if bool(z.get("tarnung_an", false)) else 0
+	if stufe != _tarnung_stufe:
+		_tarnung_stufe = stufe
+		if look_code != "":
+			look_setzen(look_code)
 
 ## Figur aus dem Warteraum einsetzen (scripts/figuren.gd), Animationen neu starten.
 func _figur_setzen(nr: int) -> void:
