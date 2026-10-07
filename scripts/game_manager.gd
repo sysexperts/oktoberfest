@@ -440,6 +440,10 @@ var _fest_ruhm := 0
 var _fest_letzter := -100    # Tag des letzten Fests
 var _konrad_ruhm := 40
 var _fest_feuer_gezuendet := false
+## Wohnwagen-Ausbau (ein Wagen für das ganze Team): besseres Bett gibt Tempo am Tag, Einrichtung bringt Prestige (Festruhm).
+const WAGEN_BETT_PREIS := {2: 400, 3: 900}
+const WAGEN_ITEMS := {"sofa": 300, "poster": 100, "pflanze": 120, "regal": 250}
+var _wagen := {"bett": 1, "items": []}
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -1018,7 +1022,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "wagen": _wagen.duplicate(true), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1101,6 +1105,9 @@ func _load_game() -> bool:
 	_sab_tag = (sabtag as Dictionary).duplicate() if sabtag is Dictionary else {}
 	_rache_tag = int(d.get("rache_tag", -1))
 	_casino_tag = int(d.get("casino_tag", -1))
+	var wg: Variant = d.get("wagen", {})
+	if wg is Dictionary and (wg as Dictionary).has("bett"):
+		_wagen = {"bett": clampi(int((wg as Dictionary).bett), 1, 3), "items": ((wg as Dictionary).get("items", []) as Array).duplicate()}
 	var fst: Variant = d.get("fest", {})
 	_fest = (fst as Dictionary).duplicate() if fst is Dictionary else {}
 	_fest_ruhm = int(d.get("fest_ruhm", 0))
@@ -6287,7 +6294,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "wagen": _wagen.duplicate(true), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -7089,7 +7096,7 @@ func _fest_auswerten() -> void:
 	if _ereignis != "fest" or _fest.is_empty():
 		return
 	var ruhm := _served / 2 + roundi(_popularity / 2.0) + int(_fest.band) * 10 + int(_fest.feuer) * 8 - _complaints * 3
-	ruhm = maxi(ruhm, 0)
+	ruhm = maxi(ruhm + wagen_prestige(), 0)
 	_fest_ruhm += ruhm
 	_fest_letzter = _day
 	var rang := 0
@@ -7134,6 +7141,7 @@ func meister_liste() -> Array:
 		["MEISTER_FAKE", mini(int(_stats.get("fakes_gemeldet", 0)), 1), 1],
 		["MEISTER_KONTROLLE", kontrolle, 1],
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
+		["MEISTER_WAGEN", wagen_prestige(), 6],
 	]
 
 func meister_fertig() -> bool:
@@ -7148,6 +7156,37 @@ func _meister_pruefen() -> void:
 		_stats["meister_titel"] = 1
 		_story.ereignis("fest_meister")
 		_melde("MSG_MEISTER_TITEL", [], 2)
+
+func wagen_prestige() -> int:
+	return int(_wagen.bett) - 1 + (_wagen.items as Array).size()
+
+## Wohnwagen-Ausbau kaufen: "bett" (nächste Stufe) oder ein Einrichtungsstück. Nur nach Feierabend und mit Zelt.
+@rpc("any_peer", "reliable", "call_local")
+func net_wagen_kauf(id: String) -> void:
+	if not multiplayer.is_server() or not buero_offen() or not _story.aktiv or _story.kapitel < 3:
+		return
+	var preis := 0
+	if id == "bett":
+		var naechste := int(_wagen.bett) + 1
+		if not WAGEN_BETT_PREIS.has(naechste):
+			return
+		preis = int(WAGEN_BETT_PREIS[naechste])
+	elif WAGEN_ITEMS.has(id):
+		if (_wagen.items as Array).has(id):
+			return
+		preis = int(WAGEN_ITEMS[id])
+	else:
+		return
+	if not _afford(preis):
+		_fehler("MSG_NO_MONEY", ["WAGEN_" + id.to_upper(), _eur(preis)])
+		return
+	Game.add_money(-preis)
+	if id == "bett":
+		_wagen.bett = int(_wagen.bett) + 1
+	else:
+		(_wagen.items as Array).append(id)
+	_melde("MSG_WAGEN_GEKAUFT", ["WAGEN_" + id.to_upper(), _eur(preis)], 2)
+	_broadcast_meta()
 
 ## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
 @rpc("any_peer", "reliable", "call_local")

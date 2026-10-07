@@ -17,6 +17,7 @@ const BANK := preload("res://scenes/ui/desktop_bank.tscn")
 const WETTER := preload("res://scenes/ui/desktop_wetter.tscn")
 const SOCIAL := preload("res://scenes/ui/desktop_social.tscn")
 const FEST := preload("res://scenes/ui/desktop_fest.tscn")
+const WAGEN := preload("res://scenes/ui/desktop_wagen.tscn")
 const KALENDER := preload("res://scenes/ui/desktop_kalender.tscn")
 const BALD := preload("res://scenes/ui/desktop_bald.tscn")
 
@@ -33,6 +34,7 @@ const APPS := {
 	"wetter": ["DESKTOP_APP_WETTER", "ausruf", Vector2(980, 780), "intern"],
 	"social": ["DESKTOP_APP_SOCIAL", "megafon", Vector2(980, 760), "intern"],
 	"fest": ["DESKTOP_APP_FEST", "stern", Vector2(1000, 800), "intern"],
+	"wagen": ["DESKTOP_APP_WAGEN", "fahne", Vector2(900, 700), "intern"],
 }
 ## Banner der Büro-Apps: [Farbe oben, Farbe unten, Untertitel-Farbe, Untertitel-Schlüssel]
 const BANNER := {
@@ -71,7 +73,7 @@ var _takt := 0.0
 
 func _ready() -> void:
 	visible = false
-	for name: String in ["Mail", "Quests", "Shop", "Personal", "Bilanz", "Bierpreis", "Bank", "Wetter", "Social", "Kalender", "Fest"]:
+	for name: String in ["Mail", "Quests", "Shop", "Personal", "Bilanz", "Bierpreis", "Bank", "Wetter", "Social", "Kalender", "Fest", "Wagen"]:
 		var icon := get_node("%Icon" + name) as Button
 		icon.pressed.connect(_symbol_geklickt.bind(name.to_lower()))
 		var start := get_node("%Start" + name) as Button
@@ -197,6 +199,8 @@ func app_frei(app: String) -> bool:
 	var kapitel := int(_story.kapitel) if _story else 3
 	if app == "fest":
 		return kapitel >= 6   # das Fest gibt es erst nach der Geschichte
+	if app == "wagen":
+		return kapitel >= 3
 	return app in FREI[clampi(kapitel, 1, 3)]
 
 func app_oeffnen(name: String) -> void:
@@ -236,11 +240,11 @@ func app_oeffnen(name: String) -> void:
 	fenster.minimiert.connect(_fenster_minimieren)
 	match str(def[3]):
 		"intern":
-			var szene: PackedScene = {"mail": MAIL, "quests": QUESTS, "bank": BANK, "wetter": WETTER, "social": SOCIAL, "kalender": KALENDER, "fest": FEST}[name]
+			var szene: PackedScene = {"mail": MAIL, "quests": QUESTS, "bank": BANK, "wetter": WETTER, "social": SOCIAL, "kalender": KALENDER, "fest": FEST, "wagen": WAGEN}[name]
 			var app: Control = szene.instantiate()
 			fenster.inhalt().add_child(app)
 			app.set_anchors_preset(Control.PRESET_FULL_RECT)
-			app.einrichten(_gm, _hud if name in ["bank", "wetter", "social", "kalender", "fest"] else _story)
+			app.einrichten(_gm, _hud if name in ["bank", "wetter", "social", "kalender", "fest", "wagen"] else _story)
 			app.zeigen()
 		"bald":
 			var platzhalter: Control = BALD.instantiate()
@@ -416,7 +420,7 @@ func _aktualisieren() -> void:
 		return
 	_uhr()
 	var offen := _buero_offen()
-	for app: String in ["Mail", "Quests", "Shop", "Personal", "Bilanz", "Bierpreis", "Bank", "Wetter", "Social", "Kalender", "Fest"]:
+	for app: String in ["Mail", "Quests", "Shop", "Personal", "Bilanz", "Bierpreis", "Bank", "Wetter", "Social", "Kalender", "Fest", "Wagen"]:
 		var frei := app_frei(app.to_lower())
 		(get_node("%Icon" + app) as Button).visible = frei
 		(get_node("%Start" + app) as Button).visible = frei

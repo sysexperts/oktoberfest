@@ -183,6 +183,16 @@ def zeichen_fest(d, farbe):
     d.rounded_rectangle((470, 700, 554, 820), radius=20, fill=WEISS)
 
 
+def zeichen_wagen(d, farbe):
+    d.rounded_rectangle((200, 380, 830, 700), radius=70, fill=WEISS)
+    d.rounded_rectangle((260, 430, 400, 540), radius=18, fill=farbe + (255,))
+    d.rounded_rectangle((440, 430, 580, 540), radius=18, fill=farbe + (255,))
+    d.rounded_rectangle((640, 430, 760, 700), radius=18, fill=farbe + (255,))
+    d.ellipse((290, 650, 430, 790), fill=(40, 40, 50, 255))
+    d.ellipse((560, 650, 700, 790), fill=(40, 40, 50, 255))
+    d.line([(130, 560), (200, 560)], fill=WEISS, width=24)
+
+
 ICONS = [
     ('mail', 'quadrat', '#4f9bff', '#1b48c4', zeichen_mail),
     ('shop', 'kreis', '#ffa04d', '#e0501a', zeichen_shop),
@@ -195,6 +205,7 @@ ICONS = [
     ('wetter', 'raute', '#52c8ff', '#0b6fbe', zeichen_wetter),
     ('social', 'kreis', '#ff7cc4', '#b81a78', zeichen_social),
     ('fest', 'sechseck', '#ffd34a', '#d6361e', zeichen_fest),
+    ('wagen', 'kreis', '#8fd0a0', '#2c7a52', zeichen_wagen),
 ]
 
 for name, form, oben, unten, zeichner in ICONS:

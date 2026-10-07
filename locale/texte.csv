@@ -2245,3 +2245,18 @@ MEISTER_FAKE,Eine Fake-Bewertung gemeldet,Reported a fake review,Bir sahte yorum
 MEISTER_KONTROLLE,Hygienekontrolle bestanden,Passed a hygiene inspection,Hijyen denetimini geç
 MEISTER_SCHULDEN,Sepps Schulden bezahlt,Paid off Sepp's debts,Sepp'in borçlarını öde
 MSG_MEISTER_TITEL,Meister-Liste komplett: Du bist Fest-Meister!,Master list complete: you are Festival Master!,Usta listesi tamam: Şenlik Ustası oldun!
+DESKTOP_APP_WAGEN,Wohnwagen,Caravan,Karavan
+WAGEN_SUB,Mach dein Zuhause gemütlich,Make your home cosy,Evini rahat yap
+WAGEN_PRESTIGE,Prestige: %d von 6 · jedes Stück zählt beim Festruhm mit,Prestige: %d of 6 · every piece counts towards festival fame,Prestij: 6 üzerinden %d · her parça şenlik şöhretine sayılır
+WAGEN_BETT,Bett,Bed,Yatak
+WAGEN_BETT_INFO,Stufe %d · ausgeschlafen: %d %% mehr Tempo,Level %d · well rested: %d %% more speed,Seviye %d · dinlenmiş: %%%d daha hızlı
+WAGEN_BETT_AUF,Bett verbessern · %s,Upgrade bed · %s,Yatağı geliştir · %s
+WAGEN_BETT_MAX,Bett: beste Stufe,Bed: best level,Yatak: en iyi seviye
+WAGEN_SOFA,Sofa,Sofa,Kanepe
+WAGEN_POSTER,Poster,Poster,Poster
+WAGEN_PFLANZE,Zimmerpflanze,Houseplant,Salon bitkisi
+WAGEN_REGAL,Trophäenregal,Trophy shelf,Kupa rafı
+WAGEN_KAUFEN,%s kaufen · %s,Buy %s · %s,%s satın al · %s
+WAGEN_GEKAUFT,"%s (gekauft, steht im Wohnwagen)","%s (bought, in the caravan)","%s (satın alındı, karavanda)"
+MSG_WAGEN_GEKAUFT,Für den Wohnwagen gekauft: %s für %s,Bought for the caravan: %s for %s,Karavan için alındı: %s için %s
+MEISTER_WAGEN,Wohnwagen komplett ausgebaut,Caravan fully fitted out,Karavan tamamen döşendi

@@ -449,6 +449,8 @@ func _tarnung_pruefen(delta: float) -> void:
 	_tarnung_t = 0.5
 	var hud: Object = _world.get("_hud")
 	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	var bett := int((z.get("wagen", {}) as Dictionary).get("bett", 1))
+	_ausgeschlafen = 1.0 + 0.03 * float(bett - 1)
 	var stufe := int(z.get("tarnung_stufe", 0)) if bool(z.get("tarnung_an", false)) else 0
 	if stufe != _tarnung_stufe:
 		_tarnung_stufe = stufe
@@ -662,7 +664,7 @@ func _handle_movement(delta: float) -> void:
 		velocity.y = SPRUNG_TEMPO
 	var speed := SPRINT_SPEED if Input.is_action_pressed("sprint") else SPEED
 	speed *= 1.0 - TRAG_BREMSE * float(extra_kruege.size())   # mehrere Krüge bremsen
-	speed *= tempo_faktor   # z. B. 10 Maß beim Wettschleppen (scripts/wettschleppen.gd)
+	speed *= tempo_faktor * _ausgeschlafen   # tempo_faktor z. B. 10 Maß beim Wettschleppen; _ausgeschlafen vom Bett im Wohnwagen
 	if dir != Vector3.ZERO:
 		velocity.x = move_toward(velocity.x, dir.x * speed, ACCEL * delta * speed)
 		velocity.z = move_toward(velocity.z, dir.z * speed, ACCEL * delta * speed)
@@ -1577,6 +1579,8 @@ func _besen_zeigen() -> void:
 var _geschleudert_bis := 0.0
 ## Laufgeschwindigkeit von außen gedrosselt (Wettschleppen)
 var tempo_faktor := 1.0
+## Besseres Bett im Wohnwagen: je Stufe 3 % mehr Tempo (GameManager._wagen)
+var _ausgeschlafen := 1.0
 
 func wird_geschleudert() -> bool:
 	return Time.get_ticks_msec() / 1000.0 < _geschleudert_bis

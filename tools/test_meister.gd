@@ -30,7 +30,7 @@ class Lauf extends Node:
 		story.kapitel_setzen(2)
 		gm._tent_stage = 1
 		var n0 := _fertige(gm)
-		_check("Liste hat 13 Einträge", gm.meister_liste().size() == 13)
+		_check("Liste hat 14 Einträge", gm.meister_liste().size() == 14)
 		gm._stats["meisterfaesser"] = 1
 		gm._stats["sab_ok"] = 1
 		_check("Einträge zählen mit", _fertige(gm) == n0 + 2, "%d -> %d" % [n0, _fertige(gm)])
@@ -46,6 +46,7 @@ class Lauf extends Node:
 		gm._stats["fakes_gemeldet"] = 1
 		for r in range(1, 7):
 			gm._stats["hire_%d" % r] = 1
+		gm._wagen = {"bett": 3, "items": ["sofa", "poster", "pflanze", "regal"]}
 		story.flags["kontrolle_bestanden"] = true
 		story.flags["rezeptseite3"] = true
 		for i in range(1, 10):
