@@ -11,6 +11,8 @@ const Figuren := preload("res://scripts/figuren.gd")
 @export var tempo := 1.2
 ## Wie lange die Figur an jedem Punkt der Runde stehen bleibt
 @export var pause := 2.0
+## Konrads Zelt wächst mit der Geschichte: diese Figur ist erst ab diesem Kapitel da
+@export var ab_kapitel := 1
 
 var _figur: Figur
 var _start: Vector3
@@ -62,7 +64,11 @@ func _lod() -> void:
 	if kamera == null or _figur == null:
 		return
 	var abstand := global_position.distance_to(kamera.global_position)
-	_figur.visible = abstand < LOD_SICHTBAR
+	var welt := get_tree().current_scene
+	var hud: Object = welt.get("_hud")
+	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	var kapitel := int((z.get("story", {}) as Dictionary).get("kapitel", 1))
+	_figur.visible = abstand < LOD_SICHTBAR and kapitel >= ab_kapitel
 	var nah := abstand < LOD_ANIMATION
 	if nah == _nah or _figur.anim == null:
 		return
