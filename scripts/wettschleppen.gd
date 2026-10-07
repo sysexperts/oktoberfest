@@ -28,6 +28,8 @@ var aktiv := false
 var ich_laufe := false
 var _t := -COUNTDOWN
 var _huber_zeit := 17.0
+## Turnierstufe 0 bis 4 (jeder Sieg macht Konrad schneller)
+var _stufe := 0
 var _naechstes := 1
 var _verschuettet := 0
 var _schwapp := 0.0
@@ -85,13 +87,14 @@ func _gross(text: String) -> void:
 		hud.grosser_text(text)
 
 ## Vom Server bei allen: Duell beginnt. duellant = Peer-ID des Herausforderers.
-func starten(duellant: int, huber_zeit: float) -> void:
+func starten(duellant: int, huber_zeit: float, stufe := 0) -> void:
 	var gm := get_tree().current_scene
 	aktiv = true
 	visible = true
 	_t = -COUNTDOWN
 	_gezaehlt = -1
 	_huber_zeit = huber_zeit
+	_stufe = stufe
 	_naechstes = 1
 	_verschuettet = 0
 	_schwapp = 0.0
@@ -209,6 +212,7 @@ func _anzeige_aktualisieren() -> void:
 	%Huber.text = tr("DUELL_HUBER_TOR") % _huber_tor() if _t < _huber_zeit else tr("DUELL_HUBER_FERTIG") % _huber_zeit
 	%Schwapp.value = _schwapp
 	%Titel.text = tr("DUELL_TITEL")
+	%Stufe.text = tr("DUELL_STUFE") % [_stufe + 1, "●".repeat(_stufe + 1) + "○".repeat(4 - _stufe)]
 	%Hinweis.text = tr("DUELL_HINWEIS") % (_tore.size() - 1)
 
 func _fertig() -> void:

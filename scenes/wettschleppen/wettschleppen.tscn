@@ -77,7 +77,7 @@ anchor_right = 0.5
 offset_left = -260.0
 offset_top = 16.0
 offset_right = 260.0
-offset_bottom = 150.0
+offset_bottom = 176.0
 grow_horizontal = 2
 mouse_filter = 2
 theme = ExtResource("4_theme")
@@ -102,6 +102,14 @@ theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
 theme_override_fonts/font = ExtResource("5_fraktur")
 theme_override_font_sizes/font_size = 28
 text = "DUELL_TITEL"
+horizontal_alignment = 1
+
+[node name="Stufe" type="Label" parent="Anzeige/Kasten/Rand/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.7, 0.35, 1)
+theme_override_font_sizes/font_size = 16
+text = "DUELL_STUFE"
 horizontal_alignment = 1
 
 [node name="Zeile" type="HBoxContainer" parent="Anzeige/Kasten/Rand/Spalte"]

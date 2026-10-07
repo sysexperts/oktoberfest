@@ -6806,14 +6806,14 @@ func net_duell_start() -> void:
 	var stufe := mini(int(_stats.get("duell_siege", 0)), 4)
 	var zeit := laenge / DUELL_GEHTEMPO * float(DUELL_FAKTOR[_schwierigkeit]) * (1.0 - 0.04 * float(stufe)) * randf_range(0.97, 1.03)
 	_duell = {"peer": s, "huber": zeit}
-	_net_duell_start.rpc(s, zeit)
+	_net_duell_start.rpc(s, zeit, stufe)
 	_broadcast_meta()
 
 @rpc("authority", "reliable", "call_local")
-func _net_duell_start(peer: int, huber_zeit: float) -> void:
+func _net_duell_start(peer: int, huber_zeit: float, stufe := 0) -> void:
 	var w := get_tree().get_first_node_in_group("wettschleppen")
 	if w:
-		w.starten(peer, huber_zeit)
+		w.starten(peer, huber_zeit, stufe)
 
 @rpc("any_peer", "reliable", "call_local")
 func net_duell_ende(zeit: float, verschuettet: int) -> void:

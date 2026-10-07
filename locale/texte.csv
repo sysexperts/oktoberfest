@@ -1082,6 +1082,7 @@ WORLD_LECK,Leck! ({interact} halten),Leak! (hold {interact}),Sızıntı! ({inter
 HUD_HUBER_WETTE,Wette mit Konrad: %s (Einsatz %s),Bet with Konrad: %s (stake %s),Konrad ile bahis: %s (bahis %s)
 HUD_HUBER_ANGEBOT,Konrad bietet eine Wette an — sprich ihn an,Konrad is offering a bet — talk to him,Konrad bahis teklif ediyor — onunla konuş
 DUELL_TITEL,Maß-Wettschleppen,Stein-Carrying Race,Kupa Taşıma Yarışı
+DUELL_STUFE,Runde %d von 5  %s,Round %d of 5  %s,Tur %d / 5  %s
 DUELL_START_ZIEL,Start · Ziel,Start · Finish,Başlangıç · Bitiş
 DUELL_LOS,Los!,Go!,Başla!
 DUELL_HUBER_TOR,Konrad: Tor %d,Konrad: gate %d,Konrad: kapı %d
