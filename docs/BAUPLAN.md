@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v364.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v365.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -235,8 +235,8 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | Aufgabe | Aufwand |
 |---|---|
 | Geld, Preise, Schulden, Belohnungen, Fristen, Bußgeld (mit `tools/sim_saison`, Testspielen) | M |
-| Koop-Test aller Systeme (Quests, Mails, Desktop, Casino, Sabotage) | M |
-| Übersetzungen EN/TR prüfen, Texte der noch fehlenden ca. 50 Mails | M |
+| ◐ Koop-Test aller Systeme: Codeprüfung der neuen RPCs (Server entscheidet, Clients zeigen über den gemeinsamen Zustand) ✔; ☐ echter Test mit Server und mehreren Spielern (`tools/test_koop_bots.sh` gegen den Live-Server, `tools/test_netz.sh`) | M |
+| ◐ Übersetzungen EN/TR prüfen: ✔ automatische Prüfung `python tools/pruefe_texte.py` (1.972 Zeilen, keine leeren Texte, gleiche Platzhalter, keine fehlenden Schlüssel, kein „Wiesn“, v365); ☐ Qualität des Türkischen von Muttersprachlern lesen lassen, ☐ Rest-Mails | M |
 | Performance (viele Gäste, Konrads Zelt, Casino), Bugs, Clipping | M |
 
 ---
