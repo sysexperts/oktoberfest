@@ -1990,3 +1990,36 @@ CHEF_HOPFEN_2_DU,"Ich kenne einen Bauern, der baut selbst welchen an. Hier, drei
 CHEF_HOPFEN_2_IHR,"Ich kenne einen Bauern, der baut selbst welchen an. Hier, drei Dolden, die reichen für den ersten Sud.","I know a farmer who grows his own. Here, three cones, that is enough for the first brew.","Kendi yetiştiren bir çiftçi tanıyorum. Al, üç salkım, ilk demleme için yeter."
 MSG_HOPFEN_BLOCKIERT,Der Hopfen ist ausverkauft: Konrad hat alles aufgekauft,The hops are sold out: Konrad bought everything,Şerbetçiotu tükendi: Konrad hepsini satın aldı
 MSG_FASS_ABGEFUELLT,Das Bier ist im Lager: %d Maß eigenes Festbier,The beer is in storage: %d mugs of your own fest beer,Bira depoda: %d kupa kendi festival birası
+Q_5_1_TITLE,Das letzte Angebot,The last offer,Son teklif
+Q_5_1_TEXT,Konrad hat dir noch einmal geschrieben. Lies seine Mail und antworte.,Konrad has written to you once more. Read his mail and answer.,Konrad sana bir kez daha yazdı. E-postasını oku ve yanıtla.
+Q_5_2_TITLE,Das Turnier beginnt,The tournament begins,Turnuva başlıyor
+Q_5_2_TEXT,Konrad fordert dich zum Maß-Wettschleppen heraus. Sprich vor seinem Zelt mit ihm und gewinn das Duell der ersten Stufe.,Konrad challenges you to the mug-carrying race. Talk to him in front of his tent and win the first-level duel.,Konrad seni kupa taşıma yarışına davet ediyor. Çadırının önünde onunla konuş ve ilk seviye düelloyu kazan.
+Q_5_3_TITLE,Die dritte Seite,The third page,Üçüncü sayfa
+Q_5_3_TEXT,Konrad hat die dritte Seite von Sepps Festbier-Rezept. Nach dem Duell muss er sie dir geben. Geh zu seinem Zelt.,Konrad has the third page of Sepp's fest beer recipe. After the duel he has to hand it over. Go to his tent.,Konrad'da Sepp'in festival birası tarifinin üçüncü sayfası var. Düellodan sonra onu sana vermek zorunda. Çadırına git.
+Q_5_4_TITLE,Das perfekte Festbier,The perfect fest beer,Mükemmel festival birası
+Q_5_4_TEXT,Mit allen drei Seiten kannst du das Festbier perfektionieren. Brau insgesamt drei Suds.,With all three pages you can perfect the fest beer. Brew three batches in total.,Üç sayfayla festival birasını mükemmelleştirebilirsin. Toplam üç demleme yap.
+Q_5_5_TITLE,Das Riesenzelt,The giant tent,Dev çadır
+Q_5_5_TEXT,Für das große Fest braucht es ein Riesenzelt. Bau im Shop auf die höchste Stufe aus.,The big festival needs a giant tent. Expand to the highest level in the shop.,Büyük festival için dev bir çadır gerekiyor. Mağazadan en yüksek seviyeye genişlet.
+Q_5_6_TITLE,Die letzte Rate,The last instalment,Son taksit
+Q_5_6_TEXT,"Zahle die letzten Schulden von Sepp in der Bank-App ab, bis nichts mehr offen ist.",Pay off Sepp's last debts in the bank app until nothing is left.,Sepp'in son borçlarını banka uygulamasında hiçbir şey kalmayana kadar öde.
+Q_5_7_TITLE,Das große Fest,The big festival,Büyük festival
+Q_5_7_TEXT,"Buche den Star-Act und mach das Zelt voll. Wenn du mit einem vollen Zelt und dem Star-Act Feierabend machst, ist das große Fest geschafft.","Book the star act and fill the tent. If you close the day with a full tent and the star act, the big festival is done.",Yıldız sanatçıyı tut ve çadırı doldur. Dolu bir çadır ve yıldız sanatçıyla günü bitirirsen büyük festival tamamdır.
+MAIL_M5_01_BETREFF,Das letzte Angebot,The last offer,Son teklif
+MAIL_M5_01_TEXT,"Sepps Patenkind. Du hast mehr durchgehalten, als ich dachte. Ich biete dir 10.000 € für das Zelt. Denk gut nach. – K.","Sepp's godchild. You lasted longer than I thought. I offer you €10,000 for the tent. Think carefully. – K.",Sepp'in vaftiz çocuğu. Düşündüğümden daha fazla dayandın. Çadır için sana 10.000 € veriyorum. İyi düşün. – K.
+MAIL_M5_01_A1,"Nein. Das Zelt gehört Sepp, und jetzt mir.","No. The tent belongs to Sepp, and now to me.","Hayır. Çadır Sepp'e ait, şimdi bana."
+MAIL_M5_01_A2,Ich denk drüber nach. (Nein.),I will think about it. (No.),Düşüneceğim. (Hayır.)
+MAIL_M5_01_A3,Komm doch und hol es dir.,Come and get it.,Gel ve al.
+MAIL_M5_02_BETREFF,Das war ein Fest,That was a festival,Bu bir festivaldi
+MAIL_M5_02_TEXT,"Das war das schönste Fest, das ich je erlebt habe. Der Sepp hätte jedem eine Runde ausgegeben. Das Zelt gehört jetzt wirklich dir.
+
+Horst","That was the finest festival I have ever seen. Sepp would have bought everyone a round. The tent is really yours now.
+
+Horst","Bu yaşadığım en güzel festivaldi. Sepp herkese bir tur ısmarlardı. Çadır artık gerçekten senin.
+
+Horst"
+KONRAD_SEITE_1_DU,Du hast mich geschlagen. Fair und ehrlich. Das muss ich anerkennen.,You beat me. Fair and square. I have to admit that.,Beni yendin. Adil ve dürüstçe. Bunu kabul etmeliyim.
+KONRAD_SEITE_1_IHR,Ihr habt mich geschlagen. Fair und ehrlich. Das muss ich anerkennen.,You beat me. Fair and square. I have to admit that.,Beni yendiniz. Adil ve dürüstçe. Bunu kabul etmeliyim.
+KONRAD_SEITE_2_DU,"Hier, die dritte Seite des Rezepts. Der Sepp hat sie mir damals gegeben, bevor wir uns zerstritten haben. Ich wollte ihm helfen, glaub mir das.","Here, the third page of the recipe. Sepp gave it to me back then, before we fell out. I wanted to help him, believe me.","Al, tarifin üçüncü sayfası. Sepp onu bana vermişti, aramız bozulmadan önce. Ona yardım etmek istedim, inan bana."
+KONRAD_SEITE_2_IHR,"Hier, die dritte Seite des Rezepts. Der Sepp hat sie mir damals gegeben, bevor wir uns zerstritten haben. Ich wollte ihm helfen, glaubt mir das.","Here, the third page of the recipe. Sepp gave it to me back then, before we fell out. I wanted to help him, believe me.","Al, tarifin üçüncü sayfası. Sepp onu bana vermişti, aramız bozulmadan önce. Ona yardım etmek istedim, inanın bana."
+KONRAD_SEITE_3_DU,"Mach etwas Gutes daraus. Und sag Horst, er soll dir erzählen, wie es wirklich war.",Make something good of it. And tell Horst to tell you how it really was.,Ondan güzel bir şey yap. Ve Horst'a sana gerçekte nasıl olduğunu anlatmasını söyle.
+KONRAD_SEITE_3_IHR,"Macht etwas Gutes daraus. Und sagt Horst, er soll euch erzählen, wie es wirklich war.",Make something good of it. And tell Horst to tell you how it really was.,Ondan güzel bir şey yapın. Ve Horst'a size gerçekte nasıl olduğunu anlatmasını söyleyin.

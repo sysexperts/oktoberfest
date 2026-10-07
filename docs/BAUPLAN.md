@@ -3,6 +3,56 @@
 Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober Aufwandsschätzung. **Gebaut wird erst auf dein Kommando.**
 **Aufwand** in „Sitzungen" (eine Sitzung = ein zusammenhängender Arbeitsblock mit mir): **S** = 0,5 · **M** = 1 · **L** = 3 · **XL** = 5 · **XXL** = 8. Das sind Schätzungen, die sich beim Bauen verschieben. Summe unten.
 
+## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
+
+**Stand 07.10.2026, Version v336.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+
+### Regeln des Nutzers (unbedingt einhalten)
+- **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
+- **Alles als Szenen/Knoten (.tscn) im Editor-Stil**, keine prozedural gebauten Oberflächen (Zeilen aus instanzierten Szenen sind die Ausnahme).
+- **Nur echte deutsche Namen** (Horst, Konrad, Gerhard, Herr Schneider, Frau Wagner, Dieter Maier, Gustav). Nie erfundene Mundartnamen. Das Wort **„Wiesn" ist geschützt** und darf nirgends vorkommen (Zeitung heißt „Festblatt", Bank „Festbank").
+- **Festleiter Horst** (in allen Sprachen), Konrad ohne Nachnamen. Horst gehört das Festbüro nicht, es ist das **Festbüro des Spielers** („dein Festbüro"). In Mails des Amts: „Sehr geehrte Herren und Damen", nie „Herr".
+- Texte immer **Deutsch, Englisch, Türkisch** in `locale/texte.csv` (Spalten: Schlüssel, de, en, tr). Du-/Ihr-Form: Schlüssel mit `_DU` und `_IHR` (Koop), sonst ein neutraler Schlüssel.
+- **Committen und pushen** nach jedem fertigen Schritt (Version in `project.godot` unter `config/version` hochzählen, Commit-Text endet mit `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`). **Steam-Upload nur, wenn der Nutzer es verlangt** (`bash tools/steam_upload.sh`, BuildID nennen; Branch setzt der Nutzer in Steamworks). Zum Upload gehört ein `git push`. Die zwei ZIPs in `assets/animationen_mixamo` nie mit hinzufügen (`git add -A -- . ':!assets/animationen_mixamo'`).
+- **3D-Modelle** selbst in Blender bauen (`"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P tools/blender/<name>.py`, Beispiel `tools/blender/sau.py`) oder kostenlose CC0-Sets suchen und Quelle und Lizenz in `docs/lizenzen` festhalten. Kein Meshy.
+- Beim Spielstart darf es **nicht ruckeln** (Besucher werden gestaffelt gebaut, siehe `scripts/crowd.gd`).
+
+### Werkzeuge und Pfade
+- Godot: `"C:/Users/vase/OneDrive - Intelego GmbH/Desktop/Godot.exe"` (Version 4.7.2). Nach Änderungen an Szenen/Skripten zuerst `... --headless --import`, dann Tests. Zufällige „Could not preload"-Fehler beim Headless-Start sind ein bekannter Fehlalarm bei parallelen Godot-Prozessen: einfach wiederholen.
+- **Heredocs in der Bash-Shell zerstören Backslashes** (`\n` wird zu einem Zeilenumbruch). Längere Skripte immer mit dem Write-Werkzeug als Datei schreiben und ausführen, nicht per Heredoc. Python-Patch-Skripte liegen als Beispiele in `build/p*_*.py`.
+- Keine neuen `class_name`s (Server-Klassencache). Einbinden per `preload`. Neue Dinge in der Welt erkennt der Spieler **per Methoden** (Duck-Typing): `hinweis_text(geschlossen)`, `gefallen_aktion(spieler)`, `wohnwagen_aktion(spieler)`, `interact_point()`. Beispiele: `scripts/gefallen_taeter.gd`, `scripts/security_posten.gd`, `scripts/wohnwagen_ding.gd`.
+- Desktop-Oberflächen werden von `build/gen_desktop4.py` erzeugt (Teile in `build/gen_*_teil.py`). Die alten Fenster (Festbüro, Zeltcomputer) kommen aus `build/orig/*.tscn` über `build/p2_legacy.py` und `tools/remap_app_farben.py`: **Quelle in `build/orig` ändern, dann `python build/p2_legacy.py`**. Look: nachtblaues Glas, Akzentfarbe je App, Farbbanner (siehe Speicher `desktop-app-look`).
+- Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
+
+### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`)
+`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
+
+### Wo was liegt
+- **Story-Kern:** `scripts/story/story.gd` (Kapitel, Quests mit Zuständen angeboten/offen/erfüllt/verfallen, Post, Hinweise, Flaggen), Daten in `daten/quests.json`, `daten/mails.json`, `daten/hinweise.json` (Texte per Schlüssel in der CSV). Messwerte für Quest-Bedingungen: `GameManager._story_messwerte()`. Neue Quest = Eintrag in `quests.json` (+ Mail + Texte), Flaggen setzt `_story.ereignis("name")`. Gespräche, die Flaggen setzen: Tabellen `STORY_GESPRAECHE` in `scripts/npc_festleiter.gd`, Konrad-Dialoge in `scripts/npc_huber.gd`, Server-RPC `net_story_flag` (Whitelist im GameManager).
+- **Kapitelfreischaltung Desktop:** `scripts/ui/desktop.gd` (`FREI`), Apps als eigene Szenen `scenes/ui/desktop_*.tscn`.
+- **Gefallen:** `scripts/gefallen.gd` (Server-Ablauf; Arten `spanner`, `dieb`, `sau`, `spion`, `punkte` mit Varianten `sturm`, `feuer`), Daten im Quest-Feld `gefallen`. Neue Arten brauchen nur Quest, Mail, Texte und ein Verhalten in `scripts/gefallen_taeter.gd`.
+- **Security:** Rolle 5 (`ROLE_SECURITY`), Posten `scenes/gefallen/security_posten.tscn`.
+- **Wohnwagen-Innenraum:** `scenes/wohnwagen_innen.tscn` (liegt bei z=600, Eintritt über die Tür, Bett, Laptop).
+- **Tutorial:** Schritte 0 bis 9 = Kapitel 1 (`QUEST_COUNT := 10` im GameManager), danach führt die Story-Hauptquest (Anzeige im HUD).
+
+### Nächste Schritte (Vorschlag, in dieser Reihenfolge)
+1. **Kapitel 5 abrunden:** Cutscene und Feuerwerk fürs große Fest, Konrads Auftritt, Stufenanzeige für das Turnier (P8).
+2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino im Keller samt Türsteher und Spielen (XL), Händler Gustav und Sabotage-System mit Tarnung (XL), Frau Wagner als Figur im Zelt (Hygiene-Überraschungskontrolle), Konrad wirbt Mitarbeiter ab, Quest 3.4b „Das Hinterzimmer", Fake-Bewertungen in der Social-App.
+3. **P7 Rest:** Qualitätsstufen und Rezeptbuch (drei Seiten), Premiumpreis fürs eigene Bier, Bräumeister Gerhard als Personal (Rolle 6), weitere Streiche.
+4. **P5 Rest:** Gefallen Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen (Muster siehe `gefallen.gd`).
+5. **P4 Rest:** Nebenquest „Happy Hour" (40 Maß in einer Stunde).
+6. **P9 bis P11:** Fest-App und Festtag-System, Meister-Liste, Wohnwagen je Spieler, Late-Game-Ausgaben, Kirmes-Quests, Meilensteine, Zeitung, Brabbelton, Balancing mit `tools/sim_saison`, **Koop-Test aller Systeme** (bisher nur Einzelspieler-Tests!), Übersetzungen prüfen, Leistung.
+7. Vor jedem Steam-Upload: alle Tests oben laufen lassen, Version hochzählen, `git push`.
+
+### Bekannte Lücken und Risiken
+- Alle Kapitel sind **nur im Test** durchgespielt, nicht von Hand und nicht im Koop. Ein Bot-Durchlauf (`tools/sim_saison`) für die ganze Story fehlt.
+- Quest 5.4 „Das perfekte Festbier" ist vorläufig „drei Suds gebraut", bis es Qualitätsstufen gibt. Quest 3.4 fängt den Saboteur direkt statt ihn zu einem Security zu tragen.
+- Die Schulden stehen bei 5.000 € (`SCHULDEN_START`), Quest 2.5 verlangt davon 1.500 € zurück. Beträge sind Platzhalter fürs Balancing.
+- Bank-Texte, Mails und Quest-Texte sind Entwürfe: Ton warm und humorvoll, nach dem Testspielen glätten.
+- `docs/PLAN_STORY.md` und die `TEXTE_K1` bis `K5` sind der Plan und enthalten teils noch das Wort „Wiesn" (nicht ins Spiel übernehmen).
+
+---
+
 ## Fortschritt (laufend gepflegt)
 
 **Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v333.
@@ -16,8 +66,9 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P4 Kapitel 2 | ✔ fertig bis auf die Nebenquest „Happy Hour" | v329 bis v332 |
 | P5 Gefallen und Security | ◐ (Security als Personal ✔ v334) System plus sechs Gefallen (Spanner, Taschendieb, Sau, Konrads Spion, Sturmwarnung, Brand) und vier Security-Posten fertig; 5 weitere Gefallen (Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen), Security als Personal offen | v330 bis v333 |
 | P6 Kapitel 3 | ◐ Streiche und Quests 3.1 bis 3.6 spielbar (ohne Casino); Konrads Zelt, Casino, Sabotage-System, Frau Wagner offen | v334 |
-| P7 Kapitel 4 | ◐ Quests 4.1 bis 4.7 spielbar (ohne Qualität und Bräumeister) | v335 |
-| P8 bis P11 | ☐ offen | |
+| P7 Kapitel 4 | ◐ Quests 4.1 bis 4.7 spielbar (ohne Qualität, Rezeptbuch und Bräumeister) | v335 |
+| P8 Kapitel 5 | ◐ Quests 5.1 bis 5.7 spielbar (großes Fest = Feierabend mit Star-Act, ohne Cutscene und Feuerwerk) | v336 |
+| P9 bis P11 | ☐ offen | |
 
 ---
 
@@ -155,9 +206,9 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| **Duell-Turnier** reaktivieren (Wettschleppen, Code vorhanden), Stufen 1 bis 5 | M |
-| Riesenzelt (Zeltstufe 4, vorhanden), Quests 5.1 bis 5.7 | M |
-| **Großes Fest:** Cutscene, Star-Act, Feuerwerk, Konrads Auftritt, Brief, Meldung | L |
+| ◐ **Duell-Turnier** reaktivieren (✔ in der Story ab 5.2 wiederholbar, Konrad wird je Sieg schneller; ☐ eigene Stufenanzeige) | M |
+| ✔ Riesenzelt (Zeltstufe 4, vorhanden), Quests 5.1 bis 5.7 | M |
+| ◐ **Großes Fest:** ✔ Star-Act-Bedingung, Brief, Meldung; ☐ Cutscene, Feuerwerk, Konrads Auftritt | L |
 
 ## P9 · Endgame (XL)
 

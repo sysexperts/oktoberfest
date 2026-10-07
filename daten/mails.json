@@ -403,5 +403,38 @@
   "betreff": "MAIL_M4_03_BETREFF",
   "text": "MAIL_M4_03_TEXT",
   "antworten": []
+ },
+ {
+  "id": "M5-01",
+  "absender": "KONRAD",
+  "betreff": "MAIL_M5_01_BETREFF",
+  "text": "MAIL_M5_01_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_M5_01_A1",
+    "folge": {
+     "flag": "konrad_letztes_angebot"
+    }
+   },
+   {
+    "text": "MAIL_M5_01_A2",
+    "folge": {
+     "flag": "konrad_letztes_angebot"
+    }
+   },
+   {
+    "text": "MAIL_M5_01_A3",
+    "folge": {
+     "flag": "konrad_letztes_angebot"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M5-02",
+  "absender": "HORST",
+  "betreff": "MAIL_M5_02_BETREFF",
+  "text": "MAIL_M5_02_TEXT",
+  "antworten": []
  }
 ]

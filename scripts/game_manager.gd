@@ -1955,7 +1955,7 @@ func _story_messwerte() -> Dictionary:
 		"feierabend": _shift_num >= 1 and _phase == Phase.INTERMISSION,
 		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
 		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": _schulden,
-		"keller_offen": keller_offen(), "zutaten_gekauft": int(_stats.get("zutat_malz", 0)) > 0 and int(_stats.get("zutat_hopfen", 0)) > 0,
+		"duell_siege": int(_stats.get("duell_siege", 0)), "keller_offen": keller_offen(), "schulden_frei": _schulden <= 0, "staract_gebucht": _artist_tier >= 3, "zutaten_gekauft": int(_stats.get("zutat_malz", 0)) > 0 and int(_stats.get("zutat_hopfen", 0)) > 0,
 		"suds_gebraut": int(_stats.get("suds", 0)), "faesser_abgefuellt": int(_stats.get("faesser", 0)), "eigenbier_bedient": int(_stats.get("eigenbier_bedient", 0)),
 	}
 
@@ -5431,6 +5431,8 @@ func _end_shift(reason := 0) -> void:
 	_saison.tage = int(_saison.tage) + 1
 	# Tag ohne eine einzige Pfütze (und mit Betrieb) — Meilenstein SAUBER_5
 	_story.ereignis("pfuetzenfreier_tag", _urin_count == 0 and _served >= 10)
+	if _artist_tier >= 3 and _served >= 20 and _story.zustand("5.7") == "offen":
+		_story.ereignis("fest_gefeiert")   # das große Fest: Star-Act, volles Zelt, Feierabend
 	if _urin_count == 0 and _served >= 10:
 		_stats.tage_sauber = int(_stats.get("tage_sauber", 0)) + 1
 	if ist_finale():
@@ -6340,7 +6342,7 @@ func _hinweis(ausloeser: String) -> void:
 ## Story-Flaggen, die Spieler per Gespräch setzen (Horst nimmt den Zettel, Konrad wird zur Rede gestellt)
 @rpc("any_peer", "reliable", "call_local")
 func net_story_flag(name: String) -> void:
-	if not multiplayer.is_server() or not name in ["zettel_uebergeben", "konrad_zur_rede", "schluessel_erhalten", "hopfen_besorgt"]:
+	if not multiplayer.is_server() or not name in ["zettel_uebergeben", "konrad_zur_rede", "schluessel_erhalten", "hopfen_besorgt", "rezeptseite3"]:
 		return
 	if name == "hopfen_besorgt":
 		_zutat["hopfen"] = int(_zutat.get("hopfen", 0)) + 3   # Horst hat Hopfen von einem Bauern
@@ -6349,7 +6351,16 @@ func net_story_flag(name: String) -> void:
 	_broadcast_meta()
 
 ## Kapitel geschafft: Meldung an alle (nur der Server setzt Kapitel)
+## Sepps letzter Brief nach dem großen Fest (bei allen)
+@rpc("authority", "reliable", "call_local")
+func net_brief_ende(mehrere: bool) -> void:
+	var kino := get_node_or_null("Kino")
+	if kino and kino.has_method("brief_zeigen"):
+		kino.brief_zeigen(mehrere, "BRIEF_ENDE", 2, "BRIEF_ENDE_TITEL")
+
 func _kapitel_gewechselt(nr: int) -> void:
+	if nr == 6 and multiplayer.is_server():
+		net_brief_ende.rpc(multiplayer.get_peers().size() > 0)
 	if multiplayer.is_server() and nr > 1:
 		_melde("MSG_KAPITEL_FERTIG", ["KAPITEL_%d_NAME" % (nr - 1)], 2)
 
@@ -6776,6 +6787,8 @@ var _duell := {}
 var _duell_saison := 0
 
 func duell_moeglich() -> bool:
+	if _story.aktiv and (_story.zustand("5.2") == "offen" or _story.zustand("5.2") == "erfuellt"):
+		return _duell.is_empty() and _tent_stage > 0
 	return ist_finale() and _duell.is_empty() and _duell_saison != _saison_nr and _tent_stage > 0
 
 @rpc("any_peer", "reliable", "call_local")
@@ -6787,7 +6800,9 @@ func net_duell_start() -> void:
 		s = 1
 	var w := get_tree().get_first_node_in_group("wettschleppen")
 	var laenge: float = w.strecken_laenge() if w else 55.0
-	var zeit := laenge / DUELL_GEHTEMPO * float(DUELL_FAKTOR[_schwierigkeit]) * randf_range(0.97, 1.03)
+	# Stufe 1 bis 5: jeder Sieg macht Konrad ein Stück schneller
+	var stufe := mini(int(_stats.get("duell_siege", 0)), 4)
+	var zeit := laenge / DUELL_GEHTEMPO * float(DUELL_FAKTOR[_schwierigkeit]) * (1.0 - 0.04 * float(stufe)) * randf_range(0.97, 1.03)
 	_duell = {"peer": s, "huber": zeit}
 	_net_duell_start.rpc(s, zeit)
 	_broadcast_meta()
@@ -6831,11 +6846,6 @@ func _net_duell_ergebnis(gewonnen: bool, gesamt: float, huber_zeit: float, versc
 		return
 	# Nach dem Sieg: Sepps letzter Brief (scripts/ui/kino.gd)
 	var danach := Callable()
-	if gewonnen:
-		danach = func() -> void:
-			var kino := get_node_or_null("Kino")
-			if kino and kino.has_method("brief_zeigen"):
-				kino.brief_zeigen(mehrere, "BRIEF_ENDE", 2, "BRIEF_ENDE_TITEL")
 	dialog.zeigen(tr("HUBER_NAME"), zeilen, danach)
 
 # ================================================= Festkalender

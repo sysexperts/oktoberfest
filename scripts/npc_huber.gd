@@ -80,6 +80,13 @@ func ansprechen() -> void:
 			rede.append(_t(k + a))
 		dialog.zeigen(wer, rede, func() -> void: welt.net_story_flag.rpc_id(1, "konrad_zur_rede"))
 		return
+	# Kapitel 5: Konrad gibt die dritte Rezeptseite heraus (Quest 5.3)
+	if story != null and story.aktiv and story.zustand("5.3") == "offen":
+		var seite: Array[String] = []
+		for k in ["KONRAD_SEITE_1", "KONRAD_SEITE_2", "KONRAD_SEITE_3"]:
+			seite.append(_t(k + a))
+		dialog.zeigen(wer, seite, func() -> void: welt.net_story_flag.rpc_id(1, "rezeptseite3"))
+		return
 	var zeilen: Array[String] = []
 	if int(z.get("kredit", 0)) > 0:
 		zeilen.append(_t("HUBER_PLEITE" + a))
