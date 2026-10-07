@@ -1315,6 +1315,9 @@ func _apply_crowd(clock: float) -> void:
 		f = lerpf(0.7, 1.0, clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.0, 1.0))
 	if _ereignis == "regen":
 		f *= 0.25   # bei Regen ist draußen kaum jemand
+	# Am allerersten Tag ist die Kirmes leer: die Besucher kommen erst, wenn man das erste Mal aufwacht (Tag 2)
+	if _day <= 1:
+		f = 0.0
 	_crowd.set_density(f)
 
 ## Gece görsel: güneş + ortam ışığını kıs (akşam hissi).
