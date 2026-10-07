@@ -421,7 +421,7 @@ zeilen = Array[String](["CHEF_SCHLAF_1", "CHEF_SCHLAF_2"])
 [node name="9_Theke" type="Node3D" parent="Rundgang" unique_id=84804737]
 script = ExtResource("76_station")
 schritt = 9
-zeilen = Array[String](["CHEF_ZAPF_1", "CHEF_ZAPF_2", "CHEF_ZAPF_3", "CHEF_ZAPF_4"])
+zeilen = Array[String](["CHEF_ZAPF_1", "CHEF_ZAPF_1B", "CHEF_ZAPF_2", "CHEF_ZAPF_3", "CHEF_ZAPF_4"])
 
 [node name="W1" type="Marker3D" parent="Rundgang/9_Theke" unique_id=448228291]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -5)
