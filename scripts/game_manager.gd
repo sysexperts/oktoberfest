@@ -281,9 +281,12 @@ const ROLE_KELLNER := 2
 const ROLE_REINIGUNG := 3
 const ROLE_ZAPFER := 4
 const ROLE_SECURITY := 5   # ab Kapitel 3: hält Prügeleien fern und stellt Saboteure
+const ROLE_BRAEUMEISTER := 6   # ab Kapitel 4: braut im Keller von allein (Bräumeister Gerhard)
+const BRAEU_POINT := Vector3(-6.5, -3.3, -3.0)   # steht im Braukeller zwischen Bottich und Kessel
+const BRAEU_ZEIT := 1.2   # Sekunden je Handgriff auf Level 1
 const SECURITY_POINT := Vector3(0.0, 0.1, 12.0)   # steht am Zelteingang
-const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400, 4: 450, 5: 550}
-const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80, 4: 90, 5: 110}   # Lohn/Schicht auf Level 1
+const STAFF_HIRE_COST := {1: 600, 2: 500, 3: 400, 4: 450, 5: 550, 6: 700}
+const STAFF_WAGE_BASE := {1: 120, 2: 100, 3: 80, 4: 90, 5: 110, 6: 130}   # Lohn/Schicht auf Level 1
 const STAFF_UPGRADE_BASE := 400                     # × aktuelles Level
 const STAFF_MAX_LEVEL := 5
 ## Wie viele Krüge ein Kellner auf einmal trägt — höhere Level sparen Laufwege.
@@ -1948,7 +1951,7 @@ func _story_messwerte() -> Dictionary:
 	return {
 		"zelt_stufe": _tent_stage, "tische": _active_count,
 		"personal_koch": _staff_anzahl(ROLE_KOCH), "personal_kellner": _staff_anzahl(ROLE_KELLNER),
-		"personal_reinigung": _staff_anzahl(ROLE_REINIGUNG), "personal_zapfer": _staff_anzahl(ROLE_ZAPFER), "personal_security": _staff_anzahl(ROLE_SECURITY),
+		"personal_reinigung": _staff_anzahl(ROLE_REINIGUNG), "personal_zapfer": _staff_anzahl(ROLE_ZAPFER), "personal_security": _staff_anzahl(ROLE_SECURITY), "personal_braeumeister": _staff_anzahl(ROLE_BRAEUMEISTER),
 		"lizenzen": lizenzen, "toilette": _has_toilet, "kuenstler": _ever_artist,
 		"bier_bestellt": int(_stock.get(WARE_BIER, 0)) > 0 or not _pending.is_empty(),
 		"lieferung_da": not _packages.is_empty() or int(_stock.get(WARE_BIER, 0)) > 0,
@@ -3098,6 +3101,8 @@ func net_hire_staff(role: int) -> void:
 		return
 	if role == ROLE_SECURITY and (not _story.aktiv or _story.kapitel < 3):
 		return   # Security gibt es erst ab Kapitel 3
+	if role == ROLE_BRAEUMEISTER and (not _story.aktiv or _story.kapitel < 4 or _tent_stage < KELLER_AB_STUFE):
+		return   # Bräumeister gibt es erst ab Kapitel 4 mit offenem Keller
 	# Ohne Essenslizenz hätte der Koch nichts zu tun
 	if role == ROLE_KOCH and _foods_avail().is_empty():
 		_fehler("MSG_COOK_LICENSE")
@@ -3225,6 +3230,8 @@ func _staff_start(role: int) -> Vector3:
 			return ZAPFER_POINT
 		ROLE_SECURITY:
 			return SECURITY_POINT
+		ROLE_BRAEUMEISTER:
+			return BRAEU_POINT
 	return BAR_POINT
 
 func _cook_level() -> int:
@@ -3334,6 +3341,8 @@ func _update_staff(delta: float) -> void:
 			ROLE_SECURITY:
 				s.tgt = SECURITY_POINT
 				_staff_move(s, delta)
+			ROLE_BRAEUMEISTER:
+				_update_braeumeister(s, delta)
 			_:
 				s.tgt = KITCHEN_POINT
 				_staff_move(s, delta)
@@ -3437,6 +3446,38 @@ func _update_zapfer(s: Dictionary, delta: float) -> void:
 	if _ausgabe_gesamt(1) >= mini(platz, int(_stock[WARE_BIER])):
 		return
 	_ausgabe_hinzufuegen(1, _naechste_sorte(1, _drinks_avail()))
+
+## Bräumeister: steht im Keller und erledigt reihum die Handgriffe — Malz rühren, Sud kochen,
+## Hefe ins freie Gärfass, fertiges Bier abfüllen. Stoppt, wenn eine Zutat fehlt (kein Meldungsflut).
+func _update_braeumeister(s: Dictionary, delta: float) -> void:
+	s.pos = BRAEU_POINT
+	s.tgt = BRAEU_POINT
+	s.timer = float(s.timer) - delta
+	if float(s.timer) > 0.0 or _tent_stage < KELLER_AB_STUFE:
+		return
+	s.timer = BRAEU_ZEIT / (1.0 + 0.25 * float(int(s.level) - 1))
+	# 1. fertig vergorenes Bier abfüllen
+	for i in _gaerfaesser.size():
+		if int((_gaerfaesser[i] as Dictionary).zustand) == 2:
+			net_gaerfass_fuellen(i)
+			return
+	# 2. fertigen Sud mit Hefe ins freie Fass
+	if _sud_fertig:
+		if int(_zutat.get("hefe", 0)) > 0:
+			for i in _gaerfaesser.size():
+				if int((_gaerfaesser[i] as Dictionary).zustand) == 0:
+					net_gaerfass_fuellen(i)
+					return
+		return
+	# 3. Maische fertig: Sud kochen (der Hopfen muss da sein)
+	if _maische_fertig:
+		if _sud >= HOPFEN_AB and not _sud_hopfen and int(_zutat.get("hopfen", 0)) <= 0:
+			return
+		net_brauen(2)
+		return
+	# 4. Malz rühren
+	if _maische > 0.0 or int(_zutat.get("malz", 0)) > 0:
+		net_brauen(1)
 
 ## Koch: kocht an seiner Kochstelle Brezn und Würstl, trägt die Portion zur
 ## Ausgabe und geht zurück. Braucht eine Essenslizenz (net_hire_staff sperrt sonst).
@@ -6236,7 +6277,7 @@ static func _eur(betrag: int) -> Dictionary:
 
 ## Namen als Übersetzungsschlüssel für Meldungen
 const WARE_KEYS := {1: "GOODS_BEER", 2: "GOODS_FOOD"}
-const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER", 5: "STAFF_SECURITY"}
+const STAFF_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER", 5: "STAFF_SECURITY", 6: "STAFF_BRAEUMEISTER"}
 const LIC_KEYS := {"weizen": "LIC_WEIZEN", "radler": "LIC_RADLER", "brezn": "LIC_BREZN", "sosis": "LIC_SOSIS",
 	"festbier": "LIC_FESTBIER", "hendl": "LIC_HENDL"}
 const BETRAG_SZENE := preload("res://scenes/ui/betrag.tscn")

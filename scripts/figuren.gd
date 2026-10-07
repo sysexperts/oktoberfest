@@ -279,7 +279,7 @@ static func look_festleiter() -> Dictionary:
 ## Berufskleidung: Gesicht, Haare und Geschlecht kommen wie bei jedem Zufalls-NPC aus der ID, Kleidung und Hut richten sich
 ## nach dem Beruf. Berufe: koch, kellner, zapfer, reinigung, security, bude (Budenbesitzer), kuenstler
 ## Frauen und Männer tragen im selben Beruf dieselbe Kleidung (uniform), nur Gesicht und Frisur unterscheiden sich.
-const BERUF_ROLLE := {1: "koch", 2: "kellner", 3: "reinigung", 4: "zapfer", 5: "security"}
+const BERUF_ROLLE := {1: "koch", 2: "kellner", 3: "reinigung", 4: "zapfer", 5: "security", 6: "braeumeister"}
 
 static func _stueck(l: Dictionary, art: String, id: String, farbe: Color, muster: Color) -> void:
 	l[art] = id
@@ -337,6 +337,13 @@ static func npc_look_beruf(id: int, beruf: String) -> Dictionary:
 			l["emotion"] = "skeptisch" + ("_w" if frau else "")
 			if not frau:
 				l["bart"] = "stoppeln"
+		"braeumeister":
+			_stueck(l, "schuhe", "schuh_haferl", Color(0.28, 0.18, 0.1), Color(0.16, 0.1, 0.06))
+			l["uniform"] = true
+			_stueck(l, "hemd", "hemd_leinen", Color(0.93, 0.9, 0.82), Color(0.8, 0.74, 0.6))
+			_stueck(l, "jacke", "schuerze_arbeit", Color(0.35, 0.22, 0.12), Color(0.2, 0.12, 0.07))
+			_stueck(l, "hose", "hose_leder", Color(0.2, 0.14, 0.09), Color(0.6, 0.5, 0.35))
+			l["hut"] = "ohne"
 		"bude":
 			l["uniform"] = true
 			if true:

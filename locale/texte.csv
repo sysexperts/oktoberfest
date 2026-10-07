@@ -2040,3 +2040,5 @@ BIER_STUFE_1,Hausbier,house beer,ev birası
 BIER_STUFE_2,Festbier,fest beer,festival birası
 BIER_STUFE_3,Meisterbräu,master brew,usta birası
 MSG_FASS_ABGEFUELLT_Q,Das Bier ist im Lager: %d Maß %s,The beer is in storage: %d mugs of %s,Bira depoda: %d kupa %s
+STAFF_BRAEUMEISTER,Bräumeister Gerhard,Master brewer Gerhard,Bira ustası Gerhard
+STAFF_INFO_BRAEUMEISTER,"Steht im Braukeller und braut von allein: rührt das Malz, kocht den Sud, füllt die Gärfässer und das fertige Bier ins Lager. Du musst nur Zutaten nachkaufen.","Stands in the brewery cellar and brews on his own: stirs the malt, boils the wort, fills the fermenting barrels and the finished beer into storage. You only have to restock ingredients.","Bira mahzeninde durur ve kendiliğinden demler: maltı karıştırır, şerbeti kaynatır, mayalama fıçılarını ve bitmiş birayı depoya doldurur. Sadece malzemeleri yeniden almalısın."

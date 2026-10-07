@@ -542,6 +542,10 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="Braeumeister" parent="Mitte/Panel/Spalte/Koerper/Reiter/Personal/Rand/Liste" instance=ExtResource("2_ang")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="TeamTitel" type="Label" parent="Mitte/Panel/Spalte/Koerper/Reiter/Personal/Rand/Liste" unique_id=1982413108]
 unique_name_in_owner = true
 layout_mode = 2

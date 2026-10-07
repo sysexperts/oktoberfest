@@ -3,9 +3,9 @@ extends Node3D
 ## Angestellter (Koch / Kellner / Reinigung). Nur Darstellung —
 ## die Logik läuft serverseitig im GameManager (_staff_sim).
 
-const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5), 4: Color(1.0, 0.85, 0.3), 5: Color(0.95, 0.85, 0.15)}
-const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹", 4: "🍻", 5: "🛡"}
-const ROLE_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER", 5: "STAFF_SECURITY"}
+const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5), 4: Color(1.0, 0.85, 0.3), 5: Color(0.95, 0.85, 0.15), 6: Color(0.85, 0.6, 0.25)}
+const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹", 4: "🍻", 5: "🛡", 6: "🍺"}
+const ROLE_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER", 5: "STAFF_SECURITY", 6: "STAFF_BRAEUMEISTER"}
 const Figuren := preload("res://scripts/figuren.gd")
 ## Versatz, damit Personal und Gäste mit gleicher Nummer nicht gleich aussehen
 const FIGUR_VERSATZ := 1000
