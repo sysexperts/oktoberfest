@@ -2535,3 +2535,7 @@ Fuarda görüşürüz"
 MAIL_K8_A1,"Gern, ich trag.","Gladly, I will carry.",Memnuniyetle taşırım.
 MAIL_K8_A2,Heute nicht.,Not today.,Bugün olmaz.
 MEISTER_KIRMES,Alle acht Kirmes-Aufgaben der Buden,All eight fair challenges at the stalls,Büfelerin sekiz fuar görevinin hepsi
+WORLD_KISTEN,"Kistenstapel
+({interact}: Kiste nehmen)","Crate stack
+({interact}: take a crate)","Kasa yığını
+({interact}: kasayı al)"

@@ -26,6 +26,9 @@ func _ready() -> void:
 	var etikett := get_node_or_null("Label") as Label3D
 	if etikett:
 		etikett.visible = variante == "quelle" or variante == "lager"
+		if variante == "lager":
+			etikett.set("schluessel", "WORLD_KISTEN")
+			etikett.call("aktualisieren")
 
 func interact_point() -> Vector3:
 	return global_position + Vector3(0, 1.0, 0)
