@@ -45,6 +45,14 @@ class Lauf extends Node:
 		sp._tarnung_t = 0.0
 		sp._tarnung_pruefen(1.0)
 		_check("Ausgeschlafen: 6 % mehr Tempo", is_equal_approx(float(sp._ausgeschlafen), 1.06), str(sp._ausgeschlafen))
+		var geld_f: int = Game.money
+		gm.net_wagen_farbe("rot")
+		_check("Neue Farbe kostet 200 €, Wagen ist rot", Game.money == geld_f - 200 and str(gm._wagen.farbe) == "rot", "%d %s" % [geld_f - Game.money, gm._wagen.farbe])
+		gm.net_wagen_farbe("blau")
+		_check("Zurück zu Blau kostet nichts", Game.money == geld_f - 200 and str(gm._wagen.farbe) == "blau")
+		gm.net_wagen_farbe("rot")
+		_check("Gekaufte Farbe wechselt frei", Game.money == geld_f - 200 and str(gm._wagen.farbe) == "rot")
+		_check("Farbe zählt als Prestige", gm.wagen_prestige() == 4, str(gm.wagen_prestige()))
 		story.kapitel_setzen(2)
 		var geld: int = Game.money
 		gm.net_wagen_kauf("regal")

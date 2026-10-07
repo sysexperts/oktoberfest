@@ -26,3 +26,19 @@ func interact_point() -> Vector3:
 	if tuer:
 		return tuer.global_position + Vector3(0, 1.0, 0)
 	return global_position + global_transform.basis.z * 1.1
+
+var _farbe_t := 0.0
+
+## Außenfarbe (aus dem Zustand des GameManagers, „wagen.farbe“): eines der drei Modelle ist sichtbar
+func _process(delta: float) -> void:
+	_farbe_t -= delta
+	if _farbe_t > 0.0 or not is_mine:
+		return
+	_farbe_t = 0.5
+	var welt := get_tree().current_scene
+	var hud: Object = welt.get("_hud")
+	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	var farbe := str((z.get("wagen", {}) as Dictionary).get("farbe", "blau"))
+	$Modell.visible = farbe == "blau"
+	$ModellRot.visible = farbe == "rot"
+	$ModellGruen.visible = farbe == "gruen"

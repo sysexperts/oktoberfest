@@ -4,6 +4,8 @@ extends Control
 
 const Texte := preload("res://scripts/ui/texte.gd")
 const ITEMS := ["sofa", "poster", "pflanze", "regal"]
+const FARBEN := ["blau", "rot", "gruen"]
+const FARB_KNOEPFE := {"blau": "Blau", "rot": "Rot", "gruen": "Gruen"}
 
 var _gm: Node
 var _hud: Node
@@ -13,6 +15,9 @@ func _ready() -> void:
 	for id: String in ITEMS:
 		var k: Button = get_node("%" + id.capitalize())
 		k.pressed.connect(func() -> void: _gm.net_wagen_kauf.rpc_id(1, id))
+	for f: String in FARBEN:
+		var fk: Button = get_node("%Farbe" + FARB_KNOEPFE[f])
+		fk.pressed.connect(func() -> void: _gm.net_wagen_farbe.rpc_id(1, f))
 
 func einrichten(gm: Node, hud: Node) -> void:
 	_gm = gm
@@ -50,3 +55,16 @@ func _anzeigen() -> void:
 		else:
 			k.text = tr("WAGEN_KAUFEN") % [name, Texte.euro(int(_gm.WAGEN_ITEMS[id]))]
 			k.disabled = false
+	var besitz: Array = wagen.get("farben", ["blau"])
+	for f: String in FARBEN:
+		var fk: Button = get_node("%Farbe" + FARB_KNOEPFE[f])
+		var fname := tr("WAGEN_FARBE_" + f.to_upper())
+		if str(wagen.get("farbe", "blau")) == f:
+			fk.text = tr("WAGEN_FARBE_AKTIV") % fname
+			fk.disabled = true
+		elif besitz.has(f):
+			fk.text = tr("WAGEN_FARBE_WECHSELN") % fname
+			fk.disabled = false
+		else:
+			fk.text = tr("WAGEN_KAUFEN") % [fname, Texte.euro(int(_gm.WAGEN_FARBEN[f]))]
+			fk.disabled = false

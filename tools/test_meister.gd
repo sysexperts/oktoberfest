@@ -50,7 +50,7 @@ class Lauf extends Node:
 		for i in range(1, 9):
 			story.quests["K-%d" % i] = {"z": "erfuellt"}
 		gm._ausbau = ["biergarten", "vip", "theke2", "buehne", "handel", "akademie", "schloss", "kamera", "alarm", "versicherung", "bude1", "bude2", "bude3", "filiale", "konrad"]
-		gm._wagen = {"bett": 3, "items": ["sofa", "poster", "pflanze", "regal"]}
+		gm._wagen = {"bett": 3, "items": ["sofa", "poster", "pflanze", "regal"], "farben": ["blau", "rot", "gruen"], "farbe": "gruen"}
 		story.flags["kontrolle_bestanden"] = true
 		story.flags["rezeptseite3"] = true
 		for i in range(1, 12):

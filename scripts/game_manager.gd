@@ -464,7 +464,8 @@ var _fest_feuer_gezuendet := false
 ## Wohnwagen-Ausbau (ein Wagen für das ganze Team): besseres Bett gibt Tempo am Tag, Einrichtung bringt Prestige (Festruhm).
 const WAGEN_BETT_PREIS := {2: 400, 3: 900}
 const WAGEN_ITEMS := {"sofa": 300, "poster": 100, "pflanze": 120, "regal": 250}
-var _wagen := {"bett": 1, "items": []}
+var _wagen := {"bett": 1, "items": [], "farben": ["blau"], "farbe": "blau"}
+const WAGEN_FARBEN := {"blau": 0, "rot": 200, "gruen": 200}
 ## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
 ##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
 ##   handel: verkauft nachts eigenes Bier an andere Zelte · konrad: Konrads Zelt aufgekauft (keine Streiche mehr, Pacht)
@@ -1158,7 +1159,9 @@ func _load_game() -> bool:
 	_ausbau = (ab as Array).map(func(x: Variant) -> String: return str(x)) if ab is Array else []
 	var wg: Variant = d.get("wagen", {})
 	if wg is Dictionary and (wg as Dictionary).has("bett"):
-		_wagen = {"bett": clampi(int((wg as Dictionary).bett), 1, 3), "items": ((wg as Dictionary).get("items", []) as Array).duplicate()}
+		var farben_geladen: Array = ((wg as Dictionary).get("farben", ["blau"]) as Array).duplicate()
+		_wagen = {"bett": clampi(int((wg as Dictionary).bett), 1, 3), "items": ((wg as Dictionary).get("items", []) as Array).duplicate(),
+			"farben": farben_geladen, "farbe": str((wg as Dictionary).get("farbe", "blau"))}
 	var fst: Variant = d.get("fest", {})
 	_fest = (fst as Dictionary).duplicate() if fst is Dictionary else {}
 	_fest_ruhm = int(d.get("fest_ruhm", 0))
@@ -7354,7 +7357,7 @@ func meister_liste() -> Array:
 		["MEISTER_FAKE", mini(int(_stats.get("fakes_gemeldet", 0)), 1), 1],
 		["MEISTER_KONTROLLE", kontrolle, 1],
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
-		["MEISTER_WAGEN", wagen_prestige(), 6],
+		["MEISTER_WAGEN", wagen_prestige(), 8],
 		["MEISTER_AUSBAU", _ausbau.size(), 15],
 		["MEISTER_KIRMES", _kirmes_erfuellt(), 8],
 	]
@@ -7380,7 +7383,25 @@ func _meister_pruefen() -> void:
 		_melde("MSG_MEISTER_TITEL", [], 2)
 
 func wagen_prestige() -> int:
-	return int(_wagen.bett) - 1 + (_wagen.items as Array).size()
+	return int(_wagen.bett) - 1 + (_wagen.items as Array).size() + (_wagen.farben as Array).size() - 1
+
+## Wohnwagen-Außenfarbe: eine neue Farbe kostet einmal, danach wechselt man frei zwischen den gekauften
+@rpc("any_peer", "reliable", "call_local")
+func net_wagen_farbe(farbe: String) -> void:
+	if not multiplayer.is_server() or not WAGEN_FARBEN.has(farbe) or not _story.aktiv or _story.kapitel < 3:
+		return
+	if not (_wagen.farben as Array).has(farbe):
+		if not buero_offen():
+			return
+		var preis: int = WAGEN_FARBEN[farbe]
+		if not _afford(preis):
+			_fehler("MSG_NO_MONEY", ["WAGEN_FARBE_" + farbe.to_upper(), _eur(preis)])
+			return
+		Game.add_money(-preis)
+		(_wagen.farben as Array).append(farbe)
+		_melde("MSG_WAGEN_GEKAUFT", ["WAGEN_FARBE_" + farbe.to_upper(), _eur(preis)], 2)
+	_wagen.farbe = farbe
+	_broadcast_meta()
 
 ## Wohnwagen-Ausbau kaufen: "bett" (nächste Stufe) oder ein Einrichtungsstück. Nur nach Feierabend und mit Zelt.
 @rpc("any_peer", "reliable", "call_local")

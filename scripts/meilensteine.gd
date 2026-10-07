@@ -46,7 +46,7 @@ const LISTE := [
 	{"id": "FEST_WELT", "wert": "meister:MEISTER_FEST", "ziel": 4, "belohnung": 3000},
 	{"id": "FAKE_GEMELDET", "wert": "fakes_gemeldet", "ziel": 1, "belohnung": 300},
 	{"id": "PERSONAL_ALLE", "wert": "meister:MEISTER_PERSONAL", "ziel": 6, "belohnung": 1500},
-	{"id": "WAGEN_VOLL", "wert": "meister:MEISTER_WAGEN", "ziel": 6, "belohnung": 1000},
+	{"id": "WAGEN_VOLL", "wert": "meister:MEISTER_WAGEN", "ziel": 8, "belohnung": 1000},
 	{"id": "AUSBAU_1", "wert": "meister:MEISTER_AUSBAU", "ziel": 1, "belohnung": 800},
 	{"id": "AUSBAU_ALLE", "wert": "meister:MEISTER_AUSBAU", "ziel": 15, "belohnung": 4000},
 	{"id": "WUNSCH_5", "wert": "wuensche", "ziel": 5, "belohnung": 500},

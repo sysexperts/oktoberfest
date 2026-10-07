@@ -3,11 +3,19 @@
 [ext_resource type="Script" path="res://scripts/caravan.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="2_wt"]
 [ext_resource type="PackedScene" path="res://scenes/kulisse/wohnwagen_blau.tscn" id="3_modell"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/wohnwagen_rot.tscn" id="4_rot"]
+[ext_resource type="PackedScene" path="res://scenes/kulisse/wohnwagen_gruen.tscn" id="5_gruen"]
 
 [node name="Caravan" type="Node3D"]
 script = ExtResource("1")
 
 [node name="Modell" parent="." instance=ExtResource("3_modell")]
+
+[node name="ModellRot" parent="." instance=ExtResource("4_rot")]
+visible = false
+
+[node name="ModellGruen" parent="." instance=ExtResource("5_gruen")]
+visible = false
 
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.0, 0)

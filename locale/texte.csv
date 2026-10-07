@@ -2599,3 +2599,8 @@ MSG_AUSBAU_ERST_BUDE,Dafür brauchst du zuerst die Bude davor.,You need the prev
 MSG_AUSBAU_ERST_RIESENZELT,"Eine Filiale gibt es erst, wenn dein Zelt zum Riesenzelt (Stufe 4) ausgebaut ist.",A branch is only possible once your tent is the giant tent (level 4).,"Şube, ancak çadırın dev çadıra (seviye 4) yükseltildikten sonra mümkün."
 MSG_AUSBAU_BUDEN,Deine %d Buden haben heute Abend %s verdient.,Your %d stalls earned %s this evening.,%d büfen bu akşam %s kazandı.
 MSG_AUSBAU_FILIALE,Die Filiale hat heute Abend %s eingebracht.,The branch brought in %s this evening.,Şube bu akşam %s getirdi.
+WAGEN_FARBE_BLAU,Außenfarbe Blau,Exterior colour blue,Dış renk mavi
+WAGEN_FARBE_ROT,Außenfarbe Rot,Exterior colour red,Dış renk kırmızı
+WAGEN_FARBE_GRUEN,Außenfarbe Grün,Exterior colour green,Dış renk yeşil
+WAGEN_FARBE_AKTIV,%s (aktiv),%s (active),%s (aktif)
+WAGEN_FARBE_WECHSELN,Wechseln zu: %s,Switch to: %s,Geç: %s
