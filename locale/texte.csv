@@ -2072,3 +2072,15 @@ SAB_TARNUNG_AN,Tarnung ausziehen,Take off disguise,Kılığı çıkar
 SAB_TARNUNG_AUS,Tarnung anziehen,Put on disguise,Kılığı giy
 SAB_SCHLIESSEN,Schließen (Esc),Close (Esc),Kapat (Esc)
 MSG_SAB_GEKAUFT,Bei Gustav gekauft: %s für %s,Bought from Gustav: %s for %s,Gustav'dan alındı: %s için %s
+HINT_SAB_FASS,{interact} Fass anbohren,{interact} Drill the barrel,{interact} Fıçıyı delmek
+HINT_SAB_STROM,{interact} Sicherungskasten kappen,{interact} Cut the fuse box,{interact} Sigorta kutusunu kes
+HINT_SAB_STINK,{interact} Stinkbombe zünden,{interact} Light the stink bomb,{interact} Kokulu bombayı patlat
+HINT_SAB_JUCK,{interact} Juckpulver auf die Bänke streuen,{interact} Sprinkle itching powder on the benches,{interact} Sıralara kaşıntı tozu serp
+MSG_SAB_KEIN_WERKZEUG,Dazu fehlt dir das Werkzeug: %s. Gustav hat es.,You are missing the tool: %s. Gustav has it.,Aletin yok: %s. Gustav'da var.
+MSG_SAB_HEUTE_SCHON,"Das hast du heute schon gemacht. Konrad wird misstrauisch, lass es morgen wieder.","You already did that today. Konrad is getting suspicious, try again tomorrow.","Bunu bugün zaten yaptın. Konrad şüpheleniyor, yarın tekrar dene."
+MSG_SAB_ERWISCHT,Erwischt! Konrad hat dich gesehen. Bußgeld %s und Rauswurf.,Caught! Konrad saw you. Fine %s and thrown out.,Yakalandın! Konrad seni gördü. Ceza %s ve dışarı atıldın.
+MSG_SAB_FASS,Konrads Fass läuft aus. Gäste wandern zu dir ab: +%s,Konrad's barrel is leaking. Guests move over to you: +%s,Konrad'ın fıçısı akıyor. Misafirler sana geçiyor: +%s
+MSG_SAB_STROM,Bei Konrad geht das Licht aus. Gäste wandern zu dir ab: +%s,The lights go out at Konrad's. Guests move over to you: +%s,Konrad'da ışıklar söndü. Misafirler sana geçiyor: +%s
+MSG_SAB_STINK,Bei Konrad stinkt es erbärmlich. Gäste wandern zu dir ab: +%s,It stinks terribly at Konrad's. Guests move over to you: +%s,Konrad'da korkunç kokuyor. Misafirler sana geçiyor: +%s
+MSG_SAB_JUCK,Bei Konrad kratzt sich alles. Gäste wandern zu dir ab: +%s,Everyone at Konrad's is scratching. Guests move over to you: +%s,Konrad'da herkes kaşınıyor. Misafirler sana geçiyor: +%s
+MSG_SAB_RACHE,Konrad schlägt zurück. Heute ist mit einem Streich zu rechnen!,Konrad strikes back. Expect a prank today!,Konrad karşılık veriyor. Bugün bir şaka bekle!

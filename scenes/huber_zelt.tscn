@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_uebers"]
 [ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="17_figur"]
 [ext_resource type="PackedScene" path="res://scenes/schanktheke.tscn" id="18_theke"]
+[ext_resource type="PackedScene" path="res://scenes/sab_ziel.tscn" id="19_ziel"]
 
 [node name="HuberZelt" type="Node3D"]
 script = ExtResource("1_huber")
@@ -166,9 +167,26 @@ nr = 23
 transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, 3.3)
 nr = 24
 
+[node name="ZielFass" parent="Innen" instance=ExtResource("19_ziel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.35, 0, -7.0)
+art = "fass"
+
+[node name="ZielStrom" parent="Innen" instance=ExtResource("19_ziel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3, 0, -7.0)
+art = "strom"
+
+[node name="ZielStink" parent="Innen" instance=ExtResource("19_ziel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+art = "stink"
+
+[node name="ZielJuck" parent="Innen" instance=ExtResource("19_ziel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 1)
+art = "juck"
+
 [node name="Huber" type="Node3D" parent="."]
 transform = Transform3D(1.12, 0, 0, 0, 1.12, 0, 0, 0, 1.12, 1.2, 0, 11.4)
 script = ExtResource("14_npc")
+runde = Array[Vector3]([Vector3(1.2, 0, 11.4), Vector3(1.2, 0, 5), Vector3(-2.2, 0, 1), Vector3(-6.5, 0, -3), Vector3(-2, 0, -6), Vector3(2, 0, -6), Vector3(6.5, 0, -3), Vector3(2.2, 0, 1)])
 figur_szene = ExtResource("16_konrad")
 
 [node name="Ausruf" type="Label3D" parent="Huber"]

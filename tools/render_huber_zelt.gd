@@ -22,7 +22,7 @@ func _ready() -> void:
 	var kamera := Camera3D.new()
 	add_child(kamera)
 	kamera.current = true
-	kamera.look_at_from_position(Vector3(0.5, 1.7, 5.5), Vector3(-0.5, 1.0, -4.0))
+	kamera.look_at_from_position(Vector3(1.0, 1.7, -1.5), Vector3(7.3, 1.3, -7.0))
 	await get_tree().create_timer(3.5).timeout
 	get_viewport().get_texture().get_image().save_png("res://build/huber_zelt.png")
 	print("RENDER FERTIG")

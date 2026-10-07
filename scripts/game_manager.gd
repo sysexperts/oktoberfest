@@ -414,6 +414,13 @@ const SAB_WAREN := {"mantel": 150, "komplett": 400, "fassbohrer": 120, "zange": 
 var _sab_inv := {}          # Werkzeug-ID -> Anzahl
 var _tarnung_stufe := 0     # 0 keine, 1 Mantel, 2 Komplettset
 var _tarnung_an := false
+## Sabotage in Konrads Zelt: je Werkzeug einmal pro Spieltag. Erwischt = Bußgeld und Rauswurf, geschafft = Kundschaft wandert zu dir.
+## Konrad schlägt am nächsten Tag zurück (Eskalation).
+const SAB_BUSSE := 200
+const SAB_ERFOLG := 120
+const SAB_WERKZEUG := {"fass": "fassbohrer", "strom": "zange", "stink": "stinkbombe", "juck": "juckpulver"}
+var _sab_tag := {}          # Ziel-Art -> Spieltag der letzten Sabotage
+var _rache_tag := -1        # Konrad schlägt an diesem Tag zurück
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -990,7 +997,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1069,6 +1076,9 @@ func _load_game() -> bool:
 	_sab_inv = (si as Dictionary).duplicate() if si is Dictionary else {}
 	_tarnung_stufe = clampi(int(d.get("tarnung_stufe", 0)), 0, 2)
 	_tarnung_an = bool(d.get("tarnung_an", false))
+	var sabtag: Variant = d.get("sab_tag", {})
+	_sab_tag = (sabtag as Dictionary).duplicate() if sabtag is Dictionary else {}
+	_rache_tag = int(d.get("rache_tag", -1))
 	var fk: Variant = d.get("fakes", [])
 	_fakes = (fk as Array).duplicate(true) if fk is Array else []
 	var gf: Variant = d.get("gaerfaesser", [])
@@ -6230,7 +6240,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an,
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(),
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -6840,8 +6850,13 @@ func _huber_morgen() -> void:
 		_sabotage_t = randf_range(60.0, 180.0)
 	_streich_art = ""
 	_streich_t = -1.0
+	# Konrad schlägt nach einer Sabotage zurück: ein Streich mit Sicherheit
+	if _rache_tag == _day and _story.kapitel >= 3:
+		_streich_art = ["laster", "dieb", "strom"].pick_random()
+		_streich_t = randf_range(30.0, 90.0)
+		_melde("MSG_SAB_RACHE", [], 1)
 	# Kapitel 4: ein weiterer Streich pro Tag mit etwas Glück
-	if _story.kapitel >= 4 and _sabotage_t <= 0.0 and randf() < STREICH_CHANCE:
+	elif _story.kapitel >= 4 and _sabotage_t <= 0.0 and randf() < STREICH_CHANCE:
 		_streich_art = ["laster", "dieb", "strom"].pick_random()
 		_streich_t = randf_range(40.0, 150.0)
 	# Story-Quests brauchen den Streich: Stinkbombe (3.2) oder Saboteur (3.4) noch heute
@@ -6954,6 +6969,43 @@ func net_sab_kauf(id: String) -> void:
 	_stats["sab_gekauft"] = int(_stats.get("sab_gekauft", 0)) + 1
 	_melde("MSG_SAB_GEKAUFT", ["SAB_" + id.to_upper(), _eur(preis)], 2)
 	_broadcast_meta()
+
+## Sabotage in Konrads Zelt. erwischt meldet der Spieler (Konrads Blickfeld läuft bei jedem Rechner selbst).
+@rpc("any_peer", "reliable", "call_local")
+func net_sabotage(art: String, erwischt: bool) -> void:
+	if not multiplayer.is_server() or not SAB_WERKZEUG.has(art) or not _story.aktiv or _story.kapitel < 3:
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	var werkzeug: String = SAB_WERKZEUG[art]
+	if int(_sab_inv.get(werkzeug, 0)) <= 0:
+		_fehler("MSG_SAB_KEIN_WERKZEUG", ["SAB_" + werkzeug.to_upper()])
+		return
+	if int(_sab_tag.get(art, -1)) == _day:
+		_fehler("MSG_SAB_HEUTE_SCHON")
+		return
+	_sab_inv[werkzeug] = int(_sab_inv[werkzeug]) - 1
+	_sab_tag[art] = _day
+	if erwischt:
+		Game.add_money(-SAB_BUSSE)
+		_popularity = maxf(POP_MIN, _popularity - 3.0)
+		_melde("MSG_SAB_ERWISCHT", [_eur(SAB_BUSSE)], 1)
+		_net_sab_rauswurf.rpc_id(sender if sender > 0 else 1)
+	else:
+		_add_income(SAB_ERFOLG)
+		_popularity = minf(100.0, _popularity + 3.0)
+		_melde("MSG_SAB_%s" % art.to_upper(), [_eur(SAB_ERFOLG)], 2)
+		_story.ereignis("sabotage_geschafft")
+		_rache_tag = _day + 1
+	_broadcast_meta()
+
+## Erwischt: der Türsteher wirft dich vor das Zelt
+@rpc("authority", "reliable", "call_local")
+func _net_sab_rauswurf() -> void:
+	var sp := _players_nodes.get(multiplayer.get_unique_id()) as Node3D
+	var zelt := get_tree().get_first_node_in_group("huber_zelt") as Node3D
+	if sp == null or zelt == null:
+		return
+	sp.global_position = zelt.global_position + zelt.global_transform.basis.z * 14.0 + Vector3(0, 0.1, 0)
 
 ## Tarnung an- oder ausziehen
 @rpc("any_peer", "reliable", "call_local")

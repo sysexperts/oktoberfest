@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/sab_ziel.gd" id="1_sz"]
+
+[sub_resource type="BoxMesh" id="KastenMesh"]
+size = Vector3(0.55, 0.75, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="KastenFarbe"]
+albedo_color = Color(0.45, 0.47, 0.5, 1)
+metallic = 0.6
+roughness = 0.5
+
+[node name="SabZiel" type="Node3D"]
+script = ExtResource("1_sz")
+
+[node name="Kasten" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+mesh = SubResource("KastenMesh")
+surface_material_override/0 = SubResource("KastenFarbe")

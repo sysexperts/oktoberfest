@@ -19,6 +19,14 @@ const Figuren := preload("res://scripts/figuren.gd")
 var _figur: Figur
 var _gehoert_tag := -1
 var _blick := 0.0
+## Runde durch sein Zelt (Punkte relativ zum Zelt, Boden y = 0). Leer = steht an seinem Platz.
+## Wer sabotiert, während Konrad hinsieht, fliegt auf (sieht()).
+@export var runde: Array[Vector3] = []
+@export var tempo := 1.0
+@export var pause := 3.0
+var _punkt := 0
+var _warte := 0.0
+var _rennt := false
 
 func _ready() -> void:
 	add_to_group("huber")
@@ -47,7 +55,8 @@ func wette_offen() -> bool:
 	var w: Dictionary = _zustand().get("huber_wette", {})
 	return not w.is_empty() and not bool(w.get("angenommen", false))
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_patrouille(delta)
 	if _ausruf:
 		var tag := int(_zustand().get("day", 0))
 		_ausruf.visible = wette_offen() or bool(_zustand().get("duell_offen", false)) or (_gehoert_tag != tag and tag > 0 and _welt().has_method("tutorial_active") and not _welt().tutorial_active())
@@ -134,9 +143,49 @@ func _t(k: String) -> String:
 
 ## Beim Wettschleppen (scripts/wettschleppen.gd): rennen bzw. wieder stehen
 func rennen(an: bool) -> void:
+	_rennt = an
 	if _figur == null:
 		return
 	if an:
 		_figur.rennen(1.3)
 	else:
 		_figur.stehen()
+
+## Konrads Runde durchs Zelt. Er bleibt stehen, solange jemand mit ihm redet oder das Duell läuft.
+func _patrouille(delta: float) -> void:
+	if runde.is_empty() or _rennt or _figur == null:
+		return
+	var dialog := get_tree().get_first_node_in_group("dialog")
+	if dialog != null and dialog.get("aktiv") == true:
+		return
+	if _warte > 0.0:
+		_warte -= delta
+		if _warte <= 0.0:
+			_figur.gehen()
+		return
+	var ziel: Vector3 = runde[_punkt]
+	var zu := ziel - position
+	zu.y = 0.0
+	if zu.length() < 0.1:
+		_punkt = (_punkt + 1) % runde.size()
+		_warte = pause
+		_figur.stehen()
+		_blick = rotation.y
+		return
+	position += zu.normalized() * minf(tempo * delta, zu.length())
+	rotation.y = lerp_angle(rotation.y, atan2(zu.x, zu.z), minf(1.0, 6.0 * delta))
+	_blick = rotation.y
+
+## Sieht Konrad die Stelle? stufe: 0 ohne Tarnung, 1 Mantel, 2 Komplettset (kleinerer Radius).
+## Blickfeld: 70 Grad nach vorn.
+func sieht(stelle: Vector3, stufe: int) -> bool:
+	var reichweite: float = [16.0, 10.0, 5.0][clampi(stufe, 0, 2)]
+	var zu := stelle - global_position
+	zu.y = 0.0
+	if zu.length() > reichweite:
+		return false
+	if zu.length() < 1.2:
+		return true
+	var vorn := global_transform.basis.z
+	vorn.y = 0.0
+	return rad_to_deg(vorn.normalized().angle_to(zu.normalized())) <= 70.0

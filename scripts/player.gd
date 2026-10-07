@@ -1125,6 +1125,8 @@ func _handle_interaction(delta: float) -> void:
 			_current_target.gefallen_aktion(self)
 			if _sfx_node:
 				_sfx_node.play("pop")
+		elif _current_target.has_method("sabotage_aktion"):
+			_current_target.sabotage_aktion(self)
 		elif _current_target.has_method("gustav_aktion"):
 			_current_target.gustav_aktion(self)
 		elif _current_target.has_method("wohnwagen_aktion"):
