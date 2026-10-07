@@ -995,5 +995,173 @@
   "belohnung": {
    "geld": 200
   }
+ },
+ {
+  "id": "K-1",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-1_TITLE",
+  "text": "Q_K-1_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K1"
+  },
+  "bedingung": {
+   "mw": "rekord_hau_den_lukas",
+   "min": 9
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 250
+  }
+ },
+ {
+  "id": "K-2",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-2_TITLE",
+  "text": "Q_K-2_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K2"
+  },
+  "bedingung": {
+   "mw": "rekord_dosenwurf",
+   "min": 8
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 200
+  }
+ },
+ {
+  "id": "K-3",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-3_TITLE",
+  "text": "Q_K-3_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K3"
+  },
+  "bedingung": {
+   "mw": "rekord_schiessstand",
+   "min": 9
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 250
+  }
+ },
+ {
+  "id": "K-4",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-4_TITLE",
+  "text": "Q_K-4_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K4"
+  },
+  "bedingung": {
+   "mw": "rekord_entenangeln",
+   "min": 7
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 200
+  }
+ },
+ {
+  "id": "K-5",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-5_TITLE",
+  "text": "Q_K-5_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K5"
+  },
+  "bedingung": {
+   "mw": "rekord_kegeln",
+   "min": 8
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 200
+  }
+ },
+ {
+  "id": "K-6",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-6_TITLE",
+  "text": "Q_K-6_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K6"
+  },
+  "bedingung": {
+   "mw": "rekord_pfeilwurf",
+   "min": 7
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 200
+  }
+ },
+ {
+  "id": "K-7",
+  "typ": "kirmes",
+  "kapitel": 2,
+  "titel": "Q_K-7_TITLE",
+  "text": "Q_K-7_TEXT",
+  "ausloeser": {
+   "kapitel": 2,
+   "zufall": {
+    "ab_kapitel": 2,
+    "bis_kapitel": 99,
+    "chance": 0.2
+   },
+   "mail": "M-K7"
+  },
+  "bedingung": {
+   "mw": "rekord_ringwurf",
+   "min": 7
+  },
+  "frist_tage": 4,
+  "belohnung": {
+   "geld": 200
+  }
  }
 ]

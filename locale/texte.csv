@@ -2282,3 +2282,89 @@ MSG_AUSBAU_KONRAD,Konrads Zelt gehört jetzt dir. Er hat keine Streiche mehr üb
 MSG_AUSBAU_HANDEL,Bierhandel: %d Maß an andere Zelte verkauft für %s,Beer trade: sold %d mugs to other tents for %s,Bira ticareti: %d kupa diğer çadırlara %s karşılığında satıldı
 MSG_AUSBAU_PACHT,Pacht von Konrads Zelt: +%s,Rent from Konrad's tent: +%s,Konrad'ın çadırından kira: +%s
 MEISTER_AUSBAU,Alle Ausbauten gebaut,Built every expansion,Tüm genişlemeleri yap
+ABSENDER_BUDE,Budenbesitzer,Stall owner,Büfe sahibi
+MEISTER_KIRMES,Alle sieben Rekord-Aufgaben der Kirmes,All seven record challenges at the fair,Fuarın yedi rekor görevinin hepsi
+Q_K-1_TITLE,Rekord: Hau den Lukas,Record: Strongman game,Rekor: Lukas'ı vur
+Q_K-1_TEXT,Erreiche an der Bude 9 oder mehr Punkte (Hau den Lukas). Dein bestes Ergebnis zählt.,Reach 9 or more points at the stall (Strongman game). Your best score counts.,Büfede 9 veya daha fazla puan yap (Lukas'ı vur). En iyi skorun sayılır.
+MAIL_K1_BETREFF,Rekord gesucht: Hau den Lukas,Record wanted: Strongman game,Rekor aranıyor: Lukas'ı vur
+MAIL_K1_TEXT,"Servus, der Lukas hier! Alle schlagen schwach zu. Bring den Schlitten mit einem Schlag ganz nach oben, mindestens 9 Punkte, dann gibt's Geld von mir.
+
+Bis bald auf der Kirmes","Hi, Lukas here! Everyone hits weakly. Send the puck right to the top with a single swing, at least 9 points, and I will pay you.
+
+See you at the fair","Selam, ben Lukas! Herkes zayıf vuruyor. Tek vuruşta en az 9 puan al, sana para veririm.
+
+Fuarda görüşürüz"
+MAIL_K1_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K1_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_K-2_TITLE,Rekord: Dosenwerfen,Record: Can toss,Rekor: Teneke atma
+Q_K-2_TEXT,Erreiche an der Bude 8 oder mehr Punkte (Dosenwerfen). Dein bestes Ergebnis zählt.,Reach 8 or more points at the stall (Can toss). Your best score counts.,Büfede 8 veya daha fazla puan yap (Teneke atma). En iyi skorun sayılır.
+MAIL_K2_BETREFF,Rekord gesucht: Dosenwerfen,Record wanted: Can toss,Rekor aranıyor: Teneke atma
+MAIL_K2_TEXT,"Servus, vom Dosenwurf! Keiner räumt mir die Dosen ab. Wirf mindestens 8 Punkte, dann spendiere ich dir was.
+
+Bis bald auf der Kirmes","Hi, from the can toss! Nobody clears my cans. Score at least 8 points and I will treat you.
+
+See you at the fair","Selam, teneke atmadan! Kimse tenekelerimi devirmiyor. En az 8 puan yap, sana ikram ederim.
+
+Fuarda görüşürüz"
+MAIL_K2_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K2_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_K-3_TITLE,Rekord: Schießbude,Record: Shooting gallery,Rekor: Atış standı
+Q_K-3_TEXT,Erreiche an der Bude 9 oder mehr Punkte (Schießbude). Dein bestes Ergebnis zählt.,Reach 9 or more points at the stall (Shooting gallery). Your best score counts.,Büfede 9 veya daha fazla puan yap (Atış standı). En iyi skorun sayılır.
+MAIL_K3_BETREFF,Rekord gesucht: Schießbude,Record wanted: Shooting gallery,Rekor aranıyor: Atış standı
+MAIL_K3_TEXT,"Servus, von der Schießbude! Ich habe nie einen echten Meisterschützen gesehen. Triff mindestens 9 von 10, dann zahle ich.
+
+Bis bald auf der Kirmes","Hi, from the shooting gallery! I have never seen a real marksman. Hit at least 9 out of 10 and I will pay.
+
+See you at the fair","Selam, atış standından! Hiç gerçek bir nişancı görmedim. 10'da en az 9 vur, ödeyeyim.
+
+Fuarda görüşürüz"
+MAIL_K3_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K3_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_K-4_TITLE,Rekord: Entenangeln,Record: Duck fishing,Rekor: Ördek avı
+Q_K-4_TEXT,Erreiche an der Bude 7 oder mehr Punkte (Entenangeln). Dein bestes Ergebnis zählt.,Reach 7 or more points at the stall (Duck fishing). Your best score counts.,Büfede 7 veya daha fazla puan yap (Ördek avı). En iyi skorun sayılır.
+MAIL_K4_BETREFF,Rekord gesucht: Entenangeln,Record wanted: Duck fishing,Rekor aranıyor: Ördek avı
+MAIL_K4_TEXT,"Servus, vom Entenangeln! Meine Enten sind zu schlau für die Leute. Angle mindestens 7 Punkte, dann gibt's was.
+
+Bis bald auf der Kirmes","Hi, from duck fishing! My ducks are too clever for the people. Catch at least 7 points and there is a reward.
+
+See you at the fair","Selam, ördek avından! Ördeklerim insanlar için fazla akıllı. En az 7 puan yakala, ödül var.
+
+Fuarda görüşürüz"
+MAIL_K4_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K4_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_K-5_TITLE,Rekord: Kegeln,Record: Bowling,Rekor: Bowling
+Q_K-5_TEXT,Erreiche an der Bude 8 oder mehr Punkte (Kegeln). Dein bestes Ergebnis zählt.,Reach 8 or more points at the stall (Bowling). Your best score counts.,Büfede 8 veya daha fazla puan yap (Bowling). En iyi skorun sayılır.
+MAIL_K5_BETREFF,Rekord gesucht: Kegeln,Record wanted: Bowling,Rekor aranıyor: Bowling
+MAIL_K5_TEXT,"Servus, von der Kegelbahn! Die Kegel stehen zu lange. Schaff mindestens 8 Punkte, ich zahl dafür.
+
+Bis bald auf der Kirmes","Hi, from the bowling lane! The pins stand too long. Score at least 8 points and I will pay for it.
+
+See you at the fair","Selam, bowling pistinden! Labutlar çok uzun duruyor. En az 8 puan yap, ödeyeyim.
+
+Fuarda görüşürüz"
+MAIL_K5_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K5_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_K-6_TITLE,Rekord: Pfeilwurf,Record: Darts,Rekor: Dart
+Q_K-6_TEXT,Erreiche an der Bude 7 oder mehr Punkte (Pfeilwurf). Dein bestes Ergebnis zählt.,Reach 7 or more points at the stall (Darts). Your best score counts.,Büfede 7 veya daha fazla puan yap (Dart). En iyi skorun sayılır.
+MAIL_K6_BETREFF,Rekord gesucht: Pfeilwurf,Record wanted: Darts,Rekor aranıyor: Dart
+MAIL_K6_TEXT,"Servus, vom Pfeilwurf! Die Luftballons halten sich zu gut. Triff mindestens 7 Punkte, dann gibt's Geld.
+
+Bis bald auf der Kirmes","Hi, from the darts! The balloons last too long. Score at least 7 points and there is money in it.
+
+See you at the fair","Selam, dart standından! Balonlar çok dayanıyor. En az 7 puan yap, para var.
+
+Fuarda görüşürüz"
+MAIL_K6_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K6_A2,Heute nicht.,Not today.,Bugün olmaz.
+Q_K-7_TITLE,Rekord: Ringwurf,Record: Ring toss,Rekor: Halka atma
+Q_K-7_TEXT,Erreiche an der Bude 7 oder mehr Punkte (Ringwurf). Dein bestes Ergebnis zählt.,Reach 7 or more points at the stall (Ring toss). Your best score counts.,Büfede 7 veya daha fazla puan yap (Halka atma). En iyi skorun sayılır.
+MAIL_K7_BETREFF,Rekord gesucht: Ringwurf,Record wanted: Ring toss,Rekor aranıyor: Halka atma
+MAIL_K7_TEXT,"Servus, vom Ringwurf! Kein Ring bleibt hängen. Schaff mindestens 7 Punkte und ich zahl dir was.
+
+Bis bald auf der Kirmes","Hi, from the ring toss! No ring ever sticks. Score at least 7 points and I will pay you.
+
+See you at the fair","Selam, halka atmadan! Hiçbir halka takılmıyor. En az 7 puan yap, ödeyeyim.
+
+Fuarda görüşürüz"
+MAIL_K7_A1,"Gern, ich komm vorbei.","Gladly, I will drop by.","Memnuniyetle, uğrarım."
+MAIL_K7_A2,Heute nicht.,Not today.,Bugün olmaz.

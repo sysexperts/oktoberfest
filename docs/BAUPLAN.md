@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v358.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v359.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -25,7 +25,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
 
 ### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`)
-`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
+`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_kirmesquests`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
 
 ### Wo was liegt
 - **Story-Kern:** `scripts/story/story.gd` (Kapitel, Quests mit Zuständen angeboten/offen/erfüllt/verfallen, Post, Hinweise, Flaggen), Daten in `daten/quests.json`, `daten/mails.json`, `daten/hinweise.json` (Texte per Schlüssel in der CSV). Messwerte für Quest-Bedingungen: `GameManager._story_messwerte()`. Neue Quest = Eintrag in `quests.json` (+ Mail + Texte), Flaggen setzt `_story.ereignis("name")`. Gespräche, die Flaggen setzen: Tabellen `STORY_GESPRAECHE` in `scripts/npc_festleiter.gd`, Konrad-Dialoge in `scripts/npc_huber.gd`, Server-RPC `net_story_flag` (Whitelist im GameManager).
@@ -224,7 +224,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 | Aufgabe | Aufwand |
 |---|---|
-| Kirmes-Quests (6 bis 8), Buden-Besitzer-Texte | M |
+| ✔ Kirmes-Quests (7 Rekord-Aufgaben an Lukas, Dosenwurf, Schießbude, Entenangeln, Kegeln, Pfeilwurf, Ringwurf, Mail vom Budenbesitzer, v359; ☐ Gäste lotsen, Bude retten, Lieferung) | M |
 | Meilensteine neu, **Steam-Errungenschaften** | M |
 | Zeitung (Wiesn-Blatt) mit neuen Themen | S |
 | **Brabbelton** je Figur im Dialog | M |

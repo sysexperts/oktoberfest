@@ -516,5 +516,145 @@
     }
    }
   ]
+ },
+ {
+  "id": "M-K1",
+  "absender": "BUDE",
+  "betreff": "MAIL_K1_BETREFF",
+  "text": "MAIL_K1_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K1_A1",
+    "folge": {
+     "quest_annehmen": "K-1"
+    }
+   },
+   {
+    "text": "MAIL_K1_A2",
+    "folge": {
+     "quest_ablehnen": "K-1"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-K2",
+  "absender": "BUDE",
+  "betreff": "MAIL_K2_BETREFF",
+  "text": "MAIL_K2_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K2_A1",
+    "folge": {
+     "quest_annehmen": "K-2"
+    }
+   },
+   {
+    "text": "MAIL_K2_A2",
+    "folge": {
+     "quest_ablehnen": "K-2"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-K3",
+  "absender": "BUDE",
+  "betreff": "MAIL_K3_BETREFF",
+  "text": "MAIL_K3_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K3_A1",
+    "folge": {
+     "quest_annehmen": "K-3"
+    }
+   },
+   {
+    "text": "MAIL_K3_A2",
+    "folge": {
+     "quest_ablehnen": "K-3"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-K4",
+  "absender": "BUDE",
+  "betreff": "MAIL_K4_BETREFF",
+  "text": "MAIL_K4_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K4_A1",
+    "folge": {
+     "quest_annehmen": "K-4"
+    }
+   },
+   {
+    "text": "MAIL_K4_A2",
+    "folge": {
+     "quest_ablehnen": "K-4"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-K5",
+  "absender": "BUDE",
+  "betreff": "MAIL_K5_BETREFF",
+  "text": "MAIL_K5_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K5_A1",
+    "folge": {
+     "quest_annehmen": "K-5"
+    }
+   },
+   {
+    "text": "MAIL_K5_A2",
+    "folge": {
+     "quest_ablehnen": "K-5"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-K6",
+  "absender": "BUDE",
+  "betreff": "MAIL_K6_BETREFF",
+  "text": "MAIL_K6_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K6_A1",
+    "folge": {
+     "quest_annehmen": "K-6"
+    }
+   },
+   {
+    "text": "MAIL_K6_A2",
+    "folge": {
+     "quest_ablehnen": "K-6"
+    }
+   }
+  ]
+ },
+ {
+  "id": "M-K7",
+  "absender": "BUDE",
+  "betreff": "MAIL_K7_BETREFF",
+  "text": "MAIL_K7_TEXT",
+  "antworten": [
+   {
+    "text": "MAIL_K7_A1",
+    "folge": {
+     "quest_annehmen": "K-7"
+    }
+   },
+   {
+    "text": "MAIL_K7_A2",
+    "folge": {
+     "quest_ablehnen": "K-7"
+    }
+   }
+  ]
  }
 ]

@@ -2041,6 +2041,7 @@ func _story_messwerte() -> Dictionary:
 		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
 		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": _schulden,
 		"duell_siege": int(_stats.get("duell_siege", 0)), "keller_offen": keller_offen(), "schulden_frei": _schulden <= 0, "staract_gebucht": _artist_tier >= 3, "zutaten_gekauft": int(_stats.get("zutat_malz", 0)) > 0 and int(_stats.get("zutat_hopfen", 0)) > 0,
+		"rekord_hau_den_lukas": int(_stats.get("rekord_hau_den_lukas", 0)), "rekord_dosenwurf": int(_stats.get("rekord_dosenwurf", 0)), "rekord_schiessstand": int(_stats.get("rekord_schiessstand", 0)), "rekord_entenangeln": int(_stats.get("rekord_entenangeln", 0)), "rekord_kegeln": int(_stats.get("rekord_kegeln", 0)), "rekord_pfeilwurf": int(_stats.get("rekord_pfeilwurf", 0)), "rekord_ringwurf": int(_stats.get("rekord_ringwurf", 0)),
 		"suds_gebraut": int(_stats.get("suds", 0)), "faesser_abgefuellt": int(_stats.get("faesser", 0)), "meisterfaesser": int(_stats.get("meisterfaesser", 0)), "eigenbier_bedient": int(_stats.get("eigenbier_bedient", 0)),
 	}
 
@@ -2375,6 +2376,9 @@ func net_schiessen_ende(treffer: int) -> void:
 		return
 	treffer = clampi(treffer, 0, 10)
 	_stats.geschossen = int(_stats.get("geschossen", 0)) + 1
+	# Bestleistung je Spiel (Kirmes-Quests „Rekord“)
+	var spiel := _spiel_name(stand_n)
+	_stats["rekord_" + spiel] = maxi(int(_stats.get("rekord_" + spiel, 0)), treffer)
 	for gewinn: Array in SCHIESS_GEWINNE:
 		if treffer >= int(gewinn[0]):
 			Game.add_money(int(gewinn[1]))
@@ -2382,6 +2386,12 @@ func net_schiessen_ende(treffer: int) -> void:
 			_schiess_meldung(s, "MSG_KIRMES_GEWINN", [treffer, str(gewinn[2]), _eur(int(gewinn[1]))], 2)
 			return
 	_schiess_meldung(s, "MSG_KIRMES_NIETE", [treffer], 0)
+
+## Name des Spiels an einer Bude (Skriptname), für die Bestleistungen
+func _spiel_name(stand: Node) -> String:
+	if stand != null and stand.get_script() != null:
+		return (stand.get_script() as Script).resource_path.get_file().get_basename()
+	return "schiessstand"
 
 # ================================================= Glücksrad (reines Glücksspiel)
 ## Faktor ×10 je Feld — muss zu tools/bake_kirmes_spiele.gd (RAD_WERTE) und
@@ -7165,7 +7175,15 @@ func meister_liste() -> Array:
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
 		["MEISTER_WAGEN", wagen_prestige(), 6],
 		["MEISTER_AUSBAU", _ausbau.size(), 6],
+		["MEISTER_KIRMES", _kirmes_erfuellt(), 7],
 	]
+
+func _kirmes_erfuellt() -> int:
+	var n := 0
+	for i in range(1, 8):
+		if _story != null and _story.zustand("K-%d" % i) == "erfuellt":
+			n += 1
+	return n
 
 func meister_fertig() -> bool:
 	for e: Array in meister_liste():
