@@ -958,7 +958,42 @@ func _umriss_setzen(ziel, an: bool) -> void:
 	for mi in ziel.find_children("*", "MeshInstance3D", true, false):
 		(mi as MeshInstance3D).material_overlay = UMRISS if an else null
 
+## Müllsack werfen: E halten lädt den Wurf auf, beim Loslassen fliegt der Sack. Ein kurzes Tippen legt ihn wie bisher ab.
+const WURF_MIN := 0.28
+const WURF_MAX := 1.0
+var _wurf_t := -1.0
+
+func _hat_muellsack() -> bool:
+	return carry_state == 3 and carry_pkg_kind == 3
+
+func _muellsack_werfen(kraft: float) -> void:
+	var kam := get_viewport().get_camera_3d()
+	var blick: Vector3 = -kam.global_transform.basis.z if kam != null else -global_transform.basis.z
+	var start: Vector3 = (kam.global_position if kam != null else global_position + Vector3(0, 1.5, 0)) + blick * 0.5
+	var tempo := (blick + Vector3(0, 0.3, 0)).normalized() * lerpf(5.0, 12.0, clampf(kraft, 0.0, 1.0))
+	_world.net_muellsack_werfen.rpc_id(1, start, tempo)
+	carry_state = 0
+	carry_pkg_kind = 0
+	carry_pkg_amount = 0
+	carry_fill = 0.0
+	carry_type = 0
+	_sfx("pop")
+
 func _handle_interaction(delta: float) -> void:
+	if _wurf_t >= 0.0:
+		if not _hat_muellsack():
+			_wurf_t = -1.0
+		elif Input.is_action_pressed("interact"):
+			_wurf_t = minf(_wurf_t + delta, WURF_MAX)
+			return
+		else:
+			var geladen := _wurf_t
+			_wurf_t = -1.0
+			if geladen < WURF_MIN:
+				_ablegen()
+			else:
+				_muellsack_werfen(geladen / WURF_MAX)
+			return
 	# Etwas in der Hand und E bewirkt beim Ziel nichts (oder kein Ziel): ablegen.
 	# Im vollen Zelt ist fast immer irgendetwas im Blick — nur bei „nichts im Blick"
 	# abzulegen, klappte im Test praktisch nie.
@@ -966,6 +1001,9 @@ func _handle_interaction(delta: float) -> void:
 	var benutzen := Input.is_action_just_pressed("interact") and Time.get_ticks_msec() >= _interaktion_ab
 	if traegt and benutzen \
 			and (_current_target == null or _hint_for(_current_target) == ""):
+		if _hat_muellsack():
+			_wurf_t = 0.0   # tippen legt ab, halten und loslassen wirft
+			return
 		_ablegen()
 		return
 	if benutzen:

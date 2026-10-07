@@ -6984,14 +6984,68 @@ func _muellsack_hinlegen(pos: Vector3) -> void:
 func net_muell_abgeben() -> void:
 	if not multiplayer.is_server():
 		return
-	# Es kann nie mehr entsorgt werden, als gefegt wurde. Ohne diese Schranke
-	# lief der Zähler hoch, wenn zwei Spieler gleichzeitig abgaben.
+	_muell_annehmen()
+
+## Es kann nie mehr entsorgt werden, als gefegt wurde. Ohne diese Schranke
+## lief der Zähler hoch, wenn zwei Spieler gleichzeitig abgaben.
+func _muell_annehmen() -> bool:
 	if _muell_entsorgt >= _muell_erzeugt:
-		return
+		return false
 	_muell_entsorgt += 1
 	_muell_stapel += 1
 	_net_muell_geworfen.rpc()
 	_broadcast_meta()
+	return true
+
+## Müllsack werfen (E halten, loslassen). Der Server rechnet den Flug nach und lässt den Sack nach der Flugzeit
+## landen: in der Tonne zählt er wie abgegeben, sonst liegt er als Sack am Boden.
+const WURF_MAX_TEMPO := 14.0
+const TONNE_TREFFER := 1.5
+@rpc("any_peer", "reliable", "call_local")
+func net_muellsack_werfen(start: Vector3, tempo: Vector3) -> void:
+	if not multiplayer.is_server():
+		return
+	var s := multiplayer.get_remote_sender_id()
+	if s == 0:
+		s = 1
+	var pl := _players_nodes.get(s) as Node3D
+	if pl == null or not is_instance_valid(pl) or tempo.length() > WURF_MAX_TEMPO or pl.global_position.distance_to(start) > 3.5:
+		return
+	var boden := ebene_boden(ebene_von(start))
+	var hoehe := start.y - boden - 0.15
+	var dauer := (tempo.y + sqrt(tempo.y * tempo.y + 19.6 * maxf(hoehe, 0.0))) / 9.8
+	dauer = clampf(dauer, 0.15, 3.0)
+	var ziel := Vector3(start.x + tempo.x * dauer, boden, start.z + tempo.z * dauer)
+	_net_sack_flug.rpc(start, tempo, dauer)
+	await get_tree().create_timer(dauer).timeout
+	for m in get_tree().get_nodes_in_group("muellplatz"):
+		var d: Vector3 = (m as Node3D).global_position - ziel
+		d.y = 0.0
+		if d.length() <= TONNE_TREFFER and _muell_annehmen():
+			return
+	var id := _pkg_next
+	_pkg_next += 1
+	_add_package.rpc(id, ziel, MUELL, 1)
+
+## Der fliegende Sack, auf allen Rechnern (rein optisch)
+@rpc("authority", "reliable", "call_local")
+func _net_sack_flug(start: Vector3, tempo: Vector3, dauer: float) -> void:
+	var sack := MeshInstance3D.new()
+	var kugel := SphereMesh.new()
+	kugel.radius = 0.22
+	kugel.height = 0.42
+	sack.mesh = kugel
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(0.12, 0.12, 0.14)
+	mat.roughness = 0.5
+	sack.material_override = mat
+	add_child(sack)
+	sack.global_position = start
+	var t := create_tween()
+	t.tween_method(func(z: float) -> void:
+		sack.global_position = start + tempo * z + Vector3(0, -4.9 * z * z, 0)
+		sack.rotation.x = z * 7.0, 0.0, dauer, dauer)
+	t.tween_callback(sack.queue_free)
 
 ## Ein Spieler hat zu viel getrunken und übergibt sich (scripts/player.gd).
 ## Den Fleck legt der Server an — sonst läge er nur auf dem eigenen Rechner und
