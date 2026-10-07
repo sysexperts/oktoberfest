@@ -6999,6 +6999,8 @@ func _muell_annehmen() -> bool:
 
 ## Müllsack werfen (E halten, loslassen). Der Server rechnet den Flug nach und lässt den Sack nach der Flugzeit
 ## landen: in der Tonne zählt er wie abgegeben, sonst liegt er als Sack am Boden.
+## Gleiches Modell wie der Sack in der Hand (scenes/player.tscn)
+const SACK_MESH := preload("res://assets/dreck/muellsack.tres")
 const WURF_MAX_TEMPO := 14.0
 const TONNE_TREFFER := 1.5
 @rpc("any_peer", "reliable", "call_local")
@@ -7031,14 +7033,8 @@ func net_muellsack_werfen(start: Vector3, tempo: Vector3) -> void:
 @rpc("authority", "reliable", "call_local")
 func _net_sack_flug(start: Vector3, tempo: Vector3, dauer: float) -> void:
 	var sack := MeshInstance3D.new()
-	var kugel := SphereMesh.new()
-	kugel.radius = 0.22
-	kugel.height = 0.42
-	sack.mesh = kugel
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.12, 0.12, 0.14)
-	mat.roughness = 0.5
-	sack.material_override = mat
+	sack.mesh = SACK_MESH
+	sack.scale = Vector3(0.8, 0.8, 0.8)
 	add_child(sack)
 	sack.global_position = start
 	var t := create_tween()
