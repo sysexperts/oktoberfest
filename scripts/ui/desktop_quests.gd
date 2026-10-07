@@ -66,3 +66,18 @@ func zeigen() -> void:
 		if _story.zustand(id) == "erfuellt":
 			erledigt += 1
 	%Erledigt.text = tr("QUESTS_ERLEDIGT") % erledigt
+	_rezeptbuch()
+
+## Sepps Rezeptbuch: Seite 1 von Anfang an, 2 nach Kapitel 4, 3 von Konrad. Jede Seite hebt die Güte des Biers.
+func _rezeptbuch() -> void:
+	var hud: Object = _gm.get("_hud") if _gm != null else null
+	var z: Dictionary = hud.get("_zustand") if hud != null else {}
+	var seiten := int(z.get("rezeptseiten", 1))
+	var zeilen: Array[String] = []
+	for i in 3:
+		if i < seiten:
+			zeilen.append("● " + tr("REZEPT_SEITE_%d" % (i + 1)))
+		else:
+			zeilen.append("○ " + tr("REZEPT_SEITE_GESPERRT") % (i + 1))
+	%Rezeptbuch.text = "
+".join(zeilen)

@@ -407,6 +407,21 @@ theme_override_font_sizes/font_size = 24
 text = "QUESTS_LEER"
 autowrap_mode = 3
 
+[node name="RezeptTitel" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.69, 0.73, 0.84, 1)
+theme_override_font_sizes/font_size = 20
+text = "QUESTS_REZEPTBUCH"
+
+[node name="Rezeptbuch" type="Label" parent="Rahmen/Scroll/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.85, 0.93, 1)
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
 [node name="Erledigt" type="Label" parent="Rahmen/Scroll/Spalte"]
 unique_name_in_owner = true
 auto_translate_mode = 2

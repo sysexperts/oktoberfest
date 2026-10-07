@@ -34,7 +34,16 @@ class Lauf extends Node:
 		_check("Duell gewonnen: 5.3 offen", story.zustand("5.2") == "erfuellt" and story.zustand("5.3") == "offen", story.zustand("5.3"))
 		gm.net_story_flag("rezeptseite3")
 		_check("5.4 offen", story.zustand("5.4") == "offen", story.zustand("5.4"))
-		gm._stats["suds"] = 3
+		_check("Rezeptbuch: drei Seiten", gm.rezeptseiten() == 3, str(gm.rezeptseiten()))
+		gm._gaerfaesser[0] = {"zustand": 2, "rest": 0.0, "menge": 8, "q": gm.rezeptseiten()}
+		gm._tent_stage = maxi(gm._tent_stage, gm.KELLER_AB_STUFE)
+		gm._eigenbier = 0
+		gm._eigenbier_q = [0, 0, 0]
+		gm.net_gaerfass_fuellen(0)
+		_check("Meisterbräu im Lager", int(gm._eigenbier_q[2]) == 8 and int(gm._stats.get("meisterfaesser", 0)) == 1, str(gm._eigenbier_q))
+		var geld_q: int = Game.money
+		gm._consume_stock(1)
+		_check("Aufschlag für Meisterbräu", Game.money > geld_q, "%d -> %d" % [geld_q, Game.money])
 		gm._broadcast_meta()
 		_check("5.5 offen", story.zustand("5.5") == "offen", story.zustand("5.5"))
 		gm._tent_stage = 4

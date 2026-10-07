@@ -970,7 +970,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier,
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1052,7 +1052,8 @@ func _load_game() -> bool:
 			if e is Dictionary:
 				_gaerfaesser[i] = {"zustand": int((e as Dictionary).get("zustand", 0)),
 					"rest": float((e as Dictionary).get("rest", 0.0)),
-					"menge": int((e as Dictionary).get("menge", 0))}
+					"menge": int((e as Dictionary).get("menge", 0)),
+					"q": clampi(int((e as Dictionary).get("q", 1)), 1, 3)}
 	_maische = float(d.get("maische", 0.0))
 	_maische_fertig = bool(d.get("maische_fertig", false))
 	_sud = float(d.get("sud", 0.0))
@@ -1099,6 +1100,9 @@ func _load_game() -> bool:
 	_bank_bezahlt = clampi(int(d.get("bank", Wirtschaft.BANK_RATEN.size())), 0, Wirtschaft.BANK_RATEN.size())
 	_schulden = maxi(0, int(d.get("schulden", SCHULDEN_START)))
 	_eigenbier = maxi(0, int(d.get("eigenbier", 0)))
+	var eq: Variant = d.get("eigenbier_q", [])
+	if eq is Array and (eq as Array).size() == 3:
+		_eigenbier_q = [maxi(0, int(eq[0])), maxi(0, int(eq[1])), maxi(0, int(eq[2]))]
 	var wette_gespeichert: Variant = d.get("huber_wette", {})
 	_huber_wette = wette_gespeichert if wette_gespeichert is Dictionary else {}
 	_letzte_sabotage = int(d.get("sabotage_tag", 0))
@@ -1956,7 +1960,7 @@ func _story_messwerte() -> Dictionary:
 		"zelt_sauber": _tent_stage > 0 and not _dreck_uebrig() and not _dreck_nachlegen and not _muell_offen(),
 		"schulden_bezahlt": int(_stats.get("schulden_bezahlt", 0)), "schulden_rest": _schulden,
 		"duell_siege": int(_stats.get("duell_siege", 0)), "keller_offen": keller_offen(), "schulden_frei": _schulden <= 0, "staract_gebucht": _artist_tier >= 3, "zutaten_gekauft": int(_stats.get("zutat_malz", 0)) > 0 and int(_stats.get("zutat_hopfen", 0)) > 0,
-		"suds_gebraut": int(_stats.get("suds", 0)), "faesser_abgefuellt": int(_stats.get("faesser", 0)), "eigenbier_bedient": int(_stats.get("eigenbier_bedient", 0)),
+		"suds_gebraut": int(_stats.get("suds", 0)), "faesser_abgefuellt": int(_stats.get("faesser", 0)), "meisterfaesser": int(_stats.get("meisterfaesser", 0)), "eigenbier_bedient": int(_stats.get("eigenbier_bedient", 0)),
 	}
 
 func _staff_anzahl(role: int) -> int:
@@ -3048,14 +3052,37 @@ func _has_stock(okind: int) -> bool:
 func net_selbst_getrunken() -> void:
 	if not multiplayer.is_server():
 		return
-	_consume_stock(1)
+	_consume_stock(1, false)
 
 var _eigenbier := 0   # So viel selbstgebrautes Bier liegt noch im Lager
+## davon je Qualität: [Hausbier, Festbier, Meisterbräu]
+var _eigenbier_q := [0, 0, 0]
+## Aufschlag je Maß und Qualitätsstufe über dem Hausbier (in €)
+const BIER_AUFSCHLAG := 2
 
-func _consume_stock(okind: int) -> void:
+## Seiten von Sepps Rezeptbuch: 1 von Anfang an, 2 nach Kapitel 4, 3 von Konrad (Quest 5.3).
+## Jede Seite macht das Bier besser (Hausbier, Festbier, Meisterbräu).
+func rezeptseiten() -> int:
+	if _story == null or not _story.aktiv:
+		return 1
+	var n := 1
+	if _story.kapitel >= 5:
+		n += 1
+	if bool(_story.flags.get("rezeptseite3", false)):
+		n += 1
+	return n
+
+func _consume_stock(okind: int, verkauf := true) -> void:
 	var w: int = WARE_ESSEN if okind == 2 else WARE_BIER
 	if w == WARE_BIER and _eigenbier > 0:
 		_eigenbier -= 1
+		# bestes Bier zuerst: Meisterbräu und Festbier bringen einen Aufschlag je Maß
+		for i in [2, 1, 0]:
+			if int(_eigenbier_q[i]) > 0:
+				_eigenbier_q[i] = int(_eigenbier_q[i]) - 1
+				if verkauf and i > 0:
+					_add_income(i * BIER_AUFSCHLAG)
+				break
 		_stats["eigenbier_bedient"] = int(_stats.get("eigenbier_bedient", 0)) + 1
 	_stock[w] = maxi(0, int(_stock.get(w, 0)) - 1)
 	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
@@ -4400,13 +4427,17 @@ func net_gaerfass_fuellen(index: int) -> void:
 		var menge := int(fass.menge)
 		_stock[WARE_BIER] = int(_stock[WARE_BIER]) + menge
 		_eigenbier += menge
+		var q := clampi(int(fass.get("q", 1)), 1, 3)
+		_eigenbier_q[q - 1] = int(_eigenbier_q[q - 1]) + menge
+		if q == 3:
+			_stats["meisterfaesser"] = int(_stats.get("meisterfaesser", 0)) + 1
 		_stats["faesser"] = int(_stats.get("faesser", 0)) + 1
 		fass.zustand = 0
 		fass.menge = 0
 		fass.rest = 0.0
 		_gaerfaesser[index] = fass
 		_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
-		_melde("MSG_FASS_ABGEFUELLT", [menge], 2)
+		_melde("MSG_FASS_ABGEFUELLT_Q", [menge, "BIER_STUFE_%d" % q], 2)
 		_brau_senden()
 		_broadcast_meta()
 		return
@@ -4419,6 +4450,7 @@ func net_gaerfass_fuellen(index: int) -> void:
 	fass.zustand = 1
 	fass.rest = GAER_DAUER
 	fass.menge = 0
+	fass["q"] = rezeptseiten()   # Qualität steht beim Ansetzen fest
 	_gaerfaesser[index] = fass
 	_sud = 0.0
 	_sud_fertig = false

@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v340.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v341.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -38,7 +38,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 ### Nächste Schritte (Vorschlag, in dieser Reihenfolge)
 1. ✔ **Kapitel 5 abgerundet** (Feuerwerk, Kamerafahrt, Konrads Auftritt, Stufenanzeige, v340).
 2. **P6 Rest:** Konrads Zelt umbauen (XL), Casino im Keller samt Türsteher und Spielen (XL), Händler Gustav und Sabotage-System mit Tarnung (XL), Frau Wagner als Figur im Zelt (Hygiene-Überraschungskontrolle), Konrad wirbt Mitarbeiter ab, Quest 3.4b „Das Hinterzimmer", Fake-Bewertungen in der Social-App.
-3. **P7 Rest:** Qualitätsstufen und Rezeptbuch (drei Seiten), Premiumpreis fürs eigene Bier, Bräumeister Gerhard als Personal (Rolle 6), weitere Streiche.
+3. **P7 Rest:** Bräumeister Gerhard als Personal (Rolle 6), weitere Streiche (Lieferwagen, Diebe, Stromausfall). Qualität, Rezeptbuch und Aufschlag sind fertig (v341).
 4. **P5 Rest:** Gefallen Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen (Muster siehe `gefallen.gd`).
 5. **P4 Rest:** Nebenquest „Happy Hour" (40 Maß in einer Stunde).
 6. **P9 bis P11:** Fest-App und Festtag-System, Meister-Liste, Wohnwagen je Spieler, Late-Game-Ausgaben, Kirmes-Quests, Meilensteine, Zeitung, Brabbelton, Balancing mit `tools/sim_saison`, **Koop-Test aller Systeme** (bisher nur Einzelspieler-Tests!), Übersetzungen prüfen, Leistung.
@@ -46,7 +46,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ### Bekannte Lücken und Risiken
 - Alle Kapitel sind **nur im Test** durchgespielt, nicht von Hand und nicht im Koop. Ein Bot-Durchlauf (`tools/sim_saison`) für die ganze Story fehlt.
-- Quest 5.4 „Das perfekte Festbier" ist vorläufig „drei Suds gebraut", bis es Qualitätsstufen gibt. Quest 3.4 fängt den Saboteur direkt statt ihn zu einem Security zu tragen.
+- Quest 5.4 verlangt jetzt ein abgefülltes Fass Meisterbräu. Quest 3.4 fängt den Saboteur direkt statt ihn zu einem Security zu tragen.
 - Die Schulden stehen bei 5.000 € (`SCHULDEN_START`), Quest 2.5 verlangt davon 1.500 € zurück. Beträge sind Platzhalter fürs Balancing.
 - Bank-Texte, Mails und Quest-Texte sind Entwürfe: Ton warm und humorvoll, nach dem Testspielen glätten.
 - `docs/PLAN_STORY.md` und die `TEXTE_K1` bis `K5` sind der Plan und enthalten teils noch das Wort „Wiesn" (nicht ins Spiel übernehmen).
@@ -66,8 +66,8 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P4 Kapitel 2 | ✔ fertig bis auf die Nebenquest „Happy Hour" | v329 bis v332 |
 | P5 Gefallen und Security | ◐ (Security als Personal ✔ v334) System plus sechs Gefallen (Spanner, Taschendieb, Sau, Konrads Spion, Sturmwarnung, Brand) und vier Security-Posten fertig; 5 weitere Gefallen (Falschgeld, gestohlene Krüge, Hochzeit, Reporter, Wettessen), Security als Personal offen | v330 bis v333 |
 | P6 Kapitel 3 | ◐ Streiche und Quests 3.1 bis 3.6 spielbar (ohne Casino); Konrads Zelt, Casino, Sabotage-System, Frau Wagner offen | v334 |
-| P7 Kapitel 4 | ◐ Quests 4.1 bis 4.7 spielbar (ohne Qualität, Rezeptbuch und Bräumeister) | v335 |
-| P8 Kapitel 5 | ◐ Quests 5.1 bis 5.7 spielbar (großes Fest = Feierabend mit Star-Act, ohne Cutscene und Feuerwerk) | v336 |
+| P7 Kapitel 4 | ◐ Quests 4.1 bis 4.7 spielbar, Qualität und Rezeptbuch ✔ (ohne Bräumeister) | v341 |
+| P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v336 |
 | P9 bis P11 | ☐ offen | |
 
 ---
@@ -197,8 +197,8 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | Aufgabe | Aufwand |
 |---|---|
 | ◐ Braukeller überarbeiten (aufräumen, Rezepttafel, Tür) — Keller und Brauen laufen wie zuvor, Abfüllen neu | M |
-| ☐ Qualitätsstufen und drei Rezeptseiten, Rezeptbuch in der Quests-App | M |
-| ◐ Eigenes Bier (✔ Abfüllen, Lager, Zählung; ☐ Premiumpreis, Geduld) | S |
+| ✔ Qualitätsstufen (Hausbier, Festbier, Meisterbräu je Rezeptseite) und Rezeptbuch in der Quests-App (v341) | M |
+| ◐ Eigenes Bier (✔ Abfüllen, Lager, Zählung, Aufschlag je Maß nach Güte; ☐ Geduld) | S |
 | ☐ Bräumeister Gerhard als Personal (Rolle sechs) | M |
 | ◐ Quests 4.1 bis 4.7, Mails (✔); Streiche: Zutaten blockieren ✔, Lieferwagen, Diebe, Stromausfall ☐ | M |
 
@@ -208,7 +208,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 |---|---|
 | ◐ **Duell-Turnier** reaktivieren (✔ in der Story ab 5.2 wiederholbar, Konrad wird je Sieg schneller; ✔ Stufenanzeige „Runde x von 5“ (v339)) | M |
 | ✔ Riesenzelt (Zeltstufe 4, vorhanden), Quests 5.1 bis 5.7 | M |
-| ◐ **Großes Fest:** ✔ Star-Act-Bedingung, Brief, Meldung; ✔ Feuerwerk (v337), Konrads Auftritt (v338), Kamerafahrt (v340) | L |
+| ✔ **Großes Fest:** ✔ Star-Act-Bedingung, Brief, Meldung; ✔ Feuerwerk (v337), Konrads Auftritt (v338), Kamerafahrt (v340) | L |
 
 ## P9 · Endgame (XL)
 

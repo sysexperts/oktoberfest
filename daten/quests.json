@@ -817,8 +817,8 @@
    "nach": "5.3"
   },
   "bedingung": {
-   "mw": "suds_gebraut",
-   "min": 3
+   "mw": "meisterfaesser",
+   "min": 1
   },
   "frist_tage": 0,
   "belohnung": {}

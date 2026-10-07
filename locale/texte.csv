@@ -1999,7 +1999,7 @@ Q_5_2_TEXT,Konrad fordert dich zum Maß-Wettschleppen heraus. Sprich vor seinem 
 Q_5_3_TITLE,Die dritte Seite,The third page,Üçüncü sayfa
 Q_5_3_TEXT,Konrad hat die dritte Seite von Sepps Festbier-Rezept. Nach dem Duell muss er sie dir geben. Geh zu seinem Zelt.,Konrad has the third page of Sepp's fest beer recipe. After the duel he has to hand it over. Go to his tent.,Konrad'da Sepp'in festival birası tarifinin üçüncü sayfası var. Düellodan sonra onu sana vermek zorunda. Çadırına git.
 Q_5_4_TITLE,Das perfekte Festbier,The perfect fest beer,Mükemmel festival birası
-Q_5_4_TEXT,Mit allen drei Seiten kannst du das Festbier perfektionieren. Brau insgesamt drei Suds.,With all three pages you can perfect the fest beer. Brew three batches in total.,Üç sayfayla festival birasını mükemmelleştirebilirsin. Toplam üç demleme yap.
+Q_5_4_TEXT,Mit allen drei Seiten kannst du das Festbier perfektionieren. Brau einen Sud nach dem Meisterrezept und füll das Fass ins Lager ab.,With all three pages you can perfect the fest beer. Brew a batch with the master recipe and bottle the barrel into storage.,Üç sayfayla festival birasını mükemmelleştirebilirsin. Usta tarifine göre bir demleme yap ve fıçıyı depoya doldur.
 Q_5_5_TITLE,Das Riesenzelt,The giant tent,Dev çadır
 Q_5_5_TEXT,Für das große Fest braucht es ein Riesenzelt. Bau im Shop auf die höchste Stufe aus.,The big festival needs a giant tent. Expand to the highest level in the shop.,Büyük festival için dev bir çadır gerekiyor. Mağazadan en yüksek seviyeye genişlet.
 Q_5_6_TITLE,Die letzte Rate,The last instalment,Son taksit
@@ -2031,3 +2031,12 @@ KONRAD_FEST_2_DU,"Aber glaub nicht, dass das Duell damit vergessen ist. Nächste
 KONRAD_FEST_2_IHR,"Aber glaubt nicht, dass das Duell damit vergessen ist. Nächstes Jahr hole ich mir die Krone zurück.",But don't think the duel is forgotten. Next year I'll take the crown back.,Ama düellonun unutulduğunu sanmayın. Seneye tacı geri alacağım.
 KONRAD_FEST_3_DU,"… Schönes Feuerwerk übrigens. Prost, Sepp.","... Nice fireworks, by the way. Cheers, Sepp.","... Bu arada havai fişek güzel. Şerefe, Sepp."
 KONRAD_FEST_3_IHR,"… Schönes Feuerwerk übrigens. Prost, ihr zwei.","... Nice fireworks, by the way. Cheers, you two.","... Bu arada havai fişek güzel. Şerefe, ikiniz."
+QUESTS_REZEPTBUCH,Rezeptbuch,Recipe book,Tarif defteri
+REZEPT_SEITE_1,"Seite 1: Hausbier. Malz maischen, Sud mit Hopfen kochen, Hefe ins Fass.","Page 1: House beer. Mash the malt, boil the wort with hops, add yeast to the barrel.","Sayfa 1: Ev birası. Maltı ez, şerbeti hopla kaynat, mayayı fıçıya at."
+REZEPT_SEITE_2,Seite 2: Festbier. Länger gelagert und fein gehopft. Bringt 2 € Aufschlag je Maß.,Page 2: Fest beer. Aged longer and finely hopped. Earns 2 € extra per mug.,"Sayfa 2: Festival birası. Daha uzun dinlendirilmiş, ince hoplu. Kupa başına 2 € ekstra kazandırır."
+REZEPT_SEITE_3,Seite 3: Meisterbräu. Sepps Geheimrezept von Konrad. Bringt 4 € Aufschlag je Maß.,Page 3: Master brew. Sepp's secret recipe from Konrad. Earns 4 € extra per mug.,Sayfa 3: Usta birası. Sepp'in Konrad'dan gelen gizli tarifi. Kupa başına 4 € ekstra kazandırır.
+REZEPT_SEITE_GESPERRT,Seite %d: noch nicht gefunden,Page %d: not found yet,Sayfa %d: henüz bulunamadı
+BIER_STUFE_1,Hausbier,house beer,ev birası
+BIER_STUFE_2,Festbier,fest beer,festival birası
+BIER_STUFE_3,Meisterbräu,master brew,usta birası
+MSG_FASS_ABGEFUELLT_Q,Das Bier ist im Lager: %d Maß %s,The beer is in storage: %d mugs of %s,Bira depoda: %d kupa %s
