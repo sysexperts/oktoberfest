@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="17_figur"]
 [ext_resource type="PackedScene" path="res://scenes/schanktheke.tscn" id="18_theke"]
 [ext_resource type="PackedScene" path="res://scenes/sab_ziel.tscn" id="19_ziel"]
+[ext_resource type="PackedScene" path="res://scenes/casino.tscn" id="20_casino"]
 
 [node name="HuberZelt" type="Node3D"]
 script = ExtResource("1_huber")
@@ -182,6 +183,8 @@ art = "stink"
 [node name="ZielJuck" parent="Innen" instance=ExtResource("19_ziel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 1)
 art = "juck"
+
+[node name="Casino" parent="." instance=ExtResource("20_casino")]
 
 [node name="Huber" type="Node3D" parent="."]
 transform = Transform3D(1.12, 0, 0, 0, 1.12, 0, 0, 0, 1.12, 1.2, 0, 11.4)

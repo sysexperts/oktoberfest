@@ -604,13 +604,28 @@
   "belohnung": {}
  },
  {
+  "id": "3.4b",
+  "typ": "haupt",
+  "kapitel": 3,
+  "titel": "Q_3_4B_TITLE",
+  "text": "Q_3_4B_TEXT",
+  "ausloeser": {
+   "nach": "3.4"
+  },
+  "bedingung": {
+   "flag": "casino_gespielt"
+  },
+  "frist_tage": 0,
+  "belohnung": {}
+ },
+ {
   "id": "3.5",
   "typ": "haupt",
   "kapitel": 3,
   "titel": "Q_3_5_TITLE",
   "text": "Q_3_5_TEXT",
   "ausloeser": {
-   "nach": "3.4"
+   "nach": "3.4b"
   },
   "bedingung": {
    "flag": "zettel_uebergeben"

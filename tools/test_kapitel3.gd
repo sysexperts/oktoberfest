@@ -64,7 +64,17 @@ class Lauf extends Node:
 		gm._saboteur = {"art": "fass", "rest": 50.0}
 		gm.net_saboteur_fangen()
 		gm._broadcast_meta()
-		_check("3.5 offen nach dem Fang", story.zustand("3.4") == "erfuellt" and story.zustand("3.5") == "offen" and bool(story.flags.get("zettel_da", false)), story.zustand("3.5"))
+		_check("3.4b offen nach dem Fang", story.zustand("3.4") == "erfuellt" and story.zustand("3.4b") == "offen" and bool(story.flags.get("zettel_da", false)), story.zustand("3.4b"))
+		# Casino: Komplettset bei Gustav, Türsteher, eine Runde Roulette
+		gm.net_casino_tuer()
+		_check("Ohne Tarnung kein Zutritt", gm._casino_tag != gm._day)
+		Game.add_money(1000)
+		gm.net_sab_kauf("komplett")
+		gm.net_casino_tuer()
+		_check("Mit Tarnung eingelassen", gm._casino_tag == gm._day)
+		gm.net_roulette(0)
+		gm._broadcast_meta()
+		_check("3.5 offen nach dem Roulette", story.zustand("3.4b") == "erfuellt" and story.zustand("3.5") == "offen", story.zustand("3.5"))
 		gm.net_story_flag("zettel_uebergeben")
 		_check("3.6 offen nach dem Zettel", story.zustand("3.6") == "offen", story.zustand("3.6"))
 		gm.net_story_flag("konrad_zur_rede")

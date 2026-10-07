@@ -421,6 +421,10 @@ const SAB_ERFOLG := 120
 const SAB_WERKZEUG := {"fass": "fassbohrer", "strom": "zange", "stink": "stinkbombe", "juck": "juckpulver"}
 var _sab_tag := {}          # Ziel-Art -> Spieltag der letzten Sabotage
 var _rache_tag := -1        # Konrad schlägt an diesem Tag zurück
+## Casino hinter Konrads Zelt (gehört Konrad, man spielt gegen seine Bank): Zutritt nur mit Tarnung.
+const ROULETTE_EINSATZ := 50
+const ROULETTE_ROT := [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+var _casino_tag := -1       # Spieltag, an dem der Türsteher uns eingelassen hat
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -997,7 +1001,7 @@ func _save_game() -> void:
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
 		"kredit": _kredit_rest,
 		"bank": _bank_bezahlt,
-		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "rezeptseiten": rezeptseiten(),
+		"schulden": _schulden, "eigenbier": _eigenbier, "eigenbier_q": _eigenbier_q.duplicate(), "fakes": _fakes.duplicate(true), "sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "rache_tag": _rache_tag, "casino_tag": _casino_tag, "rezeptseiten": rezeptseiten(),
 		"huber_wette": _huber_wette,
 		"sabotage_tag": _letzte_sabotage,
 		"duell_saison": _duell_saison,
@@ -1079,6 +1083,7 @@ func _load_game() -> bool:
 	var sabtag: Variant = d.get("sab_tag", {})
 	_sab_tag = (sabtag as Dictionary).duplicate() if sabtag is Dictionary else {}
 	_rache_tag = int(d.get("rache_tag", -1))
+	_casino_tag = int(d.get("casino_tag", -1))
 	var fk: Variant = d.get("fakes", [])
 	_fakes = (fk as Array).duplicate(true) if fk is Array else []
 	var gf: Variant = d.get("gaerfaesser", [])
@@ -6240,7 +6245,7 @@ func _buero_state() -> Dictionary:
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
 		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
-		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(),
+		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag,
 		"rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),
 		"lieferproblem": _lieferproblem,
 		"haelt": haelt, "bierpreis": _bierpreis, "einrichtung": _einrichtung.size(),
@@ -6997,6 +7002,46 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 		_story.ereignis("sabotage_geschafft")
 		_rache_tag = _day + 1
 	_broadcast_meta()
+
+## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
+@rpc("any_peer", "reliable", "call_local")
+func net_casino_tuer() -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3:
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	if _tarnung_an and _tarnung_stufe >= 1:
+		_casino_tag = _day
+		_melde("MSG_CASINO_REIN", [], 2)
+		_broadcast_meta()
+	else:
+		_melde("MSG_CASINO_RAUS", [], 1)
+		_net_sab_rauswurf.rpc_id(sender if sender > 0 else 1)
+
+## Roulette: farbe 0 = Rot, 1 = Schwarz. Gewinn 2:1 aus Konrads Bank, die 0 gewinnt immer das Haus.
+@rpc("any_peer", "reliable", "call_local")
+func net_roulette(farbe: int) -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+		return
+	if farbe != 0 and farbe != 1:
+		return
+	if not _afford(ROULETTE_EINSATZ):
+		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+		return
+	var zahl := randi() % 37
+	var rot: bool = zahl in ROULETTE_ROT
+	var gewonnen: bool = zahl != 0 and (rot == (farbe == 0))
+	Game.add_money(ROULETTE_EINSATZ if gewonnen else -ROULETTE_EINSATZ)
+	_stats["roulette"] = int(_stats.get("roulette", 0)) + 1
+	_story.ereignis("casino_gespielt")
+	_net_roulette_dreh.rpc()
+	var farbname := "CROUPIER_GRUEN" if zahl == 0 else ("CROUPIER_ROT" if rot else "CROUPIER_SCHWARZ")
+	_melde("MSG_ROULETTE_GEWONNEN" if gewonnen else "MSG_ROULETTE_VERLOREN", [zahl, farbname, _eur(ROULETTE_EINSATZ)], 2 if gewonnen else 1)
+	_broadcast_meta()
+
+@rpc("authority", "reliable", "call_local")
+func _net_roulette_dreh() -> void:
+	for c in get_tree().get_nodes_in_group("casino"):
+		c.dreh()
 
 ## Erwischt: der Türsteher wirft dich vor das Zelt
 @rpc("authority", "reliable", "call_local")

@@ -2084,3 +2084,16 @@ MSG_SAB_STROM,Bei Konrad geht das Licht aus. Gäste wandern zu dir ab: +%s,The l
 MSG_SAB_STINK,Bei Konrad stinkt es erbärmlich. Gäste wandern zu dir ab: +%s,It stinks terribly at Konrad's. Guests move over to you: +%s,Konrad'da korkunç kokuyor. Misafirler sana geçiyor: +%s
 MSG_SAB_JUCK,Bei Konrad kratzt sich alles. Gäste wandern zu dir ab: +%s,Everyone at Konrad's is scratching. Guests move over to you: +%s,Konrad'da herkes kaşınıyor. Misafirler sana geçiyor: +%s
 MSG_SAB_RACHE,Konrad schlägt zurück. Heute ist mit einem Streich zu rechnen!,Konrad strikes back. Expect a prank today!,Konrad karşılık veriyor. Bugün bir şaka bekle!
+HINT_CASINO_TUER,{interact} Zum Türsteher,{interact} Talk to the doorman,{interact} Kapıcıyla konuş
+HINT_CASINO_ROULETTE,{interact} Roulette spielen,{interact} Play roulette,{interact} Rulet oyna
+MSG_CASINO_REIN,"Der Türsteher mustert dich, nickt und lässt dich ins Casino. Mit Tarnung kommst du rein.","The doorman looks you over, nods and lets you into the casino. The disguise worked.","Kapıcı seni süzer, başını sallar ve seni kumarhaneye alır. Kılık işe yaradı."
+MSG_CASINO_RAUS,Dich kenn ich doch! Raus hier. Ohne Tarnung kommst du nicht rein.,I know you! Get out. You won't get in without a disguise.,Seni tanıyorum! Defol. Kılıksız giremezsin.
+CROUPIER_NAME,Croupier,Croupier,Krupiye
+CROUPIER_FRAGE,Faites vos jeux. Einsatz 50 €. Rot oder Schwarz?,Faites vos jeux. Stake 50 €. Red or black?,Faites vos jeux. Bahis 50 €. Kırmızı mı siyah mı?
+CROUPIER_ROT,Rot,Red,Kırmızı
+CROUPIER_SCHWARZ,Schwarz,Black,Siyah
+CROUPIER_GRUEN,Grün,Green,Yeşil
+MSG_ROULETTE_GEWONNEN,"Roulette: die %d, %s. Gewonnen: +%s aus Konrads Bank!","Roulette: %d, %s. You win +%s from Konrad's bank!","Rulet: %d, %s. Konrad'ın bankasından +%s kazandın!"
+MSG_ROULETTE_VERLOREN,"Roulette: die %d, %s. Verloren: -%s an Konrads Bank.","Roulette: %d, %s. You lose -%s to Konrad's bank.","Rulet: %d, %s. Konrad'ın bankasına -%s kaybettin."
+Q_3_4B_TITLE,Das Hinterzimmer,The back room,Arka oda
+Q_3_4B_TEXT,"Der Saboteur ist zu Konrads Zelt geflohen. Hinter seinem Zelt gibt es ein Casino. Kauf bei Gustav ein Komplettset als Tarnung, lass dich vom Türsteher einlassen und spiel eine Runde Roulette.","The saboteur fled to Konrad's tent. There is a casino behind his tent. Buy a full disguise from Gustav, get past the doorman and play a round of roulette.","Sabotajcı Konrad'ın çadırına kaçtı. Çadırının arkasında bir kumarhane var. Gustav'dan tam kılık al, kapıcıdan geç ve bir tur rulet oyna."
