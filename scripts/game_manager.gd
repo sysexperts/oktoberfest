@@ -3327,6 +3327,8 @@ func _avoid_tables(pos: Vector3, dir: Vector3) -> Vector3:
 	out.y = 0
 	return out.normalized() if out.length() > 0.01 else dir
 func _update_staff(delta: float) -> void:
+	if _strom_t > 0.0:
+		return   # Stromausfall: das Personal steht still
 	for sid in _staff_sim.keys():
 		var s: Dictionary = _staff_sim[sid]
 		match int(s.role):
@@ -5504,6 +5506,7 @@ func _end_shift(reason := 0) -> void:
 	_saison.tage = int(_saison.tage) + 1
 	# Tag ohne eine einzige Pfütze (und mit Betrieb) — Meilenstein SAUBER_5
 	_story.ereignis("pfuetzenfreier_tag", _urin_count == 0 and _served >= 10)
+	_dieb_nacht()
 	if _artist_tier >= 3 and _served >= 20 and _story.zustand("5.7") == "offen":
 		_story.ereignis("fest_gefeiert")   # das große Fest: Star-Act, volles Zelt, Feierabend
 		_melde("MSG_FEST_FEUERWERK", [], 2)
@@ -6749,6 +6752,13 @@ var _huber_wette := {}
 var _sabotage_t := -1.0
 var _letzte_sabotage := 0
 var _leck_t := 0.0
+## Kapitel 4: Konrads weitere Streiche (Lieferwagen blockiert die Einfahrt, Diebe in der Nacht, Stromausfall)
+const STREICH_CHANCE := 0.45
+const STROM_DAUER := 45.0
+const DIEB_BIER := 15
+var _streich_art := ""
+var _streich_t := -1.0
+var _strom_t := 0.0
 
 func _huber_morgen() -> void:
 	_huber_wette = {}
@@ -6771,6 +6781,12 @@ func _huber_morgen() -> void:
 	if d >= SABOTAGE_AB and d - _letzte_sabotage >= SABOTAGE_ABSTAND and randf() < 0.6:
 		_letzte_sabotage = d
 		_sabotage_t = randf_range(60.0, 180.0)
+	_streich_art = ""
+	_streich_t = -1.0
+	# Kapitel 4: ein weiterer Streich pro Tag mit etwas Glück
+	if _story.kapitel >= 4 and _sabotage_t <= 0.0 and randf() < STREICH_CHANCE:
+		_streich_art = ["laster", "dieb", "strom"].pick_random()
+		_streich_t = randf_range(40.0, 150.0)
 	# Story-Quests brauchen den Streich: Stinkbombe (3.2) oder Saboteur (3.4) noch heute
 	if _story.zustand("3.2") == "offen" or _story.zustand("3.4") == "offen":
 		_saboteur_art = "stink" if _story.zustand("3.2") == "offen" else ""
@@ -6819,6 +6835,16 @@ func _huber_schicht(delta: float) -> void:
 		_sabotage_t -= delta
 		if _sabotage_t <= 0.0:
 			_saboteur_losschicken()
+	if _streich_t > 0.0:
+		_streich_t -= delta
+		if _streich_t <= 0.0:
+			_streich_ausloesen()
+	if _strom_t > 0.0:
+		_strom_t -= delta
+		if _strom_t <= 0.0:
+			_strom_t = 0.0
+			_melde("MSG_STROM_WIEDER", [], 2)
+			_net_strom.rpc(false)
 	var leck := false
 	for k in _mess_kind.values():
 		if int(k) >= Mess.SABOTAGE and int(k) < Mess.FUSS:
@@ -6832,6 +6858,43 @@ func _huber_schicht(delta: float) -> void:
 		if int(_stock[WARE_BIER]) > 0:
 			_stock[WARE_BIER] = int(_stock[WARE_BIER]) - 1
 			_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+
+## Konrads Streiche aus Kapitel 4, während der Schicht
+func _streich_ausloesen() -> void:
+	match _streich_art:
+		"laster":
+			_lieferproblem = true   # Ware kostet heute mehr
+			_melde("MSG_STREICH_LASTER", [], 1)
+			_broadcast_meta()
+		"strom":
+			_strom_t = STROM_DAUER
+			_popularity = maxf(POP_MIN, _popularity - 3.0)
+			_melde("MSG_STROM_AUS", [], 1)
+			_net_strom.rpc(true)
+		"dieb":
+			_melde("MSG_STREICH_DIEB_WARNUNG", [], 1)
+
+## Abends: Diebe kommen ans Fasslager (nur wenn der Streich für heute gewählt wurde)
+func _dieb_nacht() -> void:
+	if _streich_art != "dieb" or _streich_t > 0.0:
+		return
+	_streich_art = ""
+	if _has_staff(ROLE_SECURITY):
+		_pop_erhoehen(2.0)
+		_melde("MSG_DIEB_GESTELLT", [], 2)
+		return
+	var weg := mini(DIEB_BIER, int(_stock[WARE_BIER]))
+	if weg <= 0:
+		return
+	_stock[WARE_BIER] = int(_stock[WARE_BIER]) - weg
+	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
+	_melde("MSG_DIEB_BIER", [weg], 1)
+
+## Stromausfall: Deckenlichter aus (bei allen), das Personal steht still
+@rpc("authority", "reliable", "call_local")
+func _net_strom(aus: bool) -> void:
+	for l in get_tree().get_nodes_in_group("deckenlicht"):
+		(l as Light3D).visible = not aus
 
 func _sabotieren() -> void:
 	if randf() < 0.5:
