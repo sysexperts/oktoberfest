@@ -236,6 +236,17 @@ beruf = "kellner"
 nr = 22
 
 
+[node name="WattenTisch" parent="." instance=ExtResource("5_karten")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -17.4)
+script = ExtResource("3_kd")
+art = "watten"
+
+[node name="CroupierWatten" parent="." instance=ExtResource("4_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -18.7)
+beruf = "kellner"
+nr = 23
+
+
 [node name="Tuersteher" parent="." instance=ExtResource("4_figur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -20.3)
 beruf = "security"

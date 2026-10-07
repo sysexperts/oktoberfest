@@ -43,6 +43,7 @@ class Lauf extends Node:
 		gm._stats.duell_siege = 5
 		gm._stats["roulette"] = 1
 		gm._stats["blackjack"] = 1
+		gm._stats["watten"] = 1
 		gm._stats["fakes_gemeldet"] = 1
 		for r in range(1, 7):
 			gm._stats["hire_%d" % r] = 1

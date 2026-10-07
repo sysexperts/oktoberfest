@@ -5,7 +5,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## ÜBERGABE: Stand und Arbeitsweise (für die nächste KI oder Sitzung)
 
-**Stand 07.10.2026, Version v367.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
+**Stand 07.10.2026, Version v368.** Die Story von Kapitel 1 bis 5 ist als Daten und Logik spielbar und per Tests belegt. Offene Arbeit steht in den Tabellen oben (☐ und ◐). Gebaut wird **selbständig weiter**, der Nutzer (Serdar) will nach jedem Schritt in diesem Bauplan sehen, was erledigt ist (✔, ◐ teilweise, ☐ offen).
 
 ### Regeln des Nutzers (unbedingt einhalten)
 - **Immer Deutsch antworten, kurz und ohne Fachwörter-Flut.** Rückfragen nur, wenn wirklich nötig.
@@ -25,7 +25,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 - Bilder zum Ansehen: `tools/render_desktop.tscn` (Desktop-Apps), `tools/shot_kino_start.tscn` (Eröffnung), `tools/shot_gefallen.tscn`, `tools/render_wohnwagen.tscn`; Ausgabe in `build/*.png`. Leistung messen: `tools/perf_bereiche.tscn` (FPS im Testfenster sind unbrauchbar, Render-Zeiten vergleichen).
 
 ### Tests (müssen grün bleiben, Aufruf `--headless --path . res://tools/<name>.tscn`; alle auf einmal: `bash tools/test_alle.sh`, aktuell 24 von 24 grün)
-`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_kirmesquests`, `test_meilensteine`, `test_gaeste`, `test_zwischenfaelle`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
+`test_story`, `test_kapitel2`, `test_kapitel3`, `test_kapitel4`, `test_kapitel5`, `test_braeumeister`, `test_streiche`, `test_kontrolle`, `test_fakes`, `test_abwerben`, `test_gustav`, `test_sabotage`, `test_blackjack`, `test_happyhour`, `test_fest`, `test_meister`, `test_wagen`, `test_ausbau`, `test_kirmesquests`, `test_meilensteine`, `test_gaeste`, `test_zwischenfaelle`, `test_watten`, `test_gefallen`, `test_wohnwagen`, `test_tutorial` (nicht headless, mit `SHOT_DIR=build`), `test_phase1` (bekannter Fehler: `WORLD_MUELLTONNE` unübersetzt, kann am Zeitlimit abbrechen).
 
 ### Wo was liegt
 - **Story-Kern:** `scripts/story/story.gd` (Kapitel, Quests mit Zuständen angeboten/offen/erfüllt/verfallen, Post, Hinweise, Flaggen), Daten in `daten/quests.json`, `daten/mails.json`, `daten/hinweise.json` (Texte per Schlüssel in der CSV). Messwerte für Quest-Bedingungen: `GameManager._story_messwerte()`. Neue Quest = Eintrag in `quests.json` (+ Mail + Texte), Flaggen setzt `_story.ereignis("name")`. Gespräche, die Flaggen setzen: Tabellen `STORY_GESPRAECHE` in `scripts/npc_festleiter.gd`, Konrad-Dialoge in `scripts/npc_huber.gd`, Server-RPC `net_story_flag` (Whitelist im GameManager).
@@ -40,7 +40,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 2. **Echter Koop-Test:** `bash tools/test_netz.sh` und `bash tools/test_koop_bots.sh` (Letzteres läuft gegen den Live-Server) — die neuen Systeme wurden bisher nur im Einzelspieler-Test und per Codeprüfung auf korrekte Server/Client-Aufteilung geprüft.
 3. **Texte:** Türkisch und Englisch der vielen neuen Texte von Muttersprachlern lesen lassen. Automatische Prüfung: `python tools/pruefe_texte.py`.
 4. **Steamworks:** Die 42 Meilenstein-IDs aus `scripts/meilensteine.gd` als Errungenschaften anlegen (`SteamDienst.errungenschaft(id)` ist schon verdrahtet).
-5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Kartenspiele im Casino, Hochzeit und Wettessen als Gefallen, Kirmes-Quests Lotsen/Retten/Lieferung, Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
+5. **Offene Bauteile:** Konrads Zelt (Küche, Layout, Wachstum mit den Kapiteln), Hochzeit und Wettessen als Gefallen, Kirmes-Quests Lotsen/Retten/Lieferung, Wettbewerbe am Festtag, Wohnwagen je Spieler mit Wohnwagenplatz, Buden betreiben, Zweitzelt, Personal-Akademie, Kameras und Schlösser als Schutz vor Konrad.
 6. Vor jedem Steam-Upload: `bash tools/test_alle.sh`, Version hochzählen, `git push`.
 
 ### Bekannte Lücken und Risiken
@@ -54,7 +54,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 
 ## Fortschritt (laufend gepflegt)
 
-**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v367.
+**Legende:** ✔ fertig · ◐ teilweise · ☐ offen. Stand 07.10.2026, Version v368.
 
 | Phase | Stand | Version |
 |---|---|---|
@@ -64,7 +64,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | P3 Kapitel 1 | ✔ fertig (spielbar bis zum ersten Feierabend) | v325 |
 | P4 Kapitel 2 | ✔ fertig | v329 bis v354 |
 | P5 Gefallen und Security | ◐ neun Gefallen, vier Security-Posten, Security als Personal; offen: Hochzeit, Wettessen | v330 bis v353 |
-| P6 Kapitel 3 | ◐ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; offen: Küche und Layout in Konrads Zelt, Kartenspiele (Schafkopf, Watten), Kameras und Schlösser | v334 bis v352 |
+| P6 Kapitel 3 | ◐ Quests 3.1 bis 3.6 und 3.4b, Konrads Zelt lebt (Personal, Gäste, Patrouille), Casino (Roulette, Blackjack), Gustav, Sabotage, Tarnung, Frau Wagner, Fake-Bewertungen, Abwerben; offen: Küche und Layout in Konrads Zelt, Kameras und Schlösser | v334 bis v352 |
 | P7 Kapitel 4 | ✔ Quests 4.1 bis 4.7, Qualität, Rezeptbuch, Bräumeister, Streiche (Geduld-Bonus offen) | v343 |
 | P8 Kapitel 5 | ✔ Quests 5.1 bis 5.7, großes Fest mit Feuerwerk, Kamerafahrt, Konrads Auftritt, Duell-Stufenanzeige | v340 |
 | P9 Endgame | ◐ Fest-App und Festtag, Meister-Liste, Wohnwagen-Ausbau (ein Wagen fürs Team), Late-Game-Ausbauten; offen: Wettbewerbe und Katastrophen am Festtag, Wagen je Spieler, Buden betreiben, Zweitzelt | v355 bis v358 |
@@ -186,7 +186,7 @@ Stand 06.10.2026. Wie wir den Plan umsetzen, in welcher Reihenfolge, mit grober 
 | ✔ **Social-Media-Fake-Bewertungen** und Melden (v345) | S |
 | ◐ **Konrads Zelt umbauen:** ✔ Schanktheke, Personal (Zapfer, 2 Kellner auf Runde) und 15 Gäste (v347); ☐ Küche, Layout, Konrad läuft selbst durchs Zelt, Anbau fürs Casino | XL |
 | ✔ **Casino hinter Konrads Zelt** (Anbau mit Wänden, Kollision, Tür gesperrt bis der Türsteher einlässt, Zutritt nur mit Tarnung, v350) | L |
-| ◐ **Casino-Spiele:** ✔ Roulette (Rot/Schwarz, 50 €, Kessel dreht sich, Modell aus Blender); ✔ Blackjack am Kartentisch (Modell aus Blender, Karte/Halten, Blackjack zahlt 3:2, v352); ☐ Schafkopf/Watten, weitere | XL |
+| ◐ **Casino-Spiele:** ✔ Roulette (Rot/Schwarz, 50 €, Kessel dreht sich, Modell aus Blender); ✔ Blackjack am Kartentisch (Modell aus Blender, Karte/Halten, Blackjack zahlt 3:2, v352); ✔ Watten (Mini-Version mit eigenem Fenster, Stiche, „Watten!“ verdoppelt den Einsatz, v368); ☐ weitere | XL |
 | ◐ **Händler Gustav** (✔ Figur am Riesenrad, Koffer mit Mantel, Komplettset, Fassbohrer, Zange, Stinkbombe, Juckpulver, Tarnung an/aus, v348) und **Sabotage-System** (✔ Einsatz in Konrads Zelt: vier Ziele, Konrad patrouilliert mit Blickfeld, Erwischt = Bußgeld und Rauswurf, Rache am nächsten Tag, v349; ✔ Mantel und Maske sichtbar am Spieler (Filzhut, Janker, Schnauzer, Brille, v351), ☐ Kameras/Schlösser): Werkzeuge, Tarnung (Mantel, Komplettset, Schnauzer-Brille), Blickfeld und Verdächtig-Balken, Bußgeld, Kunden verschieben | XL |
 | ✔ Quests 3.1 bis 3.6 und 3.4b „Das Hinterzimmer“, Mails M3-xx (ohne Horsts Erinnerung 2) | M |
 | **Neue Modelle/Figuren:** Gustav, Türsteher, Croupier, Frau Wagner, Roulette-/Kartentische, Sicherungskasten, Kellertreppe | L |

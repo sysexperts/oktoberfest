@@ -2450,3 +2450,22 @@ MSG_ZW_FLIRT,"Flirt am Tisch: Die Stimmung steigt, alle warten geduldiger.","Fli
 MSG_ZW_VERSCHUETTET,"Hoppla: Jemand hat Bier verschüttet. Schnell aufwischen, sonst rutscht noch wer aus.",Oops: someone spilled beer. Mop it up before someone slips.,Eyvah: Biri bira döktü. Biri kaymadan sil.
 MS_ZWISCHENFALL_10_TITLE,Immer was los,Always something going on,Hep bir şey oluyor
 MS_ZWISCHENFALL_10_TEXT,Erlebe zehn Zwischenfälle im Zelt.,Experience ten incidents in the tent.,Çadırda on olay yaşa.
+HINT_CASINO_WATTEN,{interact} Watten spielen,{interact} Play Watten,{interact} Watten oyna
+WATTEN_TITEL,Watten,Watten,Watten
+WATTEN_WARTEN,Die Karten werden gemischt …,Shuffling the cards ...,Kartalar karıştırılıyor ...
+WATTEN_STAND,"Stiche: du %d, Bank %d · Einsatz %d €","Tricks: you %d, bank %d · stake %d €","Eller: sen %d, banka %d · bahis %d €"
+WATTEN_BANK_SPIELT,Die Bank spielt aus: %s,The bank leads: %s,Banka açıyor: %s
+WATTEN_WATTEN,Watten! (Einsatz verdoppeln),Watten! (double the stake),Watten! (bahsi ikiye katla)
+WATTEN_NEU,Noch eine Runde,Another round,Bir tur daha
+WATTEN_BANK_NIMMT_AN,Die Bank nimmt an. Der Einsatz ist verdoppelt.,The bank accepts. The stake is doubled.,Banka kabul ediyor. Bahis ikiye katlandı.
+WATTEN_BANK_GIBT_AUF,Die Bank gibt auf! Du gewinnst %d €.,The bank folds! You win %d €.,Banka pes ediyor! %d € kazandın.
+WATTEN_GEWONNEN,Zwei Stiche geholt! Du gewinnst %d €.,Two tricks taken! You win %d €.,İki el aldın! %d € kazandın.
+WATTEN_VERLOREN,Die Bank holt zwei Stiche. Du verlierst %d €.,The bank takes two tricks. You lose %d €.,Banka iki el aldı. %d € kaybettin.
+WATTEN_R0,Sieben,Seven,Yedi
+WATTEN_R1,Acht,Eight,Sekiz
+WATTEN_R2,Neun,Nine,Dokuz
+WATTEN_R3,Zehn,Ten,On
+WATTEN_R4,Unter,Jack,Vale
+WATTEN_R5,Ober,Queen,Kız
+WATTEN_R6,König,King,Papaz
+WATTEN_R7,Ass,Ace,As

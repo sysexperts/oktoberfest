@@ -466,6 +466,7 @@ var _wunsch_t := 80.0
 const ZWISCHENFALL_ARTEN := ["heirat", "karaoke", "flirt", "verschuettet"]
 var _zwischenfall_t := 150.0
 var _karaoke_t := 0.0
+var _watten := {}           # Peer -> laufende Wattenrunde
 const WAGNER_SCENE := preload("res://scenes/frau_wagner.tscn")
 const UEBERRASCHUNG_CHANCE := 0.2   # ab Kapitel 3: Frau Wagner kommt auch unangekündigt
 var _kontrolle_ueberraschung := false
@@ -7237,7 +7238,7 @@ func meister_liste() -> Array:
 		["MEISTER_ZELT", mini(_tent_stage, 4), 4],
 		["MEISTER_PERSONAL", rollen, 6],
 		["MEISTER_FEST", fest_rang(), 4],
-		["MEISTER_CASINO", (1 if int(_stats.get("roulette", 0)) > 0 else 0) + (1 if int(_stats.get("blackjack", 0)) > 0 else 0), 2],
+		["MEISTER_CASINO", (1 if int(_stats.get("roulette", 0)) > 0 else 0) + (1 if int(_stats.get("blackjack", 0)) > 0 else 0) + (1 if int(_stats.get("watten", 0)) > 0 else 0), 3],
 		["MEISTER_SABOTAGE", mini(int(_stats.get("sab_ok", 0)), 1), 1],
 		["MEISTER_FAKE", mini(int(_stats.get("fakes_gemeldet", 0)), 1), 1],
 		["MEISTER_KONTROLLE", kontrolle, 1],
@@ -7549,6 +7550,98 @@ func _bj_ende(peer: int) -> void:
 func _net_bj(text: String, offen: bool) -> void:
 	for c in get_tree().get_nodes_in_group("casino"):
 		c.bj_zeigen(text, offen)
+
+## Watten gegen Konrads Bank. aktion 0 = neue Runde (50 € Einsatz), 1 = Karte legen (index in der Hand), 2 = „Watten!“ (Einsatz verdoppeln).
+## Karten 0 bis 7 = Sieben bis Ass. Die Bank spielt aus, die höhere Karte gewinnt den Stich (Gleichstand: Bank), zwei Stiche gewinnen.
+@rpc("any_peer", "reliable", "call_local")
+func net_watten(aktion: int, index: int) -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+		return
+	var peer := multiplayer.get_remote_sender_id()
+	if peer == 0:
+		peer = 1
+	if aktion == 0:
+		if _watten.has(peer) or not _afford(ROULETTE_EINSATZ):
+			if not _watten.has(peer):
+				_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+			return
+		var r := {"hand": [randi() % 8, randi() % 8, randi() % 8], "bank": [randi() % 8, randi() % 8, randi() % 8],
+			"stich_spieler": 0, "stich_bank": 0, "einsatz": ROULETTE_EINSATZ, "gewattet": false, "bank_karte": -1, "bank_index": -1}
+		_watten[peer] = r
+		_watten_bank_spielt(r)
+		_story.ereignis("casino_gespielt")
+		_watten_senden(peer, r)
+		return
+	if not _watten.has(peer):
+		return
+	var rd: Dictionary = _watten[peer]
+	if aktion == 2:
+		if bool(rd.gewattet):
+			return
+		rd.gewattet = true
+		# Die Bank nimmt an, wenn ihre Hand etwas taugt, sonst gibt sie auf
+		var staerke := 0
+		for k in rd.bank:
+			staerke += int(k)
+		if staerke < 6 and randf() < 0.6:
+			_watten_ende(peer, rd, true, "WATTEN_BANK_GIBT_AUF")
+			return
+		rd.einsatz = int(rd.einsatz) * 2
+		rd["meldung"] = String(TranslationServer.translate("WATTEN_BANK_NIMMT_AN"))
+		_watten_senden(peer, rd)
+		return
+	if aktion != 1 or index < 0 or index >= (rd.hand as Array).size():
+		return
+	var meine: int = (rd.hand as Array).pop_at(index)
+	var bank: int = int(rd.bank_karte)
+	if meine > bank:
+		rd.stich_spieler = int(rd.stich_spieler) + 1
+	else:
+		rd.stich_bank = int(rd.stich_bank) + 1
+	(rd.bank as Array).remove_at(int(rd.bank_index))
+	rd.bank_karte = -1
+	rd.erase("meldung")
+	if int(rd.stich_spieler) >= 2:
+		_watten_ende(peer, rd, true, "WATTEN_GEWONNEN")
+	elif int(rd.stich_bank) >= 2:
+		_watten_ende(peer, rd, false, "WATTEN_VERLOREN")
+	else:
+		_watten_bank_spielt(rd)
+		_watten_senden(peer, rd)
+
+func _watten_bank_spielt(rd: Dictionary) -> void:
+	var bank: Array = rd.bank
+	var i := 0
+	for k in bank.size():
+		if int(bank[k]) > int(bank[i]):
+			i = k
+	# Gerne mal eine kleine Karte vorweg
+	if bank.size() > 1 and randf() < 0.35:
+		i = randi() % bank.size()
+	rd.bank_index = i
+	rd.bank_karte = int(bank[i])
+
+func _watten_ende(peer: int, rd: Dictionary, gewonnen: bool, schluessel: String) -> void:
+	var betrag: int = int(rd.einsatz)
+	Game.add_money(betrag if gewonnen else -betrag)
+	_stats["watten"] = int(_stats.get("watten", 0)) + 1
+	rd["vorbei"] = true
+	rd["ende"] = schluessel
+	rd["betrag"] = betrag
+	_watten_senden(peer, rd)
+	_watten.erase(peer)
+	_broadcast_meta()
+
+func _watten_senden(peer: int, rd: Dictionary) -> void:
+	var d := rd.duplicate(true)
+	d.erase("bank")   # die Karten der Bank bleiben geheim
+	d["vorbei"] = bool(rd.get("vorbei", false))
+	_net_watten_stand.rpc_id(peer, d)
+
+@rpc("authority", "reliable", "call_local")
+func _net_watten_stand(daten: Dictionary) -> void:
+	for u in get_tree().get_nodes_in_group("watten_ui"):
+		u.stand_zeigen(daten)
 
 @rpc("authority", "reliable", "call_local")
 func _net_roulette_dreh() -> void:

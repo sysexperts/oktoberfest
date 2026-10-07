@@ -4,7 +4,7 @@ extends Node3D
 ##   art "roulette": Rot oder Schwarz, 50 € Einsatz (Server: net_roulette)
 ##   art "blackjack": Karte oder Halten gegen die Bank (Server: net_blackjack)
 
-@export_enum("tuer", "roulette", "blackjack") var art := "tuer"
+@export_enum("tuer", "roulette", "blackjack", "watten") var art := "tuer"
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -13,7 +13,7 @@ func interact_point() -> Vector3:
 	return global_position + Vector3(0, 1.0, 0)
 
 func hinweis_text(_geschlossen: bool) -> String:
-	return {"tuer": "HINT_CASINO_TUER", "roulette": "HINT_CASINO_ROULETTE", "blackjack": "HINT_CASINO_BLACKJACK"}[art]
+	return {"tuer": "HINT_CASINO_TUER", "roulette": "HINT_CASINO_ROULETTE", "blackjack": "HINT_CASINO_BLACKJACK", "watten": "HINT_CASINO_WATTEN"}[art]
 
 func kasino_aktion(spieler: Node) -> void:
 	var welt: Node = spieler.get("_world")
@@ -21,6 +21,11 @@ func kasino_aktion(spieler: Node) -> void:
 		return
 	if art == "tuer":
 		welt.net_casino_tuer.rpc_id(1)
+		return
+	if art == "watten":
+		var w := get_tree().get_first_node_in_group("watten_ui")
+		if w != null:
+			w.zeigen(spieler)
 		return
 	var dialog := get_tree().get_first_node_in_group("dialog")
 	if dialog == null:

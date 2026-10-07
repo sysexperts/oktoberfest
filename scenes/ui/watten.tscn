@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/watten.gd" id="1_w"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="2_theme"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
+
+[node name="Watten" type="CanvasLayer"]
+layer = 26
+script = ExtResource("1_w")
+
+[node name="Mitte" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("2_theme")
+
+[node name="Panel" type="PanelContainer" parent="Mitte"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+
+[node name="Rand" type="MarginContainer" parent="Mitte/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel/Rand"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Titel" type="Label" parent="Mitte/Panel/Rand/Spalte"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 34
+text = "WATTEN_TITEL"
+horizontal_alignment = 1
+
+[node name="Stand" type="Label" parent="Mitte/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BankKarte" type="Label" parent="Mitte/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.6, 0.5, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+
+[node name="Hand" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 14
+
+[node name="Karte0" type="Button" parent="Mitte/Panel/Rand/Spalte/Hand"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(150, 90)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+
+[node name="Karte1" type="Button" parent="Mitte/Panel/Rand/Spalte/Hand"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(150, 90)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+
+[node name="Karte2" type="Button" parent="Mitte/Panel/Rand/Spalte/Hand"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(150, 90)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+
+[node name="Aktionen" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 14
+
+[node name="Watten" type="Button" parent="Mitte/Panel/Rand/Spalte/Aktionen"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "WATTEN_WATTEN"
+
+[node name="Neu" type="Button" parent="Mitte/Panel/Rand/Spalte/Aktionen"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "WATTEN_NEU"
+
+[node name="Schliessen" type="Button" parent="Mitte/Panel/Rand/Spalte"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "SAB_SCHLIESSEN"

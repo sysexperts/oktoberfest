@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" path="res://scenes/getraenke_poster.tscn" id="102_poster"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gustav_laden.tscn" id="gustav_laden_s"]
+[ext_resource type="PackedScene" path="res://scenes/ui/watten.tscn" id="watten_s"]
 [ext_resource type="Texture3D" path="res://assets/shader/farb_lut.png" id="103_lut"]
 [ext_resource type="PackedScene" path="res://scenes/effekte/bildfilter.tscn" id="104_bildfilter"]
 [ext_resource type="PackedScene" path="res://scenes/ui/kino.tscn" id="106_kino"]
@@ -217,6 +218,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 7)
 
 [node name="Braukeller" parent="." instance=ExtResource("102_keller")]
+
+[node name="Watten" parent="." instance=ExtResource("watten_s")]
 
 [node name="GustavLaden" parent="." instance=ExtResource("gustav_laden_s")]
 
