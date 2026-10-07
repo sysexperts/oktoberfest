@@ -5815,6 +5815,8 @@ func _gruppe_bedient(id: int, g: Dictionary) -> void:
 
 func _update_guests(delta: float) -> void:
 	for id in _guest_sim.keys().duplicate():
+		if not _guest_sim.has(id):
+			continue   # in dieser Runde schon weg (heimgebracht, rausgeworfen)
 		var g: Dictionary = _guest_sim[id]
 		if _phase == Phase.SHIFT and _rausch_aktualisieren(g, id, delta):
 			continue   # heimgebracht
