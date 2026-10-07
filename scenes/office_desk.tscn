@@ -1,8 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/office_desk.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2_npc"]
-[ext_resource type="Script" path="res://scripts/welt_text.gd" id="3_wt"]
 [ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="4_holz"]
 [ext_resource type="Material" path="res://assets/zelt/materialien/holz_hell.tres" id="5_hell"]
 [ext_resource type="Material" path="res://assets/zelt/materialien/messing.tres" id="6_messing"]
@@ -242,20 +240,6 @@ omni_range = 1.8
 transform = Transform3D(1, 0, 0, 0, 0.94, 0.34, 0, -0.34, 0.94, -0.3, 0.9, -0.32)
 mesh = SubResource("Namensschild")
 surface_material_override/0 = ExtResource("10_gold")
-
-[node name="Beamter" parent="." instance=ExtResource("2_npc")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1.0)
-
-[node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
-billboard = 1
-pixel_size = 0.006
-font_size = 44
-outline_size = 14
-modulate = Color(1, 0.9, 0.5, 1)
-text = "WORLD_OFFICE"
-script = ExtResource("3_wt")
-schluessel = "WORLD_OFFICE"
 
 [node name="Body" type="StaticBody3D" parent="."]
 

@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/wettschleppen/wettschleppen.tscn" id="79_wettschleppen"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/aktenschrank.tscn" id="80_aktenschrank"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/ordnerregal.tscn" id="81_ordnerregal"]
+[ext_resource type="PackedScene" path="res://scenes/office_desk.tscn" id="7_kiosk"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/buerostuhl.tscn" id="82_buerostuhl"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/pflanze.tscn" id="83_pflanze"]
 [ext_resource type="PackedScene" path="res://scenes/moebel/wanduhr.tscn" id="84_wanduhr"]
@@ -221,6 +222,9 @@ mesh = SubResource("PathLane")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 41.5, 0, 18.4)
 
 [node name="Huette" parent="Festbuero" unique_id=482799034 instance=ExtResource("98_huette")]
+
+[node name="Schreibtisch" parent="Festbuero" instance=ExtResource("7_kiosk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 2.5)
 
 [node name="Einrichtung" type="Node3D" parent="Festbuero" unique_id=1972488402]
 
