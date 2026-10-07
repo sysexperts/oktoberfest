@@ -399,18 +399,23 @@ theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 14
 
-[node name="Inhalt" type="VBoxContainer" parent="Spalte/Rand"]
+[node name="Scroll" type="ScrollContainer" parent="Spalte/Rand"]
 layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Inhalt" type="VBoxContainer" parent="Spalte/Rand/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="Info" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="Info" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.78, 0.73, 0.66, 1)
 theme_override_font_sizes/font_size = 20
 text = "AUSBAU_INFO"
 autowrap_mode = 3
 
-[node name="BiergartenText" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="BiergartenText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -418,7 +423,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Biergarten" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Biergarten" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -434,7 +439,7 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
-[node name="VipText" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="VipText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -442,7 +447,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Vip" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Vip" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -458,7 +463,7 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
-[node name="Theke2Text" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="Theke2Text" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -466,7 +471,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Theke2" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Theke2" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -482,7 +487,7 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
-[node name="BuehneText" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="BuehneText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -490,7 +495,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Buehne" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Buehne" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -506,7 +511,7 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
-[node name="HandelText" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="HandelText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -514,7 +519,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Handel" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Handel" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -530,7 +535,7 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
-[node name="AkademieText" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="AkademieText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -538,7 +543,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Akademie" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Akademie" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -554,7 +559,7 @@ theme_override_styles/pressed = SubResource("KnopfGedrueckt")
 theme_override_styles/disabled = SubResource("KnopfAus")
 theme_override_styles/focus = SubResource("KnopfHover")
 
-[node name="KonradText" type="Label" parent="Spalte/Rand/Inhalt"]
+[node name="SchlossText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -562,7 +567,103 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Konrad" type="Button" parent="Spalte/Rand/Inhalt"]
+[node name="Schloss" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("KnopfNormal")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("KnopfHover")
+
+[node name="KameraText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Kamera" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("KnopfNormal")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("KnopfHover")
+
+[node name="AlarmText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Alarm" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("KnopfNormal")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("KnopfHover")
+
+[node name="VersicherungText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Versicherung" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.93, 0.89, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.839, 0.349, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("KnopfNormal")
+theme_override_styles/hover = SubResource("KnopfHover")
+theme_override_styles/pressed = SubResource("KnopfGedrueckt")
+theme_override_styles/disabled = SubResource("KnopfAus")
+theme_override_styles/focus = SubResource("KnopfHover")
+
+[node name="KonradText" type="Label" parent="Spalte/Rand/Scroll/Inhalt"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Konrad" type="Button" parent="Spalte/Rand/Scroll/Inhalt"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 custom_minimum_size = Vector2(0, 48)

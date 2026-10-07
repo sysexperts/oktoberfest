@@ -36,7 +36,7 @@ const APPS := {
 	"social": ["DESKTOP_APP_SOCIAL", "megafon", Vector2(980, 760), "intern"],
 	"fest": ["DESKTOP_APP_FEST", "stern", Vector2(1000, 800), "intern"],
 	"wagen": ["DESKTOP_APP_WAGEN", "fahne", Vector2(900, 700), "intern"],
-	"ausbau": ["DESKTOP_APP_AUSBAU", "fahne", Vector2(960, 900), "intern"],
+	"ausbau": ["DESKTOP_APP_AUSBAU", "fahne", Vector2(960, 800), "intern"],
 }
 ## Banner der Büro-Apps: [Farbe oben, Farbe unten, Untertitel-Farbe, Untertitel-Schlüssel]
 const BANNER := {

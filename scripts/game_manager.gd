@@ -464,7 +464,7 @@ var _wagen := {"bett": 1, "items": []}
 ## Late-Game-Ausbauten (App „Ausbau“, ab Kapitel 5): einmal kaufen, wirkt dauerhaft.
 ##   biergarten: +12 % Andrang · vip: mehr VIP-Gäste · theke2: Zapfer 30 % schneller · buehne: höhere Beliebtheitsgrenze
 ##   handel: verkauft nachts eigenes Bier an andere Zelte · konrad: Konrads Zelt aufgekauft (keine Streiche mehr, Pacht)
-const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "akademie": 6000, "konrad": 20000}
+const AUSBAU := {"biergarten": 2500, "vip": 4000, "theke2": 3000, "buehne": 3500, "handel": 3000, "akademie": 6000, "schloss": 800, "kamera": 1200, "alarm": 1500, "versicherung": 2000, "konrad": 20000}
 const AUSBAU_HANDEL_MASS := 12
 const AUSBAU_KONRAD_PACHT := 150
 var _ausbau: Array = []
@@ -7314,7 +7314,7 @@ func meister_liste() -> Array:
 		["MEISTER_KONTROLLE", kontrolle, 1],
 		["MEISTER_SCHULDEN", 1 if _schulden <= 0 else 0, 1],
 		["MEISTER_WAGEN", wagen_prestige(), 6],
-		["MEISTER_AUSBAU", _ausbau.size(), 7],
+		["MEISTER_AUSBAU", _ausbau.size(), 11],
 		["MEISTER_KIRMES", _kirmes_erfuellt(), 8],
 	]
 
@@ -7754,13 +7754,17 @@ func net_fake_melden(id: int) -> void:
 func _streich_ausloesen() -> void:
 	match _streich_art:
 		"laster":
-			_lieferproblem = true   # Ware kostet heute mehr
-			_melde("MSG_STREICH_LASTER", [], 1)
-			_broadcast_meta()
+			if _ausbau.has("versicherung"):
+				_melde("MSG_SCHUTZ_VERSICHERUNG_LASTER", [], 2)   # die Versicherung übernimmt den Aufschlag
+			else:
+				_lieferproblem = true   # Ware kostet heute mehr
+				_melde("MSG_STREICH_LASTER", [], 1)
+				_broadcast_meta()
 		"strom":
-			_strom_t = STROM_DAUER
-			_popularity = maxf(POP_MIN, _popularity - 3.0)
-			_melde("MSG_STROM_AUS", [], 1)
+			# Alarmanlage: kürzerer Ausfall, Kamera: weniger Ärger, weil man weiß, wer es war
+			_strom_t = STROM_DAUER * (0.4 if _ausbau.has("alarm") else 1.0)
+			_popularity = maxf(POP_MIN, _popularity - (1.5 if _ausbau.has("kamera") else 3.0))
+			_melde("MSG_STROM_AUS_KAMERA" if _ausbau.has("kamera") else "MSG_STROM_AUS", [], 1)
 			_net_strom.rpc(true)
 		"dieb":
 			_melde("MSG_STREICH_DIEB_WARNUNG", [], 1)
@@ -7770,6 +7774,9 @@ func _dieb_nacht() -> void:
 	if _streich_art != "dieb" or _streich_t > 0.0:
 		return
 	_streich_art = ""
+	if _ausbau.has("schloss"):
+		_melde("MSG_SCHUTZ_SCHLOSS", [], 2)   # das Schloss am Fasslager hält
+		return
 	if _has_staff(ROLE_SECURITY):
 		_pop_erhoehen(2.0)
 		_melde("MSG_DIEB_GESTELLT", [], 2)
@@ -7779,7 +7786,12 @@ func _dieb_nacht() -> void:
 		return
 	_stock[WARE_BIER] = int(_stock[WARE_BIER]) - weg
 	_push_stock.rpc(int(_stock[WARE_BIER]), int(_stock[WARE_ESSEN]))
-	_melde("MSG_DIEB_BIER", [weg], 1)
+	if _ausbau.has("versicherung"):
+		var erstattung := weg * 4
+		_add_income(erstattung)
+		_melde("MSG_DIEB_BIER_VERSICHERT", [weg, _eur(erstattung)], 1)
+	else:
+		_melde("MSG_DIEB_BIER", [weg], 1)
 
 ## Stromausfall: Deckenlichter aus (bei allen), das Personal steht still
 @rpc("authority", "reliable", "call_local")

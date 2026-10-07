@@ -38,5 +38,29 @@ class Lauf extends Node:
 		gm._streich_t = -1.0
 		gm._dieb_nacht()
 		_check("Diebe stehlen Bier ohne Security", int(gm._stock[gm.WARE_BIER]) == 40 - gm.DIEB_BIER, str(gm._stock[gm.WARE_BIER]))
+		# Schutz: Schloss, Alarmanlage, Kamera, Versicherung
+		gm._strom_t = 0.0
+		gm._ausbau = ["schloss"]
+		gm._stock[gm.WARE_BIER] = 40
+		gm._streich_art = "dieb"
+		gm._streich_t = -1.0
+		gm._dieb_nacht()
+		_check("Schloss: nichts gestohlen", int(gm._stock[gm.WARE_BIER]) == 40)
+		gm._ausbau = ["alarm", "kamera"]
+		gm._streich_art = "strom"
+		gm._streich_ausloesen()
+		_check("Alarmanlage: Stromausfall kürzer", gm._strom_t > 0.0 and gm._strom_t < gm.STROM_DAUER * 0.5, "%.0f" % gm._strom_t)
+		gm._strom_t = 0.0
+		gm._ausbau = ["versicherung"]
+		gm._lieferproblem = false
+		gm._streich_art = "laster"
+		gm._streich_ausloesen()
+		_check("Versicherung: kein Lieferaufschlag", not gm._lieferproblem)
+		var geld_v: int = Game.money
+		gm._streich_art = "dieb"
+		gm._streich_t = -1.0
+		gm._stock[gm.WARE_BIER] = 40
+		gm._dieb_nacht()
+		_check("Versicherung: gestohlenes Bier erstattet", Game.money > geld_v, "%d" % (Game.money - geld_v))
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit()

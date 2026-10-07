@@ -2562,3 +2562,15 @@ MSG_KATA_TREFFER_STROM,Stromausfall mitten im Fest! Ohne Notstrom steht alles st
 MSG_KATA_TREFFER_KNAPP,"Das Bier wird knapp! Fässer sind leer, ohne Vorrat fehlt Ware.","Beer runs short! Barrels are empty, without a reserve goods are missing.","Bira azalıyor! Fıçılar boş, yedek olmadan mal eksik."
 AUSBAU_AKADEMIE,Personal-Akademie,Staff academy,Personel akademisi
 AUSBAU_AKADEMIE_INFO,Mitarbeiter lassen sich bis Stufe 10 trainieren (statt 5),Staff can be trained up to level 10 (instead of 5),Personel 10. seviyeye kadar eğitilebilir (5 yerine)
+AUSBAU_SCHLOSS,Schloss am Fasslager,Lock on the barrel store,Fıçı deposu kilidi
+AUSBAU_SCHLOSS_INFO,Diebe kommen nicht mehr an dein Bier,Thieves can no longer reach your beer,Hırsızlar artık biranıza ulaşamaz
+AUSBAU_KAMERA,Überwachungskamera,Security camera,Güvenlik kamerası
+AUSBAU_KAMERA_INFO,"Streiche ärgern weniger, man sieht, wer es war","Pranks hurt less, you can see who did it","Şakalar daha az can sıkar, kimin yaptığı görünür"
+AUSBAU_ALARM,Alarmanlage,Alarm system,Alarm sistemi
+AUSBAU_ALARM_INFO,Ein Stromausfall dauert nur 40 % so lange,A power cut lasts only 40 % as long,Elektrik kesintisi sadece %40 sürer
+AUSBAU_VERSICHERUNG,Versicherung,Insurance,Sigorta
+AUSBAU_VERSICHERUNG_INFO,"Lieferwagen-Aufschlag entfällt, gestohlenes Bier wird erstattet","No delivery surcharge, stolen beer is reimbursed","Teslimat farkı yok, çalınan bira geri ödenir"
+MSG_SCHUTZ_SCHLOSS,Diebe am Fasslager: Das Schloss hält. Sie ziehen unverrichteter Dinge ab.,Thieves at the barrel store: the lock holds. They leave empty-handed.,Fıçı deposunda hırsızlar: Kilit dayandı. Eli boş gidiyorlar.
+MSG_SCHUTZ_VERSICHERUNG_LASTER,"Konrads Laster blockiert die Einfahrt, aber die Versicherung übernimmt den Aufschlag.","Konrad's truck blocks the entrance, but the insurance covers the surcharge.",Konrad'ın kamyonu girişi tıkıyor ama sigorta farkı karşılıyor.
+MSG_STROM_AUS_KAMERA,"Stromausfall! Die Kamera zeigt: Das waren Konrads Leute. Ärgerlich, aber ihr wisst Bescheid.","Power cut! The camera shows: it was Konrad's people. Annoying, but you know.",Elektrik kesintisi! Kamera gösteriyor: Konrad'ın adamlarıydı. Can sıkıcı ama biliyorsunuz.
+MSG_DIEB_BIER_VERSICHERT,Diebe waren am Fasslager und haben %d Maß Bier gestohlen. Die Versicherung zahlt %s.,Thieves hit the barrel store and stole %d mugs of beer. The insurance pays %s.,Hırsızlar fıçı deposuna girip %d kupa bira çaldı. Sigorta %s ödüyor.

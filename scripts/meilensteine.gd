@@ -48,7 +48,7 @@ const LISTE := [
 	{"id": "PERSONAL_ALLE", "wert": "meister:MEISTER_PERSONAL", "ziel": 6, "belohnung": 1500},
 	{"id": "WAGEN_VOLL", "wert": "meister:MEISTER_WAGEN", "ziel": 6, "belohnung": 1000},
 	{"id": "AUSBAU_1", "wert": "meister:MEISTER_AUSBAU", "ziel": 1, "belohnung": 800},
-	{"id": "AUSBAU_ALLE", "wert": "meister:MEISTER_AUSBAU", "ziel": 7, "belohnung": 4000},
+	{"id": "AUSBAU_ALLE", "wert": "meister:MEISTER_AUSBAU", "ziel": 11, "belohnung": 4000},
 	{"id": "WUNSCH_5", "wert": "wuensche", "ziel": 5, "belohnung": 500},
 	{"id": "GRUPPEN_10", "wert": "gruppen", "ziel": 10, "belohnung": 600},
 	{"id": "ZWISCHENFALL_10", "wert": "zwischenfaelle", "ziel": 10, "belohnung": 500},

@@ -3,7 +3,7 @@ extends Control
 ## Der Server bucht (GameManager.net_ausbau_kauf). Aufbau: scenes/ui/desktop_ausbau.tscn.
 
 const Texte := preload("res://scripts/ui/texte.gd")
-const IDS := ["biergarten", "vip", "theke2", "buehne", "handel", "akademie", "konrad"]
+const IDS := ["biergarten", "vip", "theke2", "buehne", "handel", "akademie", "schloss", "kamera", "alarm", "versicherung", "konrad"]
 
 func _name(id: String) -> String:
 	return id[0].to_upper() + id.substr(1)

@@ -49,7 +49,7 @@ class Lauf extends Node:
 			gm._stats["hire_%d" % r] = 1
 		for i in range(1, 9):
 			story.quests["K-%d" % i] = {"z": "erfuellt"}
-		gm._ausbau = ["biergarten", "vip", "theke2", "buehne", "handel", "akademie", "konrad"]
+		gm._ausbau = ["biergarten", "vip", "theke2", "buehne", "handel", "akademie", "schloss", "kamera", "alarm", "versicherung", "konrad"]
 		gm._wagen = {"bett": 3, "items": ["sofa", "poster", "pflanze", "regal"]}
 		story.flags["kontrolle_bestanden"] = true
 		story.flags["rezeptseite3"] = true
