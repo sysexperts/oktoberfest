@@ -7628,6 +7628,31 @@ func net_roulette(farbe: int) -> void:
 	_melde("MSG_ROULETTE_GEWONNEN" if gewonnen else "MSG_ROULETTE_VERLOREN", [zahl, farbname, _eur(ROULETTE_EINSATZ)], 2 if gewonnen else 1)
 	_broadcast_meta()
 
+## Würfelbecher: zwei Würfel. wahl 0 = Tief (2 bis 6), 1 = Sieben, 2 = Hoch (8 bis 12). Tief und Hoch zahlen 1:1, die Sieben 4:1.
+@rpc("any_peer", "reliable", "call_local")
+func net_wuerfel(wahl: int) -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+		return
+	if wahl < 0 or wahl > 2:
+		return
+	if not _afford(ROULETTE_EINSATZ):
+		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+		return
+	var a := randi() % 6 + 1
+	var b := randi() % 6 + 1
+	_wuerfel_auswerten(a, b, wahl)
+
+func _wuerfel_auswerten(a: int, b: int, wahl: int) -> void:
+	var summe := a + b
+	var ergebnis := 0 if summe < 7 else (1 if summe == 7 else 2)
+	var gewonnen: bool = ergebnis == wahl
+	var gewinn: int = ROULETTE_EINSATZ * (4 if wahl == 1 else 1)
+	Game.add_money(gewinn if gewonnen else -ROULETTE_EINSATZ)
+	_stats["wuerfel"] = int(_stats.get("wuerfel", 0)) + 1
+	_story.ereignis("casino_gespielt")
+	_melde("MSG_WUERFEL_GEWONNEN" if gewonnen else "MSG_WUERFEL_VERLOREN", [a, b, summe, _eur(gewinn if gewonnen else ROULETTE_EINSATZ)], 2 if gewonnen else 1)
+	_broadcast_meta()
+
 ## Blackjack gegen Konrads Bank: aktion 0 = neue Runde (50 € Einsatz), 1 = Karte, 2 = Halten.
 ## Blackjack zahlt 3:2, Bank zieht bis 17, Gleichstand bringt den Einsatz zurück.
 @rpc("any_peer", "reliable", "call_local")

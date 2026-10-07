@@ -3,8 +3,9 @@ extends Node3D
 ##   art "tuer":     der Türsteher prüft die Tarnung (Server: net_casino_tuer)
 ##   art "roulette": Rot oder Schwarz, 50 € Einsatz (Server: net_roulette)
 ##   art "blackjack": Karte oder Halten gegen die Bank (Server: net_blackjack)
+##   art "wuerfel":  Würfelbecher, zwei Würfel: Tief (2 bis 6), Sieben oder Hoch (8 bis 12) (Server: net_wuerfel)
 
-@export_enum("tuer", "roulette", "blackjack", "watten") var art := "tuer"
+@export_enum("tuer", "roulette", "blackjack", "watten", "wuerfel") var art := "tuer"
 
 func _ready() -> void:
 	add_to_group("interactable")
@@ -13,7 +14,7 @@ func interact_point() -> Vector3:
 	return global_position + Vector3(0, 1.0, 0)
 
 func hinweis_text(_geschlossen: bool) -> String:
-	return {"tuer": "HINT_CASINO_TUER", "roulette": "HINT_CASINO_ROULETTE", "blackjack": "HINT_CASINO_BLACKJACK", "watten": "HINT_CASINO_WATTEN"}[art]
+	return {"tuer": "HINT_CASINO_TUER", "roulette": "HINT_CASINO_ROULETTE", "blackjack": "HINT_CASINO_BLACKJACK", "watten": "HINT_CASINO_WATTEN", "wuerfel": "HINT_CASINO_WUERFEL"}[art]
 
 func kasino_aktion(spieler: Node) -> void:
 	var welt: Node = spieler.get("_world")
@@ -36,6 +37,11 @@ func kasino_aktion(spieler: Node) -> void:
 		dialog.zeigen(String(TranslationServer.translate("CROUPIER_NAME")), f, func(i: int) -> void:
 			if i == 0:
 				welt.net_blackjack.rpc_id(1, 0), w)
+		return
+	if art == "wuerfel":
+		var wf: Array[String] = [String(TranslationServer.translate("WUERFEL_FRAGE"))]
+		var ww: Array[String] = [String(TranslationServer.translate("WUERFEL_TIEF")), String(TranslationServer.translate("WUERFEL_SIEBEN")), String(TranslationServer.translate("WUERFEL_HOCH"))]
+		dialog.zeigen(String(TranslationServer.translate("CROUPIER_NAME")), wf, func(i: int) -> void: welt.net_wuerfel.rpc_id(1, i), ww)
 		return
 	var wer := String(TranslationServer.translate("CROUPIER_NAME"))
 	var zeilen: Array[String] = [String(TranslationServer.translate("CROUPIER_FRAGE"))]

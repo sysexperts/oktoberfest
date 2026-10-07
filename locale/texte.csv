@@ -2449,6 +2449,13 @@ MSG_ZW_FLIRT,"Flirt am Tisch: Die Stimmung steigt, alle warten geduldiger.","Fli
 MSG_ZW_VERSCHUETTET,"Hoppla: Jemand hat Bier verschüttet. Schnell aufwischen, sonst rutscht noch wer aus.",Oops: someone spilled beer. Mop it up before someone slips.,Eyvah: Biri bira döktü. Biri kaymadan sil.
 MS_ZWISCHENFALL_10_TITLE,Immer was los,Always something going on,Hep bir şey oluyor
 MS_ZWISCHENFALL_10_TEXT,Erlebe zehn Zwischenfälle im Zelt.,Experience ten incidents in the tent.,Çadırda on olay yaşa.
+HINT_CASINO_WUERFEL,{interact} Würfeln,{interact} Roll the dice,{interact} Zar at
+WUERFEL_FRAGE,Zwei Würfel. Einsatz 50 €. Tief (2 bis 6) und Hoch (8 bis 12) zahlen 1:1 – die Sieben 4:1.,Two dice. Stake 50 €. Low (2 to 6) and high (8 to 12) pay 1:1 – seven pays 4:1.,İki zar. Bahis 50 €. Düşük (2-6) ve yüksek (8-12) 1:1 öder – yedi 4:1 öder.
+WUERFEL_TIEF,Tief (2 bis 6),Low (2 to 6),Düşük (2-6)
+WUERFEL_SIEBEN,Sieben,Seven,Yedi
+WUERFEL_HOCH,Hoch (8 bis 12),High (8 to 12),Yüksek (8-12)
+MSG_WUERFEL_GEWONNEN,"Würfel: %d und %d, zusammen %d. Gewonnen: +%s aus Konrads Bank!","Dice: %d and %d, total %d. You win +%s from Konrad's bank!","Zar: %d ve %d, toplam %d. Konrad'ın bankasından +%s kazandın!"
+MSG_WUERFEL_VERLOREN,"Würfel: %d und %d, zusammen %d. Verloren: -%s an Konrads Bank.","Dice: %d and %d, total %d. You lose -%s to Konrad's bank.","Zar: %d ve %d, toplam %d. Konrad'ın bankasına -%s kaybettin."
 HINT_CASINO_WATTEN,{interact} Watten spielen,{interact} Play Watten,{interact} Watten oyna
 WATTEN_TITEL,Watten,Watten,Watten
 WATTEN_WARTEN,Die Karten werden gemischt …,Shuffling the cards ...,Kartalar karıştırılıyor ...
