@@ -84,7 +84,26 @@ class Lauf extends Node:
 			tg.set_net(Vector3(auf_tisch.x, 0.1, auf_tisch.z), 0.0)
 			tg.set_tanz(true)
 		await _frames(60)
+		var ab := AABB()
+		var erst := true
+		for mi in tisch.get_node("Tisch").find_children("*", "MeshInstance3D", true, false):
+			var b: AABB = (mi as MeshInstance3D).global_transform * (mi as MeshInstance3D).get_aabb()
+			ab = b if erst else ab.merge(b)
+			erst = false
+		print("TISCHOBEN ", ab.end.y, " tischy ", tisch.global_position.y)
+		for k in mini(2, gaeste.size()):
+			var c: Customer = gaeste[k]
+			print("TANZ node y ", c.global_position.y, " model y ", c._model.global_position.y)
+			for sk in c._model.find_children("*", "Skeleton3D", true, false):
+				var mn := 99.0
+				for bi in (sk as Skeleton3D).get_bone_count():
+					mn = minf(mn, ((sk as Skeleton3D).global_transform * (sk as Skeleton3D).get_bone_global_pose(bi)).origin.y)
+				print("FUSS tiefster Knochen y ", mn)
 		get_viewport().get_texture().get_image().save_png("res://tools/gaeste_tanz.png")
+		spieler.global_position = tisch.global_position + Vector3(0.0, 0.0, 2.6)
+		spieler.get_node("Head").rotation.x = deg_to_rad(-3.0)
+		await _frames(20)
+		get_viewport().get_texture().get_image().save_png("res://tools/gaeste_fuesse.png")
 		print("  gespeichert: gaeste_tanz")
 		for k in mini(2, gaeste.size()):
 			(gaeste[k] as Customer).set_tanz(false)

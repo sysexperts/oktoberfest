@@ -38,6 +38,7 @@ class Lauf extends Node:
 		_check("Täter taucht auf", g._taeter != null and is_instance_valid(g._taeter), str(g._lauf))
 		var sp: Node3D = gm._players_nodes.get(1)
 		var geld0: int = Game.money
+		sp.global_position = g._taeter.global_position + Vector3(0.5, 0, 0)
 		g.net_packen()
 		await _warten(0.3)
 		_check("Täter gepackt, Spieler trägt ihn", g._phase == "getragen" and bool(sp.traegt_taeter), g._phase)
@@ -94,6 +95,7 @@ class Lauf extends Node:
 		story.annehmen("G-4")
 		await _warten(0.6)
 		_check("Spion taucht auf", g._taeter != null and str(g._lauf.get("art", "")) == "spion", str(g._lauf))
+		sp.global_position = g._taeter.global_position + Vector3(0.5, 0, 0)
 		g.net_packen()
 		await _warten(0.3)
 		g.net_uebergeben()

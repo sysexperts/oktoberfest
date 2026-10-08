@@ -30,6 +30,13 @@ font_size = 40
 outline_size = 14
 text = "Kellner"
 
+[node name="Beruf" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+billboard = 1
+pixel_size = 0.0045
+shaded = false
+texture_filter = 2
+
 [node name="Tablett" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.4)
 visible = false

@@ -576,9 +576,9 @@ MSG_SCHIESS_NIETE,"%d Treffer — leider eine Niete. Ab 4 Treffern gibt es einen
 HINT_WASSER_GEBEN,{interact} Wasser geben (nüchterner),{interact} Give water (sobers up),{interact} Su ver (ayıltır)
 HINT_HEIMBRINGEN,{interact} Bierleiche heimbringen,{interact} Take the passed-out guest home,{interact} Sızan misafiri eve götür
 MSG_BIERLEICHE,"Ein Gast ist eingeschlafen — Wasser bringen oder mit leeren Händen heimbringen, sonst kotzt er!","A guest passed out — bring water or take them home with empty hands, or they'll throw up!","Bir misafir sızdı — su getir ya da boş elle eve götür, yoksa kusacak!"
-WORLD_FOOD_3,"Hendl ({interact} halten)","Roast chicken (hold {interact})","Tavuk ({interact} basılı tut)"
-WORLD_FOOD_1,"Brezn ({interact} halten)","Pretzel (hold {interact})","Brezel ({interact} basılı tut)"
-WORLD_FOOD_2,"Würstl ({interact} halten)","Sausage (hold {interact})","Sosis ({interact} basılı tut)"
+WORLD_FOOD_3,Hendl,Roast chicken,Tavuk
+WORLD_FOOD_1,Brezn,Pretzel,Simit
+WORLD_FOOD_2,Würstl,Sausage,Sosis
 WORLD_STORAGE,"LAGER %d\nHier: Bier %d · Essen %d\nGesamt: Bier %d · Essen %d\n({interact}: Paket einlagern)","STORAGE %d\nHere: beer %d · food %d\nTotal: beer %d · food %d\n({interact}: store package)","DEPO %d\nBurada: bira %d · yemek %d\nToplam: bira %d · yemek %d\n({interact}: paketi depola)"
 ACTION_SCREENSHOT,Bildschirmfoto,Screenshot,Ekran görüntüsü
 ACTION_PING,Markieren (für Mitspieler),Ping (for teammates),İşaretle (takım arkadaşları için)
@@ -1261,6 +1261,8 @@ ZEITUNG_M_RAUSWURF,%d Gäste flogen aus dem Zelt und haben Hausverbot.,%d guests
 ZEITUNG_M_RAUSWURF_1,Ein Gast flog aus dem Zelt und hat Hausverbot.,One guest was thrown out and is banned.,Bir misafir çadırdan atıldı ve yasaklandı.
 HUD_TAG_GROSS,Tag %d,Day %d,%d. Gün
 TAG_START,Das Fest öffnet,The fair opens,Festival açılıyor
+MSG_NEUE_MAIL,Neue Mail von %s,New mail from %s,%s'dan yeni e-posta
+HUD_KAPITEL_GROSS,Kapitel %d,Chapter %d,%d. Bölüm
 COOP_JOIN_CODE,Mit Code beitreten,Join with code,Kodla katıl
 PAUSE_CODE,Code: %s  (klicken zum Kopieren),Code: %s  (click to copy),Kod: %s  (kopyalamak için tıkla)
 PAUSE_CODE_COPIED,Code kopiert!,Code copied!,Kod kopyalandı!
@@ -1563,6 +1565,14 @@ WORLD_WAGEN_AUSGANG,"Ausgang
 ({interact}: dışarı çık)"
 HINT_WAGEN_RAUS,{interact} Wohnwagen verlassen,{interact} Leave caravan,{interact} Karavandan çık
 HINT_WAGEN_REIN,{interact} Wohnwagen betreten,{interact} Enter caravan,{interact} Karavana gir
+MSG_SAB_ANDRANG,Konrads Gäste wandern zu dir: heute +%d %% Andrang,Konrad's guests are coming to you: +%d %% crowd today,Konrad'un misafirleri sana geliyor: bugün +%d %% kalabalık
+HINT_BRAT_LEGEN,{interact}: auf den Kochtresen legen,{interact}: put on the cooking counter,{interact}: pişirme tezgahına koy
+HINT_BRAT_NEHMEN,{interact}: fertiges Essen nehmen,{interact}: take the finished food,{interact}: hazır yemeği al
+HINT_BRAT_VERBRANNT,{interact}: Verbranntes nehmen (in den Müll!),{interact}: take burnt food (bin it!),{interact}: yanmışı al (çöpe at!)
+HINT_BRAT_VOLL,Kochtresen voll – warte bis etwas fertig ist,Counter full – wait until something is done,Tezgah dolu – bir şeyin pişmesini bekle
+HINT_MUELL_WEG,{interact}: in den Müll werfen,{interact}: throw in the bin,{interact}: çöpe at
+WORLD_MUELL,Müll,Trash,Çöp
+MSG_QUEST_ANGEBOT,Neuer Auftrag am Computer: %s,New job offer on the computer: %s,Bilgisayarda yeni görev: %s
 MSG_KAPITEL_FERTIG,Kapitel abgeschlossen: %s,Chapter completed: %s,Bölüm tamamlandı: %s
 KAPITEL_1_NAME,Das Erbe,The Inheritance,Miras
 KAPITEL_2_NAME,Das Zelt läuft,The Tent Is Running,Çadır Çalışıyor

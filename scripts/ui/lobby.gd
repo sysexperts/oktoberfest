@@ -160,7 +160,7 @@ func _farbe_waehlen(i: int) -> void:
 
 func _senden() -> void:
 	if _gm:
-		_gm.net_lobby_setzen.rpc_id(1, (%Name.text as String).strip_edges(), _farbe, _figur)
+		_gm.net_lobby_setzen.rpc_id(1, (%Name.text as String).strip_edges(), _farbe, _figur, "", SteamDienst.eigene_id())
 
 func _los() -> void:
 	_senden()

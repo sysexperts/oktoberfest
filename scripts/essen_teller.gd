@@ -12,6 +12,16 @@ const Modell := preload("res://scripts/modell_material.gd")
 		sorte = clampi(v, 1, 3)
 		_anwenden()
 
+## Verbranntes Essen: schwarzer Überzug (muss in den Müll)
+var verbrannt := false:
+	set(v):
+		if v == verbrannt:
+			return
+		verbrannt = v
+		_anwenden()
+
+const VERKOHLT := preload("res://assets/verkohlt.tres")
+
 func _ready() -> void:
 	Modell.ohne_metall(self)
 	_anwenden()
@@ -22,3 +32,5 @@ func _anwenden() -> void:
 	$Brezn.visible = sorte == 1
 	$Wuerstl.visible = sorte == 2
 	$Hendl.visible = sorte == 3
+	for m in find_children("*", "MeshInstance3D", true, false):
+		(m as MeshInstance3D).material_overlay = VERKOHLT if verbrannt else null

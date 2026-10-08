@@ -31,7 +31,7 @@ const COSTUME_COLORS := [Color(0.85,0.2,0.2), Color(0.2,0.45,0.85), Color(0.2,0.
 # Ağ ile senkronlanan durum
 var carry_pkg_kind := 0  # taşınan paketin türü (1 Bier, 2 Zutaten); 0 = yok
 var carry_pkg_amount := 0
-var carry_state := 0     # 0 = boş el, 1 = bardak, 2 = yemek, 3 = paket
+var carry_state := 0     # 0 = boş el, 1 = bardak, 2 = yemek, 3 = paket, 4 = verbranntes Essen (in den Müll)
 var carry_fill := 0.0    # 0..1
 var carry_type := 0      # 0 boş, 1 Helles, 2 Weizen, 3 Radler, 4 Festbier, 5 Wasser
 const WASSER := 5
@@ -144,7 +144,7 @@ func _ready() -> void:
 			if not KoopDaten.lobby_wahl.is_empty() and _world.has_method("net_lobby_setzen"):
 				# Aus dem Warteraum (Einladungscode): Name und Figur stehen schon fest
 				var w := KoopDaten.lobby_wahl
-				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, int(w.get("figur", 0)), str(w.get("id", "")))
+				_world.net_lobby_setzen.rpc_id(1, str(w.get("name", "")), costume, int(w.get("figur", 0)), str(w.get("id", "")), SteamDienst.eigene_id())
 			elif _world.has_method("open_lobby_ui"):
 				# Direkt beigetreten (IP, offizieller Server): Lobby-Fenster im Spiel
 				_world.call_deferred("open_lobby_ui")
@@ -918,11 +918,18 @@ func _hint_for(t: Node3D) -> String:
 			return "HINT_KRUG_VOLL"
 		return "HINT_NEED_MUG" if carry_state == 0 else ""
 	if t is FoodStation:
-		var ft := (t as FoodStation).food_type
-		var kocht := carry_state == 2 and carry_type == ft and carry_fill < 1.0
-		if carry_state == 0 and not _bestand_frei(2):
-			return "HINT_KEIN_ESSEN"
-		return "HINT_COOK" if carry_state == 0 or kocht else ""
+		var fs := t as FoodStation
+		if carry_state != 0 or not extra_kruege.is_empty():
+			return ""
+		if fs.hat_fertig():
+			return "HINT_BRAT_NEHMEN"
+		if fs.hat_verbrannt():
+			return "HINT_BRAT_VERBRANNT"
+		if fs.hat_frei():
+			return "HINT_KEIN_ESSEN" if not _bestand_frei(2) else "HINT_BRAT_LEGEN"
+		return "HINT_BRAT_VOLL"
+	if t.has_method("ist_muell"):
+		return "HINT_MUELL_WEG" if carry_state == 4 or carry_state == 2 else ""
 	if t is Computer:
 		return (t as Computer).hinweis
 	if t is Package:
@@ -1053,6 +1060,14 @@ func _handle_interaction(delta: float) -> void:
 			_sfx("pop")
 			return
 		# Mitspieler packen: einer steht direkt vor einem und nichts im Blick
+		# Täter oder Sau eines Gefallens: in Reichweite genügt E, auch wenn er gerade
+		# nicht im Blick ist (er rennt, das Ziel wechselte sonst ständig)
+		if not traegt_taeter and (_current_target == null or _current_target.has_method("gefallen_aktion")):
+			var tt := _taeter_in_reichweite()
+			if tt != null:
+				tt.gefallen_aktion(self)
+				_sfx("pop")
+				return
 		if _current_target == null and _world.has_method("net_spieler_packen"):
 			var wer := mitspieler_vor_mir()
 			if wer != 0:
@@ -1077,6 +1092,28 @@ func _handle_interaction(delta: float) -> void:
 			if bude and not bude.laeuft() and carry_state == 0:
 				_minispiel_bude = bude
 				_world.net_schiessen_bezahlen.rpc_id(1, _world.get_path_to(bude))
+			return
+		if _current_target is FoodStation:
+			# Mehrere Portionen gleichzeitig auf den Kochtresen legen, fertige nehmen (scripts/food_station.gd)
+			var fs := _current_target as FoodStation
+			if carry_state == 0 and extra_kruege.is_empty():
+				if fs.hat_fertig() or fs.hat_verbrannt():
+					fs.net_nehmen.rpc_id(1)
+					_sfx("pop")
+				elif fs.hat_frei():
+					if _bestand_frei(2):
+						fs.net_legen.rpc_id(1)
+						_sfx("pop")
+					else:
+						_bestand_leer_melden(2)
+			return
+		if _current_target.has_method("ist_muell"):
+			if carry_state == 4 or carry_state == 2:
+				carry_state = 0
+				carry_fill = 0.0
+				carry_type = 0
+				_naechster_krug_in_hand()
+				_sfx("splash")
 			return
 		if _current_target.has_method("ist_raufbold"):
 			# Schlägerei: erst packen, mit dem nächsten E werfen
@@ -1268,20 +1305,6 @@ func _handle_interaction(delta: float) -> void:
 				else:
 					_zapf_bis = Time.get_ticks_msec() / 1000.0 + 0.25
 					_sfx_loop("glug")
-	# Yemek hazırlama (mutfak) — eller boşsa başlar, basılı tutunca pişer
-	if Input.is_action_pressed("interact") and _current_target is FoodStation:
-		var ft := (_current_target as FoodStation).food_type
-		if carry_state == 0 and not _bestand_frei(2):
-			# Nichts im Lager, das nicht schon fertig auf der Ausgabe liegt: gar nicht erst kochen
-			_bestand_leer_melden(2)
-		else:
-			if carry_state == 0:
-				carry_state = 2
-				carry_type = ft
-				carry_fill = 0.0
-			if carry_state == 2 and carry_type == ft and carry_fill < 1.0:
-				carry_fill = minf(carry_fill + FILL_RATE * delta, 1.0)
-				_sfx_loop("sizzle")
 	# Kir temizle (E basılı tut)
 	if Input.is_action_pressed("interact") and _current_target is Mess:
 		if _world.has_method("net_clean"):
@@ -1450,7 +1473,10 @@ static func kotz_heftig(t: float) -> float:
 func kotzt() -> bool:
 	return _kotz_t > 0.0
 
+var _kotz_nur_emote := false
+
 func _kotzen_starten() -> void:
+	_kotz_nur_emote = false
 	_kotz_t = KOTZ_DAUER
 	_kotz_fleck = false
 	_kotz_stoesse = 0
@@ -1469,7 +1495,7 @@ func _kotzen(delta: float) -> void:
 		_kotz_fleck = true
 		# Nur absenken: wer nüchtern per Emote (Q) kotzt, soll danach nicht angetrunken sein
 		promille = minf(promille, KOTZ_REST)
-		if _world and _world.has_method("net_spieler_kotzt"):
+		if not _kotz_nur_emote and _world and _world.has_method("net_spieler_kotzt"):
 			_world.net_spieler_kotzt.rpc_id(1)
 	# Eigene Sicht: Kopf kippt mit jedem Stoß nach vorn und unten, der Körper geht
 	# dabei in die Knie — dieselbe Kurve, die auch die Figur bewegt.
@@ -1561,7 +1587,7 @@ func _getragene() -> Array:
 
 func _update_carry_visual() -> void:
 	var has_mug := carry_state == 1
-	var has_food := carry_state == 2
+	var has_food := carry_state == 2 or carry_state == 4
 	# Fass mit beiden Händen vor der Brust — sieht man selbst und die anderen
 	var fass := carry_state == 3 and carry_pkg_kind == 1
 	var ich_sicht := _is_local and not _kamera_draussen
@@ -1606,9 +1632,8 @@ func _update_carry_visual() -> void:
 	_carry_food.visible = false
 	_carry_teller.visible = has_food
 	if has_food:
-		# Beim Kochen wächst die Portion (sichtbarer Fortschritt)
-		var s := lerpf(0.5, 1.0, clampf(carry_fill, 0.0, 1.0))
-		_carry_teller.scale = Vector3(s, s, s)
+		_carry_teller.scale = Vector3.ONE
+		_carry_teller.verbrannt = carry_state == 4
 		_carry_teller.sorte = clampi(carry_type, 1, 3)
 
 # ---------------------------------------------------------------- Einleitung
@@ -1757,6 +1782,7 @@ func _rad_oeffnen() -> void:
 func _emote_starten(welches: int) -> void:
 	if welches == EMOTE_KOTZEN:
 		_kotzen_starten()
+		_kotz_nur_emote = true   # Emote (Q): nur Show, keine Pfütze
 		return
 	emote_wahl = welches
 	_emote_until = Time.get_ticks_msec() / 1000.0 + EMOTE_DAUER
@@ -1848,6 +1874,13 @@ func getragen_geworfen(tempo: Vector3) -> void:
 
 func spieler_auf_dem_arm(ja: bool) -> void:
 	traegt_spieler = ja
+
+## Flüchtender Täter/Sau des Gefallens in Griffweite (Gruppe „gefallen_taeter“)
+func _taeter_in_reichweite() -> Node:
+	for t in get_tree().get_nodes_in_group("gefallen_taeter"):
+		if is_instance_valid(t) and not bool(t.get("getragen")) 				and (t as Node3D).global_position.distance_to(global_position) < 2.6:
+			return t
+	return null
 
 ## Mitspieler in Reichweite vor einem — für das Packen in der Schlägerei.
 func mitspieler_vor_mir() -> int:

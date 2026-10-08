@@ -114,12 +114,30 @@ const ESSEN_NAMEN := {1: "Brezn", 2: "Würstl", 3: "Hendl"}
 var _bestell_t := 0.0
 var _bestell_zeilen := {}   # "art_typ" -> Zeile
 
+## Anzahl Mails beim letzten Blick (-1 = noch nicht gesehen, damit Laden/Beitritt nicht klingelt)
+var _post_zahl := -1
+
 func _process(delta: float) -> void:
+	_neue_post_pruefen()
 	_bestell_t -= delta
 	if _bestell_t > 0.0:
 		return
 	_bestell_t = BESTELL_TAKT
 	_bestellungen_neu()
+
+## Neue Mail im Postfach: Meldung mit Absender und Ton (auch wenn der Desktop zu ist)
+func _neue_post_pruefen() -> void:
+	var story := get_parent().get_node_or_null("Story")
+	if story == null:
+		return
+	var n: int = story.post.size()
+	if _post_zahl >= 0 and n > _post_zahl:
+		var def: Dictionary = StoryDaten.mail(str((story.post[n - 1] as Dictionary).get("id", "")))
+		melde("MSG_NEUE_MAIL", [tr("ABSENDER_" + str(def.get("absender", "SYSTEM")))], 2)
+		var sfx := get_parent().get_node_or_null("Sfx")
+		if sfx:
+			sfx.play("ding")
+	_post_zahl = n
 
 func _bestellungen_neu() -> void:
 	var gm := get_parent()
@@ -195,7 +213,7 @@ func _alles_neu() -> void:
 	set_stock(_bier, _essen)
 	set_quest(_quest_step, _quest_total)
 	set_hint(_hint_key)
-	set_krug(_krug_fuellung, _krug_sichtbar)
+	set_krug(_krug_fuellung, _krug_sichtbar, _krug_essen)
 	set_buero(_zustand)
 	%HilfeHinweis.text = Texte.mit_tasten("HUD_HELP_HINT") + "   ·   " + tr("HUD_DETAILS_HINT")
 
@@ -227,15 +245,21 @@ func _gm_zuschlag() -> float:
 ## fuellung: 0 … 1 · sichtbar: false blendet die Anzeige aus.
 const KRUG_VOLL_FARBE := Color(0.55, 0.95, 0.45)
 
-func set_krug(fuellung: float, sichtbar: bool) -> void:
+var _krug_essen := false
+
+func set_krug(fuellung: float, sichtbar: bool, essen := false) -> void:
 	_krug_fuellung = fuellung
+	_krug_essen = essen
 	_krug_sichtbar = sichtbar
 	_krug.visible = sichtbar
 	if not sichtbar:
 		return
 	var voll := fuellung >= 0.999
 	_krug_balken.value = clampf(fuellung, 0.0, 1.0) * 100.0
-	_krug_text.text = tr("HUD_KRUG_VOLL") if voll else tr("HUD_KRUG_FUELLT") % int(fuellung * 100.0)
+	if essen:
+		_krug_text.text = tr("HUD_KOCH_FERTIG") if voll else tr("HUD_KOCH_BRAET") % int(fuellung * 100.0)
+	else:
+		_krug_text.text = tr("HUD_KRUG_VOLL") if voll else tr("HUD_KRUG_FUELLT") % int(fuellung * 100.0)
 	_krug_text.add_theme_color_override("font_color", KRUG_VOLL_FARBE if voll else WEISS)
 	# Voll wird grün: gold auf gold war im Test nicht zu unterscheiden
 	if _krug_fuellt_stil == null:
@@ -558,7 +582,7 @@ func is_popup_open() -> bool:
 ## Schwarzblende beim Schlafen. Danach steht kurz der neue Tag im Bild — vorher
 ## wechselte die Zahl oben in der Leiste einfach lautlos, und zwar schon nach
 ## Feierabend statt nach dem Aufstehen.
-func play_sleep_fade(tag: int = 0) -> void:
+func play_sleep_fade(tag: int = 0, kapitel: int = 0) -> void:
 	var fade: ColorRect = %Abblenden
 	var zzz: Label = %Zzz
 	var titel: Control = %Tagstitel
@@ -577,6 +601,14 @@ func play_sleep_fade(tag: int = 0) -> void:
 	if tag > 0:
 		tw.tween_property(titel, "modulate:a", 1.0, 0.5)
 		tw.tween_interval(1.1)
+		tw.tween_property(titel, "modulate:a", 0.0, 0.5)
+	if kapitel > 0:
+		var name_key := "KAPITEL_%d_NAME" % kapitel
+		tw.tween_callback(func() -> void:
+			(%Tag as Label).text = tr("HUD_KAPITEL_GROSS") % kapitel
+			(%Untertitel as Label).text = tr(name_key) if tr(name_key) != name_key else "")
+		tw.tween_property(titel, "modulate:a", 1.0, 0.5)
+		tw.tween_interval(1.4)
 		tw.tween_property(titel, "modulate:a", 0.0, 0.5)
 	tw.tween_property(fade, "color:a", 0.0, 0.9)
 	tw.tween_callback(func() -> void: fade.visible = false)

@@ -4,7 +4,9 @@ extends Node3D
 ## die Logik läuft serverseitig im GameManager (_staff_sim).
 
 const ROLE_COLORS := {1: Color(0.95, 0.6, 0.2), 2: Color(0.3, 0.7, 1.0), 3: Color(0.4, 0.9, 0.5), 4: Color(1.0, 0.85, 0.3), 5: Color(0.95, 0.85, 0.15), 6: Color(0.85, 0.6, 0.25)}
-const ROLE_ICONS := {1: "👨‍🍳", 2: "🍺", 3: "🧹", 4: "🍻", 5: "🛡", 6: "🍺"}
+## Symbol je Beruf (assets/ui/symbole, scripts/ui/symbole.gd)
+const ROLE_SYMBOLE := {1: "koch", 2: "bier", 3: "besen", 4: "fass", 5: "stern", 6: "pokal"}
+const Symbole := preload("res://scripts/ui/symbole.gd")
 const ROLE_KEYS := {1: "STAFF_COOK", 2: "STAFF_WAITER", 3: "STAFF_CLEANER", 4: "STAFF_TAPSTER", 5: "STAFF_SECURITY", 6: "STAFF_BRAEUMEISTER"}
 const Figuren := preload("res://scripts/figuren.gd")
 ## Versatz, damit Personal und Gäste mit gleicher Nummer nicht gleich aussehen
@@ -18,6 +20,7 @@ var staff_id := -1
 var role := 2
 var level := 1
 var carrying := 0
+var staff_name := ""
 
 var _net_pos: Vector3
 var _net_yaw := 0.0
@@ -31,6 +34,8 @@ var _jitter_t := 0.0
 var _bob := 0.0
 var _model_base_y := 0.0
 var _idle_motion: IdleMotion
+var _zapf_t := 0.0
+var _zapft := false
 
 @onready var _model: Node3D = $Model
 @onready var _label: Label3D = $Label
@@ -103,12 +108,24 @@ func _collect_mugs() -> void:
 		_mug_nodes.append(c)
 
 func set_net(pos: Vector3, yaw: float) -> void:
+	# Feierabend: das Personal ist heim (Host setzt y weit unter den Boden), morgens läuft es vom Eingang herein
+	var da := pos.y > -20.0
+	if da and not visible:
+		position = pos
+	visible = da
 	_net_pos = pos
 	_net_yaw = yaw
 
 func set_info(r: int, lv: int) -> void:
 	role = r
 	level = lv
+	_refresh_label()
+
+## Name des Mitarbeiters (kommt vom Host, GameManager._net_staff_namen)
+func set_staff_name(n: String) -> void:
+	if staff_name == n:
+		return
+	staff_name = n
 	_refresh_label()
 
 ## Wie viele Bestellungen der Kellner gerade trägt.
@@ -131,11 +148,13 @@ func set_carrying(n: int) -> void:
 func _refresh_label() -> void:
 	if _label == null:
 		return
-	var extra := ""
-	if carrying > 0:
-		extra = "  🍺×%d" % carrying
-	_label.text = "%s %s Lv%d%s" % [ROLE_ICONS.get(role, ""), Staff.role_name(role), level, extra]
+	# Über dem Kopf: immer der Name, darüber das Symbol des Berufs
+	_label.text = staff_name if staff_name != "" else Staff.role_name(role)
 	_label.modulate = ROLE_COLORS.get(role, Color.WHITE)
+	var symbol := get_node_or_null("Beruf") as Sprite3D
+	if symbol:
+		symbol.texture = Symbole.bild(str(ROLE_SYMBOLE.get(role, "person")))
+		symbol.modulate = ROLE_COLORS.get(role, Color.WHITE)
 
 func _process(delta: float) -> void:
 	var t := clampf(delta * 10.0, 0.0, 1.0)
@@ -146,6 +165,9 @@ func _process(delta: float) -> void:
 	if _idle_motion:
 		_idle_motion.idle = spd <= 0.4
 	if spd > 0.4:
+		if _zapft:
+			_zapft = false
+			_figur.pose_loesen()
 		_set_walking()
 		_model.rotation.y = lerp_angle(_model.rotation.y,
 			deg_to_rad(model_yaw_offset), clampf(delta * 5.0, 0.0, 1.0))
@@ -153,6 +175,17 @@ func _process(delta: float) -> void:
 	else:
 		if _walking:
 			_set_standing()
+		if role == 4 and carrying > 0:
+			# Mit vollem Krug an der Theke: stillstehen, bis er abgestellt ist
+			if _zapft:
+				_zapft = false
+				_figur.pose_loesen()
+		elif role == 4:
+			# Zapfer: am Hahn stehen heißt zapfen (kein Modell bringt die Animation mit)
+			_zapf_t += delta
+			_figur.zapf_pose(_zapf_t)
+			_zapft = true
+			return
 		_figur.pose_auffrischen()   # Skelett aktualisieren, damit die Idle-Bewegung greift
 		# im Stehen leicht umschauen und atmen, damit er nicht erstarrt wirkt
 		_jitter_t -= delta

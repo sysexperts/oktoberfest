@@ -356,7 +356,19 @@ func play(name: String, vol_db := -6.0) -> void:
 	_idx = (_idx + 1) % _players.size()
 	p.stream = _streams[name]
 	p.volume_db = vol_db
+	p.pitch_scale = 1.0
+	# "pop" begleitet fast jedes Aufheben/Ablegen: leiser, in der Tonhöhe
+	# leicht wechselnd und nicht öfter als alle 0,12 s, sonst nervt es auf Dauer.
+	if name == "pop":
+		var jetzt := Time.get_ticks_msec()
+		if jetzt - _pop_zeit < 120:
+			return
+		_pop_zeit = jetzt
+		p.volume_db = vol_db - 8.0
+		p.pitch_scale = randf_range(0.88, 1.08)
 	p.play()
+
+var _pop_zeit := 0
 
 # ------------------------------------------------------------ Dauerklänge
 ## Zapfen, Putzen, Grill: Klänge, die laufen, solange die Taste gehalten wird.

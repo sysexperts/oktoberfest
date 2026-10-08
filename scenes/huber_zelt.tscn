@@ -11,7 +11,7 @@
 [ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten.tres" id="9_hrauten"]
 [ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten_fein.tres" id="10_hrauten_fein"]
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="11_fraktur"]
-[ext_resource type="PackedScene" path="res://scenes/zelt/biergarten_tisch.tscn" id="12_tisch"]
+[ext_resource type="PackedScene" path="res://scenes/beer_table.tscn" id="12_tisch"]
 [ext_resource type="PackedScene" path="res://scenes/zelt/fass.tscn" id="13_fass"]
 [ext_resource type="Script" path="res://scripts/npc_huber.gd" id="14_npc"]
 [ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="15_bean"]
@@ -55,21 +55,27 @@ schluessel = "SIGN_HUBER_ZELT"
 
 [node name="Tisch0" parent="Innen" instance=ExtResource("12_tisch")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4, 0, -5)
+deko = true
 
 [node name="Tisch1" parent="Innen" instance=ExtResource("12_tisch")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4, 0, -1)
+deko = true
 
 [node name="Tisch2" parent="Innen" instance=ExtResource("12_tisch")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4, 0, 3)
+deko = true
 
 [node name="Tisch6" parent="Innen" instance=ExtResource("12_tisch")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4, 0, -5)
+deko = true
 
 [node name="Tisch7" parent="Innen" instance=ExtResource("12_tisch")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4, 0, -1)
+deko = true
 
 [node name="Tisch8" parent="Innen" instance=ExtResource("12_tisch")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4, 0, 3)
+deko = true
 
 [node name="Fass9" parent="Innen" instance=ExtResource("13_fass")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 0, -7.5)
@@ -147,52 +153,133 @@ ab_kapitel = 1
 [node name="Gast5" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(-1.0000, 0, 0.0000, 0, 1, 0, -0.0000, 0, -1.0000, 0.00, 0, -0.55)
 nr = 15
-ab_kapitel = 3
+ab_kapitel = 1
 
 [node name="Gast6" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(-0.3090, 0, -0.9511, 0, 1, 0, 0.9511, 0, -0.3090, 1.38, 0, -1.55)
 nr = 16
-ab_kapitel = 3
+ab_kapitel = 1
 
 [node name="Gast7" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.8090, 0, -0.5878, 0, 1, 0, 0.5878, 0, 0.8090, 0.85, 0, -3.17)
 nr = 17
-ab_kapitel = 3
+ab_kapitel = 1
 
 [node name="Gast8" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.8090, 0, 0.5878, 0, 1, 0, -0.5878, 0, 0.8090, -0.85, 0, -3.17)
 nr = 18
-ab_kapitel = 3
+ab_kapitel = 1
 
 [node name="Gast9" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(-0.3090, 0, 0.9511, 0, 1, 0, -0.9511, 0, -0.3090, -1.38, 0, -1.55)
 nr = 19
-ab_kapitel = 3
+ab_kapitel = 1
 
 [node name="Gast10" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, -5.1)
 nr = 20
-ab_kapitel = 5
+ab_kapitel = 2
 
 [node name="Gast11" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 3.1, 0, -4.4)
 nr = 21
-ab_kapitel = 5
+ab_kapitel = 2
 
 [node name="Gast12" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, -0.8)
 nr = 22
-ab_kapitel = 5
+ab_kapitel = 2
 
 [node name="Gast13" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 3.1, 0, -1.4)
 nr = 23
-ab_kapitel = 5
+ab_kapitel = 2
 
 [node name="Gast14" parent="Innen" instance=ExtResource("17_figur")]
 transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, 3.3)
 nr = 24
-ab_kapitel = 5
+ab_kapitel = 2
+
+[node name="GastNeu0" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, -4.9, 0, -4.6)
+nr = 30
+ab_kapitel = 1
+
+[node name="GastNeu1" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, -3.1, 0, -2.4)
+nr = 31
+ab_kapitel = 1
+
+[node name="GastNeu2" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, -4.9, 0, -0.6)
+nr = 32
+ab_kapitel = 1
+
+[node name="GastNeu3" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, -3.1, 0, 3.6)
+nr = 33
+ab_kapitel = 1
+
+[node name="GastNeu4" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, -4.9, 0, 4.2)
+nr = 34
+ab_kapitel = 1
+
+[node name="GastNeu5" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, -3.9)
+nr = 35
+ab_kapitel = 1
+
+[node name="GastNeu6" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 3.1, 0, -2.6)
+nr = 36
+ab_kapitel = 1
+
+[node name="GastNeu7" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, 0.2)
+nr = 37
+ab_kapitel = 1
+
+[node name="GastNeu8" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 3.1, 0, 2.6)
+nr = 38
+ab_kapitel = 1
+
+[node name="GastNeu9" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 4.9, 0, 4.4)
+nr = 39
+ab_kapitel = 1
+
+[node name="GastNeu10" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, -3.1, 0, 1.4)
+nr = 40
+ab_kapitel = 1
+
+[node name="GastNeu11" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, 3.1, 0, -0.2)
+nr = 41
+ab_kapitel = 1
+
+[node name="GastLauf0" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0, 5.0)
+nr = 50
+runde = Array[Vector3]([Vector3(0, 0, 0), Vector3(3, 0, -4), Vector3(-3, 0, -4), Vector3(0, 0, 0)])
+pause = 2.5
+ab_kapitel = 1
+
+[node name="GastLauf1" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 2.0)
+nr = 51
+runde = Array[Vector3]([Vector3(0, 0, 0), Vector3(0, 0, 6), Vector3(2, 0, 6), Vector3(0, 0, 0)])
+pause = 2.5
+ab_kapitel = 1
+
+[node name="GastLauf2" parent="Innen" instance=ExtResource("17_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 6.0)
+nr = 52
+runde = Array[Vector3]([Vector3(0, 0, 0), Vector3(-3, 0, -6), Vector3(0, 0, -6), Vector3(0, 0, 0)])
+pause = 2.5
+ab_kapitel = 1
 
 [node name="ZielFass" parent="Innen" instance=ExtResource("19_ziel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.35, 0, -7.0)

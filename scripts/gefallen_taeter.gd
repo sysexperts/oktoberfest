@@ -21,9 +21,12 @@ var _tempo := 0.0
 var _anim := ""
 var _sau: Node3D
 var _lauf_t := 0.0
+## Gepackt: scripts/gefallen.gd setzt ihn jetzt jedes Bild auf die Schulter des Trägers, er läuft nicht mehr selbst
+var getragen := false
 
 func _ready() -> void:
 	add_to_group("interactable")
+	add_to_group("gefallen_taeter")
 	if art == "sau":
 		_sau = SAU.instantiate() as Node3D
 		_sau.rotation.y = PI   # Modell blickt nach +Z, die Spielwelt nach -Z
@@ -72,6 +75,15 @@ func _ready() -> void:
 	_figur.stehen()
 	_anim = "stehen"
 
+## Auf dem Arm: strampelt (wie der gepackte Raufbold in scripts/pruegel/raufbold.gd)
+func zappeln() -> void:
+	if art == "sau":
+		_tempo = 6.0
+		_sau_laufen(get_process_delta_time())
+	elif _figur != null and _anim != "rennen":
+		_anim = "rennen"
+		_figur.rennen(1.3)
+
 func interact_point() -> Vector3:
 	return global_position + Vector3(0, 1.0, 0)
 
@@ -93,6 +105,8 @@ func ziel_setzen(pos: Vector3, yaw: float, tempo: float) -> void:
 	rotation.y = lerp_angle(rotation.y, yaw, 0.5)
 
 func _process(delta: float) -> void:
+	if getragen:
+		return
 	if art == "sau":
 		if _hat_ziel:
 			global_position = global_position.lerp(_ziel, clampf(delta * 10.0, 0.0, 1.0))

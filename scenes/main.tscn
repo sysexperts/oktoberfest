@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b7dl2t154d5cj"]
 
 [ext_resource type="Script" uid="uid://2xj70othwtox" path="res://scripts/game_manager.gd" id="1_gm"]
+[ext_resource type="PackedScene" path="res://scenes/muell_eimer.tscn" id="muell_eimer_1"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t154lahp" path="res://scenes/tent.tscn" id="2_tent"]
 [ext_resource type="PackedScene" uid="uid://b7dl2t1534eml" path="res://scenes/mug_dispenser.tscn" id="3_disp"]
 [ext_resource type="PackedScene" uid="uid://c5tkds81g8d47" path="res://scenes/keg_station.tscn" id="4_keg"]
@@ -189,11 +190,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8, 0.92, -13.5)
 beer_type = 3
 
 [node name="FoodPretzel" parent="Stations" unique_id=581788161 instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, 1.1, -12.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.99, -13.25)
+plaetze = 3
+abstand = 0.38
 
 [node name="FoodSosis" parent="Stations" unique_id=911696256 instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7, 1.1, -12.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7, 0.99, -13.25)
 food_type = 2
+plaetze = 4
+abstand = 0.27
 
 [node name="Keg4Festbier" parent="Stations" instance=ExtResource("4_keg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2, 0.92, -13.5)
@@ -204,14 +209,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0.92, -13.5)
 beer_type = 5
 
 [node name="FoodHendl" parent="Stations" instance=ExtResource("9_food")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 1.1, -12.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.99, -13.25)
 food_type = 3
+plaetze = 3
+abstand = 0.38
 
 [node name="RueckwandRegal" parent="." instance=ExtResource("98_regalwand")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -13.55)
 
 [node name="Kochtheke" parent="." instance=ExtResource("99_kochtheke")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -13.3)
+
+[node name="MuellEimer" parent="." instance=ExtResource("muell_eimer_1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 0, -13.0)
 
 [node name="Bueroraum" parent="." instance=ExtResource("100_buero")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 7)
@@ -479,6 +489,9 @@ timeout = 5.0
 
 [node name="Kochtheke2" parent="." instance=ExtResource("99_kochtheke")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 0, -13.3)
+
+[node name="Kochtheke3" parent="." instance=ExtResource("99_kochtheke")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, -13.3)
 
 [node name="ZeltEroeffnung" parent="." instance=ExtResource("101_eroeffnung")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 0, 12.4)

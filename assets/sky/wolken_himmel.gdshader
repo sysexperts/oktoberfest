@@ -13,8 +13,11 @@ uniform float regen : hint_range(0.0, 1.0) = 0.0;
 uniform float bewoelkung : hint_range(0.0, 1.0) = 0.42;
 uniform float wind = 0.006;
 
+// Ohne sin(): bei großen Werten (Wolken nahe am Horizont) wurde sin() ungenau und das Rauschen eckig
 float hash(vec2 p) {
-	return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+	p3 += dot(p3, p3.yzx + 33.33);
+	return fract((p3.x + p3.y) * p3.z);
 }
 
 float rauschen(vec2 p) {
@@ -63,7 +66,12 @@ void sky() {
 	}
 
 	// Sterne (nicht bei Regen)
-	float stern = step(0.9985, hash(floor(d.xz / max(d.y, 0.05) * 90.0)));
+	// Runde, weiche Punkte auf der Himmelskugel (vorher eckige Pixel)
+	vec3 sp = d * 110.0;
+	vec3 zelle = floor(sp);
+	vec3 versatz = vec3(hash(zelle.xy + zelle.z), hash(zelle.yz + zelle.x * 1.7), hash(zelle.zx + zelle.y * 2.3));
+	float abstand = length(fract(sp) - (0.25 + 0.5 * versatz));
+	float stern = step(0.985, hash(zelle.xz + zelle.y * 3.1)) * smoothstep(0.16, 0.0, abstand);
 	farbe += vec3(stern) * nacht * (1.0 - regen) * smoothstep(0.1, 0.35, d.y);
 
 	// Wolken auf einer flachen Kuppel
@@ -95,14 +103,14 @@ void sky() {
 			vec3 berg = mix(fels, vec3(0.93, 0.95, 1.0) * (0.88 + clamp(steig * 25.0, -0.18, 0.12)), schnee);
 			berg = mix(berg, horizont, 0.42 + 0.4 * (1.0 - smoothstep(0.0, 0.05, el)));
 			berg = mix(berg, nacht_horizont * 0.8, nacht * 0.8);
-			farbe = mix(farbe, berg, smoothstep(hA, hA - 0.0015, el));
+			farbe = mix(farbe, berg, smoothstep(hA, hA - 0.004, el));
 		}
 		float hB = 0.004 + 0.028 * pow(kamm(az, 6.0, 3.0), 1.3);
 		if (el < hB) {
 			vec3 wald = vec3(0.2, 0.28, 0.27) * (0.9 + 0.15 * rauschen(vec2(az * 90.0, el * 40.0)));
 			wald = mix(wald, horizont, 0.5);
 			wald = mix(wald, nacht_horizont * 0.6, nacht * 0.85);
-			farbe = mix(farbe, wald, smoothstep(hB, hB - 0.0015, el));
+			farbe = mix(farbe, wald, smoothstep(hB, hB - 0.004, el));
 		}
 	}
 

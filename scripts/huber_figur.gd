@@ -58,6 +58,8 @@ const LOD_ANIMATION := 25.0
 const LOD_SICHTBAR := 50.0
 var _lod_t := randf() * 0.5
 var _nah := true
+## Zufallswert: ab welchem Leerstand dieser Gast Konrads Zelt verlässt (Sabotage-Erfolg)
+var _gehwert := randf()
 
 func _lod() -> void:
 	var kamera := get_viewport().get_camera_3d()
@@ -68,7 +70,12 @@ func _lod() -> void:
 	var hud: Object = welt.get("_hud")
 	var z: Dictionary = hud.get("_zustand") if hud != null else {}
 	var kapitel := int((z.get("story", {}) as Dictionary).get("kapitel", 1))
-	_figur.visible = abstand < LOD_SICHTBAR and kapitel >= ab_kapitel
+	var weg := false
+	if beruf == "":
+		var zelt := get_tree().get_first_node_in_group("huber_zelt")
+		if zelt != null and int(zelt.get_meta("leer_tag", -1)) == int(welt.get("_day")):
+			weg = _gehwert < float(zelt.get_meta("leer_anteil", 0.0))
+	_figur.visible = abstand < LOD_SICHTBAR and kapitel >= ab_kapitel and not weg
 	var nah := abstand < LOD_ANIMATION
 	if nah == _nah or _figur.anim == null:
 		return

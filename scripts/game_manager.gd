@@ -1,6 +1,7 @@
 extends Node3D
 const Kino := preload("res://scripts/ui/kino.gd")
 const KoopDaten := preload("res://scripts/koop_daten.gd")
+const StoryDaten := preload("res://scripts/story/daten.gd")
 ## GameManager. Faz: MOLA <-> VARDİYA. Misafirler popülerliğe göre gelir,
 ## bira masalarındaki koltuklara oturur, TÜM vardiya boyunca kalır ve
 ## tekrar tekrar sipariş verir; otururken kutlar. Rol için insan yoksa NPC (Tasarom).
@@ -160,7 +161,10 @@ const MESS_CHANCE_PER_SEC := 0.02   # Wahrscheinlichkeit pro Sekunde
 ## in der Minute — genug, dass immer etwas zu fegen ist, ohne das Zelt zuzumüllen.
 const GAST_MUELL_JE_SEK := 0.0035
 ## Beim Gehen lässt ein Gast so oft noch etwas liegen
-const GAST_MUELL_BEIM_GEHEN := 0.55
+const GAST_MUELL_BEIM_GEHEN := 0.15
+## Beim Aufbruch nach Feierabend kommt höchstens so viel dazu: wer kurz vor Schluss
+## geputzt hat, soll nicht vor einem vollen Zelt stehen
+const GAST_MUELL_AUFBRUCH_MAX := 8
 
 ## Rausch der Gäste (0–100): Stufen ab 40 beschwipst, 70 betrunken, 90 Bierleiche.
 const RAUSCH_STUFEN := [40.0, 70.0, 90.0]
@@ -320,7 +324,9 @@ const KITCHEN_POINT := Vector3(5.0, 0.1, -12.2) # Koch steht vor der Kochtheke a
 const ZAPFER_POINT := Vector3(-4.2, 0.1, -12.6) # Zapfer steht hinten an den Fässern am Rückwandregal
 const KOCH_ABLAGE := Vector3(5.7, 0.1, -10.4)   # Essensausgabe gegenüber den Kochstellen
 ## Zapfer und Koch stellen Fertiges auf die Ausgabe (scenes/ausgabe.tscn).
-const ZAPF_ZEIT := 2.2        # Sekunden pro Krug auf Stufe 1
+const ZAPFER_ABLAGE := Vector3(-2.0, 0.1, -10.1) # hinter der Bier-Ausgabe an der Theke: hier stellt der Zapfer den Krug ab
+const ZAPFER_ABSTELL_ZEIT := 0.6
+const ZAPF_ZEIT := 2.2       # Sekunden pro Krug auf Stufe 1
 const KOCH_ZEIT := 4.5        # Sekunden pro Portion auf Stufe 1
 const AUSGABE_MAX_KRUEGE := 6 # + 2 je Stufe des Zapfers, höchstens 12 Plätze
 const AUSGABE_MAX_ESSEN := 3  # + 1 je Stufe des Kochs, höchstens 6 Plätze
@@ -429,6 +435,10 @@ const SAB_ERFOLG := 120
 const SAB_SCHLOSS_AB := 5
 const SAB_WERKZEUG := {"fass": "fassbohrer", "strom": "zange", "stink": "stinkbombe", "juck": "juckpulver"}
 var _sab_tag := {}          # Ziel-Art -> Spieltag der letzten Sabotage
+## Geglückte Sabotage: Konrads Kundschaft wandert heute zu uns (Zuschlag auf den Andrang, Anteil leerer Plätze bei Konrad)
+const SAB_ANDRANG := {"fass": 0.15, "strom": 0.25, "stink": 0.25, "juck": 0.15}
+var _sab_andrang := 0.0
+var _sab_andrang_tag := -1
 var _rache_tag := -1        # Konrad schlägt an diesem Tag zurück
 ## Casino hinter Konrads Zelt (gehört Konrad, man spielt gegen seine Bank): Zutritt nur mit Tarnung.
 const ROULETTE_EINSATZ := 50
@@ -692,6 +702,7 @@ func _ready() -> void:
 	_hud = $HUD
 	_story.verbinden(self)
 	_story.kapitel_gewechselt.connect(_kapitel_gewechselt)
+	_story.geaendert.connect(_angebote_melden)
 	_sfx_node = $Sfx
 	_players_container = $Players
 	_customers_container = $Customers
@@ -1317,6 +1328,8 @@ func _apply_crowd(clock: float) -> void:
 	# Zwischen den Tagen (Uhr steht, Zelt zu) ist die Kirmes trotzdem belebt — früher
 	# war sie da leer. Morgens gut voll, abends ganz.
 	var f := 0.7
+	if clock < 0.0 and _nachts_geschlossen:
+		f = 0.0   # nach Feierabend (22 Uhr) gehen die Besucher nach und nach heim, bis zum Morgen ist das Gelände leer
 	if clock >= 0.0:
 		f = lerpf(0.7, 1.0, clampf((clock - DAY_START_HOUR) / (DAY_END_HOUR - DAY_START_HOUR), 0.0, 1.0))
 	if _ereignis == "regen":
@@ -2126,6 +2139,7 @@ func story_folge(f: Dictionary) -> void:
 	if f.has("mitarbeiter_fehlt_tage") and _krank_sid >= 0 and _staff_sim.has(_krank_sid):
 		(_staff_sim[_krank_sid] as Dictionary)["krank_bis"] = _day + int(f["mitarbeiter_fehlt_tage"])
 		(_staff_sim[_krank_sid] as Dictionary)["energie"] = KRANK_ENERGIE
+		_krank_heimschicken(_krank_sid)
 	if f.has("lohn_faktor_tag"):
 		_lohn_faktor_tag = float(f["lohn_faktor_tag"])
 	if f.has("konrad_wette"):
@@ -3359,6 +3373,9 @@ func _staff_wage(role: int, level: int, eig := "normal") -> int:
 func _total_wages() -> int:
 	var w := 0
 	for s in _staff_sim.values():
+		# Wer krank daheim bleibt, bekommt für die Tage keinen Lohn
+		if _day <= int(s.get("krank_bis", 0)) and int(s.get("heim", 0)) != 0:
+			continue
 		w += _lohn_von(s)
 	return w
 
@@ -3494,6 +3511,30 @@ func _update_staff(delta: float) -> void:
 		return   # Stromausfall: das Personal steht still
 	for sid in _staff_sim.keys():
 		var s: Dictionary = _staff_sim[sid]
+		var heim := int(s.get("heim", 0))
+		if heim == 2:
+			continue
+		if heim == 1:
+			# Nach Hause geschickt (krank): zum Eingang und weg
+			s.tgt = ENTRANCE
+			if _staff_move(s, delta):
+				s.heim = 2
+				s.pos = Vector3(ENTRANCE.x, -100.0, ENTRANCE.z)
+			_staff_sim[sid] = s
+			var n1 = _staff.get(sid)
+			if n1:
+				n1.set_net(s.pos, s.yaw)
+			continue
+		if heim == 3:
+			# Morgens: vom Eingang an den Arbeitsplatz laufen
+			s.tgt = _staff_start(int(s.role))
+			if _staff_move(s, delta):
+				s.heim = 0
+			_staff_sim[sid] = s
+			var n3 = _staff.get(sid)
+			if n3:
+				n3.set_net(s.pos, s.yaw)
+			continue
 		match int(s.role):
 			ROLE_KELLNER:
 				_update_waiter(s, sid, delta)
@@ -3513,6 +3554,40 @@ func _update_staff(delta: float) -> void:
 				_staff_move(s, delta)
 		if _phase == Phase.SHIFT:
 			s.energie = maxf(0.3, float(s.get("energie", 1.0)) - MUEDE_JE_SEKUNDE * delta)
+		_staff_sim[sid] = s
+		var node = _staff.get(sid)
+		if node:
+			node.set_net(s.pos, s.yaw)
+
+## Krank gemeldet und „bleib daheim“ geantwortet: der Mitarbeiter lässt alles stehen und geht zum Ausgang
+func _krank_heimschicken(sid: int) -> void:
+	var s: Dictionary = _staff_sim[sid]
+	for gid in s.get("orders", []):
+		_assigned.erase(gid)
+	s.heim = 1
+	s.state = 0
+	s.orders = []
+	s.idx = 0
+	_staff_sim[sid] = s
+
+## Feierabend: erst wenn die Gäste draußen sind, gehen alle Mitarbeiter zum Ausgang und heim.
+func _update_staff_feierabend(delta: float) -> void:
+	if not _guest_sim.is_empty():
+		return
+	for sid in _staff_sim.keys():
+		var s: Dictionary = _staff_sim[sid]
+		var heim := int(s.get("heim", 0))
+		if heim == 2 or heim == 3:
+			continue
+		if heim == 0:
+			s.heim = 1
+			s.state = 0
+			s.orders = []
+			s.idx = 0
+		s.tgt = ENTRANCE
+		if _staff_move(s, delta):
+			s.heim = 2
+			s.pos = Vector3(ENTRANCE.x, -100.0, ENTRANCE.z)
 		_staff_sim[sid] = s
 		var node = _staff.get(sid)
 		if node:
@@ -3599,18 +3674,36 @@ func _update_waiter(s: Dictionary, sid: int, delta: float) -> void:
 ## Zapfer: steht hinter der Theke und zapft vor — volle Krüge landen auf der
 ## Ausgabe, Spieler und Kellner nehmen sie nur noch mit.
 func _update_zapfer(s: Dictionary, delta: float) -> void:
-	s.tgt = ZAPFER_POINT
-	if not _staff_move(s, delta):
-		return
-	s.timer = float(s.timer) - delta
-	if float(s.timer) > 0.0:
-		return
-	var lv := int(s.level)
-	s.timer = ZAPF_ZEIT / (1.0 + 0.25 * float(lv - 1)) / (1.3 if _ausbau.has("theke2") else 1.0)
-	var platz := mini(12, AUSGABE_MAX_KRUEGE + 2 * (lv - 1))
-	if _ausgabe_gesamt(1) >= mini(platz, int(_stock[WARE_BIER])):
-		return
-	_ausgabe_hinzufuegen(1, _naechste_sorte(1, _drinks_avail()))
+	match int(s.state):
+		1:
+			# Mit dem vollen Krug zur Theke gehen
+			s.tgt = ZAPFER_ABLAGE
+			if _staff_move(s, delta):
+				s.state = 2
+				s.timer = ZAPFER_ABSTELL_ZEIT
+		2:
+			# Zur Theke gedreht den Krug abstellen
+			s.yaw = lerp_angle(float(s.yaw), PI, clampf(delta * 8.0, 0.0, 1.0))
+			s.timer = float(s.timer) - delta
+			if float(s.timer) <= 0.0:
+				_ausgabe_hinzufuegen(1, int(s.get("typ", 1)))
+				s.state = 0
+		_:
+			s.tgt = ZAPFER_POINT
+			if not _staff_move(s, delta):
+				return
+			# Am Fass: zum Hahn gedreht zapfen
+			s.yaw = lerp_angle(float(s.yaw), 0.0, clampf(delta * 8.0, 0.0, 1.0))
+			var lv := int(s.level)
+			var platz := mini(12, AUSGABE_MAX_KRUEGE + 2 * (lv - 1))
+			if _ausgabe_gesamt(1) >= mini(platz, int(_stock[WARE_BIER])):
+				return
+			s.timer = float(s.timer) - delta
+			if float(s.timer) > 0.0:
+				return
+			s.timer = ZAPF_ZEIT / (1.0 + 0.25 * float(lv - 1)) / (1.3 if _ausbau.has("theke2") else 1.0)
+			s.typ = _naechste_sorte(1, _drinks_avail())
+			s.state = 1
 
 ## Bräumeister: steht im Keller und erledigt reihum die Handgriffe — Malz rühren, Sud kochen,
 ## Hefe ins freie Gärfass, fertiges Bier abfüllen. Stoppt, wenn eine Zutat fehlt (kein Meldungsflut).
@@ -4009,6 +4102,8 @@ func _schlafen_pruefen(melden: bool) -> void:
 	elif melden:
 		_melde("MSG_SCHLAFEN_STAND", [liegen, gesamt])
 
+var _kapitel_angesagt := 1   # höchstes Kapitel, dessen Titelkarte schon lief
+
 ## Mehr als die Hälfte aller Spieler liegt im Bett
 static func schlafen_mehrheit(liegen: int, gesamt: int) -> bool:
 	return liegen * 2 > gesamt
@@ -4031,7 +4126,12 @@ func _tag_starten() -> void:
 	_stats.days += 1
 	_story.tag_wechsel(_day)
 	_broadcast_meta()
-	net_sleep_fade.rpc(_day)
+	# Neues Kapitel seit dem letzten Schlafen: Titelkarte nach „Tag N“
+	var neues_kapitel := 0
+	if _story.aktiv and int(_story.kapitel) > _kapitel_angesagt:
+		neues_kapitel = int(_story.kapitel)
+		_kapitel_angesagt = neues_kapitel
+	net_sleep_fade.rpc(_day, neues_kapitel)
 	_spieler_zum_wohnwagen()
 	_start_shift()
 	_melde("MSG_DAY_START", [_day])
@@ -4084,7 +4184,7 @@ func open_lobby_ui() -> void:
 
 ## Lobby-Wahl eines Spielers speichern und allen schicken.
 @rpc("any_peer", "reliable", "call_local")
-func net_lobby_setzen(spielername: String, farbe: int, figur: int = -1, lobby_id: String = "") -> void:
+func net_lobby_setzen(spielername: String, farbe: int, figur: int = -1, lobby_id: String = "", steam_id: int = 0) -> void:
 	if not multiplayer.is_server():
 		return
 	var s := multiplayer.get_remote_sender_id()
@@ -4098,8 +4198,10 @@ func net_lobby_setzen(spielername: String, farbe: int, figur: int = -1, lobby_id
 	# Figur aus dem Warteraum; -1 = bisherige behalten (Lobby-Fenster im Spiel)
 	if figur < 0:
 		figur = int((_spieler_info.get(s, {}) as Dictionary).get("figur", 0))
+	if steam_id == 0:
+		steam_id = int((_spieler_info.get(s, {}) as Dictionary).get("steam", 0))
 	_spieler_info[s] = {"name": n, "farbe": clampi(farbe, 0, 5),
-		"figur": clampi(figur, 0, Figuren.ALLE.size() - 1)}
+		"figur": clampi(figur, 0, Figuren.ALLE.size() - 1), "steam": steam_id}
 	_net_spieler_info.rpc(_spieler_info)
 
 ## Selbst gebaute Charaktere (Creator): Peer → Look als JSON-Text. Der Server prüft nur die Länge,
@@ -4951,6 +5053,8 @@ func _process(delta: float) -> void:
 	elif not _guest_sim.is_empty():
 		# Nach Feierabend laufen die restlichen Gäste noch hinaus
 		_update_guests(delta)
+	if _phase == Phase.INTERMISSION:
+		_update_staff_feierabend(delta)
 	_gaerung_zaehlen(delta)   # Gärung läuft in beiden Phasen weiter
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
@@ -4988,6 +5092,8 @@ func _shift_process(delta: float) -> void:
 		andrang *= Wirtschaft.preis_andrang(_bierpreis)
 		andrang *= 1.0 + minf(DEKO_ANDRANG_MAX, DEKO_ANDRANG * float(_einrichtung.size()))
 		andrang *= _ereignis_andrang()
+		if _sab_andrang_tag == _day:
+			andrang *= 1.0 + _sab_andrang
 		if _ausbau.has("biergarten"):
 			andrang *= 1.12
 		andrang *= float(ANDRANG_FAKTOR[_schwierigkeit])
@@ -5605,6 +5711,13 @@ func _start_shift() -> void:
 		st.orders = []
 		st.idx = 0
 		st.timer = 0.0
+		# Morgens kommt das Personal vom Eingang herein — wer noch krank ist, bleibt daheim
+		if _day <= int(st.get("krank_bis", 0)):
+			st.heim = 2
+			st.pos = Vector3(ENTRANCE.x, -100.0, ENTRANCE.z)
+		else:
+			st.heim = 3
+			st.pos = ENTRANCE
 		_staff_sim[sid] = st
 	# Kirmes offen, Zelt noch zu — ein Spieler eröffnet es am Eingang (net_zelt_eroeffnen)
 	_zelt_offen = _tent_stage == 0
@@ -5907,7 +6020,7 @@ func _update_guests(delta: float) -> void:
 			if float(g.aufbruch_t) <= 0.0 and int(g.mode) != 2:
 				g.erase("aufbruch_t")
 				# Beim Aufbruch bleibt oft noch etwas am Platz liegen
-				if randf() < GAST_MUELL_BEIM_GEHEN:
+				if randf() < GAST_MUELL_BEIM_GEHEN and _mess_kind.size() < GAST_MUELL_AUFBRUCH_MAX:
 					_gast_muell(g)
 				g.mode = 2
 				g.tgt = ENTRANCE
@@ -6319,6 +6432,8 @@ func _broadcast_sync() -> void:
 			carr = maxi(0, (st.orders as Array).size() - int(st.idx))
 		elif int(st.role) == ROLE_KOCH and int(st.state) == 1:
 			carr = 1   # Koch trägt eine Portion zur Ausgabe
+		elif int(st.role) == ROLE_ZAPFER and int(st.state) >= 1:
+			carr = 1   # Zapfer trägt den vollen Krug zur Theke
 		scarry.append(carr)
 	if sids.size() > 0:
 		_net_staff.rpc(sids, sx, sy, sz, syaw, scarry)
@@ -6466,7 +6581,22 @@ func _broadcast_meta() -> void:
 		_story.ereignis("horst_zusage")
 	_story.pruefen(_story_messwerte(), _day)
 	net_meta.rpc(_phase, _day, _tent_stage, _active_count, _quest_step, _buero_state())
+	_staff_namen_senden()
 	_save_game()   # E3: her durum değişiminde ilerlemeyi kaydet
+
+## Namen der Mitarbeiter (id → Name) für die Beschriftung über dem Kopf
+func _staff_namen_senden() -> void:
+	var namen := {}
+	for sid in _staff_sim.keys():
+		namen[sid] = str((_staff_sim[sid] as Dictionary).get("name", ""))
+	_net_staff_namen.rpc(namen)
+
+@rpc("authority", "reliable", "call_local")
+func _net_staff_namen(namen: Dictionary) -> void:
+	for sid in namen.keys():
+		var n = _staff.get(int(sid))
+		if n and n.has_method("set_staff_name"):
+			n.set_staff_name(str(namen[sid]))
 
 @rpc("authority", "reliable", "call_local")
 func net_meta(phase: int, day: int, tent_stage: int, active_count: int, quest_step: int, buero: Dictionary) -> void:
@@ -6557,7 +6687,10 @@ func _net_betrag(pos: Vector3, betrag: int, trinkgeld: bool) -> void:
 	add_child(b)
 	b.global_position = pos + Vector3(0, 2.0, 0)
 	b.starte(betrag)
-	if _sfx_node:
+	# Nur hören, wenn man in der Nähe ist (nicht draußen vor dem Zelt)
+	var ich = _players_nodes.get(multiplayer.get_unique_id())
+	var nah: bool = ich == null or not is_instance_valid(ich) or (ich as Node3D).global_position.distance_to(pos) < 14.0
+	if _sfx_node and nah:
 		_sfx_node.play("muenzen" if trinkgeld else "kasse", -8.0)
 
 ## Kotz-Ablauf: Gast läuft vom Tisch weg, übergibt sich dort, geht zurück.
@@ -6586,9 +6719,9 @@ func _update_puke(g: Dictionary, id: int, delta: float) -> void:
 
 ## Kurze Schwarzblende beim Schlafen (bei allen Spielern).
 @rpc("authority", "reliable", "call_local")
-func net_sleep_fade(tag: int = 0) -> void:
+func net_sleep_fade(tag: int = 0, kapitel: int = 0) -> void:
 	if _hud and _hud.has_method("play_sleep_fade"):
-		_hud.play_sleep_fade(tag)
+		_hud.play_sleep_fade(tag, kapitel)
 
 ## Letzte Tagesbilanz — im Festbüro jederzeit nachlesbar.
 @rpc("authority", "reliable", "call_local")
@@ -6697,6 +6830,19 @@ func net_brief_ende(mehrere: bool) -> void:
 	var kino := get_node_or_null("Kino")
 	if kino and kino.has_method("brief_zeigen"):
 		kino.brief_zeigen(mehrere, "BRIEF_ENDE", 2, "BRIEF_ENDE_TITEL")
+
+## Neue Neben-/Gefallen-Angebote kurz als Meldung zeigen (sonst sieht man sie nur in der Quests-App)
+var _angebote_bekannt := {}
+
+func _angebote_melden() -> void:
+	if not multiplayer.is_server():
+		return
+	var jetzt := {}
+	for id: String in _story.angebote():
+		jetzt[id] = true
+		if not _angebote_bekannt.has(id):
+			_melde("MSG_QUEST_ANGEBOT", [str(StoryDaten.quest(id).get("titel", id))], 2)
+	_angebote_bekannt = jetzt
 
 func _kapitel_gewechselt(nr: int) -> void:
 	if nr == 6 and multiplayer.is_server():
@@ -7254,6 +7400,12 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 		_story.ereignis("sabotage_geschafft")
 		_stats["sab_ok"] = int(_stats.get("sab_ok", 0)) + 1
 		_rache_tag = _day + 1
+		if _sab_andrang_tag != _day:
+			_sab_andrang = 0.0
+			_sab_andrang_tag = _day
+		_sab_andrang += float(SAB_ANDRANG.get(art, 0.15))
+		_net_huber_leer.rpc(_day, minf(1.0, _sab_andrang * 3.0))
+		_melde("MSG_SAB_ANDRANG", [int(round(_sab_andrang * 100.0))], 2)
 	_broadcast_meta()
 
 func fest_moeglich() -> bool:
@@ -7480,7 +7632,8 @@ func wagen_plaetze() -> Array:
 	peers.sort()
 	var plaetze := _wagen_zuteilung()
 	for peer: int in peers:
-		liste.append({"peer": peer, "name": _spieler_bezeichnung(peer), "farbe": str(_wagen_von(peer).farbe),
+		liste.append({"peer": peer, "name": _spieler_bezeichnung(peer),
+			"steam": int((_spieler_info.get(peer, {}) as Dictionary).get("steam", 0)), "farbe": str(_wagen_von(peer).farbe),
 			"platz": int(plaetze.get(peer, 0)), "fest": _wagen_wahl.has(peer)})
 	return liste
 
@@ -8012,6 +8165,14 @@ func _net_watten_stand(daten: Dictionary) -> void:
 func _net_roulette_dreh() -> void:
 	for c in get_tree().get_nodes_in_group("casino"):
 		c.dreh()
+
+## Konrads Zelt wird leerer: die Gäste (nicht das Personal) gehen zum Teil, scripts/huber_figur.gd
+@rpc("authority", "reliable", "call_local")
+func _net_huber_leer(tag: int, anteil: float) -> void:
+	var zelt := get_tree().get_first_node_in_group("huber_zelt")
+	if zelt != null:
+		zelt.set_meta("leer_tag", tag)
+		zelt.set_meta("leer_anteil", anteil)
 
 ## Erwischt: der Türsteher wirft dich vor das Zelt
 @rpc("authority", "reliable", "call_local")

@@ -681,6 +681,22 @@ func posen_pose(t: float) -> void:
 	_knochen("oberschenkel_l", 0.12)
 	_knochen("unterschenkel_l", -0.18)
 
+## Zapfen am Fass: linke Hand hält den Krug vor den Hahn, die rechte zieht den
+## Hebel immer wieder nach unten, der Oberkörper neigt sich leicht mit.
+func zapf_pose(t: float) -> void:
+	if skelett == null:
+		return
+	if anim:
+		anim.active = false
+	var zug := 0.5 + 0.5 * sin(t * 3.2)   # 0 = Hebel oben, 1 = ganz gezogen
+	_knochen("arm_l", -0.85)
+	_knochen("unterarm_l", -1.1)
+	_knochen("arm_r", -0.95 - 0.35 * zug)
+	_knochen("unterarm_r", -0.9 - 0.4 * zug)
+	_knochen("wirbel_oben", 0.08 + 0.08 * zug)
+	_knochen("nacken", 0.05)
+	_knochen("kopf", 0.1 - 0.05 * zug)
+
 ## Hinsetzen ohne Sitzanimation: Beine angewinkelt, Oberkörper aufrecht.
 func sitz_pose() -> void:
 	if skelett == null:

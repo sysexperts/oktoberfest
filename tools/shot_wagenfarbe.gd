@@ -32,8 +32,12 @@ class Lauf extends Node:
 		gm._players_nodes[3] = Node3D.new()
 		gm._wagen_farbe_peer[2] = "gruen"
 		gm._wagen_farbe_peer[3] = "rot"
-		gm._spieler_info[2] = {"name": "Lena"}
-		gm._spieler_info[3] = {"name": "Tarik"}
+		# Steam-Bilder vortäuschen: Figurenporträts statt Profilbilder
+		for i in 3:
+			SteamDienst._avatare[1000 + i] = load("res://assets/ui/avatare/figur_%d.png" % i)
+		gm._spieler_info[1] = {"name": "Sepp", "steam": 1000}
+		gm._spieler_info[2] = {"name": "Lena", "steam": 1001}
+		gm._spieler_info[3] = {"name": "Tarik", "steam": 1002}
 		gm._broadcast_meta()
 		var wagen: Node3D = null
 		for n in get_tree().get_nodes_in_group("interactable"):

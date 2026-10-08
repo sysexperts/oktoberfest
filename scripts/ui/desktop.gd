@@ -362,7 +362,7 @@ func _banner(name: String, fenster: Control) -> void:
 func _buero_reiter(name: String) -> void:
 	var buero := _hud.get("_buero") as Control
 	if buero and buero.has_method("reiter_waehlen"):
-		buero.reiter_waehlen(int(REITER.get(name, 0)))
+		buero.reiter_waehlen(int(REITER.get(name, 0)), true)
 
 func _legacy_zu(name: String) -> void:
 	var alt := _legacy_knoten(name)

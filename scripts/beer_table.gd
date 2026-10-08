@@ -5,7 +5,12 @@ extends Node3D
 
 var idx := -1
 
+## Nur Möbel (Konrads Zelt): kein Spieltisch, keine Gäste, nicht tragbar
+@export var deko := false
+
 func _ready() -> void:
+	if deko:
+		return
 	add_to_group("beertable")
 	add_to_group("interactable")
 

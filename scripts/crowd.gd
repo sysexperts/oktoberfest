@@ -270,6 +270,29 @@ func weg_start() -> int:
 			return i
 	return randi() % _points.size()
 
+## Freier Platz für etwas Größeres (Sau-Gehege, 3,2 m breit) möglichst nah an `von`:
+## nicht auf dem Pflaster der Straße, ohne Gebautes und ohne gesperrte Fläche.
+func gehege_platz(von: Vector3) -> Vector3:
+	if _points.is_empty():
+		_build_points()
+	if _pflaster.is_empty():
+		_pflaster_lesen()
+	for r: float in [3.0, 4.5, 6.0, 8.0, 10.0, 13.0, 17.0]:
+		for k in 24:
+			var a := TAU * float(k) / 24.0
+			var p := Vector3(von.x + cos(a) * r, von.y, von.z + sin(a) * r)
+			if _platz_fuer_gehege(p):
+				return p
+	return von
+
+func _platz_fuer_gehege(p: Vector3) -> bool:
+	for o: Vector2 in [Vector2.ZERO, Vector2(2.2, 0), Vector2(-2.2, 0), Vector2(0, 2.2), Vector2(0, -2.2),
+			Vector2(2.2, 2.2), Vector2(-2.2, 2.2), Vector2(2.2, -2.2), Vector2(-2.2, -2.2)]:
+		var q := Vector2(p.x + o.x, p.z + o.y)
+		if not _frei(q) or (not _pflaster.is_empty() and _gepflastert(q)):
+			return false
+	return true
+
 func punkt(i: int) -> Vector3:
 	return _points[i] if i >= 0 and i < _points.size() else Vector3.ZERO
 
@@ -338,6 +361,9 @@ const BAU_PAUSE_AB := 0.05
 ## Auch bei zähen Bildern wenigstens alle 0,3 s einen Besucher, sonst füllt sich die Kirmes nie
 const BAU_NOTFALL := 0.3
 var _bau_wartet := 0.0
+## Abstand zwischen zwei Besuchern, die das Gelände verlassen
+const WEG_PAUSE := 0.5
+var _weg_wartet := 0.0
 
 func _sync_step(delta: float) -> void:
 	var t0 := Time.get_ticks_usec()
@@ -353,9 +379,10 @@ func _sync_step(delta: float) -> void:
 			v.setup(self)
 			_visitors.append(v)
 			gebaut += 1
-	var weg := 4
-	while _visitors.size() > _target and weg > 0:
+	# Nach und nach gehen, nicht alle auf einmal verschwinden lassen
+	_weg_wartet += delta
+	if _visitors.size() > _target and _weg_wartet >= WEG_PAUSE:
+		_weg_wartet = 0.0
 		var v = _visitors.pop_back()
 		if is_instance_valid(v):
 			v.queue_free()
-		weg -= 1

@@ -100,20 +100,21 @@ func _starten(id: String) -> void:
 	_lauf = {"id": id, "phase": "suchen", "traeger": -1, "art": art}
 	var start := Vector3.ZERO
 	var ort: int = frei.pick_random()
-	var ort2 := -1
+	var gehege_pos := Vector3.INF
 	if art == "sau":
 		frei.erase(ort)
-		ort2 = frei.pick_random() if not frei.is_empty() else ort
+		var ort2: int = frei.pick_random() if not frei.is_empty() else ort
+		gehege_pos = _gehege_platz(_orte[ort2])
 	if art != "spanner" and _gm._crowd != null:
 		_dieb_knoten = _gm._crowd.weg_start()
 		start = _gm._crowd.punkt(_dieb_knoten)
 		_dieb_pos = start
 		_dieb_richtung = Vector3.FORWARD.rotated(Vector3.UP, randf() * TAU)
 		_hetze = 0.0
-	net_start.rpc(id, art, ort, start, ort2)
+	net_start.rpc(id, art, ort, start, gehege_pos)
 
 @rpc("authority", "reliable", "call_local")
-func net_start(_id: String, art: String, ort: int, start: Vector3, ort2: int) -> void:
+func net_start(_id: String, art: String, ort: int, start: Vector3, gehege_pos: Vector3) -> void:
 	_taeter_weg()
 	if _orte.is_empty():
 		_orte_sammeln()
@@ -127,10 +128,20 @@ func net_start(_id: String, art: String, ort: int, start: Vector3, ort2: int) ->
 	get_tree().current_scene.add_child(_taeter)
 	_art = art
 	_taeter.global_position = start if art != "spanner" else _orte[ort]
-	if art == "sau" and ort2 >= 0 and ort2 < _orte.size():
+	if art == "sau" and gehege_pos.is_finite():
 		_gehege = GEHEGE.instantiate() as Node3D
 		get_tree().current_scene.add_child(_gehege)
-		_gehege.global_position = _orte[ort2]
+		_gehege.global_position = gehege_pos
+
+## Freier Platz neben der Straße (nur Server, Ergebnis geht per RPC an alle)
+func _gehege_platz(von: Vector3) -> Vector3:
+	var cr: Node = _gm._crowd
+	return cr.gehege_platz(von) if cr != null and cr.has_method("gehege_platz") else von
+
+@rpc("authority", "reliable", "call_local")
+func net_gehege_setzen(pos: Vector3) -> void:
+	if _gehege != null and is_instance_valid(_gehege):
+		_gehege.global_position = pos
 
 @rpc("any_peer", "reliable", "call_local")
 func net_packen() -> void:
@@ -139,8 +150,15 @@ func net_packen() -> void:
 	var peer := multiplayer.get_remote_sender_id()
 	if peer == 0:
 		peer = 1
+	var packer := _gm._players_nodes.get(peer) as Node3D if "_players_nodes" in _gm else null
+	if packer == null or not is_instance_valid(packer) or _taeter == null or not is_instance_valid(_taeter):
+		return
+	if packer.global_position.distance_to(_taeter.global_position) > 3.6:
+		return   # zu weit weg (Nachzügler-Klick)
 	_lauf.phase = "getragen"
 	_lauf.traeger = peer
+	if str(_lauf.get("art", "")) == "sau":
+		net_gehege_setzen.rpc(_gehege_platz(packer.global_position))
 	net_stand.rpc("getragen", peer)
 
 @rpc("authority", "reliable", "call_local")
@@ -176,6 +194,10 @@ func _erfuellt() -> void:
 
 @rpc("authority", "reliable", "call_local")
 func net_ende() -> void:
+	# Geschafft: der Träger wirft ihn in Gehege oder Posten, dann verschwindet er
+	if _phase == "getragen" and _taeter != null and is_instance_valid(_taeter):
+		_einwerfen(_taeter)
+		_taeter = null
 	if _traeger >= 0 and "_players_nodes" in _gm:
 		var sp: Node = _gm._players_nodes.get(_traeger)
 		if sp != null and is_instance_valid(sp):
@@ -183,6 +205,34 @@ func net_ende() -> void:
 	_phase = ""
 	_traeger = -1
 	_taeter_weg()
+
+## Bogen vom Träger ins Ziel (Gehege bei der Sau, sonst der nächste Posten)
+func _einwerfen(t: Node3D) -> void:
+	var ziel := t.global_position
+	if _gehege != null and is_instance_valid(_gehege) and _art == "sau":
+		ziel = _gehege.global_position + Vector3(0, 0.1, 0)
+	else:
+		var best := INF
+		for p in _posten:
+			if is_instance_valid(p) and t.global_position.distance_squared_to(p.global_position) < best:
+				best = t.global_position.distance_squared_to(p.global_position)
+				ziel = p.global_position
+	var start := t.global_position
+	var tw := t.create_tween()
+	var flug := func(f: float) -> void:
+		if is_instance_valid(t):
+			t.global_position = start.lerp(ziel, f) + Vector3(0, sin(f * PI) * 1.6, 0)
+			t.rotation.x = f * TAU
+	tw.tween_method(flug, 0.0, 1.0, 0.7)
+	if _art == "sau" and _gehege != null and is_instance_valid(_gehege):
+		# Das Gehege bleibt noch kurz stehen, die Sau landet darin
+		var g := _gehege
+		_gehege = null
+		get_tree().create_timer(2.0).timeout.connect(func() -> void:
+			if is_instance_valid(g):
+				g.queue_free())
+		tw.tween_interval(1.2)
+	tw.tween_callback(t.queue_free)
 
 func _taeter_weg() -> void:
 	for p in _punkte:
@@ -375,13 +425,16 @@ func _process(delta: float) -> void:
 	var sp := _gm._players_nodes.get(_traeger) as Node3D if "_players_nodes" in _gm else null
 	if sp == null or not is_instance_valid(sp):
 		return
-	if _art == "sau":
-		# Die Sau hängt vor dem Bauch
-		_taeter.global_position = sp.global_position + Vector3(0, 0.55, 0) - sp.global_transform.basis.z * 0.45
-		_taeter.rotation = Vector3(0.0, sp.rotation.y, 0.0)
-	else:
-		_taeter.global_position = sp.global_position + Vector3(0, 1.05, 0) - sp.global_transform.basis.z * 0.15
-		_taeter.rotation = Vector3(deg_to_rad(-80.0), sp.rotation.y, 0.0)
+	# Wie der Raufbold: vor dem Träger auf dem Arm, schaut ihn an und zappelt
+	var vorn := -sp.global_transform.basis.z
+	vorn.y = 0.0
+	vorn = vorn.normalized() if vorn.length() > 0.01 else Vector3(0, 0, 1)
+	var ziel := sp.global_position + vorn * 0.9 + Vector3(0, 0.55, 0)
+	_taeter.global_position = _taeter.global_position.lerp(ziel, clampf(delta * 14.0, 0.0, 1.0))
+	_taeter.rotation = Vector3(0.0, sp.rotation.y + PI, sin(Time.get_ticks_msec() * 0.012) * 0.25)
+	if _taeter.has_method("zappeln"):
+		_taeter.zappeln()
+	_taeter.set("getragen", true)
 	_taeter.remove_from_group("interactable")
 
 ## Für den Zielpfeil (scripts/ui/zielmarker.gd): wohin gerade?

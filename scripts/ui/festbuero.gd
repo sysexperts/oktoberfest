@@ -125,6 +125,8 @@ func tutorial_schritt(schritt: int) -> void:
 
 func oeffnen() -> void:
 	visible = true
+	for n in _nav_knoepfe():
+		n.visible = true
 	_neu()
 	if TUTORIAL_ZIEL.has(_schritt):
 		_reiter.current_tab = TUTORIAL_ZIEL[_schritt][0]
@@ -134,9 +136,13 @@ func oeffnen() -> void:
 	_nav_knoepfe()[_reiter.current_tab].grab_focus.call_deferred()
 
 ## Reiter wählen (Desktop-Apps Shop, Personal, Bilanz öffnen das Fenster direkt auf ihrem Reiter)
-func reiter_waehlen(tab: int) -> void:
+func reiter_waehlen(tab: int, nur: bool = false) -> void:
 	if tab < 0 or tab >= _reiter.get_tab_count():
 		return
+	# Als eigene Desktop-App: nur dieser Reiter, die übrigen Knöpfe der Seitenleiste ausblenden
+	var k := _nav_knoepfe()
+	for i in k.size():
+		k[i].visible = not nur or i == tab
 	_reiter.current_tab = tab
 	_nav_markieren(tab)
 	_nav_knoepfe()[tab].grab_focus.call_deferred()

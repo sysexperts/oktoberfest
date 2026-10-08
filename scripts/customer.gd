@@ -38,7 +38,7 @@ var _vomit_active := false
 ## Tanzt gerade auf dem Tisch (gute Stimmung, vom Server)
 var _tanzt := false
 ## Höhe der Tischplatte — so hoch steht ein Tänzer
-const TISCH_HOEHE := 0.78
+const TISCH_HOEHE := 0.70
 ## Tanzhöhe: Tischplatte oder Boden (vor der Bühne)
 var _tanz_hoehe := TISCH_HOEHE
 
@@ -250,7 +250,7 @@ func _process(delta: float) -> void:
 	# Auf dem Tisch: hoch auf die Platte, tanzen, leicht schwanken
 	if _tanzt:
 		if _model:
-			_model.position.y = lerpf(_model.position.y, _tanz_hoehe, clampf(delta * 5.0, 0.0, 1.0))
+			_model.position.y = lerpf(_model.position.y, _tanz_hoehe - position.y, clampf(delta * 5.0, 0.0, 1.0))
 			_model.rotation.z = sin(_uhr_ms * 0.004 + float(cust_id)) * 0.08
 		_update_vomit(delta)
 		return

@@ -55,8 +55,24 @@ func wette_offen() -> bool:
 	var w: Dictionary = _zustand().get("huber_wette", {})
 	return not w.is_empty() and not bool(w.get("angenommen", false))
 
+## Beim Ansprechen weich zum Spieler drehen, nach dem Gespräch zurück in die alte Blickrichtung
+var _zu_spieler := 0.0
+var _dreht := false
+
+func _zuwenden(delta: float) -> void:
+	if not _dreht or _rennt:
+		return
+	var dialog := get_tree().get_first_node_in_group("dialog")
+	var im_gespraech: bool = dialog != null and dialog.get("aktiv") == true
+	var ziel := _zu_spieler if im_gespraech else _blick
+	rotation.y = lerp_angle(rotation.y, ziel, minf(1.0, 6.0 * delta))
+	if not im_gespraech and absf(angle_difference(rotation.y, _blick)) < 0.02:
+		rotation.y = _blick
+		_dreht = false
+
 func _process(delta: float) -> void:
 	_patrouille(delta)
+	_zuwenden(delta)
 	if _ausruf:
 		var tag := int(_zustand().get("day", 0))
 		_ausruf.visible = wette_offen() or bool(_zustand().get("duell_offen", false)) or (_gehoert_tag != tag and tag > 0 and _welt().has_method("tutorial_active") and not _welt().tutorial_active())
@@ -72,12 +88,12 @@ func ansprechen() -> void:
 	var sp := welt._players_nodes.get(multiplayer.get_unique_id()) as Node3D if welt and "_players_nodes" in welt else null
 	if sp:
 		var zu := sp.global_position - global_position
-		rotation.y = atan2(zu.x, zu.z)
+		_zu_spieler = atan2(zu.x, zu.z)
+		_dreht = true
 	if _figur.extra():
 		get_tree().create_timer(2.6).timeout.connect(func() -> void:
 			if is_instance_valid(_figur):
-				_figur.stehen()
-				rotation.y = _blick)
+				_figur.stehen())
 	var tag := int(z.get("day", 1))
 	_gehoert_tag = tag
 	var wer := String(TranslationServer.translate("HUBER_NAME"))

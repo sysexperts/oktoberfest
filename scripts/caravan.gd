@@ -75,6 +75,7 @@ func _process(delta: float) -> void:
 	wahl_offen = bool(z.get("wagen_wahl_offen", false))
 	var farbe := "blau"
 	besitzer = 0
+	var steam_besitzer := 0
 	var name_besitzer := ""
 	var liste: Array = z.get("wagen_plaetze", [])
 	for e: Dictionary in liste:
@@ -86,11 +87,16 @@ func _process(delta: float) -> void:
 		besitzer = int(e.get("peer", 0))
 		farbe = str(e.get("farbe", "blau"))
 		name_besitzer = str(e.get("name", ""))
+		steam_besitzer = int(e.get("steam", 0))
 	$Modell.visible = farbe == "blau"
 	$ModellRot.visible = farbe == "rot"
 	$ModellGruen.visible = farbe == "gruen"
+	# Statt „Wohnwagen (E: schlafen)“ stehen Steam-Avatar und Name des Besitzers am Wagen
 	$Besitzer.text = name_besitzer
-	$Besitzer.visible = besitzer != 0 and liste.size() > 1
-	var schild := get_node_or_null("Label") as Label3D
-	if schild:
-		schild.visible = besitzer == multiplayer.get_unique_id()
+	$Besitzer.visible = besitzer != 0
+	var sid := steam_besitzer
+	if besitzer == multiplayer.get_unique_id() and sid == 0:
+		sid = SteamDienst.eigene_id()
+	var tex: Texture2D = SteamDienst.avatar_textur(sid) if sid != 0 else null
+	$Avatar.texture = tex
+	$Avatar.visible = besitzer != 0 and tex != null

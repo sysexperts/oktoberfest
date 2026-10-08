@@ -130,13 +130,3 @@ surface_material_override/0 = ExtResource("4_metall")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
 shape = SubResource("Kollision")
-
-[node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
-billboard = 1
-pixel_size = 0.005
-font_size = 40
-modulate = Color(0.6, 0.85, 1, 1)
-text = "WORLD_LAPTOP"
-script = ExtResource("2_wt")
-schluessel = "WORLD_LAPTOP"

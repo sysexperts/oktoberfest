@@ -117,6 +117,18 @@ corner_radius_top_right = 18
 corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
 
+[sub_resource type="StyleBoxFlat" id="FadenkreuzPunkt"]
+bg_color = Color(1, 1, 1, 0.9)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 0.7)
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
@@ -694,26 +706,21 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 15
 text = "[F1] Hilfe"
 
-[node name="Fadenkreuz" type="Label" parent="."]
+[node name="Fadenkreuz" type="Panel" parent="."]
 unique_name_in_owner = true
+mouse_filter = 2
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -12.0
-offset_top = -20.0
-offset_right = 12.0
-offset_bottom = 18.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = 3.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.85)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 28
-text = "+"
-horizontal_alignment = 1
-vertical_alignment = 1
+theme_override_styles/panel = SubResource("FadenkreuzPunkt")
 
 [node name="Krug" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

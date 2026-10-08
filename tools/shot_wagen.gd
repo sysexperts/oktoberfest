@@ -35,7 +35,9 @@ class Lauf extends Node:
 		gm._broadcast_meta()
 		var kam := Camera3D.new()
 		gm.add_child(kam)
-		kam.look_at_from_position(Vector3(1.6, 1.9, 600 + 2.1), Vector3(-1.4, 0.9, 600 - 1.6))
+		var mitte := (gm.get_node("WohnwagenInnen") as Node3D).global_position
+		kam.fov = 75.0
+		kam.look_at_from_position(mitte + Vector3(0.6, 1.6, 0.9), mitte + Vector3(2.75, 0.5, -0.3))
 		kam.make_current()
 		await _warten(1.5)
 		await _warten(2.0)

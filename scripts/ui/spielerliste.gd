@@ -16,6 +16,8 @@ const Meldung := preload("res://scripts/ui/meldung.gd")
 
 var _gm: Node
 var _t := 0.0
+var _ereignis_stand := ""
+var _spieler_zahl := 0
 
 func einrichten(gm: Node) -> void:
 	_gm = gm
@@ -59,17 +61,23 @@ func _aufbauen() -> void:
 			name_text = Net.player_name
 		(z.get_node("%Name") as Label).text = name_text
 		(z.get_node("%Ich") as Label).visible = int(peer) == ich
+	_spieler_zahl = peers.size()
 	%Titel.text = tr("SPIELERLISTE_TITEL") % peers.size()
 	_ereignisse_zeigen()
 
 ## Die Meldungen des heutigen Tages zum Nachlesen (neueste oben), in der Farbe ihrer Art
 func _ereignisse_zeigen() -> void:
-	for k in %Ereignisse.get_children():
-		k.queue_free()
 	var hud := get_parent()
 	var alle: Array = hud.verlauf if "verlauf" in hud else []
 	# Nur der heutige Tag; nach dem Schlafen beginnt die Liste neu
 	var liste: Array = alle.filter(func(e: Dictionary) -> bool: return int(e.get("tag", -1)) == int(hud._day))
+	# Nur neu bauen, wenn sich etwas geändert hat (sonst flackert das Kürzen unten)
+	var stand := "%d|%d|%d" % [liste.size(), get_viewport_rect().size.y, _spieler_zahl]
+	if stand == _ereignis_stand and %Ereignisse.get_child_count() > 0:
+		return
+	_ereignis_stand = stand
+	for k in %Ereignisse.get_children():
+		k.queue_free()
 	%Ereignisse.visible = not liste.is_empty()
 	for i in range(liste.size() - 1, -1, -1):
 		var e: Dictionary = liste[i]
@@ -79,3 +87,17 @@ func _ereignisse_zeigen() -> void:
 		(z.get_node("%Strich") as ColorRect).color = Color(farbe.r, farbe.g, farbe.b, 0.9)
 		(z.get_node("%Zeit") as Label).text = str(e.get("zeit", ""))
 		(z.get_node("%Text") as RichTextLabel).text = Meldung.auszeichnen(str(e.get("text", "")), farbe)
+	_ereignisse_kuerzen()
+
+## Die Liste ist zu lang für den Bildschirm: die ältesten Einträge (unten) fallen weg,
+## damit alles, was sichtbar ist, auch ganz zu sehen ist.
+func _ereignisse_kuerzen() -> void:
+	var panel := %Titel.get_parent().get_parent() as Control
+	var grenze := get_viewport_rect().size.y - 70.0 - 30.0
+	for i in 60:
+		await get_tree().process_frame
+		if not is_instance_valid(panel) or %Ereignisse.get_child_count() <= 1 or panel.size.y <= grenze:
+			return
+		var letzter := %Ereignisse.get_child(%Ereignisse.get_child_count() - 1)
+		%Ereignisse.remove_child(letzter)
+		letzter.queue_free()
