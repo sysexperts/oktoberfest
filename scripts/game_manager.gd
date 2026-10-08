@@ -7230,15 +7230,20 @@ func _huber_morgen() -> void:
 	if not _story.aktiv or _story.kapitel < 3 or tutorial_active():
 		return
 	var d := _day
-	if d >= HUBER_WETTE_AB and d % 3 == 0:
+	# Solange die Story-Wette (3.1) offen ist, gibt es jeden Tag eine neue, sicher machbare Wette
+	var wette_quest := _story.zustand("3.1") == "offen"
+	if wette_quest or (d >= HUBER_WETTE_AB and d % 3 == 0):
 		var arten := [
 			{"typ": "mass", "ziel": int(ceil(float(15 + 7 * d) * 1.1))},
 			{"typ": "sauber", "ziel": 0},
 			{"typ": "beschwerde", "ziel": 0},
 		]
-		_huber_wette = arten.pick_random()
+		_huber_wette = arten[0] if wette_quest else arten.pick_random()
+		if wette_quest:
+			_huber_wette["ziel"] = int(float(_huber_wette["ziel"]) * 0.8)
 		_huber_wette["einsatz"] = 150 + 50 * d
 		_huber_wette["angenommen"] = false
+		_huber_wette["quest"] = wette_quest
 		_melde("MSG_HUBER_WETTE", [], 0)
 		_story.post_senden("M3-02")
 	if d >= SABOTAGE_AB and d - _letzte_sabotage >= SABOTAGE_ABSTAND and randf() < 0.6:
@@ -7269,7 +7274,7 @@ func net_huber_wette(annehmen: bool) -> void:
 	if annehmen:
 		_huber_wette["angenommen"] = true
 		_melde("MSG_HUBER_WETTE_AN", [_eur(int(_huber_wette.einsatz))], 0)
-	else:
+	elif not bool(_huber_wette.get("quest", false)):   # die Quest-Wette lässt sich nicht ablehnen
 		_huber_wette = {}
 	_broadcast_meta()
 
@@ -7277,6 +7282,8 @@ func net_huber_wette(annehmen: bool) -> void:
 func _huber_abrechnen() -> void:
 	if _huber_wette.is_empty():
 		return
+	var quest_wette := bool(_huber_wette.get("quest", false))
+	var quest_gewonnen := false
 	if bool(_huber_wette.get("angenommen", false)):
 		var einsatz := int(_huber_wette.einsatz)
 		var gewonnen := false
@@ -7284,6 +7291,7 @@ func _huber_abrechnen() -> void:
 			"mass": gewonnen = _served >= int(_huber_wette.ziel)
 			"sauber": gewonnen = _urin_count == 0 and _served >= 10
 			"beschwerde": gewonnen = _complaints == 0 and _served >= 10
+		quest_gewonnen = gewonnen
 		if gewonnen:
 			Game.add_money(einsatz)
 			_popularity = minf(100.0, _popularity + 2.0)
@@ -7292,6 +7300,8 @@ func _huber_abrechnen() -> void:
 		else:
 			Game.add_money(-einsatz)
 			_melde("MSG_HUBER_WETTE_VERLOREN", [_eur(einsatz)], 1)
+	if quest_wette and not quest_gewonnen:
+		_story.post_senden("M3-03")   # Horst macht Mut, morgen gibt es die nächste Wette
 	_huber_wette = {}
 
 ## Während der Schicht: Sabotage auslösen und das Leck Bier kosten lassen

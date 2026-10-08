@@ -342,6 +342,14 @@
   "antworten": []
  },
  {
+  "id": "M3-03",
+  "absender": "HORST",
+  "betreff": "MAIL_M3_03_BETREFF",
+  "text": "MAIL_M3_03_TEXT",
+  "antworten": [],
+  "mehrfach": true
+ },
+ {
   "id": "M3-02",
   "absender": "KONRAD",
   "betreff": "MAIL_M3_02_BETREFF",

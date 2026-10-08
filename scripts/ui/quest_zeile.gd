@@ -5,6 +5,8 @@ signal angenommen
 signal abgelehnt
 
 func _ready() -> void:
+	%Annehmen.text = tr("QUESTS_ANNEHMEN")
+	%Ablehnen.text = tr("QUESTS_ABLEHNEN")
 	%Annehmen.pressed.connect(func() -> void: angenommen.emit())
 	%Ablehnen.pressed.connect(func() -> void: abgelehnt.emit())
 

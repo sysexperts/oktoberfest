@@ -1903,8 +1903,8 @@ MSG_GEFALLEN_GESCHAFFT,Geschafft! Horst legt %s auf dein Konto,Done! Horst adds 
 MSG_GEFALLEN_ZU_SPAET,"Zu spät, der Gefallen ist gescheitert","Too late, the favour failed","Çok geç, iş başarısız oldu"
 STAFF_SECURITY,Security,Security,Güvenlik
 STAFF_INFO_SECURITY,Steht am Zelteingang. Mit Security gibt es keine Massenschlägerei und nur halb so viele Streits. Er kann auch Saboteure abfangen.,Stands at the tent entrance. With security there are no mass brawls and only half as many fights. He can also intercept saboteurs.,"Çadır girişinde durur. Güvenlikle toplu kavga olmaz, tartışmalar yarıya iner. Sabotajcıları da yakalayabilir."
-Q_3_1_TITLE,Eine Wette,A bet,Bir bahis
-Q_3_1_TEXT,"Konrad wettet mit dir. Nimm die Wette an (per Mail oder im Gespräch mit ihm vor seinem Zelt) und gewinn sie, die Wette gilt immer für einen Tag.","Konrad bets against you. Accept the bet (by mail or by talking to him in front of his tent) and win it, a bet always lasts one day.","Konrad seninle bahse giriyor. Bahsi kabul et (e-postayla ya da çadırının önünde onunla konuşarak) ve kazan, bahis her zaman bir gün sürer."
+Q_3_1_TITLE,Gewinn Konrads Wette,Win Konrad's bet,Konrad'ın bahsini kazan
+Q_3_1_TEXT,"Sprich mit Konrad vor seinem Zelt: Die Wette gilt dann automatisch für diesen Tag. Gewinne sie! Schaffst du es nicht, bekommst du morgen eine neue Wette.","Talk to Konrad outside his tent: the bet then applies automatically for that day. Win it! If you fail, you get a new bet tomorrow.","Konrad ile çadırının önünde konuş: bahis o gün için otomatik geçerli olur. Kazan! Başaramazsan yarın yeni bir bahis gelir."
 Q_3_2_TITLE,Es stinkt,It stinks,Kokuyor
 Q_3_2_TEXT,"Jemand legt dir eine Stinkbombe ins Zelt. Finde die Flecken und wisch sie weg, bis das Zelt wieder sauber ist.",Someone is planting a stink bomb in your tent. Find the stains and wipe them up until the tent is clean again.,Biri çadırına kokulu bomba bırakıyor. Lekeleri bul ve çadır yeniden temiz olana kadar sil.
 Q_3_3_TITLE,Wachpersonal,Security staff,Güvenlik personeli
@@ -1917,6 +1917,10 @@ Q_3_6_TITLE,Zur Rede gestellt,Confronted,Hesaba çekildi
 Q_3_6_TEXT,Stell Konrad vor seinem Zelt zur Rede und leg ihm den Zettel vor.,Confront Konrad in front of his tent and show him the note.,Konrad'ı çadırının önünde hesaba çek ve notu göster.
 MAIL_M3_01_BETREFF,Eine kleine Wette,A little bet,Küçük bir bahis
 MAIL_M3_01_TEXT,"Na, Sepps Patenkind? Läuft's? Ich wette, du hältst nicht mehr lange durch. Ab und zu mache ich dir ein Angebot. Nimm es an, wenn du dich traust. – K.","So, Sepp's godchild? Going well? I bet you will not last much longer. Now and then I will make you an offer. Take it if you dare. – K.","Eee, Sepp'in vaftiz çocuğu? İyi gidiyor mu? Daha fazla dayanamazsın bahse girerim. Ara sıra sana bir teklif yaparım. Cesaretin varsa kabul et. – K."
+MAIL_M3_03_BETREFF,Kein Problem,No problem,Sorun değil
+MAIL_M3_03_TEXT,"Das war heute nicht dein Tag, aber das macht nichts. Morgen schaffst du es, ich glaube an dich. Konrad bietet dir bestimmt wieder eine Wette an. – Horst","Today was not your day, but that is fine. Tomorrow you will manage it, I believe in you. Konrad will surely offer you a bet again. – Horst","Bugün senin günün değildi ama sorun değil. Yarın başarırsın, sana inanıyorum. Konrad kesin yine bir bahis önerir. – Horst"
+HUBER_WETTE_QUEST_DU,"Ich wette, das schaffst du nicht: %s. Einsatz %s. Die Wette gilt!","I bet you can't: %s. Stake %s. The bet is on!","Bahse girerim yapamazsın: %s. Bahis %s. Bahis geçerli!"
+HUBER_WETTE_QUEST_IHR,"Ich wette, das schafft ihr nicht: %s. Einsatz %s. Die Wette gilt!","I bet you can't: %s. Stake %s. The bet is on!","Bahse girerim yapamazsınız: %s. Bahis %s. Bahis geçerli!"
 MAIL_M3_02_BETREFF,Eine Wette,A bet,Bir bahis
 MAIL_M3_02_TEXT,"Ich wette, du schaffst es heute nicht. Der Einsatz steht in deiner Aufgabenkarte. Nimmst du an? – K.",I bet you will not manage today. The stake is on your task card. Do you accept? – K.,Bugün başaramayacağına bahse girerim. Bahis tutarı görev kartında. Kabul ediyor musun? – K.
 MAIL_M3_02_A1,Die Wette gilt.,The bet is on.,Bahis geçerli.

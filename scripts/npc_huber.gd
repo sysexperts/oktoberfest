@@ -143,6 +143,13 @@ func ansprechen() -> void:
 			zeilen.append(_t("HUBER_WETTE_LAEUFT" + a) % Texte.huber_wette_text(wette))
 		dialog.zeigen(wer, zeilen, Callable())
 		return
+	# Quest-Wette (Kapitel 3): gilt automatisch, ohne Ja/Nein
+	if bool(wette.get("quest", false)):
+		zeilen.append(_t("HUBER_WETTE_QUEST" + a) % [Texte.huber_wette_text(wette), Texte.euro(int(wette.get("einsatz", 0)))])
+		if welt.has_method("net_huber_wette"):
+			welt.net_huber_wette.rpc_id(1, true)
+		dialog.zeigen(wer, zeilen, Callable())
+		return
 	# Wette anbieten: Ja/Nein
 	zeilen.append(_t("HUBER_WETTE_FRAGE" + a) % [Texte.huber_wette_text(wette), Texte.euro(int(wette.get("einsatz", 0)))])
 	var wahl: Array[String] = [_t("HUBER_WAHL_JA" + a), _t("HUBER_WAHL_NEIN" + a)]
