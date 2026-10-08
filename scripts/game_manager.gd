@@ -7231,7 +7231,7 @@ func _huber_morgen() -> void:
 		return
 	var d := _day
 	# Solange die Story-Wette (3.1) offen ist, gibt es jeden Tag eine neue, sicher machbare Wette
-	var wette_quest := _story.zustand("3.1") == "offen"
+	var wette_quest: bool = _story.zustand("3.1") == "offen"
 	if wette_quest or (d >= HUBER_WETTE_AB and d % 3 == 0):
 		var arten := [
 			{"typ": "mass", "ziel": int(ceil(float(15 + 7 * d) * 1.1))},
