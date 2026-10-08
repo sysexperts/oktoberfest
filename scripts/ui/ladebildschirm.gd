@@ -25,7 +25,7 @@ func _ready() -> void:
 	_ziel = Net.ziel_szene
 	_naechster_tipp()
 	create_tween().tween_property(%Schwarz, "color:a", 0.0, 0.3)
-	if _ziel == "" or ResourceLoader.load_threaded_request(_ziel, "", true) != OK:
+	if _ziel == "" or ResourceLoader.load_threaded_request(_ziel, "", false) != OK:
 		_abbrechen()
 
 func _naechster_tipp() -> void:
