@@ -24,8 +24,8 @@ class Lauf extends Node:
 		if kino and kino.aktiv:
 			kino.beenden()
 		var horst := get_tree().get_first_node_in_group("festleiter") as Node3D
-		if horst:
-			horst.global_position = Vector3(-9.7, 0, 9)
 		await _bild("raum", Vector3(-9.1, 1.9, 6.0), Vector3(-10.2, 1.0, 10.4))
 		await _bild("huette", Vector3(33, 2.5, 22), Vector3(41.5, 1.0, 18.4))
+		await _bild("oben", Vector3(41.5, 14, 18.5), Vector3(41.5, 0, 18.4))
+		await _bild("ost", Vector3(52, 2.5, 22), Vector3(41.5, 1.0, 18.4))
 		get_tree().quit()

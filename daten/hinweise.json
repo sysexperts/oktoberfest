@@ -18,5 +18,10 @@
   "id": "H-PERSONAL",
   "ausloeser": "personal_app_erstmals",
   "text": "HINT_PERSONAL_APP"
+ },
+ {
+  "id": "H-EMOTE",
+  "ausloeser": "erste_bedienung",
+  "text": "HINT_EMOTE_1"
  }
 ]

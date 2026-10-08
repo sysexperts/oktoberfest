@@ -5,7 +5,7 @@ extends Control
 
 const Texte := preload("res://scripts/ui/texte.gd")
 ## Anzahl der Tipps LOAD_TIP_1 … LOAD_TIP_n in texte.csv
-const TIPPS := 6
+const TIPPS := 7
 ## So lange bleibt der Bildschirm mindestens stehen — sonst flackert der Tipp nur
 const MIN_ANZEIGE := 0.8
 ## Nach so vielen Sekunden kommt der nächste Tipp

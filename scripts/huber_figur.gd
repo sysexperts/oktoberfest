@@ -75,7 +75,8 @@ func _lod() -> void:
 		var zelt := get_tree().get_first_node_in_group("huber_zelt")
 		if zelt != null and int(zelt.get_meta("leer_tag", -1)) == int(welt.get("_day")):
 			weg = _gehwert < float(zelt.get_meta("leer_anteil", 0.0))
-	_figur.visible = abstand < LOD_SICHTBAR and kapitel >= ab_kapitel and not weg
+	var da: bool = not welt.has_method("konrad_leute_da") or welt.konrad_leute_da()
+	_figur.visible = abstand < LOD_SICHTBAR and kapitel >= ab_kapitel and not weg and da
 	var nah := abstand < LOD_ANIMATION
 	if nah == _nah or _figur.anim == null:
 		return

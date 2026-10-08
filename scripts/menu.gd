@@ -195,6 +195,8 @@ func _on_platz(platz: int) -> void:
 	if Net.speicherstand_info(platz).is_empty():
 		_vor_neuem_spiel(func() -> void: Net.start_solo(true, platz))
 	else:
+		# Der Fenstertitel steht ohne Hintergrund über dem Menü — die Frage kommt in den Text
+		_bestaetigen.dialog_text = tr("NEWGAME_CONFIRM_TITLE") + "\n" + tr("NEWGAME_CONFIRM_TEXT")
 		_bestaetigen.popup_centered()
 
 ## Vor einem neuen Spiel den Charakter bauen — wer schon einen hat, spielt gleich los

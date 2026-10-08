@@ -1022,6 +1022,10 @@ func _zelt_eroeffnen(wer: String, von_selbst: bool) -> void:
 
 ## Vardiyadaki oyun içi saat (8.0 = 08:00). Kapalıyken -1.
 ## Zelt noch nicht eröffnet: die Uhr steht auf DAY_START_HOUR.
+## Konrads Zelt hat nur Leute, solange dein Zelt geöffnet ist (nach dem Öffnen am Morgen bis 22 Uhr), wie die Besucher draußen
+func konrad_leute_da() -> bool:
+	return _phase == Phase.SHIFT and _zelt_offen
+
 func _clock_hour() -> float:
 	if _phase != Phase.SHIFT:
 		return -1.0
@@ -3944,6 +3948,7 @@ func _serve_by_staff(gid: int) -> void:
 	g.served_t = SERVED_SHOW
 	_guest_sim[gid] = g
 	_served += 1
+	_hinweis("erste_bedienung")
 	if int(g.okind) == 1 and int(g.otype) == 2:
 		_weizen_heute += 1
 	_stats.served += 1
