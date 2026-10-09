@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 	var vp := get_viewport()
 	var rid := vp.get_viewport_rid()
 	var fps := Engine.get_frames_per_second()
-	var groesse := vp.get_visible_rect().size * vp.scaling_3d_scale
+	var groesse := Vector2(DisplayServer.window_get_size()) * vp.scaling_3d_scale
 	var fenster := DisplayServer.window_get_size()
 	_text.text = "%d FPS  ·  %.1f ms\
 Skripte(echt) %.1f  Physik %.1f  Render-CPU %.1f  GPU %.1f ms\

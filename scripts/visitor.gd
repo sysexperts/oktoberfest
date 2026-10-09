@@ -332,6 +332,7 @@ func _update_lod(delta: float) -> void:
 	if far == _far:
 		return
 	_far = far
+	_figur.ferne = far
 	var anim := _figur.anim
 	if anim:
 		if far:

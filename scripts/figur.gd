@@ -125,6 +125,7 @@ func _ready() -> void:
 	if mixamo_bibliothek and not anim.has_animation_library("mixamo"):
 		anim.add_animation_library("mixamo", mixamo_bibliothek)
 	_sitz_angleichen()
+	_lod_starten()
 	# Die importierten Animationen haben keine Schleife gesetzt
 	var schleifen := [anim_stehen, anim_gehen, anim_rennen, anim_sitzen, anim_betrunken]
 	schleifen.append_array(anim_tanzen)
@@ -132,6 +133,42 @@ func _ready() -> void:
 	for n in schleifen:
 		if hat(n):
 			anim.get_animation(n).loop_mode = Animation.LOOP_LINEAR
+
+## Entfernungsstufe für alle Figuren: weiter weg als LOD_ANIMATION steht die Animation still (Pose eingefroren),
+## (Die Sichtbarkeit fasst sie nicht an: andere Skripte verstecken Figuren bewusst.) Messung 09.10.: 98 Figuren in der Karte liefen ohne diese Stufe,
+## 93 davon weiter als 25 m entfernt. Besucher, Konrads Gäste und Budenbesitzer haben eine eigene Stufe und bleiben bei ihr.
+const LOD_ANIMATION := 34.0
+const EIGENE_STUFE := ["visitor.gd", "huber_figur.gd", "budenbesitzer.gd"]
+var ferne := false
+
+func _lod_starten() -> void:
+	if anim == null:
+		return
+	var q: Node = get_parent()
+	while q != null:
+		var sk: Script = q.get_script()
+		if sk != null and (sk.resource_path.get_file() in EIGENE_STUFE):
+			return
+		q = q.get_parent()
+	get_tree().create_timer(randf_range(0.2, 1.0)).timeout.connect(_lod_pruefen)
+
+func _lod_pruefen() -> void:
+	if not is_inside_tree():
+		return
+	get_tree().create_timer(randf_range(0.4, 0.8)).timeout.connect(_lod_pruefen)
+	var kamera := get_viewport().get_camera_3d()
+	if kamera == null or anim == null:
+		return
+	var abstand := global_position.distance_to(kamera.global_position)
+	var fern := abstand > LOD_ANIMATION
+	if fern == ferne:
+		return
+	ferne = fern
+	if fern:
+		anim.advance(0.0)   # Pose einfrieren, sonst T-Pose
+		anim.active = false
+	else:
+		anim.active = true
 
 func _animationen_ausleihen() -> void:
 	# Mehrere Quellen: Alex bringt jede Animation in einer eigenen Datei mit,
@@ -259,7 +296,7 @@ func stehen() -> void:
 	if anim == null:
 		return
 	_haltung_an(true)
-	anim.active = true
+	anim.active = not ferne
 	if idle_ist_standbild:
 		if hat(anim_gehen):
 			anim.play(anim_gehen)
@@ -473,7 +510,7 @@ func abspielen(name: String, tempo := 1.0) -> bool:
 	# Bewegungen, die ein Rock nicht mitmacht (Überschläge …): nur für Männer
 	if name in NUR_MAENNER and str(get_meta("geschlecht", "m")) == "w":
 		return false
-	anim.active = true
+	anim.active = not ferne
 	if not name in anim_sitz_extras:
 		_sitz_aktiv = false
 		set_process(false)
@@ -500,7 +537,7 @@ func _spiele(name: String, tempo: float) -> void:
 	if name != anim_sitzen:
 		_sitz_aktiv = false
 		set_process(false)
-	anim.active = true
+	anim.active = not ferne
 	# Arme gelten bei jeder Animation, Rücken/Kopf nur beim Stehen und Gehen
 	var staerke := 1.0 if name == anim_stehen else (aufrichten_gehen if name == anim_gehen else 0.0)
 	_haltung_an(true, staerke, name == anim_sitzen, name in anim_extras or name == anim_sitzen, name == anim_gehen or name == anim_rennen)
@@ -738,7 +775,7 @@ func pose_loesen() -> void:
 		_knochen(name, 0.0, Vector3.FORWARD)
 		_knochen(name, 0.0)
 	if anim:
-		anim.active = true
+		anim.active = not ferne
 
 ## Knochen um zwei Achsen drehen: vor/zurück (RIGHT) und seitwärts (FORWARD).
 ## Zwei einzelne _knochen-Aufrufe gehen nicht — der zweite überschreibt den

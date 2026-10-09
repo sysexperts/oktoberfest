@@ -81,6 +81,7 @@ func _lod() -> void:
 	if nah == _nah or _figur.anim == null:
 		return
 	_nah = nah
+	_figur.ferne = not nah
 	if nah:
 		_figur.anim.active = true
 	else:
