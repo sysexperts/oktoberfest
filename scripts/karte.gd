@@ -256,15 +256,20 @@ func _eintrag_setzen(n: int, e: Dictionary) -> void:
 	k.transform = _transform(e)
 	# Essensbuden: Verkäufer hinter die Theke
 	var platz := k.get_node_or_null("Verkaeufer") as Node3D
+	var figur: Figur = null
+	var look := {}
 	if platz:
-		var look := Figuren.npc_look(n * 7 + 11)
-		var figur := Figuren.Look.bauen(look)
+		look = Figuren.npc_look(n * 7 + 11)
+		figur = Figuren.Look.bauen(look)
 		figur.name = "Figur"
 		figur.add_to_group("nachtruhe")
 		figur.transform = platz.transform
 		k.add_child(figur)
-		Figuren.Look.faerben(figur, look)
 	add_child(k)
+	# Erst jetzt, im Spielbaum: faerben() kleidet die Figur am Skelett an, das es vorher noch nicht gibt
+	# (bis v420 standen die Verkäufer der Essensbuden deshalb ohne Kleidung und mit Grundhaut da)
+	if figur != null:
+		Figuren.Look.faerben(figur, look)
 	Sichtweite.anwenden(k)
 	if figur_von(k):
 		figur_von(k).stehen()
