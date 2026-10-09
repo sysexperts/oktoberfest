@@ -35,6 +35,13 @@ func _ready() -> void:
 	add_child(_ende)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3 and _ergebnis_steht:
+		_ergebnis_steht = false
+		_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F4:
+		_taste_f4()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3:
 		visible = not visible
 		_t = INTERVALL
@@ -48,6 +55,8 @@ func _process(delta: float) -> void:
 	var roh := float(_ende.dauer) / 1000.0
 	if roh >= 0.0 and roh < 1000.0:
 		_skript_ms = lerpf(_skript_ms, roh, 0.1)
+	if _test_laeuft or _ergebnis_steht:
+		return
 	_t += delta
 	if _t < INTERVALL:
 		return
@@ -71,3 +80,107 @@ Bild %dx%d (3D %dx%d)  ·  Grafik %d  ·  %s" % [
 		float(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)) / 1000000.0,
 		fenster.x, fenster.y, int(groesse.x), int(groesse.y), Einstellungen.grafik,
 		RenderingServer.get_video_adapter_name()]
+
+## ------------------------------------------------------------ Selbsttest (F4)
+## Misst auf dem eigenen Rechner, was die einzelnen Teile kosten: schaltet je einen Teil ab, misst die Bildzeit
+## und stellt alles wieder her. Dauert rund eine Minute, das Ergebnis steht als Liste im Bild und in
+## user://leistungstest.txt. Nur im Spiel (Spielszene), nicht im Menü.
+var _test_laeuft := false
+var _test_zeilen: PackedStringArray = []
+## Nach dem Test bleibt die Liste stehen, bis F3 gedrückt wird
+var _ergebnis_steht := false
+
+func _taste_f4() -> void:
+	if _test_laeuft:
+		return
+	var welt := get_tree().current_scene
+	if welt == null or not welt.has_method("net_book_tent"):
+		return
+	visible = true
+	_selbsttest(welt)
+
+func _bildzeit(s: float) -> float:
+	var t := 0.0
+	var f := 0
+	await get_tree().create_timer(0.8).timeout   # kurz einschwingen
+	while t < s:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		f += 1
+	return t / maxf(1.0, float(f)) * 1000.0
+
+func _selbsttest(welt: Node) -> void:
+	_test_laeuft = true
+	_test_zeilen = PackedStringArray()
+	var vp := get_viewport()
+	var we := welt.get_node_or_null("WorldEnvironment") as WorldEnvironment
+	var lichter: Array = welt.find_children("*", "Light3D", true, false).filter(func(l): return not (l is DirectionalLight3D))
+	var sonne := welt.get_node_or_null("Sun") as Light3D
+	var karte := welt.get_node_or_null("Kirmes/Karte") as Node3D
+	var zelt := welt.get_node_or_null("Tent") as Node3D
+	var filter := welt.get_node_or_null("Bildfilter") as CanvasLayer
+	var hud := welt.get_node_or_null("HUD") as CanvasLayer
+	var figuren: Array = welt.find_children("*", "Skeleton3D", true, false)
+	var basis := await _bildzeit(3.0)
+	_test_zeilen.append("Grundwert  %.1f ms  (%d FPS)" % [basis, roundi(1000.0 / basis)])
+	_zeige_test(basis, "")
+	# jeder Eintrag: [Name, Abschalten, Wiederherstellen]
+	var env: Environment = we.environment if we else null
+	var env_alt := {}
+	if env:
+		env_alt = {"ssao": env.ssao_enabled, "ssil": env.ssil_enabled, "glow": env.glow_enabled, "fog": env.fog_enabled, "adj": env.adjustment_enabled}
+	var msaa_alt := vp.msaa_3d
+	var aa_alt := vp.screen_space_aa
+	var scale_alt := vp.scaling_3d_scale
+	var schritte := [
+		["ohne Lichter (%d)" % lichter.size(), func() -> void: for l in lichter: (l as Light3D).visible = false,
+			func() -> void: for l in lichter: (l as Light3D).visible = true],
+		["ohne Sonne", func() -> void: sonne.visible = false, func() -> void: sonne.visible = true],
+		["ohne Kantenglättung", func() -> void: vp.msaa_3d = Viewport.MSAA_DISABLED; vp.screen_space_aa = Viewport.SCREEN_SPACE_AA_DISABLED,
+			func() -> void: vp.msaa_3d = msaa_alt; vp.screen_space_aa = aa_alt],
+		["ohne Effekte (SSAO, SSIL, Glow, Nebel, Farbe)", func() -> void:
+				if env:
+					env.ssao_enabled = false; env.ssil_enabled = false; env.glow_enabled = false; env.fog_enabled = false; env.adjustment_enabled = false,
+			func() -> void:
+				if env:
+					env.ssao_enabled = env_alt.ssao; env.ssil_enabled = env_alt.ssil; env.glow_enabled = env_alt.glow; env.fog_enabled = env_alt.fog; env.adjustment_enabled = env_alt.adj],
+		["ohne HUD und Bildfilter", func() -> void:
+				if hud: hud.visible = false
+				if filter: filter.visible = false,
+			func() -> void:
+				if hud: hud.visible = true
+				if filter: filter.visible = true],
+		["ohne Besucher", func() -> void: for v in get_tree().get_nodes_in_group("visitor"): (v as Node3D).visible = false,
+			func() -> void: for v in get_tree().get_nodes_in_group("visitor"): (v as Node3D).visible = true],
+		["ohne alle Figuren (%d)" % figuren.size(), func() -> void: for f in figuren: (f as Node3D).visible = false,
+			func() -> void: for f in figuren: (f as Node3D).visible = true],
+		["ohne Kirmes (Buden, Bäume)", func() -> void: if karte: karte.visible = false,
+			func() -> void: if karte: karte.visible = true],
+		["ohne Zelt", func() -> void: if zelt: zelt.visible = false, func() -> void: if zelt: zelt.visible = true],
+		["3D-Auflösung 50 %", func() -> void: vp.scaling_3d_scale = 0.5, func() -> void: vp.scaling_3d_scale = scale_alt],
+	]
+	for st: Array in schritte:
+		(st[1] as Callable).call()
+		var ms := await _bildzeit(2.5)
+		(st[2] as Callable).call()
+		_test_zeilen.append("%-46s %5.1f ms  (%+.1f)" % [st[0], ms, ms - basis])
+		_zeige_test(basis, st[0])
+	_test_zeilen.append("Fertig. Screenshot an Claude schicken.")
+	_zeige_test(basis, "")
+	var f := FileAccess.open("user://leistungstest.txt", FileAccess.WRITE)
+	if f:
+		f.store_string("
+".join(_test_zeilen) + "
+")
+	print("[Leistungstest]
+", "
+".join(_test_zeilen))
+	_test_laeuft = false
+	_ergebnis_steht = true
+
+func _zeige_test(_basis: float, aktuell: String) -> void:
+	_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	var kopf := "LEISTUNGSTEST" + ("  — misst: " + aktuell if aktuell != "" else "")
+	_text.text = kopf + "
+" + "
+".join(_test_zeilen)
