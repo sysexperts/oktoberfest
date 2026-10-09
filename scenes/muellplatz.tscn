@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/muellplatz.gd" id="1_skript"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_label"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/muellsack.tres" id="2_sack"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/muelltonne.tres" id="4_tonne"]
 [ext_resource type="ArrayMesh" path="res://assets/dreck/muelltonne_deckel.tres" id="5_deckel"]
@@ -60,6 +61,8 @@ fixed_size = false
 modulate = Color(1, 0.88, 0.5, 1)
 outline_modulate = Color(0.1, 0.06, 0.02, 1)
 text = "WORLD_MUELLTONNE"
+script = ExtResource("wt_label")
+schluessel = "WORLD_MUELLTONNE"
 font_size = 64
 outline_size = 14
 visibility_range_end = 40.0

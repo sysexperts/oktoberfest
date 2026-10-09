@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/muell_eimer.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_label"]
 
 [sub_resource type="StandardMaterial3D" id="Blech"]
 albedo_color = Color(0.32, 0.34, 0.36, 1)
@@ -42,6 +43,8 @@ billboard = 1
 pixel_size = 0.006
 font_size = 40
 text = "WORLD_MUELL"
+script = ExtResource("wt_label")
+schluessel = "WORLD_MUELL"
 modulate = Color(0.75, 0.78, 0.8, 1)
 
 [node name="Body" type="StaticBody3D" parent="."]

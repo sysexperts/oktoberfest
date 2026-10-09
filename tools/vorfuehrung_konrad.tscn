@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tools/vorfuehrung_konrad.gd" id="1"]
+
+[node name="VorfuehrungKonrad" type="Node"]
+script = ExtResource("1")

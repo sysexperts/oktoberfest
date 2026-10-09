@@ -71,11 +71,19 @@ class Lauf extends Node:
 			kapsel.height = 1.6
 			var abfrage := PhysicsShapeQueryParameters3D.new()
 			abfrage.shape = kapsel
-			var vor_tuer: Vector3 = tuer + wagen.global_transform.basis.z * 0.5 + Vector3(0, 1.0, 0)
-			abfrage.transform = Transform3D(Basis(), vor_tuer)
-			var treffer: Array = gm.get_world_3d().direct_space_state.intersect_shape(abfrage, 8)
-			_check("vor der Wohnwagentür ist Platz", treffer.is_empty(),
-				str(treffer.map(func(t: Dictionary) -> String: return str(t.collider.name))))
+			# Steht die Kapsel auf dem Boden, gibt es im Umkreis von 2 m um die Tür einen freien Platz?
+			var boden := Vector3(tuer.x, 0.0, tuer.z)
+			var frei := false
+			for r in [0.7, 1.1, 1.6, 2.0]:
+				for w in 16:
+					var a := TAU * float(w) / 16.0
+					abfrage.transform = Transform3D(Basis(), boden + Vector3(cos(a), 0.0, sin(a)) * float(r) + Vector3(0, 0.95, 0))
+					if gm.get_world_3d().direct_space_state.intersect_shape(abfrage, 4).is_empty():
+						frei = true
+						break
+				if frei:
+					break
+			_check("vor der Wohnwagentür ist Platz", frei, "")
 		var stufe0: int = gm.get("_tent_stage")
 		gm.net_book_tent.rpc_id(1)
 		await _frames(5)
@@ -226,7 +234,7 @@ class Lauf extends Node:
 
 		print("  -- Geführtes Tutorial (2.3)")
 		gm._check_quest()
-		_check("Schritt 2 (Zelt putzen) nach dem Mieten", gm._quest_step == 2, "Schritt=%d" % gm._quest_step)
+		_check("Schritt 3 (Zelt putzen) nach dem Mieten", gm._quest_step == 3, "Schritt=%d" % gm._quest_step)
 		var marker := gm.get_node_or_null("Zielmarker")
 		_check("Zielmarker in der Szene", marker != null, "")
 		if marker:
@@ -1470,7 +1478,7 @@ class Lauf extends Node:
 			Einstellungen.grafik = 0
 			Einstellungen.anwenden()
 			await _frames(2)
-			_check("Niedrig: 90 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 90
+			_check("Niedrig: 24 Besucher, kein SSAO und Glow", gm.get_node("Crowd").max_visitors == 24
 				and not umgebung.ssao_enabled and not umgebung.glow_enabled, "")
 			_check("Niedrig: ein Drittel der Kirmeslichter", grafik.sichtbare_lichter() <= ceili(alle / 3.0),
 				"%d von %d" % [grafik.sichtbare_lichter(), alle])

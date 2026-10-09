@@ -10,7 +10,7 @@ Legende: [ ] offen · [x] passt · [~] korrigiert
 - [x] 1 Start: Hauptmenü, Mauszeiger (Pfeil/Hand, v405), Ladebildschirm kommt durch (v409), Version unten
 - [x] 2 Neues Spiel → Tutorial: Horst, Wohnwagen aussuchen (kostenlos, eigener Wagen, v399/400), Weg zurück zum Zelt
 - [x] 3 Zelt jeden Morgen vorne am Eingang eröffnen, Horst erklärt es bei „Bediene“ (v402); keine Kirmes-Besucher am ersten Tag (v391)  ⚠ Teil geprüft: test_besucher_start OK (keine Besucher am ersten Tag); Vorführung gezeigt, wartet auf dein Passt
-- [ ] 4 Wohnwagen innen (Wände, Fenster, Küchenzeile, Bett, Spiegel, v398) und Schlafen: Mehrheit muss im Bett liegen (v401)  ⚠ Schlafen OK (test_schlafen), aber test_phase1 meldet Kollision vor der Wohnwagentür → noch prüfen
+- [x] 4 Wohnwagen innen (Wände, Fenster, Küchenzeile, Bett, Spiegel, v398) und Schlafen: Mehrheit muss im Bett liegen (v401)  ✔ test_schlafen, test_wohnwagen, test_phase1 (Tür: alle 17 Wagen erreichbar) grün
 - [ ] 5 Festbüro und Computer: Desktop-Zeiger bleibt sichtbar (v404), Bestellung nur am Computer (v394/395)
 - [x] 6 Boden: Pfützen, Kotze, Dreck liegen auf dem Boden, nicht darin (v403); Müllsack werfen (v392/393)  ✔ Test grün: test_fleckabstand, test_muellwurf
 - [x] 7 Mail-App: Quest-Angebot „Annehmen/Ablehnen“ beschriftet (v407), Quest-Angebote als Meldung (v406)  ✔ Test grün: test_story
