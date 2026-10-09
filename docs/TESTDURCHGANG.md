@@ -11,7 +11,7 @@ Legende: [ ] offen · [x] passt · [~] korrigiert
 - [x] 2 Neues Spiel → Tutorial: Horst, Wohnwagen aussuchen (kostenlos, eigener Wagen, v399/400), Weg zurück zum Zelt
 - [x] 3 Zelt jeden Morgen vorne am Eingang eröffnen, Horst erklärt es bei „Bediene“ (v402); keine Kirmes-Besucher am ersten Tag (v391)  ⚠ Teil geprüft: test_besucher_start OK (keine Besucher am ersten Tag); Vorführung gezeigt, wartet auf dein Passt
 - [x] 4 Wohnwagen innen (Wände, Fenster, Küchenzeile, Bett, Spiegel, v398) und Schlafen: Mehrheit muss im Bett liegen (v401)  ✔ test_schlafen, test_wohnwagen, test_phase1 (Tür: alle 17 Wagen erreichbar) grün
-- [ ] 5 Festbüro und Computer: Desktop-Zeiger bleibt sichtbar (v404), Bestellung nur am Computer (v394/395)
+- [x] 5 Festbüro und Computer: Desktop-Zeiger bleibt sichtbar (v404), Bestellung nur am Computer (v394/395)  ✔ test_buero_computer (neu, mit Fenster): Schreibtisch nicht ansprechbar, Computer ja, Zeiger bleibt sichtbar auch nach Klick ins Leere, Shop im Desktop
 - [x] 6 Boden: Pfützen, Kotze, Dreck liegen auf dem Boden, nicht darin (v403); Müllsack werfen (v392/393)  ✔ Test grün: test_fleckabstand, test_muellwurf
 - [x] 7 Mail-App: Quest-Angebot „Annehmen/Ablehnen“ beschriftet (v407), Quest-Angebote als Meldung (v406)  ✔ Test grün: test_story
 - [x] 8 Kapitel 3 „Gewinn Konrads Wette“: Konrad ansprechen, Wette gilt automatisch, verlieren → Horst-Mail, am nächsten Tag neue Wette, gewinnen → nächste Quest (v407)  ✔ Test grün: test_wette (neu), test_kapitel3
