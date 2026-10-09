@@ -154,8 +154,14 @@ func _selbsttest(welt: Node) -> void:
 			func() -> void: for v in get_tree().get_nodes_in_group("visitor"): (v as Node3D).visible = true],
 		["ohne alle Figuren (%d)" % figuren.size(), func() -> void: for f in figuren: (f as Node3D).visible = false,
 			func() -> void: for f in figuren: (f as Node3D).visible = true],
-		["ohne Kirmes (Buden, Bäume)", func() -> void: if karte: karte.visible = false,
+		["ohne Kirmes (alles)", func() -> void: if karte: karte.visible = false,
 			func() -> void: if karte: karte.visible = true],
+		["ohne Bäume", func() -> void: _karte_teil(karte, "kulisse/baum_", false), func() -> void: _karte_teil(karte, "kulisse/baum_", true)],
+		["ohne Buden mit Spielen (Schießen, Dosen, Rad …)", func() -> void: _karte_teil(karte, "kirmes/", false), func() -> void: _karte_teil(karte, "kirmes/", true)],
+		["ohne Deko (Zäune, Ampeln, Kübel …)", func() -> void: _karte_teil(karte, "kulisse/deko/", false), func() -> void: _karte_teil(karte, "kulisse/deko/", true)],
+		["ohne Wohnwagen", func() -> void: _karte_teil(karte, "caravan.tscn", false); _karte_teil(karte, "wohnwagen_", false), func() -> void: _karte_teil(karte, "caravan.tscn", true); _karte_teil(karte, "wohnwagen_", true)],
+		["ohne Konrads Zelt", func() -> void: _karte_teil(karte, "huber_zelt", false), func() -> void: _karte_teil(karte, "huber_zelt", true)],
+		["ohne Altstadt-Kulisse", func() -> void: _karte_teil(karte, "altstadt", false), func() -> void: _karte_teil(karte, "altstadt", true)],
 		["ohne Zelt", func() -> void: if zelt: zelt.visible = false, func() -> void: if zelt: zelt.visible = true],
 		["3D-Auflösung 50 %", func() -> void: vp.scaling_3d_scale = 0.5, func() -> void: vp.scaling_3d_scale = scale_alt],
 	]
@@ -184,3 +190,11 @@ func _zeige_test(_basis: float, aktuell: String) -> void:
 	_text.text = kopf + "
 " + "
 ".join(_test_zeilen)
+
+## Einträge der Karte, deren Szenendatei den Text enthält, ein- oder ausblenden (für den Selbsttest)
+func _karte_teil(karte: Node3D, teil: String, an: bool) -> void:
+	if karte == null:
+		return
+	for k in karte.get_children():
+		if k is Node3D and (k.scene_file_path.contains(teil)):
+			(k as Node3D).visible = an
