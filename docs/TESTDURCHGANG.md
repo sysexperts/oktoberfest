@@ -17,7 +17,7 @@ Legende: [ ] offen · [x] passt · [~] korrigiert
 - [x] 8 Kapitel 3 „Gewinn Konrads Wette“: Konrad ansprechen, Wette gilt automatisch, verlieren → Horst-Mail, am nächsten Tag neue Wette, gewinnen → nächste Quest (v407)  ✔ Test grün: test_wette (neu), test_kapitel3
 - [x] 9 Konrads Zelt: volles Zelt, Kochtresen mit mehreren Portionen (auflegen, gar, verbrennt nach 20 s, Mülleimer), neue Grillmodelle (v406)  ✔ test_kochtresen (neu): 4 Plätze, gar nach 8 s, verbrannt nach 20 s, Mülleimer; Konrads Zelt braucht laut Serdar keine Funktion, nur Optik (Bilder gezeigt)
 - [x] 10 Gefallen: Sau und Täter tragen wie Raufbold, Gehege auf freiem Platz; Sabotage lockt Konrads Gäste (v406)  ✔ Test grün: test_gefallen
-- [ ] 11 Aufheben-Töne leiser (v406)
+- [x] 11 Aufheben-Töne leiser (v406)  ✔ im Code (scripts/sfx.gd): „pop“ spielt 8 dB leiser und höchstens alle 120 ms
 
 ## Teil 2 · Der Rest vom Plan (aus PLAN_STORY.md, Abschnitt in Klammern)
 - [x] 12 Kernschicht: Krug füllen, zapfen, servieren, kassieren, Beschwerden, Klo-Warteschlange, Gäste in Gruppen und Wunschlieder (17)  ✔ Test grün: test_zapfsperre, test_krugstapel, test_gaeste
