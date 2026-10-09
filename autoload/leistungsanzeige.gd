@@ -38,6 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3 and _ergebnis_steht:
 		_ergebnis_steht = false
 		_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		_text.add_theme_font_size_override("font_size", 22)
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F4:
 		_taste_f4()
 		get_viewport().set_input_as_handled()
@@ -112,6 +113,10 @@ func _bildzeit(s: float) -> float:
 func _selbsttest(welt: Node) -> void:
 	_test_laeuft = true
 	_test_zeilen = PackedStringArray()
+	_text.add_theme_font_size_override("font_size", 17)
+	var karte_pause := welt.get_node_or_null("Kirmes/Karte")
+	if karte_pause:
+		karte_pause.set_meta("fern_pause", true)
 	var vp := get_viewport()
 	var we := welt.get_node_or_null("WorldEnvironment") as WorldEnvironment
 	var lichter: Array = welt.find_children("*", "Light3D", true, false).filter(func(l): return not (l is DirectionalLight3D))
@@ -183,6 +188,8 @@ func _selbsttest(welt: Node) -> void:
 ".join(_test_zeilen))
 	_test_laeuft = false
 	_ergebnis_steht = true
+	if karte_pause:
+		karte_pause.remove_meta("fern_pause")
 
 func _zeige_test(_basis: float, aktuell: String) -> void:
 	_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT

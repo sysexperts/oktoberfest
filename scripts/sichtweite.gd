@@ -14,6 +14,9 @@ const LICHT_UEBER := 12.0
 static func anwenden(wurzel: Node) -> void:
 	for n in wurzel.find_children("*", "GeometryInstance3D", true, false):
 		var g := n as GeometryInstance3D
+		# Figuren nicht anfassen: ihre Kleidungsstücke sind kleine Meshes und verschwänden vor dem Körper (nackte NPCs)
+		if _in_figur(g, wurzel):
+			continue
 		# Kleinteile werfen keinen Schatten: sie kosten im Schattendurchgang viele Zeichenaufrufe und fallen kaum auf
 		if g.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON and _groesse(g) <= SCHATTEN_AB:
 			g.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -37,3 +40,12 @@ static func _groesse(g: GeometryInstance3D) -> float:
 	var box := g.get_aabb()
 	var s := g.global_transform.basis.get_scale() if g.is_inside_tree() else Vector3.ONE
 	return maxf(box.size.x * absf(s.x), maxf(box.size.y * absf(s.y), box.size.z * absf(s.z)))
+
+static func _in_figur(g: Node, wurzel: Node) -> bool:
+	var q := g.get_parent()
+	while q != null and q != wurzel.get_parent():
+		var sk: Script = q.get_script()
+		if sk != null and sk.resource_path.get_file() == "figur.gd":
+			return true
+		q = q.get_parent()
+	return false

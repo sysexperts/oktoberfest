@@ -42,6 +42,8 @@ var _fern_i := 0
 var _fern_t := 0.0
 
 func _fern_pruefen(delta: float) -> void:
+	if has_meta("fern_pause"):
+		return   # der Selbsttest (F4) blendet selbst ein und aus
 	_fern_t -= delta
 	if _fern_t > 0.0:
 		return
