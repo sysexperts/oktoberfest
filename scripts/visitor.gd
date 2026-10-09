@@ -46,6 +46,12 @@ const FEST_ZEIT := 3.0
 var speed := 1.5
 
 var _crowd: Node = null
+## Nach Feierabend (oder wenn weniger Besucher gebraucht werden) laufen sie zum Ausgang und verschwinden dort
+var _heim := false
+var _heim_ziel := Vector3.ZERO
+var _heim_t := 0.0
+## Spätestens nach so vielen Sekunden verschwindet ein Heimgänger, auch wenn er den Ausgang nicht erreicht
+const HEIM_MAX := 150.0
 var _tgt := Vector3.ZERO
 var _pause := 0.0
 var _figur: Figur
@@ -102,6 +108,9 @@ func setup(crowd: Node) -> void:
 
 ## Nächsten Wegpunkt wählen und auf der eigenen Spur ansteuern.
 func _weiter() -> void:
+	if _heim:
+		_tgt = _heim_ziel
+		return
 	var neu: int = _crowd.weiter(_knoten, _richtung)
 	var d: Vector3 = _crowd.punkt(neu) - _crowd.punkt(_knoten)
 	d.y = 0.0
@@ -109,6 +118,15 @@ func _weiter() -> void:
 		_richtung = d.normalized()
 	_knoten = neu
 	_tgt = _crowd.spur_punkt(_knoten, _richtung, _spur)
+
+## Zum Ausgang laufen und dort verschwinden (crowd.gd, wenn weniger Besucher gebraucht werden).
+func heimgehen(ziel: Vector3) -> void:
+	_heim = true
+	_heim_ziel = ziel
+	_tgt = ziel
+	_pause = 0.0
+	speed = maxf(speed, 1.5)
+	_go_walk()
 
 func _go_walk() -> void:
 	if _state == "walk":
@@ -143,11 +161,19 @@ func _process(delta: float) -> void:
 	_update_lod(delta)
 	if _crowd == null:
 		return
+	if _heim:
+		_heim_t += delta
+		var rest := _heim_ziel - position
+		rest.y = 0.0
+		if _heim_t > HEIM_MAX or rest.length() < 2.5:
+			queue_free()
+			return
+		_pause = 0.0
 	if _pause > 0.0:
 		_pause -= delta
 		_idle_look(delta)
 		return
-	if _netz != _crowd.netz_version():
+	if _netz != _crowd.netz_version() and not _heim:
 		# Karte geändert: Wegenetz neu — von vorn anfangen
 		_netz = _crowd.netz_version()
 		_knoten = _crowd.weg_start()

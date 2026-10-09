@@ -14,7 +14,7 @@ extends Node
 ## Detail-Shader als zweiter Durchgang auf Kirmes-, Zelt- und Tischmaterialien.
 ## Werte messen: tools/grafik_messen.tscn. Liegt als Knoten in main.tscn.
 
-const BESUCHER := [90, 200, 320]
+const BESUCHER := [24, 48, 80]
 ## Sichtweite der Kleinteile (scripts/sichtweite.gd) je Stufe: auf schwächerer Grafik früher ausblenden
 const SICHT_FAKTOR := [0.55, 0.8, 1.0]
 ## Schattenstufen der Sonne: Niedrig eine, Mittel zwei, Hoch vier (Schatten zeichnen die Karte mehrfach neu)

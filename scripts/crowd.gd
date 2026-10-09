@@ -363,6 +363,10 @@ const BAU_NOTFALL := 0.3
 var _bau_wartet := 0.0
 ## Abstand zwischen zwei Besuchern, die das Gelände verlassen
 const WEG_PAUSE := 0.5
+## Ausgänge der Kirmes (Karte reicht von z = -100 bis 85)
+const AUSGANG_NORD := Vector3(0.0, 0.1, 88.0)
+const AUSGANG_SUED := Vector3(0.0, 0.1, -102.0)
+const AUSGANG_TRENNUNG_Z := -7.0
 var _weg_wartet := 0.0
 
 func _sync_step(delta: float) -> void:
@@ -385,4 +389,6 @@ func _sync_step(delta: float) -> void:
 		_weg_wartet = 0.0
 		var v = _visitors.pop_back()
 		if is_instance_valid(v):
-			v.queue_free()
+			# zum nächstgelegenen Ausgang (Nord- oder Südende der Kirmes) laufen, nicht einfach verschwinden
+			var ziel := AUSGANG_NORD if (v as Node3D).position.z > AUSGANG_TRENNUNG_Z else AUSGANG_SUED
+			v.heimgehen(ziel)

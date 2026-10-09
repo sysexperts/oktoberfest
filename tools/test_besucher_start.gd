@@ -25,6 +25,6 @@ class Lauf extends Node:
 		_check("Tag 1: keine Besucher draußen", gm._crowd._target == 0, str(gm._crowd._target))
 		gm._day = 2
 		gm._apply_crowd(-1.0)
-		_check("Tag 2: Besucher kommen", gm._crowd._target > 100, str(gm._crowd._target))
+		_check("Tag 2: Besucher kommen", gm._crowd._target > 20, str(gm._crowd._target))
 		print("ERGEBNIS: ", "OK" if fehler == 0 else "FEHLGESCHLAGEN (%d)" % fehler)
 		get_tree().quit(fehler)
