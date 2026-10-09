@@ -16,13 +16,13 @@ extends Node
 
 const BESUCHER := [24, 48, 80]
 ## Sichtweite der Kleinteile (scripts/sichtweite.gd) je Stufe: auf schwächerer Grafik früher ausblenden
-const SICHT_FAKTOR := [0.55, 0.8, 1.0]
+const SICHT_FAKTOR := [0.4, 0.6, 0.75]
 ## Schattenstufen der Sonne: Niedrig eine, Mittel zwei, Hoch vier (Schatten zeichnen die Karte mehrfach neu)
 const SCHATTEN_STUFEN := [DirectionalLight3D.SHADOW_ORTHOGONAL, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS]
 const SCHATTEN_WEITE := [50.0, 80.0, 0.0]
 var _schatten_weite0 := -1.0
 ## Ab dieser Entfernung blenden Kirmeslichter aus (0 = nie)
-const LICHT_AUSBLENDEN := [25.0, 45.0, 0.0]
+const LICHT_AUSBLENDEN := [22.0, 32.0, 42.0]
 const DETAIL := preload("res://assets/shader/detail.gdshader")
 ## Weiche Schatten der Sonne (Stufe Mittel/Hoch)
 const SONNE_WINKEL := 1.2

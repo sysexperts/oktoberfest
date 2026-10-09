@@ -33,6 +33,45 @@ signal gesetzt(n: int, von: int)
 var eintraege := {}   # Nummer -> Eintrag
 var _naechste := 1
 
+## Entfernungsstufe für ganze Buden und Bäume: weit weg wird der ganze Eintrag nicht mehr gezeichnet.
+## Selbsttest (F4) auf dem Hauptrechner: die Buden mit Spielen kosteten 6 ms, jede besteht aus 300 bis 700 Meshes.
+## Reichweite je Grafikstufe (Niedrig, Mittel, Hoch) in Metern.
+const FERN_BUDEN := [55.0, 75.0, 95.0]
+const FERN_BAEUME := [80.0, 100.0, 130.0]
+var _fern_i := 0
+var _fern_t := 0.0
+
+func _fern_pruefen(delta: float) -> void:
+	_fern_t -= delta
+	if _fern_t > 0.0:
+		return
+	_fern_t = 0.1
+	var kam := get_viewport().get_camera_3d()
+	var kinder := get_children()
+	if kam == null or kinder.is_empty():
+		return
+	var stufe := clampi(Einstellungen.grafik, 0, 2)
+	# je Durchlauf nur ein Stück der Einträge prüfen (verteilt die Arbeit)
+	for _n in mini(80, kinder.size()):
+		_fern_i = (_fern_i + 1) % kinder.size()
+		var k := kinder[_fern_i] as Node3D
+		if k == null:
+			continue
+		var pfad := k.scene_file_path
+		var reichweite := 0.0
+		if pfad.contains("/kirmes/"):
+			reichweite = FERN_BUDEN[stufe]
+		elif pfad.contains("kulisse/baum_"):
+			reichweite = FERN_BAEUME[stufe]
+		if reichweite <= 0.0:
+			continue
+		var da := k.global_position.distance_to(kam.global_position) < reichweite
+		if k.visible != da:
+			k.visible = da
+
+func _process(delta: float) -> void:
+	_fern_pruefen(delta)
+
 func _ready() -> void:
 	if multiplayer.is_server():
 		_alles_setzen(_mit_wohnwagen(_lesen(START)))
