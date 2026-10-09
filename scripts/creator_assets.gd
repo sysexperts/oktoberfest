@@ -37,6 +37,8 @@ const BRILLEN := [
 	{"id": "sonnenbrille_eckig", "name": "CREATOR_BRILLE_SONNE_ECKIG", "szene": "res://scenes/creator/brillen/sonnenbrille_eckig.tscn", "farbe": Color(0.72, 0.60, 0.22)},
 	{"id": "monokel", "name": "CREATOR_BRILLE_MONOKEL", "szene": "res://scenes/creator/brillen/monokel.tscn", "farbe": Color(0.72, 0.60, 0.22)},
 	{"id": "herzbrille", "name": "CREATOR_BRILLE_HERZ", "szene": "res://scenes/creator/brillen/herzbrille.tscn", "farbe": Color(0.95, 0.30, 0.50)},
+	# Scherzbrille der Casino-Tarnung (Gustav): nur über Figuren.tarnung(), nie im Creator wählbar ("versteckt")
+	{"id": "tarnbrille", "name": "CREATOR_BRILLE_TARN", "szene": "res://scenes/creator/brillen/tarnbrille.tscn", "farbe": Color(0.03, 0.03, 0.035), "versteckt": true},
 	{"id": "security_brille", "name": "CREATOR_BRILLE_SECURITY", "szene": "res://scenes/creator/brillen/security_brille.tscn", "farbe": Color(0.08, 0.08, 0.09)},
 ]
 

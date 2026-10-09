@@ -52,7 +52,8 @@ const FREI := {
 	3: ["mail", "shop", "quests", "kalender", "bank", "personal", "bilanz", "bierpreis", "wetter", "social"],
 }
 ## Reiter im Festbüro-Fenster (scenes/ui/festbuero.tscn)
-const REITER := {"shop": 0, "personal": 2, "bilanz": 5}
+## Reiter im Festbüro-Fenster je App: Shop = Zelt, Lizenzen, Künstler, Ware (Bier!), Deko; Personal; Bilanz + Ziele
+const REITER := {"shop": [0, 1, 3, 4, 7], "personal": [2], "bilanz": [5, 6]}
 ## Diese Apps teilen sich das Festbüro-Fenster
 const BUERO_APPS := ["shop", "personal", "bilanz"]
 
@@ -361,8 +362,8 @@ func _banner(name: String, fenster: Control) -> void:
 
 func _buero_reiter(name: String) -> void:
 	var buero := _hud.get("_buero") as Control
-	if buero and buero.has_method("reiter_waehlen"):
-		buero.reiter_waehlen(int(REITER.get(name, 0)), true)
+	if buero and buero.has_method("reiter_gruppe"):
+		buero.reiter_gruppe(REITER.get(name, [0]))
 
 func _legacy_zu(name: String) -> void:
 	var alt := _legacy_knoten(name)

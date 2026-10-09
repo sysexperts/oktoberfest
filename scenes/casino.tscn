@@ -97,6 +97,64 @@ material = SubResource("Schild")
 [sub_resource type="BoxShape3D" id="SSperre"]
 size = Vector3(2.2, 2.6, 0.3)
 
+[sub_resource type="StandardMaterial3D" id="X_Samt"]
+albedo_color = Color(0.42, 0.04, 0.09, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="X_Neon"]
+albedo_color = Color(1.0, 0.85, 0.45, 1)
+emission_enabled = true
+emission = Color(1.0, 0.75, 0.3, 1)
+emission_energy_multiplier = 2.6
+
+[sub_resource type="BoxMesh" id="X_Leiste"]
+size = Vector3(11.9, 0.18, 0.2)
+
+[sub_resource type="BoxMesh" id="X_Pilaster"]
+size = Vector3(0.2, 3.25, 0.25)
+
+[sub_resource type="BoxMesh" id="X_Feld"]
+size = Vector3(3.2, 2.0, 0.05)
+
+[sub_resource type="BoxMesh" id="X_Dach"]
+size = Vector3(3.4, 0.07, 1.8)
+
+[sub_resource type="BoxMesh" id="X_Saum"]
+size = Vector3(3.4, 0.14, 0.05)
+
+[sub_resource type="BoxMesh" id="X_Teppich"]
+size = Vector3(1.9, 0.025, 4.0)
+
+[sub_resource type="BoxMesh" id="X_Rand"]
+size = Vector3(0.07, 0.03, 4.0)
+
+[sub_resource type="CylinderMesh" id="X_Pfosten"]
+top_radius = 0.045
+bottom_radius = 0.045
+height = 1.0
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="X_Mast"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 2.2
+radial_segments = 10
+
+[sub_resource type="SphereMesh" id="X_Lampe"]
+radius = 0.17
+height = 0.34
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxMesh" id="X_Seil"]
+size = Vector3(0.03, 0.03, 2.0)
+
+[sub_resource type="BoxMesh" id="X_NeonH"]
+size = Vector3(2.3, 0.035, 0.035)
+
+[sub_resource type="BoxMesh" id="X_NeonV"]
+size = Vector3(0.035, 0.55, 0.035)
+
 [node name="Casino" type="Node3D"]
 script = ExtResource("1_cas")
 
@@ -286,3 +344,147 @@ nr = 30
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.2)
 script = ExtResource("3_kd")
 art = "tuer"
+
+[node name="Aussen" type="Node3D" parent="."]
+
+[node name="Zierleiste" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, -19.12)
+mesh = SubResource("X_Leiste")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pilaster0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 1.62, -19.15)
+mesh = SubResource("X_Pilaster")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pilaster1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.62, -19.15)
+mesh = SubResource("X_Pilaster")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pilaster2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 1.62, -19.15)
+mesh = SubResource("X_Pilaster")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pilaster3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 1.62, -19.15)
+mesh = SubResource("X_Pilaster")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Feld0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.55, 1.5, -19.2)
+mesh = SubResource("X_Feld")
+surface_material_override/0 = SubResource("X_Samt")
+
+[node name="Feld1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 1.5, -19.2)
+mesh = SubResource("X_Feld")
+surface_material_override/0 = SubResource("X_Samt")
+
+[node name="Baldachin" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 0.9397, 0.342, 0, -0.342, 0.9397, 0, 3.05, -19.9)
+mesh = SubResource("X_Dach")
+surface_material_override/0 = SubResource("X_Samt")
+
+[node name="BaldachinSaum" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.74, -20.75)
+mesh = SubResource("X_Saum")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Teppich" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, -21.15)
+mesh = SubResource("X_Teppich")
+surface_material_override/0 = SubResource("X_Samt")
+
+[node name="TeppichRand0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.02, -21.15)
+mesh = SubResource("X_Rand")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="TeppichRand1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.02, -21.15)
+mesh = SubResource("X_Rand")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pfosten0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.5, -21.0)
+mesh = SubResource("X_Pfosten")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pfosten1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.5, -23.0)
+mesh = SubResource("X_Pfosten")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pfosten2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.5, -21.0)
+mesh = SubResource("X_Pfosten")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Pfosten3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.5, -23.0)
+mesh = SubResource("X_Pfosten")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Seil0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.88, -22.0)
+mesh = SubResource("X_Seil")
+surface_material_override/0 = SubResource("X_Samt")
+
+[node name="Seil1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.88, -22.0)
+mesh = SubResource("X_Seil")
+surface_material_override/0 = SubResource("X_Samt")
+
+[node name="Mast0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 1.1, -20.3)
+mesh = SubResource("X_Mast")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Lampe0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 2.3, -20.3)
+mesh = SubResource("X_Lampe")
+surface_material_override/0 = SubResource("X_Neon")
+
+[node name="LaternenLicht0" type="OmniLight3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 2.2, -20.5)
+light_color = Color(1, 0.78, 0.45, 1)
+light_energy = 0.9
+omni_range = 5.5
+
+[node name="Mast1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 1.1, -20.3)
+mesh = SubResource("X_Mast")
+surface_material_override/0 = SubResource("Gold")
+
+[node name="Lampe1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.3, -20.3)
+mesh = SubResource("X_Lampe")
+surface_material_override/0 = SubResource("X_Neon")
+
+[node name="LaternenLicht1" type="OmniLight3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.2, -20.5)
+light_color = Color(1, 0.78, 0.45, 1)
+light_energy = 0.9
+omni_range = 5.5
+
+[node name="NeonOben" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -19.3)
+mesh = SubResource("X_NeonH")
+surface_material_override/0 = SubResource("X_Neon")
+
+[node name="NeonUnten" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.68, -19.3)
+mesh = SubResource("X_NeonH")
+surface_material_override/0 = SubResource("X_Neon")
+
+[node name="NeonLinks" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 2.94, -19.3)
+mesh = SubResource("X_NeonV")
+surface_material_override/0 = SubResource("X_Neon")
+
+[node name="NeonRechts" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 2.94, -19.3)
+mesh = SubResource("X_NeonV")
+surface_material_override/0 = SubResource("X_Neon")

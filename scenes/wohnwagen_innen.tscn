@@ -264,6 +264,16 @@ albedo_color = Color(0.95, 0.75, 0.2, 1)
 metallic = 0.9
 roughness = 0.25
 
+[sub_resource type="BoxMesh" id="SchrankKorpus"]
+size = Vector3(1.0, 2.0, 0.5)
+
+[sub_resource type="BoxMesh" id="SchrankFuge"]
+size = Vector3(0.02, 1.8, 0.02)
+
+[sub_resource type="BoxMesh" id="SchrankGriff"]
+size = Vector3(0.04, 0.22, 0.05)
+
+
 [node name="WohnwagenInnen" type="Node3D"]
 
 
@@ -940,6 +950,31 @@ surface_material_override/0 = ExtResource("m_holz")
 [node name="Laptop" parent="." instance=ExtResource("laptop")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 2.75, 0, -0.3)
 
+
+[node name="Kleiderschrank" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, 1.12)
+script = ExtResource("ding")
+art = "kleiderschrank"
+
+[node name="Korpus" type="MeshInstance3D" parent="Kleiderschrank"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+mesh = SubResource("SchrankKorpus")
+surface_material_override/0 = ExtResource("m_holz")
+
+[node name="Fuge" type="MeshInstance3D" parent="Kleiderschrank"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.26)
+mesh = SubResource("SchrankFuge")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+[node name="GriffLinks" type="MeshInstance3D" parent="Kleiderschrank"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 1.0, -0.27)
+mesh = SubResource("SchrankGriff")
+surface_material_override/0 = ExtResource("m_dunkel")
+
+[node name="GriffRechts" type="MeshInstance3D" parent="Kleiderschrank"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 1.0, -0.27)
+mesh = SubResource("SchrankGriff")
+surface_material_override/0 = ExtResource("m_dunkel")
 
 [node name="Ausgang" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 1.41)

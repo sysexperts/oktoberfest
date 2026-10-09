@@ -135,6 +135,23 @@ func oeffnen() -> void:
 	# Controller: in der Seitenleiste mit dem Steuerkreuz hoch/runter
 	_nav_knoepfe()[_reiter.current_tab].grab_focus.call_deferred()
 
+## Desktop-App öffnet das Büro-Fenster mit ihrer Gruppe von Reitern (nur diese Knöpfe in der Seitenleiste).
+## Im Tutorial springt das Fenster auf den Reiter des aktuellen Schritts, wenn er zur Gruppe gehört (z. B. Ware für das Bier).
+func reiter_gruppe(tabs: Array) -> void:
+	if tabs.is_empty():
+		return
+	var k := _nav_knoepfe()
+	for i in k.size():
+		k[i].visible = i in tabs
+	var ziel := int(tabs[0])
+	if TUTORIAL_ZIEL.has(_schritt) and int(TUTORIAL_ZIEL[_schritt][0]) in tabs:
+		ziel = int(TUTORIAL_ZIEL[_schritt][0])
+	if ziel < 0 or ziel >= _reiter.get_tab_count():
+		return
+	_reiter.current_tab = ziel
+	_nav_markieren(ziel)
+	k[ziel].grab_focus.call_deferred()
+
 ## Reiter wählen (Desktop-Apps Shop, Personal, Bilanz öffnen das Fenster direkt auf ihrem Reiter)
 func reiter_waehlen(tab: int, nur: bool = false) -> void:
 	if tab < 0 or tab >= _reiter.get_tab_count():

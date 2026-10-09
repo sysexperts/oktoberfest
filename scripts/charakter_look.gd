@@ -91,7 +91,12 @@ static func dirndl_setzen(l: Dictionary, d: Dictionary) -> void:
 				l[art + "_muster"] = (farben[1] as Color).to_html(false)
 
 ## Auswahl für ein Geschlecht ("" = alle): Einträge mit "g" gelten nur für dieses Geschlecht
+## Was der Charakter-Creator anbietet: ohne die versteckten Einträge (Scherzbrille der Tarnung)
 static func liste(art: String, geschlecht := "") -> Array:
+	return _alle_liste(art, geschlecht).filter(func(e: Dictionary) -> bool: return not bool(e.get("versteckt", false)))
+
+## Alle Einträge, auch die versteckten — für Bauen und Prüfen
+static func _alle_liste(art: String, geschlecht := "") -> Array:
 	var alle: Array
 	match art:
 		"augen": alle = Assets.AUGEN
@@ -111,10 +116,10 @@ static func liste(art: String, geschlecht := "") -> Array:
 	return alle.filter(func(e: Dictionary) -> bool: return not e.has("g") or e["g"] == geschlecht)
 
 static func _eintrag(art: String, id: String) -> Dictionary:
-	for e: Dictionary in liste(art):
+	for e: Dictionary in _alle_liste(art):
 		if e["id"] == id:
 			return e
-	return liste(art)[0]
+	return _alle_liste(art)[0]
 
 ## Unbekanntes und Kaputtes durch Standardwerte ersetzen (Netz- und Dateidaten sind nicht vertrauenswürdig)
 static func pruefen(roh: Dictionary) -> Dictionary:
@@ -122,7 +127,7 @@ static func pruefen(roh: Dictionary) -> Dictionary:
 	var l := standard(g)
 	for art: String in ARTEN:
 		var id := str(roh.get(art, l[art]))
-		if liste(art, g).any(func(e: Dictionary) -> bool: return e["id"] == id):
+		if _alle_liste(art, g).any(func(e: Dictionary) -> bool: return e["id"] == id):
 			l[art] = id
 	for schluessel: String in FARB_SCHLUESSEL:
 		var t := str(roh.get(schluessel, l[schluessel]))

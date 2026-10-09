@@ -266,6 +266,32 @@ static func look_huber() -> Dictionary:
 	l["hose_muster"] = Color(0.3, 0.28, 0.28).to_html(false)
 	return l
 
+## Verkleidung für das Casino (Gustavs Mantel und Komplettset): nur KLEIDUNG wird getauscht — Haare, Gesicht, Hautton
+## und Körper bleiben, damit man die eigene Figur wiedererkennt. Stufe 1 = langer dunkler Mantel (Janker),
+## Stufe 2 = dazu die Scherzbrille (runde schwarze Fassung, Brauen, große Nase, Schnurrbart), dunkle Hose und schwarze Schuhe.
+static func tarnung(l: Dictionary, stufe: int) -> Dictionary:
+	if stufe <= 0:
+		return l
+	var t := l.duplicate()
+	var dunkel := Color(0.12, 0.12, 0.14)
+	# Ein Kleid (Dirndl) nimmt den Platz von Hose und Jacke ein und würde den Mantel verdecken: dann dunkle Kniebundhose
+	if str(t.get("hose", "")).begins_with("kleid"):
+		Look._kleid_setzen(t, "hose", "hose_kniebund")
+		t["hose_farbe"] = Color(0.09, 0.09, 0.1).to_html(false)
+		t["hose_muster"] = Color(0.2, 0.2, 0.22).to_html(false)
+	Look._kleid_setzen(t, "jacke", "jacke_janker")
+	t["jacke_farbe"] = dunkel.to_html(false)
+	t["jacke_muster"] = Color(0.3, 0.3, 0.33).to_html(false)
+	if stufe >= 2:
+		t["brille"] = "tarnbrille"   # Scherzbrille: runde Fassung, Brauen, Nase, Schnauzer
+		t["brille_farbe"] = Color(0.03, 0.03, 0.035).to_html(false)
+		Look._kleid_setzen(t, "hose", "hose_leder")
+		t["hose_farbe"] = Color(0.09, 0.09, 0.1).to_html(false)
+		t["hose_muster"] = Color(0.2, 0.2, 0.22).to_html(false)
+		Look._kleid_setzen(t, "schuhe", "schuh_halb")
+		t["schuhe_farbe"] = Color(0.05, 0.05, 0.05).to_html(false)
+	return Look.pruefen(t)
+
 ## Schwarzmarkt-Haendler Gustav: Filzhut, Schnauzer, langer dunkler Janker, zwielichtig
 static func look_gustav() -> Dictionary:
 	var l := npc_look(hash("gustav"), 9, "m")

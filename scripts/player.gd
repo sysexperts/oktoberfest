@@ -427,20 +427,7 @@ var _tarnung_stufe := 0
 var _tarnung_t := 0.0
 
 func _mit_tarnung(l: Dictionary) -> Dictionary:
-	if _tarnung_stufe <= 0:
-		return l
-	var t := l.duplicate()
-	t["hut"] = "filzhut"
-	t["hut_farbe"] = Color(0.12, 0.1, 0.09).to_html(false)
-	if _tarnung_stufe >= 1 and str(t.get("geschlecht", "m")) != "w":
-		t["jacke"] = "jacke_janker"
-		t["jacke_farbe"] = Color(0.16, 0.16, 0.18).to_html(false)
-		t["jacke_muster"] = Color(0.3, 0.3, 0.33).to_html(false)
-	if _tarnung_stufe >= 2:
-		t["bart"] = "schnauzer"
-		t["brille"] = "rund"
-		t["brille_farbe"] = Color(0.08, 0.08, 0.09).to_html(false)
-	return Look.pruefen(t)
+	return Figuren.tarnung(l, _tarnung_stufe)
 
 func _tarnung_pruefen(delta: float) -> void:
 	_tarnung_t -= delta
