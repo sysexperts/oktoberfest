@@ -9,7 +9,7 @@ Legende: [ ] offen · [x] passt · [~] korrigiert
 ## Teil 1 · Neu seit v400 (zuletzt umgesetzt)
 - [x] 1 Start: Hauptmenü, Mauszeiger (Pfeil/Hand, v405), Ladebildschirm kommt durch (v409), Version unten
 - [x] 2 Neues Spiel → Tutorial: Horst, Wohnwagen aussuchen (kostenlos, eigener Wagen, v399/400), Weg zurück zum Zelt
-- [ ] 3 Zelt jeden Morgen vorne am Eingang eröffnen, Horst erklärt es bei „Bediene“ (v402); keine Kirmes-Besucher am ersten Tag (v391)  ⚠ Teil geprüft: test_besucher_start OK (keine Besucher am ersten Tag); Vorführung gezeigt, wartet auf dein Passt
+- [x] 3 Zelt jeden Morgen vorne am Eingang eröffnen, Horst erklärt es bei „Bediene“ (v402); keine Kirmes-Besucher am ersten Tag (v391)  ⚠ Teil geprüft: test_besucher_start OK (keine Besucher am ersten Tag); Vorführung gezeigt, wartet auf dein Passt
 - [ ] 4 Wohnwagen innen (Wände, Fenster, Küchenzeile, Bett, Spiegel, v398) und Schlafen: Mehrheit muss im Bett liegen (v401)  ⚠ Schlafen OK (test_schlafen), aber test_phase1 meldet Kollision vor der Wohnwagentür → noch prüfen
 - [ ] 5 Festbüro und Computer: Desktop-Zeiger bleibt sichtbar (v404), Bestellung nur am Computer (v394/395)
 - [x] 6 Boden: Pfützen, Kotze, Dreck liegen auf dem Boden, nicht darin (v403); Müllsack werfen (v392/393)  ✔ Test grün: test_fleckabstand, test_muellwurf
@@ -54,3 +54,9 @@ Neu geschrieben: tools/test_wette.gd (Quest 3.1, OK).
 **Echte offene Punkte:** Animationen mit Durchstoß (3 von 43) · Kollision vor der Wohnwagentür · Spielautomat-Walzen · test_pad_neu · Koop-Test mit zwei Instanzen · Performance.
 **Veraltete Tests (Spiel unverändert in Ordnung):** test_duell (altes Finale), test_tagesziel (feste Bankrate), test_wagen (alte Wagen-API), test_spielerfigur (Figurenpfad), test_huber (Wette erst ab Kapitel 3), test_code_beitritt/test_live_beitritt/test_koop_bot (alter Server).
 **Brauchen Fenster, nicht headless:** test_fussspuren, test_meldungen, test_putzziele, test_passend, test_spielerliste, test_moebel, test_zeitung, test_rundgang, test_pad_spiel, test_creator_menue.
+
+## Stand 2026-10-09 (Streamer morgen)
+Erledigt seit dem Testlauf: Quest-Wette, Wohnwagen-Text, Horst startet am Büro, Konrads Zelt nur bei offenem Zelt, Q-Hinweis,
+Leistung (Zelt 13.200 → 2.100 Aufrufe, Tor 15.200 → 10.600, FPS 20 → ca. 40), Animations-Stufe für alle Figuren,
+Besucher 24/48/80 mit Heimgehen nach 22 Uhr, NPC-Kleidung (Verkäufer) behoben, F3/F4-Leistungsanzeige.
+Offen für morgen: Bot-Saison (läuft), Konrads Zelt/Casino ansehen, Emotes (Q), Spacewar-ZIP (zuletzt), Buden-Leistung weiter.
