@@ -6,12 +6,17 @@ extends RefCounted
 ##
 ## Größe = längste Kante des Meshes (mit Skalierung) → Sichtweite in Metern.
 const STUFEN := [[0.35, 22.0], [1.0, 40.0], [2.5, 75.0], [6.0, 140.0]]
+## Teile bis zu dieser Kantenlänge (m) werfen keinen Sonnenschatten
+const SCHATTEN_AB := 0.5
 const LICHT_AB := 30.0
 const LICHT_UEBER := 12.0
 
 static func anwenden(wurzel: Node) -> void:
 	for n in wurzel.find_children("*", "GeometryInstance3D", true, false):
 		var g := n as GeometryInstance3D
+		# Kleinteile werfen keinen Schatten: sie kosten im Schattendurchgang viele Zeichenaufrufe und fallen kaum auf
+		if g.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON and _groesse(g) <= SCHATTEN_AB:
+			g.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		if g.visibility_range_end > 0.0:
 			continue   # schon von Hand gesetzt
 		var groesse := _groesse(g)

@@ -70,6 +70,24 @@ size = Vector3(9.3, 7.05, 0.3)
 [sub_resource type="BoxMesh" id="BoxMesh_7fabf"]
 size = Vector3(6, 3.75, 0.3)
 
+[sub_resource type="BoxOccluder3D" id="Verdeckung_West"]
+size = Vector3(0.3, 7.05, 25.6)
+
+[sub_resource type="BoxOccluder3D" id="Verdeckung_Ost"]
+size = Vector3(0.3, 7.05, 25.6)
+
+[sub_resource type="BoxOccluder3D" id="Verdeckung_Hinten"]
+size = Vector3(24.6, 7.05, 0.3)
+
+[sub_resource type="BoxOccluder3D" id="Verdeckung_VorneLinks"]
+size = Vector3(9.3, 7.05, 0.3)
+
+[sub_resource type="BoxOccluder3D" id="Verdeckung_VorneRechts"]
+size = Vector3(9.3, 7.05, 0.3)
+
+[sub_resource type="BoxOccluder3D" id="Verdeckung_UeberTor"]
+size = Vector3(6, 3.75, 0.3)
+
 [sub_resource type="BoxMesh" id="BoxMesh_vhexk"]
 size = Vector3(0.06, 1.2, 25)
 
@@ -2864,3 +2882,29 @@ transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.965
 
 [node name="BesucherSperre" type="Area3D" parent="." unique_id=1851492197 instance=ExtResource("sperre_besucher")]
 script = ExtResource("33_npji6")
+
+[node name="Verdeckung" type="Node3D" parent="."]
+
+[node name="West" type="OccluderInstance3D" parent="Verdeckung"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.15, 3.525, -1.5)
+occluder = SubResource("Verdeckung_West")
+
+[node name="Ost" type="OccluderInstance3D" parent="Verdeckung"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.15, 3.525, -1.5)
+occluder = SubResource("Verdeckung_Ost")
+
+[node name="Hinten" type="OccluderInstance3D" parent="Verdeckung"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.525, -14.15)
+occluder = SubResource("Verdeckung_Hinten")
+
+[node name="VorneLinks" type="OccluderInstance3D" parent="Verdeckung"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.65, 3.525, 11.15)
+occluder = SubResource("Verdeckung_VorneLinks")
+
+[node name="VorneRechts" type="OccluderInstance3D" parent="Verdeckung"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.65, 3.525, 11.15)
+occluder = SubResource("Verdeckung_VorneRechts")
+
+[node name="UeberTor" type="OccluderInstance3D" parent="Verdeckung"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.175, 11.15)
+occluder = SubResource("Verdeckung_UeberTor")

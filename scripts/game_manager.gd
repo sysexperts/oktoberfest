@@ -7714,6 +7714,7 @@ func _wagen_innen_abgleichen(plaetze: Array) -> void:
 	var null_raum := get_node_or_null("WohnwagenInnen") as Node3D
 	if null_raum:
 		null_raum.set_meta("platz", 0)
+		_innen_sichtweite(null_raum)
 	for e: Dictionary in plaetze:
 		var nr := int(e.get("platz", 0))
 		if nr <= 0 or get_node_or_null("WohnwagenInnen%d" % nr) != null:
@@ -7723,6 +7724,20 @@ func _wagen_innen_abgleichen(plaetze: Array) -> void:
 		raum.set_meta("platz", nr)
 		add_child(raum)
 		raum.global_position = Vector3(float(nr) * 14.0, 0.0, 600.0)
+		_innen_sichtweite(raum)
+
+## Die Innenräume liegen weit draußen bei z = 600 und wurden vom ganzen Zeltplatz aus mitgezeichnet (rund 170 Aufrufe).
+## Teile und Lichter blenden ab 70 m aus, im Raum selbst (wenige Meter) ändert sich nichts.
+func _innen_sichtweite(raum: Node3D) -> void:
+	for g in raum.find_children("*", "GeometryInstance3D", true, false):
+		var gi := g as GeometryInstance3D
+		if gi.visibility_range_end <= 0.0:
+			gi.visibility_range_end = 70.0
+	for l in raum.find_children("*", "Light3D", true, false):
+		var li := l as Light3D
+		li.distance_fade_enabled = true
+		li.distance_fade_begin = 50.0
+		li.distance_fade_length = 15.0
 
 ## Wohnwagen-Ausbau kaufen: "bett" (nächste Stufe) oder ein Einrichtungsstück. Nur nach Feierabend und mit Zelt.
 @rpc("any_peer", "reliable", "call_local")
