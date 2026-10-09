@@ -91,7 +91,8 @@ func _ready() -> void:
 		_verbinde(PERSONAL[rolle][0], func(i: int) -> void:
 			_rpc("net_hire_staff" if i == 0 else "net_upgrade_staff", [rolle]))
 	for stufe: int in KUENSTLER:
-		_verbinde(KUENSTLER[stufe][0], func(_i: int) -> void: _rpc("net_book_artist", [stufe]))
+		_verbinde(KUENSTLER[stufe][0], func(i: int) -> void:
+			_rpc("net_cancel_artist" if i == 1 else "net_book_artist", [] if i == 1 else [stufe]))
 	for sorte: int in WARE:
 		_verbinde(WARE[sorte][0], func(i: int) -> void: _rpc("net_order_goods", [sorte, PAKETE[i]]))
 	for zutat: Array in ZUTATEN:
@@ -373,6 +374,9 @@ func _reiter_kuenstler() -> void:
 			roundi(float(_gm.ARTIST_DRAW[stufe]) * 100.0), roundi(float(_gm.ARTIST_POP[stufe]))], d[1])
 		var sperre: String = tr("WHY_ACT_BOOKED") % tr("ACT_%d" % gebucht) if gebucht > 0 else ""
 		_einzelkauf(z, "BTN_BOOK", int(_gm.ARTIST_COST[stufe]), sperre)
+		if stufe == gebucht:
+			z.knopf(1, tr("BTN_ACT_CANCEL"))
+			z.grund(tr("ACT_TAGE_REST") % int(_z.get("artist_tage", 0)))
 
 func _reiter_ware(ohne_zelt: String) -> void:
 	for sorte: int in WARE:

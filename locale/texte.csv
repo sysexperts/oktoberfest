@@ -381,8 +381,11 @@ MSG_MARKETING,Werbung Stufe %d — Beliebtheit +%d %%,Advertising level %d — p
 MSG_DEKO,Deko Stufe %d — Einnahmen +%d %%,Decoration level %d — income +%d %%,Dekorasyon seviye %d — gelir +%%%d
 MSG_TOILET_HAVE,Die Toilette ist schon eingebaut,The toilet is already installed,Tuvalet zaten kurulu
 MSG_TOILET_DONE,Toilette eingebaut — keine Pfützen mehr in der Ecke,Toilet installed — no more puddles in the corner,Tuvalet kuruldu — köşede artık birikinti yok
+MSG_ACT_CANCELLED,Band gekündigt – du kannst eine neue buchen,Band cancelled – you can book a new one,Grup iptal edildi – yenisini ayarlayabilirsin
+BTN_ACT_CANCEL,Kündigen,Cancel,İptal
+ACT_TAGE_REST,Noch %d Schicht(en) gebucht,%d shift(s) left,%d vardiya kaldı
 MSG_ACT_BOOKED_ALREADY,Schon gebucht: %s,Already booked: %s,Zaten ayarlandı: %s
-MSG_ACT_BOOKED,%s gebucht! Beliebtheit +%d %% · spielt in der nächsten Schicht,%s booked! Popularity +%d %% · plays next shift,%s ayarlandı! Popülerlik +%d %% · sonraki vardiyada çalar
+MSG_ACT_BOOKED,%s gebucht! Beliebtheit +%d %% · spielt 3 Schichten lang,%s booked! Popularity +%d %% · plays for 3 shifts,%s ayarlandı! Popülerlik +%d %% · 3 vardiya çalar
 MSG_LIEFERPROBLEM,"Lieferprobleme bei der Brauerei! Das Bier ist knapp: die Gäste zahlen heute %d %% mehr, nachbestellen geht aber nicht.","Delivery trouble at the brewery! Beer is scarce: guests pay %d %% more today, but you cannot reorder.","Bira fabrikasında teslimat sorunu! Bira az: misafirler bugün %%%d fazla ödüyor, ama yeni sipariş veremezsin."
 POPUP_LIEFERPROBLEM,"Heute kommt kein Bier mehr\n\nDie Brauerei hat Lieferprobleme. Was im Lager ist, muss für heute reichen — morgen kannst du wieder bestellen.","No more beer today\n\nThe brewery has delivery trouble. What is in storage has to last — you can order again tomorrow.","Bugün bira gelmiyor\n\nBira fabrikasında teslimat sorunu var. Depodaki kadarıyla idare etmelisin — yarın yine sipariş verebilirsin."
 HUD_LIEFERPROBLEM,"Lieferprobleme · Bier +%d %% · keine Nachlieferung","Delivery trouble · beer +%d %% · no restock","Teslimat sorunu · bira +%%%d · yeni sevkiyat yok"
@@ -1251,6 +1254,7 @@ EMOTE_SITZEN,Sitzen,Sit,Otur
 EMOTE_POSEN,Posen,Pose,Poz ver
 EMOTE_KOTZEN,Kotzen,Puke,Kusmak
 EMOTE_WINKEN,Winken,Wave,El salla
+EMOTE_MITTELFINGER,Mittelfinger,Middle finger,Orta parmak
 EMOTE_HINWEIS,Maus oder Pfeiltasten zum Auswählen,Mouse or arrow keys to choose,Seçmek için fare veya ok tuşları
 HINT_PACKEN,{interact} Raufbold packen,{interact} Grab the brawler,{interact} Kavgacıyı yakala
 HINT_WERFEN,{interact} Werfen,{interact} Throw,{interact} Fırlat

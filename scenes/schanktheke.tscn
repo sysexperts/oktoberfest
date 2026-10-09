@@ -131,7 +131,7 @@ material_override = ExtResource("1_31d6p")
 mesh = SubResource("BoxMesh_of0vg")
 
 [node name="Sockel" type="MeshInstance3D" parent="Korpus" unique_id=994613446]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.07, 0.04)
 material_override = ExtResource("2_movo1")
 mesh = SubResource("BoxMesh_x3js8")
 

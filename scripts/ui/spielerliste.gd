@@ -54,7 +54,12 @@ func _aufbauen() -> void:
 		var z := zeile.instantiate()
 		%Liste.add_child(z)
 		var nr := clampi(int(d.get("figur", 0)), 0, Figuren.ALLE.size() - 1)
-		(z.get_node("%Avatar") as TextureRect).texture = load(AVATAR % nr)
+		# Steam-Profilbild, sonst das Figurenporträt
+		var sid := int(d.get("steam", 0))
+		if sid == 0 and int(peer) == ich:
+			sid = SteamDienst.eigene_id()
+		var steam_bild: Texture2D = SteamDienst.avatar_textur(sid) if sid != 0 else null
+		(z.get_node("%Avatar") as TextureRect).texture = steam_bild if steam_bild != null else load(AVATAR % nr)
 		(z.get_node("%Farbe") as ColorRect).color = FARBEN[clampi(int(d.get("farbe", 0)), 0, FARBEN.size() - 1)]
 		var name_text := str(d.get("name", ""))
 		if name_text == "":

@@ -4,6 +4,8 @@ extends Control
 ## oder godot --path . res://scenes/werkzeuge/animationen_ansicht.tscn
 
 const Look := preload("res://scripts/charakter_look.gd")
+const EmoteClips := preload("res://scripts/emote_clips.gd")
+const SYMBOLE := ["tanzen", "jubel", "sitzen", "posen", "winken", "kotzen", "musik", "bier"]
 
 var _mann: Figur
 var _frau: Figur
@@ -11,8 +13,23 @@ var _aktuell := ""
 var _wartet := 0.0
 var _zoom := 4.2
 var _ziehen := false
+## Clips fürs Q-Rad: [{clip, name, symbol}] — wie daten/emote_clips.json
+var _q: Array = []
 
 func _ready() -> void:
+	_q = EmoteClips.laden()
+	for s in SYMBOLE:
+		%QSymbol.add_item(s)
+	%QRad.toggled.connect(_q_umschalten)
+	%QName.text_changed.connect(func(t: String) -> void:
+		var e := _q_eintrag(_aktuell)
+		if not e.is_empty():
+			e["name"] = t)
+	%QSymbol.item_selected.connect(func(i: int) -> void:
+		var e := _q_eintrag(_aktuell)
+		if not e.is_empty():
+			e["symbol"] = SYMBOLE[i])
+	%QSpeichern.pressed.connect(_q_speichern)
 	var lm := Look.standard("m")
 	lm["hut"] = "tirolerhut"
 	lm["hut_farbe"] = "4a6a3a"
@@ -84,13 +101,55 @@ func _liste_fuellen() -> void:
 		var bm := b.begins_with("mixamo/")
 		return a < b if am == bm else am)
 	for n in namen:
-		var i: int = %Clips.add_item(n)
+		var i: int = %Clips.add_item(("★ " if not _q_eintrag(n).is_empty() or _q_gruppe(n) != "" else "") + n)
 		%Clips.set_item_metadata(i, n)
 	%Anzahl.text = "%d Animationen" % namen.size()
 
 func _gewaehlt(i: int) -> void:
 	_aktuell = str(%Clips.get_item_metadata(i))
 	_abspielen(_aktuell)
+	_q_zeigen()
+
+## Eintrag zum Clip (leer = nicht im Rad)
+func _q_eintrag(clip: String) -> Dictionary:
+	for e: Dictionary in _q:
+		if e.get("clip", "") == clip:
+			return e
+	return {}
+
+## Steckt der Clip in einer Gruppe (z. B. "Tanzen")? Zeigt den Namen der Gruppe, sonst ""
+func _q_gruppe(clip: String) -> String:
+	for e: Dictionary in _q:
+		if e.has("clips") and clip in (e["clips"] as Array):
+			return str(e.get("name", ""))
+	return ""
+
+func _q_zeigen() -> void:
+	var e := _q_eintrag(_aktuell)
+	%QRad.set_pressed_no_signal(not e.is_empty())
+	%QName.text = str(e.get("name", ""))
+	%QName.editable = not e.is_empty()
+	%QSymbol.disabled = e.is_empty()
+	%QSymbol.select(maxi(0, SYMBOLE.find(str(e.get("symbol", "tanzen")))))
+	var g := _q_gruppe(_aktuell)
+	%QStatus.text = ("In der Gruppe \"%s\" (daten/emote_clips.json)" % g) if g != "" else ""
+
+func _q_umschalten(an: bool) -> void:
+	if _aktuell == "":
+		return
+	if an and _q_eintrag(_aktuell).is_empty():
+		_q.append({"clip": _aktuell, "name": _aktuell.get_file().replace("_", " "), "symbol": "tanzen"})
+	elif not an:
+		_q = _q.filter(func(e: Dictionary) -> bool: return e.get("clip", "") != _aktuell)
+	_q_zeigen()
+	var gewaehlt: PackedInt32Array = %Clips.get_selected_items()
+	_liste_fuellen()
+	if not gewaehlt.is_empty() and gewaehlt[0] < %Clips.item_count:
+		%Clips.select(gewaehlt[0])
+	%QStatus.text = "Noch nicht gespeichert"
+
+func _q_speichern() -> void:
+	%QStatus.text = ("Gespeichert: %d Clips im Q-Rad (daten/emote_clips.json)" % _q.size()) if EmoteClips.speichern(_q) else "Speichern fehlgeschlagen"
 
 func _abspielen(name: String) -> void:
 	%Name.text = name

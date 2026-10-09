@@ -537,8 +537,18 @@ func _update_animation(delta: float) -> void:
 			EMOTE_POSEN:
 				figur.posen_pose(_emote_anim_t)
 				_cur_anim = "pose"
+			EMOTE_MITTELFINGER:
+				figur.mittelfinger_pose(_emote_anim_t)
+				_cur_anim = "pose"
+			_:
+				# Clip aus dem Q-Rad (Mixamo u. a., daten/emote_clips.json)
+				var clip := EmoteClips.clip_von(emote)
+				if clip != "" and _cur_anim != "clip:" + clip:
+					if not figur.abspielen(clip):
+						figur.stehen()
+					_cur_anim = "clip:" + clip
 		return
-	if _cur_anim == "pose" or _cur_anim == "sitzen":
+	if _cur_anim == "pose" or _cur_anim == "sitzen" or _cur_anim.begins_with("clip:"):
 		figur.pose_loesen()
 		_cur_anim = ""
 	_emote_anim_t = 0.0
@@ -1750,8 +1760,12 @@ const EMOTE_WINKEN := 3
 const EMOTE_JUBEL := 4
 const EMOTE_POSEN := 5
 const EMOTE_SITZEN := 6
+const EMOTE_MITTELFINGER := 7
+const EmoteClips := preload("res://scripts/emote_clips.gd")
 ## So lange läuft ein Emote, wenn man nicht vorher weiterläuft
 const EMOTE_DAUER := 6.0
+## Der Mittelfinger ist kurz
+const EMOTE_DAUER_FINGER := 3.0
 
 func _emote_rad() -> Node:
 	var hud := _world.get_node_or_null("HUD") if _world else null
@@ -1771,8 +1785,17 @@ func _emote_starten(welches: int) -> void:
 		_kotzen_starten()
 		_kotz_nur_emote = true   # Emote (Q): nur Show, keine Pfütze
 		return
+	if welches >= EmoteClips.AB:
+		welches = EmoteClips.zufall(welches)   # Gruppe: zufälliger Clip, die Nummer trägt ihn zu den Mitspielern
 	emote_wahl = welches
-	_emote_until = Time.get_ticks_msec() / 1000.0 + EMOTE_DAUER
+	var dauer := EMOTE_DAUER_FINGER if welches == EMOTE_MITTELFINGER else EMOTE_DAUER
+	if welches >= EmoteClips.AB:
+		# Einmalige Clips laufen genau so lange, wie sie dauern
+		var fig := _model as Figur
+		var clip := EmoteClips.clip_von(welches)
+		if fig and fig.anim and clip != "" and fig.anim.has_animation(clip) and fig.anim.get_animation(clip).loop_mode == Animation.LOOP_NONE:
+			dauer = clampf(fig.anim.get_animation(clip).length, 1.0, 30.0)
+	_emote_until = Time.get_ticks_msec() / 1000.0 + dauer
 	if welches == EMOTE_JUBEL:
 		_sfx("cheer")
 		_sfx("prost")   # Krüge klirren — nur mit Datei

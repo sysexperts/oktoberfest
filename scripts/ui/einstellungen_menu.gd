@@ -23,9 +23,6 @@ const MODUS_NAMEN := ["SET_MODE_BORDERLESS", "SET_MODE_EXCLUSIVE", "SET_MODE_WIN
 @onready var _aufloesung_wert: Label = %AufloesungWert
 
 const QUALITAETEN := ["SET_QUALITY_LOW", "SET_QUALITY_MEDIUM", "SET_QUALITY_HIGH"]
-## Gleiche Reihenfolge wie Einstellungen.RENDERER
-const RENDERER_NAMEN := ["SET_RENDERER_QUALITY", "SET_RENDERER_PERFORMANCE"]
-@onready var _renderer: OptionButton = %Renderer
 @onready var _maus: HSlider = %Maus
 @onready var _maus_wert: Label = %MausWert
 @onready var _invert: CheckButton = %MausInvert
@@ -77,7 +74,6 @@ func _ready() -> void:
 	_fps.item_selected.connect(_on_fps)
 	_vsync.toggled.connect(_on_vsync)
 	_qualitaet.item_selected.connect(_on_qualitaet)
-	_renderer.item_selected.connect(_on_renderer)
 	_aufloesung.value_changed.connect(_on_aufloesung)
 	# Größe der Oberfläche — eigene Datei user://ui.cfg (siehe menu_eingang.gd)
 	var ui := preload("res://scripts/menu_eingang.gd")
@@ -148,11 +144,6 @@ func _texte() -> void:
 		_qualitaet.add_item(tr(QUALITAETEN[i]), i)
 	_qualitaet.select(Einstellungen.grafik)
 	_aufloesung_wert.text = "%d %%" % roundi(Einstellungen.aufloesung * 100.0)
-	_renderer.clear()
-	for i in RENDERER_NAMEN.size():
-		_renderer.add_item(tr(RENDERER_NAMEN[i]), i)
-	_renderer.select(maxi(0, Einstellungen.RENDERER.find(Einstellungen.renderer)))
-	_renderer_hinweis()
 	_anzeige_listen()
 
 ## Anzeigemodus, Fenstergröße, Bildschirm und Bildrate beschriften und wählen.
@@ -182,12 +173,6 @@ func _anzeige_listen() -> void:
 	_fps.select(maxi(0, Einstellungen.FPS_GRENZEN.find(Einstellungen.fps_grenze)))
 
 ## Hinweis, wenn die gewählte Darstellung erst nach einem Neustart gilt.
-func _renderer_hinweis() -> void:
-	%RendererHinweis.visible = Einstellungen.renderer != RenderingServer.get_current_rendering_method()
-	for bus: String in _regler:
-		(_regler[bus][1] as Label).text = "%d %%" % roundi(float(Einstellungen.lautstaerke[bus]) * 100.0)
-	_tasten_aufbauen()
-
 func _tasten_aufbauen() -> void:
 	# Die Knöpfe entstehen neu — der Fokus ginge dabei verloren, und ohne Fokus
 	# kommt man mit dem Controller nicht mehr weiter. Also merken und zurückgeben.
@@ -337,11 +322,6 @@ func _on_fps(index: int) -> void:
 func _on_vsync(an: bool) -> void:
 	Einstellungen.vsync = an
 	Einstellungen.anwenden()
-
-func _on_renderer(index: int) -> void:
-	Einstellungen.renderer = Einstellungen.RENDERER[index]
-	Einstellungen.speichern()   # menu_eingang liest die Datei beim nächsten Start
-	_renderer_hinweis()
 
 func _on_qualitaet(index: int) -> void:
 	Einstellungen.grafik = index

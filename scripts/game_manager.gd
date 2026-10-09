@@ -356,6 +356,7 @@ const DROP_POINT := Vector3(-0.5, 0.0, 21.4)   # wo die Pakete landen (vor dem W
 # ---- E5: Bühne & Künstler ----
 const ARTIST_SCENE := preload("res://scenes/artist.tscn")
 const ARTIST_COST := {1: 500, 2: 2000, 3: 6000}
+const ARTIST_TAGE := 3                           # so viele Schichten bleibt eine gebuchte Band
 const ARTIST_COUNT := {1: 1, 2: 3, 3: 5}      # wie viele auf der Bühne stehen
 const ARTIST_POP := {1: 5.0, 2: 12.0, 3: 25.0}  # Beliebtheitsschub beim Buchen
 const ARTIST_DRAW := {1: 0.15, 2: 0.35, 3: 0.6} # zusätzliche Auslastung während der Schicht
@@ -599,6 +600,13 @@ var _assigned := {}     # guest_id -> staff_id (doppelte Bedienung vermeiden)
 var _wages_last := 0
 const CLEAN_TIP_MIN := 6      # Trinkgeld fürs Saubermachen (nur Öffnungszeit)
 const CLEAN_TIP_MAX := 12
+## Ein Fußweg besteht aus bis zu 18 Stücken — jedes einzeln mit vollem Trinkgeld wäre zu viel
+const CLEAN_TIP_FUSS := 1
+
+func _putz_trinkgeld(mess_art: int) -> int:
+	if mess_art >= Mess.FUSS:
+		return CLEAN_TIP_FUSS
+	return randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
 var _clean_tips := 0
 var _interest_paid := 0
 var _last_report := {}   # Zahlen der letzten Tagesbilanz (siehe _end_shift)
@@ -639,6 +647,7 @@ var _quest_step := 0
 var _folge_geschafft := false
 var _quest_served_once := false
 var _ever_artist := false
+var _artist_tage := 0   # verbleibende Schichten der gebuchten Band (Buchung = 3 Tage)
 var _quest_timer := 0.0
 # Meilensteine (Plan 3.2): Lebenszeit-Zähler und erreichte IDs, beides im Spielstand
 const Meilensteine := preload("res://scripts/meilensteine.gd")
@@ -1088,6 +1097,7 @@ func _save_game() -> void:
 		"story": _story.speichern(),
 		"quest_version": QUEST_VERSION,
 		"ever_artist": _ever_artist,
+		"artist_tier": _artist_tier, "artist_tage": _artist_tage,
 		"stats": _stats,
 		"meilensteine": _meilensteine,
 		# Formatversion: ältere Spielversionen laden keinen neueren Stand (Net.SAVE_FORMAT)
@@ -1237,6 +1247,8 @@ func _load_game() -> bool:
 	if quest_alt < 5 and _quest_step >= 1:
 		_quest_step += 1   # Wohnwagen aussuchen (Version 5)
 	_ever_artist = bool(d.get("ever_artist", false))
+	_artist_tier = int(d.get("artist_tier", 0))
+	_artist_tage = int(d.get("artist_tage", 0)) if _artist_tier > 0 else 0
 	var gespeicherte_stats: Variant = d.get("stats", {})
 	if gespeicherte_stats is Dictionary:
 		for k in Meilensteine.ZAEHLER:
@@ -2307,9 +2319,20 @@ func net_book_artist(tier: int) -> void:
 		return
 	Game.add_money(-cost)
 	_artist_tier = tier
+	_artist_tage = ARTIST_TAGE
 	_ever_artist = true
 	_popularity = minf(100.0, _popularity + float(ARTIST_POP[tier]))
 	_melde("MSG_ACT_BOOKED", ["ACT_%d" % tier, int(ARTIST_POP[tier])], 2)
+	_broadcast_meta()
+
+## Band kündigen (keine Erstattung), danach kann eine bessere gebucht werden.
+@rpc("any_peer", "reliable", "call_local")
+func net_cancel_artist() -> void:
+	if not multiplayer.is_server() or not buero_offen() or _artist_tier <= 0:
+		return
+	_artist_tier = 0
+	_artist_tage = 0
+	_melde("MSG_ACT_CANCELLED", [], 2)
 	_broadcast_meta()
 
 ## Künstler auf die Bühne stellen (Schichtbeginn).
@@ -3925,7 +3948,7 @@ func _update_cleaner(s: Dictionary, delta: float) -> void:
 		_mess_clean[best] = float(_mess_clean.get(best, 0.0)) + rate * delta
 		if float(_mess_clean[best]) >= 1.0:
 			# Trinkgeld gibt es auch, wenn die Reinigungskraft putzt
-			var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+			var tip := _putz_trinkgeld(int(_mess_kind.get(best, 0)))
 			_add_income(tip)
 			_last_earn += tip
 			_clean_tips += tip
@@ -5774,7 +5797,10 @@ func _end_shift(reason := 0) -> void:
 	_ereignis = ""
 	_fass_kaputt = 0
 	_ausgabe_senden()
-	_artist_tier = 0
+	_artist_tage -= 1
+	if _artist_tage <= 0:
+		_artist_tier = 0
+		_artist_tage = 0
 
 	# Erken kapatma → popülerlik cezası (ne kadar erken, o kadar çok)
 	var pop_penalty := 0.0
@@ -6381,7 +6407,7 @@ func net_clean(id: int) -> void:
 			_stats.cleaned += 1
 			_leistung(putzer, "geputzt")
 			if _phase == Phase.SHIFT and _zelt_offen:
-				var tip := randi_range(CLEAN_TIP_MIN, CLEAN_TIP_MAX)
+				var tip := _putz_trinkgeld(art_dreck)
 				_add_income(tip)
 				_last_earn += tip
 				_clean_tips += tip
@@ -6552,7 +6578,7 @@ func _buero_state() -> Dictionary:
 	return {
 		"stage": _tent_stage, "tables": _active_count, "limit": int(TENT_TABLE_LIMIT[_tent_stage]),
 		"seats": _seats.size(), "rent": _daily_rent(), "mkt": _upg_marketing, "deko": _upg_deko,
-		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier,
+		"toilet": _has_toilet, "lic": _lic.duplicate(), "staff": staff, "artist": _artist_tier, "artist_tage": _artist_tage,
 		"pending": _pending.size(), "bier": int(_stock[WARE_BIER]), "essen": int(_stock[WARE_ESSEN]),
 		"sab_inv": _sab_inv.duplicate(), "tarnung_stufe": _tarnung_stufe, "tarnung_an": _tarnung_an, "sab_tag": _sab_tag.duplicate(), "casino_tag": _casino_tag, "ausbau": _ausbau.duplicate(), "wagen": _wagen.duplicate(true), "wagen_alle": _wagen_alle_zustand(), "wagen_wahl_offen": wagen_wahl_offen(), "wagen_plaetze": wagen_plaetze(), "wagen_prestige": wagen_prestige(), "fest": _fest.duplicate(), "fest_ruhm": _fest_ruhm, "fest_letzter": _fest_letzter, "konrad_ruhm": _konrad_ruhm, "fest_moeglich": fest_moeglich(), "meister": meister_liste(), "meister_titel": int(_stats.get("meister_titel", 0)),
 		"staff_max": staff_max_level(), "anstich_offen": _anstich_offen, "eigenbier": _eigenbier, "fest_wb": _fest_wb.duplicate(), "wunsch": _wunsch.duplicate(), "rezeptseiten": rezeptseiten(), "fakes": _fakes.duplicate(true),

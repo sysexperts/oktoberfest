@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://tools/finger_schuss.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/figuren/bean.tscn" id="2"]
+
+[node name="FingerSchuss" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Figur" parent="." instance=ExtResource("2")]
+
+[node name="Kamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 2.4)
+current = true
+
+[node name="Licht" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0.6, 0, -0.6, 0.8, 0, 3, 3)

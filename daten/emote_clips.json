@@ -1,0 +1,8 @@
+{
+	"clips": [
+		{"clips": ["geliehen/Hip_Hop_Dance", "mixamo/flair_2", "mixamo/breakdance_uprock", "mixamo/breakdance_uprock_var_1", "mixamo/Hip_Hop_Dancing"], "name": "Tanzen", "symbol": "tanzen"},
+		{"clip": "mixamo/Angry", "name": "Sad", "symbol": "posen"},
+		{"clip": "geliehen/Depressed_Full_Turn_Left", "name": "Fuck Off", "symbol": "winken"},
+		{"clip": "geliehen/Walking_Woman", "name": "Catwalk", "symbol": "posen"}
+	]
+}

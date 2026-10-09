@@ -1,6 +1,6 @@
 extends Control
 ## Emote-Rad: Taste halten, mit der Maus (oder den Pfeiltasten) ein Kuchenstück
-## wählen, loslassen — die Figur spielt es. Sechs Stücke wie im Entwurf:
+## wählen, loslassen — die Figur spielt es. Sechs Stücke:
 ## Winken, Tanzen, Jubel, Sitzen, Posen, Kotzen.
 ##
 ## Gezeichnet wird das Rad in _draw(), weil sechs Kuchenstücke mit Rand und
@@ -8,10 +8,10 @@ extends Control
 ## echte Knoten (scenes/ui/emote_rad.tscn).
 
 const Symbole := preload("res://scripts/ui/symbole.gd")
+const EmoteClips := preload("res://scripts/emote_clips.gd")
 
 ## Reihenfolge = im Uhrzeigersinn ab oben. Muss zu Player.EMOTE_* passen.
-const STUECKE := [
-	{"emote": 1, "symbol": "tanzen", "text": "EMOTE_TANZEN"},
+const BASIS := [
 	{"emote": 4, "symbol": "jubel", "text": "EMOTE_JUBEL"},
 	{"emote": 6, "symbol": "sitzen", "text": "EMOTE_SITZEN"},
 	{"emote": 5, "symbol": "posen", "text": "EMOTE_POSEN"},
@@ -28,6 +28,9 @@ const RAND := Color(0.58, 0.42, 0.24, 0.85)
 const STUECK_AUS := Color(0.08, 0.07, 0.06, 0.92)
 const STUECK_AN := Color(0.28, 0.21, 0.09, 0.96)
 
+## Grundstücke plus die in der Animationen-Ansicht ausgesuchten Clips (daten/emote_clips.json)
+var STUECKE: Array = BASIS.duplicate()
+
 signal gewaehlt(emote: int)
 
 var _offen := false
@@ -39,12 +42,21 @@ var _wahl := 0
 func _ready() -> void:
 	visible = false
 	set_process_input(false)
+	_stuecke_laden()
 	_bauen()
+
+func _stuecke_laden() -> void:
+	STUECKE = BASIS.duplicate()
+	var clips := EmoteClips.laden()
+	for i in clips.size():
+		var c: Dictionary = clips[i]
+		STUECKE.append({"emote": EmoteClips.nummer(i), "symbol": str(c.get("symbol", "tanzen")), "text": str(c.get("name", c.get("clip", "?")))})
 
 ## Symbole und Beschriftungen als echte Knoten — je Stück ein VBox mit Bild
 ## und Text, auf dem Kreis verteilt.
 func _bauen() -> void:
 	for kind in _symbole.get_children():
+		_symbole.remove_child(kind)
 		kind.queue_free()
 	for i in STUECKE.size():
 		var d: Dictionary = STUECKE[i]
@@ -73,6 +85,9 @@ func oeffnen() -> void:
 	_offen = true
 	visible = true
 	_wahl = 0
+	# Ausgesuchte Clips jedes Mal neu lesen: Änderungen aus der Animationen-Ansicht gelten sofort
+	_stuecke_laden()
+	_bauen()
 	_symbole_setzen()
 	set_process_input(true)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

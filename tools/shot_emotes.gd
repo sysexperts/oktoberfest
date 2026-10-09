@@ -29,11 +29,18 @@ class Lauf extends Node:
 		if rad:
 			rad.schliessen(true)
 		await _warten(0.5)
-		for e in [[1, "tanzen"], [4, "jubel"], [6, "sitzen"], [5, "posen"], [2, "kotzen"], [3, "winken"]]:
+		for e in [[1, "tanzen"], [4, "jubel"], [6, "sitzen"], [5, "posen"], [2, "kotzen"], [3, "winken"], [100, "tanzen_a"], [100, "tanzen_b"], [100, "tanzen_c"], [110, "sad"], [120, "fuckoff"], [130, "catwalk"]]:
 			sp._emote_starten(int(e[0]))
 			await _warten(2.2)
 			get_viewport().get_texture().get_image().save_png(dir + "/emote_%s.png" % e[1])
 			sp.emote_wahl = 0
 			sp._emote_until = 0.0
 			await _warten(1.5)
+		# Mittelfinger von vorn, so wie ihn Mitspieler sehen
+		sp._emote_starten(7)
+		await _warten(1.5)
+		# Figur zur Kamera drehen: so sehen es die Mitspieler
+		sp._model.rotation.y += PI
+		await _warten(0.5)
+		get_viewport().get_texture().get_image().save_png(dir + "/emote_mittelfinger_vorn.png")
 		get_tree().quit()

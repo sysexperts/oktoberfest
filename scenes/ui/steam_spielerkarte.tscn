@@ -202,6 +202,7 @@ theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="FigurZeile" type="HBoxContainer" parent="Spieler"]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1

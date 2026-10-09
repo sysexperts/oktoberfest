@@ -33,7 +33,7 @@ extends Control
 const HAUPTMENUE := "res://scenes/ui/hauptmenue.tscn"
 const DOWNLOAD_SEITE := "https://survival.vapur-it.de/"
 const EINSTELLUNGEN := "user://einstellungen.cfg"
-const RENDERER := ["forward_plus", "gl_compatibility"]
+const RENDERER := ["forward_plus"]   # Leistungs-Darstellung ist aus den Einstellungen entfernt (sah unheimlich aus)
 ## Wird beim Neustart mitgegeben — verhindert eine Endlosschleife.
 const NEUSTART_MARKE := "--neu-gestartet"
 ## Welche Programm-Generation dieses Paket mindestens braucht.

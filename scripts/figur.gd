@@ -500,7 +500,7 @@ func _zufaellig_aus(liste: PackedStringArray, tempo: float) -> bool:
 	return true
 
 ## Animationen, die nur Männer bekommen (Frauen im Dirndl: der Rock macht sie nicht mit)
-const NUR_MAENNER := ["mixamo/flair_2"]
+const NUR_MAENNER := []   # flair_2 geht jetzt auch bei Frauen
 
 ## Eine beliebige Animation abspielen (z. B. "mixamo/Sitting_Drinking"). Gibt false zurück, wenn es sie nicht gibt.
 ## Dauerschleifen starten an einer zufälligen Stelle, einmalige Bewegungen am Anfang.
@@ -593,6 +593,13 @@ const KNOCHEN_NAMEN := {
 	"oberschenkel_r": ["RightUpLeg", "mixamorig_RightUpLeg"],
 	"unterschenkel_l": ["LeftLeg", "mixamorig_LeftLeg"],
 	"unterschenkel_r": ["RightLeg", "mixamorig_RightLeg"],
+	# Fingerknochen (nur der neue Standardkörper hat welche; bei den alten Rigs
+	# fehlen sie, dann bleibt die Hand eine Faust ohne Finger)
+	"zeige1_r": ["RightHandIndex1"], "zeige2_r": ["RightHandIndex2"],
+	"mittel1_r": ["RightHandMiddle1"], "mittel2_r": ["RightHandMiddle2"],
+	"ring1_r": ["RightHandRing1"], "ring2_r": ["RightHandRing2"],
+	"klein1_r": ["RightHandPinky1"], "klein2_r": ["RightHandPinky2"],
+	"daumen1_r": ["RightHandThumb1"], "daumen2_r": ["RightHandThumb2"],
 }
 const KOTZ_KNOCHEN := ["wirbel_unten", "wirbel_mitte", "wirbel_oben", "nacken", "kopf",
 	"arm_l", "arm_r", "unterarm_l", "unterarm_r",
@@ -649,7 +656,52 @@ func _knochen(rolle: String, winkel: float, achse := Vector3.RIGHT) -> void:
 ## Gelöst wird alles zusammen mit kotz_pose_loesen().
 const EMOTE_KNOCHEN := ["arm_l", "arm_r", "unterarm_l", "unterarm_r",
 	"wirbel_oben", "nacken", "kopf", "oberschenkel_l", "oberschenkel_r",
-	"unterschenkel_l", "unterschenkel_r"]
+	"unterschenkel_l", "unterschenkel_r", "hand_r"]
+const FINGER_KNOCHEN := ["zeige1_r", "zeige2_r", "mittel1_r", "mittel2_r", "ring1_r", "ring2_r",
+	"klein1_r", "klein2_r", "daumen1_r", "daumen2_r"]
+
+## Mittelfinger. Die Winkel stehen in daten/mittelfinger_pose.json und werden mit
+## tools/pose_editor.tscn eingestellt: "pose" = Ruhe, "stoss" = Höhepunkt des Stoßes nach vorn.
+## Jeder Eintrag ist ein Knochen (Rolle aus KNOCHEN_NAMEN) mit Euler-Winkeln (XYZ) relativ zur Ruhelage.
+const MF_DATEI := "res://daten/mittelfinger_pose.json"
+static var _mf_daten := {}
+
+static func mittelfinger_daten(neu_laden := false) -> Dictionary:
+	if _mf_daten.is_empty() or neu_laden:
+		var f := FileAccess.open(MF_DATEI, FileAccess.READ)
+		_mf_daten = JSON.parse_string(f.get_as_text()) if f else {}
+	return _mf_daten
+
+func mittelfinger_pose(t: float) -> void:
+	if skelett == null:
+		return
+	# Nur der Standardkörper hat Fingerknochen und passende Armachsen; alte Rigs (Wilhelm, Lisa, Alex)
+	# bekommen einen erhobenen Arm
+	if _knochen_index("mittel1_r") < 0:
+		if anim:
+			anim.active = false
+		_richte("arm_r", "unterarm_r", Vector3(-0.85, -0.2, 0.55))
+		_richte("unterarm_r", "hand_r", Vector3(-0.2, 0.85, 0.45))
+		return
+	pose_aus_daten(mittelfinger_daten(), absf(sin(t * 4.5)))
+
+## Stellt die Knochen aus {"pose": {Rolle: [x, y, z]}, "stoss": {...}, "handskala": 1.2};
+## k blendet von "pose" (0) nach "stoss" (1).
+func pose_aus_daten(daten: Dictionary, k := 0.0) -> void:
+	if skelett == null or daten.is_empty():
+		return
+	if anim:
+		anim.active = false
+	var a: Dictionary = daten.get("pose", {})
+	var b: Dictionary = daten.get("stoss", a)
+	for rolle: String in a:
+		var ea: Array = a[rolle]
+		var eb: Array = b.get(rolle, ea)
+		_knochen_euler(rolle, Vector3(lerpf(ea[0], eb[0], k), lerpf(ea[1], eb[1], k), lerpf(ea[2], eb[2], k)))
+	# Die Hand ist beim Standardkörper winzig — für die Geste etwas größer, damit man sie von weitem erkennt
+	var h := _knochen_index("hand_r")
+	if h >= 0:
+		skelett.set_bone_pose_scale(h, Vector3.ONE * float(daten.get("handskala", 1.0)))
 
 func winke_pose(t: float) -> void:
 	if skelett == null:
@@ -666,7 +718,7 @@ func winke_pose(t: float) -> void:
 ## Knochen so drehen, dass die Strecke zu seinem Kindknochen in `richtung` zeigt
 ## (Figur-Raum). Die Winkel jedes Modells sind verschieden — Zielrichtungen
 ## sehen auf jedem Rig gleich aus. Eltern müssen vorher gerichtet sein.
-func _richte(rolle: String, kind_rolle: String, richtung: Vector3) -> void:
+func _richte(rolle: String, kind_rolle: String, richtung: Vector3, roll := 0.0) -> void:
 	var b := _knochen_index(rolle)
 	var c := _knochen_index(kind_rolle)
 	if b < 0 or c < 0:
@@ -679,7 +731,8 @@ func _richte(rolle: String, kind_rolle: String, richtung: Vector3) -> void:
 	var eltern := skelett.get_bone_parent(b)
 	var eltern_rot := Quaternion.IDENTITY if eltern < 0 else skelett.get_bone_global_pose(eltern).basis.orthonormalized().get_rotation_quaternion()
 	var jetzt := skelett.get_bone_global_pose(b).basis.orthonormalized().get_rotation_quaternion()
-	skelett.set_bone_pose_rotation(b, eltern_rot.inverse() * drehung * jetzt)
+	var verdreht := Quaternion(soll.normalized(), roll) if roll != 0.0 else Quaternion.IDENTITY
+	skelett.set_bone_pose_rotation(b, eltern_rot.inverse() * verdreht * drehung * jetzt)
 
 func _knochen_index(rolle: String) -> int:
 	for name: String in KNOCHEN_NAMEN.get(rolle, [rolle]):
@@ -774,8 +827,21 @@ func pose_loesen() -> void:
 	for name: String in EMOTE_KNOCHEN:
 		_knochen(name, 0.0, Vector3.FORWARD)
 		_knochen(name, 0.0)
+	for name: String in FINGER_KNOCHEN:
+		_knochen(name, 0.0)
+	var hand := _knochen_index("hand_r")
+	if hand >= 0:
+		skelett.set_bone_pose_scale(hand, Vector3.ONE)
 	if anim:
 		anim.active = not ferne
+
+## Knochen um alle drei Achsen drehen (Euler, von der Ruhelage aus).
+func _knochen_euler(rolle: String, euler: Vector3) -> void:
+	var b := _knochen_index(rolle)
+	if b < 0:
+		return
+	var rest := skelett.get_bone_rest(b).basis.get_rotation_quaternion()
+	skelett.set_bone_pose_rotation(b, rest * Quaternion(Basis.from_euler(euler, EULER_ORDER_XYZ)))
 
 ## Knochen um zwei Achsen drehen: vor/zurück (RIGHT) und seitwärts (FORWARD).
 ## Zwei einzelne _knochen-Aufrufe gehen nicht — der zweite überschreibt den
