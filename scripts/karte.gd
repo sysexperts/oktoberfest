@@ -231,7 +231,37 @@ static func _mit_wohnwagen(liste: Array) -> Array:
 		neu.append(HUBER_PLATZ.duplicate())
 	return neu
 
+## Das Casino hängt hinten an Hubers Zelt (scenes/casino.tscn, im Koordinatensystem des Zelts gemessen: 8 bis 21 m
+## hinter dem Zelt, 6,7 m nach beiden Seiten). Ältere Karten haben dort Buden und Bäume stehen — mitten im Casino.
+## Die fliegen beim Laden raus. (Das Zelt ist in der Karte um 90° gedreht gespeichert, deshalb rechnet es im Zeltsystem.)
+const CASINO_HINTEN := Vector2(-24.5, -7.0)
+const CASINO_BREIT := 9.0
+
+static func _ohne_casino_platz(liste: Array) -> Array:
+	var huber: Dictionary = {}
+	for e in liste:
+		if e is Dictionary and str(e.get("p", "")) == HUBER_ZELT:
+			huber = e
+			break
+	if huber.is_empty():
+		return liste
+	var hx := float(huber.get("x", 0.0))
+	var hz := float(huber.get("z", 0.0))
+	var r := float(huber.get("r", 0.0))
+	var neu: Array = []
+	for e in liste:
+		if e is Dictionary and str(e.get("p", "")) != HUBER_ZELT:
+			var dx := float(e.get("x", 0.0)) - hx
+			var dz := float(e.get("z", 0.0)) - hz
+			var lx := dx * cos(r) - dz * sin(r)
+			var lz := dx * sin(r) + dz * cos(r)
+			if lz >= CASINO_HINTEN.x and lz <= CASINO_HINTEN.y and absf(lx) <= CASINO_BREIT:
+				continue
+		neu.append(e)
+	return neu
+
 func _alles_setzen(liste: Array) -> void:
+	liste = _ohne_casino_platz(liste)
 	for c in get_children():
 		c.name = "Weg_" + c.name
 		c.queue_free()

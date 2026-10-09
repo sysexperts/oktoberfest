@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" path="res://assets/models/roulette.glb" id="2_roulette"]
 [ext_resource type="Script" path="res://scripts/kasino/kasino_ding.gd" id="3_kd"]
 [ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="4_figur"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_casino"]
+[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="font_casino"]
 [ext_resource type="PackedScene" path="res://assets/models/kartentisch.glb" id="5_karten"]
 [ext_resource type="PackedScene" path="res://scenes/kasino/slot.tscn" id="6_slot"]
 
@@ -172,6 +174,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.95, -19.2)
 
 [node name="Mesh" type="MeshInstance3D" parent="Schild"]
 mesh = SubResource("MSchild")
+
+[node name="Beschriftung" type="Label3D" parent="Schild"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -0.04)
+pixel_size = 0.0045
+modulate = Color(0.16, 0.07, 0.03, 1)
+outline_size = 0
+text = "WORLD_CASINO"
+font = ExtResource("font_casino")
+font_size = 72
+script = ExtResource("wt_casino")
+schluessel = "WORLD_CASINO"
 
 [node name="Sperre" type="StaticBody3D" parent="." groups=["casino_sperre"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -19)
