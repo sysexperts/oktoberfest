@@ -15,7 +15,7 @@ Legende: [ ] offen · [x] passt · [~] korrigiert
 - [x] 6 Boden: Pfützen, Kotze, Dreck liegen auf dem Boden, nicht darin (v403); Müllsack werfen (v392/393)  ✔ Test grün: test_fleckabstand, test_muellwurf
 - [x] 7 Mail-App: Quest-Angebot „Annehmen/Ablehnen“ beschriftet (v407), Quest-Angebote als Meldung (v406)  ✔ Test grün: test_story
 - [x] 8 Kapitel 3 „Gewinn Konrads Wette“: Konrad ansprechen, Wette gilt automatisch, verlieren → Horst-Mail, am nächsten Tag neue Wette, gewinnen → nächste Quest (v407)  ✔ Test grün: test_wette (neu), test_kapitel3
-- [ ] 9 Konrads Zelt: volles Zelt, Kochtresen mit mehreren Portionen (auflegen, gar, verbrennt nach 20 s, Mülleimer), neue Grillmodelle (v406)
+- [x] 9 Konrads Zelt: volles Zelt, Kochtresen mit mehreren Portionen (auflegen, gar, verbrennt nach 20 s, Mülleimer), neue Grillmodelle (v406)  ✔ test_kochtresen (neu): 4 Plätze, gar nach 8 s, verbrannt nach 20 s, Mülleimer; Konrads Zelt braucht laut Serdar keine Funktion, nur Optik (Bilder gezeigt)
 - [x] 10 Gefallen: Sau und Täter tragen wie Raufbold, Gehege auf freiem Platz; Sabotage lockt Konrads Gäste (v406)  ✔ Test grün: test_gefallen
 - [ ] 11 Aufheben-Töne leiser (v406)
 
