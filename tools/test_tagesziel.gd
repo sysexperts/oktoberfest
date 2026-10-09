@@ -25,7 +25,7 @@ class Lauf extends Node:
 		await _warten(3.0)
 		var dir := OS.get_environment("SHOT_DIR")
 		_check("Neues Spiel: keine Rate bezahlt", gm._bank_bezahlt == 0, str(gm._bank_bezahlt))
-		_check("Nächste Rate Tag 4", gm.bank_naechste() == [4, 1500], str(gm.bank_naechste()))
+		_check("keine feste Bankrate mehr (Schulden zahlt man selbst in der Bank-App)", gm.bank_naechste().is_empty(), str(gm.bank_naechste()))
 		# Während des Tutorials kein Tagesziel
 		gm._tagesziel_waehlen()
 		_check("im Tutorial kein Ziel", gm._tagesziel.is_empty(), str(gm._tagesziel))
@@ -40,16 +40,16 @@ class Lauf extends Node:
 		_check("Belohnung ausgezahlt", Game.money == geld + 260, "%d → %d" % [geld, Game.money])
 		geld = Game.money
 		gm._bank_abbuchen()
-		_check("Rate Tag 4 abgebucht", Game.money == geld - 1500 and gm._bank_bezahlt == 1, "%d, bezahlt %d" % [Game.money, gm._bank_bezahlt])
+		_check("Tag 4: nichts wird automatisch abgebucht", Game.money == geld and gm._bank_bezahlt == 0, "%d, bezahlt %d" % [Game.money, gm._bank_bezahlt])
 		gm._bank_abbuchen()
-		_check("nicht doppelt", gm._bank_bezahlt == 1, "")
+		_check("auch danach keine Abbuchung", gm._bank_bezahlt == 0, "")
 		gm._tagesziel = {"typ": "bedienen", "ziel": 43, "lohn": 260}
 		gm._served = 12
 		gm._broadcast_meta()
 		await _warten(1.5)
 		_bild(dir + "/tagesziel_karte.png")
 		var zeilen: Array[String] = gm.chef_tageszeilen(false, gm._hud._zustand)
-		_check("Chef sagt Ziel + Bank", zeilen.size() == 2 and zeilen[0].contains("43") and zeilen[1].contains("Tag 8"), str(zeilen))
+		_check("Chef sagt das Tagesziel (Gäste) und eine Schuldenzeile", zeilen.size() == 2 and zeilen[0].contains("43") and zeilen[1] != "", str(zeilen))
 		# Gespräch am Büro
 		var chef = gm.get_node("Kirmes/Festleiter")
 		await _warten(1.0)

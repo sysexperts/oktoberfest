@@ -21,7 +21,7 @@ Legende: [ ] offen · [x] passt · [~] korrigiert
 
 ## Teil 2 · Der Rest vom Plan (aus PLAN_STORY.md, Abschnitt in Klammern)
 - [x] 12 Kernschicht: Krug füllen, zapfen, servieren, kassieren, Beschwerden, Klo-Warteschlange, Gäste in Gruppen und Wunschlieder (17)  ✔ Test grün: test_zapfsperre, test_krugstapel, test_gaeste
-- [ ] 13 Tagesablauf: Tagesziel, Bankrate, Bilanz, Bierpreis, Kalender, Wetter und Amt, Festkurier/Zeitung, Social Media (2, 29.3)  ⚠ test_tagesziel veraltet (feste Bankrate entfällt), Kalender/Zeitung ohne Urteil → im Fenster ansehen
+- [x] 13 Tagesablauf: Tagesziel, Bankrate, Bilanz, Bierpreis, Kalender, Wetter und Amt, Festkurier/Zeitung, Social Media (2, 29.3)  ✔ test_tagesziel (angepasst, grün: Tagesziel, Belohnung, Chef sagt Ziel; keine feste Bankrate mehr), Bilder von Bank, Bilanz, Bierpreis, Kalender, Wetter/Amt, Social, Festkurier gezeigt
 - [x] 14 Kapitel 1: Eröffnung mit Logo und Kamerafahrt, Brief als Zeitungsblatt, Tutorial bis Feierabend (9)  ✔ Test grün: test_tutorial, test_story
 - [x] 15 Kapitel 2: Hauptquests, Sepps Schulden in der Bank-App, Nebenquests mit Frist, Krankmeldung, Konrads Angebot, Horsts Erinnerung 1 (10)  ✔ Test grün: test_kapitel2
 - [x] 16 Personal und Stammgäste: Einstellen, Lohn, Akademie, Bräumeister Gerhard, Security als Personal (29.4, 10)  ✔ Test grün: test_personal, test_braeumeister, test_stamm, test_abwerben
