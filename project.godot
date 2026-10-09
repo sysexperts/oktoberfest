@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Sloptoberfest"
 config/description="Fuehre dein eigenes Festzelt auf dem Sloptoberfest — allein oder mit Freunden."
-config/version="410"
+config/version="411"
 run/main_scene="res://scenes/boot.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://assets/ui/icon_256.png"
@@ -25,6 +25,7 @@ Net="*res://autoload/net.gd"
 Game="*res://autoload/game.gd"
 SteamDienst="*res://autoload/steam_dienst.gd"
 Klang="*res://autoload/klang.gd"
+Leistungsanzeige="*res://autoload/leistungsanzeige.tscn"
 
 [display]
 
