@@ -54,6 +54,13 @@ var _steam: Object
 
 func _ready() -> void:
 	app_id = int(ProjectSettings.get_setting("steam/app_id", TEST_APP_ID))
+	# Spacewar-Testversion: steht neben der exe eine steam_appid.txt (Inhalt 480), gilt diese App-ID statt der
+	# eigenen — sonst meldet sich das Spiel in Steam als "Sloptoberfest" statt als "Spacewar" an
+	var appid_datei := OS.get_executable_path().get_base_dir().path_join("steam_appid.txt")
+	if FileAccess.file_exists(appid_datei):
+		var aus_datei := FileAccess.get_file_as_string(appid_datei).strip_edges().to_int()
+		if aus_datei > 0:
+			app_id = aus_datei
 	if not soll_starten(OS.has_feature("steam"), OS.get_cmdline_user_args().has("--server"),
 			Engine.has_singleton("Steam")):
 		grund = "kein Steam-Build" if not OS.has_feature("steam") else "Steam-Bibliothek fehlt oder Server"
@@ -83,7 +90,7 @@ func starten() -> bool:
 	var status := int((antwort as Dictionary).get("status", -1)) if antwort is Dictionary else -1
 	if status != 0:
 		grund = str((antwort as Dictionary).get("verbal", "keine Antwort")) if antwort is Dictionary else "keine Antwort"
-		print("[Steam] nicht gestartet (%d): %s — das Spiel läuft ohne Steam weiter" % [status, grund])
+		print("[Steam] nicht gestartet (%d, App %d): %s — das Spiel läuft ohne Steam weiter" % [status, app_id, grund])
 		return false
 	aktiv = true
 	grund = ""

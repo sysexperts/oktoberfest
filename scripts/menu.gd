@@ -132,6 +132,9 @@ func _texte_aktualisieren() -> void:
 	if not SteamDienst.aktiv:
 		hinweis = "COOP_STEAM_OFFLINE" if OS.has_feature("steam") else "COOP_STEAM_ONLY"
 	%SteamHinweis.text = tr(hinweis)
+	# Steam-Version ohne laufendes Steam: den Grund dazuschreiben (Steam-Client nicht gestartet, DLL fehlt …)
+	if hinweis == "COOP_STEAM_OFFLINE" and SteamDienst.grund != "":
+		%SteamHinweis.text += "\n(%s · App %d)" % [SteamDienst.grund, SteamDienst.app_id]
 	var letzter := Net.letzter_slot()
 	_weiter.visible = letzter > 0
 	_weiter_info.visible = _weiter.visible
