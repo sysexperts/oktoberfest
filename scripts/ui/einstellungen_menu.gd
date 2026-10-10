@@ -145,6 +145,10 @@ func _texte() -> void:
 	_qualitaet.select(Einstellungen.grafik)
 	_aufloesung_wert.text = "%d %%" % roundi(Einstellungen.aufloesung * 100.0)
 	_anzeige_listen()
+	# Lautstärke-Beschriftungen und Tastenliste (standen früher mit in _renderer_hinweis)
+	for bus: String in _regler:
+		(_regler[bus][1] as Label).text = "%d %%" % roundi(float(Einstellungen.lautstaerke[bus]) * 100.0)
+	_tasten_aufbauen()
 
 ## Anzeigemodus, Fenstergröße, Bildschirm und Bildrate beschriften und wählen.
 func _anzeige_listen() -> void:

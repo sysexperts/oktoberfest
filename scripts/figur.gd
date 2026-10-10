@@ -339,10 +339,16 @@ func pose_auffrischen() -> void:
 	if idle_ist_standbild and anim and anim.current_animation == anim_gehen:
 		anim.seek(standbild_zeit, true)
 
+## Frauen (Creator, Geschlecht "w") laufen standardmäßig im Catwalk-Gang
+const CATWALK := "geliehen/Walking_Woman"
+
 func gehen(tempo := 1.0) -> void:
 	_haltung_an(true, aufrichten_gehen)
-	if hat(anim_gehen):
-		_spiele(anim_gehen, tempo)
+	var clip := anim_gehen
+	if str(get_meta("geschlecht", "m")) == "w" and hat(CATWALK):
+		clip = CATWALK
+	if hat(clip):
+		_spiele(clip, tempo)
 
 ## Torkeln statt gehen — nur Figuren mit anim_betrunken können das.
 func kann_torkeln() -> bool:

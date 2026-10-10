@@ -850,6 +850,11 @@ func in_intermission() -> bool:
 ## Feierabend und morgens, solange das Zelt noch nicht eröffnet ist. Nur bei
 ## offenem Zelt, wenn Gäste kommen, ist das Büro zu. Schlafen geht weiter nur
 ## nach Feierabend (in_intermission).
+## Der Shop am Computer (Zelt, Lizenzen, Künstler, Ware, Deko) ist immer offen — auch während der Schicht.
+## Personal, Umbauen und Aufbau bleiben an buero_offen() gebunden.
+func shop_offen() -> bool:
+	return true
+
 func buero_offen() -> bool:
 	return _phase == Phase.INTERMISSION or (_phase == Phase.SHIFT and not _zelt_offen)
 
@@ -1814,7 +1819,7 @@ func _apply_tent() -> void:
 ## Zelt mieten (Stufe 1) — der Name kommt aus dem Mietdialog (scenes/ui/zelt_mieten.tscn).
 @rpc("any_peer", "reliable", "call_local")
 func net_book_tent(zelt_name := "") -> void:
-	if not multiplayer.is_server() or not buero_offen() or _tent_stage != 0:
+	if not multiplayer.is_server() or not shop_offen() or _tent_stage != 0:
 		return
 	if not _afford(TENT_BOOK_COST):
 		_fehler("MSG_NO_MONEY", ["OFFER_TENT_RENT", _eur(TENT_BOOK_COST)])
@@ -1865,7 +1870,7 @@ func _zeltname_anzeigen() -> void:
 ## Kiosk: Tisch kaufen/platzieren (limit je Zeltstufe).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_table() -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if _tent_stage == 0:
 		_fehler("MSG_NEED_TENT")
@@ -1894,7 +1899,7 @@ func net_buy_table() -> void:
 ## Kiosk: Werbung — anında popülerlik enjeksiyonu (her seviye daha pahalı).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_marketing() -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -1913,7 +1918,7 @@ func net_buy_marketing() -> void:
 ## Kiosk: Deko — kalıcı gelir çarpanı.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_deko() -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -1932,7 +1937,7 @@ func net_buy_deko() -> void:
 ## Festbüro: Toilette einbauen — danach pinkelt niemand mehr in die Ecke.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_toilet() -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -2302,7 +2307,7 @@ func net_skip_tutorial() -> void:
 ## Festbüro: Künstler für die nächste Schicht buchen.
 @rpc("any_peer", "reliable", "call_local")
 func net_book_artist(tier: int) -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if not ARTIST_COST.has(tier):
 		return
@@ -2323,16 +2328,21 @@ func net_book_artist(tier: int) -> void:
 	_ever_artist = true
 	_popularity = minf(100.0, _popularity + float(ARTIST_POP[tier]))
 	_melde("MSG_ACT_BOOKED", ["ACT_%d" % tier, int(ARTIST_POP[tier])], 2)
+	if _phase == Phase.SHIFT:
+		_clear_artists()
+		_spawn_artists()
 	_broadcast_meta()
 
 ## Band kündigen (keine Erstattung), danach kann eine bessere gebucht werden.
 @rpc("any_peer", "reliable", "call_local")
 func net_cancel_artist() -> void:
-	if not multiplayer.is_server() or not buero_offen() or _artist_tier <= 0:
+	if not multiplayer.is_server() or not shop_offen() or _artist_tier <= 0:
 		return
 	_artist_tier = 0
 	_artist_tage = 0
 	_melde("MSG_ACT_CANCELLED", [], 2)
+	if _phase == Phase.SHIFT:
+		_clear_artists()
 	_broadcast_meta()
 
 ## Künstler auf die Bühne stellen (Schichtbeginn).
@@ -4017,7 +4027,7 @@ func _net_staff(ids: PackedInt32Array, sx: PackedFloat32Array, sy: PackedFloat32
 ## Festbüro: Lizenz kaufen (weizen/radler/brezn/sosis).
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_license(key: String) -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if not LIC_COST.has(key):
 		return
@@ -4050,7 +4060,7 @@ func net_buy_license(key: String) -> void:
 ## Kiosk: Zelt upgraden (mehr Tische / Kapazität).
 @rpc("any_peer", "reliable", "call_local")
 func net_upgrade_tent() -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if _kredit_sperrt():
 		return
@@ -4490,7 +4500,7 @@ func _haelt_lager_stand() -> Dictionary:
 
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_lagerregal() -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if _tent_stage == 0:
 		_fehler("MSG_NEED_TENT")
@@ -4623,7 +4633,7 @@ func _update_held_tables() -> void:
 ## Büro steht weit weg, dort vor dem Käufer wäre er fehl am Platz.
 @rpc("any_peer", "reliable", "call_local")
 func net_buy_einrichtung(art: String) -> void:
-	if not multiplayer.is_server() or not buero_offen():
+	if not multiplayer.is_server() or not shop_offen():
 		return
 	if not Katalog.ARTEN.has(art):
 		return

@@ -213,7 +213,7 @@ func app_oeffnen(name: String) -> void:
 		return
 	if not APPS.has(name):
 		return
-	if name in BUERO_APPS and not _buero_offen():
+	if name in BUERO_APPS and name != "shop" and not _buero_offen():
 		return
 	var gemeinsam := name in BUERO_APPS
 	# Festbüro-Apps teilen ein Fenster: ist es schon offen, nur auf den Reiter wechseln
@@ -433,8 +433,10 @@ func _aktualisieren() -> void:
 		(get_node("%Icon" + app) as Button).visible = frei
 		(get_node("%Start" + app) as Button).visible = frei
 	for n: String in ["Shop", "Personal"]:
-		(get_node("%Icon" + n) as Button).disabled = not offen
-		(get_node("%Start" + n) as Button).disabled = not offen
+		# Der Shop ist immer offen (auch in der Schicht), Personal nur bei geschlossenem Zelt
+		var gesperrt := not offen and n != "Shop"
+		(get_node("%Icon" + n) as Button).disabled = gesperrt
+		(get_node("%Start" + n) as Button).disabled = gesperrt
 	var n: int = int(_story.ungelesen()) if _story else 0
 	%Badge.visible = n > 0
 	%Badge.text = str(n)

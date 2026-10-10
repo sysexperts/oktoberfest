@@ -20,6 +20,19 @@ const TRAG_BREMSE := 0.12
 ## Absprunggeschwindigkeit (Schwerkraft 20 → gut 0,9 m hoch)
 const SPRUNG_TEMPO := 6.0
 var _war_in_luft := false
+## Lauf-Varianten (Mixamo): rückwärts, Treppe, Sprung, betrunken — erkannt aus der Bewegung, damit sie auch
+## bei Mitspielern stimmen (die kennen nur Position und Blickrichtung)
+var _steig_glatt := 0.0
+var _dreh_glatt := 0.0
+var _yaw_vorher := 0.0
+var _betrunken_netz := false
+const LAUF_CLIPS := {
+	"rueck": "mixamo/Walking_Backwards", "rueck_dreh": "mixamo/backward_walking_turn",
+	"rennen_rueck": "mixamo/run_backward_arc_right", "treppe": "mixamo/Walking_Up_The_Stairs",
+	"sprung": "mixamo/Running_Jump",
+	"bt_rennen": "mixamo/drunk_run_forward", "bt_rueck": "mixamo/drunk_walk_backwards",
+	"bt_dreh": "mixamo/drunk_walking_turn",
+}
 
 # 1 Helles, 2 Weizen, 3 Radler
 const BEER_COLORS := {0: Color(0.95, 0.65, 0.05), 1: Color(0.95, 0.75, 0.2), 2: Color(0.85, 0.5, 0.15), 3: Color(0.85, 0.85, 0.45), 4: Color(0.75, 0.35, 0.08), 5: Color(0.7, 0.88, 1.0)}
@@ -396,7 +409,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			emote = 0
 		_kamera_aussen(emote != 0 or _schulterkamera, delta)
-		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume, PackedByteArray(extra_kruege))
+		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume | (256 if _rausch_stufe >= 1 else 0), PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
 		global_position = global_position.lerp(_net_pos, t)
@@ -461,6 +474,10 @@ func _figur_setzen(nr: int) -> void:
 	_fass_anheften()
 	_model.visible = not _is_local
 	_cur_anim = ""
+
+## Angetrunken? Selbst aus dem Pegel, bei Mitspielern aus dem Netz-Bit
+func _ist_betrunken() -> bool:
+	return _rausch_stufe >= 1 if _is_local else _betrunken_netz
 
 func _update_animation(delta: float) -> void:
 	var figur := _model as Figur
@@ -553,24 +570,55 @@ func _update_animation(delta: float) -> void:
 		_cur_anim = ""
 	_emote_anim_t = 0.0
 	var spd: float
+	var bew := Vector3.ZERO   # Bewegung in der Ebene
+	var vy := 0.0
 	if _is_local:
 		spd = Vector2(velocity.x, velocity.z).length()
+		bew = Vector3(velocity.x, 0.0, velocity.z)
+		vy = velocity.y
 	else:
-		spd = (global_position - _last_anim_pos).length() / maxf(delta, 0.0001)
+		var d := (global_position - _last_anim_pos) / maxf(delta, 0.0001)
+		spd = d.length()
+		bew = Vector3(d.x, 0.0, d.z)
+		vy = d.y
 	_last_anim_pos = global_position
+	_steig_glatt = lerpf(_steig_glatt, vy, clampf(delta * 6.0, 0.0, 1.0))
+	_dreh_glatt = lerpf(_dreh_glatt, absf(angle_difference(_yaw_vorher, rotation.y)) / maxf(delta, 0.0001), clampf(delta * 5.0, 0.0, 1.0))
+	_yaw_vorher = rotation.y
+	var bew_laenge := bew.length()
+	var rueck := bew_laenge > 0.4 and bew.normalized().dot(-global_basis.z) < -0.4
+	var dreht := _dreh_glatt > 1.4
+	var luft := (not is_on_floor()) if _is_local else absf(vy) > 3.0
+	var betrunken := _ist_betrunken()
 	var want := "stehen"
-	if spd > 5.5:
-		want = "rennen"
+	if luft and bew_laenge > 3.5 and not betrunken:
+		want = "sprung"
+	elif spd > 5.5:
+		want = "rennen_rueck" if rueck else ("bt_rennen" if betrunken else "rennen")
+		if rueck and betrunken:
+			want = "bt_rueck"
 	elif spd > 0.4:
 		want = "gehen"
+		if rueck:
+			want = "bt_rueck" if betrunken else ("rueck_dreh" if dreht else "rueck")
+		elif _steig_glatt > 0.9 and bew_laenge > 0.6 and not luft:
+			want = "treppe"
+		elif betrunken:
+			want = "bt_dreh" if dreht else "bt_gehen"
 	if want != _cur_anim:
 		match want:
 			"rennen":
 				figur.rennen()
 			"gehen":
 				figur.gehen()
-			_:
+			"bt_gehen":
+				figur.torkeln()
+			"stehen":
 				figur.stehen()
+			_:
+				var clip: String = LAUF_CLIPS.get(want, "")
+				if clip == "" or not figur.abspielen(clip):
+					figur.gehen()
 		_cur_anim = want
 	if want == "stehen":
 		figur.pose_auffrischen()
@@ -590,7 +638,9 @@ func _push_state(pos: Vector3, yaw: float, cstate: int, cfill: float, ctype: int
 	for sorte in extra:
 		extra_kruege.append(int(sorte))
 	emote = em
-	costume = cost
+	# Bit 8 = angetrunken (für Torkeln und die Betrunken-Clips bei Mitspielern)
+	_betrunken_netz = (cost & 256) != 0
+	costume = cost & 255
 	_apply_costume()
 
 func _apply_costume() -> void:
