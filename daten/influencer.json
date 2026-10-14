@@ -27,7 +27,8 @@
 			"hut_farbe": "0c0c0e",
 			"brille_farbe": "0a0a0c",
 			"tattoo_koerper": "sloptana",
-			"brille_skala": 0.72
+			"brille_skala": 0.72,
+			"brille_vor": 0.045
 		}
 	}
 }

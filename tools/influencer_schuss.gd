@@ -25,6 +25,7 @@ func _ready() -> void:
 	await _bild(id, "gesicht", Vector3(0.0, 1.38, 0.75), Vector3(0, 1.36, 0))
 	await _bild(id, "brust", Vector3(0.0, 1.0, 0.9), Vector3(0, 0.98, 0))
 	await _bild(id, "arm", Vector3(0.75, 0.95, 0.75), Vector3(0.3, 0.9, 0))
+	await _bild(id, "brille_seite", Vector3(1.0, 1.32, 0.35), Vector3(0, 1.30, 0.15))
 	await _bild(id, "seite", Vector3(1.0, 1.4, 0.2), Vector3(0, 1.35, 0))
 	get_tree().quit()
 

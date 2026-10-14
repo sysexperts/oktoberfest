@@ -170,6 +170,8 @@ static func pruefen(roh: Dictionary) -> Dictionary:
 			# auch die versteckten Stücke (Radlerhose, Träger der Influencer) sind gültig, nur der Creator zeigt sie nicht
 			if _alle_liste(art, "m").any(func(e: Dictionary) -> bool: return e["id"] == id):
 				l[art] = id
+	if roh.has("brille_vor"):
+		l["brille_vor"] = clampf(float(roh["brille_vor"]), -0.05, 0.12)
 	if roh.has("brille_skala"):
 		l["brille_skala"] = clampf(float(roh["brille_skala"]), 0.5, 1.5)
 	var tk := str(roh.get("tattoo_koerper", "ohne"))
@@ -259,9 +261,10 @@ static func bauen(l: Dictionary) -> Figur:
 		f.zubehoer_extra[hat_nr] = Transform3D(Basis(), mitte) * t * Transform3D(Basis(), -mitte)
 	# Brille kleiner oder größer (Influencer): um die Augenmitte skalieren
 	var b_skala := clampf(float(l.get("brille_skala", 1.0)), 0.5, 1.5)
-	if brille_nr >= 0 and not is_equal_approx(b_skala, 1.0):
+	var b_vor := clampf(float(l.get("brille_vor", 0.0)), -0.05, 0.12)
+	if brille_nr >= 0 and (not is_equal_approx(b_skala, 1.0) or b_vor != 0.0):
 		var augen := Vector3(0, 1.30, 0.12)
-		var tb := Transform3D(Basis.from_scale(Vector3(b_skala, b_skala, b_skala)), Vector3.ZERO)
+		var tb := Transform3D(Basis.from_scale(Vector3(b_skala, b_skala, b_skala)), Vector3(0, 0, b_vor))
 		f.zubehoer_extra[brille_nr] = Transform3D(Basis(), augen) * tb * Transform3D(Basis(), -augen)
 	return f
 
