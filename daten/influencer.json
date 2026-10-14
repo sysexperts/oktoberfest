@@ -39,15 +39,15 @@
 			"haut": "e6b494",
 			"augen": "gross",
 			"emotion": "froehlich",
-			"frisur": "kurz",
-			"haar": "7a5230",
-			"bart": "vollbart",
+			"frisur": "seitenscheitel",
+			"haar": "c47d44",
+			"bart": "stoppeln",
 			"hut": "ohne",
 			"brille": "ohne",
-			"hemd": "hemd_karo_kurz",
+			"hemd": "ohne",
 			"hemd_farbe": "0d0d10",
 			"hemd_muster": "0d0d10",
-			"jacke": "ohne",
+			"jacke": "jacke_tshirt",
 			"hose": "hose_kniebund",
 			"hose_farbe": "2d3f66",
 			"hose_muster": "2d3f66",
@@ -56,13 +56,15 @@
 			"schuhe_muster": "f2f2f0",
 			"influencer": true,
 			"frisur_extra": [
-				0.9,
-				0.5,
-				0.93,
-				0.075,
-				-0.02
+				1.0,
+				1.0,
+				1.0,
+				0.0,
+				0.0
 			],
-			"tattoo_koerper": "peaced_shirt"
+			"tattoo_koerper": "peaced_shirt",
+			"jacke_farbe": "0d0d10",
+			"jacke_muster": "0d0d10"
 		}
 	}
 }

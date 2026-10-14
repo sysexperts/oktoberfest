@@ -124,6 +124,10 @@ const FRISUREN := [
 	{"id": "dutt", "name": "CREATOR_FRISUR_DUTT", "szene": "res://scenes/creator/frisuren/dutt.tscn", "g": "w"},
 	{"id": "pferdeschwanz", "name": "CREATOR_FRISUR_PFERDESCHWANZ", "szene": "res://scenes/creator/frisuren/pferdeschwanz.tscn", "g": "w"},
 	{"id": "kurz", "name": "CREATOR_FRISUR_KURZ", "szene": "res://scenes/creator/frisuren/kurz.tscn", "g": "w"},
+	# Männerfrisuren (noch nicht im Creator, nur für Influencer): Tolle, Seitenscheitel, Kurzhaar
+	{"id": "tolle", "name": "CREATOR_FRISUR_TOLLE", "szene": "res://scenes/creator/frisuren/tolle.tscn", "g": "m", "versteckt": true},
+	{"id": "seitenscheitel", "name": "CREATOR_FRISUR_SCHEITEL", "szene": "res://scenes/creator/frisuren/seitenscheitel.tscn", "g": "m", "versteckt": true},
+	{"id": "kurzhaar", "name": "CREATOR_FRISUR_KURZHAAR", "szene": "res://scenes/creator/frisuren/kurzhaar.tscn", "g": "m", "versteckt": true},
 ]
 
 ## Dirndl: Frauen tragen nur Kleider. Ein Dirndl besteht aus drei Schichten, die im Look als hemd (Bluse),
@@ -202,6 +206,7 @@ const JACKEN := [
 	{"id": "jacke_warnweste", "name": "CREATOR_JACKE_WARNWESTE", "szene": "res://scenes/creator/kleidung/jacke_warnweste.tscn", "farbe": Color(0.95, 0.80, 0.08), "muster": Color(0.85, 0.87, 0.88)},
 	{"id": "schuerze_arbeit", "name": "CREATOR_SCHUERZE_ARBEIT", "szene": "res://scenes/creator/kleidung/schuerze_arbeit.tscn", "farbe": Color(0.30, 0.22, 0.14), "muster": Color(0.15, 0.10, 0.07)},
 	{"id": "jacke_traeger", "name": "CREATOR_JACKE_TRAEGER", "szene": "res://scenes/creator/kleidung/jacke_traeger.tscn", "g": "m", "versteckt": true, "farbe": Color(0.06, 0.06, 0.07), "muster": Color(0.06, 0.06, 0.07)},
+	{"id": "jacke_tshirt", "name": "CREATOR_JACKE_TSHIRT", "szene": "res://scenes/creator/kleidung/jacke_tshirt.tscn", "g": "m", "versteckt": true, "farbe": Color(0.05, 0.05, 0.06), "muster": Color(0.05, 0.05, 0.06)},
 	{"id": "jacke_weste", "name": "CREATOR_JACKE_WESTE", "szene": "res://scenes/creator/kleidung/jacke_weste.tscn", "farbe": Color(0.14, 0.24, 0.34), "muster": Color(0.86, 0.78, 0.58)},
 ]
 const HOSEN := [

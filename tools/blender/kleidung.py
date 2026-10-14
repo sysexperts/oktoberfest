@@ -2667,6 +2667,10 @@ elif OUTFIT == "kleidung":
                 return
         raise RuntimeError("Ausschnitt an %s schneidet nicht" % o.name)
 
+    # ---- T-Shirt über der Hose (MrPeaced): Jacken-Schicht, damit es über Hemd UND Hose liegt, Saum auf Höhe der Hüfte
+    ts = rumpf_mit_aermeln("jacke_tshirt", lambda c: 0.030 + 0.006 * sanft(0.92, 0.70, c.z), 0.70, ("ober", 0.62), 1.14, None)
+    stueck("jacke_tshirt", ts, lambda P: np.zeros(len(P)), [], 256)
+
     hose("hose_radler", lambda c: 0.010 - 0.002 * sanft(0.52, 0.46, c.z), 0.46, maske_leer, None, bund=0.93, groesse=256)
 
     tr_ = schale("jacke_traeger_farbe", lambda c: 0.024, [unter(0.90), ueber(1.13)] + breiter_als(0.118), 2)

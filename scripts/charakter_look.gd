@@ -306,7 +306,7 @@ static func kleiden(f: Figur, l: Dictionary) -> void:
 			mi.skeleton = NodePath("..")
 			if haupt:
 				mi.name = art + "_farbe"
-				if art == "hemd":
+				if art == "hemd" or szene.resource_path.ends_with("jacke_tshirt.tscn"):
 					mi.layers |= 4   # Shirt-Aufdruck (Decal mit cull_mask 4, z. B. MrPeaced)
 				var sm := ShaderMaterial.new()
 				sm.shader = KLEIDUNG_SHADER
