@@ -1,0 +1,32 @@
+{
+	"sloptanablack88": {
+		"name": "SloptanaBlack88",
+		"look": {
+			"geschlecht": "m",
+			"haut": "cc9473",
+			"augen": "gross",
+			"emotion": "grinsend",
+			"frisur": "ohne",
+			"bart": "stoppeln",
+			"hut": "baseballcap",
+			"brille": "sonnenbrille_eckig",
+			"tattoo": "sloptana",
+			"haar": "211710",
+			"hemd": "ohne",
+			"hemd_farbe": "111114",
+			"hemd_muster": "1c1c22",
+			"jacke": "jacke_traeger",
+			"jacke_farbe": "0b0b0d",
+			"jacke_muster": "0b0b0d",
+			"hose": "hose_radler",
+			"hose_farbe": "0b0b0d",
+			"hose_muster": "0b0b0d",
+			"schuhe": "schuh_clog",
+			"schuhe_farbe": "101012",
+			"schuhe_muster": "2a2a2e",
+			"hut_farbe": "0c0c0e",
+			"brille_farbe": "0a0a0c",
+			"tattoo_koerper": "sloptana"
+		}
+	}
+}

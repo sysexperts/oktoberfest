@@ -2643,6 +2643,36 @@ elif OUTFIT == "kleidung":
     hose("hose_leder", lambda c: 0.016 + 0.014 * sanft(0.62, 0.50, c.z), 0.50, maske_leder(0.50), gurt_extras, groesse=1024)
     hose("hose_kniebund", lambda c: 0.016 - 0.004 * sanft(0.44, 0.34, c.z), 0.34, maske_leder(0.34, 0.60), gurt_extras, groesse=1024)
 
+    # ---- Radlerhose und Träger (Influencer SloptanaBlack88): enge Hose bis über das Knie, Träger über beide Schultern.
+    # Die Träger sind die Streifen eines aufgeblasenen Rumpfs rechts und links der Mitte (Jacken-Schicht), die Hose reicht
+    # bis zur Taille hoch, wo die Träger ansetzen.
+    def maske_leer(P):
+        return np.zeros(len(P))
+
+    def ausschneiden_frei(o, werkzeug):
+        """wie ausschneiden(), aber ohne die Prüfung auf 50 % Rest: hier bleibt absichtlich nur ein schmaler Streifen übrig"""
+        sicher = o.data.copy()
+        vorher = len(o.data.polygons)
+        for loesung in ('MANIFOLD', 'EXACT', 'FLOAT'):
+            o.data = sicher.copy()
+            b = o.modifiers.new("Ausschnitt", 'BOOLEAN')
+            b.operation = 'DIFFERENCE'
+            b.solver = loesung
+            b.object = werkzeug
+            bpy.context.view_layer.objects.active = o
+            bpy.ops.object.modifier_apply(modifier="Ausschnitt")
+            print("DEBUG ausschneiden_frei", o.name, loesung, vorher, "->", len(o.data.polygons))
+            if 0 < len(o.data.polygons) != vorher:
+                bpy.data.objects.remove(werkzeug, do_unlink=True)
+                return
+        raise RuntimeError("Ausschnitt an %s schneidet nicht" % o.name)
+
+    hose("hose_radler", lambda c: 0.010 - 0.002 * sanft(0.52, 0.46, c.z), 0.46, maske_leer, None, bund=0.93, groesse=256)
+
+    tr_ = schale("jacke_traeger_farbe", lambda c: 0.024, [unter(0.90), ueber(1.13)] + breiter_als(0.118), 2)
+    ausschneiden_frei(tr_, keil([(-0.068, 0.80), (0.068, 0.80), (0.068, 1.25), (-0.068, 1.25)], -0.5, 0.5))
+    stueck("jacke_traeger", tr_, maske_leer, [], 256, True)
+
     def maske_naht(saum):
         def f(P):
             gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]

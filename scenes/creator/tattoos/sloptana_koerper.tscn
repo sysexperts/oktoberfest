@@ -1,0 +1,53 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/creator/tattoos/sloptana_brust.png" id="1_brust"]
+[ext_resource type="Texture2D" path="res://assets/creator/tattoos/sloptana_oberarm.png" id="2_oberarm"]
+[ext_resource type="Texture2D" path="res://assets/creator/tattoos/sloptana_unterarm.png" id="3_unterarm"]
+
+[node name="SloptanaKoerper" type="Node3D"]
+
+[node name="Brust" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.98, 0.17)
+size = Vector3(0.36, 0.30, 0.45)
+texture_albedo = ExtResource("1_brust")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 2
+metadata/knochen = "wirbel_mitte"
+
+[node name="OberarmL" type="Decal" parent="."]
+transform = Transform3D(-0.79316, -0.48073, 0.37389, -0.32787, -0.1803, -0.92736, 0.51322, -0.85813, -0.01461, 0.28258, 0.98006, 0.02999)
+size = Vector3(0.15, 0.12, 0.24)
+texture_albedo = ExtResource("2_oberarm")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 2
+metadata/knochen = "arm_l"
+
+[node name="UnterarmL" type="Decal" parent="."]
+transform = Transform3D(-0.81439, -0.50759, 0.28128, -0.24306, -0.14179, -0.95959, 0.52696, -0.84985, -0.00791, 0.36093, 0.75808, 0.02691)
+size = Vector3(0.13, 0.12, 0.22)
+texture_albedo = ExtResource("3_unterarm")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 2
+metadata/knochen = "unterarm_l"
+
+[node name="OberarmR" type="Decal" parent="."]
+transform = Transform3D(-0.79689, 0.48813, -0.35594, 0.31477, -0.1674, -0.93429, -0.51564, -0.85657, -0.02025, -0.2738, 0.98858, 0.03089)
+size = Vector3(0.15, 0.12, 0.24)
+texture_albedo = ExtResource("2_oberarm")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 2
+metadata/knochen = "arm_r"
+
+[node name="UnterarmR" type="Decal" parent="."]
+transform = Transform3D(-0.80668, 0.49929, -0.31619, 0.27715, -0.15293, -0.94858, -0.52197, -0.85283, -0.01501, -0.35321, 0.7678, 0.02654)
+size = Vector3(0.13, 0.12, 0.22)
+texture_albedo = ExtResource("3_unterarm")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 2
+metadata/knochen = "unterarm_r"
+

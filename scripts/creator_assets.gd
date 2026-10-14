@@ -84,6 +84,19 @@ const EMOTIONEN := [
 	{"id": "grinsend_w", "name": "CREATOR_EMO_GRINSEND", "szene": "res://scenes/creator/emotionen/grinsend_w.tscn", "g": "w"},
 ]
 
+## Tattoos (Gesicht, Hals): Decals am Kopf, die auf die Haut projiziert werden (scenes/creator/tattoos/*.tscn). Noch nicht im
+## Creator wählbar ("versteckt"), nur für Figuren wie die Influencer (scripts/influencer.gd).
+const TATTOOS := [
+	{"id": "ohne", "name": "CREATOR_TATTOO_OHNE", "szene": null, "farbe": Color.WHITE},
+	{"id": "sloptana", "name": "CREATOR_TATTOO_SLOPTANA", "szene": "res://scenes/creator/tattoos/sloptana.tscn", "versteckt": true, "farbe": Color.WHITE},
+]
+
+## Tattoos an Rumpf und Armen: Decals, die je an einem Knochen hängen (Metadaten "knochen" im Decal, siehe Figur.an_knochen_haengen).
+const TATTOOS_KOERPER := [
+	{"id": "ohne", "name": "CREATOR_TATTOO_OHNE", "szene": null, "farbe": Color.WHITE},
+	{"id": "sloptana", "name": "CREATOR_TATTOO_SLOPTANA", "szene": "res://scenes/creator/tattoos/sloptana_koerper.tscn", "versteckt": true, "farbe": Color.WHITE},
+]
+
 ## Bärte. "ohne" = glatt rasiert. Bart-Teile heißen "*_farbe" und werden in der Haarfarbe eingefärbt.
 const BAERTE := [
 	{"id": "ohne", "name": "CREATOR_BART_OHNE", "szene": null, "farbe": Color.WHITE},
@@ -186,6 +199,7 @@ const JACKEN := [
 	{"id": "jacke_kochjacke", "name": "CREATOR_JACKE_KOCH", "szene": "res://scenes/creator/kleidung/jacke_kochjacke.tscn", "farbe": Color(0.96, 0.96, 0.94), "muster": Color(0.20, 0.30, 0.55)},
 	{"id": "jacke_warnweste", "name": "CREATOR_JACKE_WARNWESTE", "szene": "res://scenes/creator/kleidung/jacke_warnweste.tscn", "farbe": Color(0.95, 0.80, 0.08), "muster": Color(0.85, 0.87, 0.88)},
 	{"id": "schuerze_arbeit", "name": "CREATOR_SCHUERZE_ARBEIT", "szene": "res://scenes/creator/kleidung/schuerze_arbeit.tscn", "farbe": Color(0.30, 0.22, 0.14), "muster": Color(0.15, 0.10, 0.07)},
+	{"id": "jacke_traeger", "name": "CREATOR_JACKE_TRAEGER", "szene": "res://scenes/creator/kleidung/jacke_traeger.tscn", "g": "m", "versteckt": true, "farbe": Color(0.06, 0.06, 0.07), "muster": Color(0.06, 0.06, 0.07)},
 	{"id": "jacke_weste", "name": "CREATOR_JACKE_WESTE", "szene": "res://scenes/creator/kleidung/jacke_weste.tscn", "farbe": Color(0.14, 0.24, 0.34), "muster": Color(0.86, 0.78, 0.58)},
 ]
 const HOSEN := [
@@ -195,6 +209,7 @@ const HOSEN := [
 	{"id": "kleid_lang", "name": "CREATOR_KLEID", "szene": "res://scenes/creator/kleidung/kleid_lang.tscn", "g": "w", "farbe": Color(0.15, 0.28, 0.65), "muster": Color(0.90, 0.85, 0.70)},
 	{"id": "kleid_tracht", "name": "CREATOR_KLEID", "szene": "res://scenes/creator/kleidung/kleid_tracht.tscn", "g": "w", "farbe": Color(0.45, 0.10, 0.16), "muster": Color(0.90, 0.80, 0.50)},
 	{"id": "kleid_land", "name": "CREATOR_KLEID", "szene": "res://scenes/creator/kleidung/kleid_land.tscn", "g": "w", "farbe": Color(0.85, 0.35, 0.40), "muster": Color(0.97, 0.90, 0.80)},
+	{"id": "hose_radler", "name": "CREATOR_HOSE_RADLER", "szene": "res://scenes/creator/kleidung/hose_radler.tscn", "g": "m", "versteckt": true, "farbe": Color(0.06, 0.06, 0.07), "muster": Color(0.06, 0.06, 0.07)},
 	{"id": "hose_kniebund", "name": "CREATOR_HOSE_KNIEBUND", "szene": "res://scenes/creator/kleidung/hose_kniebund.tscn", "farbe": Color(0.30, 0.22, 0.14), "muster": Color(0.74, 0.64, 0.44)},
 ]
 

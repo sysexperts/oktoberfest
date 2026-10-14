@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/creator/tattoos/sloptana_gesicht.png" id="1_gesicht"]
+
+[node name="Sloptana" type="Node3D"]
+
+[node name="Gesicht" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 1.40, 0.18)
+size = Vector3(0.4, 0.3, 0.45)
+texture_albedo = ExtResource("1_gesicht")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 2

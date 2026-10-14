@@ -25,7 +25,7 @@ const FARB_SCHLUESSEL := ["haut", "haar", "hut_farbe", "brille_farbe", "hemd_far
 const KLEIDUNG_SHADER := preload("res://assets/shader/kleidung.gdshader")
 
 ## Reihenfolge, in der die Bausteine am Kopf hängen — danach richtet sich auch das Einfärben
-const ARTEN := ["augen", "emotion", "frisur", "bart", "hut", "brille"]
+const ARTEN := ["augen", "emotion", "frisur", "bart", "hut", "brille", "tattoo"]
 ## Teile am Skelett statt am Kopf (Hemd, Jacke, Hose)
 const KLEIDER := ["hemd", "jacke", "hose", "schuhe"]
 ## Hut über Frisur: (Breite, Höhe, Anheben in m) um die Kopfmitte
@@ -47,6 +47,8 @@ static func standard(geschlecht := "m") -> Dictionary:
 		"bart": "ohne",
 		"hut": "ohne",
 		"brille": "ohne",
+		"tattoo": "ohne",
+		"tattoo_koerper": "ohne",
 		"hemd": "ohne",
 		"jacke": "ohne",
 		"hose": "ohne",
@@ -105,6 +107,8 @@ static func _alle_liste(art: String, geschlecht := "") -> Array:
 		"bart": alle = Assets.BAERTE
 		"hut": alle = Assets.HUETE
 		"brille": alle = Assets.BRILLEN
+		"tattoo": alle = Assets.TATTOOS
+		"tattoo_koerper": alle = Assets.TATTOOS_KOERPER
 		"hemd": alle = Assets.HEMDEN
 		"jacke": alle = Assets.JACKEN
 		"hose": alle = Assets.HOSEN
@@ -163,8 +167,12 @@ static func pruefen(roh: Dictionary) -> Dictionary:
 	else:
 		for art: String in KLEIDER:
 			var id := str(roh.get(art, l[art]))
-			if liste(art, "m").any(func(e: Dictionary) -> bool: return e["id"] == id):
+			# auch die versteckten Stücke (Radlerhose, Träger der Influencer) sind gültig, nur der Creator zeigt sie nicht
+			if _alle_liste(art, "m").any(func(e: Dictionary) -> bool: return e["id"] == id):
 				l[art] = id
+	var tk := str(roh.get("tattoo_koerper", "ohne"))
+	if _alle_liste("tattoo_koerper").any(func(e: Dictionary) -> bool: return e["id"] == tk):
+		l["tattoo_koerper"] = tk
 	l["geschlecht"] = g
 	return l
 
@@ -200,6 +208,8 @@ static func zufall(geschlecht := "") -> Dictionary:
 	var g := geschlecht if geschlecht != "" else ("w" if randf() < 0.5 else "m")
 	var l := standard(g)
 	for art: String in ARTEN:
+		if art == "tattoo":
+			continue   # Tattoos tragen nur die Influencer
 		var eintraege := liste(art, g)
 		l[art] = eintraege[randi() % eintraege.size()]["id"]
 	l["haut"] = HAUTFARBEN[randi() % HAUTFARBEN.size()].to_html(false)
@@ -292,6 +302,7 @@ static func kleiden(f: Figur, l: Dictionary) -> void:
 
 static func faerben(f: Figur, l: Dictionary) -> void:
 	kleiden(f, l)
+	_tattoos_koerper(f, l)
 	for art: String in KLEIDER:
 		var mi := f.skelett.get_node_or_null(art + "_farbe") as MeshInstance3D if f.skelett else null
 		if mi:
@@ -300,6 +311,23 @@ static func faerben(f: Figur, l: Dictionary) -> void:
 				sm.set_shader_parameter("haupt", Color.html(str(l.get(art + "_farbe", "ffffff"))))
 				sm.set_shader_parameter("muster", Color.html(str(l.get(art + "_muster", "ffffff"))))
 	_faerben_rest(f, l)
+
+## Tattoos an Rumpf und Armen: die Decals aus der Tattoo-Szene an ihre Knochen hängen (einmal je Figur)
+static func _tattoos_koerper(f: Figur, l: Dictionary) -> void:
+	if f.skelett == null or f.has_meta("tattoo_k_da"):
+		return
+	f.set_meta("tattoo_k_da", true)
+	var szene := Assets.laden(_eintrag("tattoo_koerper", str(l.get("tattoo_koerper", "ohne"))))
+	if szene == null:
+		return
+	var quelle := szene.instantiate()
+	for d in quelle.get_children():
+		var lage := (d as Node3D).transform
+		var rolle := str(d.get_meta("knochen", ""))
+		quelle.remove_child(d)
+		if not f.an_knochen_haengen(rolle, d as Node3D, lage):
+			d.free()
+	quelle.free()
 
 ## Haut und Bausteine am Kopf
 static func _faerben_rest(f: Figur, l: Dictionary) -> void:
@@ -311,6 +339,7 @@ static func _faerben_rest(f: Figur, l: Dictionary) -> void:
 		for mi: MeshInstance3D in f.skelett.find_children("*", "MeshInstance3D", false, false):
 			if mi.name in ["Koerper", "HandLeft", "HandRight"]:
 				_tonen(mi, haut)
+				mi.layers |= 2   # Tattoo-Decals (cull_mask 2) liegen nur auf der Haut, nicht auf Bart, Augen und Hut
 	var halter := f.skelett.get_node_or_null("Zubehoer") if f.skelett else null
 	if halter == null:
 		return

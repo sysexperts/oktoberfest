@@ -288,6 +288,33 @@ func _zubehoer_anlegen() -> void:
 		halter.add_child(teil)
 		teil.transform = bindung * zubehoer_anpassung * (zubehoer_extra.get(nr, Transform3D()) as Transform3D) * lage
 
+## Teil an einen Knochen hängen (Rolle aus KNOCHEN_NAMEN), Lage in Modellkoordinaten wie beim Zubehör.
+## Für Tattoo-Decals am Rumpf und an den Armen. false, wenn die Figur den Knochen nicht hat.
+func an_knochen_haengen(rolle: String, teil: Node3D, lage: Transform3D) -> bool:
+	var b := _knochen_index(rolle) if skelett else -1
+	if b < 0:
+		return false
+	var halter := skelett.get_node_or_null("Halter_" + rolle) as BoneAttachment3D
+	if halter == null:
+		halter = BoneAttachment3D.new()
+		halter.name = "Halter_" + rolle
+		skelett.add_child(halter)
+		halter.bone_name = skelett.get_bone_name(b)
+	var bindung := skelett.get_bone_global_rest(b).affine_inverse()
+	for mi: MeshInstance3D in skelett.find_children("*", "MeshInstance3D", false, false):
+		if mi.skin == null:
+			continue
+		for i in mi.skin.get_bind_count():
+			var bn := mi.skin.get_bind_name(i)
+			var idx := mi.skin.get_bind_bone(i) if bn == "" else skelett.find_bone(bn)
+			if idx == b:
+				bindung = mi.skin.get_bind_pose(i) * mi.transform.affine_inverse()
+				break
+		break
+	halter.add_child(teil)
+	teil.transform = bindung * lage
+	return true
+
 func hat(name: String) -> bool:
 	return anim != null and name != "" and anim.has_animation(name)
 
