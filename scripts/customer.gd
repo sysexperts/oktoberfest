@@ -65,7 +65,7 @@ func _ready() -> void:
 	_last = position
 	# Namenlose Gäste: aus der ID zusammengewürfelt (Creator); benannte Stammgäste behalten ihre feste Figur
 	_figur = Figuren.einsetzen_npc(self, cust_id) if stamm == "" else Figuren.einsetzen_stamm(self, stamm)
-	_steht = Figuren.ist_stehgast(cust_id)
+	_steht = Figuren.ist_stehgast(cust_id) and stamm != "monte"   # SloptanaBlack88 sitzt immer
 	_model = _figur
 	_anim = _figur.anim
 	_skel = _figur.skelett

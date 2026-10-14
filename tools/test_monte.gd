@@ -33,6 +33,8 @@ class Lauf extends Node:
 		# Monte direkt als Gast anlegen (der Zufall wäre im Test zu selten)
 		var si: int = gm._free_seat()
 		_check("freier Platz da", si >= 0)
+		while posmod(gm._guest_next * 5 + 1, 3) != 0:   # Absichtlich eine ID, die sonst ein Stehgast wäre
+			gm._guest_next += 1
 		gm._spawn_guest(si)
 		var id: int = gm._guest_next - 1
 		gm._remove_guest(id)   # der normale Gast wird zum Stammgast (im Spiel entscheidet das _spawn_guest vorher)
@@ -48,6 +50,10 @@ class Lauf extends Node:
 		_check("mindestens ein Freund am selben Tisch (%d Gäste)" % am_tisch, am_tisch >= 2)
 		var c: Node = gm._guests.get(id)
 		_check("Figur ist SloptanaBlack88 (Customer.stamm)", c != null and c.stamm == "monte")
+		var vorher: String = (c.get_node("Spruch") as Label3D).text
+		await _warten(8.0)
+		_check("keine Sprüche von allein", not (c.get_node("Spruch") as Label3D).visible)
+		_check("Monte sitzt (kein Stehgast)", not c._steht)
 		gm.net_monte_ansprechen(id)
 		await _warten(0.5)
 		var spruch: Label3D = c.get_node("Spruch")

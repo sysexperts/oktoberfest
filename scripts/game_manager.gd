@@ -1719,7 +1719,7 @@ func open_booking_ui() -> void:
 func _platz_pos_fuer(gast_id: int, si: int) -> Vector3:
 	var s: Dictionary = _seats[si]
 	var p: Vector3 = s.pos
-	if Figuren.ist_stehgast(gast_id):
+	if Figuren.ist_stehgast(gast_id) and gast_id != _monte_gast:
 		p += (s.away as Vector3) * STEHABSTAND
 	return p
 
@@ -5982,7 +5982,12 @@ func _stamm_gast_setzen(id: int, start: Vector3, stamm: String, si: int) -> void
 	if stamm == "monte":
 		# Nie allein: zwei Leibwächter neben dem Tisch, und Freunde setzen sich dazu
 		_monte_gast = id
-		_monte_t = 6.0
+		# Er sitzt immer (auch wenn die ID sonst einen Stehgast ergäbe): letzten Wegpunkt auf die Bank legen
+		var wege: Array = _guest_sim[id].weg
+		if wege.is_empty():
+			_guest_sim[id].tgt = _platz_pos_fuer(id, si)
+		else:
+			wege[wege.size() - 1] = _platz_pos_fuer(id, si)
 		_leibwaechter_stellen(si)
 		_gruppe_nachziehen(id, si)
 
@@ -8744,12 +8749,11 @@ func _net_saboteur_weg() -> void:
 ## zufrieden bedient → Belohnung auf seine Art, verpasst → zählt zurück.
 ## Stand im Spielstand ("stamm"), Anzeige im Festkurier und über dem Kopf.
 const STAMMGAESTE := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig", "monte"]
-## ---- Influencer SloptanaBlack88: kommt nie allein (zwei Leibwächter), sagt Sprüche (MONTE_SPRUCH_0..2)
+## ---- Influencer SloptanaBlack88: kommt nie allein (zwei Leibwächter), sitzt am Tisch, sagt Sprüche nur wenn man ihn anspricht (MONTE_SPRUCH_0..2)
 const LW_ABSTAND := 2.2          # so weit steht ein Leibwächter seitlich vom Tisch
 const MONTE_SPRUECHE := 3
 const MONTE_GEWICHT := [5, 2, 2]  # "Schmutz, Digga!" kommt am häufigsten
 var _monte_gast := -1            # Gast-ID des Influencers (-1 = keiner da)
-var _monte_t := 0.0
 var _monte_cooldown := 0.0
 var _lw_pos := {}                # Leibwächter-ID -> [Position, Blickrichtung] für Mitspieler, die später dazukommen
 var _lw_nodes := {}
@@ -8764,10 +8768,7 @@ func _update_monte(delta: float) -> void:
 	if not _guest_sim.has(_monte_gast):
 		_monte_gast = -1
 		return
-	_monte_t -= delta
-	if _monte_t <= 0.0:
-		_monte_t = randf_range(22.0, 40.0)
-		_monte_spruch()
+	# Keine Sprüche von allein: er sagt nur etwas, wenn man ihn anspricht (net_monte_ansprechen)
 
 func _monte_spruch() -> void:
 	if _monte_gast < 0:
@@ -8796,7 +8797,6 @@ func net_monte_ansprechen(id: int) -> void:
 	if not multiplayer.is_server() or id != _monte_gast or _monte_cooldown > 0.0:
 		return
 	_monte_cooldown = 2.0
-	_monte_t = randf_range(22.0, 40.0)
 	_monte_spruch()
 
 ## Zwei Leibwächter seitlich vom Tisch des Influencers, mit Blick zum Tisch
