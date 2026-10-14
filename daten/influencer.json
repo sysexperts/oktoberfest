@@ -39,7 +39,7 @@
 			"haut": "e6b494",
 			"augen": "gross",
 			"emotion": "froehlich",
-			"frisur": "seitenscheitel",
+			"frisur": "peaced",
 			"haar": "c47d44",
 			"bart": "stoppeln",
 			"hut": "ohne",
@@ -64,7 +64,8 @@
 			],
 			"tattoo_koerper": "peaced_shirt",
 			"jacke_farbe": "0d0d10",
-			"jacke_muster": "0d0d10"
+			"jacke_muster": "0d0d10",
+			"bart2": "buerste"
 		}
 	}
 }

@@ -1507,6 +1507,36 @@ elif OUTFIT == "frisuren":
             strähne(bm, OBEN, VORN, phi, 1.00 - 0.10 * ebene, haarlinie(phi, 1.9, 2.05, 2.35), 7, lift, 0.004, breit, 0.55, 0.0, 0.05 * math.sin(phi * 5))
     frisur_fertig("haarkranz", bm, haube("kranz_kappe", offset=0.007, vorn=1.40, seite=1.40, hinten=1.34, oben_weg=1.545, vorn_weg=0.09))
 
+    # ---- 11. Seitenfransen (MrPeaced): glatte, kompakte Form wie der Körper (Voxel-Remesh), kurze Seiten, oben Volumen und eine
+    # nach vorn und zur Seite gekämmte Fransen-Welle. Keine Strähnen-Streifen.
+    def haar_glatt(P):
+        gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
+        fein = ruis(P, 70.0)
+        hoch = np.clip((gy - 1.45) / 0.30, 0, 1)
+        v = 0.72 + 0.07 * fein + 0.04 * hoch
+        return np.repeat(np.clip(v, 0, 1)[:, None], 3, axis=1)
+
+    def blob(x, y, z, rx, ry, rz, name="b"):
+        # Godot-Mitte (x, y, z) und Halbachsen (Breite, Höhe, Tiefe) -> Blender-Ellipsoid
+        return kugel(g2b(Vector((x, y, z))), (rx, rz, ry), name, 20)
+
+    teile_h = [
+        blob(0.0, 1.530, -0.010, 0.218, 0.178, 0.206, "basis"),          # Kappe über dem ganzen Kopf
+        blob(0.0, 1.625, 0.000, 0.160, 0.080, 0.175, "volumen"),         # Volumen oben
+        blob(0.035, 1.640, 0.080, 0.125, 0.062, 0.130, "welle"),         # Welle nach vorn
+        blob(0.085, 1.590, 0.155, 0.110, 0.045, 0.075, "franse"),        # Franse über der Stirn, zur Seite gekämmt
+        blob(0.150, 1.570, 0.110, 0.060, 0.050, 0.090, "seite"),         # Seitenpartie vorn
+        blob(-0.040, 1.620, -0.070, 0.140, 0.070, 0.130, "hinten"),
+    ]
+    k_ = 0.52   # Haarlinie steigt nach vorn an: hinten/seitlich y = 1.43, vorn über der Stirn ca. y = 1.53
+    o = teil("peaced", teile_h, 0.0060, schnitte=[(Vector((0, 0, 1.43)), Vector((0, -k_, -1)))], glaetten=10, anteil=0.20)
+    bpy.context.view_layer.objects.active = o
+    bpy.ops.object.shade_smooth()
+    f_ = fertig("peaced_farbe", [o], haar_glatt, 1024, 0.9)
+    for g in list(f_.vertex_groups):
+        f_.vertex_groups.remove(g)
+    HUETE["peaced"] = [f_]
+
     # ---- Frisuren nach Quaternius-Vorlage (CC0, Universal Base Characters): die Haarformen der fertigen
     # Frisuren werden auf unseren Kopf skaliert, an die Kopfoberfläche gedrückt (Haaransatz sitzt an der Haut),
     # verdickt und zu einer glatten, kompakten Form verschmolzen — passend zum Stil des Körpers.
@@ -2380,6 +2410,18 @@ elif OUTFIT == "baerte":
     for i in range(5):
         t_.append(bpunkt(0.0, 1.230, 0.022))
     bart_fertig("hufeisen", b_formen("hufeisen", t_, 0.0032, 6, 0.22))
+
+    # ---- 11. Bürstenschnauzer (MrPeaced): normaler, kurzer Oberlippenbart ohne Zwirbel, sitzt über den Stoppeln
+    t_ = []
+    for sx in (1, -1):
+        for i in range(26):
+            t = i / 25.0
+            x = sx * (0.006 + 0.092 * t)
+            h = 1.236 - 0.030 * math.sin(min(t / 0.7, 1.0) * math.pi * 0.5) - 0.014 * max(0.0, (t - 0.7) / 0.3)
+            t_.append(bpunkt(x, h, 0.034 * (1.0 - 0.50 * t ** 1.3) + 0.010, 0.006))
+    for i in range(5):
+        t_.append(bpunkt(0.0, 1.232 - 0.004 * i, 0.030))
+    bart_fertig("buerste", b_formen("buerste", t_, 0.0030, 6, 0.22))
 
 elif OUTFIT == "kleidung":
     # ================================================================ Creator-Assets: Hemden, Jacken, Hosen

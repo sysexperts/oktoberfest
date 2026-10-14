@@ -25,7 +25,7 @@ const FARB_SCHLUESSEL := ["haut", "haar", "hut_farbe", "brille_farbe", "hemd_far
 const KLEIDUNG_SHADER := preload("res://assets/shader/kleidung.gdshader")
 
 ## Reihenfolge, in der die Bausteine am Kopf hängen — danach richtet sich auch das Einfärben
-const ARTEN := ["augen", "emotion", "frisur", "bart", "hut", "brille", "tattoo"]
+const ARTEN := ["augen", "emotion", "frisur", "bart", "bart2", "hut", "brille", "tattoo"]
 ## Teile am Skelett statt am Kopf (Hemd, Jacke, Hose)
 const KLEIDER := ["hemd", "jacke", "hose", "schuhe"]
 ## Hut über Frisur: (Breite, Höhe, Anheben in m) um die Kopfmitte
@@ -45,6 +45,7 @@ static func standard(geschlecht := "m") -> Dictionary:
 		"emotion": "freundlich",
 		"frisur": "ohne",
 		"bart": "ohne",
+		"bart2": "ohne",   # zweiter Bart (Influencer: Schnauzer über Stoppeln)
 		"hut": "ohne",
 		"brille": "ohne",
 		"tattoo": "ohne",
@@ -104,7 +105,7 @@ static func _alle_liste(art: String, geschlecht := "") -> Array:
 		"augen": alle = Assets.AUGEN
 		"emotion": alle = Assets.EMOTIONEN
 		"frisur": alle = Assets.FRISUREN
-		"bart": alle = Assets.BAERTE
+		"bart", "bart2": alle = Assets.BAERTE
 		"hut": alle = Assets.HUETE
 		"brille": alle = Assets.BRILLEN
 		"tattoo": alle = Assets.TATTOOS
@@ -218,8 +219,8 @@ static func zufall(geschlecht := "") -> Dictionary:
 	var g := geschlecht if geschlecht != "" else ("w" if randf() < 0.5 else "m")
 	var l := standard(g)
 	for art: String in ARTEN:
-		if art == "tattoo":
-			continue   # Tattoos tragen nur die Influencer
+		if art == "tattoo" or art == "bart2":
+			continue   # Tattoos und Zweitbart tragen nur die Influencer
 		var eintraege := liste(art, g)
 		l[art] = eintraege[randi() % eintraege.size()]["id"]
 	l["haut"] = HAUTFARBEN[randi() % HAUTFARBEN.size()].to_html(false)
@@ -394,7 +395,7 @@ static func _faerben_rest(f: Figur, l: Dictionary) -> void:
 		match art:
 			"hut": Assets.faerben(teil, Color.html(str(l.get("hut_farbe", "ffffff"))))
 			"brille": Assets.faerben(teil, Color.html(str(l.get("brille_farbe", "ffffff"))))
-			"bart", "emotion": Assets.faerben(teil, haar)
+			"bart", "bart2", "emotion": Assets.faerben(teil, haar)
 			"frisur": _haar_faerben(teil, haar, f.eigenleuchten, str(l.get("hut", "ohne")) != "ohne")
 			"augen": Assets.faerben(teil, haut_wahl, "*_haut*")
 

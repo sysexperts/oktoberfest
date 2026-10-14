@@ -103,6 +103,7 @@ const TATTOOS_KOERPER := [
 const BAERTE := [
 	{"id": "ohne", "name": "CREATOR_BART_OHNE", "szene": null, "farbe": Color.WHITE},
 	{"id": "schnauzer", "name": "CREATOR_BART_SCHNAUZER", "szene": "res://scenes/creator/baerte/schnauzer.tscn", "g": "m", "farbe": Color(0.35, 0.22, 0.12)},
+	{"id": "buerste", "name": "CREATOR_BART_BUERSTE", "szene": "res://scenes/creator/baerte/buerste.tscn", "g": "m", "versteckt": true, "farbe": Color(0.40, 0.26, 0.14)},
 	{"id": "walross", "name": "CREATOR_BART_WALROSS", "szene": "res://scenes/creator/baerte/walross.tscn", "g": "m", "farbe": Color(0.45, 0.30, 0.18)},
 	{"id": "fumanchu", "name": "CREATOR_BART_FUMANCHU", "szene": "res://scenes/creator/baerte/fumanchu.tscn", "g": "m", "farbe": Color(0.12, 0.09, 0.07)},
 	{"id": "kinnbart", "name": "CREATOR_BART_KINN", "szene": "res://scenes/creator/baerte/kinnbart.tscn", "g": "m", "farbe": Color(0.30, 0.18, 0.10)},
@@ -127,6 +128,7 @@ const FRISUREN := [
 	# Männerfrisuren (noch nicht im Creator, nur für Influencer): Tolle, Seitenscheitel, Kurzhaar
 	{"id": "tolle", "name": "CREATOR_FRISUR_TOLLE", "szene": "res://scenes/creator/frisuren/tolle.tscn", "g": "m", "versteckt": true},
 	{"id": "seitenscheitel", "name": "CREATOR_FRISUR_SCHEITEL", "szene": "res://scenes/creator/frisuren/seitenscheitel.tscn", "g": "m", "versteckt": true},
+	{"id": "peaced", "name": "CREATOR_FRISUR_PEACED", "szene": "res://scenes/creator/frisuren/peaced.tscn", "g": "m", "versteckt": true},
 	{"id": "kurzhaar", "name": "CREATOR_FRISUR_KURZHAAR", "szene": "res://scenes/creator/frisuren/kurzhaar.tscn", "g": "m", "versteckt": true},
 ]
 
