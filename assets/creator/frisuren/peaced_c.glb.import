@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://benedh1nbs1ex"
-path="res://.godot/imported/peaced.glb-96a16bf25fe684b232d2cf3b33823911.scn"
+uid="uid://dnhepricyo2ym"
+path="res://.godot/imported/peaced_c.glb-90055762b67b44fa84d3e338aaf1637d.scn"
 
 [deps]
 
-source_file="res://assets/creator/frisuren/peaced.glb"
-dest_files=["res://.godot/imported/peaced.glb-96a16bf25fe684b232d2cf3b33823911.scn"]
+source_file="res://assets/creator/frisuren/peaced_c.glb"
+dest_files=["res://.godot/imported/peaced_c.glb-90055762b67b44fa84d3e338aaf1637d.scn"]
 
 [params]
 

@@ -1513,29 +1513,33 @@ elif OUTFIT == "frisuren":
         gx, gy, gz = P[:, 0], P[:, 1], P[:, 2]
         fein = ruis(P, 70.0)
         hoch = np.clip((gy - 1.45) / 0.30, 0, 1)
-        v = 0.72 + 0.07 * fein + 0.04 * hoch
+        v = 0.74 + 0.06 * fein
         return np.repeat(np.clip(v, 0, 1)[:, None], 3, axis=1)
 
     def blob(x, y, z, rx, ry, rz, name="b"):
         # Godot-Mitte (x, y, z) und Halbachsen (Breite, Höhe, Tiefe) -> Blender-Ellipsoid
         return kugel(g2b(Vector((x, y, z))), (rx, rz, ry), name, 20)
 
-    teile_h = [
-        blob(0.0, 1.530, -0.010, 0.218, 0.178, 0.206, "basis"),          # Kappe über dem ganzen Kopf
-        blob(0.0, 1.625, 0.000, 0.160, 0.080, 0.175, "volumen"),         # Volumen oben
-        blob(0.035, 1.640, 0.080, 0.125, 0.062, 0.130, "welle"),         # Welle nach vorn
-        blob(0.085, 1.590, 0.155, 0.110, 0.045, 0.075, "franse"),        # Franse über der Stirn, zur Seite gekämmt
-        blob(0.150, 1.570, 0.110, 0.060, 0.050, 0.090, "seite"),         # Seitenpartie vorn
-        blob(-0.040, 1.620, -0.070, 0.140, 0.070, 0.130, "hinten"),
-    ]
     k_ = 0.52   # Haarlinie steigt nach vorn an: hinten/seitlich y = 1.43, vorn über der Stirn ca. y = 1.53
-    o = teil("peaced", teile_h, 0.0060, schnitte=[(Vector((0, 0, 1.43)), Vector((0, -k_, -1)))], glaetten=10, anteil=0.20)
-    bpy.context.view_layer.objects.active = o
-    bpy.ops.object.shade_smooth()
-    f_ = fertig("peaced_farbe", [o], haar_glatt, 1024, 0.9)
-    for g in list(f_.vertex_groups):
-        f_.vertex_groups.remove(g)
-    HUETE["peaced"] = [f_]
+
+    def peaced_frisur(name, blobs):
+        # Dünne Kappe eng am Kopf plus die Formen, die das Volumen geben
+        teile_h = [blob(0.0, 1.528, -0.010, 0.212, 0.182, 0.200, "basis")] + [blob(*b_, "f") for b_ in blobs]
+        o = teil(name, teile_h, 0.0055, schnitte=[(Vector((0, 0, 1.43)), Vector((0, -k_, -1)))], glaetten=12, anteil=0.20)
+        bpy.context.view_layer.objects.active = o
+        bpy.ops.object.shade_smooth()
+        f_ = fertig(name + "_farbe", [o], haar_glatt, 1024, 0.9)
+        for g in list(f_.vertex_groups):
+            f_.vertex_groups.remove(g)
+        HUETE[name] = [f_]
+
+    # A: Welle über der Stirn (breiter Wulst nach vorn) und flaches Volumen dahinter
+    peaced_frisur("peaced_a", [(0.0, 1.600, 0.150, 0.150, 0.040, 0.060), (0.02, 1.630, 0.060, 0.120, 0.045, 0.100), (0.0, 1.600, -0.060, 0.130, 0.040, 0.110)])
+    # B: Bürste hoch: flache, hohe Platte oben, Stirnkante nach vorn
+    peaced_frisur("peaced_b", [(0.0, 1.625, 0.050, 0.150, 0.050, 0.140), (0.0, 1.600, 0.150, 0.130, 0.050, 0.050)])
+    # C: Seitenwelle: Strähnenblock von hinten links nach vorn rechts über die Stirn
+    peaced_frisur("peaced_c", [(0.070, 1.610, 0.140, 0.100, 0.045, 0.060), (0.020, 1.630, 0.090, 0.100, 0.045, 0.070),
+                               (-0.050, 1.620, 0.020, 0.110, 0.050, 0.100), (-0.020, 1.600, -0.070, 0.120, 0.040, 0.100)])
 
     # ---- Frisuren nach Quaternius-Vorlage (CC0, Universal Base Characters): die Haarformen der fertigen
     # Frisuren werden auf unseren Kopf skaliert, an die Kopfoberfläche gedrückt (Haaransatz sitzt an der Haut),
