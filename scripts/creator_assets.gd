@@ -95,6 +95,8 @@ const TATTOOS := [
 const TATTOOS_KOERPER := [
 	{"id": "ohne", "name": "CREATOR_TATTOO_OHNE", "szene": null, "farbe": Color.WHITE},
 	{"id": "sloptana", "name": "CREATOR_TATTOO_SLOPTANA", "szene": "res://scenes/creator/tattoos/sloptana_koerper.tscn", "versteckt": true, "farbe": Color.WHITE},
+	# Shirt-Aufdruck von MrPeaced: Decal auf der Hemd-Schicht (Layer 4)
+	{"id": "peaced_shirt", "name": "CREATOR_TATTOO_PEACED", "szene": "res://scenes/creator/tattoos/peaced_shirt.tscn", "versteckt": true, "farbe": Color.WHITE},
 ]
 
 ## Bärte. "ohne" = glatt rasiert. Bart-Teile heißen "*_farbe" und werden in der Haarfarbe eingefärbt.

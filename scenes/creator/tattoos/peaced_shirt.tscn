@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/creator/tattoos/peaced_shirt.png" id="1_druck"]
+
+[node name="PeacedShirt" type="Node3D"]
+
+[node name="Druck" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.985, 0.17)
+size = Vector3(0.3, 0.3, 0.28)
+texture_albedo = ExtResource("1_druck")
+upper_fade = 0.0
+lower_fade = 0.0
+cull_mask = 4
+metadata/knochen = "wirbel_mitte"

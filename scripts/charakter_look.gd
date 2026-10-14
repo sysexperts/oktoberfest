@@ -174,6 +174,8 @@ static func pruefen(roh: Dictionary) -> Dictionary:
 			# auch die versteckten Stücke (Radlerhose, Träger der Influencer) sind gültig, nur der Creator zeigt sie nicht
 			if _alle_liste(art, "m").any(func(e: Dictionary) -> bool: return e["id"] == id):
 				l[art] = id
+	if roh.get("frisur_extra") is Array:
+		l["frisur_extra"] = roh["frisur_extra"]
 	if roh.has("brille_vor"):
 		l["brille_vor"] = clampf(float(roh["brille_vor"]), -0.05, 0.12)
 	if roh.has("brille_skala"):
@@ -248,6 +250,7 @@ static func bauen(l: Dictionary) -> Figur:
 	var z: Array[PackedScene] = []
 	var hat_nr := -1
 	var brille_nr := -1
+	var frisur_nr := -1
 	for art: String in ARTEN:
 		var e := _eintrag(art, str(l.get(art, "ohne")))
 		if e["szene"] != null:
@@ -255,6 +258,8 @@ static func bauen(l: Dictionary) -> Figur:
 				hat_nr = z.size()
 			if art == "brille":
 				brille_nr = z.size()
+			if art == "frisur":
+				frisur_nr = z.size()
 			z.append(Assets.laden(e))
 	f.zubehoer = z
 	f.set_meta("geschlecht", str(l.get("geschlecht", "m")))
@@ -265,6 +270,13 @@ static func bauen(l: Dictionary) -> Figur:
 		f.zubehoer_extra[hat_nr] = Transform3D(Basis(), mitte) * t * Transform3D(Basis(), -mitte)
 	# Brille kleiner oder größer (Influencer): um die Augenmitte skalieren
 	var b_skala := clampf(float(l.get("brille_skala", 1.0)), 0.5, 1.5)
+	# Frisur anpassen (Influencer): [Breite, Höhe, Tiefe, Höhe verschieben, nach vorn verschieben] um die Kopfmitte
+	var fe: Variant = l.get("frisur_extra", null)
+	if fe is Array and (fe as Array).size() == 5 and frisur_nr >= 0:
+		var mitte_f := Vector3(0, 1.5, 0)
+		var tf := Transform3D(Basis.from_scale(Vector3(clampf(float(fe[0]), 0.5, 1.5), clampf(float(fe[1]), 0.3, 1.5), clampf(float(fe[2]), 0.5, 1.5))),
+			Vector3(0, clampf(float(fe[3]), -0.1, 0.15), clampf(float(fe[4]), -0.1, 0.1)))
+		f.zubehoer_extra[frisur_nr] = Transform3D(Basis(), mitte_f) * tf * Transform3D(Basis(), -mitte_f)
 	var b_vor := clampf(float(l.get("brille_vor", 0.0)), -0.05, 0.12)
 	if brille_nr >= 0 and (not is_equal_approx(b_skala, 1.0) or b_vor != 0.0):
 		var augen := Vector3(0, 1.30, 0.12)
@@ -294,6 +306,8 @@ static func kleiden(f: Figur, l: Dictionary) -> void:
 			mi.skeleton = NodePath("..")
 			if haupt:
 				mi.name = art + "_farbe"
+				if art == "hemd":
+					mi.layers |= 4   # Shirt-Aufdruck (Decal mit cull_mask 4, z. B. MrPeaced)
 				var sm := ShaderMaterial.new()
 				sm.shader = KLEIDUNG_SHADER
 				if alt:
