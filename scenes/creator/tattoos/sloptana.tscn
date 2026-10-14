@@ -11,3 +11,5 @@ texture_albedo = ExtResource("1_gesicht")
 upper_fade = 0.0
 lower_fade = 0.0
 cull_mask = 2
+modulate = Color(0.55, 0.55, 0.6, 1)
+albedo_mix = 1.0

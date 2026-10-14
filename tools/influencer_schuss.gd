@@ -7,7 +7,11 @@ const Look := preload("res://scripts/charakter_look.gd")
 func _ready() -> void:
 	var id := OS.get_environment("ID") if OS.get_environment("ID") != "" else "sloptanablack88"
 	var daten: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://daten/influencer.json"))
-	var l := Look.pruefen(daten[id]["look"])
+	var look: Dictionary = daten[id]["look"].duplicate()
+	if OS.get_environment("NACKT") != "":
+		look["hut"] = "ohne"   # Gesichts-Tattoos prüfen: ohne Cap und Brille
+		look["brille"] = "ohne"
+	var l := Look.pruefen(look)
 	var f := Look.bauen(l)
 	add_child(f)
 	Look.faerben(f, l)

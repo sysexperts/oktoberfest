@@ -340,6 +340,12 @@ static func _faerben_rest(f: Figur, l: Dictionary) -> void:
 			if mi.name in ["Koerper", "HandLeft", "HandRight"]:
 				_tonen(mi, haut)
 				mi.layers |= 2   # Tattoo-Decals (cull_mask 2) liegen nur auf der Haut, nicht auf Bart, Augen und Hut
+				if str(l.get("tattoo", "ohne")) != "ohne" or str(l.get("tattoo_koerper", "ohne")) != "ohne":
+					# Das Eigenleuchten der Haut würde die Tattoos aufhellen (Decals ändern nur die Grundfarbe, nicht das Leuchten)
+					for s in mi.mesh.get_surface_count():
+						var hm := mi.get_surface_override_material(s) as BaseMaterial3D
+						if hm:
+							hm.emission_enabled = false
 	var halter := f.skelett.get_node_or_null("Zubehoer") if f.skelett else null
 	if halter == null:
 		return
