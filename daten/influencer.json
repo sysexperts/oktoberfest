@@ -26,7 +26,8 @@
 			"schuhe_muster": "2a2a2e",
 			"hut_farbe": "0c0c0e",
 			"brille_farbe": "0a0a0c",
-			"tattoo_koerper": "sloptana"
+			"tattoo_koerper": "sloptana",
+			"brille_skala": 0.72
 		}
 	}
 }

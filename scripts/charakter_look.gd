@@ -170,6 +170,8 @@ static func pruefen(roh: Dictionary) -> Dictionary:
 			# auch die versteckten Stücke (Radlerhose, Träger der Influencer) sind gültig, nur der Creator zeigt sie nicht
 			if _alle_liste(art, "m").any(func(e: Dictionary) -> bool: return e["id"] == id):
 				l[art] = id
+	if roh.has("brille_skala"):
+		l["brille_skala"] = clampf(float(roh["brille_skala"]), 0.5, 1.5)
 	var tk := str(roh.get("tattoo_koerper", "ohne"))
 	if _alle_liste("tattoo_koerper").any(func(e: Dictionary) -> bool: return e["id"] == tk):
 		l["tattoo_koerper"] = tk
@@ -239,11 +241,14 @@ static func bauen(l: Dictionary) -> Figur:
 	var f := BASIS.instantiate() as Figur
 	var z: Array[PackedScene] = []
 	var hat_nr := -1
+	var brille_nr := -1
 	for art: String in ARTEN:
 		var e := _eintrag(art, str(l.get(art, "ohne")))
 		if e["szene"] != null:
 			if art == "hut":
 				hat_nr = z.size()
+			if art == "brille":
+				brille_nr = z.size()
 			z.append(Assets.laden(e))
 	f.zubehoer = z
 	f.set_meta("geschlecht", str(l.get("geschlecht", "m")))
@@ -252,6 +257,12 @@ static func bauen(l: Dictionary) -> Figur:
 		var mitte := Vector3(0, 1.5, 0)
 		var t := Transform3D(Basis.from_scale(Vector3(HUT_UEBER_HAAR.x, HUT_UEBER_HAAR.y, HUT_UEBER_HAAR.x)), Vector3(0, HUT_UEBER_HAAR.z, 0))
 		f.zubehoer_extra[hat_nr] = Transform3D(Basis(), mitte) * t * Transform3D(Basis(), -mitte)
+	# Brille kleiner oder größer (Influencer): um die Augenmitte skalieren
+	var b_skala := clampf(float(l.get("brille_skala", 1.0)), 0.5, 1.5)
+	if brille_nr >= 0 and not is_equal_approx(b_skala, 1.0):
+		var augen := Vector3(0, 1.30, 0.12)
+		var tb := Transform3D(Basis.from_scale(Vector3(b_skala, b_skala, b_skala)), Vector3.ZERO)
+		f.zubehoer_extra[brille_nr] = Transform3D(Basis(), augen) * tb * Transform3D(Basis(), -augen)
 	return f
 
 ## Hemd, Jacke und Hose: die Netze aus dem Baustein an das Skelett der Figur hängen (einmal je Figur).
