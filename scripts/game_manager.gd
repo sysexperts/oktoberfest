@@ -3493,7 +3493,7 @@ func _staff_move(s: Dictionary, delta: float) -> bool:
 	var want := atan2(-dir.x, -dir.z)
 	s.yaw = lerp_angle(float(s.yaw), want, clampf(delta * 7.0, 0.0, 1.0))
 	var fwd := Vector3(-sin(float(s.yaw)), 0.0, -cos(float(s.yaw)))
-	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level)) * _staff_tempo(s)
+	var sp: float = STAFF_BASE_SPEED * (0.7 + 0.06 * float(s.level)) * _staff_tempo(s) * (1.9 if bool(s.get("rennt", false)) else 1.0)
 	if fwd.dot(dir) > 0.2:
 		var schritt := minf(sp * delta, d)
 		var pos: Vector3 = s.pos
@@ -3557,6 +3557,11 @@ func _update_staff(delta: float) -> void:
 			# Nach Hause geschickt (krank): zum Eingang und weg
 			s.tgt = ENTRANCE
 			if _staff_move(s, delta):
+				if bool(s.get("kuendigt", false)):
+					# Hat für MrPeaced gekündigt: für immer weg
+					_personal_weg(sid)
+					_broadcast_meta()
+					continue
 				s.heim = 2
 				s.pos = Vector3(ENTRANCE.x, -100.0, ENTRANCE.z)
 			_staff_sim[sid] = s
@@ -5979,6 +5984,9 @@ func _stamm_gast_setzen(id: int, start: Vector3, stamm: String, si: int) -> void
 	_guest_sim[id].patience = _geduld() * float(TYP_GEDULD.stamm)
 	_add_guest.rpc(id, start, "stamm|" + stamm)
 	_melde("MSG_STAMM_" + stamm.to_upper() + "_DA", [], 0)
+	if stamm == "peaced":
+		_peaced_gast = id
+		_peaced_runde_gemacht = false
 	if stamm == "monte":
 		# Nie allein: zwei Leibwächter neben dem Tisch, und Freunde setzen sich dazu
 		_monte_gast = id
@@ -6187,6 +6195,8 @@ func _despawn_guest(id: int) -> void:
 	if id == _monte_gast:
 		_monte_gast = -1
 		_leibwaechter_weg.rpc()
+	if id == _peaced_gast:
+		_peaced_gast = -1
 	if _klo_gast == id:
 		_klo_setzen(-1)
 	if _guest_sim.has(id):
@@ -8748,7 +8758,7 @@ func _net_saboteur_weg() -> void:
 ## Jeder hat einen Wunsch (Alois: Helles, Franz: Hendl, Giulia: Radler …). Dreimal
 ## zufrieden bedient → Belohnung auf seine Art, verpasst → zählt zurück.
 ## Stand im Spielstand ("stamm"), Anzeige im Festkurier und über dem Kopf.
-const STAMMGAESTE := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig", "monte"]
+const STAMMGAESTE := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig", "monte", "peaced"]
 ## ---- Influencer SloptanaBlack88: kommt nie allein (zwei Leibwächter), sitzt am Tisch, sagt Sprüche nur wenn man ihn anspricht (MONTE_SPRUCH_0..2)
 const LW_ABSTAND := 2.2          # so weit steht ein Leibwächter seitlich vom Tisch
 const MONTE_SPRUECHE := 3
@@ -8850,6 +8860,59 @@ func _leibwaechter_weg() -> void:
 	_lw_nodes.clear()
 	_lw_pos.clear()
 
+## ---- Influencer MrPeaced: bezahlt eine Runde Bier für alle, bietet manchmal einem Kellner 10.000 € zum Kündigen
+const PEACED_KELLNER_CHANCE := 0.4
+const PEACED_KUENDIGUNG := 10000
+var _peaced_gast := -1
+var _peaced_runde_gemacht := false
+
+## Er wurde zufrieden bedient: Runde für alle (der Spieler bekommt den Bierpreis je Gast im Zelt), dann mit 40 % Chance
+## das Angebot an einen Kellner
+func _peaced_bedient() -> void:
+	if _peaced_runde_gemacht or _peaced_gast < 0:
+		return
+	_peaced_runde_gemacht = true
+	var gaeste := _guest_sim.size()
+	var summe := _reward_for(1, 1) * gaeste
+	_add_income(summe)
+	_last_earn += summe
+	_net_spruch_text.rpc(_peaced_gast, "PEACED_SPRUCH_RUNDE", [])
+	_melde("MSG_PEACED_RUNDE", [gaeste, _eur(summe)], 2)
+	if randf() < PEACED_KELLNER_CHANCE:
+		get_tree().create_timer(7.0).timeout.connect(_peaced_kellner_angebot)
+
+func _peaced_kellner_angebot() -> void:
+	if _peaced_gast < 0 or not _guest_sim.has(_peaced_gast):
+		return
+	var kandidaten: Array = []
+	for sid in _staff_sim.keys():
+		var s: Dictionary = _staff_sim[sid]
+		if int(s.role) == ROLE_KELLNER and int(s.get("heim", 0)) == 0 and not bool(s.get("kuendigt", false)):
+			kandidaten.append(sid)
+	if kandidaten.is_empty():
+		return
+	var sid: int = kandidaten.pick_random()
+	var kname := str((_staff_sim[sid] as Dictionary).get("name", ""))
+	_net_spruch_text.rpc(_peaced_gast, "PEACED_SPRUCH_KELLNER", [kname])
+	_melde("MSG_PEACED_KELLNER", [kname, _eur(PEACED_KUENDIGUNG)], 1)
+	# Der Kellner sagt ja und rennt zum Ausgang — dort ist er für immer weg (_update_staff, heim = 1)
+	var s2: Dictionary = _staff_sim[sid]
+	s2.kuendigt = true
+	s2.rennt = true
+	s2.heim = 1
+	s2.state = 0
+	s2.orders = []
+	s2.idx = 0
+	_staff_sim[sid] = s2
+
+## Spruch mit Text-Schlüssel über dem Kopf eines Gasts
+@rpc("authority", "reliable", "call_local")
+func _net_spruch_text(id: int, key: String, args: Array) -> void:
+	var c: Variant = _guests.get(id)
+	if c != null and is_instance_valid(c) and c.has_method("spruch_zeigen"):
+		var text := tr(key)
+		c.spruch_zeigen(text % args if not args.is_empty() else text)
+
 const STAMM_ZIEL := 3
 const STAMM_CHANCE := 0.03   # je neuem Gast, bis heute einer da war
 var _stamm := {}             # key -> {"gut": n, "belohnt": bool}
@@ -8887,6 +8950,8 @@ func _stamm_bedient(g: Dictionary) -> void:
 		return
 	s.gut = int(s.gut) + 1
 	_stamm[k] = s
+	if k == "peaced":
+		_peaced_bedient()
 	if int(s.gut) >= STAMM_ZIEL:
 		s.belohnt = true
 		_stamm_belohnung(k)
@@ -8922,6 +8987,8 @@ func _stamm_belohnung(k: String) -> void:
 			_pop_erhoehen(3.0)
 		"monte":
 			_pop_erhoehen(10.0)
+		"peaced":
+			_pop_erhoehen(12.0)
 	_melde("MSG_STAMM_BELOHNUNG_" + k.to_upper(), [], 2)
 
 ## Nach Loslassen oder Wurf: kein Spieler trägt mehr einen Raufbold. Es kann

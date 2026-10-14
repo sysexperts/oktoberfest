@@ -28,7 +28,33 @@
 			"brille_farbe": "0a0a0c",
 			"tattoo_koerper": "sloptana",
 			"brille_skala": 0.72,
-			"brille_vor": 0.045
+			"brille_vor": 0.045,
+			"influencer": true
+		}
+	},
+	"mrpeaced": {
+		"name": "MrPeaced",
+		"look": {
+			"geschlecht": "m",
+			"haut": "e0a98a",
+			"augen": "gross",
+			"emotion": "froehlich",
+			"frisur": "kurz",
+			"haar": "3b2415",
+			"bart": "stoppeln",
+			"hut": "ohne",
+			"brille": "ohne",
+			"hemd": "hemd_karo_kurz",
+			"hemd_farbe": "d4242b",
+			"hemd_muster": "d4242b",
+			"jacke": "ohne",
+			"hose": "hose_kniebund",
+			"hose_farbe": "2d4f86",
+			"hose_muster": "2d4f86",
+			"schuhe": "schuh_sneaker",
+			"schuhe_farbe": "f2f2f0",
+			"schuhe_muster": "d4242b",
+			"influencer": true
 		}
 	}
 }

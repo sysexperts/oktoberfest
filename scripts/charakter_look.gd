@@ -129,10 +129,14 @@ static func _eintrag(art: String, id: String) -> Dictionary:
 static func pruefen(roh: Dictionary) -> Dictionary:
 	var g := "w" if str(roh.get("geschlecht", "m")) == "w" else "m"
 	var l := standard(g)
+	# Influencer (festes Aussehen, daten/influencer.json) dürfen alle Bausteine tragen, auch Frauenfrisuren bei Männern
+	var alle_frei := bool(roh.get("influencer", false))
 	for art: String in ARTEN:
 		var id := str(roh.get(art, l[art]))
-		if _alle_liste(art, g).any(func(e: Dictionary) -> bool: return e["id"] == id):
+		if _alle_liste(art, "" if alle_frei else g).any(func(e: Dictionary) -> bool: return e["id"] == id):
 			l[art] = id
+	if alle_frei:
+		l["influencer"] = true
 	for schluessel: String in FARB_SCHLUESSEL:
 		var t := str(roh.get(schluessel, l[schluessel]))
 		if t.length() <= 8 and Color.html_is_valid(t):

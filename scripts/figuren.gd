@@ -219,14 +219,18 @@ static func einsetzen_npc(besitzer: Node3D, id: int, salz := 0) -> Figur:
 
 
 ## Benannte Stammgäste (GameManager.STAMMGAESTE): feste Figur je Name, Geschlecht passend zum Namen
-const STAMM_GESCHLECHT := {"monte": "m", "alois": "m", "veronika": "w", "katharina": "w", "franz": "m", "giulia": "w", "ludwig": "m"}
+const STAMM_GESCHLECHT := {"peaced": "m", "monte": "m", "alois": "m", "veronika": "w", "katharina": "w", "franz": "m", "giulia": "w", "ludwig": "m"}
+
+## Stammgast-Name -> Eintrag in daten/influencer.json
+const INFLUENCER := {"monte": "sloptanablack88", "peaced": "mrpeaced"}
 
 static func einsetzen_stamm(besitzer: Node3D, name: String) -> Figur:
-	if name == "monte":
-		# SloptanaBlack88 (Influencer): feste Figur aus daten/influencer.json
+	if name in INFLUENCER:
+		# Influencer (SloptanaBlack88, MrPeaced): feste Figur aus daten/influencer.json
 		var roh: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://daten/influencer.json"))
-		if roh is Dictionary and (roh as Dictionary).has("sloptanablack88"):
-			return einsetzen_look(besitzer, (roh["sloptanablack88"] as Dictionary)["look"])
+		var schluessel: String = INFLUENCER[name]
+		if roh is Dictionary and (roh as Dictionary).has(schluessel):
+			return einsetzen_look(besitzer, (roh[schluessel] as Dictionary)["look"])
 	var l := npc_look(hash(name), 7, str(STAMM_GESCHLECHT.get(name, "")))
 	if name == "alois":
 		# Opa Alois: weißer Backenbart unterm Filzhut (der Walross-Schnauzer gehört Horst)
