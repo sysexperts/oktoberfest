@@ -924,6 +924,8 @@ func _hint_for(t: Node3D) -> String:
 			return "HINT_WASSER_GEBEN" if g.rausch_stufe >= 1 else ""
 		if g.rausch_stufe == 3 and carry_state == 0 and extra_kruege.is_empty():
 			return "HINT_HEIMBRINGEN"
+		if g.stamm == "monte" and not _has_ready() and extra_kruege.is_empty():
+			return "HINT_MONTE"
 		if g.order_state != 1:
 			return ""
 		if not (_has_ready() or not extra_kruege.is_empty()):
@@ -1194,6 +1196,10 @@ func _handle_interaction(delta: float) -> void:
 				and carry_state == 0 and extra_kruege.is_empty():
 			_world.net_heimbringen.rpc_id(1, (_current_target as Customer).cust_id)
 			_sfx("pop")
+			return
+		if _current_target is Customer and (_current_target as Customer).stamm == "monte" \
+				and not _has_ready() and extra_kruege.is_empty():
+			_world.net_monte_ansprechen.rpc_id(1, (_current_target as Customer).cust_id)
 			return
 		if _current_target is Customer and (_has_ready() or not extra_kruege.is_empty()):
 			var g := _current_target as Customer

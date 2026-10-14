@@ -1609,6 +1609,8 @@ func _client_ready(version: String) -> void:
 	for sid in _staff_sim.keys():
 		var st: Dictionary = _staff_sim[sid]
 		_add_staff.rpc_id(sender, sid, st.pos, int(st.role), int(st.level))
+	for lw in _lw_pos.keys():
+		_add_leibwaechter.rpc_id(sender, lw, (_lw_pos[lw] as Array)[0], float((_lw_pos[lw] as Array)[1]))
 	for pid in _packages.keys():
 		var pk = _packages[pid]
 		_add_package.rpc_id(sender, pid, (pk as Node3D).position, int(pk.kind), int(pk.amount))
@@ -5156,6 +5158,7 @@ func _shift_process(delta: float) -> void:
 	_update_complaints(delta)
 	_update_hygiene(delta)
 	_update_fussspuren(delta)
+	_update_monte(delta)
 
 ## Gästetyp nach Gewicht (GAST_TYPEN).
 func _gast_typ_waehlen() -> String:
@@ -5741,6 +5744,8 @@ func _start_shift() -> void:
 	_tagesziel_waehlen()
 	_npc_roles = {}          # E3: Aushilfs-NPCs entfallen — echtes Personal übernimmt
 	_assigned.clear()
+	_leibwaechter_weg.rpc()   # Influencer vom Vortag samt Leibwächtern
+	_monte_gast = -1
 	_net_band_zurueck.rpc()   # neue Schicht: Band wieder da, Musik wieder an
 	_spawn_artists()          # E5: gebuchter Künstler betritt die Bühne
 	for sid in _staff_sim.keys():
@@ -5961,14 +5966,24 @@ func _spawn_guest(sitz := -1, gruppe := 0) -> void:
 	# Benannter Stammgast (Opa Alois, Veronika …) — einer pro Tag, nach dem Tutorial
 	var stamm := _stammgast_waehlen()
 	if stamm != "":
-		_guest_sim[id].typ = "stamm"
-		_guest_sim[id].stamm = stamm
-		_guest_sim[id].patience = _geduld() * float(TYP_GEDULD.stamm)
-		_add_guest.rpc(id, start, "stamm|" + stamm)
-		_melde("MSG_STAMM_" + stamm.to_upper() + "_DA", [], 0)
+		_stamm_gast_setzen(id, start, stamm, si)
 		return
 	_add_guest.rpc(id, start, typ)
 	if gruppe == 0 and _story.aktiv and not tutorial_active() and randf() < GRUPPE_CHANCE:
+		_gruppe_nachziehen(id, si)
+
+## Aus einem neuen Gast einen benannten Stammgast machen (Opa Alois, Veronika, SloptanaBlack88 …)
+func _stamm_gast_setzen(id: int, start: Vector3, stamm: String, si: int) -> void:
+	_guest_sim[id].typ = "stamm"
+	_guest_sim[id].stamm = stamm
+	_guest_sim[id].patience = _geduld() * float(TYP_GEDULD.stamm)
+	_add_guest.rpc(id, start, "stamm|" + stamm)
+	_melde("MSG_STAMM_" + stamm.to_upper() + "_DA", [], 0)
+	if stamm == "monte":
+		# Nie allein: zwei Leibwächter neben dem Tisch, und Freunde setzen sich dazu
+		_monte_gast = id
+		_monte_t = 6.0
+		_leibwaechter_stellen(si)
 		_gruppe_nachziehen(id, si)
 
 ## Zu einem neuen Gast kommen ein bis zwei Freunde, die sich an denselben Tisch setzen.
@@ -6164,6 +6179,9 @@ func _guest_order(g: Dictionary, id: int, delta: float) -> void:
 		g.tgt = _auf_ebene(ziel, ebene_von(seat.pos))
 
 func _despawn_guest(id: int) -> void:
+	if id == _monte_gast:
+		_monte_gast = -1
+		_leibwaechter_weg.rpc()
 	if _klo_gast == id:
 		_klo_setzen(-1)
 	if _guest_sim.has(id):
@@ -8725,7 +8743,113 @@ func _net_saboteur_weg() -> void:
 ## Jeder hat einen Wunsch (Alois: Helles, Franz: Hendl, Giulia: Radler …). Dreimal
 ## zufrieden bedient → Belohnung auf seine Art, verpasst → zählt zurück.
 ## Stand im Spielstand ("stamm"), Anzeige im Festkurier und über dem Kopf.
-const STAMMGAESTE := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig"]
+const STAMMGAESTE := ["alois", "veronika", "katharina", "franz", "giulia", "ludwig", "monte"]
+## ---- Influencer SloptanaBlack88: kommt nie allein (zwei Leibwächter), sagt Sprüche (MONTE_SPRUCH_0..2)
+const LW_ABSTAND := 2.2          # so weit steht ein Leibwächter seitlich vom Tisch
+const MONTE_SPRUECHE := 3
+const MONTE_GEWICHT := [5, 2, 2]  # "Schmutz, Digga!" kommt am häufigsten
+var _monte_gast := -1            # Gast-ID des Influencers (-1 = keiner da)
+var _monte_t := 0.0
+var _monte_cooldown := 0.0
+var _lw_pos := {}                # Leibwächter-ID -> [Position, Blickrichtung] für Mitspieler, die später dazukommen
+var _lw_nodes := {}
+var _lw_next := 1
+
+func _update_monte(delta: float) -> void:
+	if not multiplayer.is_server():
+		return
+	_monte_cooldown = maxf(0.0, _monte_cooldown - delta)
+	if _monte_gast < 0:
+		return
+	if not _guest_sim.has(_monte_gast):
+		_monte_gast = -1
+		return
+	_monte_t -= delta
+	if _monte_t <= 0.0:
+		_monte_t = randf_range(22.0, 40.0)
+		_monte_spruch()
+
+func _monte_spruch() -> void:
+	if _monte_gast < 0:
+		return
+	var summe := 0
+	for w: int in MONTE_GEWICHT:
+		summe += w
+	var wurf := randi() % summe
+	var nr := 0
+	for i in MONTE_GEWICHT.size():
+		wurf -= int(MONTE_GEWICHT[i])
+		if wurf < 0:
+			nr = i
+			break
+	_net_monte_spruch.rpc(_monte_gast, nr)
+
+@rpc("authority", "reliable", "call_local")
+func _net_monte_spruch(id: int, nr: int) -> void:
+	var c: Variant = _guests.get(id)
+	if c != null and is_instance_valid(c) and c.has_method("spruch_zeigen"):
+		c.spruch_zeigen(tr("MONTE_SPRUCH_%d" % clampi(nr, 0, MONTE_SPRUECHE - 1)))
+
+## Spieler spricht den Influencer an (E): er sagt sofort einen Spruch
+@rpc("any_peer", "reliable", "call_local")
+func net_monte_ansprechen(id: int) -> void:
+	if not multiplayer.is_server() or id != _monte_gast or _monte_cooldown > 0.0:
+		return
+	_monte_cooldown = 2.0
+	_monte_t = randf_range(22.0, 40.0)
+	_monte_spruch()
+
+## Zwei Leibwächter seitlich vom Tisch des Influencers, mit Blick zum Tisch
+func _leibwaechter_stellen(si: int) -> void:
+	var ti := int(_seats[si].get("table", 0))
+	if ti < 0 or ti >= _beertables.size():
+		return
+	var bt := _beertables[ti] as Node3D
+	var basis := bt.global_transform.basis.orthonormalized()
+	# Vier Standplätze um den Tisch (an den Schmalseiten und vorn/hinten): die zwei mit dem meisten Abstand zu
+	# anderen Tischen, damit die Leibwächter nicht in einer Bank des Nachbartischs stehen
+	var kandidaten: Array[Vector3] = []
+	for r in [basis.x * (TISCH_FLECK_HALB.x + LW_ABSTAND - 1.0), -basis.x * (TISCH_FLECK_HALB.x + LW_ABSTAND - 1.0),
+			basis.z * (TISCH_FLECK_HALB.y + LW_ABSTAND + 0.6), -basis.z * (TISCH_FLECK_HALB.y + LW_ABSTAND + 0.6)]:
+		kandidaten.append(bt.global_position + (r as Vector3))
+	var wertung: Array = []
+	for k: Vector3 in kandidaten:
+		var frei := 99.0
+		for i in _beertables.size():
+			if i != ti:
+				frei = minf(frei, (_beertables[i] as Node3D).global_position.distance_to(k))
+		wertung.append([frei, k])
+	wertung.sort_custom(func(a: Array, b: Array) -> bool: return float(a[0]) > float(b[0]))
+	for n in 2:
+		var pos: Vector3 = wertung[n][1]
+		pos.y = bt.global_position.y
+		var blick := bt.global_position - pos
+		var yaw := atan2(-blick.x, -blick.z)
+		var lid := _lw_next
+		_lw_next += 1
+		_lw_pos[lid] = [pos, yaw]
+		_add_leibwaechter.rpc(lid, pos, yaw)
+
+@rpc("authority", "reliable", "call_local")
+func _add_leibwaechter(lid: int, pos: Vector3, yaw: float) -> void:
+	if _lw_nodes.has(lid):
+		return
+	var n := (load("res://scenes/leibwaechter.tscn") as PackedScene).instantiate()
+	n.lw_id = lid
+	n.position = pos
+	n.rotation.y = yaw
+	add_child(n)
+	_lw_nodes[lid] = n
+
+@rpc("authority", "reliable", "call_local")
+func _leibwaechter_weg() -> void:
+	for lid in _lw_nodes.keys():
+		var n: Node = _lw_nodes[lid]
+		if is_instance_valid(n):
+			n.queue_free()
+	_lw_nodes.clear()
+	_lw_pos.clear()
+
 const STAMM_ZIEL := 3
 const STAMM_CHANCE := 0.03   # je neuem Gast, bis heute einer da war
 var _stamm := {}             # key -> {"gut": n, "belohnt": bool}
@@ -8796,6 +8920,8 @@ func _stamm_belohnung(k: String) -> void:
 		"ludwig":
 			_add_income(300)
 			_pop_erhoehen(3.0)
+		"monte":
+			_pop_erhoehen(10.0)
 	_melde("MSG_STAMM_BELOHNUNG_" + k.to_upper(), [], 2)
 
 ## Nach Loslassen oder Wurf: kein Spieler trägt mehr einen Raufbold. Es kann

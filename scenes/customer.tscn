@@ -16,3 +16,15 @@ billboard = 1
 pixel_size = 0.0042
 font_size = 56
 outline_size = 14
+
+[node name="Spruch" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.65, 0)
+visible = false
+billboard = 1
+no_depth_test = true
+pixel_size = 0.0032
+modulate = Color(1, 0.93, 0.5, 1)
+font_size = 52
+outline_size = 16
+autowrap_mode = 3
+width = 520.0

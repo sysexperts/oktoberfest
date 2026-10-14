@@ -2771,3 +2771,10 @@ WORLD_CASINO,Casino,Casino,Casino
 HINT_WAGEN_UMZIEHEN_AN,{interact} Verkleidung anziehen,{interact} Put on the disguise,{interact} Kılığı giy
 HINT_WAGEN_UMZIEHEN_AUS,{interact} Verkleidung ausziehen,{interact} Take off the disguise,{interact} Kılığı çıkar
 HINT_WAGEN_SCHRANK_LEER,"Noch keine Verkleidung — die gibt es bei Gustav","No disguise yet — you can get one from Gustav","Henüz kılık yok — Gustav'dan alabilirsin"
+STAMM_NAME_MONTE,SloptanaBlack88,SloptanaBlack88,SloptanaBlack88
+MSG_STAMM_MONTE_DA,"SloptanaBlack88 streamt aus deinem Zelt – mit zwei Bodyguards!","SloptanaBlack88 is streaming from your tent – with two bodyguards!","SloptanaBlack88 çadırından yayın yapıyor – yanında iki koruma var!"
+MSG_STAMM_BELOHNUNG_MONTE,"Der Chat dreht durch: SloptanaBlack88 hat dein Zelt gepostet (+Beliebtheit).","Chat goes wild: SloptanaBlack88 posted your tent (+popularity).","Sohbet çıldırdı: SloptanaBlack88 çadırını paylaştı (+popülerlik)."
+HINT_MONTE,{interact} Ansprechen,{interact} Talk,{interact} Konuş
+MONTE_SPRUCH_0,"Schmutz, Digga!","Shit, dude!","Vay be, kanka!"
+MONTE_SPRUCH_1,"Digga, ist das Bier frisch oder muss ich selbst zapfen?","Dude, is this beer fresh or do I have to tap it myself?","Kanka, bu bira taze mi yoksa kendim mi çekeyim?"
+MONTE_SPRUCH_2,"Chat, schaut euch das Zelt an. Absolut gönn-bar.","Chat, look at this tent. Absolutely worth it.","Chat, şu çadıra bakın. Kesinlikle değer."

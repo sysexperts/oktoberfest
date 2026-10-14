@@ -44,6 +44,14 @@ var _tanz_hoehe := TISCH_HOEHE
 
 @onready var _model: Node3D = $Model
 @onready var _bubble: Label3D = $Bubble
+@onready var _spruch: Label3D = $Spruch
+var _spruch_t := 0.0
+
+func _process_spruch(delta: float) -> void:
+	if _spruch_t > 0.0:
+		_spruch_t -= delta
+		if _spruch_t <= 0.0 and _spruch:
+			_spruch.visible = false
 
 func _ready() -> void:
 	# Benannter Stammgast vom Server: "stamm|alois" (GameManager, Stammgäste)
@@ -237,6 +245,7 @@ var _details := false
 var _uhr_ms := 0.0
 
 func _process(delta: float) -> void:
+	_process_spruch(delta)
 	_uhr_ms += delta * 1000.0
 	var details := Input.is_physical_key_pressed(KEY_CTRL) or Input.is_action_pressed(Einstellungen.PAD_HALTEN)
 	if details != _details:
@@ -345,3 +354,11 @@ func _pose(bone: int, axis: Vector3, ang: float) -> void:
 ## Für Tests: ob der Gast gerade sitzt.
 func sitzt() -> bool:
 	return _seated
+
+## Spruch über dem Kopf (Influencer SloptanaBlack88): erscheint für ein paar Sekunden
+func spruch_zeigen(text: String) -> void:
+	if _spruch == null:
+		return
+	_spruch.text = text
+	_spruch.visible = true
+	_spruch_t = 4.5 + 0.05 * text.length()
