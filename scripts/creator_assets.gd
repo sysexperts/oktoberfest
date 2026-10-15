@@ -128,6 +128,8 @@ const FRISUREN := [
 	# Männerfrisuren (noch nicht im Creator, nur für Influencer): Tolle, Seitenscheitel, Kurzhaar
 	{"id": "tolle", "name": "CREATOR_FRISUR_TOLLE", "szene": "res://scenes/creator/frisuren/tolle.tscn", "g": "m", "versteckt": true},
 	{"id": "seitenscheitel", "name": "CREATOR_FRISUR_SCHEITEL", "szene": "res://scenes/creator/frisuren/seitenscheitel.tscn", "g": "m", "versteckt": true},
+	{"id": "peaced_d", "name": "CREATOR_FRISUR_PEACED", "szene": "res://scenes/creator/frisuren/peaced_d.tscn", "g": "m", "versteckt": true},
+	{"id": "peaced_e", "name": "CREATOR_FRISUR_PEACED", "szene": "res://scenes/creator/frisuren/peaced_e.tscn", "g": "m", "versteckt": true},
 	{"id": "peaced_a", "name": "CREATOR_FRISUR_PEACED", "szene": "res://scenes/creator/frisuren/peaced_a.tscn", "g": "m", "versteckt": true},
 	{"id": "peaced_b", "name": "CREATOR_FRISUR_PEACED", "szene": "res://scenes/creator/frisuren/peaced_b.tscn", "g": "m", "versteckt": true},
 	{"id": "peaced_c", "name": "CREATOR_FRISUR_PEACED", "szene": "res://scenes/creator/frisuren/peaced_c.tscn", "g": "m", "versteckt": true},

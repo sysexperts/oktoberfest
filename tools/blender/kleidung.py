@@ -1541,6 +1541,42 @@ elif OUTFIT == "frisuren":
     peaced_frisur("peaced_c", [(0.070, 1.610, 0.140, 0.100, 0.045, 0.060), (0.020, 1.630, 0.090, 0.100, 0.045, 0.070),
                                (-0.050, 1.620, 0.020, 0.110, 0.050, 0.100), (-0.020, 1.600, -0.070, 0.120, 0.040, 0.100)])
 
+    # ---- 12. Fransen-Welle (MrPeaced): echte Haarbüschel statt Kappe. Kurze, eng anliegende Seiten und Nacken (Fade), oben dicke,
+    # spitz zulaufende Büschel, die von einem Wirbel hinten links nach vorn rechts über die Stirn gekämmt sind; die vordersten
+    # heben sich ab und hängen als Fransen in die Stirn.
+    def peaced_haar(name, pol, hoch, swing, anz_oben, fransen):
+        bm = bmesh.new()
+        # Seiten und Nacken: kurz, glatt anliegend
+        for ebene, (anz, versatz, th0, lift, breit) in enumerate([(30, 0.0, 0.55, (0.008, 0.010), (0.034, 0.020)),
+                                                                  (30, 0.5, 0.95, (0.012, 0.012), (0.030, 0.018))]):
+            for i in range(anz):
+                phi = (i + versatz) / anz * math.tau
+                if math.cos(phi) > 0.55 and abs(math.sin(phi)) < 0.9 and ebene == 1:
+                    continue
+                strähne(bm, OBEN, VORN, phi, th0, haarlinie(phi, 1.50, 1.88, 2.05), 7, lift, 0.003, breit, 0.55)
+        # Oberseite: dicke Büschel in drei Lagen vom Wirbel zur Stirn
+        for lage, (anz, th0, lift, breit, bauch) in enumerate([(anz_oben, 0.10, (0.012, 0.016), (0.052, 0.026), 0.012),
+                                                               (anz_oben - 2, 0.30, (0.022, 0.028), (0.048, 0.022), 0.022),
+                                                               (anz_oben - 4, 0.55, (0.034, 0.040), (0.042, 0.016), 0.032)]):
+            for i in range(anz):
+                f = (i + 0.5 * lage) / max(1, anz - 1)
+                psi = -1.15 + 2.30 * f
+                th1 = hoch - 0.22 * abs(psi) / 1.15 - 0.10 * lage
+                strähne(bm, pol, OBEN, psi, th0, th1, 12, lift, bauch, breit, 0.50, 0.0, swing * math.sin(f * math.pi))
+        # Fransen: einzelne lange Büschel, die frei in die Stirn hängen und zur Seite zeigen
+        for i in range(fransen):
+            f = i / max(1, fransen - 1)
+            psi = -0.55 + 1.10 * f
+            strähne(bm, pol, OBEN, psi, 0.30, hoch - 0.30, 8, (0.040, 0.026), 0.020, (0.040, 0.010), 0.45, 0.0, swing * 1.4)
+        return bm
+
+    pol_d = Vector((0.45, 0.10, 0.88)).normalized()
+    bm = peaced_haar("peaced_d", pol_d, 2.05, 0.10, 9, 3)
+    frisur_fertig("peaced_d", bm, haube("peaced_d_kappe", offset=0.008, vorn=1.55, seite=1.43, hinten=1.37))
+    pol_e = Vector((0.0, 0.14, 1.0)).normalized()
+    bm = peaced_haar("peaced_e", pol_e, 2.15, 0.0, 10, 3)
+    frisur_fertig("peaced_e", bm, haube("peaced_e_kappe", offset=0.008, vorn=1.55, seite=1.43, hinten=1.37))
+
     # ---- Frisuren nach Quaternius-Vorlage (CC0, Universal Base Characters): die Haarformen der fertigen
     # Frisuren werden auf unseren Kopf skaliert, an die Kopfoberfläche gedrückt (Haaransatz sitzt an der Haut),
     # verdickt und zu einer glatten, kompakten Form verschmolzen — passend zum Stil des Körpers.
