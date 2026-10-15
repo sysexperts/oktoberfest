@@ -39,6 +39,7 @@ class Lauf extends Node:
 		await _warten(1.0)
 		var c: Node = gm._guests.get(id)
 		_check("MrPeaced-Gast gesetzt", gm._peaced_gast == id and c != null and c.stamm == "peaced")
+		_check("zwei Leibwächter", gm._lw_nodes.size() == 2)
 		var gaeste: int = gm._guest_sim.size()
 		var vorher: int = gm._income_today if "_income_today" in gm else 0
 		var geld_vorher: int = Game.money
@@ -59,6 +60,9 @@ class Lauf extends Node:
 		while gm._staff_sim.has(sid) and t < 40.0:
 			await _warten(1.0)
 			t += 1.0
+		gm._despawn_guest(id)
+		await _warten(0.5)
+		_check("Leibwächter weg nach Abgang", gm._lw_nodes.is_empty())
 		_check("Kellner ist nach %.0f s weg (für immer entlassen)" % t, not gm._staff_sim.has(sid))
 		print("ERGEBNIS: %s" % ("BESTANDEN" if ok else "FEHLGESCHLAGEN"))
 		get_tree().quit()

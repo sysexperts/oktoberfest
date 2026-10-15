@@ -5987,6 +5987,9 @@ func _stamm_gast_setzen(id: int, start: Vector3, stamm: String, si: int) -> void
 	if stamm == "peaced":
 		_peaced_gast = id
 		_peaced_runde_gemacht = false
+		# Auch MrPeaced kommt nie allein: zwei Security-Männer neben dem Tisch (wie bei SloptanaBlack88), Freunde am Tisch
+		_leibwaechter_stellen(si)
+		_gruppe_nachziehen(id, si)
 	if stamm == "monte":
 		# Nie allein: zwei Leibwächter neben dem Tisch, und Freunde setzen sich dazu
 		_monte_gast = id
@@ -6197,6 +6200,7 @@ func _despawn_guest(id: int) -> void:
 		_leibwaechter_weg.rpc()
 	if id == _peaced_gast:
 		_peaced_gast = -1
+		_leibwaechter_weg.rpc()
 	if _klo_gast == id:
 		_klo_setzen(-1)
 	if _guest_sim.has(id):
