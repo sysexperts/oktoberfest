@@ -8127,7 +8127,7 @@ func _bj_text(karten: Array) -> String:
 	var teile: PackedStringArray = []
 	for k in karten:
 		var kk := int(k)
-		teile.append("A" if kk == 1 else ("B" if kk == 11 else ("D" if kk == 12 else ("K" if kk == 13 else str(kk)))))
+		teile.append(String(TranslationServer.translate("BJ_ASS")) if kk == 1 else (String(TranslationServer.translate("BJ_BUBE")) if kk == 11 else (String(TranslationServer.translate("BJ_DAME")) if kk == 12 else (String(TranslationServer.translate("BJ_KOENIG")) if kk == 13 else str(kk)))))
 	return " ".join(teile)
 
 func _bj_senden(peer: int, offen: bool, ergebnis := "") -> void:
@@ -8164,7 +8164,7 @@ func _bj_ende(peer: int) -> void:
 	if betrag != 0:
 		Game.add_money(betrag)
 	_stats["blackjack"] = int(_stats.get("blackjack", 0)) + 1
-	_bj_senden(peer, false, String(TranslationServer.translate(key)) % _eur(absi(betrag)))
+	_bj_senden(peer, false, String(TranslationServer.translate(key)) % Texte.euro(absi(betrag)))
 	_bj.erase(peer)
 	_broadcast_meta()
 
