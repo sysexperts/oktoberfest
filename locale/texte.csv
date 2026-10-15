@@ -2807,3 +2807,66 @@ BJ_ASS,Ass,Ace,As
 BJ_BUBE,Bube,Jack,Vale
 BJ_DAME,Dame,Queen,Kız
 BJ_KOENIG,König,King,Papaz
+
+ROULETTE_TITEL,Roulette,Roulette,Rulet
+ROULETTE_KASSE,Kasse: %s,Cash: %s,Kasa: %s
+ROULETTE_EINSATZ,Einsatz: %s,Stake: %s,Bahis: %s
+ROULETTE_JETON,Jeton wählen,Choose a chip,Fiş seç
+ROULETTE_VERLAUF,Letzte Zahlen,Last numbers,Son sayılar
+ROULETTE_ZURUECK,Zurück,Undo,Geri al
+ROULETTE_LEEREN,Leeren,Clear,Temizle
+ROULETTE_WIEDERHOLEN,Wiederholen,Repeat,Tekrarla
+ROULETTE_DREHEN,Drehen,Spin,Çevir
+ROULETTE_GERADE,Gerade,Even,Çift
+ROULETTE_UNGERADE,Ungerade,Odd,Tek
+ROULETTE_ROT,Rot,Red,Kırmızı
+ROULETTE_SCHWARZ,Schwarz,Black,Siyah
+DUTZEND_1,1. Dutzend,1st dozen,1. düzine
+DUTZEND_2,2. Dutzend,2nd dozen,2. düzine
+DUTZEND_3,3. Dutzend,3rd dozen,3. düzine
+ROULETTE_HINWEIS,"Zahl 35:1 · Dutzend, Spalte 2:1 · Rot/Schwarz, Gerade/Ungerade, 1-18/19-36 1:1 · die 0 gehört dem Haus","Number 35:1 · dozen, column 2:1 · red/black, even/odd, 1-18/19-36 1:1 · the 0 belongs to the house","Sayı 35:1 · düzine, sütun 2:1 · kırmızı/siyah, çift/tek, 1-18/19-36 1:1 · 0 kasanın"
+ROULETTE_SETZEN,Faites vos jeux – setz deine Jetons!,Faites vos jeux – place your chips!,Faites vos jeux – fişlerini koy!
+ROULETTE_RIEN_NE_VA_PLUS,Rien ne va plus …,Rien ne va plus ...,Rien ne va plus ...
+ROULETTE_ZU_WENIG,Dafür reicht dein Geld nicht.,You can't afford that.,Paran buna yetmiyor.
+ROULETTE_ABGELEHNT,Die Bank hat die Wette nicht angenommen.,The bank did not accept the bet.,Banka bahsi kabul etmedi.
+ROULETTE_UI_GEWINN,"Die %d, %s! Du gewinnst %s.","%d, %s! You win %s.","%d, %s! %s kazandın."
+ROULETTE_UI_VERLUST,"Die %d, %s. Du verlierst %s.","%d, %s. You lose %s.","%d, %s. %s kaybettin."
+BJ_TITEL,Blackjack,Blackjack,Blackjack
+BJ_REGEL,Blackjack zahlt 3:2 · Bank zieht bis 17,Blackjack pays 3:2 · dealer draws to 17,Blackjack 3:2 öder · krupiye 17'ye kadar çeker
+BJ_BANK,Bank,Dealer,Krupiye
+BJ_DU,Du,You,Sen
+BJ_JETON,Einsatz mit Jetons setzen,Place your stake with chips,Bahsi fişlerle koy
+BJ_AUSTEILEN,Austeilen,Deal,Dağıt
+BJ_VERDOPPELN,Verdoppeln,Double down,Ikiye katla
+BJ_HINWEIS,"Karte = noch eine Karte · Halten = Hand behalten · Verdoppeln = doppelter Einsatz, genau eine Karte","Hit = another card · Stand = keep your hand · Double = double stake, exactly one card","Kart = bir kart daha · Dur = eli koru · Ikiye katla = çifte bahis, tam bir kart"
+WUERFEL_TITEL,Würfelbecher,Dice cup,Zar kupası
+WUERFEL_FELD_TIEF,Tief (2 bis 6) · 1:1,Low (2 to 6) · 1:1,Düşük (2-6) · 1:1
+WUERFEL_FELD_SIEBEN,Sieben · 4:1,Seven · 4:1,Yedi · 4:1
+WUERFEL_FELD_HOCH,Hoch (8 bis 12) · 1:1,High (8 to 12) · 1:1,Yüksek (8-12) · 1:1
+WUERFEL_FELD_PASCH,Pasch (beide gleich) · 4:1,Doubles (both the same) · 4:1,Çift (ikisi aynı) · 4:1
+WUERFEL_WERFEN,Würfeln,Roll,Zar at
+WUERFEL_SCHUETTELN,Der Becher wird geschüttelt …,Shaking the cup ...,Kupa sallanıyor ...
+WUERFEL_HINWEIS,Zwei Würfel · du kannst auf mehrere Felder gleichzeitig setzen · die Sieben zählt weder als Tief noch als Hoch,Two dice · you can bet on several fields at once · seven counts as neither low nor high,İki zar · aynı anda birden çok alana oynayabilirsin · yedi ne düşük ne yüksek sayılır
+WUERFEL_UI_GEWINN,"%d und %d, zusammen %d! Du gewinnst %s.","%d and %d, total %d! You win %s.","%d ve %d, toplam %d! %s kazandın."
+WUERFEL_UI_VERLUST,"%d und %d, zusammen %d. Du verlierst %s.","%d and %d, total %d. You lose %s.","%d ve %d, toplam %d. %s kaybettin."
+SLOT_TITEL,Wiesn-Automat,Wiesn slot machine,Wiesn slot makinesi
+SLOT_EINSATZ,Einsatz pro Dreh,Stake per spin,Dönüş başına bahis
+SLOT_EINSATZ_ZEILE,Einsatz: %s,Stake: %s,Bahis: %s
+SLOT_TAFEL,Gewinntafel,Pay table,Kazanç tablosu
+SLOT_WILD,Raute = Wild,Diamond = wild,Baklava = joker
+SLOT_DREHEN,Drehen,Spin,Çevir
+SLOT_HINWEIS,"Fünf Gewinnlinien: Mitte, oben, unten und beide Diagonalen · der Einsatz verteilt sich auf die Linien · drei gleiche Symbole auf einer Linie gewinnen","Five paylines: middle, top, bottom and both diagonals · the stake is split across the lines · three matching symbols on a line win","Beş kazanç hattı: orta, üst, alt ve iki çapraz · bahis hatlara bölünür · bir hatta üç aynı sembol kazanır"
+SLOT_BEREIT,Hebel ziehen oder Drehen drücken.,Pull the lever or press Spin.,Kolu çek ya da Çevir'e bas.
+SLOT_LCD_BEREIT,BEREIT,READY,HAZIR
+SLOT_LCD_DREHT,VIEL GLÜCK …,GOOD LUCK ...,BOL ŞANS ...
+SLOT_LCD_GEWINN,GEWINN %s,WIN %s,KAZANÇ %s
+SLOT_LCD_NIETE,KEIN GEWINN,NO WIN,KAZANÇ YOK
+SLOT_TREFFER,Treffer auf %d Linie(n): du gewinnst %s!,Hit on %d line(s): you win %s!,%d hatta isabet: %s kazandın!
+SLOT_NICHTS,Diesmal nichts – der Einsatz geht an Konrads Bank.,Nothing this time – the stake goes to Konrad's bank.,Bu sefer hiçbir şey yok – bahis Konrad'ın bankasına gider.
+HINT_CASINO_SLOT,{interact} Automat spielen,{interact} Play the slot machine,{interact} Slot makinesini oyna
+MSG_SLOT_GEWONNEN,Automat: Treffer! +%s aus Konrads Bank.,Slot machine: a hit! +%s from Konrad's bank.,Slot makinesi: isabet! Konrad'ın bankasından +%s.
+MSG_SLOT_VERLOREN,Automat: nichts. -%s an Konrads Bank.,Slot machine: nothing. -%s to Konrad's bank.,Slot makinesi: boş. Konrad'ın bankasına -%s.
+WATTEN_REGEL,Zwei Stiche gewinnen · höhere Karte sticht · bei Gleichstand gewinnt die Bank,Win two tricks · the higher card wins · on a tie the bank wins,İki el kazan · yüksek kart alır · beraberlikte banka alır
+WATTEN_HINWEIS,"Karte anklicken, um sie zu legen · „Watten!“ verdoppelt den Einsatz – die Bank kann aufgeben","Click a card to play it · ""Watten!"" doubles the stake – the bank may fold","Oynamak için karta tıkla · ""Watten!"" bahsi ikiye katlar – banka pes edebilir"
+WATTEN_STICH_DU,Der Stich geht an dich!,The trick is yours!,El senin!
+WATTEN_STICH_BANK,Der Stich geht an die Bank.,The trick goes to the bank.,El bankanın.

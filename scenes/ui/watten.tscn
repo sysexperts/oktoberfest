@@ -1,106 +1,642 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/watten.gd" id="1_w"]
-[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="2_theme"]
-[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
+[ext_resource type="Script" path="res://scripts/ui/watten.gd" id="skript"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="theme"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="fraktur"]
+[ext_resource type="Texture2D" path="res://assets/casino/karte_ruecken.png" id="ruecken"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_10.png" id="c_10"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_50.png" id="c_50"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_100.png" id="c_100"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_500.png" id="c_500"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_1000.png" id="c_1000"]
+
+[sub_resource type="StyleBoxFlat" id="rahmen"]
+bg_color = Color(0.05, 0.27, 0.16, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.91, 0.74, 0.33, 1)
+corner_radius_top_left = 34
+corner_radius_top_right = 34
+corner_radius_bottom_right = 34
+corner_radius_bottom_left = 34
+
+[sub_resource type="StyleBoxFlat" id="tisch"]
+bg_color = Color(0.03, 0.17, 0.1, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="leer"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="gold_n"]
+bg_color = Color(0.88, 0.66, 0.22, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.93, 0.6, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="gold_h"]
+bg_color = Color(1.0, 0.8, 0.34, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0.8, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="gold_g"]
+bg_color = Color(0.35, 0.3, 0.18, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6, 0.55, 0.4, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="knopf_n"]
+bg_color = Color(0.1, 0.12, 0.11, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="knopf_h"]
+bg_color = Color(0.18, 0.21, 0.19, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="knopf_g"]
+bg_color = Color(0.1, 0.12, 0.11, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.45, 0.3, 0.5)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="banner"]
+bg_color = Color(0.02, 0.08, 0.05, 0.88)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.91, 0.74, 0.33, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="hand_n"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="hand_h"]
+bg_color = Color(1, 0.9, 0.4, 0.18)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="Watten" type="CanvasLayer"]
 layer = 26
-script = ExtResource("1_w")
+script = ExtResource("skript")
 
-[node name="Mitte" type="CenterContainer" parent="."]
+[node name="Dunkel" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource("2_theme")
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
 
-[node name="Panel" type="PanelContainer" parent="Mitte"]
-custom_minimum_size = Vector2(640, 0)
-layout_mode = 2
-
-[node name="Rand" type="MarginContainer" parent="Mitte/Panel"]
-layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 18
-
-[node name="Spalte" type="VBoxContainer" parent="Mitte/Panel/Rand"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Titel" type="Label" parent="Mitte/Panel/Rand/Spalte"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
-theme_override_fonts/font = ExtResource("3_fraktur")
-theme_override_font_sizes/font_size = 34
-text = "WATTEN_TITEL"
-horizontal_alignment = 1
-
-[node name="Stand" type="Label" parent="Mitte/Panel/Rand/Spalte"]
+[node name="Buehne" type="Control" parent="."]
 unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -800.0
+offset_top = -450.0
+offset_right = 800.0
+offset_bottom = 450.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(800, 450)
+theme = ExtResource("theme")
+
+[node name="Rahmen" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+theme_override_styles/panel = SubResource("rahmen")
+
+[node name="Titel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 60
+offset_top = 26
+offset_right = 760
+offset_bottom = 106
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_fonts/font = ExtResource("fraktur")
+theme_override_font_sizes/font_size = 64
+text = "WATTEN_TITEL"
+
+[node name="Kasse" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1000
+offset_top = 40
+offset_right = 1480
+offset_bottom = 100
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 2
 auto_translate_mode = 2
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
+
+[node name="Schliessen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1510
+offset_top = 30
+offset_right = 1570
+offset_bottom = 90
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/focus = SubResource("leer")
+text = "X"
+
+[node name="Filz" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 200
+offset_top = 120
+offset_right = 1400
+offset_bottom = 740
+theme_override_styles/panel = SubResource("tisch")
+mouse_filter = 2
+
+[node name="StapelHinten" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 1296
+offset_top = 142
+offset_right = 1446
+offset_bottom = 352
+texture = ExtResource("ruecken")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+modulate = Color(0.7, 0.7, 0.7, 1)
+
+[node name="Stapel" type="TextureRect" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1288
+offset_top = 134
+offset_right = 1438
+offset_bottom = 344
+texture = ExtResource("ruecken")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="BankName" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 240
+offset_top = 130
+offset_right = 540
+offset_bottom = 170
+theme_override_colors/font_color = Color(0.91, 0.74, 0.33, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "BJ_BANK"
+
+[node name="StichBank" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 240
+offset_top = 170
+offset_right = 540
+offset_bottom = 220
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="SpielerName" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 240
+offset_top = 470
+offset_right = 540
+offset_bottom = 510
+theme_override_colors/font_color = Color(0.91, 0.74, 0.33, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "BJ_DU"
+
+[node name="StichSpieler" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 240
+offset_top = 510
+offset_right = 540
+offset_bottom = 560
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="EinsatzTisch" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 240
+offset_top = 640
+offset_right = 600
+offset_bottom = 690
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="Regel" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 300
+offset_top = 330
+offset_right = 1300
+offset_bottom = 380
+theme_override_colors/font_color = Color(0.91, 0.74, 0.33, 0.55)
+theme_override_font_sizes/font_size = 28
 horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "WATTEN_REGEL"
+
+[node name="BankMeldung" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 700
+offset_top = 590
+offset_right = 1300
+offset_bottom = 640
+theme_override_colors/font_color = Color(0.95, 0.7, 0.55, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="Karten" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+mouse_filter = 2
+
+[node name="Hand0" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 560
+offset_top = 500
+offset_right = 710
+offset_bottom = 710
+focus_mode = 0
+ignore_texture_size = true
+stretch_mode = 5
+pivot_offset = Vector2(75, 105)
+visible = false
+
+[node name="Hand1" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 730
+offset_top = 500
+offset_right = 880
+offset_bottom = 710
+focus_mode = 0
+ignore_texture_size = true
+stretch_mode = 5
+pivot_offset = Vector2(75, 105)
+visible = false
+
+[node name="Hand2" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 900
+offset_top = 500
+offset_right = 1050
+offset_bottom = 710
+focus_mode = 0
+ignore_texture_size = true
+stretch_mode = 5
+pivot_offset = Vector2(75, 105)
+visible = false
+
+[node name="BannerPlatte" type="Panel" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 360
+offset_top = 346
+offset_right = 1240
+offset_bottom = 444
+theme_override_styles/panel = SubResource("banner")
+mouse_filter = 2
+visible = false
+
+[node name="Ergebnis" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 380
+offset_top = 350
+offset_right = 1220
+offset_bottom = 440
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 38
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
 autowrap_mode = 3
 
-[node name="BankKarte" type="Label" parent="Mitte/Panel/Rand/Spalte"]
+[node name="JetonTitel" type="Label" parent="Buehne"]
 unique_name_in_owner = true
-auto_translate_mode = 2
-layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.6, 0.5, 1)
-theme_override_font_sizes/font_size = 26
-horizontal_alignment = 1
-
-[node name="Hand" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte"]
-layout_mode = 2
-alignment = 1
-theme_override_constants/separation = 14
-
-[node name="Karte0" type="Button" parent="Mitte/Panel/Rand/Spalte/Hand"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(150, 90)
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-
-[node name="Karte1" type="Button" parent="Mitte/Panel/Rand/Spalte/Hand"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(150, 90)
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-
-[node name="Karte2" type="Button" parent="Mitte/Panel/Rand/Spalte/Hand"]
-unique_name_in_owner = true
-auto_translate_mode = 2
-custom_minimum_size = Vector2(150, 90)
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-
-[node name="Aktionen" type="HBoxContainer" parent="Mitte/Panel/Rand/Spalte"]
-layout_mode = 2
-alignment = 1
-theme_override_constants/separation = 14
-
-[node name="Watten" type="Button" parent="Mitte/Panel/Rand/Spalte/Aktionen"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 48)
-layout_mode = 2
+layout_mode = 0
+offset_left = 60
+offset_top = 744
+offset_right = 460
+offset_bottom = 774
+theme_override_colors/font_color = Color(0.85, 0.8, 0.6, 1)
 theme_override_font_sizes/font_size = 22
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "BJ_JETON"
+
+[node name="jeton_10" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 70
+offset_top = 780
+offset_right = 150
+offset_bottom = 860
+focus_mode = 0
+texture_normal = ExtResource("c_10")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_50" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 188
+offset_top = 780
+offset_right = 268
+offset_bottom = 860
+focus_mode = 0
+texture_normal = ExtResource("c_50")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_100" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 306
+offset_top = 780
+offset_right = 386
+offset_bottom = 860
+focus_mode = 0
+texture_normal = ExtResource("c_100")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_500" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 424
+offset_top = 780
+offset_right = 504
+offset_bottom = 860
+focus_mode = 0
+texture_normal = ExtResource("c_500")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_1000" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 542
+offset_top = 780
+offset_right = 622
+offset_bottom = 860
+focus_mode = 0
+texture_normal = ExtResource("c_1000")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Einsatz" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 690
+offset_top = 770
+offset_right = 1020
+offset_bottom = 830
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 2
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="Leeren" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1040
+offset_top = 776
+offset_right = 1220
+offset_bottom = 846
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/disabled = SubResource("knopf_g")
+theme_override_colors/font_disabled_color = Color(0.5, 0.5, 0.45, 1)
+text = "ROULETTE_LEEREN"
+
+[node name="Austeilen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1260
+offset_top = 764
+offset_right = 1560
+offset_bottom = 856
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("gold_n")
+theme_override_styles/hover = SubResource("gold_h")
+theme_override_styles/pressed = SubResource("gold_h")
+theme_override_styles/disabled = SubResource("gold_g")
+theme_override_colors/font_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.45, 0.35, 1)
+text = "BJ_AUSTEILEN"
+
+[node name="Aktionen" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+mouse_filter = 2
+visible = false
+
+[node name="Watten" type="Button" parent="Buehne/Aktionen"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 560
+offset_top = 764
+offset_right = 1040
+offset_bottom = 856
+focus_mode = 0
+theme_override_font_sizes/font_size = 34
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("gold_n")
+theme_override_styles/hover = SubResource("gold_h")
+theme_override_styles/pressed = SubResource("gold_h")
+theme_override_styles/disabled = SubResource("gold_g")
+theme_override_colors/font_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.45, 0.35, 1)
 text = "WATTEN_WATTEN"
 
-[node name="Neu" type="Button" parent="Mitte/Panel/Rand/Spalte/Aktionen"]
+[node name="Neu" type="Button" parent="Buehne/Aktionen"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 48)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
+layout_mode = 0
+offset_left = 1100
+offset_top = 764
+offset_right = 1500
+offset_bottom = 856
+focus_mode = 0
+theme_override_font_sizes/font_size = 34
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("gold_n")
+theme_override_styles/hover = SubResource("gold_h")
+theme_override_styles/pressed = SubResource("gold_h")
+theme_override_styles/disabled = SubResource("gold_g")
+theme_override_colors/font_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.45, 0.35, 1)
 text = "WATTEN_NEU"
 
-[node name="Schliessen" type="Button" parent="Mitte/Panel/Rand/Spalte"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
+[node name="Hinweis" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 60
+offset_top = 858
+offset_right = 1540
+offset_bottom = 888
+theme_override_colors/font_color = Color(0.75, 0.82, 0.7, 0.9)
 theme_override_font_sizes/font_size = 18
-text = "SAB_SCHLIESSEN"
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "WATTEN_HINWEIS"
+
+[node name="Gewinnregen" type="CPUParticles2D" parent="Buehne"]
+unique_name_in_owner = true
+position = Vector2(800, 690)
+emitting = false
+amount = 46
+lifetime = 2.4
+one_shot = true
+explosiveness = 0.92
+texture = ExtResource("c_10")
+direction = Vector2(0, -1)
+spread = 55.0
+gravity = Vector2(0, 1100)
+initial_velocity_min = 600.0
+initial_velocity_max = 1100.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+scale_amount_min = 0.22
+scale_amount_max = 0.42
+local_coords = true

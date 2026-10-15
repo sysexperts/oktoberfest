@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/casino_karte.gd" id="1_k"]
+[ext_resource type="Texture2D" path="res://assets/casino/karte_ruecken.png" id="2_r"]
+
+[node name="Karte" type="TextureRect"]
+custom_minimum_size = Vector2(150, 210)
+offset_right = 150.0
+offset_bottom = 210.0
+pivot_offset = Vector2(75, 105)
+mouse_filter = 2
+texture = ExtResource("2_r")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("1_k")

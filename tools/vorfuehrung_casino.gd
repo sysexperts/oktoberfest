@@ -148,15 +148,15 @@ class Lauf extends Node:
 		var dlg := get_tree().get_first_node_in_group("dialog")
 		var offen: bool = dlg != null and dlg.aktiv
 		print("  (Roulette-Dialog offen: ", offen, ")")
-		gm.net_roulette(0)
+		gm.net_roulette([{"typ": "rot", "einsatz": 50}])
 		await _warten(0.5)
 		_check("Roulette gespielt, Quest 3.4b erfüllt, 3.5 offen", story.zustand("3.4b") == "erfuellt" and story.zustand("3.5") == "offen", "%s / %s, Geld %d → %d" % [story.zustand("3.4b"), story.zustand("3.5"), geld2, Game.money])
 		for art in ["slot", "wuerfel"]:
 			var g0: int = Game.money
 			if art == "slot":
-				gm.net_slot()
+				gm.net_slot(50)
 			else:
-				gm.net_wuerfel(1)
+				gm.net_wuerfel([{"typ": "sieben", "einsatz": 50}])
 			await _warten(3.0)
 			_check("%s spielbar (Geld %d → %d)" % [art, g0, Game.money], Game.money != g0 or true, "")
 		_ansage("Ende der Vorführung")

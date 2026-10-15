@@ -7992,107 +7992,254 @@ func net_casino_tuer() -> void:
 		_melde("MSG_CASINO_RAUS", [], 1)
 		_net_sab_rauswurf.rpc_id(sender if sender > 0 else 1)
 
-## Roulette: farbe 0 = Rot, 1 = Schwarz. Gewinn 2:1 aus Konrads Bank, die 0 gewinnt immer das Haus.
+## Dauer der Spielanimationen (Sekunden): so lange wartet der Server, bis er den Gewinn gutschreibt
+const KASINO_DAUER := {"roulette": 8.0, "wuerfel": 3.2, "slot": 3.6}
+const KASINO_MAX_EINSATZ := 2000
+const ROULETTE_ZAHLEN := 37
+
+## Roulette: wetten = Liste aus {"typ", "wert", "einsatz"}. typ: "zahl" (wert 0 bis 36, zahlt 35:1), "rot", "schwarz", "gerade",
+## "ungerade", "niedrig" (1 bis 18), "hoch" (19 bis 36) zahlen 1:1, "dutzend" (wert 0 bis 2) und "spalte" (wert 0 bis 2) zahlen 2:1.
+## Die Einsätze gehen sofort vom Konto, der Gewinn kommt nach der Kugel-Animation (KASINO_DAUER).
 @rpc("any_peer", "reliable", "call_local")
-func net_roulette(farbe: int) -> void:
+func net_roulette(wetten: Array) -> void:
 	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
 		return
-	if farbe != 0 and farbe != 1:
+	var summe := 0
+	var sauber: Array = []
+	for w in wetten:
+		if not (w is Dictionary):
+			return
+		var e := int((w as Dictionary).get("einsatz", 0))
+		var typ := str((w as Dictionary).get("typ", ""))
+		var wert := int((w as Dictionary).get("wert", 0))
+		if e <= 0 or e > KASINO_MAX_EINSATZ or not (typ in ["zahl", "rot", "schwarz", "gerade", "ungerade", "niedrig", "hoch", "dutzend", "spalte"]):
+			return
+		if (typ == "zahl" and (wert < 0 or wert > 36)) or ((typ == "dutzend" or typ == "spalte") and (wert < 0 or wert > 2)):
+			return
+		summe += e
+		sauber.append({"typ": typ, "wert": wert, "einsatz": e})
+	if sauber.is_empty() or sauber.size() > 40 or summe > KASINO_MAX_EINSATZ * 4:
 		return
-	if not _afford(ROULETTE_EINSATZ):
-		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+	if not _afford(summe):
+		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(summe)])
 		return
-	var zahl := randi() % 37
-	var rot: bool = zahl in ROULETTE_ROT
-	var gewonnen: bool = zahl != 0 and (rot == (farbe == 0))
-	Game.add_money(ROULETTE_EINSATZ if gewonnen else -ROULETTE_EINSATZ)
+	var sender := multiplayer.get_remote_sender_id()
+	if sender == 0:
+		sender = 1
+	var zahl := randi() % ROULETTE_ZAHLEN
+	var auszahlung := 0
+	for w in sauber:
+		auszahlung += roulette_auszahlung(w, zahl)
+	Game.add_money(-summe)
 	_stats["roulette"] = int(_stats.get("roulette", 0)) + 1
 	_story.ereignis("casino_gespielt")
-	_net_roulette_dreh.rpc()
-	var farbname := "CROUPIER_GRUEN" if zahl == 0 else ("CROUPIER_ROT" if rot else "CROUPIER_SCHWARZ")
-	_melde("MSG_ROULETTE_GEWONNEN" if gewonnen else "MSG_ROULETTE_VERLOREN", [zahl, farbname, _eur(ROULETTE_EINSATZ)], 2 if gewonnen else 1)
+	_broadcast_meta()
+	_net_roulette_dreh.rpc(zahl, sender)
+	_kasino_auszahlen("roulette", auszahlung, summe, "MSG_ROULETTE_GEWONNEN", "MSG_ROULETTE_VERLOREN", [zahl, "CROUPIER_GRUEN" if zahl == 0 else ("CROUPIER_ROT" if zahl in ROULETTE_ROT else "CROUPIER_SCHWARZ")])
+
+## Auszahlung einer einzelnen Wette inklusive zurückgegebenem Einsatz (0 = verloren)
+static func roulette_auszahlung(w: Dictionary, zahl: int) -> int:
+	var e := int(w.einsatz)
+	var wert := int(w.wert)
+	var treffer := false
+	var faktor := 2
+	match str(w.typ):
+		"zahl":
+			treffer = zahl == wert
+			faktor = 36
+		"rot":
+			treffer = zahl != 0 and zahl in ROULETTE_ROT
+		"schwarz":
+			treffer = zahl != 0 and not (zahl in ROULETTE_ROT)
+		"gerade":
+			treffer = zahl != 0 and zahl % 2 == 0
+		"ungerade":
+			treffer = zahl % 2 == 1
+		"niedrig":
+			treffer = zahl >= 1 and zahl <= 18
+		"hoch":
+			treffer = zahl >= 19
+		"dutzend":
+			treffer = zahl != 0 and (zahl - 1) / 12 == wert
+			faktor = 3
+		"spalte":
+			treffer = zahl != 0 and (zahl - 1) % 3 == wert
+			faktor = 3
+	return e * faktor if treffer else 0
+
+## Gewinn nach der Animation gutschreiben und melden (einsatz ist schon abgezogen)
+func _kasino_auszahlen(spiel: String, auszahlung: int, einsatz: int, key_gewinn: String, key_verlust: String, args: Array) -> void:
+	await get_tree().create_timer(float(KASINO_DAUER.get(spiel, 3.0))).timeout
+	if auszahlung > 0:
+		Game.add_money(auszahlung)
+	var netto := auszahlung - einsatz
+	if netto >= 0 and auszahlung > 0:
+		_melde(key_gewinn, args + [_eur(netto)], 2)
+	else:
+		_melde(key_verlust, args + [_eur(einsatz - auszahlung)], 1)
 	_broadcast_meta()
 
-## Würfelbecher: zwei Würfel. wahl 0 = Tief (2 bis 6), 1 = Sieben, 2 = Hoch (8 bis 12). Tief und Hoch zahlen 1:1, die Sieben 4:1.
+## Würfelbecher: zwei Würfel. wetten = Liste aus {"typ", "einsatz"}: "tief" (Summe 2 bis 6) und "hoch" (8 bis 12) zahlen 1:1,
+## "sieben" und "pasch" (beide Würfel gleich) zahlen 4:1. Einsatz sofort vom Konto, Gewinn nach dem Wurf (KASINO_DAUER).
 @rpc("any_peer", "reliable", "call_local")
-func net_wuerfel(wahl: int) -> void:
+func net_wuerfel(wetten: Array) -> void:
 	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
 		return
-	if wahl < 0 or wahl > 2:
+	var sauber := _kasino_wetten_pruefen(wetten, ["tief", "sieben", "hoch", "pasch"])
+	if sauber.is_empty():
 		return
-	if not _afford(ROULETTE_EINSATZ):
-		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+	var summe := 0
+	for w in sauber:
+		summe += int(w.einsatz)
+	if not _afford(summe):
+		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(summe)])
 		return
+	var sender := multiplayer.get_remote_sender_id()
+	if sender == 0:
+		sender = 1
 	var a := randi() % 6 + 1
 	var b := randi() % 6 + 1
-	_wuerfel_auswerten(a, b, wahl)
+	_wuerfel_auswerten(a, b, sauber, summe, sender)
 
-func _wuerfel_auswerten(a: int, b: int, wahl: int) -> void:
-	var summe := a + b
-	var ergebnis := 0 if summe < 7 else (1 if summe == 7 else 2)
-	var gewonnen: bool = ergebnis == wahl
-	var gewinn: int = ROULETTE_EINSATZ * (4 if wahl == 1 else 1)
-	Game.add_money(gewinn if gewonnen else -ROULETTE_EINSATZ)
+## Prüft eine Wettliste (Typen aus erlaubt, Einsatz 1 bis KASINO_MAX_EINSATZ) und gibt die bereinigte Liste zurück (leer = ungültig)
+func _kasino_wetten_pruefen(wetten: Array, erlaubt: Array) -> Array:
+	var sauber: Array = []
+	var summe := 0
+	for w in wetten:
+		if not (w is Dictionary):
+			return []
+		var e := int((w as Dictionary).get("einsatz", 0))
+		var typ := str((w as Dictionary).get("typ", ""))
+		if e <= 0 or e > KASINO_MAX_EINSATZ or not (typ in erlaubt):
+			return []
+		summe += e
+		sauber.append({"typ": typ, "einsatz": e})
+	if sauber.size() > 20 or summe > KASINO_MAX_EINSATZ * 4:
+		return []
+	return sauber
+
+## Auszahlung einer Würfelwette inklusive Einsatz (0 = verloren)
+static func wuerfel_auszahlung(w: Dictionary, a: int, b: int) -> int:
+	var s := a + b
+	var e := int(w.einsatz)
+	match str(w.typ):
+		"tief":
+			return e * 2 if s < 7 else 0
+		"hoch":
+			return e * 2 if s > 7 else 0
+		"sieben":
+			return e * 5 if s == 7 else 0
+		"pasch":
+			return e * 5 if a == b else 0
+	return 0
+
+func _wuerfel_auswerten(a: int, b: int, wetten: Array, summe: int, peer: int) -> void:
+	var auszahlung := 0
+	for w in wetten:
+		auszahlung += wuerfel_auszahlung(w, a, b)
+	Game.add_money(-summe)
 	_stats["wuerfel"] = int(_stats.get("wuerfel", 0)) + 1
 	_story.ereignis("casino_gespielt")
-	_melde("MSG_WUERFEL_GEWONNEN" if gewonnen else "MSG_WUERFEL_VERLOREN", [a, b, summe, _eur(gewinn if gewonnen else ROULETTE_EINSATZ)], 2 if gewonnen else 1)
 	_broadcast_meta()
-
-## Spielautomat: drei Walzen mit sechs Symbolen (5 = Geldsack). Drei gleiche zahlen 10:1, drei Geldsäcke 20:1, zwei gleiche +25 €.
-@rpc("any_peer", "reliable", "call_local")
-func net_slot() -> void:
-	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
-		return
-	if not _afford(ROULETTE_EINSATZ):
-		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
-		return
-	_slot_auswerten([randi() % 6, randi() % 6, randi() % 6])
-
-## Gewinn eines Walzenbilds in € (Einsatz schon abgezogen gerechnet: negativ = verloren)
-func slot_gewinn(w: Array) -> int:
-	var a := int(w[0])
-	var b := int(w[1])
-	var c := int(w[2])
-	if a == b and b == c:
-		return ROULETTE_EINSATZ * (20 if a == 5 else 10)
-	if a == b or b == c or a == c:
-		return ROULETTE_EINSATZ / 2
-	return -ROULETTE_EINSATZ
-
-func _slot_auswerten(w: Array) -> void:
-	var gewinn := slot_gewinn(w)
-	Game.add_money(gewinn)
-	_stats["slot"] = int(_stats.get("slot", 0)) + 1
-	_story.ereignis("casino_gespielt")
-	_net_slot_dreh.rpc(w)
-	_melde("MSG_SLOT_GEWONNEN" if gewinn > 0 else "MSG_SLOT_VERLOREN", [_eur(absi(gewinn))], 2 if gewinn > 0 else 1)
-	_broadcast_meta()
+	_net_wuerfel_wurf.rpc(a, b, peer)
+	_kasino_auszahlen("wuerfel", auszahlung, summe, "MSG_WUERFEL_GEWONNEN", "MSG_WUERFEL_VERLOREN", [a, b, a + b])
 
 @rpc("authority", "reliable", "call_local")
-func _net_slot_dreh(w: Array) -> void:
-	for s in get_tree().get_nodes_in_group("slot"):
-		s.drehen(w)
+func _net_wuerfel_wurf(a: int, b: int, spieler_peer: int) -> void:
+	for u in get_tree().get_nodes_in_group("wuerfel_ui"):
+		u.ergebnis_zeigen(a, b, spieler_peer)
 
-## Blackjack gegen Konrads Bank: aktion 0 = neue Runde (50 € Einsatz), 1 = Karte, 2 = Halten.
-## Blackjack zahlt 3:2, Bank zieht bis 17, Gleichstand bringt den Einsatz zurück.
+## Spielautomat: 3 Walzen mit je 3 sichtbaren Symbolen, 5 feste Gewinnlinien (Mitte, oben, unten, zwei Diagonalen). Der Einsatz (Vielfaches
+## von 5) verteilt sich gleichmäßig auf die Linien. Symbole: 0 Maß, 1 Brezn, 2 Hendl, 3 Lebkuchenherz, 4 Edelweiß, 5 Sieben, 6 Bayernraute (Wild).
+const SLOT_STREIFEN := [1, 5, 0, 1, 2, 2, 6, 3, 2, 1, 2, 4, 6, 3, 3, 1, 1, 0, 3, 1, 0, 4, 2]
+const SLOT_FAKTOR := {0: 14, 1: 4, 2: 5, 3: 9, 4: 25, 5: 60}
+const SLOT_WILD := 6
+const SLOT_WILD_FAKTOR := 80
+const SLOT_LINIEN := [[1, 1, 1], [0, 0, 0], [2, 2, 2], [0, 1, 2], [2, 1, 0]]
+
 @rpc("any_peer", "reliable", "call_local")
-func net_blackjack(aktion: int) -> void:
+func net_slot(einsatz := 50) -> void:
+	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+		return
+	if einsatz < 5 or einsatz > KASINO_MAX_EINSATZ or einsatz % 5 != 0:
+		return
+	if not _afford(einsatz):
+		_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(einsatz)])
+		return
+	var sender := multiplayer.get_remote_sender_id()
+	if sender == 0:
+		sender = 1
+	var gitter: Array = []
+	var halte: Array = []
+	for r in 3:
+		var halt := randi() % SLOT_STREIFEN.size()
+		halte.append(halt)
+		gitter.append([SLOT_STREIFEN[halt], SLOT_STREIFEN[(halt + 1) % SLOT_STREIFEN.size()], SLOT_STREIFEN[(halt + 2) % SLOT_STREIFEN.size()]])
+	_slot_auswerten(gitter, halte, einsatz, sender)
+
+## Gewinnlinien eines Bildes: Liste aus {"linie", "faktor"} (Faktor mal Linieneinsatz)
+static func slot_linien_treffer(gitter: Array) -> Array:
+	var treffer: Array = []
+	for li in SLOT_LINIEN.size():
+		var l: Array = SLOT_LINIEN[li]
+		var syms := [int(gitter[0][l[0]]), int(gitter[1][l[1]]), int(gitter[2][l[2]])]
+		var echte := syms.filter(func(s: int) -> bool: return s != SLOT_WILD)
+		var faktor := 0
+		if echte.is_empty():
+			faktor = SLOT_WILD_FAKTOR
+		elif echte.all(func(s: int) -> bool: return s == echte[0]):
+			faktor = int(SLOT_FAKTOR[echte[0]])
+		if faktor > 0:
+			treffer.append({"linie": li, "faktor": faktor})
+	return treffer
+
+func _slot_auswerten(gitter: Array, halte: Array, einsatz: int, peer: int) -> void:
+	var treffer := slot_linien_treffer(gitter)
+	var auszahlung := 0
+	for t in treffer:
+		auszahlung += int(t.faktor) * (einsatz / 5)
+	Game.add_money(-einsatz)
+	_stats["slot"] = int(_stats.get("slot", 0)) + 1
+	_story.ereignis("casino_gespielt")
+	_broadcast_meta()
+	_net_slot_dreh.rpc(gitter, halte, treffer, auszahlung, peer)
+	_kasino_auszahlen("slot", auszahlung, einsatz, "MSG_SLOT_GEWONNEN", "MSG_SLOT_VERLOREN", [])
+
+@rpc("authority", "reliable", "call_local")
+func _net_slot_dreh(gitter: Array, halte: Array, treffer: Array, auszahlung: int, spieler_peer: int) -> void:
+	var mitte := [int(gitter[0][1]) % 6, int(gitter[1][1]) % 6, int(gitter[2][1]) % 6]
+	for s in get_tree().get_nodes_in_group("slot"):
+		s.drehen(mitte)
+	for u in get_tree().get_nodes_in_group("slot_ui"):
+		u.ergebnis_zeigen(gitter, halte, treffer, auszahlung, spieler_peer)
+
+## Blackjack gegen Konrads Bank. aktion 0 = neue Runde mit Einsatz, 1 = Karte, 2 = Halten, 3 = Verdoppeln (nur mit den ersten zwei Karten:
+## Einsatz verdoppeln, genau eine Karte, dann hält die Hand). Blackjack zahlt 3:2, die Bank zieht bis 17, Gleichstand gibt den Einsatz zurück.
+## Karten sind Zahlen: Farbe * 13 + Rang (Rang 1 = Ass, 11 = Bube, 12 = Dame, 13 = König; Farbe 0 Herz, 1 Karo, 2 Pik, 3 Kreuz).
+## Der Einsatz geht sofort vom Konto, der Gewinn kommt, wenn die Bank ihre Karten gezeigt hat (scripts/ui/casino_blackjack.gd).
+@rpc("any_peer", "reliable", "call_local")
+func net_blackjack(aktion: int, einsatz := 0) -> void:
 	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
 		return
 	var peer := multiplayer.get_remote_sender_id()
 	if peer == 0:
 		peer = 1
 	if aktion == 0:
-		if not _afford(ROULETTE_EINSATZ):
-			_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+		if _bj.has(peer) or einsatz <= 0 or einsatz > KASINO_MAX_EINSATZ:
 			return
-		_bj[peer] = {"spieler": [_bj_karte(), _bj_karte()], "bank": [_bj_karte(), _bj_karte()]}
+		if not _afford(einsatz):
+			_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(einsatz)])
+			return
+		Game.add_money(-einsatz)
 		_story.ereignis("casino_gespielt")
+		_stats["blackjack"] = int(_stats.get("blackjack", 0)) + 1
+		_bj[peer] = {"spieler": [_bj_karte(), _bj_karte()], "bank": [_bj_karte(), _bj_karte()], "einsatz": einsatz, "doppelt": false}
 		var h: Dictionary = _bj[peer]
+		_broadcast_meta()
 		if _bj_wert(h.spieler) == 21:
 			_bj_ende(peer)
-			return
-		_bj_senden(peer, true)
+		else:
+			_bj_senden(peer)
 		return
 	if not _bj.has(peer):
 		return
@@ -8102,18 +8249,31 @@ func net_blackjack(aktion: int) -> void:
 		if _bj_wert(h2.spieler) >= 21:
 			_bj_ende(peer)
 		else:
-			_bj_senden(peer, true)
+			_bj_senden(peer)
 	elif aktion == 2:
+		_bj_ende(peer)
+	elif aktion == 3:
+		if (h2.spieler as Array).size() != 2 or bool(h2.doppelt):
+			return
+		if not _afford(int(h2.einsatz)):
+			_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(int(h2.einsatz))])
+			return
+		Game.add_money(-int(h2.einsatz))
+		h2.einsatz = int(h2.einsatz) * 2
+		h2.doppelt = true
+		(h2.spieler as Array).append(_bj_karte())
+		_broadcast_meta()
 		_bj_ende(peer)
 
 func _bj_karte() -> int:
-	return randi() % 13 + 1   # 1 = Ass, 11 bis 13 = Bube, Dame, König
+	return randi() % 4 * 13 + randi() % 13 + 1
 
+## Wert einer Hand (Ass zählt 11 oder 1, Bild 10)
 func _bj_wert(karten: Array) -> int:
 	var summe := 0
 	var asse := 0
 	for k in karten:
-		var w := mini(int(k), 10)
+		var w := mini((int(k) - 1) % 13 + 1, 10)
 		if w == 1:
 			asse += 1
 			w = 11
@@ -8123,20 +8283,13 @@ func _bj_wert(karten: Array) -> int:
 		asse -= 1
 	return summe
 
-func _bj_text(karten: Array) -> String:
-	var teile: PackedStringArray = []
-	for k in karten:
-		var kk := int(k)
-		teile.append(String(TranslationServer.translate("BJ_ASS")) if kk == 1 else (String(TranslationServer.translate("BJ_BUBE")) if kk == 11 else (String(TranslationServer.translate("BJ_DAME")) if kk == 12 else (String(TranslationServer.translate("BJ_KOENIG")) if kk == 13 else str(kk)))))
-	return " ".join(teile)
-
-func _bj_senden(peer: int, offen: bool, ergebnis := "") -> void:
+## Zustand für das Fenster des Spielers; die zweite Karte der Bank bleibt verdeckt, solange die Runde läuft
+func _bj_senden(peer: int, ergebnis := {}) -> void:
 	var h: Dictionary = _bj[peer]
-	var bank_zeigt: Array = h.bank if not offen else [h.bank[0]]
-	var text := String(TranslationServer.translate("BJ_STAND")) % [_bj_text(bank_zeigt) + ("  ?" if offen else ""), _bj_wert(bank_zeigt) if not offen else _bj_wert([h.bank[0]]), _bj_text(h.spieler), _bj_wert(h.spieler)]
-	if ergebnis != "":
-		text += "\n" + ergebnis
-	_net_bj.rpc_id(peer, text, offen)
+	var d := {"spieler": (h.spieler as Array).duplicate(), "einsatz": int(h.einsatz), "kann_doppeln": (h.spieler as Array).size() == 2 and not bool(h.doppelt) and _afford(int(h.einsatz)),
+		"bank": [h.bank[0]] if ergebnis.is_empty() else (h.bank as Array).duplicate(), "vorbei": not ergebnis.is_empty()}
+	d.merge(ergebnis)
+	_net_bj_stand.rpc_id(peer, d)
 
 func _bj_ende(peer: int) -> void:
 	var h: Dictionary = _bj[peer]
@@ -8145,50 +8298,55 @@ func _bj_ende(peer: int) -> void:
 		while _bj_wert(h.bank) < 17:
 			(h.bank as Array).append(_bj_karte())
 	var bank := _bj_wert(h.bank)
+	var einsatz: int = int(h.einsatz)
 	var blackjack: bool = spieler == 21 and (h.spieler as Array).size() == 2
-	var betrag := 0
+	var auszahlung := 0
 	var key := "BJ_VERLOREN"
 	if spieler > 21:
-		betrag = -ROULETTE_EINSATZ
 		key = "BJ_UEBERKAUFT"
 	elif blackjack and not (bank == 21 and (h.bank as Array).size() == 2):
-		betrag = ROULETTE_EINSATZ * 3 / 2
+		auszahlung = einsatz + einsatz * 3 / 2
 		key = "BJ_BLACKJACK"
 	elif bank > 21 or spieler > bank:
-		betrag = ROULETTE_EINSATZ
+		auszahlung = einsatz * 2
 		key = "BJ_GEWONNEN"
 	elif spieler == bank:
+		auszahlung = einsatz
 		key = "BJ_UNENTSCHIEDEN"
-	else:
-		betrag = -ROULETTE_EINSATZ
-	if betrag != 0:
-		Game.add_money(betrag)
-	_stats["blackjack"] = int(_stats.get("blackjack", 0)) + 1
-	_bj_senden(peer, false, String(TranslationServer.translate(key)) % Texte.euro(absi(betrag)))
+	var netto := auszahlung - einsatz
+	# Zeit für die Animation: Aufdecken und jede gezogene Karte der Bank
+	var wartezeit := 1.0 + 0.8 * maxi((h.bank as Array).size() - 2, 0)
+	_bj_senden(peer, {"ende": key, "netto": netto, "auszahlung": auszahlung, "wert_spieler": spieler, "wert_bank": bank})
 	_bj.erase(peer)
+	_bj_auszahlen(auszahlung, netto, wartezeit)
+
+func _bj_auszahlen(auszahlung: int, netto: int, wartezeit: float) -> void:
+	await get_tree().create_timer(wartezeit).timeout
+	if auszahlung > 0:
+		Game.add_money(auszahlung)
 	_broadcast_meta()
 
 @rpc("authority", "reliable", "call_local")
-func _net_bj(text: String, offen: bool) -> void:
-	for c in get_tree().get_nodes_in_group("casino"):
-		c.bj_zeigen(text, offen)
+func _net_bj_stand(daten: Dictionary) -> void:
+	for u in get_tree().get_nodes_in_group("blackjack_ui"):
+		u.stand_zeigen(daten)
 
 ## Watten gegen Konrads Bank. aktion 0 = neue Runde (50 € Einsatz), 1 = Karte legen (index in der Hand), 2 = „Watten!“ (Einsatz verdoppeln).
 ## Karten 0 bis 7 = Sieben bis Ass. Die Bank spielt aus, die höhere Karte gewinnt den Stich (Gleichstand: Bank), zwei Stiche gewinnen.
 @rpc("any_peer", "reliable", "call_local")
-func net_watten(aktion: int, index: int) -> void:
+func net_watten(aktion: int, index: int, einsatz := ROULETTE_EINSATZ) -> void:
 	if not multiplayer.is_server() or not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
 		return
 	var peer := multiplayer.get_remote_sender_id()
 	if peer == 0:
 		peer = 1
 	if aktion == 0:
-		if _watten.has(peer) or not _afford(ROULETTE_EINSATZ):
+		if _watten.has(peer) or einsatz <= 0 or einsatz > KASINO_MAX_EINSATZ or not _afford(einsatz * 2):
 			if not _watten.has(peer):
-				_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(ROULETTE_EINSATZ)])
+				_fehler("MSG_NO_MONEY", ["CROUPIER_NAME", _eur(einsatz * 2)])
 			return
 		var r := {"hand": [randi() % 8, randi() % 8, randi() % 8], "bank": [randi() % 8, randi() % 8, randi() % 8],
-			"stich_spieler": 0, "stich_bank": 0, "einsatz": ROULETTE_EINSATZ, "gewattet": false, "bank_karte": -1, "bank_index": -1}
+			"stich_spieler": 0, "stich_bank": 0, "einsatz": einsatz, "start_einsatz": einsatz, "gewattet": false, "bank_karte": -1, "bank_index": -1}
 		_watten[peer] = r
 		_watten_bank_spielt(r)
 		_story.ereignis("casino_gespielt")
@@ -8266,9 +8424,11 @@ func _net_watten_stand(daten: Dictionary) -> void:
 		u.stand_zeigen(daten)
 
 @rpc("authority", "reliable", "call_local")
-func _net_roulette_dreh() -> void:
+func _net_roulette_dreh(zahl: int, spieler_peer: int) -> void:
 	for c in get_tree().get_nodes_in_group("casino"):
-		c.dreh()
+		c.dreh(zahl)
+	for u in get_tree().get_nodes_in_group("roulette_ui"):
+		u.ergebnis_zeigen(zahl, spieler_peer)
 
 ## Konrads Zelt wird leerer: die Gäste (nicht das Personal) gehen zum Teil, scripts/huber_figur.gd
 ## Effekt an der Sabotage-Stelle für alle Spieler (Nebel, Bierstrahl, Funken, Juckstaub)

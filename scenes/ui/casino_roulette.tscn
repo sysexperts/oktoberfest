@@ -1,0 +1,1411 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/casino_roulette.gd" id="1_s"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="2_theme"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="3_fraktur"]
+[ext_resource type="Texture2D" path="res://assets/casino/roulette_rad.png" id="4_rad"]
+[ext_resource type="Texture2D" path="res://assets/casino/kugel.png" id="5_kugel"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_10.png" id="c_10"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_50.png" id="c_50"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_100.png" id="c_100"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_500.png" id="c_500"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_1000.png" id="c_1000"]
+
+[sub_resource type="StyleBoxFlat" id="rot_n"]
+bg_color = Color(0.72, 0.1, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="rot_h"]
+bg_color = Color(1.0, 0.15000000000000002, 0.21000000000000002, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="schwarz_n"]
+bg_color = Color(0.07, 0.07, 0.09, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="schwarz_h"]
+bg_color = Color(0.22400000000000003, 0.22400000000000003, 0.288, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="gruen_n"]
+bg_color = Color(0.07, 0.46, 0.24, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="gruen_h"]
+bg_color = Color(0.10500000000000001, 0.6900000000000001, 0.36, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="aussen_n"]
+bg_color = Color(0.04, 0.22, 0.13, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="aussen_h"]
+bg_color = Color(0.06, 0.33, 0.195, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="rahmen"]
+bg_color = Color(0.05, 0.27, 0.16, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.91, 0.74, 0.33, 1)
+corner_radius_top_left = 34
+corner_radius_top_right = 34
+corner_radius_bottom_right = 34
+corner_radius_bottom_left = 34
+
+[sub_resource type="StyleBoxFlat" id="tisch"]
+bg_color = Color(0.03, 0.17, 0.1, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="leer"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="gold_n"]
+bg_color = Color(0.88, 0.66, 0.22, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.93, 0.6, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="gold_h"]
+bg_color = Color(1.0, 0.8, 0.34, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0.8, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="gold_g"]
+bg_color = Color(0.35, 0.3, 0.18, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6, 0.55, 0.4, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="knopf_n"]
+bg_color = Color(0.1, 0.12, 0.11, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="knopf_h"]
+bg_color = Color(0.18, 0.21, 0.19, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Roulette" type="CanvasLayer"]
+layer = 26
+script = ExtResource("1_s")
+
+[node name="Dunkel" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="Buehne" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -800.0
+offset_top = -450.0
+offset_right = 800.0
+offset_bottom = 450.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(800, 450)
+theme = ExtResource("2_theme")
+
+[node name="Rahmen" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+theme_override_styles/panel = SubResource("rahmen")
+
+[node name="Titel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 60
+offset_top = 26
+offset_right = 560
+offset_bottom = 106
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_font_sizes/font_size = 64
+text = "ROULETTE_TITEL"
+
+[node name="Kasse" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1000
+offset_top = 40
+offset_right = 1480
+offset_bottom = 100
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 2
+auto_translate_mode = 2
+
+[node name="Schliessen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1510
+offset_top = 30
+offset_right = 1570
+offset_bottom = 90
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/focus = SubResource("leer")
+text = "X"
+
+[node name="KesselSockel" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 36
+offset_top = 126
+offset_right = 584
+offset_bottom = 674
+theme_override_styles/panel = SubResource("tisch")
+
+[node name="Kessel" type="TextureRect" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 50
+offset_top = 140
+offset_right = 570
+offset_bottom = 660
+pivot_offset = Vector2(260, 260)
+texture = ExtResource("4_rad")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Kugel" type="TextureRect" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 296
+offset_top = 376
+offset_right = 324
+offset_bottom = 404
+pivot_offset = Vector2(14, 14)
+texture = ExtResource("5_kugel")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+visible = false
+
+[node name="Zeiger" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 285
+offset_top = 98
+offset_right = 335
+offset_bottom = 138
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_font_sizes/font_size = 34
+text = "▼"
+horizontal_alignment = 1
+mouse_filter = 2
+
+[node name="Gewinnzahl" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 185
+offset_top = 335
+offset_right = 435
+offset_bottom = 445
+theme_override_font_sizes/font_size = 92
+theme_override_fonts/font = ExtResource("3_fraktur")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2
+visible = false
+
+[node name="VerlaufTitel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 40
+offset_top = 700
+offset_right = 540
+offset_bottom = 730
+theme_override_colors/font_color = Color(0.85, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 22
+text = "ROULETTE_VERLAUF"
+
+[node name="Verlauf" type="HBoxContainer" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40
+offset_top = 736
+offset_right = 580
+offset_bottom = 796
+theme_override_constants/separation = 8
+
+[node name="TischPlatte" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 626
+offset_top = 136
+offset_right = 1578
+offset_bottom = 508
+theme_override_styles/panel = SubResource("tisch")
+
+[node name="Wettfelder" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+mouse_filter = 2
+
+[node name="zahl_0" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 640
+offset_top = 150
+offset_right = 706
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("gruen_n")
+theme_override_styles/hover = SubResource("gruen_h")
+theme_override_styles/pressed = SubResource("gruen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "0"
+
+[node name="zahl_3" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 706
+offset_top = 150
+offset_right = 772
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "3"
+
+[node name="zahl_2" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 706
+offset_top = 226
+offset_right = 772
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "2"
+
+[node name="zahl_1" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 706
+offset_top = 302
+offset_right = 772
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "1"
+
+[node name="zahl_6" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 772
+offset_top = 150
+offset_right = 838
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "6"
+
+[node name="zahl_5" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 772
+offset_top = 226
+offset_right = 838
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "5"
+
+[node name="zahl_4" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 772
+offset_top = 302
+offset_right = 838
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "4"
+
+[node name="zahl_9" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 838
+offset_top = 150
+offset_right = 904
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "9"
+
+[node name="zahl_8" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 838
+offset_top = 226
+offset_right = 904
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "8"
+
+[node name="zahl_7" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 838
+offset_top = 302
+offset_right = 904
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "7"
+
+[node name="zahl_12" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 904
+offset_top = 150
+offset_right = 970
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "12"
+
+[node name="zahl_11" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 904
+offset_top = 226
+offset_right = 970
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "11"
+
+[node name="zahl_10" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 904
+offset_top = 302
+offset_right = 970
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "10"
+
+[node name="zahl_15" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 970
+offset_top = 150
+offset_right = 1036
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "15"
+
+[node name="zahl_14" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 970
+offset_top = 226
+offset_right = 1036
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "14"
+
+[node name="zahl_13" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 970
+offset_top = 302
+offset_right = 1036
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "13"
+
+[node name="zahl_18" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1036
+offset_top = 150
+offset_right = 1102
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "18"
+
+[node name="zahl_17" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1036
+offset_top = 226
+offset_right = 1102
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "17"
+
+[node name="zahl_16" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1036
+offset_top = 302
+offset_right = 1102
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "16"
+
+[node name="zahl_21" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1102
+offset_top = 150
+offset_right = 1168
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "21"
+
+[node name="zahl_20" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1102
+offset_top = 226
+offset_right = 1168
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "20"
+
+[node name="zahl_19" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1102
+offset_top = 302
+offset_right = 1168
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "19"
+
+[node name="zahl_24" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1168
+offset_top = 150
+offset_right = 1234
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "24"
+
+[node name="zahl_23" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1168
+offset_top = 226
+offset_right = 1234
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "23"
+
+[node name="zahl_22" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1168
+offset_top = 302
+offset_right = 1234
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "22"
+
+[node name="zahl_27" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1234
+offset_top = 150
+offset_right = 1300
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "27"
+
+[node name="zahl_26" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1234
+offset_top = 226
+offset_right = 1300
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "26"
+
+[node name="zahl_25" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1234
+offset_top = 302
+offset_right = 1300
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "25"
+
+[node name="zahl_30" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1300
+offset_top = 150
+offset_right = 1366
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "30"
+
+[node name="zahl_29" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1300
+offset_top = 226
+offset_right = 1366
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "29"
+
+[node name="zahl_28" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1300
+offset_top = 302
+offset_right = 1366
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "28"
+
+[node name="zahl_33" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1366
+offset_top = 150
+offset_right = 1432
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "33"
+
+[node name="zahl_32" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1366
+offset_top = 226
+offset_right = 1432
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "32"
+
+[node name="zahl_31" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1366
+offset_top = 302
+offset_right = 1432
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "31"
+
+[node name="zahl_36" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1432
+offset_top = 150
+offset_right = 1498
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "36"
+
+[node name="zahl_35" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1432
+offset_top = 226
+offset_right = 1498
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "35"
+
+[node name="zahl_34" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1432
+offset_top = 302
+offset_right = 1498
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "34"
+
+[node name="spalte_2" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1498
+offset_top = 150
+offset_right = 1564
+offset_bottom = 226
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "2:1"
+
+[node name="spalte_1" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1498
+offset_top = 226
+offset_right = 1564
+offset_bottom = 302
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "2:1"
+
+[node name="spalte_0" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1498
+offset_top = 302
+offset_right = 1564
+offset_bottom = 378
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "2:1"
+
+[node name="dutzend_0" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 706
+offset_top = 384
+offset_right = 970
+offset_bottom = 436
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "DUTZEND_1"
+
+[node name="dutzend_1" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 970
+offset_top = 384
+offset_right = 1234
+offset_bottom = 436
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "DUTZEND_2"
+
+[node name="dutzend_2" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1234
+offset_top = 384
+offset_right = 1498
+offset_bottom = 436
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "DUTZEND_3"
+
+[node name="niedrig" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 706
+offset_top = 442
+offset_right = 838
+offset_bottom = 498
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "1-18"
+
+[node name="gerade" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 838
+offset_top = 442
+offset_right = 970
+offset_bottom = 498
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "ROULETTE_GERADE"
+
+[node name="rot" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 970
+offset_top = 442
+offset_right = 1102
+offset_bottom = 498
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("rot_n")
+theme_override_styles/hover = SubResource("rot_h")
+theme_override_styles/pressed = SubResource("rot_h")
+theme_override_styles/focus = SubResource("leer")
+text = "ROULETTE_ROT"
+
+[node name="schwarz" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1102
+offset_top = 442
+offset_right = 1234
+offset_bottom = 498
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("schwarz_n")
+theme_override_styles/hover = SubResource("schwarz_h")
+theme_override_styles/pressed = SubResource("schwarz_h")
+theme_override_styles/focus = SubResource("leer")
+text = "ROULETTE_SCHWARZ"
+
+[node name="ungerade" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1234
+offset_top = 442
+offset_right = 1366
+offset_bottom = 498
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "ROULETTE_UNGERADE"
+
+[node name="hoch" type="Button" parent="Buehne/Wettfelder"]
+layout_mode = 0
+offset_left = 1366
+offset_top = 442
+offset_right = 1498
+offset_bottom = 498
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("aussen_n")
+theme_override_styles/hover = SubResource("aussen_h")
+theme_override_styles/pressed = SubResource("aussen_h")
+theme_override_styles/focus = SubResource("leer")
+text = "19-36"
+
+[node name="JetonTitel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 640
+offset_top = 524
+offset_right = 940
+offset_bottom = 554
+theme_override_colors/font_color = Color(0.85, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 22
+text = "ROULETTE_JETON"
+
+[node name="JetonAuswahl" type="Panel" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 700
+offset_top = 556
+offset_right = 800
+offset_bottom = 656
+theme_override_styles/panel = SubResource("gold_n")
+mouse_filter = 2
+
+[node name="jeton_10" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 710
+offset_top = 566
+offset_right = 790
+offset_bottom = 646
+focus_mode = 0
+texture_normal = ExtResource("c_10")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_50" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 828
+offset_top = 566
+offset_right = 908
+offset_bottom = 646
+focus_mode = 0
+texture_normal = ExtResource("c_50")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_100" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 946
+offset_top = 566
+offset_right = 1026
+offset_bottom = 646
+focus_mode = 0
+texture_normal = ExtResource("c_100")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_500" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1064
+offset_top = 566
+offset_right = 1144
+offset_bottom = 646
+focus_mode = 0
+texture_normal = ExtResource("c_500")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="jeton_1000" type="TextureButton" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1182
+offset_top = 566
+offset_right = 1262
+offset_bottom = 646
+focus_mode = 0
+texture_normal = ExtResource("c_1000")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Einsatz" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1250
+offset_top = 540
+offset_right = 1564
+offset_bottom = 590
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 34
+horizontal_alignment = 2
+auto_translate_mode = 2
+
+[node name="Zurueck" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 640
+offset_top = 690
+offset_right = 820
+offset_bottom = 756
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/disabled = SubResource("knopf_n")
+text = "ROULETTE_ZURUECK"
+
+[node name="Leeren" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 836
+offset_top = 690
+offset_right = 1016
+offset_bottom = 756
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/disabled = SubResource("knopf_n")
+text = "ROULETTE_LEEREN"
+
+[node name="Wiederholen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1032
+offset_top = 690
+offset_right = 1232
+offset_bottom = 756
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/disabled = SubResource("knopf_n")
+text = "ROULETTE_WIEDERHOLEN"
+
+[node name="Drehen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1280
+offset_top = 676
+offset_right = 1564
+offset_bottom = 770
+focus_mode = 0
+theme_override_font_sizes/font_size = 40
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("gold_n")
+theme_override_styles/hover = SubResource("gold_h")
+theme_override_styles/pressed = SubResource("gold_h")
+theme_override_styles/disabled = SubResource("gold_g")
+theme_override_colors/font_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.45, 0.35, 1)
+text = "ROULETTE_DREHEN"
+
+[node name="Ergebnis" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 640
+offset_top = 782
+offset_right = 1564
+offset_bottom = 838
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 38
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+
+[node name="Hinweis" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 640
+offset_top = 846
+offset_right = 1564
+offset_bottom = 880
+theme_override_colors/font_color = Color(0.75, 0.82, 0.7, 0.9)
+theme_override_font_sizes/font_size = 20
+text = "ROULETTE_HINWEIS"
+horizontal_alignment = 1
+
+[node name="Gewinnregen" type="CPUParticles2D" parent="Buehne"]
+unique_name_in_owner = true
+position = Vector2(310, 420)
+emitting = false
+amount = 46
+lifetime = 2.4
+one_shot = true
+explosiveness = 0.92
+texture = ExtResource("c_10")
+direction = Vector2(0, -1)
+spread = 55.0
+gravity = Vector2(0, 1100)
+initial_velocity_min = 600.0
+initial_velocity_max = 1100.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+scale_amount_min = 0.22
+scale_amount_max = 0.42
+local_coords = true

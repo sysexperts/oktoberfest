@@ -33,6 +33,10 @@
 [ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="101_fraktur"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gustav_laden.tscn" id="gustav_laden_s"]
 [ext_resource type="PackedScene" path="res://scenes/ui/watten.tscn" id="watten_s"]
+[ext_resource type="PackedScene" path="res://scenes/ui/casino_roulette.tscn" id="roulette_s"]
+[ext_resource type="PackedScene" path="res://scenes/ui/casino_blackjack.tscn" id="blackjack_s"]
+[ext_resource type="PackedScene" path="res://scenes/ui/casino_wuerfel.tscn" id="wuerfel_s"]
+[ext_resource type="PackedScene" path="res://scenes/ui/casino_slot.tscn" id="slot_s"]
 [ext_resource type="PackedScene" path="res://scenes/ui/fassanstich.tscn" id="anstich_s"]
 [ext_resource type="PackedScene" path="res://scenes/festfass.tscn" id="festfass_s"]
 [ext_resource type="Texture3D" path="res://assets/shader/farb_lut.png" id="103_lut"]
@@ -239,6 +243,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 3)
 
 [node name="Watten" parent="." instance=ExtResource("watten_s")]
+
+[node name="Roulette" parent="." instance=ExtResource("roulette_s")]
+
+[node name="Blackjack" parent="." instance=ExtResource("blackjack_s")]
+
+[node name="Wuerfel" parent="." instance=ExtResource("wuerfel_s")]
+
+[node name="SlotUI" parent="." instance=ExtResource("slot_s")]
 
 [node name="GustavLaden" parent="." instance=ExtResource("gustav_laden_s")]
 

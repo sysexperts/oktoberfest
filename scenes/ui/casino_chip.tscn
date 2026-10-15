@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/casino_chip.gd" id="1_c"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_50.png" id="2_chip"]
+
+[node name="Chip" type="TextureRect"]
+custom_minimum_size = Vector2(52, 52)
+offset_right = 52.0
+offset_bottom = 52.0
+pivot_offset = Vector2(26, 26)
+mouse_filter = 2
+texture = ExtResource("2_chip")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("1_c")
+
+[node name="Betrag" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 52.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
+vertical_alignment = 1
+mouse_filter = 2

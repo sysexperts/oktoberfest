@@ -3,9 +3,9 @@ extends Node3D
 ## hier laufen die Walzen bei allen Spielern los und bleiben nacheinander auf dem Ergebnis stehen.
 
 const SYMBOLE: Array[Texture2D] = [
-	preload("res://assets/ui/symbole/bier.svg"), preload("res://assets/ui/symbole/brezn.svg"),
-	preload("res://assets/ui/symbole/zitrone.svg"), preload("res://assets/ui/symbole/stern.svg"),
-	preload("res://assets/ui/symbole/pokal.svg"), preload("res://assets/ui/symbole/geld.svg"),
+	preload("res://assets/casino/slot_mass.png"), preload("res://assets/casino/slot_brezn.png"),
+	preload("res://assets/casino/slot_hendl.png"), preload("res://assets/casino/slot_herz.png"),
+	preload("res://assets/casino/slot_edelweiss.png"), preload("res://assets/casino/slot_sieben.png"),
 ]
 
 var _lauf := 0.0

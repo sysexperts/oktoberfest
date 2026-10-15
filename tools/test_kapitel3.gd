@@ -72,7 +72,7 @@ class Lauf extends Node:
 		gm.net_sab_kauf("komplett")
 		gm.net_casino_tuer()
 		_check("Mit Tarnung eingelassen", gm._casino_tag == gm._day)
-		gm.net_roulette(0)
+		gm.net_roulette([{"typ": "rot", "einsatz": 50}])
 		gm._broadcast_meta()
 		_check("3.5 offen nach dem Roulette", story.zustand("3.4b") == "erfuellt" and story.zustand("3.5") == "offen", story.zustand("3.5"))
 		gm.net_story_flag("zettel_uebergeben")

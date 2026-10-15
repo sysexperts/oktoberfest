@@ -1,0 +1,2015 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/casino_slot.gd" id="skript"]
+[ext_resource type="Theme" path="res://assets/ui/menue_theme.tres" id="theme"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="fraktur"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_mass.png" id="s_mass"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_brezn.png" id="s_brezn"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_hendl.png" id="s_hendl"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_herz.png" id="s_herz"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_edelweiss.png" id="s_edelweiss"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_sieben.png" id="s_sieben"]
+[ext_resource type="Texture2D" path="res://assets/casino/slot_raute.png" id="s_raute"]
+[ext_resource type="Texture2D" path="res://assets/casino/chip_10.png" id="c_10"]
+
+[sub_resource type="StyleBoxFlat" id="tisch"]
+bg_color = Color(0.03, 0.17, 0.1, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="leer"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="gold_n"]
+bg_color = Color(0.88, 0.66, 0.22, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.93, 0.6, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="gold_h"]
+bg_color = Color(1.0, 0.8, 0.34, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0.8, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="gold_g"]
+bg_color = Color(0.35, 0.3, 0.18, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6, 0.55, 0.4, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="knopf_n"]
+bg_color = Color(0.1, 0.12, 0.11, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.7)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="knopf_h"]
+bg_color = Color(0.18, 0.21, 0.19, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="knopf_g"]
+bg_color = Color(0.1, 0.12, 0.11, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.45, 0.3, 0.5)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="banner"]
+bg_color = Color(0.02, 0.08, 0.05, 0.88)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.91, 0.74, 0.33, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="rahmen"]
+bg_color = Color(0.3, 0.05, 0.08, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.91, 0.74, 0.33, 1)
+corner_radius_top_left = 34
+corner_radius_top_right = 34
+corner_radius_bottom_right = 34
+corner_radius_bottom_left = 34
+
+[sub_resource type="StyleBoxFlat" id="fenster"]
+bg_color = Color(0.96, 0.93, 0.84, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.91, 0.74, 0.33, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="lcd"]
+bg_color = Color(0.03, 0.05, 0.04, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.91, 0.74, 0.33, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="lampe"]
+bg_color = Color(1, 0.85, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.95, 0.7, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="hebel_stab"]
+bg_color = Color(0.8, 0.8, 0.84, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.45, 0.5, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="hebel_kugel"]
+bg_color = Color(0.85, 0.1, 0.12, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.6, 0.6, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[sub_resource type="StyleBoxFlat" id="wahl_n"]
+bg_color = Color(0.1, 0.04, 0.05, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.7)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="wahl_h"]
+bg_color = Color(0.22, 0.09, 0.1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9, 0.5, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="tafel"]
+bg_color = Color(0.12, 0.03, 0.05, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.74, 0.33, 0.6)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Slot" type="CanvasLayer"]
+layer = 26
+script = ExtResource("skript")
+
+[node name="Dunkel" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="Buehne" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -800.0
+offset_top = -450.0
+offset_right = 800.0
+offset_bottom = 450.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(800, 450)
+theme = ExtResource("theme")
+
+[node name="Rahmen" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_right = 1600.0
+offset_bottom = 900.0
+theme_override_styles/panel = SubResource("rahmen")
+
+[node name="Titel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 60
+offset_top = 26
+offset_right = 760
+offset_bottom = 106
+theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)
+theme_override_fonts/font = ExtResource("fraktur")
+theme_override_font_sizes/font_size = 64
+text = "SLOT_TITEL"
+
+[node name="Kasse" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1000
+offset_top = 40
+offset_right = 1480
+offset_bottom = 100
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 2
+auto_translate_mode = 2
+
+[node name="Schliessen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1510
+offset_top = 30
+offset_right = 1570
+offset_bottom = 90
+focus_mode = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("knopf_n")
+theme_override_styles/hover = SubResource("knopf_h")
+theme_override_styles/pressed = SubResource("knopf_h")
+theme_override_styles/focus = SubResource("leer")
+text = "X"
+
+[node name="Lampen" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+mouse_filter = 2
+
+[node name="LampeO0" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 330
+offset_top = 128
+offset_right = 358
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU0" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 330
+offset_top = 660
+offset_right = 358
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO1" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 388
+offset_top = 128
+offset_right = 416
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU1" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 388
+offset_top = 660
+offset_right = 416
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO2" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 446
+offset_top = 128
+offset_right = 474
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU2" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 446
+offset_top = 660
+offset_right = 474
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO3" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 504
+offset_top = 128
+offset_right = 532
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU3" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 504
+offset_top = 660
+offset_right = 532
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO4" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 562
+offset_top = 128
+offset_right = 590
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU4" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 562
+offset_top = 660
+offset_right = 590
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO5" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 620
+offset_top = 128
+offset_right = 648
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU5" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 620
+offset_top = 660
+offset_right = 648
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO6" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 678
+offset_top = 128
+offset_right = 706
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU6" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 678
+offset_top = 660
+offset_right = 706
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO7" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 736
+offset_top = 128
+offset_right = 764
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU7" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 736
+offset_top = 660
+offset_right = 764
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO8" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 794
+offset_top = 128
+offset_right = 822
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU8" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 794
+offset_top = 660
+offset_right = 822
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO9" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 852
+offset_top = 128
+offset_right = 880
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU9" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 852
+offset_top = 660
+offset_right = 880
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO10" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 910
+offset_top = 128
+offset_right = 938
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU10" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 910
+offset_top = 660
+offset_right = 938
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO11" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 968
+offset_top = 128
+offset_right = 996
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU11" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 968
+offset_top = 660
+offset_right = 996
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO12" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 1026
+offset_top = 128
+offset_right = 1054
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU12" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 1026
+offset_top = 660
+offset_right = 1054
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO13" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 1084
+offset_top = 128
+offset_right = 1112
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU13" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 1084
+offset_top = 660
+offset_right = 1112
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeO14" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 1142
+offset_top = 128
+offset_right = 1170
+offset_bottom = 156
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="LampeU14" type="Panel" parent="Buehne/Lampen"]
+layout_mode = 0
+offset_left = 1142
+offset_top = 660
+offset_right = 1170
+offset_bottom = 688
+theme_override_styles/panel = SubResource("lampe")
+mouse_filter = 2
+
+[node name="Fenster" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 350
+offset_top = 170
+offset_right = 1130
+offset_bottom = 630
+theme_override_styles/panel = SubResource("fenster")
+mouse_filter = 2
+
+[node name="Walze0" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 380
+offset_top = 190
+offset_right = 600
+offset_bottom = 610
+clip_contents = true
+mouse_filter = 2
+
+[node name="Streifen" type="Control" parent="Buehne/Walze0"]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Z0" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 0
+offset_right = 210
+offset_bottom = 140
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z1" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 140
+offset_right = 210
+offset_bottom = 280
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z2" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 280
+offset_right = 210
+offset_bottom = 420
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z3" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 420
+offset_right = 210
+offset_bottom = 560
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z4" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 560
+offset_right = 210
+offset_bottom = 700
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z5" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 700
+offset_right = 210
+offset_bottom = 840
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z6" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 840
+offset_right = 210
+offset_bottom = 980
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z7" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 980
+offset_right = 210
+offset_bottom = 1120
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z8" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1120
+offset_right = 210
+offset_bottom = 1260
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z9" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1260
+offset_right = 210
+offset_bottom = 1400
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z10" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1400
+offset_right = 210
+offset_bottom = 1540
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z11" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1540
+offset_right = 210
+offset_bottom = 1680
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z12" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1680
+offset_right = 210
+offset_bottom = 1820
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z13" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1820
+offset_right = 210
+offset_bottom = 1960
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z14" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1960
+offset_right = 210
+offset_bottom = 2100
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z15" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2100
+offset_right = 210
+offset_bottom = 2240
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z16" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2240
+offset_right = 210
+offset_bottom = 2380
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z17" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2380
+offset_right = 210
+offset_bottom = 2520
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z18" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2520
+offset_right = 210
+offset_bottom = 2660
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z19" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2660
+offset_right = 210
+offset_bottom = 2800
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z20" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2800
+offset_right = 210
+offset_bottom = 2940
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z21" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2940
+offset_right = 210
+offset_bottom = 3080
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z22" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3080
+offset_right = 210
+offset_bottom = 3220
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z23" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3220
+offset_right = 210
+offset_bottom = 3360
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z24" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3360
+offset_right = 210
+offset_bottom = 3500
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z25" type="TextureRect" parent="Buehne/Walze0/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3500
+offset_right = 210
+offset_bottom = 3640
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Walze1" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 630
+offset_top = 190
+offset_right = 850
+offset_bottom = 610
+clip_contents = true
+mouse_filter = 2
+
+[node name="Streifen" type="Control" parent="Buehne/Walze1"]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Z0" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 0
+offset_right = 210
+offset_bottom = 140
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z1" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 140
+offset_right = 210
+offset_bottom = 280
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z2" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 280
+offset_right = 210
+offset_bottom = 420
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z3" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 420
+offset_right = 210
+offset_bottom = 560
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z4" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 560
+offset_right = 210
+offset_bottom = 700
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z5" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 700
+offset_right = 210
+offset_bottom = 840
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z6" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 840
+offset_right = 210
+offset_bottom = 980
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z7" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 980
+offset_right = 210
+offset_bottom = 1120
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z8" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1120
+offset_right = 210
+offset_bottom = 1260
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z9" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1260
+offset_right = 210
+offset_bottom = 1400
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z10" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1400
+offset_right = 210
+offset_bottom = 1540
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z11" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1540
+offset_right = 210
+offset_bottom = 1680
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z12" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1680
+offset_right = 210
+offset_bottom = 1820
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z13" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1820
+offset_right = 210
+offset_bottom = 1960
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z14" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1960
+offset_right = 210
+offset_bottom = 2100
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z15" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2100
+offset_right = 210
+offset_bottom = 2240
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z16" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2240
+offset_right = 210
+offset_bottom = 2380
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z17" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2380
+offset_right = 210
+offset_bottom = 2520
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z18" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2520
+offset_right = 210
+offset_bottom = 2660
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z19" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2660
+offset_right = 210
+offset_bottom = 2800
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z20" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2800
+offset_right = 210
+offset_bottom = 2940
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z21" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2940
+offset_right = 210
+offset_bottom = 3080
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z22" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3080
+offset_right = 210
+offset_bottom = 3220
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z23" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3220
+offset_right = 210
+offset_bottom = 3360
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z24" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3360
+offset_right = 210
+offset_bottom = 3500
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z25" type="TextureRect" parent="Buehne/Walze1/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3500
+offset_right = 210
+offset_bottom = 3640
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Trenner1" type="ColorRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 616
+offset_top = 190
+offset_right = 619
+offset_bottom = 610
+color = Color(0.7, 0.6, 0.4, 0.7)
+mouse_filter = 2
+
+[node name="Walze2" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 880
+offset_top = 190
+offset_right = 1100
+offset_bottom = 610
+clip_contents = true
+mouse_filter = 2
+
+[node name="Streifen" type="Control" parent="Buehne/Walze2"]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Z0" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 0
+offset_right = 210
+offset_bottom = 140
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z1" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 140
+offset_right = 210
+offset_bottom = 280
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z2" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 280
+offset_right = 210
+offset_bottom = 420
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z3" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 420
+offset_right = 210
+offset_bottom = 560
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z4" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 560
+offset_right = 210
+offset_bottom = 700
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z5" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 700
+offset_right = 210
+offset_bottom = 840
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z6" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 840
+offset_right = 210
+offset_bottom = 980
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z7" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 980
+offset_right = 210
+offset_bottom = 1120
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z8" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1120
+offset_right = 210
+offset_bottom = 1260
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z9" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1260
+offset_right = 210
+offset_bottom = 1400
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z10" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1400
+offset_right = 210
+offset_bottom = 1540
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z11" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1540
+offset_right = 210
+offset_bottom = 1680
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z12" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1680
+offset_right = 210
+offset_bottom = 1820
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z13" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1820
+offset_right = 210
+offset_bottom = 1960
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z14" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 1960
+offset_right = 210
+offset_bottom = 2100
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z15" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2100
+offset_right = 210
+offset_bottom = 2240
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z16" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2240
+offset_right = 210
+offset_bottom = 2380
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z17" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2380
+offset_right = 210
+offset_bottom = 2520
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z18" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2520
+offset_right = 210
+offset_bottom = 2660
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z19" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2660
+offset_right = 210
+offset_bottom = 2800
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z20" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2800
+offset_right = 210
+offset_bottom = 2940
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z21" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 2940
+offset_right = 210
+offset_bottom = 3080
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z22" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3080
+offset_right = 210
+offset_bottom = 3220
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z23" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3220
+offset_right = 210
+offset_bottom = 3360
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z24" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3360
+offset_right = 210
+offset_bottom = 3500
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Z25" type="TextureRect" parent="Buehne/Walze2/Streifen"]
+layout_mode = 0
+offset_left = 10
+offset_top = 3500
+offset_right = 210
+offset_bottom = 3640
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Trenner2" type="ColorRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 866
+offset_top = 190
+offset_right = 869
+offset_bottom = 610
+color = Color(0.7, 0.6, 0.4, 0.7)
+mouse_filter = 2
+
+[node name="SchattenOben" type="ColorRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 370
+offset_top = 190
+offset_right = 1110
+offset_bottom = 236
+color = Color(0, 0, 0, 0.28)
+mouse_filter = 2
+
+[node name="SchattenUnten" type="ColorRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 370
+offset_top = 564
+offset_right = 1110
+offset_bottom = 610
+color = Color(0, 0, 0, 0.28)
+mouse_filter = 2
+
+[node name="Linien" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Linie0" type="Line2D" parent="Buehne/Linien"]
+points = PackedVector2Array(368, 400, 490, 400, 740, 400, 990, 400, 1112, 400)
+width = 10.0
+default_color = Color(1, 0.85, 0.2, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+visible = false
+
+[node name="Linie1" type="Line2D" parent="Buehne/Linien"]
+points = PackedVector2Array(368, 260, 490, 260, 740, 260, 990, 260, 1112, 260)
+width = 10.0
+default_color = Color(0.3, 1, 0.5, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+visible = false
+
+[node name="Linie2" type="Line2D" parent="Buehne/Linien"]
+points = PackedVector2Array(368, 540, 490, 540, 740, 540, 990, 540, 1112, 540)
+width = 10.0
+default_color = Color(0.3, 0.8, 1, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+visible = false
+
+[node name="Linie3" type="Line2D" parent="Buehne/Linien"]
+points = PackedVector2Array(368, 260, 490, 260, 740, 400, 990, 540, 1112, 540)
+width = 10.0
+default_color = Color(1, 0.5, 0.9, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+visible = false
+
+[node name="Linie4" type="Line2D" parent="Buehne/Linien"]
+points = PackedVector2Array(368, 540, 490, 540, 740, 400, 990, 260, 1112, 260)
+width = 10.0
+default_color = Color(1, 0.5, 0.3, 1)
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+visible = false
+
+[node name="LcdPlatte" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 350
+offset_top = 700
+offset_right = 1130
+offset_bottom = 790
+theme_override_styles/panel = SubResource("lcd")
+mouse_filter = 2
+
+[node name="LcdText" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 370
+offset_top = 706
+offset_right = 1110
+offset_bottom = 784
+theme_override_colors/font_color = Color(0.5, 1, 0.6, 1)
+theme_override_font_sizes/font_size = 54
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="Ergebnis" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 350
+offset_top = 796
+offset_right = 1130
+offset_bottom = 840
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="EinsatzTitel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 640
+offset_right = 330
+offset_bottom = 670
+theme_override_colors/font_color = Color(0.85, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "SLOT_EINSATZ"
+
+[node name="EinsatzWahl" type="VBoxContainer" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 70
+offset_top = 676
+offset_right = 310
+offset_bottom = 866
+theme_override_constants/separation = 8
+
+[node name="einsatz_50" type="Button" parent="Buehne/EinsatzWahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("wahl_n")
+theme_override_styles/hover = SubResource("wahl_h")
+theme_override_styles/pressed = SubResource("gold_n")
+theme_override_styles/hover_pressed = SubResource("gold_h")
+theme_override_styles/focus = SubResource("leer")
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.15, 0.08, 0.02, 1)
+text = "50"
+
+[node name="einsatz_100" type="Button" parent="Buehne/EinsatzWahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("wahl_n")
+theme_override_styles/hover = SubResource("wahl_h")
+theme_override_styles/pressed = SubResource("gold_n")
+theme_override_styles/hover_pressed = SubResource("gold_h")
+theme_override_styles/focus = SubResource("leer")
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.15, 0.08, 0.02, 1)
+text = "100"
+
+[node name="einsatz_250" type="Button" parent="Buehne/EinsatzWahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("wahl_n")
+theme_override_styles/hover = SubResource("wahl_h")
+theme_override_styles/pressed = SubResource("gold_n")
+theme_override_styles/hover_pressed = SubResource("gold_h")
+theme_override_styles/focus = SubResource("leer")
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.15, 0.08, 0.02, 1)
+text = "250"
+
+[node name="einsatz_500" type="Button" parent="Buehne/EinsatzWahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("wahl_n")
+theme_override_styles/hover = SubResource("wahl_h")
+theme_override_styles/pressed = SubResource("gold_n")
+theme_override_styles/hover_pressed = SubResource("gold_h")
+theme_override_styles/focus = SubResource("leer")
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.15, 0.08, 0.02, 1)
+text = "500"
+
+[node name="einsatz_1000" type="Button" parent="Buehne/EinsatzWahl"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("wahl_n")
+theme_override_styles/hover = SubResource("wahl_h")
+theme_override_styles/pressed = SubResource("gold_n")
+theme_override_styles/hover_pressed = SubResource("gold_h")
+theme_override_styles/focus = SubResource("leer")
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.15, 0.08, 0.02, 1)
+text = "1000"
+
+[node name="Tafel" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 50
+offset_top = 150
+offset_right = 330
+offset_bottom = 630
+theme_override_styles/panel = SubResource("tafel")
+mouse_filter = 2
+
+[node name="TafelTitel" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 60
+offset_top = 158
+offset_right = 320
+offset_bottom = 198
+theme_override_colors/font_color = Color(0.91, 0.74, 0.33, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "SLOT_TAFEL"
+
+[node name="TafelBild0" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 204
+offset_right = 130
+offset_bottom = 264
+texture = ExtResource("s_sieben")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWert0" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 140
+offset_top = 212
+offset_right = 310
+offset_bottom = 256
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+text = "3 x60"
+
+[node name="TafelBild1" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 266
+offset_right = 130
+offset_bottom = 326
+texture = ExtResource("s_edelweiss")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWert1" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 140
+offset_top = 274
+offset_right = 310
+offset_bottom = 318
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+text = "3 x25"
+
+[node name="TafelBild2" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 328
+offset_right = 130
+offset_bottom = 388
+texture = ExtResource("s_mass")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWert2" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 140
+offset_top = 336
+offset_right = 310
+offset_bottom = 380
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+text = "3 x14"
+
+[node name="TafelBild3" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 390
+offset_right = 130
+offset_bottom = 450
+texture = ExtResource("s_herz")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWert3" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 140
+offset_top = 398
+offset_right = 310
+offset_bottom = 442
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+text = "3 x9"
+
+[node name="TafelBild4" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 452
+offset_right = 130
+offset_bottom = 512
+texture = ExtResource("s_hendl")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWert4" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 140
+offset_top = 460
+offset_right = 310
+offset_bottom = 504
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+text = "3 x5"
+
+[node name="TafelBild5" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 514
+offset_right = 130
+offset_bottom = 574
+texture = ExtResource("s_brezn")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWert5" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 140
+offset_top = 522
+offset_right = 310
+offset_bottom = 566
+theme_override_colors/font_color = Color(1, 0.93, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+text = "3 x4"
+
+[node name="TafelWild" type="TextureRect" parent="Buehne"]
+layout_mode = 0
+offset_left = 70
+offset_top = 578
+offset_right = 120
+offset_bottom = 628
+texture = ExtResource("s_raute")
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="TafelWildText" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 126
+offset_top = 580
+offset_right = 326
+offset_bottom = 628
+theme_override_colors/font_color = Color(0.85, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 0
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "SLOT_WILD"
+
+[node name="Hebel" type="Control" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1190
+offset_top = 430
+offset_right = 1230
+offset_bottom = 450
+pivot_offset = Vector2(20, 10)
+mouse_filter = 2
+
+[node name="Stab" type="Panel" parent="Buehne/Hebel"]
+layout_mode = 0
+offset_left = 11
+offset_top = -130
+offset_right = 29
+offset_bottom = 10
+theme_override_styles/panel = SubResource("hebel_stab")
+mouse_filter = 2
+
+[node name="Kugel" type="Panel" parent="Buehne/Hebel"]
+layout_mode = 0
+offset_left = -12
+offset_top = -186
+offset_right = 52
+offset_bottom = -122
+theme_override_styles/panel = SubResource("hebel_kugel")
+mouse_filter = 2
+
+[node name="HebelSockel" type="Panel" parent="Buehne"]
+layout_mode = 0
+offset_left = 1166
+offset_top = 430
+offset_right = 1254
+offset_bottom = 474
+theme_override_styles/panel = SubResource("lcd")
+mouse_filter = 2
+
+[node name="Drehen" type="Button" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1160
+offset_top = 520
+offset_right = 1540
+offset_bottom = 630
+focus_mode = 0
+theme_override_font_sizes/font_size = 46
+theme_override_styles/focus = SubResource("leer")
+theme_override_styles/normal = SubResource("gold_n")
+theme_override_styles/hover = SubResource("gold_h")
+theme_override_styles/pressed = SubResource("gold_h")
+theme_override_styles/disabled = SubResource("gold_g")
+theme_override_colors/font_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_pressed_color = Color(0.15, 0.08, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.5, 0.45, 0.35, 1)
+text = "SLOT_DREHEN"
+
+[node name="Kasse2" type="Label" parent="Buehne"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1160
+offset_top = 650
+offset_right = 1540
+offset_bottom = 690
+theme_override_colors/font_color = Color(0.85, 0.8, 0.6, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+mouse_filter = 2
+
+[node name="Hinweis" type="Label" parent="Buehne"]
+layout_mode = 0
+offset_left = 60
+offset_top = 862
+offset_right = 1540
+offset_bottom = 888
+theme_override_colors/font_color = Color(0.9, 0.8, 0.7, 0.8)
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 1
+mouse_filter = 2
+text = "SLOT_HINWEIS"
+
+[node name="Gewinnregen" type="CPUParticles2D" parent="Buehne"]
+unique_name_in_owner = true
+position = Vector2(740, 470)
+emitting = false
+amount = 46
+lifetime = 2.4
+one_shot = true
+explosiveness = 0.92
+texture = ExtResource("c_10")
+direction = Vector2(0, -1)
+spread = 55.0
+gravity = Vector2(0, 1100)
+initial_velocity_min = 600.0
+initial_velocity_max = 1100.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+scale_amount_min = 0.22
+scale_amount_max = 0.42
+local_coords = true

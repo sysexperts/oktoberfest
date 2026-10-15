@@ -1,10 +1,10 @@
 extends Node3D
 ## Etwas zum Anfassen im Casino (scenes/casino.tscn). Der Spieler erkennt es an hinweis_text und kasino_aktion.
 ##   art "tuer":     der Türsteher prüft die Tarnung (Server: net_casino_tuer)
-##   art "roulette": Rot oder Schwarz, 50 € Einsatz (Server: net_roulette)
-##   art "blackjack": Karte oder Halten gegen die Bank (Server: net_blackjack)
-##   art "wuerfel":  Würfelbecher, zwei Würfel: Tief (2 bis 6), Sieben oder Hoch (8 bis 12) (Server: net_wuerfel)
-##   art "slot":     Spielautomat, drei Walzen, Hebel ziehen für 50 € (Server: net_slot)
+##   art "roulette": Tisch mit Jetons und allen Wetten (scripts/ui/casino_roulette.gd) (Server: net_roulette)
+##   art "blackjack": Karte, Halten, Verdoppeln gegen die Bank (scripts/ui/casino_blackjack.gd, Server: net_blackjack)
+##   art "wuerfel":  Würfelbecher mit Wetten auf Tief, Sieben, Hoch, Pasch (scripts/ui/casino_wuerfel.gd, Server: net_wuerfel)
+##   art "slot":     Spielautomat mit 5 Gewinnlinien (scripts/ui/casino_slot.gd, Server: net_slot)
 
 @export_enum("tuer", "roulette", "blackjack", "watten", "wuerfel", "slot") var art := "tuer"
 
@@ -29,25 +29,13 @@ func kasino_aktion(spieler: Node) -> void:
 		if w != null:
 			w.zeigen(spieler)
 		return
-	if art == "slot":
-		welt.net_slot.rpc_id(1)
+	if art == "roulette":
+		var r := get_tree().get_first_node_in_group("roulette_ui")
+		if r != null:
+			r.zeigen(spieler)
 		return
-	var dialog := get_tree().get_first_node_in_group("dialog")
-	if dialog == null:
-		return
-	if art == "blackjack":
-		var f: Array[String] = [String(TranslationServer.translate("BJ_FRAGE"))]
-		var w: Array[String] = [String(TranslationServer.translate("BJ_SPIELEN")), String(TranslationServer.translate("BJ_NEIN"))]
-		dialog.zeigen(String(TranslationServer.translate("CROUPIER_NAME")), f, func(i: int) -> void:
-			if i == 0:
-				welt.net_blackjack.rpc_id(1, 0), w)
-		return
-	if art == "wuerfel":
-		var wf: Array[String] = [String(TranslationServer.translate("WUERFEL_FRAGE"))]
-		var ww: Array[String] = [String(TranslationServer.translate("WUERFEL_TIEF")), String(TranslationServer.translate("WUERFEL_SIEBEN")), String(TranslationServer.translate("WUERFEL_HOCH"))]
-		dialog.zeigen(String(TranslationServer.translate("CROUPIER_NAME")), wf, func(i: int) -> void: welt.net_wuerfel.rpc_id(1, i), ww)
-		return
-	var wer := String(TranslationServer.translate("CROUPIER_NAME"))
-	var zeilen: Array[String] = [String(TranslationServer.translate("CROUPIER_FRAGE"))]
-	var wahl: Array[String] = [String(TranslationServer.translate("CROUPIER_ROT")), String(TranslationServer.translate("CROUPIER_SCHWARZ"))]
-	dialog.zeigen(wer, zeilen, func(i: int) -> void: welt.net_roulette.rpc_id(1, i), wahl)
+	var fenster := {"slot": "slot_ui", "blackjack": "blackjack_ui", "wuerfel": "wuerfel_ui"}
+	if fenster.has(art):
+		var f := get_tree().get_first_node_in_group(fenster[art])
+		if f != null:
+			f.zeigen(spieler)
