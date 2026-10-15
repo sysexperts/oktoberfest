@@ -311,6 +311,7 @@ func an_knochen_haengen(rolle: String, teil: Node3D, lage: Transform3D) -> bool:
 				bindung = mi.skin.get_bind_pose(i) * mi.transform.affine_inverse()
 				break
 		break
+	teil.owner = null   # stammt aus einer fremden Szene (Tattoo-Decals): sonst warnt Godot über inkonsistente Besitzer
 	halter.add_child(teil)
 	teil.transform = bindung * lage
 	return true
