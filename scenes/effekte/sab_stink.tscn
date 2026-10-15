@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="Gradient" id="G"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="T"]
+gradient = SubResource("G")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="M"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = SubResource("T")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+
+[sub_resource type="QuadMesh" id="Q"]
+material = SubResource("M")
+
+[sub_resource type="Gradient" id="Verlauf"]
+offsets = PackedFloat32Array(0, 0.18, 0.8, 1)
+colors = PackedColorArray(0.35, 0.8, 0.12, 0, 0.38, 0.85, 0.14, 0.55, 0.3, 0.7, 0.1, 0.42, 0.3, 0.7, 0.1, 0)
+
+[sub_resource type="GradientTexture1D" id="VerlaufTex"]
+gradient = SubResource("Verlauf")
+
+[sub_resource type="ParticleProcessMaterial" id="P"]
+color_ramp = SubResource("VerlaufTex")
+emission_shape = 1
+emission_sphere_radius = 2.4
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0.06, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.45
+scale_min = 2.4
+scale_max = 3.8
+angle_min = -180.0
+angle_max = 180.0
+
+[node name="SabStink" type="GPUParticles3D"]
+emitting = false
+local_coords = false
+visibility_aabb = AABB(-6, -2, -6, 12, 6, 12)
+process_material = SubResource("P")
+draw_pass_1 = SubResource("Q")
+amount = 70
+lifetime = 7.0
+explosiveness = 0.15
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

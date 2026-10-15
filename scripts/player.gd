@@ -399,6 +399,8 @@ func _physics_process(delta: float) -> void:
 		_trinken(delta)
 		if _kotz_t > 0.0:
 			emote = EMOTE_KOTZEN
+		elif sab_aktiv:
+			emote = EMOTE_SABOTAGE
 		elif emote_laeuft():
 			# Losgehen bricht das Emote ab — man steht ja mittendrin
 			if Vector2(velocity.x, velocity.z).length() > 0.6:
@@ -408,7 +410,7 @@ func _physics_process(delta: float) -> void:
 				emote = emote_wahl
 		else:
 			emote = 0
-		_kamera_aussen(emote != 0 or _schulterkamera, delta)
+		_kamera_aussen((emote != 0 and emote != EMOTE_SABOTAGE) or _schulterkamera, delta)
 		_modell_ausrichten(delta)
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume | (256 if _rausch_stufe >= 1 else 0), PackedByteArray(extra_kruege))
 	else:
@@ -558,6 +560,9 @@ func _update_animation(delta: float) -> void:
 			EMOTE_MITTELFINGER:
 				figur.mittelfinger_pose(_emote_anim_t)
 				_cur_anim = "pose"
+			EMOTE_SABOTAGE:
+				figur.sabotage_pose(_emote_anim_t)
+				_cur_anim = "pose"
 			_:
 				# Clip aus dem Q-Rad (Mixamo u. a., daten/emote_clips.json)
 				var clip := EmoteClips.clip_von(emote)
@@ -695,8 +700,27 @@ func schlafen_setzen(an: bool) -> void:
 	if _is_local:
 		_sfx("pop")
 
+## Sabotage läuft (scripts/sab_ziel.gd): man steht still und kniet
+var sab_aktiv := false
+
+func sabotage_beginnen() -> void:
+	sab_aktiv = true
+	_emote_until = 0.0
+
+func sabotage_ende() -> void:
+	sab_aktiv = false
+
 func _handle_movement(delta: float) -> void:
 	if _geschleudert():
+		return
+	if sab_aktiv:
+		velocity.x = move_toward(velocity.x, 0.0, ACCEL * delta * SPEED * 3.0)
+		velocity.z = move_toward(velocity.z, 0.0, ACCEL * delta * SPEED * 3.0)
+		if not is_on_floor():
+			velocity.y -= 20.0 * delta
+		elif velocity.y <= 0.0:
+			velocity.y = 0.0
+		move_and_slide()
 		return
 	if schlaeft:
 		velocity = Vector3.ZERO
@@ -1818,6 +1842,8 @@ const EMOTE_JUBEL := 4
 const EMOTE_POSEN := 5
 const EMOTE_SITZEN := 6
 const EMOTE_MITTELFINGER := 7
+## Sabotage in Konrads Zelt (knien und werkeln): kein Emote aus dem Rad, läuft aber über dasselbe Netzfeld
+const EMOTE_SABOTAGE := 8
 const EmoteClips := preload("res://scripts/emote_clips.gd")
 ## So lange läuft ein Emote, wenn man nicht vorher weiterläuft
 const EMOTE_DAUER := 6.0

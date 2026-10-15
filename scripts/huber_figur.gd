@@ -29,11 +29,44 @@ func _ready() -> void:
 	_figur.stehen()
 	set_process(true)
 
+## Sabotage-Erfolg (GameManager._net_huber_leer): ein Teil der Gäste rennt zum Ausgang und ist dann weg.
+## 0 = da, 1 = rennt, 2 = draußen. Am nächsten Tag stehen alle wieder an ihrem Platz.
+const AUSGANG_Z := 11.0   # lokal im Zelt: so weit vorn liegt der Eingang
+const FLUCHT_TEMPO := 4.8
+var _flucht := 0
+
+func _flucht_pruefen() -> void:
+	if beruf != "":
+		return
+	var welt := get_tree().current_scene
+	var zelt := get_tree().get_first_node_in_group("huber_zelt") as Node3D
+	if zelt == null or not welt.has_method("konrad_leute_da"):
+		return
+	var heute := int(zelt.get_meta("leer_tag", -1)) == int(welt.get("_day"))
+	if heute:
+		var jetzt := Time.get_ticks_msec() / 1000.0
+		var ab := float(zelt.get_meta("leer_zeit", 0.0)) + _gehwert * 3.0
+		if _flucht == 0 and _gehwert < float(zelt.get_meta("leer_anteil", 0.0)) and jetzt >= ab:
+			_flucht = 1
+			_figur.rennen()
+	elif _flucht != 0:
+		_flucht = 0
+		position = _start
+		_punkt = 0
+		_warte = randf_range(0.0, pause)
+		_figur.stehen()
+
 func _process(delta: float) -> void:
 	_lod_t -= delta
 	if _lod_t <= 0.0:
 		_lod_t = randf_range(0.4, 0.8)
+		_flucht_pruefen()
 		_lod()
+	if _flucht == 1:
+		_hinauslaufen(delta)
+		return
+	if _flucht == 2:
+		return
 	if runde.is_empty():
 		return
 	if _warte > 0.0:
@@ -51,6 +84,23 @@ func _process(delta: float) -> void:
 		return
 	position += zu.normalized() * minf(tempo * delta, zu.length())
 	rotation.y = lerp_angle(rotation.y, atan2(zu.x, zu.z), minf(1.0, 8.0 * delta))
+
+## Zum Ausgang rennen (im Raum des Elternknotens), vorn verschwinden
+func _hinauslaufen(delta: float) -> void:
+	var zelt := get_tree().get_first_node_in_group("huber_zelt") as Node3D
+	var eltern := get_parent() as Node3D
+	if zelt == null or eltern == null:
+		_flucht = 2
+		return
+	var ziel := eltern.to_local(zelt.to_global(Vector3(0.0, 0.0, AUSGANG_Z)))
+	var zu := ziel - position
+	zu.y = 0.0
+	if zu.length() < 0.9:
+		_flucht = 2
+		_figur.visible = false
+		return
+	position += zu.normalized() * minf(FLUCHT_TEMPO * delta, zu.length())
+	rotation.y = lerp_angle(rotation.y, atan2(zu.x, zu.z), minf(1.0, 10.0 * delta))
 
 ## Leistung: weit weg wird die Animation angehalten, noch weiter weg wird die Figur nicht gezeichnet
 ## (wie bei den Budenbesitzern, scripts/kirmes/budenbesitzer.gd). 22 Figuren in Konrads Zelt kosteten rund 900 Zeichenaufrufe.
@@ -70,11 +120,7 @@ func _lod() -> void:
 	var hud: Object = welt.get("_hud")
 	var z: Dictionary = hud.get("_zustand") if hud != null else {}
 	var kapitel := int((z.get("story", {}) as Dictionary).get("kapitel", 1))
-	var weg := false
-	if beruf == "":
-		var zelt := get_tree().get_first_node_in_group("huber_zelt")
-		if zelt != null and int(zelt.get_meta("leer_tag", -1)) == int(welt.get("_day")):
-			weg = _gehwert < float(zelt.get_meta("leer_anteil", 0.0))
+	var weg := _flucht == 2
 	var da: bool = not welt.has_method("konrad_leute_da") or welt.konrad_leute_da()
 	_figur.visible = abstand < LOD_SICHTBAR and kapitel >= ab_kapitel and not weg and da
 	var nah := abstand < LOD_ANIMATION

@@ -7493,6 +7493,7 @@ func net_sabotage(art: String, erwischt: bool) -> void:
 			_sab_andrang_tag = _day
 		_sab_andrang += float(SAB_ANDRANG.get(art, 0.15))
 		_net_huber_leer.rpc(_day, minf(1.0, _sab_andrang * 3.0))
+		_net_sab_effekt.rpc(art)
 		_melde("MSG_SAB_ANDRANG", [int(round(_sab_andrang * 100.0))], 2)
 	_broadcast_meta()
 
@@ -8270,11 +8271,19 @@ func _net_roulette_dreh() -> void:
 		c.dreh()
 
 ## Konrads Zelt wird leerer: die Gäste (nicht das Personal) gehen zum Teil, scripts/huber_figur.gd
+## Effekt an der Sabotage-Stelle für alle Spieler (Nebel, Bierstrahl, Funken, Juckstaub)
+@rpc("authority", "reliable", "call_local")
+func _net_sab_effekt(art: String) -> void:
+	for z in get_tree().get_nodes_in_group("sab_ziel"):
+		if str(z.get("art")) == art and z.has_method("effekt_abspielen"):
+			z.effekt_abspielen()
+
 @rpc("authority", "reliable", "call_local")
 func _net_huber_leer(tag: int, anteil: float) -> void:
 	var zelt := get_tree().get_first_node_in_group("huber_zelt")
 	if zelt != null:
 		zelt.set_meta("leer_tag", tag)
+		zelt.set_meta("leer_zeit", Time.get_ticks_msec() / 1000.0)
 		zelt.set_meta("leer_anteil", anteil)
 
 ## Erwischt: der Türsteher wirft dich vor das Zelt

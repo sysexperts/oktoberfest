@@ -1,6 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/sab_ziel.gd" id="1_sz"]
+[ext_resource type="PackedScene" path="res://scenes/effekte/sab_stink.tscn" id="2_stink"]
+[ext_resource type="PackedScene" path="res://scenes/effekte/sab_fass.tscn" id="3_fass"]
+[ext_resource type="PackedScene" path="res://scenes/effekte/sab_strom.tscn" id="4_strom"]
+[ext_resource type="PackedScene" path="res://scenes/effekte/sab_juck.tscn" id="5_juck"]
 
 [sub_resource type="BoxMesh" id="KastenMesh"]
 size = Vector3(0.55, 0.75, 0.22)
@@ -10,6 +14,35 @@ albedo_color = Color(0.45, 0.47, 0.5, 1)
 metallic = 0.6
 roughness = 0.5
 
+[sub_resource type="QuadMesh" id="BalkenMesh"]
+size = Vector2(1, 0.12)
+center_offset = Vector3(0.5, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="BalkenHinten"]
+shading_mode = 0
+albedo_color = Color(0.05, 0.05, 0.07, 0.85)
+transparency = 1
+no_depth_test = true
+billboard_mode = 1
+render_priority = 10
+
+[sub_resource type="StandardMaterial3D" id="BalkenVorn"]
+shading_mode = 0
+albedo_color = Color(1, 0.78, 0.2, 1)
+no_depth_test = true
+billboard_mode = 1
+render_priority = 11
+
+[sub_resource type="CylinderMesh" id="PfuetzeMesh"]
+top_radius = 1.3
+bottom_radius = 1.3
+height = 0.01
+
+[sub_resource type="StandardMaterial3D" id="PfuetzeFarbe"]
+transparency = 1
+albedo_color = Color(0.95, 0.68, 0.15, 0.7)
+roughness = 0.2
+
 [node name="SabZiel" type="Node3D"]
 script = ExtResource("1_sz")
 
@@ -17,3 +50,31 @@ script = ExtResource("1_sz")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 mesh = SubResource("KastenMesh")
 surface_material_override/0 = SubResource("KastenFarbe")
+
+[node name="Balken" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
+visible = false
+
+[node name="Hinten" type="MeshInstance3D" parent="Balken"]
+transform = Transform3D(1.06, 0, 0, 0, 1.4, 0, 0, 0, 1, -0.53, 0, -0.001)
+mesh = SubResource("BalkenMesh")
+surface_material_override/0 = SubResource("BalkenHinten")
+
+[node name="Vorn" type="MeshInstance3D" parent="Balken"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
+mesh = SubResource("BalkenMesh")
+surface_material_override/0 = SubResource("BalkenVorn")
+
+[node name="EffektStink" parent="." instance=ExtResource("2_stink")]
+
+[node name="EffektFass" parent="." instance=ExtResource("3_fass")]
+
+[node name="EffektStrom" parent="." instance=ExtResource("4_strom")]
+
+[node name="EffektJuck" parent="." instance=ExtResource("5_juck")]
+
+[node name="Pfuetze" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.02, 1.1)
+visible = false
+mesh = SubResource("PfuetzeMesh")
+surface_material_override/0 = SubResource("PfuetzeFarbe")

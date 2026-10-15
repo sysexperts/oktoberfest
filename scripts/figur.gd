@@ -670,6 +670,26 @@ func kotz_pose_loesen() -> void:
 	pose_loesen()
 
 
+## Sabotage: in die Hocke, Oberkörper vor, beide Hände werkeln vor dem Körper
+func sabotage_pose(t: float) -> void:
+	if skelett == null:
+		return
+	if anim:
+		anim.active = false
+	var werkeln := sin(t * 11.0)
+	_knochen("oberschenkel_l", 1.05)
+	_knochen("oberschenkel_r", 1.05)
+	_knochen("unterschenkel_l", -1.55)
+	_knochen("unterschenkel_r", -1.55)
+	_knochen("wirbel_unten", 0.30)
+	_knochen("wirbel_mitte", 0.26)
+	_knochen("wirbel_oben", 0.22)
+	_knochen("kopf", -0.20)
+	_knochen("arm_l", -1.0 + 0.10 * werkeln)
+	_knochen("arm_r", -1.0 - 0.10 * werkeln)
+	_knochen("unterarm_l", -0.85)
+	_knochen("unterarm_r", -0.85)
+
 ## Knochen zu einer Rolle aus KNOCHEN_NAMEN drehen. Kennt das Modell keine der
 ## Schreibweisen, passiert nichts — dann fehlt eben dieser Teil der Pose.
 func _knochen(rolle: String, winkel: float, achse := Vector3.RIGHT) -> void:
