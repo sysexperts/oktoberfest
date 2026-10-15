@@ -46,6 +46,18 @@ func ziel_suchen() -> Node3D:
 		var z: Node3D = gefallen.ziel_fuer(sp)
 		if z != null:
 			return z
+	# Quest "Das Hinterzimmer" (3.4b): erst zu Gustav (Tarnung kaufen), dann zum Türsteher, dann zum Roulette
+	var st: Node = gm.get("_story")
+	if sp and st != null and st.zustand("3.4b") == "offen":
+		var z := {}
+		var hud: Object = gm.get("_hud")
+		if hud != null:
+			z = hud.get("_zustand")
+		if int(z.get("tarnung_stufe", 0)) < 2:
+			return _naechstes(sp, func(n: Node) -> bool: return n.has_method("gustav_aktion"))
+		if int(z.get("casino_tag", -1)) != int(gm.get("_day")):
+			return _naechstes(sp, func(n: Node) -> bool: return n.has_method("kasino_aktion") and str(n.get("art")) == "tuer")
+		return _naechstes(sp, func(n: Node) -> bool: return n.has_method("kasino_aktion") and str(n.get("art")) == "roulette")
 	if sp == null or not gm.has_method("tutorial_active") or not gm.tutorial_active():
 		return null
 	var geschlossen: bool = gm.in_intermission()

@@ -610,7 +610,8 @@
   "titel": "Q_3_4B_TITLE",
   "text": "Q_3_4B_TEXT",
   "ausloeser": {
-   "nach": "3.4"
+   "nach": "3.4",
+   "mail": "M3-04B"
   },
   "bedingung": {
    "flag": "casino_gespielt"

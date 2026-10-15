@@ -378,6 +378,13 @@
   "antworten": []
  },
  {
+  "id": "M3-04B",
+  "absender": "HORST",
+  "betreff": "MAIL_M3_04B_BETREFF",
+  "text": "MAIL_M3_04B_TEXT",
+  "antworten": []
+ },
+ {
   "id": "M3-05",
   "absender": "HORST",
   "betreff": "MAIL_M3_05_BETREFF",

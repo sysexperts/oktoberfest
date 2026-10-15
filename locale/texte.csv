@@ -2071,7 +2071,7 @@ MSG_FAKE_GELOESCHT,Fake-Bewertung gemeldet und gelöscht. Beliebtheit +2 %,Fake 
 HINT_GUSTAV,{interact} Mit Gustav reden,{interact} Talk to Gustav,{interact} Gustav ile konuş
 GUSTAV_NAME,Gustav,Gustav,Gustav
 GUSTAV_NOCH_NICHT,Kenn ich dich? Nein. Ich kenn dich nicht. Und ich weiß von nix.,Do I know you? No. I don't know you. And I know nothing.,Seni tanıyor muyum? Hayır. Seni tanımıyorum. Ve hiçbir şey bilmiyorum.
-GUSTAV_HALLO,"Pst. Du hast mich nie gesehen. Schau in meinen Koffer, aber red leise. Bezahlt wird bar.","Psst. You never saw me. Take a look in my case, but keep your voice down. Cash only.",Pst. Beni hiç görmedin. Çantama bak ama sessiz konuş. Ödeme nakit.
+GUSTAV_HALLO,"Pst. Du hast mich nie gesehen. Konrad lässt dich überall beschreiben, ohne Verkleidung kommst du in sein Zelt oder ins Casino nicht rein. Schau in meinen Koffer, aber red leise. Bezahlt wird bar.","Psst. You never saw me. Konrad has you described everywhere; without a disguise you will not get into his tent or the casino. Take a look in my case, but keep your voice down. Cash only.","Pst. Beni hiç görmedin. Konrad seni her yerde tarif ettiriyor; kılıksız çadırına ya da kumarhaneye giremezsin. Çantama bak ama sessiz konuş. Ödeme nakit."
 SAB_TITEL,Gustavs Koffer,Gustav's case,Gustav'ın çantası
 SAB_INFO,Kasse: %d €,Cash: %d €,Kasa: %d €
 SAB_BESITZ,hast: %d,owned: %d,sende: %d
@@ -2100,7 +2100,7 @@ MSG_SAB_RACHE,Konrad schlägt zurück. Heute ist mit einem Streich zu rechnen!,K
 HINT_CASINO_TUER,{interact} Zum Türsteher,{interact} Talk to the doorman,{interact} Kapıcıyla konuş
 HINT_CASINO_ROULETTE,{interact} Roulette spielen,{interact} Play roulette,{interact} Rulet oyna
 MSG_CASINO_REIN,"Der Türsteher mustert dich, nickt und lässt dich ins Casino. Mit Tarnung kommst du rein.","The doorman looks you over, nods and lets you into the casino. The disguise worked.","Kapıcı seni süzer, başını sallar ve seni kumarhaneye alır. Kılık işe yaradı."
-MSG_CASINO_RAUS,Dich kenn ich doch! Raus hier. Ohne Tarnung kommst du nicht rein.,I know you! Get out. You won't get in without a disguise.,Seni tanıyorum! Defol. Kılıksız giremezsin.
+MSG_CASINO_RAUS,"Dich kenn ich doch! Konrad hat dein Gesicht beschrieben. Raus hier! Komm verkleidet wieder, bei Gustav gibt es Tarnung.","I know you! Konrad described your face. Get out! Come back in disguise, Gustav sells disguises.","Seni tanıyorum! Konrad yüzünü tarif etti. Defol! Kılık değiştirip gel, Gustav kılık satıyor."
 CROUPIER_NAME,Croupier,Croupier,Krupiye
 CROUPIER_FRAGE,Faites vos jeux. Einsatz 50 €. Rot oder Schwarz?,Faites vos jeux. Stake 50 €. Red or black?,Faites vos jeux. Bahis 50 €. Kırmızı mı siyah mı?
 CROUPIER_ROT,Rot,Red,Kırmızı
@@ -2109,7 +2109,7 @@ CROUPIER_GRUEN,Grün,Green,Yeşil
 MSG_ROULETTE_GEWONNEN,"Roulette: die %d, %s. Gewonnen: +%s aus Konrads Bank!","Roulette: %d, %s. You win +%s from Konrad's bank!","Rulet: %d, %s. Konrad'ın bankasından +%s kazandın!"
 MSG_ROULETTE_VERLOREN,"Roulette: die %d, %s. Verloren: -%s an Konrads Bank.","Roulette: %d, %s. You lose -%s to Konrad's bank.","Rulet: %d, %s. Konrad'ın bankasına -%s kaybettin."
 Q_3_4B_TITLE,Das Hinterzimmer,The back room,Arka oda
-Q_3_4B_TEXT,"Der Saboteur ist zu Konrads Zelt geflohen. Hinter seinem Zelt gibt es ein Casino. Kauf bei Gustav ein Komplettset als Tarnung, lass dich vom Türsteher einlassen und spiel eine Runde Roulette.","The saboteur fled to Konrad's tent. There is a casino behind his tent. Buy a full disguise from Gustav, get past the doorman and play a round of roulette.","Sabotajcı Konrad'ın çadırına kaçtı. Çadırının arkasında bir kumarhane var. Gustav'dan tam kılık al, kapıcıdan geç ve bir tur rulet oyna."
+Q_3_4B_TEXT,"Der Saboteur ist zu Konrads Zelt geflohen. Hinter dem Zelt liegt ein Casino. Konrad hat deinen Namen an jede Tür gehängt, der Türsteher wirft dich sofort raus. Hol dir bei Gustav (beim Riesenrad) das Komplettset als Verkleidung, geh damit zum Türsteher und spiel eine Runde Roulette.","The saboteur fled to Konrad's tent. There is a casino behind it. Konrad has put your name on every door, so the doorman throws you out at once. Get the full disguise from Gustav (by the Ferris wheel), go to the doorman in it and play a round of roulette.","Sabotajcı Konrad'ın çadırına kaçtı. Çadırın arkasında bir kumarhane var. Konrad adını her kapıya astı, kapıcı seni hemen dışarı atar. Dönme dolabın yanındaki Gustav'dan tam kılığı al, onunla kapıcıya git ve bir tur rulet oyna."
 HINT_CASINO_BLACKJACK,{interact} Blackjack spielen,{interact} Play blackjack,{interact} Blackjack oyna
 BJ_FRAGE,"Blackjack gegen die Bank. Einsatz 50 €. Wer 21 am nächsten kommt, ohne drüber zu gehen, gewinnt.",Blackjack against the bank. Stake 50 €. Whoever gets closest to 21 without going over wins.,Banka karşı blackjack. Bahis 50 €. 21'e en çok yaklaşan ve geçmeyen kazanır.
 BJ_SPIELEN,Spielen,Play,Oyna
@@ -2791,3 +2791,15 @@ CREATOR_FRISUR_KURZHAAR,Kurzhaar,Short hair,Kısa saç
 CREATOR_JACKE_TSHIRT,T-Shirt (über der Hose),T-shirt (untucked),Tişört (dışarıda)
 CREATOR_FRISUR_PEACED,Seitenfransen,Side fringe,Yan perçem
 CREATOR_BART_BUERSTE,Bürstenschnauzer,Brush moustache,Fırça bıyık
+SAB_INV_TITEL,Gustavs Sachen,Gustav's stuff,Gustav'ın eşyaları
+SAB_INV_TARNUNG,Tarnung: %s (%s),Disguise: %s (%s),Kılık: %s (%s)
+SAB_INV_AN,an,on,açık
+SAB_INV_AUS,aus,off,kapalı
+MAIL_M3_04B_BETREFF,"Das Hinterzimmer","The back room","Arka oda"
+MAIL_M3_04B_TEXT,"Der Saboteur ist zu Konrads Zelt geflohen. Hinter dem Zelt gibt es ein Casino, da ging früher auch der Sepp hin, aber das ist eine andere Geschichte. Der Türsteher gehört Konrad, und der hat ihm dein Gesicht beschrieben: Wenn du so hinkommst, wie du bist, fliegst du raus. Nur wer verkleidet ist, kommt rein. Frag den Gustav, den findest du beim Riesenrad, aber ich weiß von nix! Besorg dir das Komplettset und lass dich einlassen.
+
+Horst","The saboteur fled to Konrad's tent. There is a casino behind it, Sepp used to go there too, but that is another story. The doorman belongs to Konrad and he described your face to him: if you turn up as you are, you get thrown out. Only people in disguise get in. Ask Gustav, you will find him by the Ferris wheel, but I know nothing! Get the full disguise and have yourself let in.
+
+Horst","Sabotajcı Konrad'ın çadırına kaçtı. Çadırın arkasında bir kumarhane var, Sepp de eskiden oraya giderdi, ama o başka bir hikaye. Kapıcı Konrad'ın adamı ve ona yüzünü tarif etti: olduğun gibi gelirsen dışarı atılırsın. İçeri sadece kılık değiştirenler girer. Gustav'a sor, onu dönme dolabın yanında bulursun, ama benim haberim yok! Tam kılığı al ve içeri gir.
+
+Horst"

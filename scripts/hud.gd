@@ -382,10 +382,30 @@ func set_stock(bier: int, essen: int) -> void:
 
 ## Füllfarbe eines Balkens, ohne das Theme für alle anderen zu ändern.
 
+## Kleine Liste links unten: welche Sabotage-Werkzeuge man bei sich hat und ob die Tarnung an ist (Gustavs Sachen)
+const SAB_REIHE := ["fassbohrer", "zange", "stinkbombe", "juckpulver", "dietrich"]
+
+func _sab_inventar_zeigen(z: Dictionary) -> void:
+	var inv: Dictionary = z.get("sab_inv", {})
+	var zeilen: Array[String] = []
+	for id: String in SAB_REIHE:
+		var n := int(inv.get(id, 0))
+		if n > 0:
+			zeilen.append("%s ×%d" % [tr("SAB_" + id.to_upper()), n])
+	var stufe := int(z.get("tarnung_stufe", 0))
+	if stufe > 0:
+		zeilen.append(tr("SAB_INV_TARNUNG") % [tr("SAB_KOMPLETT" if stufe >= 2 else "SAB_MANTEL"), tr("SAB_INV_AN") if bool(z.get("tarnung_an", false)) else tr("SAB_INV_AUS")])
+	%SabInventar.visible = not zeilen.is_empty()
+	if not zeilen.is_empty():
+		%SabText.text = tr("SAB_INV_TITEL") + "
+" + "
+".join(zeilen)
+
 # ------------------------------------------------------------ Zustand vom Server
 ## Zelt, Personal, Lizenzen, Bierpreis … (GameManager._buero_state).
 func set_buero(z: Dictionary) -> void:
 	_zustand = z
+	_sab_inventar_zeigen(z)
 	_buero.setze_zustand(z)
 	_computer.setze_zustand(z)
 	_ziel_anzeigen()
