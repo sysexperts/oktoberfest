@@ -409,6 +409,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			emote = 0
 		_kamera_aussen(emote != 0 or _schulterkamera, delta)
+		_modell_ausrichten(delta)
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume | (256 if _rausch_stufe >= 1 else 0), PackedByteArray(extra_kruege))
 	else:
 		var t := clampf(delta * 12.0, 0.0, 1.0)
@@ -1874,6 +1875,26 @@ var _kam_ruhe := Vector3.INF
 var _schulterkamera := false
 ## Kamera gerade draußen (Emote oder F5) — dann Fass am Körper statt vor der Kamera
 var _kamera_draussen := false
+
+## Die Figur im Szenenbaum ist um 180° gedreht (scenes/player.tscn)
+const MODELL_BASIS_YAW := PI
+## In welche Himmelsrichtung die Figur blickt (nur in der F5-Ansicht eigenständig)
+var _modell_welt_yaw := 0.0
+
+## F5-Ansicht: Mausdrehen schwenkt die Kamera um die Figur, ohne die Figur mitzudrehen — so sieht man sie auch von vorn.
+## Die Figur dreht sich nur, wenn man läuft (dann in Laufrichtung). In der Ich-Sicht und bei Emotes bleibt alles wie gewohnt.
+func _modell_ausrichten(delta: float) -> void:
+	if _model == null or not _is_local:
+		return
+	if _schulterkamera and emote == 0:
+		var v := Vector3(velocity.x, 0.0, velocity.z)
+		if v.length() > 0.5:
+			var ziel := atan2(-v.x, -v.z)
+			_modell_welt_yaw = lerp_angle(_modell_welt_yaw, ziel, clampf(delta * 10.0, 0.0, 1.0))
+		_model.rotation.y = MODELL_BASIS_YAW + angle_difference(rotation.y, _modell_welt_yaw)
+	else:
+		_modell_welt_yaw = rotation.y
+		_model.rotation.y = lerp_angle(_model.rotation.y, MODELL_BASIS_YAW, clampf(delta * 12.0, 0.0, 1.0))
 
 func _kamera_aussen(an: bool, delta: float) -> void:
 	if _kam_ruhe == Vector3.INF:
