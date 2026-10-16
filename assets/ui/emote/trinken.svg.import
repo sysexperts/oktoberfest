@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwjqvfi8huqt1"
-path="res://.godot/imported/kotzen.png-c383560d62f042cde73c5576add4a42e.ctex"
+uid="uid://bq48h2qho3785"
+path="res://.godot/imported/trinken.svg-42bf9a9ec7a8c2043bec3b8053767bb5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/emote/kotzen.png"
-dest_files=["res://.godot/imported/kotzen.png-c383560d62f042cde73c5576add4a42e.ctex"]
+source_file="res://assets/ui/emote/trinken.svg"
+dest_files=["res://.godot/imported/trinken.svg-42bf9a9ec7a8c2043bec3b8053767bb5.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

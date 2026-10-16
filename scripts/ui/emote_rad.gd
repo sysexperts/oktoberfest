@@ -5,7 +5,7 @@ extends Control
 ##
 ## Gezeichnet wird das Rad in _draw() (Glas-Ringstücke mit Farbverlauf und Leuchten, das gewählte Stück wächst nach außen),
 ## Symbole und Beschriftungen sind echte Knoten (scenes/ui/emote_rad.tscn). Die Symbole sind Piktogramme aus
-## assets/ui/emote (erzeugt von tools/emote_icons.py), jedes auf einer Scheibe in der Farbe des Emotes.
+## assets/ui/emote (Phosphor Icons, MIT, Lizenz dort), jedes auf einer Scheibe in der Farbe des Emotes.
 
 const Symbole := preload("res://scripts/ui/symbole.gd")
 const EmoteClips := preload("res://scripts/emote_clips.gd")
@@ -58,7 +58,7 @@ func _ready() -> void:
 	_bauen()
 
 static func icon(name: String) -> Texture2D:
-	var pfad := "res://assets/ui/emote/%s.png" % name
+	var pfad := "res://assets/ui/emote/%s.svg" % name
 	if ResourceLoader.exists(pfad):
 		return load(pfad)
 	return Symbole.bild(name)

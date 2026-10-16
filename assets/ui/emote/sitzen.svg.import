@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://y0nb5lssieih"
-path="res://.godot/imported/jubel.png-c2749003119266fa67eb55cf7416c671.ctex"
+uid="uid://c76xox1v5oa6p"
+path="res://.godot/imported/sitzen.svg-d2bac2756126bb973fa24c71169e2e56.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/emote/jubel.png"
-dest_files=["res://.godot/imported/jubel.png-c2749003119266fa67eb55cf7416c671.ctex"]
+source_file="res://assets/ui/emote/sitzen.svg"
+dest_files=["res://.godot/imported/sitzen.svg-d2bac2756126bb973fa24c71169e2e56.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

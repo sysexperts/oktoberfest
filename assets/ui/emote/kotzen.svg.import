@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5b4a2ach66b1"
-path="res://.godot/imported/catwalk.png-82069aa3dd1f26fa142d98221c754bb5.ctex"
+uid="uid://btqvx5b8wq47a"
+path="res://.godot/imported/kotzen.svg-61ca6baa689c924ec17deab2bcd9f47f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/emote/catwalk.png"
-dest_files=["res://.godot/imported/catwalk.png-82069aa3dd1f26fa142d98221c754bb5.ctex"]
+source_file="res://assets/ui/emote/kotzen.svg"
+dest_files=["res://.godot/imported/kotzen.svg-61ca6baa689c924ec17deab2bcd9f47f.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
