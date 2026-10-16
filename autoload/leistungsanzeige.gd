@@ -46,6 +46,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_ergebnis_steht = false
 		_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		_text.add_theme_font_size_override("font_size", 22)
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F7 and visible and not _rangliste_laeuft:
+		_skript_rangliste()
+		get_viewport().set_input_as_handled()
+		return
 	# F4 (Selbsttest) ist im Spiel abgeschaltet: _taste_f4() bleibt für Messwerkzeuge, hängt aber an keiner Taste mehr
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3:
 		visible = not visible
@@ -56,6 +60,62 @@ func _unhandled_input(event: InputEvent) -> void:
 		_t = INTERVALL
 		RenderingServer.viewport_set_measure_render_time(get_viewport().get_viewport_rid(), visible)
 		get_viewport().set_input_as_handled()
+
+## F7 (bei eingeschalteter Anzeige): schaltet nacheinander die Skripte aller Knoten ab, misst jedes Mal die Skriptzeit und
+## schreibt eine Rangliste nach user://leistung_skripte.txt. Dauert einige Minuten, das Spiel ruckelt dabei kurz.
+var _rangliste_laeuft := false
+
+func _skript_mittel(s: float) -> float:
+	var summe := 0.0
+	var n := 0
+	var t := 0.0
+	while t < s:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		summe += float(_ende.dauer) / 1000.0
+		n += 1
+	return summe / maxf(1.0, float(n))
+
+func _skript_rangliste() -> void:
+	_rangliste_laeuft = true
+	_text.text = "Rangliste läuft … bitte nichts anfassen (einige Minuten)"
+	var gruppen := {}
+	for n in get_tree().root.find_children("*", "", true, false):
+		if n == self or n == _anfang or n == _ende:
+			continue
+		var sk: Script = n.get_script()
+		if sk != null and (n.is_processing() or n.is_physics_processing()):
+			var pfad := sk.resource_path
+			if not gruppen.has(pfad):
+				gruppen[pfad] = []
+			(gruppen[pfad] as Array).append(n)
+	var basis := await _skript_mittel(3.0)
+	var ergebnis := []
+	var i := 0
+	for pfad: String in gruppen.keys():
+		i += 1
+		_text.text = "Rangliste %d/%d …" % [i, gruppen.size()]
+		var knoten: Array = gruppen[pfad]
+		for n: Node in knoten:
+			if is_instance_valid(n):
+				n.set_process(false)
+				n.set_physics_process(false)
+		var danach := await _skript_mittel(1.5)
+		for n: Node in knoten:
+			if is_instance_valid(n):
+				n.set_process(true)
+				n.set_physics_process(true)
+		await _skript_mittel(0.5)
+		ergebnis.append([basis - danach, pfad, knoten.size(), danach])
+	ergebnis.sort_custom(func(a: Array, b: Array) -> bool: return a[0] > b[0])
+	var f := FileAccess.open("user://leistung_skripte.txt", FileAccess.WRITE)
+	if f:
+		f.store_line("Basis Skriptzeit %.1f ms, %d Skriptgruppen (Gewinn = so viele ms spart es, wenn das Skript aus ist)" % [basis, gruppen.size()])
+		for e: Array in ergebnis:
+			f.store_line("%6.1f ms  %4d Knoten  %s" % [e[0], e[2], e[1]])
+		f.close()
+	_rangliste_laeuft = false
+	_t = INTERVALL
 
 func _log_schreiben() -> void:
 	var vp := get_viewport()
@@ -97,7 +157,7 @@ func _process(delta: float) -> void:
 	var roh := float(_ende.dauer) / 1000.0
 	if roh >= 0.0 and roh < 1000.0:
 		_skript_ms = lerpf(_skript_ms, roh, 0.1)
-	if _test_laeuft or _ergebnis_steht:
+	if _test_laeuft or _ergebnis_steht or _rangliste_laeuft:
 		return
 	_t += delta
 	if _t < INTERVALL:

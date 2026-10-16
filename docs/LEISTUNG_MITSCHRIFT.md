@@ -9,3 +9,8 @@
 Spalten: Spielzeit, Tag, Restzeit der Phase, FPS, längstes Bild (ms), Skripte, Physik, Render-CPU, GPU (alle ms),
 Zeichenaufrufe, Objekte, Dreiecke, Knoten, Gäste, Dreck, Spieler, Grafikstufe, Auflösung, Grafikkarte.
 Die Datei wächst an (neue Sitzungen hängen unten an); zum Neustart die Datei löschen.
+
+## Rangliste: welches Skript kostet?
+Bei eingeschalteter Anzeige (F3) im späten Spiel **F7** drücken. Das Spiel schaltet nacheinander die Skripte aus, misst die Skriptzeit
+und schreibt `leistung_skripte.txt` in denselben Ordner wie `leistung_log.csv`. Dauert einige Minuten, nichts anfassen
+(Anzeige: „Rangliste n/m“). Bitte die Datei auch schicken, am besten bei vollem Zelt.
