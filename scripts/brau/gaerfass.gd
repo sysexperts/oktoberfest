@@ -16,6 +16,7 @@ var menge := 0
 
 func _ready() -> void:
 	add_to_group("gaerfass")
+	add_to_group("interactable")   # sonst lässt sich das Fass nicht bedienen (E: füllen / abfüllen)
 	_beschriften()
 
 func setze(neu_zustand: int, neu_rest: float, neu_menge: int) -> void:

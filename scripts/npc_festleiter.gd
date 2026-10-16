@@ -21,7 +21,7 @@ const Texte := preload("res://scripts/ui/texte.gd")
 const TEMPO := 1.7
 ## Story-Gespräche mit Horst: Quest → [Textschlüssel, Flagge die danach gesetzt wird, Flagge die vorher da sein muss ("" = keine)]
 const STORY_GESPRAECHE := {
-	"3.5": [["CHEF_ZETTEL_1", "CHEF_ZETTEL_2", "CHEF_ZETTEL_3"], "zettel_uebergeben", "zettel_da"],
+	"3.5": [["CHEF_ZETTEL_1", "CHEF_ZETTEL_2", "CHEF_ZETTEL_3"], "zettel_uebergeben", ""],
 	"4.1": [["CHEF_SCHLUESSEL_1", "CHEF_SCHLUESSEL_2"], "schluessel_erhalten", ""],
 	"4.6": [["CHEF_HOPFEN_1", "CHEF_HOPFEN_2"], "hopfen_besorgt", ""],
 }

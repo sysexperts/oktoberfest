@@ -58,6 +58,21 @@ func ziel_suchen() -> Node3D:
 		if int(z.get("casino_tag", -1)) != int(gm.get("_day")):
 			return _naechstes(sp, func(n: Node) -> bool: return n.has_method("kasino_aktion") and str(n.get("art")) == "tuer")
 		return _naechstes(sp, func(n: Node) -> bool: return n.has_method("kasino_aktion") and str(n.get("art")) == "roulette")
+	# Brauen (4.4 / 4.5): Sud fertig -> freies Gärfass; Bier gegoren -> das fertige Gärfass
+	if sp and st != null and (st.zustand("4.4") == "offen" or st.zustand("4.5") == "offen"):
+		var gesucht := 2 if st.zustand("4.5") == "offen" and st.zustand("4.4") != "offen" else 0
+		if gesucht == 2 or bool(gm.get("_sud_fertig")):
+			var bestes: Node3D = null
+			for f in get_tree().get_nodes_in_group("gaerfass"):
+				if int(f.get("zustand")) == gesucht and (bestes == null or sp.global_position.distance_to(f.global_position) < sp.global_position.distance_to(bestes.global_position)):
+					bestes = f
+			if bestes:
+				return bestes
+	# Quest "Beweise" (3.5): den Zettel gibt es nicht zum Aufheben, er steckt schon in der Tasche — Horst im Festbüro zeigen
+	if sp and st != null and st.zustand("3.5") == "offen":
+		var horst := get_tree().get_first_node_in_group("festleiter") as Node3D
+		if horst:
+			return horst
 	if sp == null or not gm.has_method("tutorial_active") or not gm.tutorial_active():
 		return null
 	var geschlossen: bool = gm.in_intermission()
