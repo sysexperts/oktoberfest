@@ -5075,16 +5075,29 @@ func _reward_for(okind: int, otype := 1) -> int:
 
 func CustomerReward() -> int:
 	return 15
+## Zeitmessung für die Leistungs-Mitschrift (F3): _pz("name") rechnet die Zeit seit dem letzten Aufruf dem Namen zu
+var prof := {}
+var _prof_t := 0
+func _pz(name: String) -> void:
+	var jetzt := Time.get_ticks_usec()
+	if name != "":
+		prof[name] = int(prof.get(name, 0)) + (jetzt - _prof_t)
+	_prof_t = jetzt
+
 func _process(delta: float) -> void:
+	_pz("")
 	if not multiplayer.is_server():
 		return
 	_vermittler_melden(delta)
+	_pz("_vermittler_melden")
 	if Net.dedicated and _players_nodes.is_empty():
 		_leer_pruefen(delta)
 		return
 	_leer_seit = 0.0
 	_ziel_senden(delta)
+	_pz("_ziel_senden")
 	_putz_senden(delta)
+	_pz("_putz_senden")
 	if _dreck_nachlegen and _messes_container:
 		_dreck_nachlegen = false
 		if _quest_step == 3 and _tent_stage > 0 and not _dreck_uebrig():
@@ -5095,34 +5108,47 @@ func _process(delta: float) -> void:
 		if _zelt_offen:
 			_phase_time -= delta
 		_shift_process(delta)
+		_pz("_shift_process")
 		_huber_schicht(delta)
+		_pz("_huber_schicht")
 		_saboteur_schicht(delta)
+		_pz("_saboteur_schicht")
 		if _phase_time <= 0.0:
 			_end_shift(0)   # 22:00 — normal kapanış
 	elif not _guest_sim.is_empty():
 		# Nach Feierabend laufen die restlichen Gäste noch hinaus
 		_update_guests(delta)
+		_pz("_update_guests")
 	if _phase == Phase.INTERMISSION:
 		_update_staff_feierabend(delta)
+		_pz("_update_staff_feierabend")
 	_gaerung_zaehlen(delta)   # Gärung läuft in beiden Phasen weiter
+	_pz("_gaerung_zaehlen")
 	_update_delivery(delta)   # Lieferungen laufen in beiden Phasen
+	_pz("_update_delivery")
 	_apply_crowd(_clock_hour())   # Host: Besuchermenge draußen
+	_pz("_apply_crowd")
 	_apply_stage(_clock_hour() >= 0.0)
+	_pz("_apply_stage")
 	_apply_daylight(_clock_hour())
+	_pz("_apply_daylight")
 	# Tutorial: Fortschritt regelmäßig prüfen (Bedingungen ändern sich im Spiel)
 	_quest_timer -= delta
 	if _quest_timer <= 0.0:
 		_quest_timer = 1.0
 		var geaendert := _check_quest()
+		_pz("_check_quest")
 		if _pruefe_meilensteine():
 			geaendert = true
 		if geaendert:
 			_broadcast_meta()
 	_update_held_tables()
+	_pz("_update_held_tables")
 	_sync_timer -= delta
 	if _sync_timer <= 0.0:
 		_sync_timer = SYNC_INTERVAL
 		_broadcast_sync()
+		_pz("_broadcast_sync")
 
 func _shift_process(delta: float) -> void:
 	# Popülerliğe + saate göre misafir çağır (sabah az, akşam çok; 08:00'den önce yok)
@@ -5157,17 +5183,27 @@ func _shift_process(delta: float) -> void:
 		_apply_night_visual(true)   # host görseli
 		_melde("MSG_EVENING")
 	_update_guests(delta)
+	_pz("_update_guests")
 	_update_tanz(delta)
+	_pz("_update_tanz")
 	if int(_stock[WARE_BIER]) <= 0 and not _guest_sim.is_empty():
 		_ohne_ware_s += delta
 	_update_ereignis(delta)
+	_pz("_update_ereignis")
 	_update_schlaegerei(delta)
+	_pz("_update_schlaegerei")
 	_update_gepackt(delta)
+	_pz("_update_gepackt")
 	_update_staff(delta)
+	_pz("_update_staff")
 	_update_complaints(delta)
+	_pz("_update_complaints")
 	_update_hygiene(delta)
+	_pz("_update_hygiene")
 	_update_fussspuren(delta)
+	_pz("_update_fussspuren")
 	_update_monte(delta)
+	_pz("_update_monte")
 
 ## Gästetyp nach Gewicht (GAST_TYPEN).
 func _gast_typ_waehlen() -> String:

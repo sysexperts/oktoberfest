@@ -6,7 +6,7 @@ func _ready() -> void:
 class Lauf extends Node:
 	func _ready() -> void:
 		process_mode = Node.PROCESS_MODE_ALWAYS
-		var gm := await Spielstart.starten(self)
+		var gm := await Spielstart.starten(self, false, 1)
 		if gm == null:
 			return
 		if FileAccess.file_exists("user://leistung_log.csv"):

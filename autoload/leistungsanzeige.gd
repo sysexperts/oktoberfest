@@ -117,6 +117,23 @@ func _skript_rangliste() -> void:
 	_rangliste_laeuft = false
 	_t = INTERVALL
 
+## Die größten Posten im GameManager seit der letzten Zeile (ms pro Bild), als "name=ms name=ms ..."
+func _gm_zeiten(welt: Node) -> String:
+	if welt == null or welt.get("prof") == null:
+		return ""
+	var prof: Dictionary = welt.prof
+	var rest: Array = []
+	for k in prof.keys():
+		rest.append([float(prof[k]) / 1000.0 / maxf(1.0, float(_log_bilder)), str(k)])
+	rest.sort_custom(func(a: Array, b: Array) -> bool: return a[0] > b[0])
+	var teile: PackedStringArray = []
+	for e in rest.slice(0, 6):
+		teile.append("%s=%.2f" % [e[1], e[0]])
+	prof.clear()
+	return " ".join(teile)
+
+var _log_bilder := 0
+
 func _log_schreiben() -> void:
 	var vp := get_viewport()
 	var rid := vp.get_viewport_rid()
@@ -127,7 +144,7 @@ func _log_schreiben() -> void:
 		return
 	f.seek_end()
 	if neu:
-		f.store_line("zeit_s;tag;phasenzeit_s;fps;max_bild_ms;skripte_ms;physik_ms;render_cpu_ms;gpu_ms;aufrufe;objekte;dreiecke_mio;knoten;gaeste;dreck;spieler;grafik;aufloesung;gpu_name")
+		f.store_line("zeit_s;tag;phasenzeit_s;fps;max_bild_ms;skripte_ms;physik_ms;render_cpu_ms;gpu_ms;aufrufe;objekte;dreiecke_mio;knoten;gaeste;dreck;spieler;grafik;aufloesung;gpu_name;gm_zeiten_ms_pro_bild")
 	var gaeste := get_tree().get_nodes_in_group("visitor").size()
 	var dreck := get_tree().get_nodes_in_group("mess").size()
 	var spieler := get_tree().get_nodes_in_group("player").size()
@@ -140,13 +157,15 @@ func _log_schreiben() -> void:
 		int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)), int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)),
 		float(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)) / 1000000.0,
 		int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)), gaeste, dreck, spieler, str(Einstellungen.grafik),
-		DisplayServer.window_get_size().x, DisplayServer.window_get_size().y, RenderingServer.get_video_adapter_name()])
+		DisplayServer.window_get_size().x, DisplayServer.window_get_size().y, RenderingServer.get_video_adapter_name() + ";" + _gm_zeiten(welt)])
 	f.close()
 	_log_max_bild = 0.0
+	_log_bilder = 0
 
 func _process(delta: float) -> void:
 	if visible:
 		_log_max_bild = maxf(_log_max_bild, delta)
+		_log_bilder += 1
 		_log_t += delta
 		if _log_t >= LOG_INTERVALL:
 			_log_t = 0.0
