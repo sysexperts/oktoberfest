@@ -272,8 +272,7 @@ func _mitte_aktualisieren() -> void:
 		bild.texture = Symbole.bild("maus")
 		bild.modulate = Color(1, 0.84, 0.35)
 		bild.custom_minimum_size = Vector2(30, 30)
-		titel.text = tr("EMOTE_TITEL")
-		titel.add_theme_font_size_override("font_size", 20)
+		titel.text = ""   # Text erst beim Darüberfahren
 	else:
 		var d: Dictionary = STUECKE[i]
 		bild.texture = icon(str(d["symbol"]))

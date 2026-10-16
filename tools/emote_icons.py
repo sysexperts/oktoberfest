@@ -147,14 +147,17 @@ def posen():
 
 def winken():
     im, d = neu()
-    # Hand: Handfläche mit fünf Fingern
-    abrunden(d, [(32, 56), (68, 56), (72, 76), (60, 90), (40, 90), (28, 76)], WEISS, 4)
-    for x, top in ((33, 28), (44, 20), (55, 20), (66, 28)):
-        linie(d, [(x, 56), (x, top + 4)], 9)
-    linie(d, [(32, 62), (18, 50), (16, 42)], 9)               # Daumen
-    # Winkbogen
-    bogen(d, 52, 52, 44, -145, -108, 3.4, (255, 255, 255, 170))
-    bogen(d, 52, 52, 44, -72, -35, 3.4, (255, 255, 255, 170))
+    # Offene Hand von vorn: Handballen, vier Finger, Daumen, Handgelenk
+    abrunden(d, [(36, 52), (70, 52), (72, 78), (62, 88), (44, 88), (34, 78)], WEISS, 5)
+    for x, top in ((38.5, 22), (48.5, 14), (58.5, 17), (68.5, 28)):
+        linie(d, [(x, 56), (x, top)], 8.6)
+    linie(d, [(36, 74), (22, 58), (20, 48)], 9)
+    linie(d, [(52, 88), (52, 96)], 16, (255, 255, 255, 200))
+    # Winkbögen links und rechts der Hand
+    bogen(d, 53, 52, 40, 195, 235, 3.6, (255, 255, 255, 190))
+    bogen(d, 53, 52, 40, 305, 345, 3.6, (255, 255, 255, 190))
+    bogen(d, 53, 52, 48, 205, 228, 3, (255, 255, 255, 110))
+    bogen(d, 53, 52, 48, 312, 335, 3, (255, 255, 255, 110))
     return im
 
 

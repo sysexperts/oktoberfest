@@ -66,7 +66,7 @@ class Lauf extends Node:
 		rad._wahl = 100
 		await _warten(0.6)
 		await _bild("tanzen")
-		rad._wahl = 4
+		rad._wahl = 3
 		await _warten(0.6)
 		await _bild("jubel")
 		rad._wahl = 120

@@ -87,6 +87,7 @@ text = "EMOTE_TITEL"
 horizontal_alignment = 1
 
 [node name="Hinweis" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
