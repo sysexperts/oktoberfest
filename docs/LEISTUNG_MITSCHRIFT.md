@@ -1,0 +1,11 @@
+# Leistung mitschreiben (für den Spieltest)
+
+1. Im Spiel **F3** drücken: oben rechts erscheint die Leistungsanzeige, und das Spiel schreibt ab jetzt alle 5 Sekunden eine Zeile mit.
+2. Ganz normal spielen, bis das Zelt voll ist (mindestens eine Runde, gern einen ganzen Tag).
+3. Spiel beenden und die Datei schicken: `%APPDATA%\Godot\app_userdata\Sloptoberfest\leistung_log.csv`
+   (Windows-Taste, `%APPDATA%\Godot\app_userdata\Sloptoberfest` eintippen, Enter).
+4. Pro Rechner eine eigene Datei, den Namen des Rechners (Grafikkarte steht in der Datei) dazuschreiben.
+
+Spalten: Spielzeit, Tag, Restzeit der Phase, FPS, längstes Bild (ms), Skripte, Physik, Render-CPU, GPU (alle ms),
+Zeichenaufrufe, Objekte, Dreiecke, Knoten, Gäste, Dreck, Spieler, Grafikstufe, Auflösung, Grafikkarte.
+Die Datei wächst an (neue Sitzungen hängen unten an); zum Neustart die Datei löschen.

@@ -4,6 +4,13 @@ extends CanvasLayer
 ## (Aufbau: autoload/leistungsanzeige.tscn). Zeigt nichts und kostet nichts, solange sie aus ist.
 
 const INTERVALL := 0.5
+## Mitschrieben wird, solange die Anzeige (F3) an ist: alle 5 s eine Zeile nach user://leistung_log.csv
+## (Windows: %APPDATA%\Godot\app_userdata\Sloptoberfest\leistung_log.csv). Zum Auswerten, was mit vollem Zelt wächst.
+const LOG_INTERVALL := 5.0
+const LOG_DATEI := "user://leistung_log.csv"
+var _log_t := 0.0
+var _log_max_bild := 0.0
+var _log_start := 0
 
 ## Misst die echte Skriptzeit eines Bildes: eine Marke läuft als Erste, eine als Letzte (Priorität).
 ## Godots eigene Zahl TIME_PROCESS enthält den ganzen Bildaufbau samt Warten auf die Grafikkarte.
@@ -42,11 +49,48 @@ func _unhandled_input(event: InputEvent) -> void:
 	# F4 (Selbsttest) ist im Spiel abgeschaltet: _taste_f4() bleibt für Messwerkzeuge, hängt aber an keiner Taste mehr
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3:
 		visible = not visible
+		if visible:
+			_log_start = Time.get_ticks_msec()
+			_log_t = 0.0
+			_log_max_bild = 0.0
 		_t = INTERVALL
 		RenderingServer.viewport_set_measure_render_time(get_viewport().get_viewport_rid(), visible)
 		get_viewport().set_input_as_handled()
 
+func _log_schreiben() -> void:
+	var vp := get_viewport()
+	var rid := vp.get_viewport_rid()
+	var welt := get_tree().current_scene
+	var neu := not FileAccess.file_exists(LOG_DATEI)
+	var f := FileAccess.open(LOG_DATEI, FileAccess.READ_WRITE if not neu else FileAccess.WRITE)
+	if f == null:
+		return
+	f.seek_end()
+	if neu:
+		f.store_line("zeit_s;tag;phasenzeit_s;fps;max_bild_ms;skripte_ms;physik_ms;render_cpu_ms;gpu_ms;aufrufe;objekte;dreiecke_mio;knoten;gaeste;dreck;spieler;grafik;aufloesung;gpu_name")
+	var gaeste := get_tree().get_nodes_in_group("visitor").size()
+	var dreck := get_tree().get_nodes_in_group("mess").size()
+	var spieler := get_tree().get_nodes_in_group("player").size()
+	var tag := int(welt.get("_day")) if welt != null and welt.get("_day") != null else -1
+	var stunde := "%.1f" % float(welt.get("_phase_time")) if welt != null and welt.get("_phase_time") != null else ""
+	f.store_line("%d;%d;%s;%d;%.1f;%.2f;%.2f;%.2f;%.2f;%d;%d;%.2f;%d;%d;%d;%d;%s;%dx%d;%s" % [
+		(Time.get_ticks_msec() - _log_start) / 1000, tag, stunde, Engine.get_frames_per_second(), _log_max_bild * 1000.0, _skript_ms,
+		Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
+		RenderingServer.viewport_get_measured_render_time_cpu(rid), RenderingServer.viewport_get_measured_render_time_gpu(rid),
+		int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)), int(Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME)),
+		float(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)) / 1000000.0,
+		int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)), gaeste, dreck, spieler, str(Einstellungen.grafik),
+		DisplayServer.window_get_size().x, DisplayServer.window_get_size().y, RenderingServer.get_video_adapter_name()])
+	f.close()
+	_log_max_bild = 0.0
+
 func _process(delta: float) -> void:
+	if visible:
+		_log_max_bild = maxf(_log_max_bild, delta)
+		_log_t += delta
+		if _log_t >= LOG_INTERVALL:
+			_log_t = 0.0
+			_log_schreiben()
 	if not visible:
 		return
 	# Letztes Bild: Ende minus Anfang der Verarbeitung (geglättet)
@@ -67,7 +111,7 @@ func _process(delta: float) -> void:
 	_text.text = "%d FPS  ·  %.1f ms\
 Skripte(echt) %.1f  Physik %.1f  Render-CPU %.1f  GPU %.1f ms\
 Aufrufe %d  ·  Objekte %d  ·  Dreiecke %.1f Mio.\
-Bild %dx%d (3D %dx%d)  ·  Grafik %d  ·  %s" % [
+Bild %dx%d (3D %dx%d)  ·  Grafik %d  ·  %sMitschrift: leistung_log.csv" % [
 		fps, 1000.0 / maxf(1.0, float(fps)),
 		_skript_ms,
 		Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
