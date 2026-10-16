@@ -23,7 +23,7 @@ const BASIS := [
 const AKZENT := {
 	"jubel": Color(1.0, 0.78, 0.25), "trinken": Color(1.0, 0.64, 0.18), "tanzen": Color(1.0, 0.45, 0.78),
 	"sitzen": Color(0.38, 0.7, 1.0), "posen": Color(0.72, 0.52, 1.0), "winken": Color(0.3, 0.86, 0.9),
-	"sad": Color(0.45, 0.55, 0.98), "kotzen": Color(0.55, 0.86, 0.35), "fuckoff": Color(1.0, 0.36, 0.34),
+	"sad": Color(0.45, 0.55, 0.98), "kotzen": Color(0.55, 0.86, 0.35), "abwenden": Color(1.0, 0.45, 0.3),
 	"catwalk": Color(0.96, 0.36, 0.62),
 }
 const AKZENT_STANDARD := Color(1.0, 0.84, 0.35)

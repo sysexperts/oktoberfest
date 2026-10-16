@@ -191,19 +191,20 @@ def kotzen():
     return im
 
 
-def mittelfinger():
+def abwenden():
+    """Wendet sich ab und geht: Figur von hinten, die den Kopf wegdreht, dazu ein Wendepfeil und Geschwindigkeitsstriche"""
     im, d = neu()
-    abrunden(d, [(26, 58), (74, 58), (74, 80), (62, 92), (38, 92), (26, 80)], WEISS, 5)   # Faust
-    linie(d, [(50, 60), (50, 14)], 12)                                                  # Mittelfinger
-    for x in (30, 40, 60, 70):
-        linie(d, [(x, 58), (x, 52)], 9)
-    linie(d, [(26, 66), (14, 62), (14, 54)], 8)                                         # Daumen
-    # Strahlen um den Finger
-    for a in (-30, 0, 30):
-        w = math.radians(a - 90)
-        x0, y0 = 50 + 22 * math.cos(w), 14 + 22 * math.sin(w) + 10
-        x1, y1 = 50 + 32 * math.cos(w), 14 + 32 * math.sin(w) + 10
-        linie(d, [(x0, y0), (x1, y1)], 3.2, (255, 255, 255, 170))
+    kreis(d, 38, 22, 9)
+    abrunden(d, [(28, 34), (48, 34), (52, 62), (24, 62)], WEISS, 3)       # Rücken
+    linie(d, [(30, 38), (18, 52), (22, 62)], 7)                           # Arm schwingt zurück
+    linie(d, [(46, 38), (56, 50)], 7)
+    linie(d, [(32, 62), (28, 92)], 8)
+    linie(d, [(44, 62), (54, 78), (62, 92)], 8)                           # Schritt nach rechts
+    # Wendepfeil
+    bogen(d, 62, 40, 24, -170, -20, 5.5, (255, 255, 255, 235))
+    polygon(d, [(86, 34), (96, 52), (76, 50)], (255, 255, 255, 235))
+    for y in (70, 80, 90):
+        linie(d, [(6, y), (16, y)], 3, (255, 255, 255, 150))
     return im
 
 
@@ -220,7 +221,7 @@ def catwalk():
 
 
 ICONS = {"jubel": jubel, "trinken": trinken, "tanzen": tanzen, "sitzen": sitzen, "posen": posen, "winken": winken,
-         "sad": traurig, "kotzen": kotzen, "fuckoff": mittelfinger, "catwalk": catwalk}
+         "sad": traurig, "kotzen": kotzen, "abwenden": abwenden, "catwalk": catwalk}
 
 if __name__ == "__main__":
     bogen_bild = Image.new("RGBA", (len(ICONS) * 210 + 10, 230), (60, 40, 90, 255))

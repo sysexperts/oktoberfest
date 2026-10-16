@@ -69,7 +69,7 @@ class Lauf extends Node:
 		rad._wahl = 4
 		await _warten(0.6)
 		await _bild("jubel")
-		rad._wahl = 2
+		rad._wahl = 120
 		await _warten(0.6)
 		await _bild("kotzen")
 		get_tree().quit()

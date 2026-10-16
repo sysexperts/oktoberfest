@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2n4pbqgcmynd"
-path="res://.godot/imported/fuckoff.png-dbb54579ce805783ed4493caeb5f8ee7.ctex"
+uid="uid://bxrcm6to04iui"
+path="res://.godot/imported/abwenden.png-63e729f7cedcebef8cbf939a4448c621.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/emote/fuckoff.png"
-dest_files=["res://.godot/imported/fuckoff.png-dbb54579ce805783ed4493caeb5f8ee7.ctex"]
+source_file="res://assets/ui/emote/abwenden.png"
+dest_files=["res://.godot/imported/abwenden.png-63e729f7cedcebef8cbf939a4448c621.ctex"]
 
 [params]
 

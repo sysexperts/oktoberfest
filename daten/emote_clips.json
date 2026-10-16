@@ -2,7 +2,7 @@
 	"clips": [
 		{"clips": ["geliehen/Hip_Hop_Dance", "mixamo/flair_2", "mixamo/breakdance_uprock", "mixamo/breakdance_uprock_var_1", "mixamo/Hip_Hop_Dancing"], "name": "EMOTE_TANZEN", "symbol": "tanzen"},
 		{"clip": "mixamo/Angry", "name": "EMOTE_SAD", "symbol": "sad"},
-		{"clip": "geliehen/Depressed_Full_Turn_Left", "name": "EMOTE_FUCKOFF", "symbol": "fuckoff"},
+		{"clip": "geliehen/Depressed_Full_Turn_Left", "name": "EMOTE_FUCKOFF", "symbol": "abwenden"},
 		{"clip": "geliehen/Walking_Woman", "name": "EMOTE_CATWALK", "symbol": "catwalk"},
 		{"clip": "mixamo/Drinking", "name": "EMOTE_TRINKEN", "symbol": "trinken"}
 	]
