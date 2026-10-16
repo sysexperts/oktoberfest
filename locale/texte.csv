@@ -2875,3 +2875,15 @@ MSG_CASINO_BELEGT,Der Platz ist besetzt – such dir einen anderen Tisch.,This s
 Q_3_5_TEXT,"Beim Saboteur lag ein Zettel mit Konrads Handschrift – er steckt schon in deiner Tasche, du musst ihn nirgends suchen. Zeig ihn Horst im Festbüro (Pfeil folgen) und sprich mit ihm.","The saboteur had a note in Konrad's handwriting – it is already in your pocket, no need to look for it. Show it to Horst at the fair office (follow the arrow) and talk to him.","Sabotajcının üzerinde Konrad'ın el yazısıyla bir not vardı – zaten cebinde, bir yerde aramana gerek yok. Notu fuar ofisinde Horst'a göster (oku takip et) ve onunla konuş."
 Q_4_3_TEXT,"Kauf am Computer im Shop (Reiter Ware) Malz, Hopfen und Hefe für den ersten Sud – die Hefe brauchst du gleich, um den fertigen Sud ins Gärfass zu füllen.","Buy malt, hops and yeast for the first brew on the computer in the shop (Goods tab) – you need the yeast right away to fill the finished wort into the fermenting barrel.","Bilgisayarda mağazadan (Mal sekmesi) ilk demleme için malt, şerbetçiotu ve maya satın al – bitmiş şırayı fermantasyon fıçısına doldurmak için mayaya hemen ihtiyacın var."
 Q_4_4_TEXT,"Geh in den Braukeller: Maische im Bottich rühren, im Kessel kochen (Hopfen bei 60 %). Steht „fertig“ am Kessel, geh zum liegenden Gärfass und drück E – dafür brauchst du Hefe aus dem Shop. Dann gärt es fünf Minuten.","Go to the brewery: stir the mash in the vat, boil it in the kettle (hops at 60 %). When the kettle says ready, go to the lying fermenting barrel and press E – you need yeast from the shop for that. Then it ferments for five minutes.","Bira mahzenine git: hamuru kazanda karıştır, kazanda kaynat (şerbetçiotu %60'ta). Kazan hazır yazınca yatan fermantasyon fıçısına git ve E'ye bas – bunun için mağazadan maya gerekir. Sonra beş dakika mayalanır."
+EMOTE_TANZEN,Tanzen,Dance,Dans et
+EMOTE_SAD,Traurig,Sad,Üzgün
+EMOTE_FUCKOFF,Verpiss dich,Fuck off,Siktir git
+EMOTE_CATWALK,Catwalk,Catwalk,Podyum
+EMOTE_TRINKEN,Trinken,Drink,İç
+EMOTE_JUBEL,Prost,Cheers,Şerefe
+EMOTE_SITZEN,Sitzen,Sit,Otur
+EMOTE_POSEN,Posen,Pose,Poz ver
+EMOTE_KOTZEN,Kotzen,Puke,Kus
+EMOTE_WINKEN,Winken,Wave,El salla
+EMOTE_TITEL,Emotes,Emotes,Emotlar
+EMOTE_HINWEIS,"Maus, Pfeiltasten oder Stick zum Auswählen · Loslassen spielt es","Mouse, arrow keys or stick to choose · release to play","Seçmek için fare, ok tuşları veya stick · bırakınca oynatılır"
