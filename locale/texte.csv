@@ -2870,3 +2870,5 @@ WATTEN_REGEL,Zwei Stiche gewinnen · höhere Karte sticht · bei Gleichstand gew
 WATTEN_HINWEIS,"Karte anklicken, um sie zu legen · „Watten!“ verdoppelt den Einsatz – die Bank kann aufgeben","Click a card to play it · ""Watten!"" doubles the stake – the bank may fold","Oynamak için karta tıkla · ""Watten!"" bahsi ikiye katlar – banka pes edebilir"
 WATTEN_STICH_DU,Der Stich geht an dich!,The trick is yours!,El senin!
 WATTEN_STICH_BANK,Der Stich geht an die Bank.,The trick goes to the bank.,El bankanın.
+HINT_CASINO_BELEGT,Hier sitzt schon jemand,Someone is already sitting here,Burada zaten biri oturuyor
+MSG_CASINO_BELEGT,Der Platz ist besetzt – such dir einen anderen Tisch.,This seat is taken – find another table.,Bu yer dolu – başka bir masa bul.

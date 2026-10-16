@@ -75,6 +75,7 @@ func _wurf(a: int, b: int) -> void:
 	var weg := create_tween().set_parallel(true)
 	weg.tween_property(_becher, "position", BECHER_RUHE + Vector2(260, 0), 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	weg.tween_property(_becher, "modulate:a", 0.0, 0.5)
+	get_tree().call_group("wuerfel_tisch", "setze", a, b)
 	_auswerten(a, b)
 
 ## Ein Würfel fliegt im Bogen auf die Bahn, wechselt dabei die Augen und hüpft einmal nach

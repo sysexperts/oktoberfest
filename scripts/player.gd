@@ -106,6 +106,7 @@ var _fegt_bis := 0.0
 
 func _ready() -> void:
 	add_to_group("player")
+	_kopf_y0 = _head.position.y
 	if _carry_fass:
 		_carry_fass.transform = TRAGE_HALTUNG.fass
 	if _carry_fass_pov:
@@ -259,6 +260,7 @@ var _muell_tipp_gezeigt := false
 
 func minispiel_beendet() -> void:
 	minispiel = null
+	kasino_aufstehen()
 	_cam.current = true
 	_interaktion_ab = Time.get_ticks_msec() + INTERAKTION_SPERRE_MS
 
@@ -401,6 +403,8 @@ func _physics_process(delta: float) -> void:
 			emote = EMOTE_KOTZEN
 		elif sab_aktiv:
 			emote = EMOTE_SABOTAGE
+		elif sitz_kasino != null:
+			emote = EMOTE_SITZEN
 		elif emote_laeuft():
 			# Losgehen bricht das Emote ab — man steht ja mittendrin
 			if Vector2(velocity.x, velocity.z).length() > 0.6:
@@ -410,7 +414,10 @@ func _physics_process(delta: float) -> void:
 				emote = emote_wahl
 		else:
 			emote = 0
-		_kamera_aussen((emote != 0 and emote != EMOTE_SABOTAGE) or _schulterkamera, delta)
+		_kamera_aussen((emote != 0 and emote != EMOTE_SABOTAGE and sitz_kasino == null) or _schulterkamera, delta)
+		if _kotz_t <= 0.0:
+			# Sitzend sind die Augen tiefer
+			_head.position.y = lerpf(_head.position.y, _kopf_y0 - (0.42 if sitz_kasino != null else 0.0), clampf(delta * 8.0, 0.0, 1.0))
 		_modell_ausrichten(delta)
 		_push_state.rpc(global_position, rotation.y, carry_state, carry_fill, carry_pkg_kind if carry_state == 3 else carry_type, emote, costume | (256 if _rausch_stufe >= 1 else 0), PackedByteArray(extra_kruege))
 	else:
@@ -700,6 +707,55 @@ func schlafen_setzen(an: bool) -> void:
 	if _is_local:
 		_sfx("pop")
 
+## Sitzt am Casino-Tisch oder -Automaten (scenes/kasino/sitz.tscn): man klebt am Hocker, alle sehen einen sitzen.
+## Pro Platz nur ein Spieler — der Server führt Buch (GameManager.net_kasino_sitz).
+var sitz_kasino: Node3D = null
+var _kasino_wunsch: Node = null
+var _kopf_y0 := 0.0
+
+## Vom Tisch: Platz beim Server anfragen, dann hinsetzen und das Spiel öffnen
+func kasino_sitz_anfragen(ding: Node) -> void:
+	var sitz := ding.get_node_or_null("Sitz")
+	if sitz == null or _world == null:
+		return
+	if sitz.belegt_von_anderem():
+		var hud: Object = _world.get("_hud")
+		if hud != null:
+			hud.melde_text(tr("MSG_CASINO_BELEGT"), 1)
+		return
+	_kasino_wunsch = ding
+	_world.net_kasino_sitz.rpc_id(1, sitz.sitz_id(), true)
+
+## Antwort des Servers: Platz ist frei (ok) oder war gerade weg
+func kasino_sitz_antwort(ok: bool) -> void:
+	var ding := _kasino_wunsch
+	_kasino_wunsch = null
+	if ding == null or not is_instance_valid(ding):
+		return
+	if not ok:
+		var hud: Object = _world.get("_hud")
+		if hud != null:
+			hud.melde_text(tr("MSG_CASINO_BELEGT"), 1)
+		return
+	sitz_kasino = ding.get_node("Sitz") as Node3D
+	velocity = Vector3.ZERO
+	global_position = sitz_kasino.global_position
+	rotation.y = sitz_kasino.global_rotation.y
+	_pitch = -0.25
+	_emote_until = 0.0
+	ding.kasino_spiel_oeffnen(self)
+
+## Aufstehen: Platz freigeben und einen Schritt vor den Hocker treten
+func kasino_aufstehen() -> void:
+	if sitz_kasino == null:
+		return
+	var sitz := sitz_kasino
+	sitz_kasino = null
+	if _world != null:
+		_world.net_kasino_sitz.rpc_id(1, sitz.sitz_id(), false)
+	global_position = sitz.global_position + sitz.global_transform.basis.z * 0.55
+	velocity = Vector3.ZERO
+
 ## Sabotage läuft (scripts/sab_ziel.gd): man steht still und kniet
 var sab_aktiv := false
 
@@ -721,6 +777,11 @@ func _handle_movement(delta: float) -> void:
 		elif velocity.y <= 0.0:
 			velocity.y = 0.0
 		move_and_slide()
+		return
+	if sitz_kasino != null:
+		velocity = Vector3.ZERO
+		if is_instance_valid(sitz_kasino):
+			global_position = sitz_kasino.global_position
 		return
 	if schlaeft:
 		velocity = Vector3.ZERO

@@ -23,11 +23,29 @@ class Lauf extends Node:
 			kino.beenden()
 		gm._start_shift()
 		gm._zelt_offen = true
+		var story: Node = gm.get_node("Story")
+		gm._quest_step = gm.QUEST_COUNT
+		story.kapitel_setzen(3)
+		story.quests["2.6"] = {"z": "erfuellt"}
+		await get_tree().create_timer(0.5).timeout
+		story.ereignis("wette_gewonnen")
+		story.quests["3.2"] = {"z": "erfuellt"}
+		story.quests["3.3"] = {"z": "erfuellt"}
+		story.ereignis("saboteur_gefasst")
+		Game.money = 5000
+		gm._tarnung_stufe = 2
+		gm._tarnung_an = true
+		gm._casino_tag = gm._day
+		gm._broadcast_meta()
 		await get_tree().create_timer(4.0).timeout
-		await _bild("1_aussen", Vector3(80, 2.2, -21), Vector3(64, 1.4, -21))
-		await _bild("2_tuer", Vector3(68.5, 1.7, -21), Vector3(62, 1.3, -21))
-		await _bild("3_innen_ecke1", Vector3(62.5, 2.3, -16.2), Vector3(55, 1.0, -24))
-		await _bild("4_innen_ecke2", Vector3(53.6, 2.3, -25.6), Vector3(61, 1.0, -18))
-		await _bild("5_innen_ecke3", Vector3(62.5, 2.3, -26), Vector3(54.5, 1.0, -17))
-		await _bild("6_oben", Vector3(58.6, 22, -21.01), Vector3(58.6, 0, -21))
+		# Weltkoordinaten: x = 44 - z_zelt, z = -21 + x_zelt (Zelt um 90 Grad gedreht). Tür auf der Wiesenseite bei (58, -12).
+		await _bild("1_aussen_vorn", Vector3(64, 2.2, -2.0), Vector3(58, 1.8, -13))
+		await _bild("2_tuer", Vector3(58, 1.7, -5.0), Vector3(58, 1.5, -12))
+		await _bild("3_ueberblick", Vector3(72, 9, -4), Vector3(57, 1.5, -20))
+		await _bild("4_oben", Vector3(58, 38, -21.01), Vector3(58, 0, -21))
+		await _bild("5_innen_tuer", Vector3(58, 1.65, -12.9), Vector3(57, 1.3, -22))
+		await _bild("6_innen_bar", Vector3(60.5, 1.9, -23.5), Vector3(54.8, 1.2, -20.2))
+		await _bild("7_innen_tische", Vector3(54.2, 2.0, -12.9), Vector3(60.5, 1.1, -22.0))
+		await _bild("8_innen_slots", Vector3(58.5, 2.0, -26.5), Vector3(53.4, 1.4, -19.0))
+		await _bild("9_innen_klavier", Vector3(55.5, 2.0, -24.5), Vector3(61.5, 1.1, -27.0))
 		get_tree().quit()

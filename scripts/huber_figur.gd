@@ -13,6 +13,8 @@ const Figuren := preload("res://scripts/figuren.gd")
 @export var pause := 2.0
 ## Konrads Zelt wächst mit der Geschichte: diese Figur ist erst ab diesem Kapitel da
 @export var ab_kapitel := 1
+## Bleibt bei einer Sabotage im Zelt stehen (Personal und Gäste im Casino rennen nicht hinaus)
+@export var bleibt := false
 
 var _figur: Figur
 var _start: Vector3
@@ -36,7 +38,7 @@ const FLUCHT_TEMPO := 4.8
 var _flucht := 0
 
 func _flucht_pruefen() -> void:
-	if beruf != "":
+	if beruf != "" or bleibt:
 		return
 	var welt := get_tree().current_scene
 	var zelt := get_tree().get_first_node_in_group("huber_zelt") as Node3D

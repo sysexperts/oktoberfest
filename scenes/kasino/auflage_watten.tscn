@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/casino/tisch_watten.png" id="t_watten"]
+[ext_resource type="Texture2D" path="res://assets/casino/bkarte_laub_ober.png" id="k_bkarte_laub_ober"]
+[ext_resource type="Texture2D" path="res://assets/casino/bkarte_eichel_koenig.png" id="k_bkarte_eichel_koenig"]
+[ext_resource type="Texture2D" path="res://assets/casino/bkarte_herz_ass.png" id="k_bkarte_herz_ass"]
+[ext_resource type="Texture2D" path="res://assets/casino/bkarte_schellen_10.png" id="k_bkarte_schellen_10"]
+[ext_resource type="Texture2D" path="res://assets/casino/bkarte_laub_unter.png" id="k_bkarte_laub_unter"]
+
+[sub_resource type="StandardMaterial3D" id="M_watten"]
+transparency = 2
+alpha_scissor_threshold = 0.35
+albedo_texture = ExtResource("t_watten")
+roughness = 1.0
+cull_mode = 2
+
+[sub_resource type="QuadMesh" id="Q_watten"]
+material = SubResource("M_watten")
+size = Vector2(2.44, 2.44)
+
+[sub_resource type="CylinderMesh" id="C_Stapel0"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.05499999999999999
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel0"]
+albedo_color = Color(0.8, 0.12, 0.14, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel0"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel0"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="C_Stapel1"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.022
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel1"]
+albedo_color = Color(0.15, 0.3, 0.75, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel1"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel1"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[node name="AuflageWatten" type="Node3D"]
+
+[node name="Aufdruck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 6.123233995736766e-17, 1.0, 0.0, -1.0, 6.123233995736766e-17, 0, 0.92, 0)
+mesh = SubResource("Q_watten")
+cast_shadow = 0
+
+[node name="BankKarte" type="Sprite3D" parent="."]
+transform = Transform3D(0.9961946980917455, 0.0, -0.08715574274765817, 0.0, 1.0, 0.0, 0.08715574274765817, -0.0, 0.9961946980917455, -0.27, 0.924, 0.0)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_bkarte_laub_ober")
+
+[node name="SpielerKarte" type="Sprite3D" parent="."]
+transform = Transform3D(0.9975640502598242, 0.0, 0.0697564737441253, -0.0, 1.0, 0.0, -0.0697564737441253, -0.0, 0.9975640502598242, 0.27, 0.924, 0.0)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_bkarte_eichel_koenig")
+
+[node name="Hand0" type="Sprite3D" parent="."]
+transform = Transform3D(0.9702957262759965, 0.0, -0.24192189559966773, 0.0, 1.0, 0.0, 0.24192189559966773, -0.0, 0.9702957262759965, -0.12, 0.924, 0.62)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_bkarte_herz_ass")
+
+[node name="Hand1" type="Sprite3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.924, 0.62)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_bkarte_schellen_10")
+
+[node name="Hand2" type="Sprite3D" parent="."]
+transform = Transform3D(0.9702957262759965, 0.0, 0.24192189559966773, -0.0, 1.0, 0.0, -0.24192189559966773, -0.0, 0.9702957262759965, 0.12, 0.924, 0.62)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_bkarte_laub_unter")
+
+[node name="Stapel0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.9455, 0.3)
+mesh = SubResource("C_Stapel0")
+surface_material_override/0 = SubResource("MC_Stapel0")
+
+[node name="Stapel0Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.9455, 0.3)
+mesh = SubResource("CR_Stapel0")
+surface_material_override/0 = SubResource("MR_Stapel0")
+
+[node name="Stapel1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.07, 0.929, 0.34)
+mesh = SubResource("C_Stapel1")
+surface_material_override/0 = SubResource("MC_Stapel1")
+
+[node name="Stapel1Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.07, 0.929, 0.34)
+mesh = SubResource("CR_Stapel1")
+surface_material_override/0 = SubResource("MR_Stapel1")

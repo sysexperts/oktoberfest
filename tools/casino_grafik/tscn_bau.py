@@ -63,7 +63,7 @@ class Bau:
 
     def geruest(self, titel_key):
         self.node(self.wurzel, "CanvasLayer", None, 'layer = 26\nscript = ExtResource("skript")\n')
-        self.node("Dunkel", "ColorRect", self.wurzel, "anchors_preset = 15\nanchor_right = 1.0\nanchor_bottom = 1.0\ngrow_horizontal = 2\ngrow_vertical = 2\ncolor = Color(0, 0, 0, 0.72)\n")
+        self.node("Dunkel", "ColorRect", self.wurzel, "anchors_preset = 15\nanchor_right = 1.0\nanchor_bottom = 1.0\ngrow_horizontal = 2\ngrow_vertical = 2\ncolor = Color(0, 0, 0, 0.45)\n")
         self.node("Buehne", "Control", self.wurzel, 'layout_mode = 3\nanchors_preset = 8\nanchor_left = 0.5\nanchor_top = 0.5\nanchor_right = 0.5\nanchor_bottom = 0.5\noffset_left = -800.0\noffset_top = -450.0\noffset_right = 800.0\noffset_bottom = 450.0\ngrow_horizontal = 2\ngrow_vertical = 2\npivot_offset = Vector2(800, 450)\ntheme = ExtResource("theme")\n', True)
         self.node("Rahmen", "Panel", "Buehne", "layout_mode = 0\noffset_right = 1600.0\noffset_bottom = 900.0\n" + 'theme_override_styles/panel = SubResource("rahmen")\n')
         self.node("Titel", "Label", "Buehne", self.rect(60, 26, 700, 80) + 'theme_override_colors/font_color = Color(1, 0.84, 0.35, 1)\ntheme_override_fonts/font = ExtResource("fraktur")\ntheme_override_font_sizes/font_size = 64\ntext = "%s"\n' % titel_key)

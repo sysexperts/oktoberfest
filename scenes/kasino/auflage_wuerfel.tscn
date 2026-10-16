@@ -1,0 +1,170 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/kasino/wuerfel_tisch.gd" id="skript"]
+[ext_resource type="Texture2D" path="res://assets/casino/tisch_wuerfel.png" id="t_wuerfel"]
+[ext_resource type="Texture2D" path="res://assets/casino/wuerfel_3.png" id="w0"]
+[ext_resource type="Texture2D" path="res://assets/casino/wuerfel_4.png" id="w1"]
+
+[sub_resource type="StandardMaterial3D" id="M_wuerfel"]
+transparency = 2
+alpha_scissor_threshold = 0.35
+albedo_texture = ExtResource("t_wuerfel")
+roughness = 1.0
+cull_mode = 2
+
+[sub_resource type="QuadMesh" id="Q_wuerfel"]
+material = SubResource("M_wuerfel")
+size = Vector2(2.44, 2.44)
+
+[sub_resource type="BoxMesh" id="W_Mesh"]
+size = Vector3(0.07, 0.07, 0.07)
+
+[sub_resource type="StandardMaterial3D" id="W_Mat"]
+albedo_color = Color(0.96, 0.93, 0.84, 1)
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="B_Mesh"]
+top_radius = 0.06
+bottom_radius = 0.045
+height = 0.14
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="B_Mat"]
+albedo_color = Color(0.42, 0.24, 0.1, 1)
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="C_Stapel0"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.033
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel0"]
+albedo_color = Color(0.8, 0.12, 0.14, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel0"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel0"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="C_Stapel1"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.05499999999999999
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel1"]
+albedo_color = Color(0.15, 0.3, 0.75, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel1"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel1"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="C_Stapel2"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.022
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel2"]
+albedo_color = Color(0.1, 0.55, 0.28, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel2"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel2"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[node name="AuflageWuerfel" type="Node3D"]
+script = ExtResource("skript")
+
+[node name="Aufdruck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 6.123233995736766e-17, 1.0, 0.0, -1.0, 6.123233995736766e-17, 0, 0.92, 0)
+mesh = SubResource("Q_wuerfel")
+cast_shadow = 0
+
+[node name="Wuerfel0" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9396926207859084, 0.0, -0.3420201433256687, 0.0, 1.0, 0.0, 0.3420201433256687, -0.0, 0.9396926207859084, -0.12, 0.9530000000000001, -0.02)
+mesh = SubResource("W_Mesh")
+surface_material_override/0 = SubResource("W_Mat")
+
+[node name="Augen" type="Sprite3D" parent="Wuerfel0"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0, 0.0375, 0)
+shaded = false
+pixel_size = 0.0004
+axis = 1
+texture = ExtResource("w0")
+unique_name_in_owner = false
+
+[node name="Wuerfel1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8191520442889918, 0.0, 0.573576436351046, -0.0, 1.0, 0.0, -0.573576436351046, -0.0, 0.8191520442889918, 0.1, 0.9530000000000001, 0.06)
+mesh = SubResource("W_Mesh")
+surface_material_override/0 = SubResource("W_Mat")
+
+[node name="Augen" type="Sprite3D" parent="Wuerfel1"]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0, 0.0375, 0)
+shaded = false
+pixel_size = 0.0004
+axis = 1
+texture = ExtResource("w1")
+unique_name_in_owner = false
+
+[node name="Becher" type="MeshInstance3D" parent="."]
+transform = Transform3D(5.549534652183772e-17, 1.0, -2.5877905075098294e-17, -0.9063077870366499, 6.123233995736766e-17, 0.42261826174069944, 0.42261826174069944, -0.0, 0.9063077870366499, 0.42, 0.978, -0.12)
+mesh = SubResource("B_Mesh")
+surface_material_override/0 = SubResource("B_Mat")
+
+[node name="Stapel0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, -0.23563562627676382, 0.9345, 0.7854144457731582)
+mesh = SubResource("C_Stapel0")
+surface_material_override/0 = SubResource("MC_Stapel0")
+
+[node name="Stapel0Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, -0.23563562627676382, 0.9345, 0.7854144457731582)
+mesh = SubResource("CR_Stapel0")
+surface_material_override/0 = SubResource("MR_Stapel0")
+
+[node name="Stapel1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, -0.23563562627676382, 0.9455, 0.7854144457731582)
+mesh = SubResource("C_Stapel1")
+surface_material_override/0 = SubResource("MC_Stapel1")
+
+[node name="Stapel1Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, -0.23563562627676382, 0.9455, 0.7854144457731582)
+mesh = SubResource("CR_Stapel1")
+surface_material_override/0 = SubResource("MR_Stapel1")
+
+[node name="Stapel2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.2342644612720783, 0.929, 0.7858245110614093)
+mesh = SubResource("C_Stapel2")
+surface_material_override/0 = SubResource("MC_Stapel2")
+
+[node name="Stapel2Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.2342644612720783, 0.929, 0.7858245110614093)
+mesh = SubResource("CR_Stapel2")
+surface_material_override/0 = SubResource("MR_Stapel2")

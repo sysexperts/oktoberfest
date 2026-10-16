@@ -1666,6 +1666,10 @@ func _on_peer_left(peer_id: int) -> void:
 		_melde("NET_PLAYER_LEFT")
 	_spawn_index_by_peer.erase(peer_id)
 	_lobby_ids.erase(peer_id)
+	for k in kasino_sitze.keys():
+		if int(kasino_sitze[k]) == peer_id:
+			kasino_sitze.erase(k)
+			_net_kasino_sitze.rpc(kasino_sitze)
 	if _held_deko.has(peer_id):
 		_deko_abstellen(peer_id)
 	_remove_player.rpc(peer_id)
@@ -7977,6 +7981,44 @@ func net_wunsch_erfuellen() -> void:
 	_stats["wuensche"] = int(_stats.get("wuensche", 0)) + 1
 	_melde("MSG_WUNSCH_OK", ["WUNSCH_TITEL_%d" % titel, _eur(30)], 2)
 	_broadcast_meta()
+
+## Wer sitzt wo im Casino: Sitz-Kennung (Name des Tisches oder Automaten) -> Peer. Der Server führt Buch, alle bekommen eine Kopie.
+var kasino_sitze := {}
+
+## Platz am Casino-Tisch belegen (an = true) oder freigeben. Pro Platz sitzt nur einer; ein Spieler sitzt immer nur an einem Platz.
+@rpc("any_peer", "reliable", "call_local")
+func net_kasino_sitz(sitz_id: String, an: bool) -> void:
+	if not multiplayer.is_server():
+		return
+	var peer := multiplayer.get_remote_sender_id()
+	if peer == 0:
+		peer = 1
+	var ok := true
+	if an:
+		if not _story.aktiv or _story.kapitel < 3 or _casino_tag != _day:
+			ok = false
+		elif kasino_sitze.has(sitz_id) and int(kasino_sitze[sitz_id]) != peer:
+			ok = false
+		else:
+			for k in kasino_sitze.keys():
+				if int(kasino_sitze[k]) == peer:
+					kasino_sitze.erase(k)
+			kasino_sitze[sitz_id] = peer
+	elif int(kasino_sitze.get(sitz_id, 0)) == peer:
+		kasino_sitze.erase(sitz_id)
+	_net_kasino_sitze.rpc(kasino_sitze)
+	if an:
+		_net_kasino_sitz_antwort.rpc_id(peer, ok)
+
+@rpc("authority", "reliable", "call_local")
+func _net_kasino_sitze(d: Dictionary) -> void:
+	kasino_sitze = d
+
+@rpc("authority", "reliable", "call_local")
+func _net_kasino_sitz_antwort(ok: bool) -> void:
+	var p: Node = _players_nodes.get(multiplayer.get_unique_id())
+	if p != null and is_instance_valid(p) and p.has_method("kasino_sitz_antwort"):
+		p.kasino_sitz_antwort(ok)
 
 ## Der Türsteher am Casino: mit Tarnung kommst du rein, sonst erkennt er dich und wirft dich raus
 @rpc("any_peer", "reliable", "call_local")

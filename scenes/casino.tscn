@@ -1,33 +1,80 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/kasino/casino.gd" id="1_cas"]
-[ext_resource type="PackedScene" path="res://assets/models/roulette.glb" id="2_roulette"]
-[ext_resource type="Script" path="res://scripts/kasino/kasino_ding.gd" id="3_kd"]
-[ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="4_figur"]
-[ext_resource type="Script" path="res://scripts/welt_text.gd" id="wt_casino"]
-[ext_resource type="FontFile" uid="uid://csj0js8d0pxak" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="font_casino"]
-[ext_resource type="PackedScene" path="res://assets/models/kartentisch.glb" id="5_karten"]
-[ext_resource type="PackedScene" path="res://scenes/kasino/slot.tscn" id="6_slot"]
+[ext_resource type="Script" path="res://scripts/kasino/casino.gd" id="skript_cas"]
+[ext_resource type="Script" path="res://scripts/kasino/kasino_ding.gd" id="skript_kd"]
+[ext_resource type="Script" path="res://scripts/welt_text.gd" id="skript_wt"]
+[ext_resource type="Script" path="res://scripts/kasino/blinker.gd" id="skript_bl"]
+[ext_resource type="Script" path="res://scripts/kasino/rotieren.gd" id="skript_ro"]
+[ext_resource type="FontFile" path="res://assets/fonts/UnifrakturCook-Bold.ttf" id="font_fraktur"]
+[ext_resource type="PackedScene" path="res://assets/models/roulette.glb" id="m_roulette"]
+[ext_resource type="PackedScene" path="res://assets/models/kartentisch.glb" id="m_kartentisch"]
+[ext_resource type="PackedScene" path="res://scenes/huber_figur.tscn" id="s_figur"]
+[ext_resource type="PackedScene" path="res://scenes/kasino/slot.tscn" id="s_slot"]
+[ext_resource type="PackedScene" path="res://scenes/kasino/sitz.tscn" id="s_sitz"]
+[ext_resource type="PackedScene" path="res://scenes/kasino/auflage_blackjack.tscn" id="s_abj"]
+[ext_resource type="PackedScene" path="res://scenes/kasino/auflage_wuerfel.tscn" id="s_awu"]
+[ext_resource type="PackedScene" path="res://scenes/kasino/auflage_watten.tscn" id="s_awa"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/gold.tres" id="mat_gold"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/holz_dunkel.tres" id="mat_holz"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_streifen.tres" id="mat_streifen"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_rauten.tres" id="mat_rauten"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/huber_rot.tres" id="mat_hrot"]
+[ext_resource type="Material" path="res://assets/zelt/materialien/schwarz_lack.tres" id="mat_lack"]
+[ext_resource type="Texture2D" path="res://assets/casino/raum_teppich.png" id="t_teppich"]
+[ext_resource type="Texture2D" path="res://assets/casino/raum_tapete.png" id="t_tapete"]
+[ext_resource type="Texture2D" path="res://assets/casino/raum_girlande.png" id="t_girlande"]
+[ext_resource type="Texture2D" path="res://assets/casino/bild_casino.png" id="t_b1"]
+[ext_resource type="Texture2D" path="res://assets/casino/bild_karten.png" id="t_b2"]
+[ext_resource type="Texture2D" path="res://assets/casino/bild_mass.png" id="t_b3"]
 
 [sub_resource type="StandardMaterial3D" id="Teppich"]
-albedo_color = Color(0.32, 0.04, 0.08, 1)
-roughness = 0.8
-metallic = 0.0
-
-[sub_resource type="StandardMaterial3D" id="Wand"]
-albedo_color = Color(0.2, 0.09, 0.07, 1)
+albedo_color = Color(1, 1, 1, 1)
 roughness = 0.9
 metallic = 0.0
+albedo_texture = ExtResource("t_teppich")
+uv1_triplanar = true
+uv1_scale = Vector3(0.28, 0.28, 0.28)
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Tapete"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.9
+metallic = 0.0
+albedo_texture = ExtResource("t_tapete")
+uv1_triplanar = true
+uv1_scale = Vector3(0.3, 0.3, 0.3)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="Decke"]
-albedo_color = Color(0.12, 0.06, 0.05, 1)
+albedo_color = Color(0.1, 0.05, 0.04, 1)
 roughness = 0.9
 metallic = 0.0
 
-[sub_resource type="StandardMaterial3D" id="Gold"]
-albedo_color = Color(0.9, 0.7, 0.2, 1)
-roughness = 0.3
-metallic = 0.8
+[sub_resource type="StandardMaterial3D" id="Samt"]
+albedo_color = Color(0.42, 0.04, 0.09, 1)
+roughness = 0.9
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="SamtDunkel"]
+albedo_color = Color(0.26, 0.03, 0.06, 1)
+roughness = 0.9
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="Neon"]
+albedo_color = Color(1.0, 0.85, 0.45, 1)
+roughness = 0.5
+metallic = 0.0
+emission_enabled = true
+emission = Color(1.0, 0.75, 0.3, 1)
+emission_energy_multiplier = 2.6
+
+[sub_resource type="StandardMaterial3D" id="Glueh"]
+albedo_color = Color(1.0, 0.9, 0.6, 1)
+roughness = 0.4
+metallic = 0.0
+emission_enabled = true
+emission = Color(1.0, 0.8, 0.4, 1)
+emission_energy_multiplier = 3.0
 
 [sub_resource type="StandardMaterial3D" id="Schild"]
 albedo_color = Color(1.0, 0.8, 0.3, 1)
@@ -37,472 +84,2331 @@ emission_enabled = true
 emission = Color(1.0, 0.7, 0.2, 1)
 emission_energy_multiplier = 1.4
 
-[sub_resource type="BoxMesh" id="MBoden"]
-size = Vector3(11.4, 0.1, 10.4)
-material = SubResource("Teppich")
+[sub_resource type="StandardMaterial3D" id="Schwarz"]
+albedo_color = Color(0.03, 0.03, 0.04, 1)
+roughness = 0.25
+metallic = 0.2
 
-[sub_resource type="BoxShape3D" id="SBoden"]
-size = Vector3(11.4, 0.1, 10.4)
+[sub_resource type="StandardMaterial3D" id="HolzHell"]
+albedo_color = Color(0.34, 0.18, 0.09, 1)
+roughness = 0.55
+metallic = 0.0
 
-[sub_resource type="BoxMesh" id="MDecke"]
-size = Vector3(11.4, 0.1, 10.4)
-material = SubResource("Decke")
+[sub_resource type="StandardMaterial3D" id="Nuss"]
+albedo_color = Color(0.16, 0.08, 0.05, 1)
+roughness = 0.45
+metallic = 0.0
 
-[sub_resource type="BoxMesh" id="MWandOst"]
+[sub_resource type="StandardMaterial3D" id="FlascheG"]
+albedo_color = Color(0.1, 0.4, 0.15, 1)
+roughness = 0.2
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="FlascheB"]
+albedo_color = Color(0.45, 0.25, 0.05, 1)
+roughness = 0.2
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="FlascheK"]
+albedo_color = Color(0.7, 0.75, 0.8, 1)
+roughness = 0.15
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="Blatt"]
+albedo_color = Color(0.12, 0.38, 0.14, 1)
+roughness = 0.8
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="Topf"]
+albedo_color = Color(0.5, 0.28, 0.14, 1)
+roughness = 0.7
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="RotLampe"]
+albedo_color = Color(1, 0.3, 0.2, 1)
+roughness = 0.4
+metallic = 0.0
+emission_enabled = true
+emission = Color(1, 0.2, 0.1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="Girlande"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.9
+metallic = 0.0
+albedo_texture = ExtResource("t_girlande")
+transparency = 2
+alpha_scissor_threshold = 0.4
+cull_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Bild1"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.6
+metallic = 0.0
+albedo_texture = ExtResource("t_b1")
+
+[sub_resource type="StandardMaterial3D" id="Bild2"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.6
+metallic = 0.0
+albedo_texture = ExtResource("t_b2")
+
+[sub_resource type="StandardMaterial3D" id="Bild3"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.6
+metallic = 0.0
+albedo_texture = ExtResource("t_b3")
+
+[sub_resource type="StandardMaterial3D" id="Kugelglas"]
+albedo_color = Color(1, 0.85, 0.5, 1)
+roughness = 0.2
+metallic = 0.0
+emission_enabled = true
+emission = Color(1, 0.7, 0.3, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="B_18_4_0_1_10_4"]
+size = Vector3(18.4, 0.1, 10.4)
+
+[sub_resource type="BoxShape3D" id="S_18_4_0_1_10_4"]
+size = Vector3(18.4, 0.1, 10.4)
+
+[sub_resource type="BoxMesh" id="B_0_3_3_2_10_4"]
 size = Vector3(0.3, 3.2, 10.4)
-material = SubResource("Wand")
 
-[sub_resource type="BoxShape3D" id="SWandOst"]
+[sub_resource type="BoxShape3D" id="S_0_3_3_2_10_4"]
 size = Vector3(0.3, 3.2, 10.4)
 
-[sub_resource type="BoxMesh" id="MWandWest"]
-size = Vector3(0.3, 3.2, 10.4)
-material = SubResource("Wand")
+[sub_resource type="BoxMesh" id="B_18_6_3_2_0_3"]
+size = Vector3(18.6, 3.2, 0.3)
 
-[sub_resource type="BoxShape3D" id="SWandWest"]
-size = Vector3(0.3, 3.2, 10.4)
+[sub_resource type="BoxShape3D" id="S_18_6_3_2_0_3"]
+size = Vector3(18.6, 3.2, 0.3)
 
-[sub_resource type="BoxMesh" id="MWandNord"]
-size = Vector3(11.8, 3.2, 0.3)
-material = SubResource("Wand")
+[sub_resource type="BoxMesh" id="B_0_3_3_2_3_9"]
+size = Vector3(0.3, 3.2, 3.9)
 
-[sub_resource type="BoxShape3D" id="SWandNord"]
-size = Vector3(11.8, 3.2, 0.3)
+[sub_resource type="BoxShape3D" id="S_0_3_3_2_3_9"]
+size = Vector3(0.3, 3.2, 3.9)
 
-[sub_resource type="BoxMesh" id="MWandSuedL"]
-size = Vector3(4.5, 3.2, 0.3)
-material = SubResource("Wand")
+[sub_resource type="BoxMesh" id="B_0_3_1_0_2_2"]
+size = Vector3(0.3, 1.0, 2.2)
 
-[sub_resource type="BoxShape3D" id="SWandSuedL"]
-size = Vector3(4.5, 3.2, 0.3)
-
-[sub_resource type="BoxMesh" id="MWandSuedR"]
-size = Vector3(4.5, 3.2, 0.3)
-material = SubResource("Wand")
-
-[sub_resource type="BoxShape3D" id="SWandSuedR"]
-size = Vector3(4.5, 3.2, 0.3)
-
-[sub_resource type="BoxMesh" id="MTuerSturz"]
-size = Vector3(2.2, 1.0, 0.3)
-material = SubResource("Wand")
-
-[sub_resource type="BoxShape3D" id="STuerSturz"]
-size = Vector3(2.2, 1.0, 0.3)
-
-[sub_resource type="BoxMesh" id="MSchild"]
-size = Vector3(2.0, 0.35, 0.05)
-material = SubResource("Schild")
+[sub_resource type="BoxShape3D" id="S_0_3_1_0_2_2"]
+size = Vector3(0.3, 1.0, 2.2)
 
 [sub_resource type="BoxShape3D" id="SSperre"]
-size = Vector3(2.2, 2.6, 0.3)
+size = Vector3(0.3, 2.6, 2.2)
 
-[sub_resource type="StandardMaterial3D" id="X_Samt"]
-albedo_color = Color(0.42, 0.04, 0.09, 1)
-roughness = 0.9
+[sub_resource type="BoxMesh" id="B_0_08_2_3_10_6"]
+size = Vector3(0.08, 2.3, 10.6)
 
-[sub_resource type="StandardMaterial3D" id="X_Neon"]
-albedo_color = Color(1.0, 0.85, 0.45, 1)
-emission_enabled = true
-emission = Color(1.0, 0.75, 0.3, 1)
-emission_energy_multiplier = 2.6
+[sub_resource type="BoxMesh" id="B_18_8_2_3_0_08"]
+size = Vector3(18.8, 2.3, 0.08)
 
-[sub_resource type="BoxMesh" id="X_Leiste"]
-size = Vector3(11.9, 0.18, 0.2)
+[sub_resource type="BoxMesh" id="B_0_08_2_3_3_9"]
+size = Vector3(0.08, 2.3, 3.9)
 
-[sub_resource type="BoxMesh" id="X_Pilaster"]
-size = Vector3(0.2, 3.25, 0.25)
+[sub_resource type="BoxMesh" id="B_0_08_1_0_2_2"]
+size = Vector3(0.08, 1.0, 2.2)
 
-[sub_resource type="BoxMesh" id="X_Feld"]
-size = Vector3(3.2, 2.0, 0.05)
+[sub_resource type="BoxMesh" id="B_0_12_0_9_10_7"]
+size = Vector3(0.12, 0.9, 10.700000000000001)
 
-[sub_resource type="BoxMesh" id="X_Dach"]
-size = Vector3(3.4, 0.07, 1.8)
+[sub_resource type="BoxMesh" id="B_18_9_0_9_0_12"]
+size = Vector3(18.900000000000002, 0.9, 0.12)
 
-[sub_resource type="BoxMesh" id="X_Saum"]
-size = Vector3(3.4, 0.14, 0.05)
+[sub_resource type="BoxMesh" id="B_0_12_0_9_3_95"]
+size = Vector3(0.12, 0.9, 3.95)
 
-[sub_resource type="BoxMesh" id="X_Teppich"]
-size = Vector3(1.9, 0.025, 4.0)
+[sub_resource type="BoxMesh" id="B_0_3_3_35_0_3"]
+size = Vector3(0.3, 3.35, 0.3)
 
-[sub_resource type="BoxMesh" id="X_Rand"]
-size = Vector3(0.07, 0.03, 4.0)
+[sub_resource type="BoxMesh" id="B_0_2_3_3_0_14"]
+size = Vector3(0.2, 3.3, 0.14)
 
-[sub_resource type="CylinderMesh" id="X_Pfosten"]
+[sub_resource type="BoxMesh" id="B_0_14_3_3_0_2"]
+size = Vector3(0.14, 3.3, 0.2)
+
+[sub_resource type="BoxMesh" id="B_19_2_0_16_0_2"]
+size = Vector3(19.200000000000003, 0.16, 0.2)
+
+[sub_resource type="BoxMesh" id="B_0_2_0_16_11_0"]
+size = Vector3(0.2, 0.16, 11.0)
+
+[sub_resource type="BoxMesh" id="B_0_2_0_16_4_2"]
+size = Vector3(0.2, 0.16, 4.2)
+
+[sub_resource type="BoxMesh" id="B_0_2_0_16_2_4"]
+size = Vector3(0.2, 0.16, 2.4)
+
+[sub_resource type="PrismMesh" id="P_10_9_1_9_19_400000000000002"]
+size = Vector3(10.9, 1.9, 19.400000000000002)
+
+[sub_resource type="BoxMesh" id="B_19_5_0_12_0_12"]
+size = Vector3(19.5, 0.12, 0.12)
+
+[sub_resource type="CylinderMesh" id="Z_0_04_0_05_1_5_8"]
+top_radius = 0.04
+bottom_radius = 0.05
+height = 1.5
+radial_segments = 8
+rings = 1
+
+[sub_resource type="QuadMesh" id="Q_0_9_0_6"]
+size = Vector2(0.9, 0.6)
+
+[sub_resource type="SphereMesh" id="K_0_13_12"]
+radius = 0.13
+height = 0.26
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxMesh" id="B_0_3_2_6_0_14"]
+size = Vector3(0.3, 2.6, 0.14)
+
+[sub_resource type="BoxMesh" id="B_0_3_0_14_2_44"]
+size = Vector3(0.3, 0.14, 2.44)
+
+[sub_resource type="BoxMesh" id="B_0_06_0_55_2_6"]
+size = Vector3(0.06, 0.55, 2.6)
+
+[sub_resource type="BoxMesh" id="B_4_2_0_025_1_9"]
+size = Vector3(4.2, 0.025, 1.9)
+
+[sub_resource type="BoxMesh" id="B_4_2_0_03_0_07"]
+size = Vector3(4.2, 0.03, 0.07)
+
+[sub_resource type="CylinderMesh" id="Z_0_045_0_045_1_0_10"]
 top_radius = 0.045
 bottom_radius = 0.045
 height = 1.0
 radial_segments = 10
+rings = 1
 
-[sub_resource type="CylinderMesh" id="X_Mast"]
+[sub_resource type="BoxMesh" id="B_2_9_0_03_0_03"]
+size = Vector3(2.9, 0.03, 0.03)
+
+[sub_resource type="CylinderMesh" id="Z_0_05_0_05_2_3_10"]
 top_radius = 0.05
 bottom_radius = 0.05
-height = 2.2
+height = 2.3
 radial_segments = 10
+rings = 1
 
-[sub_resource type="SphereMesh" id="X_Lampe"]
-radius = 0.17
-height = 0.34
+[sub_resource type="SphereMesh" id="K_0_18_12"]
+radius = 0.18
+height = 0.36
 radial_segments = 12
 rings = 6
 
-[sub_resource type="BoxMesh" id="X_Seil"]
-size = Vector3(0.03, 0.03, 2.0)
+[sub_resource type="BoxMesh" id="B_0_35_0_3_1_4"]
+size = Vector3(0.35, 0.3, 1.4)
 
-[sub_resource type="BoxMesh" id="X_NeonH"]
-size = Vector3(2.3, 0.035, 0.035)
+[sub_resource type="BoxMesh" id="B_0_3_0_14_1_3"]
+size = Vector3(0.3, 0.14, 1.3)
 
-[sub_resource type="BoxMesh" id="X_NeonV"]
-size = Vector3(0.035, 0.55, 0.035)
+[sub_resource type="StandardMaterial3D" id="Blumen"]
+albedo_color = Color(0.8, 0.15, 0.25, 1)
+roughness = 0.8
+metallic = 0.0
+
+[sub_resource type="BoxMesh" id="B_0_04_0_04_2_5"]
+size = Vector3(0.04, 0.04, 2.5)
+
+[sub_resource type="BoxMesh" id="B_0_04_2_7_0_04"]
+size = Vector3(0.04, 2.7, 0.04)
+
+[sub_resource type="BoxMesh" id="B_1_4_1_3_0_04"]
+size = Vector3(1.4, 1.3, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="FensterGlas"]
+albedo_color = Color(1, 0.7, 0.35, 1)
+roughness = 0.2
+metallic = 0.0
+emission_enabled = true
+emission = Color(1, 0.6, 0.25, 1)
+emission_energy_multiplier = 1.3
+
+[sub_resource type="BoxMesh" id="B_0_04_1_3_1_4"]
+size = Vector3(0.04, 1.3, 1.4)
+
+[sub_resource type="BoxMesh" id="B_17_6_1_05_0_06"]
+size = Vector3(17.6, 1.05, 0.06)
+
+[sub_resource type="BoxMesh" id="B_0_06_1_05_9_6"]
+size = Vector3(0.06, 1.05, 9.6)
+
+[sub_resource type="BoxMesh" id="B_0_06_1_05_3_7"]
+size = Vector3(0.06, 1.05, 3.7)
+
+[sub_resource type="BoxMesh" id="B_17_6_0_06_0_1"]
+size = Vector3(17.6, 0.06, 0.1)
+
+[sub_resource type="BoxMesh" id="B_0_1_0_06_9_6"]
+size = Vector3(0.1, 0.06, 9.6)
+
+[sub_resource type="BoxMesh" id="B_17_6_0_1_0_18"]
+size = Vector3(17.6, 0.1, 0.18)
+
+[sub_resource type="BoxMesh" id="B_0_18_0_1_9_6"]
+size = Vector3(0.18, 0.1, 9.6)
+
+[sub_resource type="BoxMesh" id="B_0_35_0_22_10_2"]
+size = Vector3(0.35, 0.22, 10.2)
+
+[sub_resource type="BoxMesh" id="B_1_9_2_9_0_12"]
+size = Vector3(1.9, 2.9, 0.12)
+
+[sub_resource type="BoxMesh" id="B_2_0_0_05_0_05"]
+size = Vector3(2.0, 0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="B_0_12_2_9_1_8"]
+size = Vector3(0.12, 2.9, 1.8)
+
+[sub_resource type="BoxMesh" id="B_0_05_1_3_1_0"]
+size = Vector3(0.05, 1.3, 1.0)
+
+[sub_resource type="QuadMesh" id="Q_0_88_1_18"]
+size = Vector2(0.88, 1.18)
+
+[sub_resource type="BoxMesh" id="B_1_0_1_3_0_05"]
+size = Vector3(1.0, 1.3, 0.05)
+
+[sub_resource type="QuadMesh" id="Q_17_4_0_7"]
+size = Vector2(17.4, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="Girlande0"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.9
+metallic = 0.0
+albedo_texture = ExtResource("t_girlande")
+uv1_scale = Vector3(8, 1, 1)
+transparency = 2
+alpha_scissor_threshold = 0.4
+cull_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="Girlande1"]
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.9
+metallic = 0.0
+albedo_texture = ExtResource("t_girlande")
+uv1_scale = Vector3(8, 1, 1)
+transparency = 2
+alpha_scissor_threshold = 0.4
+cull_mode = 2
+
+[sub_resource type="CylinderMesh" id="Z_0_24_0_27_3_1_14"]
+top_radius = 0.24
+bottom_radius = 0.27
+height = 3.1
+radial_segments = 14
+rings = 1
+
+[sub_resource type="BoxMesh" id="B_0_7_0_18_0_7"]
+size = Vector3(0.7, 0.18, 0.7)
+
+[sub_resource type="BoxMesh" id="B_0_7_0_2_0_7"]
+size = Vector3(0.7, 0.2, 0.7)
+
+[sub_resource type="CylinderMesh" id="Z_0_3_0_3_0_06_14"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 0.06
+radial_segments = 14
+rings = 1
+
+[sub_resource type="BoxShape3D" id="SSaeule"]
+size = Vector3(0.6, 3.1, 0.6)
+
+[sub_resource type="SphereMesh" id="K_0_11_12"]
+radius = 0.11
+height = 0.22
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="Z_0_015_0_015_0_5_6"]
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.5
+radial_segments = 6
+rings = 1
+
+[sub_resource type="TorusMesh" id="T_0_5_0_58"]
+inner_radius = 0.5
+outer_radius = 0.58
+rings = 24
+ring_segments = 8
+
+[sub_resource type="TorusMesh" id="T_0_2_0_26"]
+inner_radius = 0.2
+outer_radius = 0.26
+rings = 24
+ring_segments = 8
+
+[sub_resource type="SphereMesh" id="K_0_07_8"]
+radius = 0.07
+height = 0.14
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="K_0_12_12"]
+radius = 0.12
+height = 0.24
+radial_segments = 12
+rings = 6
+
+[sub_resource type="BoxMesh" id="B_4_6_0_05_0_05"]
+size = Vector3(4.6, 0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="B_0_05_0_97_0_05"]
+size = Vector3(0.05, 0.97, 0.05)
+
+[sub_resource type="BoxMesh" id="B_5_2_1_05_0_7"]
+size = Vector3(5.2, 1.05, 0.7)
+
+[sub_resource type="BoxShape3D" id="S_5_2_1_05_0_7"]
+size = Vector3(5.2, 1.05, 0.7)
+
+[sub_resource type="BoxMesh" id="B_5_4_0_08_0_95"]
+size = Vector3(5.4, 0.08, 0.95)
+
+[sub_resource type="BoxMesh" id="B_5_4_0_04_0_05"]
+size = Vector3(5.4, 0.04, 0.05)
+
+[sub_resource type="CylinderMesh" id="Z_0_035_0_035_5_2_10"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 5.2
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="B_6_0_0_06_0_35"]
+size = Vector3(6.0, 0.06, 0.35)
+
+[sub_resource type="BoxMesh" id="B_6_0_1_3_0_04"]
+size = Vector3(6.0, 1.3, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="Spiegel"]
+albedo_color = Color(0.75, 0.8, 0.85, 1)
+roughness = 0.05
+metallic = 0.9
+
+[sub_resource type="CylinderMesh" id="Z_0_045_0_06_0_3_8"]
+top_radius = 0.045
+bottom_radius = 0.06
+height = 0.3
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_02_0_025_0_12_8"]
+top_radius = 0.02
+bottom_radius = 0.025
+height = 0.12
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_045_0_055_0_28_8"]
+top_radius = 0.045
+bottom_radius = 0.055
+height = 0.28
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_24_0_24_0_09_18"]
+top_radius = 0.24
+bottom_radius = 0.24
+height = 0.09
+radial_segments = 18
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_035_0_035_0_68_8"]
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.68
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_2_0_22_0_03_18"]
+top_radius = 0.2
+bottom_radius = 0.22
+height = 0.03
+radial_segments = 18
+rings = 1
+
+[sub_resource type="BoxMesh" id="B_1_7_0_95_1_2"]
+size = Vector3(1.7, 0.95, 1.2)
+
+[sub_resource type="BoxShape3D" id="S_1_7_0_95_1_2"]
+size = Vector3(1.7, 0.95, 1.2)
+
+[sub_resource type="BoxMesh" id="B_1_7_0_05_1_2"]
+size = Vector3(1.7, 0.05, 1.2)
+
+[sub_resource type="BoxMesh" id="B_0_5_0_05_1_1"]
+size = Vector3(0.5, 0.05, 1.1)
+
+[sub_resource type="StandardMaterial3D" id="Tasten"]
+albedo_color = Color(0.95, 0.93, 0.88, 1)
+roughness = 0.4
+metallic = 0.0
+
+[sub_resource type="CylinderMesh" id="Z_0_05_0_05_0_5_8"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.5
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_22_0_22_0_06_14"]
+top_radius = 0.22
+bottom_radius = 0.22
+height = 0.06
+radial_segments = 14
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Z_0_04_0_04_0_44_8"]
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.44
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="B_2_2_0_5_0_8"]
+size = Vector3(2.2, 0.5, 0.8)
+
+[sub_resource type="BoxShape3D" id="S_2_2_0_5_0_8"]
+size = Vector3(2.2, 0.5, 0.8)
+
+[sub_resource type="BoxMesh" id="B_2_2_0_55_0_2"]
+size = Vector3(2.2, 0.55, 0.2)
+
+[sub_resource type="BoxMesh" id="B_0_2_0_3_0_8"]
+size = Vector3(0.2, 0.3, 0.8)
+
+[sub_resource type="BoxMesh" id="B_0_8_0_5_2_0"]
+size = Vector3(0.8, 0.5, 2.0)
+
+[sub_resource type="CylinderMesh" id="Z_0_28_0_2_0_5_12"]
+top_radius = 0.28
+bottom_radius = 0.2
+height = 0.5
+radial_segments = 12
+rings = 1
+
+[sub_resource type="SphereMesh" id="K_0_55_10"]
+radius = 0.55
+height = 1.1
+radial_segments = 10
+rings = 5
+
+[sub_resource type="SphereMesh" id="K_0_38_10"]
+radius = 0.38
+height = 0.76
+radial_segments = 10
+rings = 5
+
+[sub_resource type="BoxMesh" id="B_7_4_0_02_1_7"]
+size = Vector3(7.4, 0.02, 1.7)
+
+[sub_resource type="BoxMesh" id="B_7_4_0_025_0_06"]
+size = Vector3(7.4, 0.025, 0.06)
 
 [node name="Casino" type="Node3D"]
-script = ExtResource("1_cas")
+script = ExtResource("skript_cas")
 
 [node name="Boden" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, -14)
 
 [node name="Mesh" type="MeshInstance3D" parent="Boden"]
-mesh = SubResource("MBoden")
+mesh = SubResource("B_18_4_0_1_10_4")
+surface_material_override/0 = SubResource("Teppich")
 
 [node name="Form" type="CollisionShape3D" parent="Boden"]
-shape = SubResource("SBoden")
+shape = SubResource("S_18_4_0_1_10_4")
 
 [node name="Decke" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.25, -14)
 
 [node name="Mesh" type="MeshInstance3D" parent="Decke"]
-mesh = SubResource("MDecke")
-
-[node name="WandOst" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.75, 1.6, -14)
-
-[node name="Mesh" type="MeshInstance3D" parent="WandOst"]
-mesh = SubResource("MWandOst")
-
-[node name="Form" type="CollisionShape3D" parent="WandOst"]
-shape = SubResource("SWandOst")
+mesh = SubResource("B_18_4_0_1_10_4")
+surface_material_override/0 = SubResource("Decke")
 
 [node name="WandWest" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.75, 1.6, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.6, -14)
 
 [node name="Mesh" type="MeshInstance3D" parent="WandWest"]
-mesh = SubResource("MWandWest")
+mesh = SubResource("B_0_3_3_2_10_4")
+surface_material_override/0 = SubResource("Tapete")
 
 [node name="Form" type="CollisionShape3D" parent="WandWest"]
-shape = SubResource("SWandWest")
+shape = SubResource("S_0_3_3_2_10_4")
 
 [node name="WandNord" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -9.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -9)
 
 [node name="Mesh" type="MeshInstance3D" parent="WandNord"]
-mesh = SubResource("MWandNord")
+mesh = SubResource("B_18_6_3_2_0_3")
+surface_material_override/0 = SubResource("Tapete")
 
 [node name="Form" type="CollisionShape3D" parent="WandNord"]
-shape = SubResource("SWandNord")
+shape = SubResource("S_18_6_3_2_0_3")
 
-[node name="WandSuedL" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.55, 1.6, -19.0)
+[node name="WandSued" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -19)
 
-[node name="Mesh" type="MeshInstance3D" parent="WandSuedL"]
-mesh = SubResource("MWandSuedL")
+[node name="Mesh" type="MeshInstance3D" parent="WandSued"]
+mesh = SubResource("B_18_6_3_2_0_3")
+surface_material_override/0 = SubResource("Tapete")
 
-[node name="Form" type="CollisionShape3D" parent="WandSuedL"]
-shape = SubResource("SWandSuedL")
+[node name="Form" type="CollisionShape3D" parent="WandSued"]
+shape = SubResource("S_18_6_3_2_0_3")
 
-[node name="WandSuedR" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 1.6, -19.0)
+[node name="WandOstL" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.6, -17.05)
 
-[node name="Mesh" type="MeshInstance3D" parent="WandSuedR"]
-mesh = SubResource("MWandSuedR")
+[node name="Mesh" type="MeshInstance3D" parent="WandOstL"]
+mesh = SubResource("B_0_3_3_2_3_9")
+surface_material_override/0 = SubResource("Tapete")
 
-[node name="Form" type="CollisionShape3D" parent="WandSuedR"]
-shape = SubResource("SWandSuedR")
+[node name="Form" type="CollisionShape3D" parent="WandOstL"]
+shape = SubResource("S_0_3_3_2_3_9")
+
+[node name="WandOstR" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.6, -10.95)
+
+[node name="Mesh" type="MeshInstance3D" parent="WandOstR"]
+mesh = SubResource("B_0_3_3_2_3_9")
+surface_material_override/0 = SubResource("Tapete")
+
+[node name="Form" type="CollisionShape3D" parent="WandOstR"]
+shape = SubResource("S_0_3_3_2_3_9")
 
 [node name="TuerSturz" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, -19.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 2.7, -14)
 
 [node name="Mesh" type="MeshInstance3D" parent="TuerSturz"]
-mesh = SubResource("MTuerSturz")
+mesh = SubResource("B_0_3_1_0_2_2")
+surface_material_override/0 = SubResource("Tapete")
 
 [node name="Form" type="CollisionShape3D" parent="TuerSturz"]
-shape = SubResource("STuerSturz")
-
-[node name="Schild" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.95, -19.2)
-
-[node name="Mesh" type="MeshInstance3D" parent="Schild"]
-mesh = SubResource("MSchild")
-
-[node name="Beschriftung" type="Label3D" parent="Schild"]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, -0.04)
-pixel_size = 0.0045
-modulate = Color(0.16, 0.07, 0.03, 1)
-outline_size = 0
-text = "WORLD_CASINO"
-font = ExtResource("font_casino")
-font_size = 72
-script = ExtResource("wt_casino")
-schluessel = "WORLD_CASINO"
+shape = SubResource("S_0_3_1_0_2_2")
 
 [node name="Sperre" type="StaticBody3D" parent="." groups=["casino_sperre"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -19)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.8, 1.3, -14)
 
 [node name="Form" type="CollisionShape3D" parent="Sperre"]
 shape = SubResource("SSperre")
 
-
-[node name="Licht0" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2.8, -12)
-light_color = Color(1, 0.78, 0.5, 1)
-light_energy = 3.0
-omni_range = 11.0
-light_specular = 0.4
-
-[node name="Licht1" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2.8, -12)
-light_color = Color(1, 0.78, 0.5, 1)
-light_energy = 3.0
-omni_range = 11.0
-light_specular = 0.4
-
-[node name="Licht2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 2.8, -16.5)
-light_color = Color(1, 0.78, 0.5, 1)
-light_energy = 3.0
-omni_range = 11.0
-light_specular = 0.4
-
-[node name="Licht3" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 2.8, -16.5)
-light_color = Color(1, 0.78, 0.5, 1)
-light_energy = 3.0
-omni_range = 11.0
-light_specular = 0.4
-
-
-[node name="Roulette0" parent="." instance=ExtResource("2_roulette")]
-transform = Transform3D(0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, 0.0000, -3.0, 0, -13.0)
-script = ExtResource("3_kd")
-art = "roulette"
-
-[node name="Croupier0" parent="." instance=ExtResource("4_figur")]
-transform = Transform3D(-0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, -0.0000, -1.4, 0, -13.0)
-beruf = "kellner"
-nr = 20
-
-[node name="Roulette1" parent="." instance=ExtResource("2_roulette")]
-transform = Transform3D(0.0000, 0, 1.0000, 0, 1, 0, -1.0000, 0, 0.0000, 3.0, 0, -13.0)
-script = ExtResource("3_kd")
-art = "roulette"
-
-[node name="Croupier1" parent="." instance=ExtResource("4_figur")]
-transform = Transform3D(-0.0000, 0, -1.0000, 0, 1, 0, 1.0000, 0, -0.0000, 1.4, 0, -13.0)
-beruf = "kellner"
-nr = 21
-
-
-[node name="Kartentisch" parent="." instance=ExtResource("5_karten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16.2)
-script = ExtResource("3_kd")
-art = "blackjack"
-
-[node name="CroupierKarten" parent="." instance=ExtResource("4_figur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -17.8)
-beruf = "kellner"
-nr = 22
-
-
-[node name="WattenTisch" parent="." instance=ExtResource("5_karten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -17.4)
-script = ExtResource("3_kd")
-art = "watten"
-
-[node name="CroupierWatten" parent="." instance=ExtResource("4_figur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 0, -18.7)
-beruf = "kellner"
-nr = 23
-
-
-[node name="WuerfelTisch" parent="." instance=ExtResource("5_karten")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -17.4)
-script = ExtResource("3_kd")
-art = "wuerfel"
-
-[node name="CroupierWuerfel" parent="." instance=ExtResource("4_figur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0, -18.7)
-beruf = "kellner"
-nr = 24
-
-[node name="Slot0" parent="." instance=ExtResource("6_slot")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4.4, 0, -9.7)
-
-[node name="Slot1" parent="." instance=ExtResource("6_slot")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4.4, 0, -9.7)
-
-[node name="Tuersteher" parent="." instance=ExtResource("4_figur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0, -20.3)
-beruf = "security"
-nr = 30
-
-[node name="TuerKontakt" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.2)
-script = ExtResource("3_kd")
-art = "tuer"
-
 [node name="Aussen" type="Node3D" parent="."]
 
-[node name="Zierleiste" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, -19.12)
-mesh = SubResource("X_Leiste")
-surface_material_override/0 = SubResource("Gold")
+[node name="HautWest" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.19, 2.05, -14)
+mesh = SubResource("B_0_08_2_3_10_6")
+surface_material_override/0 = ExtResource("mat_streifen")
 
-[node name="Pilaster0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 1.62, -19.15)
-mesh = SubResource("X_Pilaster")
-surface_material_override/0 = SubResource("Gold")
+[node name="HautSued" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -19.19)
+mesh = SubResource("B_18_8_2_3_0_08")
+surface_material_override/0 = ExtResource("mat_streifen")
 
-[node name="Pilaster1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.62, -19.15)
-mesh = SubResource("X_Pilaster")
-surface_material_override/0 = SubResource("Gold")
+[node name="HautOstL" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.19, 2.05, -17.05)
+mesh = SubResource("B_0_08_2_3_3_9")
+surface_material_override/0 = ExtResource("mat_streifen")
 
-[node name="Pilaster2" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 1.62, -19.15)
-mesh = SubResource("X_Pilaster")
-surface_material_override/0 = SubResource("Gold")
+[node name="HautOstR" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.19, 2.05, -10.95)
+mesh = SubResource("B_0_08_2_3_3_9")
+surface_material_override/0 = ExtResource("mat_streifen")
 
-[node name="Pilaster3" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 1.62, -19.15)
-mesh = SubResource("X_Pilaster")
-surface_material_override/0 = SubResource("Gold")
+[node name="HautOstSturz" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.19, 2.7, -14)
+mesh = SubResource("B_0_08_1_0_2_2")
+surface_material_override/0 = ExtResource("mat_streifen")
 
-[node name="Feld0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.55, 1.5, -19.2)
-mesh = SubResource("X_Feld")
-surface_material_override/0 = SubResource("X_Samt")
+[node name="HautNord" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.05, -8.81)
+mesh = SubResource("B_18_8_2_3_0_08")
+surface_material_override/0 = ExtResource("mat_streifen")
 
-[node name="Feld1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 1.5, -19.2)
-mesh = SubResource("X_Feld")
-surface_material_override/0 = SubResource("X_Samt")
+[node name="SockelWest" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.22, 0.45, -14)
+mesh = SubResource("B_0_12_0_9_10_7")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Baldachin" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 0.9397, 0.342, 0, -0.342, 0.9397, 0, 3.05, -19.9)
-mesh = SubResource("X_Dach")
-surface_material_override/0 = SubResource("X_Samt")
+[node name="SockelSued" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -19.22)
+mesh = SubResource("B_18_9_0_9_0_12")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="BaldachinSaum" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.74, -20.75)
-mesh = SubResource("X_Saum")
-surface_material_override/0 = SubResource("Gold")
+[node name="SockelNord" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -8.78)
+mesh = SubResource("B_18_9_0_9_0_12")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Teppich" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, -21.15)
-mesh = SubResource("X_Teppich")
-surface_material_override/0 = SubResource("X_Samt")
+[node name="SockelOstL" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.22, 0.45, -17.05)
+mesh = SubResource("B_0_12_0_9_3_95")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="TeppichRand0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.02, -21.15)
-mesh = SubResource("X_Rand")
-surface_material_override/0 = SubResource("Gold")
+[node name="SockelOstR" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.22, 0.45, -10.95)
+mesh = SubResource("B_0_12_0_9_3_95")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="TeppichRand1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.02, -21.15)
-mesh = SubResource("X_Rand")
-surface_material_override/0 = SubResource("Gold")
+[node name="Ecke0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.2, 1.67, -19.2)
+mesh = SubResource("B_0_3_3_35_0_3")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Pfosten0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.5, -21.0)
-mesh = SubResource("X_Pfosten")
-surface_material_override/0 = SubResource("Gold")
+[node name="Ecke1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 1.67, -19.2)
+mesh = SubResource("B_0_3_3_35_0_3")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Pfosten1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.5, -23.0)
-mesh = SubResource("X_Pfosten")
-surface_material_override/0 = SubResource("Gold")
+[node name="Ecke2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.2, 1.67, -8.8)
+mesh = SubResource("B_0_3_3_35_0_3")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Pfosten2" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.5, -21.0)
-mesh = SubResource("X_Pfosten")
-surface_material_override/0 = SubResource("Gold")
+[node name="Ecke3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 1.67, -8.8)
+mesh = SubResource("B_0_3_3_35_0_3")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Pfosten3" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.5, -23.0)
-mesh = SubResource("X_Pfosten")
-surface_material_override/0 = SubResource("Gold")
+[node name="PfostenS0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.65, -19.24)
+mesh = SubResource("B_0_2_3_3_0_14")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Seil0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.88, -22.0)
-mesh = SubResource("X_Seil")
-surface_material_override/0 = SubResource("X_Samt")
+[node name="PfostenS1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.65, -19.24)
+mesh = SubResource("B_0_2_3_3_0_14")
+surface_material_override/0 = ExtResource("mat_holz")
 
-[node name="Seil1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.88, -22.0)
-mesh = SubResource("X_Seil")
-surface_material_override/0 = SubResource("X_Samt")
+[node name="PfostenS2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, -19.24)
+mesh = SubResource("B_0_2_3_3_0_14")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenS3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.65, -19.24)
+mesh = SubResource("B_0_2_3_3_0_14")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenS4" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.65, -19.24)
+mesh = SubResource("B_0_2_3_3_0_14")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenO0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.24, 1.65, -17)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenO1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.24, 1.65, -15.2)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenO2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.24, 1.65, -12.8)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenO3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.24, 1.65, -11)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenW0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.24, 1.65, -16.5)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenW1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.24, 1.65, -13.8)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="PfostenW2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.24, 1.65, -11.2)
+mesh = SubResource("B_0_14_3_3_0_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="TraufeSued" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, -19.25)
+mesh = SubResource("B_19_2_0_16_0_2")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TraufeWest" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.25, 3.3, -14)
+mesh = SubResource("B_0_2_0_16_11_0")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TraufeOstL" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.25, 3.3, -17.1)
+mesh = SubResource("B_0_2_0_16_4_2")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TraufeOstR" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.25, 3.3, -10.9)
+mesh = SubResource("B_0_2_0_16_4_2")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TraufeOstTuer" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.25, 3.3, -14)
+mesh = SubResource("B_0_2_0_16_2_4")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Dach" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 4.25, -14)
+mesh = SubResource("P_10_9_1_9_19_400000000000002")
+surface_material_override/0 = ExtResource("mat_streifen")
+
+[node name="Dachsaum" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.18, -14)
+mesh = SubResource("B_19_5_0_12_0_12")
+surface_material_override/0 = ExtResource("mat_gold")
 
 [node name="Mast0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 1.1, -20.3)
-mesh = SubResource("X_Mast")
-surface_material_override/0 = SubResource("Gold")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.2, 5.7, -14)
+mesh = SubResource("Z_0_04_0_05_1_5_8")
+surface_material_override/0 = ExtResource("mat_gold")
 
-[node name="Lampe0" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 2.3, -20.3)
-mesh = SubResource("X_Lampe")
-surface_material_override/0 = SubResource("X_Neon")
-
-[node name="LaternenLicht0" type="OmniLight3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 2.2, -20.5)
-light_color = Color(1, 0.78, 0.45, 1)
-light_energy = 0.9
-omni_range = 5.5
+[node name="Fahne0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9.65, 6.1, -14)
+mesh = SubResource("Q_0_9_0_6")
+surface_material_override/0 = ExtResource("mat_rauten")
+cast_shadow = 0
 
 [node name="Mast1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 1.1, -20.3)
-mesh = SubResource("X_Mast")
-surface_material_override/0 = SubResource("Gold")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2, 5.7, -14)
+mesh = SubResource("Z_0_04_0_05_1_5_8")
+surface_material_override/0 = ExtResource("mat_gold")
 
-[node name="Lampe1" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.3, -20.3)
-mesh = SubResource("X_Lampe")
-surface_material_override/0 = SubResource("X_Neon")
+[node name="Fahne1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9.65, 6.1, -14)
+mesh = SubResource("Q_0_9_0_6")
+surface_material_override/0 = ExtResource("mat_rauten")
+cast_shadow = 0
+
+[node name="Kugel0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 5.25, -14)
+mesh = SubResource("K_0_13_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kugel1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 5.25, -14)
+mesh = SubResource("K_0_13_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kugel2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.25, -14)
+mesh = SubResource("K_0_13_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kugel3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 5.25, -14)
+mesh = SubResource("K_0_13_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TuerRahmenO" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.28, 1.3, -12.85)
+mesh = SubResource("B_0_3_2_6_0_14")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TuerRahmenW" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.28, 1.3, -15.15)
+mesh = SubResource("B_0_3_2_6_0_14")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TuerRahmenOben" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.28, 2.62, -14)
+mesh = SubResource("B_0_3_0_14_2_44")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Schild" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 3.02, -14)
+
+[node name="Mesh" type="MeshInstance3D" parent="Schild"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("B_0_06_0_55_2_6")
+surface_material_override/0 = SubResource("Schild")
+
+[node name="Beschriftung" type="Label3D" parent="Schild"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.05, 0, 0)
+pixel_size = 0.0055
+modulate = Color(0.16, 0.07, 0.03, 1)
+outline_size = 0
+text = "WORLD_CASINO"
+font = ExtResource("font_fraktur")
+font_size = 72
+script = ExtResource("skript_wt")
+schluessel = "WORLD_CASINO"
+
+[node name="Teppich" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 0.012, -14)
+mesh = SubResource("B_4_2_0_025_1_9")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="TeppichRand0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 0.02, -13.05)
+mesh = SubResource("B_4_2_0_03_0_07")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="TeppichRand1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 0.02, -14.95)
+mesh = SubResource("B_4_2_0_03_0_07")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="PfostenSeil0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, -12.75)
+mesh = SubResource("Z_0_045_0_045_1_0_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="PfostenSeil1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9, 0.5, -12.75)
+mesh = SubResource("Z_0_045_0_045_1_0_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="PfostenSeil2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.5, -15.25)
+mesh = SubResource("Z_0_045_0_045_1_0_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="PfostenSeil3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9, 0.5, -15.25)
+mesh = SubResource("Z_0_045_0_045_1_0_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Seil0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.45, 0.88, -12.75)
+mesh = SubResource("B_2_9_0_03_0_03")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Seil1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.45, 0.88, -15.25)
+mesh = SubResource("B_2_9_0_03_0_03")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Laterne0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 1.15, -12)
+mesh = SubResource("Z_0_05_0_05_2_3_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="LaterneLampe0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 2.4, -12)
+mesh = SubResource("K_0_18_12")
+surface_material_override/0 = SubResource("Glueh")
+
+[node name="LaternenLicht0" type="OmniLight3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 2.3, -12)
+light_color = Color(1, 0.78, 0.45, 1)
+light_energy = 1.1
+omni_range = 6.0
+light_specular = 0.3
+
+[node name="Laterne1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 1.15, -16)
+mesh = SubResource("Z_0_05_0_05_2_3_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="LaterneLampe1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 2.4, -16)
+mesh = SubResource("K_0_18_12")
+surface_material_override/0 = SubResource("Glueh")
 
 [node name="LaternenLicht1" type="OmniLight3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.2, -20.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 2.3, -16)
 light_color = Color(1, 0.78, 0.45, 1)
-light_energy = 0.9
-omni_range = 5.5
+light_energy = 1.1
+omni_range = 6.0
+light_specular = 0.3
+
+[node name="Kasten0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.85, -11.1)
+mesh = SubResource("B_0_35_0_3_1_4")
+surface_material_override/0 = SubResource("HolzHell")
+
+[node name="Blumen0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 1.07, -11.1)
+mesh = SubResource("B_0_3_0_14_1_3")
+surface_material_override/0 = SubResource("Blumen")
+
+[node name="Kasten1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.85, -16.9)
+mesh = SubResource("B_0_35_0_3_1_4")
+surface_material_override/0 = SubResource("HolzHell")
+
+[node name="Blumen1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 1.07, -16.9)
+mesh = SubResource("B_0_3_0_14_1_3")
+surface_material_override/0 = SubResource("Blumen")
 
 [node name="NeonOben" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -19.3)
-mesh = SubResource("X_NeonH")
-surface_material_override/0 = SubResource("X_Neon")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.34, 2.7, -14)
+mesh = SubResource("B_0_04_0_04_2_5")
+surface_material_override/0 = SubResource("Neon")
+cast_shadow = 0
 
-[node name="NeonUnten" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.68, -19.3)
-mesh = SubResource("X_NeonH")
-surface_material_override/0 = SubResource("X_Neon")
+[node name="NeonO" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.34, 1.35, -12.75)
+mesh = SubResource("B_0_04_2_7_0_04")
+surface_material_override/0 = SubResource("Neon")
+cast_shadow = 0
 
-[node name="NeonLinks" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 2.94, -19.3)
-mesh = SubResource("X_NeonV")
-surface_material_override/0 = SubResource("X_Neon")
+[node name="NeonW" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.34, 1.35, -15.25)
+mesh = SubResource("B_0_04_2_7_0_04")
+surface_material_override/0 = SubResource("Neon")
+cast_shadow = 0
 
-[node name="NeonRechts" type="MeshInstance3D" parent="Aussen"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 2.94, -19.3)
-mesh = SubResource("X_NeonV")
-surface_material_override/0 = SubResource("X_Neon")
+[node name="FensterS0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.8, -19.25)
+mesh = SubResource("B_1_4_1_3_0_04")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
 
-[node name="LichtFuell0" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -10)
-light_color = Color(1, 0.82, 0.58, 1)
-light_energy = 2.0
+[node name="FensterS1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.8, -19.25)
+mesh = SubResource("B_1_4_1_3_0_04")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="FensterS2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.8, -19.25)
+mesh = SubResource("B_1_4_1_3_0_04")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="FensterS3" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1.8, -19.25)
+mesh = SubResource("B_1_4_1_3_0_04")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="FensterS4" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 1.8, -19.25)
+mesh = SubResource("B_1_4_1_3_0_04")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="FensterW0" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.28, 1.8, -15.1)
+mesh = SubResource("B_0_04_1_3_1_4")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="FensterW1" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.28, 1.8, -12.4)
+mesh = SubResource("B_0_04_1_3_1_4")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="FensterW2" type="MeshInstance3D" parent="Aussen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.28, 1.8, -9.8)
+mesh = SubResource("B_0_04_1_3_1_4")
+surface_material_override/0 = SubResource("FensterGlas")
+cast_shadow = 0
+
+[node name="Innen" type="Node3D" parent="."]
+
+[node name="TaefelSued" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -18.82)
+mesh = SubResource("B_17_6_1_05_0_06")
+surface_material_override/0 = SubResource("Nuss")
+
+[node name="TaefelNord" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -9.18)
+mesh = SubResource("B_17_6_1_05_0_06")
+surface_material_override/0 = SubResource("Nuss")
+
+[node name="TaefelWest" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.82, 0.55, -14)
+mesh = SubResource("B_0_06_1_05_9_6")
+surface_material_override/0 = SubResource("Nuss")
+
+[node name="TaefelOstL" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.82, 0.55, -17)
+mesh = SubResource("B_0_06_1_05_3_7")
+surface_material_override/0 = SubResource("Nuss")
+
+[node name="TaefelOstR" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.82, 0.55, -11)
+mesh = SubResource("B_0_06_1_05_3_7")
+surface_material_override/0 = SubResource("Nuss")
+
+[node name="LeisteSued" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11, -18.8)
+mesh = SubResource("B_17_6_0_06_0_1")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="LeisteNord" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11, -9.2)
+mesh = SubResource("B_17_6_0_06_0_1")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="LeisteWest" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, 1.11, -14)
+mesh = SubResource("B_0_1_0_06_9_6")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="DeckenLeisteSued" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.12, -18.78)
+mesh = SubResource("B_17_6_0_1_0_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="DeckenLeisteNord" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.12, -9.22)
+mesh = SubResource("B_17_6_0_1_0_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="DeckenLeisteWest" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.78, 3.12, -14)
+mesh = SubResource("B_0_18_0_1_9_6")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="DeckenLeisteOst" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.78, 3.12, -14)
+mesh = SubResource("B_0_18_0_1_9_6")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Balken0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 3.1, -14)
+mesh = SubResource("B_0_35_0_22_10_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="Balken1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 3.1, -14)
+mesh = SubResource("B_0_35_0_22_10_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="Balken2" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 3.1, -14)
+mesh = SubResource("B_0_35_0_22_10_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="Balken3" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 3.1, -14)
+mesh = SubResource("B_0_35_0_22_10_2")
+surface_material_override/0 = ExtResource("mat_holz")
+
+[node name="VorhangS0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 1.7, -18.76)
+mesh = SubResource("B_1_9_2_9_0_12")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangStange0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 3.12, -18.7)
+mesh = SubResource("B_2_0_0_05_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="VorhangS1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 1.7, -18.76)
+mesh = SubResource("B_1_9_2_9_0_12")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangStange1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.7, 3.12, -18.7)
+mesh = SubResource("B_2_0_0_05_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="VorhangS2" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -18.76)
+mesh = SubResource("B_1_9_2_9_0_12")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangStange2" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.12, -18.7)
+mesh = SubResource("B_2_0_0_05_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="VorhangS3" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 1.7, -18.76)
+mesh = SubResource("B_1_9_2_9_0_12")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangStange3" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 3.12, -18.7)
+mesh = SubResource("B_2_0_0_05_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="VorhangS4" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4, 1.7, -18.76)
+mesh = SubResource("B_1_9_2_9_0_12")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangStange4" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4, 3.12, -18.7)
+mesh = SubResource("B_2_0_0_05_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="VorhangW0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.76, 1.7, -17.8)
+mesh = SubResource("B_0_12_2_9_1_8")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangW1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.76, 1.7, -14)
+mesh = SubResource("B_0_12_2_9_1_8")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="VorhangW2" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.76, 1.7, -10.4)
+mesh = SubResource("B_0_12_2_9_1_8")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="RahmenW0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, 2.1, -16)
+mesh = SubResource("B_0_05_1_3_1_0")
+surface_material_override/0 = ExtResource("mat_gold")
+cast_shadow = 0
+
+[node name="BildW0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.77, 2.1, -16)
+mesh = SubResource("Q_0_88_1_18")
+surface_material_override/0 = SubResource("Bild1")
+cast_shadow = 0
+
+[node name="RahmenW1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.8, 2.1, -12)
+mesh = SubResource("B_0_05_1_3_1_0")
+surface_material_override/0 = ExtResource("mat_gold")
+cast_shadow = 0
+
+[node name="BildW1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.77, 2.1, -12)
+mesh = SubResource("Q_0_88_1_18")
+surface_material_override/0 = SubResource("Bild2")
+cast_shadow = 0
+
+[node name="RahmenN0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2.3, -9.2)
+mesh = SubResource("B_1_0_1_3_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+cast_shadow = 0
+
+[node name="BildN0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -1, 2.3, -9.17)
+mesh = SubResource("Q_0_88_1_18")
+surface_material_override/0 = SubResource("Bild3")
+cast_shadow = 0
+
+[node name="RahmenN1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.3, -9.2)
+mesh = SubResource("B_1_0_1_3_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+cast_shadow = 0
+
+[node name="BildN1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2, 2.3, -9.17)
+mesh = SubResource("Q_0_88_1_18")
+surface_material_override/0 = SubResource("Bild1")
+cast_shadow = 0
+
+[node name="Girlande0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.85, -11.5)
+mesh = SubResource("Q_17_4_0_7")
+surface_material_override/0 = SubResource("Girlande0")
+cast_shadow = 0
+
+[node name="Girlande1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.85, -15.5)
+mesh = SubResource("Q_17_4_0_7")
+surface_material_override/0 = SubResource("Girlande1")
+cast_shadow = 0
+
+[node name="Saeule0" type="StaticBody3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 0, -17.9)
+
+[node name="Schaft" type="MeshInstance3D" parent="Innen/Saeule0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("Z_0_24_0_27_3_1_14")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Sockel" type="MeshInstance3D" parent="Innen/Saeule0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+mesh = SubResource("B_0_7_0_18_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kapitell" type="MeshInstance3D" parent="Innen/Saeule0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+mesh = SubResource("B_0_7_0_2_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Saeule0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("Z_0_3_0_3_0_06_14")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Form" type="CollisionShape3D" parent="Innen/Saeule0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+shape = SubResource("SSaeule")
+
+[node name="Saeule1" type="StaticBody3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, -17.9)
+
+[node name="Schaft" type="MeshInstance3D" parent="Innen/Saeule1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("Z_0_24_0_27_3_1_14")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Sockel" type="MeshInstance3D" parent="Innen/Saeule1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+mesh = SubResource("B_0_7_0_18_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kapitell" type="MeshInstance3D" parent="Innen/Saeule1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+mesh = SubResource("B_0_7_0_2_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Saeule1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("Z_0_3_0_3_0_06_14")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Form" type="CollisionShape3D" parent="Innen/Saeule1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+shape = SubResource("SSaeule")
+
+[node name="Saeule2" type="StaticBody3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.35, 0, -16)
+
+[node name="Schaft" type="MeshInstance3D" parent="Innen/Saeule2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("Z_0_24_0_27_3_1_14")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Sockel" type="MeshInstance3D" parent="Innen/Saeule2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+mesh = SubResource("B_0_7_0_18_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kapitell" type="MeshInstance3D" parent="Innen/Saeule2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+mesh = SubResource("B_0_7_0_2_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Saeule2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("Z_0_3_0_3_0_06_14")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Form" type="CollisionShape3D" parent="Innen/Saeule2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+shape = SubResource("SSaeule")
+
+[node name="Saeule3" type="StaticBody3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.35, 0, -12)
+
+[node name="Schaft" type="MeshInstance3D" parent="Innen/Saeule3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("Z_0_24_0_27_3_1_14")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Sockel" type="MeshInstance3D" parent="Innen/Saeule3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+mesh = SubResource("B_0_7_0_18_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Kapitell" type="MeshInstance3D" parent="Innen/Saeule3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+mesh = SubResource("B_0_7_0_2_0_7")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Saeule3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("Z_0_3_0_3_0_06_14")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Form" type="CollisionShape3D" parent="Innen/Saeule3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+shape = SubResource("SSaeule")
+
+[node name="Leuchter0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 2.2, -17.55)
+mesh = SubResource("K_0_11_12")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Leuchter1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 2.2, -17.55)
+mesh = SubResource("K_0_11_12")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Leuchter2" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.2, -16)
+mesh = SubResource("K_0_11_12")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Leuchter3" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.2, -12)
+mesh = SubResource("K_0_11_12")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Kronleuchter0" type="Node3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 2.75, -13.4)
+script = ExtResource("skript_ro")
+grad_pro_sekunde = 9.0
+
+[node name="Kette" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("Z_0_015_0_015_0_5_6")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("T_0_5_0_58")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="RingInnen" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("T_0_2_0_26")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Flamme0" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.1, 0)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme1" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38184, 0.1, 0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme2" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.54)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme3" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38184, 0.1, 0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme4" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.1, 0)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme5" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38184, 0.1, -0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme6" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.54)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme7" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38184, 0.1, -0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Zapfen" type="MeshInstance3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+mesh = SubResource("K_0_12_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Licht" type="OmniLight3D" parent="Innen/Kronleuchter0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+light_color = Color(1, 0.78, 0.5, 1)
+light_energy = 2.6
 omni_range = 9.0
 light_specular = 0.3
 
-[node name="LichtFuell1" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -19)
-light_color = Color(1, 0.82, 0.58, 1)
-light_energy = 2.0
+[node name="Kronleuchter1" type="Node3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.75, -14.6)
+script = ExtResource("skript_ro")
+grad_pro_sekunde = 13.0
+
+[node name="Kette" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("Z_0_015_0_015_0_5_6")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("T_0_5_0_58")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="RingInnen" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("T_0_2_0_26")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Flamme0" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.1, 0)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme1" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38184, 0.1, 0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme2" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.54)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme3" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38184, 0.1, 0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme4" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.1, 0)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme5" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38184, 0.1, -0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme6" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.54)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme7" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38184, 0.1, -0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Zapfen" type="MeshInstance3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+mesh = SubResource("K_0_12_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Licht" type="OmniLight3D" parent="Innen/Kronleuchter1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+light_color = Color(1, 0.78, 0.5, 1)
+light_energy = 2.6
 omni_range = 9.0
 light_specular = 0.3
+
+[node name="Kronleuchter2" type="Node3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.75, -13.4)
+script = ExtResource("skript_ro")
+grad_pro_sekunde = 17.0
+
+[node name="Kette" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("Z_0_015_0_015_0_5_6")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Ring" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("T_0_5_0_58")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="RingInnen" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("T_0_2_0_26")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Flamme0" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.1, 0)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme1" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38184, 0.1, 0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme2" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0.54)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme3" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38184, 0.1, 0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme4" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.1, 0)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme5" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38184, 0.1, -0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme6" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.54)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Flamme7" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38184, 0.1, -0.38184)
+mesh = SubResource("K_0_07_8")
+surface_material_override/0 = SubResource("Kugelglas")
+cast_shadow = 0
+
+[node name="Zapfen" type="MeshInstance3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+mesh = SubResource("K_0_12_12")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Licht" type="OmniLight3D" parent="Innen/Kronleuchter2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+light_color = Color(1, 0.78, 0.5, 1)
+light_energy = 2.6
+omni_range = 9.0
+light_specular = 0.3
+
+[node name="LichtBar" type="OmniLight3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 2.6, -11)
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 1.8
+omni_range = 6.0
+light_specular = 0.3
+
+[node name="LichtRoulette" type="OmniLight3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 2.4, -14.4)
+light_color = Color(1, 0.75, 0.5, 1)
+light_energy = 1.5
+omni_range = 6.0
+light_specular = 0.3
+
+[node name="LichtTuer" type="OmniLight3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.6, -14)
+light_color = Color(1, 0.75, 0.5, 1)
+light_energy = 1.6
+omni_range = 6.0
+light_specular = 0.3
+
+[node name="NeonSchrift" type="Label3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, -18.62)
+pixel_size = 0.012
+modulate = Color(1, 0.82, 0.4, 1)
+outline_size = 8
+outline_modulate = Color(0.6, 0.2, 0.05, 1)
+shaded = false
+no_depth_test = false
+text = "WORLD_CASINO"
+font = ExtResource("font_fraktur")
+font_size = 140
+script = ExtResource("skript_wt")
+schluessel = "WORLD_CASINO"
+
+[node name="NeonRohr0" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -18.66)
+mesh = SubResource("B_4_6_0_05_0_05")
+surface_material_override/0 = SubResource("Neon")
+script = ExtResource("skript_bl")
+takt = 1.1
+
+[node name="NeonRohr1" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08, -18.66)
+mesh = SubResource("B_4_6_0_05_0_05")
+surface_material_override/0 = SubResource("Neon")
+script = ExtResource("skript_bl")
+takt = 1.5
+
+[node name="NeonRohr2" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 2.54, -18.66)
+mesh = SubResource("B_0_05_0_97_0_05")
+surface_material_override/0 = SubResource("Neon")
+script = ExtResource("skript_bl")
+takt = 1.9000000000000001
+
+[node name="NeonRohr3" type="MeshInstance3D" parent="Innen"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 2.54, -18.66)
+mesh = SubResource("B_0_05_0_97_0_05")
+surface_material_override/0 = SubResource("Neon")
+script = ExtResource("skript_bl")
+takt = 2.3000000000000003
+
+[node name="Bar" type="Node3D" parent="."]
+
+[node name="Theke" type="StaticBody3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.525, -10.7)
+
+[node name="Mesh" type="MeshInstance3D" parent="Bar/Theke"]
+mesh = SubResource("B_5_2_1_05_0_7")
+surface_material_override/0 = SubResource("Nuss")
+
+[node name="Form" type="CollisionShape3D" parent="Bar/Theke"]
+shape = SubResource("S_5_2_1_05_0_7")
+
+[node name="ThekePlatte" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.09, -10.75)
+mesh = SubResource("B_5_4_0_08_0_95")
+surface_material_override/0 = SubResource("Schwarz")
+
+[node name="ThekeKante" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.12, -11.24)
+mesh = SubResource("B_5_4_0_04_0_05")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Fussrohr" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.5, 0.2, -11.15)
+mesh = SubResource("Z_0_035_0_035_5_2_10")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="RueckenRegal" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.5, -9.3)
+mesh = SubResource("B_6_0_0_06_0_35")
+surface_material_override/0 = SubResource("HolzHell")
+
+[node name="RueckenRegal2" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 2, -9.3)
+mesh = SubResource("B_6_0_0_06_0_35")
+surface_material_override/0 = SubResource("HolzHell")
+
+[node name="RueckenSpiegel" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1.75, -9.17)
+mesh = SubResource("B_6_0_1_3_0_04")
+surface_material_override/0 = SubResource("Spiegel")
+cast_shadow = 0
+
+[node name="Flasche0" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheHals0" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="Flasche1" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheHals1" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="Flasche2" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheHals2" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="Flasche3" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheHals3" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="Flasche4" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheHals4" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="Flasche5" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheHals5" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="Flasche6" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheHals6" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="Flasche7" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheHals7" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="Flasche8" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheHals8" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="Flasche9" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheHals9" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.95, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="Flasche10" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheHals10" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="Flasche11" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheHals11" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.65, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="Flasche12" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheHals12" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="Flasche13" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 1.68, -9.3)
+mesh = SubResource("Z_0_045_0_06_0_3_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheHals13" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 1.89, -9.3)
+mesh = SubResource("Z_0_02_0_025_0_12_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheO0" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheO1" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheO2" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheO3" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.79, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheO4" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheO5" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheO6" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheO7" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.69, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheO8" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.06, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="FlascheO9" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.43, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheB")
+
+[node name="FlascheO10" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheK")
+
+[node name="FlascheO11" type="MeshInstance3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.17, 2.18, -9.3)
+mesh = SubResource("Z_0_045_0_055_0_28_8")
+surface_material_override/0 = SubResource("FlascheG")
+
+[node name="Barhocker0" type="Node3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -11.7)
+
+[node name="Polster" type="MeshInstance3D" parent="Bar/Barhocker0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Z_0_24_0_24_0_09_18")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Stiel" type="MeshInstance3D" parent="Bar/Barhocker0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("Z_0_035_0_035_0_68_8")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Fuss" type="MeshInstance3D" parent="Bar/Barhocker0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("Z_0_2_0_22_0_03_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Barhocker1" type="Node3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.7)
+
+[node name="Polster" type="MeshInstance3D" parent="Bar/Barhocker1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Z_0_24_0_24_0_09_18")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Stiel" type="MeshInstance3D" parent="Bar/Barhocker1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("Z_0_035_0_035_0_68_8")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Fuss" type="MeshInstance3D" parent="Bar/Barhocker1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("Z_0_2_0_22_0_03_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Barhocker2" type="Node3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -11.7)
+
+[node name="Polster" type="MeshInstance3D" parent="Bar/Barhocker2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Z_0_24_0_24_0_09_18")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Stiel" type="MeshInstance3D" parent="Bar/Barhocker2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("Z_0_035_0_035_0_68_8")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Fuss" type="MeshInstance3D" parent="Bar/Barhocker2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("Z_0_2_0_22_0_03_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Barhocker3" type="Node3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -11.7)
+
+[node name="Polster" type="MeshInstance3D" parent="Bar/Barhocker3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Z_0_24_0_24_0_09_18")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Stiel" type="MeshInstance3D" parent="Bar/Barhocker3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("Z_0_035_0_035_0_68_8")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Fuss" type="MeshInstance3D" parent="Bar/Barhocker3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("Z_0_2_0_22_0_03_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Barhocker4" type="Node3D" parent="Bar"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -11.7)
+
+[node name="Polster" type="MeshInstance3D" parent="Bar/Barhocker4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Z_0_24_0_24_0_09_18")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Stiel" type="MeshInstance3D" parent="Bar/Barhocker4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("Z_0_035_0_035_0_68_8")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Fuss" type="MeshInstance3D" parent="Bar/Barhocker4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("Z_0_2_0_22_0_03_18")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Moebel" type="Node3D" parent="."]
+
+[node name="Klavier" type="StaticBody3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.75, 0.5, -18)
+
+[node name="Mesh" type="MeshInstance3D" parent="Moebel/Klavier"]
+mesh = SubResource("B_1_7_0_95_1_2")
+surface_material_override/0 = SubResource("Schwarz")
+
+[node name="Form" type="CollisionShape3D" parent="Moebel/Klavier"]
+shape = SubResource("S_1_7_0_95_1_2")
+
+[node name="KlavierDeckel" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.75, 1, -18)
+mesh = SubResource("B_1_7_0_05_1_2")
+surface_material_override/0 = ExtResource("mat_lack")
+
+[node name="Tasten" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.75, 0.86, -18)
+mesh = SubResource("B_0_5_0_05_1_1")
+surface_material_override/0 = SubResource("Tasten")
+
+[node name="KlavierBein0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.4, 0.25, -17.5)
+mesh = SubResource("Z_0_05_0_05_0_5_8")
+surface_material_override/0 = SubResource("Schwarz")
+
+[node name="KlavierBein1" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.4, 0.25, -18.5)
+mesh = SubResource("Z_0_05_0_05_0_5_8")
+surface_material_override/0 = SubResource("Schwarz")
+
+[node name="Klavierhocker" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0.46, -18)
+mesh = SubResource("Z_0_22_0_22_0_06_14")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="KlavierhockerStiel" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0.22, -18)
+mesh = SubResource("Z_0_04_0_04_0_44_8")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Sofa0" type="StaticBody3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4, 0.25, -9.6)
+
+[node name="Mesh" type="MeshInstance3D" parent="Moebel/Sofa0"]
+mesh = SubResource("B_2_2_0_5_0_8")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Form" type="CollisionShape3D" parent="Moebel/Sofa0"]
+shape = SubResource("S_2_2_0_5_0_8")
+
+[node name="SofaLehne0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4, 0.75, -9.28)
+mesh = SubResource("B_2_2_0_55_0_2")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="SofaArm0_0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 0.5, -9.6)
+mesh = SubResource("B_0_2_0_3_0_8")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="SofaArm1_0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0.5, -9.6)
+mesh = SubResource("B_0_2_0_3_0_8")
+surface_material_override/0 = SubResource("Samt")
+
+[node name="Sofa1" type="StaticBody3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.4, 0.25, -17.9)
+
+[node name="Mesh" type="MeshInstance3D" parent="Moebel/Sofa1"]
+mesh = SubResource("B_0_8_0_5_2_0")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="Topf0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3, 0.25, -9.5)
+mesh = SubResource("Z_0_28_0_2_0_5_12")
+surface_material_override/0 = SubResource("Topf")
+
+[node name="Palme0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3, 1.15, -9.5)
+mesh = SubResource("K_0_55_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="PalmeOben0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.18, 1.65, -9.58)
+mesh = SubResource("K_0_38_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="Topf1" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3, 0.25, -9.5)
+mesh = SubResource("Z_0_28_0_2_0_5_12")
+surface_material_override/0 = SubResource("Topf")
+
+[node name="Palme1" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.3, 1.15, -9.5)
+mesh = SubResource("K_0_55_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="PalmeOben1" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.42, 1.65, -9.58)
+mesh = SubResource("K_0_38_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="Topf2" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3, 0.25, -18.5)
+mesh = SubResource("Z_0_28_0_2_0_5_12")
+surface_material_override/0 = SubResource("Topf")
+
+[node name="Palme2" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3, 1.15, -18.5)
+mesh = SubResource("K_0_55_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="PalmeOben2" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.18, 1.65, -18.58)
+mesh = SubResource("K_0_38_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="Topf3" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.25, -9.7)
+mesh = SubResource("Z_0_28_0_2_0_5_12")
+surface_material_override/0 = SubResource("Topf")
+
+[node name="Palme3" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.15, -9.7)
+mesh = SubResource("K_0_55_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="PalmeOben3" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38, 1.65, -9.78)
+mesh = SubResource("K_0_38_10")
+surface_material_override/0 = SubResource("Blatt")
+
+[node name="Laeufer" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 0.006, -14)
+mesh = SubResource("B_7_4_0_02_1_7")
+surface_material_override/0 = SubResource("SamtDunkel")
+
+[node name="LaeuferR0" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 0.012, -13.15)
+mesh = SubResource("B_7_4_0_025_0_06")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="LaeuferR1" type="MeshInstance3D" parent="Moebel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9, 0.012, -14.85)
+mesh = SubResource("B_7_4_0_025_0_06")
+surface_material_override/0 = ExtResource("mat_gold")
+
+[node name="Roulette0" parent="." instance=ExtResource("m_roulette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -6.4, 0, -12.6)
+script = ExtResource("skript_kd")
+art = "roulette"
+
+[node name="Sitz" parent="Roulette0" instance=ExtResource("s_sitz")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0, 1.15)
+
+[node name="Croupier0" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.8, 0, -12.6)
+beruf = "kellner"
+nr = 20
+bleibt = true
+
+[node name="Roulette1" parent="." instance=ExtResource("m_roulette")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -6.4, 0, -16.2)
+script = ExtResource("skript_kd")
+art = "roulette"
+
+[node name="Sitz" parent="Roulette1" instance=ExtResource("s_sitz")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0, 1.15)
+
+[node name="Croupier1" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -4.8, 0, -16.2)
+beruf = "kellner"
+nr = 21
+bleibt = true
+
+[node name="WuerfelTisch" parent="." instance=ExtResource("m_kartentisch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0, -17.2)
+script = ExtResource("skript_kd")
+art = "wuerfel"
+
+[node name="Auflage" parent="WuerfelTisch" instance=ExtResource("s_awu")]
+
+[node name="Sitz" parent="WuerfelTisch" instance=ExtResource("s_sitz")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.62)
+
+[node name="CroupierWuerfel" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0, -18.62)
+beruf = "kellner"
+nr = 24
+bleibt = true
+
+[node name="Kartentisch" parent="." instance=ExtResource("m_kartentisch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0, -17.2)
+script = ExtResource("skript_kd")
+art = "blackjack"
+
+[node name="Auflage" parent="Kartentisch" instance=ExtResource("s_abj")]
+
+[node name="Sitz" parent="Kartentisch" instance=ExtResource("s_sitz")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.62)
+
+[node name="CroupierKarten" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0, -18.62)
+beruf = "kellner"
+nr = 22
+bleibt = true
+
+[node name="WattenTisch" parent="." instance=ExtResource("m_kartentisch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, 0, -17.2)
+script = ExtResource("skript_kd")
+art = "watten"
+
+[node name="Auflage" parent="WattenTisch" instance=ExtResource("s_awa")]
+
+[node name="Sitz" parent="WattenTisch" instance=ExtResource("s_sitz")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.62)
+
+[node name="CroupierWatten" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, 0, -18.62)
+beruf = "kellner"
+nr = 23
+bleibt = true
+
+[node name="Slot0" parent="." instance=ExtResource("s_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -7.8, 0, -9.55)
+
+[node name="Slot1" parent="." instance=ExtResource("s_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -6.6, 0, -9.55)
+
+[node name="Slot2" parent="." instance=ExtResource("s_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -5.4, 0, -9.55)
+
+[node name="Slot3" parent="." instance=ExtResource("s_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -4.2, 0, -9.55)
+
+[node name="Slot4" parent="." instance=ExtResource("s_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 4, 0, -9.55)
+
+[node name="Slot5" parent="." instance=ExtResource("s_slot")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 5.2, 0, -9.55)
+
+[node name="Barkeeper" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -9.75)
+beruf = "zapfer"
+nr = 40
+bleibt = true
+
+[node name="Pianist" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 6.2, 0, -17.35)
+beruf = ""
+nr = 41
+bleibt = true
+
+[node name="Kellnerin0" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -12.8)
+beruf = "kellner"
+nr = 42
+bleibt = true
+runde = Array[Vector3]([Vector3(0, 0, 0), Vector3(3.6, 0, 0), Vector3(3.6, 0, 3.4), Vector3(0, 0, 3.4)])
+tempo = 0.9
+pause = 2.5
+
+[node name="Kellner1" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 0, -12.6)
+beruf = "kellner"
+nr = 43
+bleibt = true
+runde = Array[Vector3]([Vector3(0, 0, 0), Vector3(-3.0, 0, 0), Vector3(-3.0, 0, -2.4), Vector3(0, 0, -2.4)])
+tempo = 0.8
+pause = 3.0
+
+[node name="Gast0" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, -1.2, 0, -11.6)
+nr = 50
+bleibt = true
+
+[node name="Gast1" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(-0.98481, 0, -0.17365, 0, 1, 0, 0.17365, 0, -0.98481, 0.1, 0, -11.7)
+nr = 51
+bleibt = true
+
+[node name="Gast2" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(-0.98481, 0, 0.17365, 0, 1, 0, -0.17365, 0, -0.98481, 1.6, 0, -11.6)
+nr = 52
+bleibt = true
+
+[node name="Gast3" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 7.2, 0, -10.5)
+nr = 53
+bleibt = true
+
+[node name="Gast4" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(-0.5, 0, 0.86603, 0, 1, 0, -0.86603, 0, -0.5, 7.9, 0, -10.2)
+nr = 54
+bleibt = true
+
+[node name="Gast5" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -8, 0, -14.5)
+nr = 55
+bleibt = true
+
+[node name="Gast6" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(-0.93969, 0, 0.34202, 0, 1, 0, -0.34202, 0, -0.93969, 6.9, 0, -16.3)
+nr = 56
+bleibt = true
+
+[node name="Tuersteher" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -12.3)
+beruf = "security"
+nr = 30
+bleibt = true
+
+[node name="TuerKontakt" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.2, 0, -13.3)
+script = ExtResource("skript_kd")
+art = "tuer"
+
+[node name="Tuersteher2" parent="." instance=ExtResource("s_figur")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 10, 0, -15.7)
+beruf = "security"
+nr = 31
+bleibt = true

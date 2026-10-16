@@ -231,11 +231,13 @@ static func _mit_wohnwagen(liste: Array) -> Array:
 		neu.append(HUBER_PLATZ.duplicate())
 	return neu
 
-## Das Casino hängt hinten an Hubers Zelt (scenes/casino.tscn, im Koordinatensystem des Zelts gemessen: 8 bis 21 m
-## hinter dem Zelt, 6,7 m nach beiden Seiten). Ältere Karten haben dort Buden und Bäume stehen — mitten im Casino.
+## Das Casino hängt hinten an Hubers Zelt (scenes/casino.tscn, im Koordinatensystem des Zelts gemessen: 8 bis 20 m
+## hinter dem Zelt, 9,3 m nach beiden Seiten; die Tür zeigt zur Seite (+x) auf die Wiese, davor liegt der Eingangsbereich).
+## Ältere Karten haben dort Buden und Bäume stehen — mitten im Casino.
 ## Die fliegen beim Laden raus. (Das Zelt ist in der Karte um 90° gedreht gespeichert, deshalb rechnet es im Zeltsystem.)
-const CASINO_HINTEN := Vector2(-24.5, -7.0)
-const CASINO_BREIT := 9.0
+const CASINO_HINTEN := Vector2(-21.0, -7.0)
+## Von der linken Außenwand bis zum Ende des Eingangsteppichs (x im Zeltsystem)
+const CASINO_X := Vector2(-10.5, 14.5)
 
 static func _ohne_casino_platz(liste: Array) -> Array:
 	var huber: Dictionary = {}
@@ -255,7 +257,7 @@ static func _ohne_casino_platz(liste: Array) -> Array:
 			var dz := float(e.get("z", 0.0)) - hz
 			var lx := dx * cos(r) - dz * sin(r)
 			var lz := dx * sin(r) + dz * cos(r)
-			if lz >= CASINO_HINTEN.x and lz <= CASINO_HINTEN.y and absf(lx) <= CASINO_BREIT:
+			if lz >= CASINO_HINTEN.x and lz <= CASINO_HINTEN.y and lx >= CASINO_X.x and lx <= CASINO_X.y:
 				continue
 		neu.append(e)
 	return neu

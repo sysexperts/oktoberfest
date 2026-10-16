@@ -68,7 +68,7 @@ class Lauf extends Node:
 		for n in tisch.get_children():
 			if str(n.name).begins_with("Slot") and n.get("art") == "slot" and n.hinweis_text(false) == "HINT_CASINO_SLOT":
 				automaten += 1
-		_check("Zwei Spielautomaten im Casino", automaten == 2, str(automaten))
+		_check("Sechs Spielautomaten im Casino", automaten == 6, str(automaten))
 		get_tree().call_group("slot", "drehen", [1, 2, 3])
 		await get_tree().create_timer(3.0).timeout
 		var walze := tisch.get_node("Slot0/Kontrolle/Walzen/Walze2") as Sprite3D

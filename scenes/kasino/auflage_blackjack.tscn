@@ -1,0 +1,145 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/casino/tisch_blackjack.png" id="t_blackjack"]
+[ext_resource type="Texture2D" path="res://assets/casino/karte_pik_ass.png" id="k_karte_pik_ass"]
+[ext_resource type="Texture2D" path="res://assets/casino/karte_ruecken.png" id="k_karte_ruecken"]
+[ext_resource type="Texture2D" path="res://assets/casino/karte_herz_koenig.png" id="k_karte_herz_koenig"]
+[ext_resource type="Texture2D" path="res://assets/casino/karte_karo_9.png" id="k_karte_karo_9"]
+
+[sub_resource type="StandardMaterial3D" id="M_blackjack"]
+transparency = 2
+alpha_scissor_threshold = 0.35
+albedo_texture = ExtResource("t_blackjack")
+roughness = 1.0
+cull_mode = 2
+
+[sub_resource type="QuadMesh" id="Q_blackjack"]
+material = SubResource("M_blackjack")
+size = Vector2(2.44, 2.44)
+
+[sub_resource type="CylinderMesh" id="C_Stapel0"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.044
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel0"]
+albedo_color = Color(0.8, 0.12, 0.14, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel0"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel0"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="C_Stapel1"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.033
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel1"]
+albedo_color = Color(0.15, 0.3, 0.75, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel1"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel1"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="C_Stapel2"]
+top_radius = 0.026
+bottom_radius = 0.026
+height = 0.066
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MC_Stapel2"]
+albedo_color = Color(0.08, 0.08, 0.1, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CR_Stapel2"]
+top_radius = 0.0275
+bottom_radius = 0.0275
+height = 0.004
+radial_segments = 20
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MR_Stapel2"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.5
+
+[node name="AuflageBlackjack" type="Node3D"]
+
+[node name="Aufdruck" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 6.123233995736766e-17, 1.0, 0.0, -1.0, 6.123233995736766e-17, 0, 0.92, 0)
+mesh = SubResource("Q_blackjack")
+cast_shadow = 0
+
+[node name="BankKarte0" type="Sprite3D" parent="."]
+transform = Transform3D(0.9975640502598242, 0.0, -0.0697564737441253, 0.0, 1.0, 0.0, 0.0697564737441253, -0.0, 0.9975640502598242, -0.05, 0.924, -0.62)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_karte_pik_ass")
+
+[node name="BankKarte1" type="Sprite3D" parent="."]
+transform = Transform3D(0.9986295347545738, 0.0, 0.052335956242943835, -0.0, 1.0, 0.0, -0.052335956242943835, -0.0, 0.9986295347545738, 0.05, 0.924, -0.62)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_karte_ruecken")
+
+[node name="SpielerKarte0" type="Sprite3D" parent="."]
+transform = Transform3D(0.9961946980917455, 0.0, 0.08715574274765817, -0.0, 1.0, 0.0, -0.08715574274765817, -0.0, 0.9961946980917455, -0.05, 0.924, 0.2)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_karte_herz_koenig")
+
+[node name="SpielerKarte1" type="Sprite3D" parent="."]
+transform = Transform3D(0.9986295347545738, 0.0, -0.052335956242943835, 0.0, 1.0, 0.0, 0.052335956242943835, -0.0, 0.9986295347545738, 0.06, 0.924, 0.2)
+pixel_size = 0.00029
+axis = 1
+texture = ExtResource("k_karte_karo_9")
+
+[node name="Stapel0" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.9400000000000001, 0.786)
+mesh = SubResource("C_Stapel0")
+surface_material_override/0 = SubResource("MC_Stapel0")
+
+[node name="Stapel0Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.0, 0.9400000000000001, 0.786)
+mesh = SubResource("CR_Stapel0")
+surface_material_override/0 = SubResource("MR_Stapel0")
+
+[node name="Stapel1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, -0.39, 0.9345, 0.68)
+mesh = SubResource("C_Stapel1")
+surface_material_override/0 = SubResource("MC_Stapel1")
+
+[node name="Stapel1Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, -0.39, 0.9345, 0.68)
+mesh = SubResource("CR_Stapel1")
+surface_material_override/0 = SubResource("MR_Stapel1")
+
+[node name="Stapel2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.39, 0.9510000000000001, 0.68)
+mesh = SubResource("C_Stapel2")
+surface_material_override/0 = SubResource("MC_Stapel2")
+
+[node name="Stapel2Rand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, -0.0, 1.0, 0.39, 0.9510000000000001, 0.68)
+mesh = SubResource("CR_Stapel2")
+surface_material_override/0 = SubResource("MR_Stapel2")
