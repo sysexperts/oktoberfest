@@ -19,7 +19,7 @@ der Koop-Modus, ohne dass das Spiel schon im Store ist. In der Freundesliste ste
 - Beide Seiten müssen **dieselbe Version** haben (die Version steht unten im Hauptmenü).
 
 ## Hilfreiche Tasten
-- **F3** Leistungsanzeige (FPS, Bildzeit), **F4** Leistungstest (dauert eine Minute, Screenshot an uns schicken)
+- **F3** Leistungsanzeige (FPS, Bildzeit)
 - **Q** halten: Emote-Rad · **F1** Hilfe
 
 ## Wenn etwas nicht klappt

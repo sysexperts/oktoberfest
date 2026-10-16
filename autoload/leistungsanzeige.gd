@@ -39,10 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_ergebnis_steht = false
 		_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		_text.add_theme_font_size_override("font_size", 22)
-	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F4:
-		_taste_f4()
-		get_viewport().set_input_as_handled()
-		return
+	# F4 (Selbsttest) ist im Spiel abgeschaltet: _taste_f4() bleibt für Messwerkzeuge, hängt aber an keiner Taste mehr
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3:
 		visible = not visible
 		_t = INTERVALL
