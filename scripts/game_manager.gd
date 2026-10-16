@@ -878,10 +878,22 @@ const GEMUET_JE_100 := 0.01
 const GEMUET_MAX := 0.25
 
 ## Wert der aufgestellten Einrichtung in Euro
+## Wird für jeden Gast jedes Bild gebraucht (Geduld) — darum je Bild und Deko-Anzahl nur einmal gerechnet.
+## (Früher: Gäste × Deko-Stücke × jedes Bild, mit 60 Gästen und viel Deko mehrere ms pro Bild.)
+var _deko_wert_bild := -1
+var _deko_wert_anzahl := -1
+var _deko_wert_cache := 0
+
 func deko_wert() -> int:
+	var bild := Engine.get_process_frames()
+	if bild == _deko_wert_bild and _deko_wert_anzahl == _einrichtung.size():
+		return _deko_wert_cache
 	var w := 0
 	for e: Dictionary in _einrichtung.values():
 		w += Katalog.preis(str(e.get("art", "")))
+	_deko_wert_bild = bild
+	_deko_wert_anzahl = _einrichtung.size()
+	_deko_wert_cache = w
 	return w
 
 ## Geduldzuschlag aus der Gemütlichkeit (0.0 … GEMUET_MAX)
