@@ -18,13 +18,13 @@ class Lauf extends Node:
 		e.keycode = KEY_F8
 		e.pressed = true
 		la._unhandled_input(e)
-		var ende := Time.get_ticks_msec() + 280000
+		var ende := Time.get_ticks_msec() + 420000
 		await get_tree().create_timer(2.0).timeout
 		while la._test_laeuft and Time.get_ticks_msec() < ende:
 			await get_tree().process_frame
 		var f := FileAccess.open("user://leistungstest.txt", FileAccess.READ)
 		var t := f.get_as_text() if f else ""
 		print(t)
-		var ok: bool = t.contains("3D-Bild komplett aus") and gm.process_mode == Node.PROCESS_MODE_INHERIT and gm.is_processing() and not get_viewport().disable_3d
+		var ok: bool = t.contains("alle Skripte aus") and t.contains("Töne aus") and gm.process_mode == Node.PROCESS_MODE_INHERIT and gm.is_processing() and not get_viewport().disable_3d
 		print("ERGEBNIS: ", "OK" if ok else "FEHLGESCHLAGEN")
 		get_tree().quit()

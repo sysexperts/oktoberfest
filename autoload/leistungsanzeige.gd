@@ -231,6 +231,33 @@ func _bildzeit(s: float) -> float:
 		f += 1
 	return t / maxf(1.0, float(f)) * 1000.0
 
+## Alle Knoten dieser Klasse unter welt an- oder abschalten (process_mode); Zustand merkt sich der Knoten per Meta
+func _alle_aus(welt: Node, klasse: String, an: bool) -> void:
+	for n in welt.find_children("*", klasse, true, false):
+		if an:
+			if n.has_meta("_lz_pm"):
+				n.process_mode = int(n.get_meta("_lz_pm"))
+				n.remove_meta("_lz_pm")
+		elif not n.has_meta("_lz_pm"):
+			n.set_meta("_lz_pm", n.process_mode)
+			n.process_mode = Node.PROCESS_MODE_DISABLED
+
+## Alle Skripte unter welt: Verarbeitung ein/aus (die Knoten merken sich, ob sie vorher an waren)
+func _skripte_aus(welt: Node, an: bool) -> void:
+	for n in welt.find_children("*", "", true, false):
+		if n.get_script() == null:
+			continue
+		if an:
+			if n.has_meta("_lz_sk"):
+				var z: Array = n.get_meta("_lz_sk")
+				n.set_process(bool(z[0]))
+				n.set_physics_process(bool(z[1]))
+				n.remove_meta("_lz_sk")
+		elif not n.has_meta("_lz_sk"):
+			n.set_meta("_lz_sk", [n.is_processing(), n.is_physics_processing()])
+			n.set_process(false)
+			n.set_physics_process(false)
+
 func _selbsttest(welt: Node) -> void:
 	_test_laeuft = true
 	_test_zeilen = PackedStringArray()
@@ -298,6 +325,41 @@ func _selbsttest(welt: Node) -> void:
 			func() -> void:
 				vp.disable_3d = false
 				welt.set_process(true)],
+		# Wer in der Verarbeitung kostet? Jeweils mit 3D aus, damit nur CPU-Arbeit übrig bleibt.
+		["3D aus + alle Animationen aus (%d)" % welt.find_children("*", "AnimationPlayer", true, false).size(), func() -> void:
+				vp.disable_3d = true
+				_alle_aus(welt, "AnimationPlayer", false),
+			func() -> void:
+				vp.disable_3d = false
+				_alle_aus(welt, "AnimationPlayer", true)],
+		["3D aus + alle Partikel aus", func() -> void:
+				vp.disable_3d = true
+				_alle_aus(welt, "GPUParticles3D", false)
+				_alle_aus(welt, "CPUParticles3D", false),
+			func() -> void:
+				vp.disable_3d = false
+				_alle_aus(welt, "GPUParticles3D", true)
+				_alle_aus(welt, "CPUParticles3D", true)],
+		["3D aus + alle Töne aus", func() -> void:
+				vp.disable_3d = true
+				_alle_aus(welt, "AudioStreamPlayer3D", false)
+				_alle_aus(welt, "AudioStreamPlayer", false),
+			func() -> void:
+				vp.disable_3d = false
+				_alle_aus(welt, "AudioStreamPlayer3D", true)
+				_alle_aus(welt, "AudioStreamPlayer", true)],
+		["3D aus + alle Skripte aus (_process, _physics_process)", func() -> void:
+				vp.disable_3d = true
+				_skripte_aus(welt, false),
+			func() -> void:
+				vp.disable_3d = false
+				_skripte_aus(welt, true)],
+		["3D aus + Physik-Körper und Kollision aus", func() -> void:
+				vp.disable_3d = true
+				_alle_aus(welt, "PhysicsBody3D", false),
+			func() -> void:
+				vp.disable_3d = false
+				_alle_aus(welt, "PhysicsBody3D", true)],
 		["3D aus + ALLE Spielknoten pausiert (Rest = Engine)", func() -> void:
 				vp.disable_3d = true
 				welt.process_mode = Node.PROCESS_MODE_DISABLED,
