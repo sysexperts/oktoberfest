@@ -50,7 +50,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		_skript_rangliste()
 		get_viewport().set_input_as_handled()
 		return
-	# F4 (Selbsttest) ist im Spiel abgeschaltet: _taste_f4() bleibt für Messwerkzeuge, hängt aber an keiner Taste mehr
+	# F8 (nur bei eingeschalteter Anzeige): Selbsttest, schaltet Teile nacheinander ab und misst die Bildzeit (ca. 1 Minute)
+	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F8 and visible and not _rangliste_laeuft:
+		_taste_f4()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3:
 		visible = not visible
 		if visible:
@@ -286,6 +290,20 @@ func _selbsttest(welt: Node) -> void:
 		["ohne Altstadt-Kulisse", func() -> void: _karte_teil(karte, "altstadt", false), func() -> void: _karte_teil(karte, "altstadt", true)],
 		["ohne Zelt", func() -> void: if zelt: zelt.visible = false, func() -> void: if zelt: zelt.visible = true],
 		["3D-Auflösung 50 %", func() -> void: vp.scaling_3d_scale = 0.5, func() -> void: vp.scaling_3d_scale = scale_alt],
+		# Zerlegung: was bleibt übrig, wenn das 3D-Bild nicht gezeichnet wird? Und wenn zusätzlich die Spiellogik pausiert?
+		["3D-Bild komplett aus (nur Skripte + Oberfläche)", func() -> void: vp.disable_3d = true, func() -> void: vp.disable_3d = false],
+		["3D aus + GameManager pausiert", func() -> void:
+				vp.disable_3d = true
+				welt.set_process(false),
+			func() -> void:
+				vp.disable_3d = false
+				welt.set_process(true)],
+		["3D aus + ALLE Spielknoten pausiert (Rest = Engine)", func() -> void:
+				vp.disable_3d = true
+				welt.process_mode = Node.PROCESS_MODE_DISABLED,
+			func() -> void:
+				vp.disable_3d = false
+				welt.process_mode = Node.PROCESS_MODE_INHERIT],
 	]
 	for st: Array in schritte:
 		(st[1] as Callable).call()

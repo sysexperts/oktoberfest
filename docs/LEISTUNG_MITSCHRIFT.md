@@ -14,3 +14,8 @@ Die Datei wächst an (neue Sitzungen hängen unten an); zum Neustart die Datei l
 Bei eingeschalteter Anzeige (F3) im späten Spiel **F7** drücken. Das Spiel schaltet nacheinander die Skripte aus, misst die Skriptzeit
 und schreibt `leistung_skripte.txt` in denselben Ordner wie `leistung_log.csv`. Dauert einige Minuten, nichts anfassen
 (Anzeige: „Rangliste n/m“). Bitte die Datei auch schicken, am besten bei vollem Zelt.
+
+## Zerlegung: wo bleibt die Zeit? (F8)
+Bei eingeschalteter Anzeige (F3) im späten Spiel bei vollem Zelt **F8** drücken. Das Spiel misst rund eine Minute lang die Bildzeit und schaltet
+nacheinander Teile ab (Lichter, Effekte, Bäume, Zelt, 3D komplett …); am Ende stehen die Werte als Liste im Bild und in `leistungstest.txt`
+im selben Ordner wie `leistung_log.csv`. Bitte nichts anfassen, bis „Fertig“ steht, und die Datei schicken (oder einen Screenshot).
