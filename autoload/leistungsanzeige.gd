@@ -44,7 +44,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F3 and _ergebnis_steht:
 		_ergebnis_steht = false
-		_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_text.add_theme_font_size_override("font_size", 22)
 	if event is InputEventKey and event.pressed and not event.echo and (event as InputEventKey).keycode == KEY_F7 and visible and not _rangliste_laeuft:
 		_skript_rangliste()
@@ -187,10 +187,7 @@ func _process(delta: float) -> void:
 	var fps := Engine.get_frames_per_second()
 	var groesse := Vector2(DisplayServer.window_get_size()) * vp.scaling_3d_scale
 	var fenster := DisplayServer.window_get_size()
-	_text.text = "%d FPS  ·  %.1f ms\
-Skripte(echt) %.1f  Physik %.1f  Render-CPU %.1f  GPU %.1f ms\
-Aufrufe %d  ·  Objekte %d  ·  Dreiecke %.1f Mio.\
-Bild %dx%d (3D %dx%d)  ·  Grafik %d  ·  %sMitschrift: leistung_log.csv" % [
+	_text.text = "%d FPS  ·  %.1f ms\nSkripte(echt) %.1f  Physik %.1f  Render-CPU %.1f  GPU %.1f ms\nAufrufe %d  ·  Objekte %d  ·  Dreiecke %.1f Mio.\nBild %dx%d (3D %dx%d)  ·  Grafik %d  ·  %s\nMitschrift: leistung_log.csv" % [
 		fps, 1000.0 / maxf(1.0, float(fps)),
 		_skript_ms,
 		Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
