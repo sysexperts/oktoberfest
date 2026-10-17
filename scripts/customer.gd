@@ -92,10 +92,13 @@ func set_net(pos: Vector3, yaw: float) -> void:
 	_net_yaw = yaw
 
 func set_order(state: int, kind: int, type: int, ratio: float) -> void:
+	patience_ratio = ratio
+	# Der Server ruft das für jeden Gast jedes Bild auf — die Sprechblase (Label3D mit Emojis) nur bei einer Änderung neu bauen
+	if state == order_state and kind == order_kind and type == order_type and _bubble_gebaut:
+		return
 	order_state = state
 	order_kind = kind
 	order_type = type
-	patience_ratio = ratio
 	_update_bubble()
 
 ## Gute Stimmung: auf den Tisch steigen und tanzen (an) bzw. zurück (aus).
@@ -189,9 +192,12 @@ func _update_vomit(delta: float) -> void:
 func can_serve(kind: int, type: int) -> bool:
 	return order_state == 1 and kind == order_kind and type == order_type
 
+var _bubble_gebaut := false
+
 func _update_bubble() -> void:
 	if _bubble == null or _vomit_active:
 		return   # kusarken 🤮 baloncuğu ezilmesin
+	_bubble_gebaut = true
 	# Test 13.09.: im vollen Zelt überlappten die Texte — normal nur Icons,
 	# mit gedrückter Strg-Taste Gästetyp und Bestellung als Text
 	var typ_zeile := ""
