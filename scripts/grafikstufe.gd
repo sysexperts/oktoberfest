@@ -4,7 +4,7 @@ extends Node
 ##            keine Farbkorrektur, harte Schatten, kein Detail-Shader, kein Bildfilter
 ##   Mittel:  200 Besucher, zwei von drei Lichtern, Glow, Nebel, Farbkorrektur,
 ##            weiche Schatten, Detail-Shader und Bildfilter, kein SSAO
-##   Hoch:    alles, wie gebaut, dazu SSIL
+##   Hoch:    alles wie Mittel plus SSAO, MSAA und alle Lichter (SSIL und vier Schattenebenen seit v442 aus)
 ## Kantenglättung: Niedrig keine, Mittel FXAA (rund 5 % GPU), Hoch MSAA 2× plus FXAA
 ## (rund 19 %). Ohne sie flimmern Kanten, an denen zwei Objekte zusammentreffen
 ## (Geländer an der Zeltwand, Treppenwangen), sobald sich die Kamera bewegt.
@@ -18,11 +18,13 @@ const BESUCHER := [24, 48, 80]
 ## Sichtweite der Kleinteile (scripts/sichtweite.gd) je Stufe: auf schwächerer Grafik früher ausblenden
 const SICHT_FAKTOR := [0.4, 0.6, 0.75]
 ## Schattenstufen der Sonne: Niedrig eine, Mittel zwei, Hoch vier (Schatten zeichnen die Karte mehrfach neu)
-const SCHATTEN_STUFEN := [DirectionalLight3D.SHADOW_ORTHOGONAL, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS]
-const SCHATTEN_WEITE := [50.0, 80.0, 0.0]
+## v442: Hoch nutzt wie Mittel zwei Ebenen (statt vier) bis 90 m — die Mitschrift der Spieler (RTX 3060 Ti) zeigte 17 ms GPU, fast
+## unabhängig von der Auflösung: Schatten und Lichter statt Pixel. Vier Ebenen zeichnen die Karte vier Mal.
+const SCHATTEN_STUFEN := [DirectionalLight3D.SHADOW_ORTHOGONAL, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS]
+const SCHATTEN_WEITE := [50.0, 80.0, 90.0]
 var _schatten_weite0 := -1.0
 ## Ab dieser Entfernung blenden Kirmeslichter aus (0 = nie)
-const LICHT_AUSBLENDEN := [22.0, 32.0, 42.0]
+const LICHT_AUSBLENDEN := [22.0, 30.0, 34.0]
 const DETAIL := preload("res://assets/shader/detail.gdshader")
 ## Weiche Schatten der Sonne (Stufe Mittel/Hoch)
 const SONNE_WINKEL := 1.2
@@ -70,7 +72,7 @@ func anwenden() -> void:
 	var we := get_node_or_null(welt) as WorldEnvironment
 	if we and we.environment:
 		we.environment.ssao_enabled = stufe >= 2
-		we.environment.ssil_enabled = stufe >= 2
+		we.environment.ssil_enabled = false   # v442: SSIL kostet viel und fällt kaum auf (SSAO bleibt auf Hoch)
 		we.environment.glow_enabled = stufe >= 1
 		we.environment.fog_enabled = stufe >= 1
 		# Farbkorrektur kostet einen ganzen Nachbearbeitungsschritt — gemessen
