@@ -167,6 +167,15 @@ var fps_grenze := 0
 var vsync := true
 ## 0 Niedrig, 1 Mittel, 2 Hoch — was das bewirkt, steht in scripts/grafikstufe.gd
 var grafik := 2
+## Einzelregler der Grafik (Reiter Grafik): -1 = so, wie es die Qualitätsstufe vorgibt, sonst die gewählte Stufe 0 bis 2.
+## Wirkung steht in scripts/grafikstufe.gd (Schatten, Lichter, Effekte, Kantenglättung, Sichtweite, Besucher).
+const FEIN := ["schatten", "lichter", "effekte", "kante", "sicht", "besucher"]
+var fein := {"schatten": -1, "lichter": -1, "effekte": -1, "kante": -1, "sicht": -1, "besucher": -1}
+
+## Wert eines Einzelreglers: die eigene Wahl oder, bei -1, die Stufe der Grafikqualität
+func fein_wert(name: String) -> int:
+	var w := int(fein.get(name, -1))
+	return grafik if w < 0 else clampi(w, 0, 2)
 ## Renderauflösung der 3D-Welt (0,5 … 1,0); Menüs bleiben immer scharf
 var aufloesung := 1.0
 ## Darstellung: "forward_plus" (Qualität) oder "gl_compatibility" (Leistung).
@@ -393,6 +402,16 @@ func anwenden() -> void:
 ## Bildschirm, Modus und Fenstergröße setzen. Reihenfolge zählt: erst auf den
 ## richtigen Bildschirm, dann Modus, im Fenster dann Größe und Mitte.
 func _anzeige_anwenden() -> void:
+	_anzeige_setzen()
+	# Windows/Godot fällt bei Änderungen (V-Sync, Auflösung, Monitor) manchmal still ins Fenster zurück: kurz danach prüfen
+	if is_inside_tree() and modus != "fenster":
+		get_tree().create_timer(0.4).timeout.connect(_anzeige_pruefen)
+
+func _anzeige_pruefen() -> void:
+	if modus != "fenster" and DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_WINDOWED and DisplayServer.get_name() != "headless":
+		_anzeige_setzen()
+
+func _anzeige_setzen() -> void:
 	vollbild = modus != "fenster"
 	var anzahl := DisplayServer.get_screen_count()
 	var ziel := monitor if monitor >= 0 and monitor < anzahl else DisplayServer.window_get_current_screen()
@@ -653,6 +672,8 @@ func speichern() -> void:
 	cfg.set_value("grafik", "vollbild_seit_v276", true)
 	cfg.set_value("grafik", "vsync", vsync)
 	cfg.set_value("grafik", "qualitaet", grafik)
+	for k: String in FEIN:
+		cfg.set_value("grafik", "fein_" + k, int(fein[k]))
 	cfg.set_value("grafik", "aufloesung", aufloesung)
 	cfg.set_value("grafik", "renderer", renderer)
 	for bus: String in lautstaerke:
@@ -700,6 +721,8 @@ func _lade() -> void:
 		fps_grenze = 0
 	vsync = bool(cfg.get_value("grafik", "vsync", vsync))
 	grafik = clampi(int(cfg.get_value("grafik", "qualitaet", grafik)), 0, 2)
+	for k: String in FEIN:
+		fein[k] = clampi(int(cfg.get_value("grafik", "fein_" + k, -1)), -1, 2)
 	aufloesung = clampf(float(cfg.get_value("grafik", "aufloesung", aufloesung)), 0.5, 1.0)
 	renderer = str(cfg.get_value("grafik", "renderer", renderer))
 	if not renderer in RENDERER:

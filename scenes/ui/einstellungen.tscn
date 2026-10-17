@@ -259,6 +259,96 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 horizontal_alignment = 2
 
+[node name="FeinTitel" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.42, 1)
+theme_override_font_sizes/font_size = 22
+text = "SET_FEIN_TITEL"
+
+[node name="FeinSchattenZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinSchattenZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FEIN_SCHATTEN"
+
+[node name="FeinSchatten" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinSchattenZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
+[node name="FeinLichterZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinLichterZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FEIN_LICHTER"
+
+[node name="FeinLichter" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinLichterZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
+[node name="FeinEffekteZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinEffekteZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FEIN_EFFEKTE"
+
+[node name="FeinEffekte" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinEffekteZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
+[node name="FeinKanteZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinKanteZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FEIN_KANTE"
+
+[node name="FeinKante" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinKanteZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
+[node name="FeinSichtZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinSichtZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FEIN_SICHT"
+
+[node name="FeinSicht" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinSichtZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
+[node name="FeinBesucherZeile" type="HBoxContainer" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+
+[node name="Text" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinBesucherZeile"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SET_FEIN_BESUCHER"
+
+[node name="FeinBesucher" type="OptionButton" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt/FeinBesucherZeile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 40)
+layout_mode = 2
+
 [node name="QualitaetHinweis" type="Label" parent="Rahmen/Spalte/Inhalt/Reiter/Grafik/Rand/Inhalt"]
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 2

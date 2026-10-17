@@ -19,6 +19,13 @@ const REITER_TITEL := ["SET_TAB_GRAPHICS", "SET_TAB_AUDIO", "SET_TAB_CONTROLS", 
 const MODUS_NAMEN := ["SET_MODE_BORDERLESS", "SET_MODE_EXCLUSIVE", "SET_MODE_WINDOW"]
 @onready var _vsync: CheckButton = %Vsync
 @onready var _qualitaet: OptionButton = %Qualitaet
+## Einzelregler der Grafik: Name in Einstellungen.fein → Auswahl; Einträge: „wie Stufe“, dann je Regler drei Stufen
+@onready var _fein := {"schatten": %FeinSchatten, "lichter": %FeinLichter, "effekte": %FeinEffekte, "kante": %FeinKante, "sicht": %FeinSicht, "besucher": %FeinBesucher}
+const FEIN_STUFEN := {
+	"schatten": ["SET_FEIN_S0", "SET_FEIN_S1", "SET_FEIN_S2"], "lichter": ["SET_FEIN_L0", "SET_FEIN_L1", "SET_FEIN_L2"],
+	"effekte": ["SET_FEIN_E0", "SET_FEIN_E1", "SET_FEIN_E2"], "kante": ["SET_FEIN_K0", "SET_FEIN_K1", "SET_FEIN_K2"],
+	"sicht": ["SET_FEIN_V0", "SET_FEIN_V1", "SET_FEIN_V2"], "besucher": ["SET_FEIN_B0", "SET_FEIN_B1", "SET_FEIN_B2"],
+}
 @onready var _aufloesung: HSlider = %Aufloesung
 @onready var _aufloesung_wert: Label = %AufloesungWert
 
@@ -74,6 +81,8 @@ func _ready() -> void:
 	_fps.item_selected.connect(_on_fps)
 	_vsync.toggled.connect(_on_vsync)
 	_qualitaet.item_selected.connect(_on_qualitaet)
+	for k: String in _fein:
+		(_fein[k] as OptionButton).item_selected.connect(_on_fein.bind(k))
 	_aufloesung.value_changed.connect(_on_aufloesung)
 	# Größe der Oberfläche — eigene Datei user://ui.cfg (siehe menu_eingang.gd)
 	var ui := preload("res://scripts/menu_eingang.gd")
@@ -143,6 +152,13 @@ func _texte() -> void:
 	for i in QUALITAETEN.size():
 		_qualitaet.add_item(tr(QUALITAETEN[i]), i)
 	_qualitaet.select(Einstellungen.grafik)
+	for k: String in _fein:
+		var ob := _fein[k] as OptionButton
+		ob.clear()
+		ob.add_item(tr("SET_FEIN_AUTO"), 0)
+		for i in 3:
+			ob.add_item(tr(FEIN_STUFEN[k][i]), i + 1)
+		ob.select(int(Einstellungen.fein[k]) + 1)
 	_aufloesung_wert.text = "%d %%" % roundi(Einstellungen.aufloesung * 100.0)
 	_anzeige_listen()
 	# Lautstärke-Beschriftungen und Tastenliste (standen früher mit in _renderer_hinweis)
@@ -326,6 +342,11 @@ func _on_fps(index: int) -> void:
 func _on_vsync(an: bool) -> void:
 	Einstellungen.vsync = an
 	Einstellungen.anwenden()
+
+## Einzelregler: Auswahl 0 = wie die Qualitätsstufe (-1), sonst Stufe 0 bis 2
+func _on_fein(index: int, name: String) -> void:
+	Einstellungen.fein[name] = index - 1
+	Einstellungen.anwenden()   # Grafikstufe im Spiel hört auf "geaendert"
 
 func _on_qualitaet(index: int) -> void:
 	Einstellungen.grafik = index

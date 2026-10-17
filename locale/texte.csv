@@ -2887,3 +2887,29 @@ EMOTE_KOTZEN,Kotzen,Puke,Kus
 EMOTE_WINKEN,Winken,Wave,El salla
 EMOTE_TITEL,Emotes,Emotes,Emotlar
 EMOTE_HINWEIS,"Maus, Pfeiltasten oder Stick zum Auswählen · Loslassen spielt es","Mouse, arrow keys or stick to choose · release to play","Seçmek için fare, ok tuşları veya stick · bırakınca oynatılır"
+SET_FEIN_TITEL,Einzelne Grafikregler,Individual graphics options,Tek tek grafik ayarları
+SET_FEIN_AUTO,Wie Qualitätsstufe,Same as quality level,Kalite seviyesi gibi
+SET_FEIN_SCHATTEN,Schatten der Sonne,Sun shadows,Güneş gölgeleri
+SET_FEIN_S0,Aus (schnellste),Off (fastest),Kapalı (en hızlı)
+SET_FEIN_S1,"Einfach, nah","Simple, near","Basit, yakın"
+SET_FEIN_S2,"Sauber, weit","Clean, far","Temiz, uzak"
+SET_FEIN_LICHTER,"Lichter (Laternen, Buden)","Lights (lanterns, stalls)","Işıklar (fenerler, tezgahlar)"
+SET_FEIN_L0,"Wenige, nur nah","Few, near only","Az, sadece yakın"
+SET_FEIN_L1,Mittel,Medium,Orta
+SET_FEIN_L2,"Alle, weit sichtbar","All, visible far away","Hepsi, uzaktan görünür"
+SET_FEIN_EFFEKTE,Bildeffekte,Image effects,Görüntü efektleri
+SET_FEIN_E0,Keine (schnellste),None (fastest),Yok (en hızlı)
+SET_FEIN_E1,"Glühen, Nebel, Farben","Glow, fog, colors","Parlama, sis, renkler"
+SET_FEIN_E2,"Alle, mit Raumschatten","All, with ambient occlusion","Hepsi, ortam gölgeli"
+SET_FEIN_KANTE,Kantenglättung,Anti-aliasing,Kenar yumuşatma
+SET_FEIN_K0,Aus,Off,Kapalı
+SET_FEIN_K1,FXAA (leicht),FXAA (light),FXAA (hafif)
+SET_FEIN_K2,MSAA + FXAA (schön),MSAA + FXAA (best),MSAA + FXAA (en iyi)
+SET_FEIN_SICHT,Sichtweite der Kleinteile,Draw distance of small objects,Küçük nesnelerin görüş mesafesi
+SET_FEIN_V0,Kurz,Short,Kısa
+SET_FEIN_V1,Mittel,Medium,Orta
+SET_FEIN_V2,Weit,Far,Uzak
+SET_FEIN_BESUCHER,Besucher auf der Kirmes,Visitors at the fair,Panayırdaki ziyaretçiler
+SET_FEIN_B0,Wenige,Few,Az
+SET_FEIN_B1,Mittel,Medium,Orta
+SET_FEIN_B2,Viele,Many,Çok

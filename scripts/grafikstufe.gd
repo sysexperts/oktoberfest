@@ -69,43 +69,52 @@ func _ready() -> void:
 
 func anwenden() -> void:
 	var stufe := clampi(Einstellungen.grafik, 0, 2)
+	# Einzelregler aus den Einstellungen (Reiter Grafik); ohne eigene Wahl gilt die Qualitätsstufe
+	var st_schatten := Einstellungen.fein_wert("schatten")
+	var st_lichter := Einstellungen.fein_wert("lichter")
+	var st_effekte := Einstellungen.fein_wert("effekte")
+	var st_kante := Einstellungen.fein_wert("kante")
+	var st_sicht := Einstellungen.fein_wert("sicht")
+	var st_besucher := Einstellungen.fein_wert("besucher")
 	var we := get_node_or_null(welt) as WorldEnvironment
 	if we and we.environment:
-		we.environment.ssao_enabled = stufe >= 2
+		we.environment.ssao_enabled = st_effekte >= 2
 		we.environment.ssil_enabled = false   # v442: SSIL kostet viel und fällt kaum auf (SSAO bleibt auf Hoch)
-		we.environment.glow_enabled = stufe >= 1
-		we.environment.fog_enabled = stufe >= 1
+		we.environment.glow_enabled = st_effekte >= 1
+		we.environment.fog_enabled = st_effekte >= 1
 		# Farbkorrektur kostet einen ganzen Nachbearbeitungsschritt — gemessen
 		# ~13 ms pro Bild auf integrierter Grafik, mehr als Glow und Nebel zusammen
-		we.environment.adjustment_enabled = stufe >= 1
+		we.environment.adjustment_enabled = st_effekte >= 1
 	# Kantenglättung: MSAA glättet Geometriekanten und Schnittlinien, FXAA den Rest
 	var vp := get_viewport()
 	# Anisotrope Filterung: Böden im flachen Blickwinkel (Dielen) flimmern sonst an den Fugen
 	vp.anisotropic_filtering_level = [Viewport.ANISOTROPY_4X, Viewport.ANISOTROPY_8X, Viewport.ANISOTROPY_16X][stufe]
-	vp.msaa_3d = Viewport.MSAA_2X if stufe >= 2 else Viewport.MSAA_DISABLED
-	vp.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA if stufe >= 1 else Viewport.SCREEN_SPACE_AA_DISABLED
+	vp.msaa_3d = Viewport.MSAA_2X if st_kante >= 2 else Viewport.MSAA_DISABLED
+	vp.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA if st_kante >= 1 else Viewport.SCREEN_SPACE_AA_DISABLED
 	var s := get_node_or_null(sonne) as DirectionalLight3D
 	if s:
 		s.light_angular_distance = SONNE_WINKEL if stufe >= 1 else 0.0
-		s.directional_shadow_mode = SCHATTEN_STUFEN[stufe]
+		# Schatten: 0 = keine Sonnenschatten, 1 = eine Ebene bis 50 m, 2 = zwei Ebenen bis 90 m
+		s.shadow_enabled = st_schatten >= 1
+		s.directional_shadow_mode = SCHATTEN_STUFEN[st_schatten]
 		if _schatten_weite0 < 0.0:
 			_schatten_weite0 = s.directional_shadow_max_distance
-		s.directional_shadow_max_distance = SCHATTEN_WEITE[stufe] if SCHATTEN_WEITE[stufe] > 0.0 else _schatten_weite0
-	_sichtweiten(SICHT_FAKTOR[stufe])
+		s.directional_shadow_max_distance = SCHATTEN_WEITE[st_schatten] if SCHATTEN_WEITE[st_schatten] > 0.0 else _schatten_weite0
+	_sichtweiten(SICHT_FAKTOR[st_sicht])
 	var f := get_node_or_null(bildfilter) as CanvasLayer
 	if f:
-		f.visible = stufe >= 1
+		f.visible = st_effekte >= 1
 	for mat in _detail_mats:
-		mat.next_pass = _detail if stufe >= 1 else null
+		mat.next_pass = _detail if st_effekte >= 1 else null
 	var m := get_node_or_null(menge)
 	if m and "max_visitors" in m:
-		m.max_visitors = BESUCHER[stufe]
+		m.max_visitors = BESUCHER[st_besucher]
 	for i in _lichter.size():
 		var l := _lichter[i]
 		# Fest nach Position in der Liste, damit immer dieselben an bleiben
-		l.visible = stufe == 2 or (stufe == 1 and i % 3 != 2) or (stufe == 0 and i % 3 == 0)
-		l.distance_fade_enabled = LICHT_AUSBLENDEN[stufe] > 0.0
-		l.distance_fade_begin = LICHT_AUSBLENDEN[stufe]
+		l.visible = st_lichter == 2 or (st_lichter == 1 and i % 3 != 2) or (st_lichter == 0 and i % 3 == 0)
+		l.distance_fade_enabled = LICHT_AUSBLENDEN[st_lichter] > 0.0
+		l.distance_fade_begin = LICHT_AUSBLENDEN[st_lichter]
 		l.distance_fade_length = 10.0
 
 ## Sichtweiten der Kleinteile mit dem Faktor der Stufe skalieren (Ursprungswert steht in der Meta "vr0")
