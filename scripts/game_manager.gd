@@ -4797,20 +4797,31 @@ func net_gaerfass_fuellen(index: int) -> void:
 
 ## Gaerung mitzaehlen - laeuft auch in der Pause weiter, fuenf Minuten sind
 ## fuenf Minuten, egal ob das Zelt offen ist.
+## Die Restzeit am Gärfass zählt nur ganze Sekunden: gesendet wird einmal pro Sekunde und sofort, wenn ein Fass fertig ist.
+## (Früher jedes Bild: _brau_senden() baut den ganzen Spielzustand und schickt ihn an alle — 16 ms pro Bild, solange ein Fass gärte.)
+var _gaerung_sende_t := 0.0
+
 func _gaerung_zaehlen(delta: float) -> void:
-	var geaendert := false
+	var gaert := false
+	var fertig := false
 	for i in _gaerfaesser.size():
 		var fass: Dictionary = _gaerfaesser[i]
 		if int(fass.zustand) != 1:
 			continue
+		gaert = true
 		fass.rest = maxf(0.0, float(fass.rest) - delta)
 		if float(fass.rest) <= 0.0:
 			fass.zustand = 2
 			fass.menge = ANSATZ_MENGE
 			_melde("MSG_GAERUNG_FERTIG", [ANSATZ_MENGE], 2)
+			fertig = true
 		_gaerfaesser[i] = fass
-		geaendert = true
-	if geaendert:
+	if not gaert:
+		_gaerung_sende_t = 0.0
+		return
+	_gaerung_sende_t -= delta
+	if fertig or _gaerung_sende_t <= 0.0:
+		_gaerung_sende_t = 1.0
 		_brau_senden()
 
 ## Stand der Brauerei an alle schicken
