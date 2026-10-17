@@ -705,7 +705,22 @@ var _messes := {}
 var _mess_clean := {}
 var _mess_next := 0
 
+## Leistung: über 600 kleine Punktlichter (Laternen, Buden, Wohnwagen, Ampeln) blenden ab dieser Entfernung weich aus.
+## Im F8-Test kosteten die Lichter rund 6 ms pro Bild; entfernte Lichter tragen kaum etwas zum Bild bei.
+const LICHT_AUS_AB := 26.0
+const LICHT_AUS_LAENGE := 10.0
+
+func _licht_faden(n: Node) -> void:
+	if n is OmniLight3D or n is SpotLight3D:
+		var l := n as Light3D
+		l.distance_fade_enabled = true
+		l.distance_fade_begin = LICHT_AUS_AB
+		l.distance_fade_length = LICHT_AUS_LAENGE
+
 func _ready() -> void:
+	for l in find_children("*", "Light3D", true, false):
+		_licht_faden(l)
+	get_tree().node_added.connect(_licht_faden)
 	_lager_standard_merken()
 	Game.reset()
 	_hud = $HUD
